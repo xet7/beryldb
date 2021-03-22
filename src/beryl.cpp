@@ -12,3 +12,14 @@ BerylStart
         delete Nucleus;
         return 0;
 }
+
+Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
+{
+        /* Main link. */
+
+        Nucleus = this;
+
+        /* Refreshing time for the very first time. */
+
+        this->TimeRefresh();
+}

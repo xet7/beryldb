@@ -5,6 +5,12 @@ extern Beryl* Nucleus;
 
 class Beryl
 {
+    private:
+    
+        /* Current time, as updated in the mainloop. */
+
+        struct timespec TIME;
+
     public:
 
         /*
@@ -18,5 +24,9 @@ class Beryl
 
         bool Locked;
         
+        /* Refreshes TIME, this function is called in every loop. */
+                
+        void TimeRefresh();
+
         
 };
