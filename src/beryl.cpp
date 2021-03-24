@@ -23,3 +23,19 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 
         this->TimeRefresh();
 }
+
+void Beryl::Initialize()
+{
+        this->TimeRefresh();
+        time_t PREV_TIME = this->TIME.tv_sec;
+
+        /* We wait 2 seconds before start processing requests. */
+
+        usleep(200000);
+
+        do
+        {
+        
+        }
+        while (true);
+}
