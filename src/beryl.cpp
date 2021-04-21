@@ -26,3 +26,11 @@ BerylDB::BerylDB(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
         this->Refresh();
 
 }
+
+void Beryl::RunTimed(time_t current)
+{
+         /* Remove expiring entries. */
+
+        this->DataManager->Expires->Flush(current);
+
+}
