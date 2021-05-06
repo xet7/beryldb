@@ -42,4 +42,4 @@ beryl> OK
 
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldev/beryl)
-* [Support/Discord](https://discord.gg/kMyf64rq5C)
+* [Support/Discord](https://discord.gg/sqsXVYuGrX)
