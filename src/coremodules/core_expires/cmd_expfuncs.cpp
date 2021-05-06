@@ -1,0 +1,95 @@
+/*
+ * BerylDB - A modular database.
+ * http://www.beryldb.com
+ *
+ * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * 
+ * This file is part of BerylDB. BerylDB is free software: you can
+ * redistribute it and/or modify it under the terms of the BSD License
+ * version 3.
+ *
+ * More information about our licensing can be found at https://docs.beryl.dev
+ */
+
+#include "beryl.h"
+#include "brldb/dbmanager.h"
+#include "brldb/dbflush.h"
+#include "brldb/expires.h"
+#include "engine.h"
+#include "converter.h"
+#include "core_expires.h"
+
+CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 1)
+{
+         last_empty_ok = true;
+}
+
+COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
+{       
+         const std::string& arg = parameters[0];
+         
+         /* No argument provided, we simply count expire items. */
+         
+         if (!parameters.size() || arg.length() > 1)
+         {
+                  unsigned int count = Kernel->Store->Expires->Count();
+                  user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), Daemon::Format("Expire count: %d", count).c_str());
+                  return SUCCESS;
+         }
+         
+         /* 
+          * These two arguments are valid.  Arguments valid are:
+          *
+          * h: Human readable format.
+          * r: Raw format date.
+          */
+         
+         if (arg != "h" && arg != "r")
+         {
+                  user->SendProtocol(ERR_INVALID_PARAM, arg, "Invalid parameter.");
+                  return FAILED;
+         }
+         
+         /* User has requested all expires with expiration date. */
+         
+         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+         user->SendProtocol(BRLD_EXPIRE_BEGIN, arg, "Begin of EXPIRE list.");
+
+         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         {
+               ExpireEntry entry = it->second;
+               std::string schedule;
+               
+               if (arg == "h")
+               {
+                    schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+               }
+               else 
+               {
+                    schedule = convto_string(entry.schedule);
+               }
+               
+               user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
+         }
+         
+        user->SendProtocol(BRLD_EXPIRE_END, arg, Daemon::Format("End of EXPIRE list (%li)", expiring.size()).c_str());
+        return SUCCESS;
+}
+
+CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
+{
+         
+}
+
+COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
+{       
+         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting %d expires ...", Kernel->Store->Expires->Count()).c_str());
+
+         /* Clears all expires pending. */
+         
+         ExpireManager::Reset();
+         user->SendProtocol(BRLD_EXP_DELETED, "Expires removed.");
+         
+         return SUCCESS;
+}

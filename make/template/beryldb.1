@@ -1,0 +1,95 @@
+.TH "BerylDB" "1" "January 2021" "BerylDB 0.0.1-rc" "BerylDB Manual"
+
+.SH "NAME"
+\t\fBBerylDB\fR - A lightweight, high-performance and modular database.
+.BR
+
+.SH "SYNOPSIS"
+\t\fBberyldb\fR [--config <file>] [--debug] [--nofork] [--nolog] [--nopid] [--asroot] [--version]
+
+.SH "OPTIONS"
+.TP
+.B "--config <file>"
+.br
+Sets a full path to your configuration file. Defaults config file is \fIrun/conf/beryldb.conf\fR.
+.TP
+.B "--debug"
+.br
+Logs all misc events as provided by the core server.
+.TP
+.B "--nofork"
+.br
+Avoids BerylDB to fork and become a daemon.
+.TP
+.B "--nolog"
+.br
+BerylDB will not write log files. 
+.TP
+.B "--nopid"
+.br
+Avoids the writing of beryldb.pid.
+.TP
+.B "--asroot"
+.br
+Allows running BerylDB as root (use only when needed).
+.TP
+.B "--version"
+.br
+Displays BerylDB version and exits.
+
+.SH "EXIT CODES"
+.TP
+.B "0 (EXIT_CODE_OK)"
+.br
+The server exited without errors.
+.TP
+.B "1 (EXIT_CODE_CORE)"
+.br
+The server exited because an error with the core database occured.
+.TP
+.B "2 (EXIT_CODE_CONFIG)"
+.br
+The server exited because of an issue concerning your configuration file.
+.TP
+.B "3 (EXIT_CODE_LOG)"
+.br
+The server exited because of a log file error.
+.TP
+.B "4 (EXIT_CODE_FORK)"
+.br
+The server exited because it was unable to fork and become a daemon.
+.TP
+.B "5 (EXIT_CODE_ARGV)"
+.br
+The server exited because an invalid argument was provided to the command line.
+.TP
+.B "6 (EXIT_CODE_PID)"
+.br
+The server exited because it was unable to save the PID file.
+.TP
+.B "7 (EXIT_CODE_SOCKESTREAM)"
+.br
+The server exited because a problem with the the socket stream.
+.TP
+.B "8 (EXIT_CODE_ROOT)"
+.br
+The server exited because it was started as root without providing \fI--asroot\fR.
+.TP
+.B "9 (EXIT_CODE_MODULE)"
+.br
+The server exited because it was unable to load a module file during startup.
+.TP
+.B "10 (EXIT_CODE_SIGTERM)"
+.br
+The server exited because of an exiting signal.
+.TP
+.B "11 (EXIT_CODE_DATABASE)"
+.br
+The server exited because of problem with the database.
+.TP
+.B "12 (EXIT_CODE_SIGINT)"
+.br
+The server exited because of a received sig int. 
+
+
+
