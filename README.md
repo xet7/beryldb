@@ -38,10 +38,10 @@ beryl> set hello "world"
 beryl> OK
 ```
 
-![Logo](https://docs.beryl.dev/img/logo.png)
-
 ## External Links
 
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)
+
+![Logo](https://docs.beryl.dev/img/smaller.png)
