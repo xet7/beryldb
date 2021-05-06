@@ -38,10 +38,6 @@ beryl> set hello "world"
 beryl> OK
 ```
 
-## License
-
-BerylDB is licensed under [version 3 of the BSD License].
-
 ## External Links
 
 * [Documentation](https://docs.beryl.dev)
