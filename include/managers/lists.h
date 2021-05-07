@@ -31,5 +31,6 @@ class Externalize ListHelper
     static void Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst = false);
 
     static void Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type = TYPE_EXIST);
-        
+
+    static void Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value, const std::string& back);
 };

@@ -200,6 +200,18 @@ class Externalize hget_query : public query_base
         void Run();
 };
 
+class Externalize lmove_query : public query_base
+{
+    public:
+
+        lmove_query() : query_base(DBL_TYPE_LMOVE)
+        {
+
+        }
+
+        void Run();
+};
+
 class Externalize lpush_query : public query_base
 {
     public:	
@@ -495,5 +507,7 @@ class Flusher
         static void Touch(User* user, std::shared_ptr<query_base> query);
 
         static void Append(User* user, std::shared_ptr<query_base> query);
+
+        static void LMove(User* user, std::shared_ptr<query_base> query);
 
 };

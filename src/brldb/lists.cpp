@@ -66,11 +66,149 @@ void Flusher::LPush(User* user, std::shared_ptr<query_base> query)
         }
 }
 
+void lmove_query::Run()
+{
+    if (!this->Check())
+    {
+            this->access_set(DBL_STATUS_BROKEN);
+            return;
+    }
+
+    if (this->key.empty())
+    {
+            this->access_set(DBL_MISS_ARGS);
+            return;
+    }
+
+    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+
+    std::string rawstring;
+
+    std::string foundvalue;
+    
+    bool found = false;
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+                if (this->user && this->user->IsQuitting())
+                {
+                    access_set(DBL_NOT_FOUND);
+                    return;
+                }
+
+                if (!Kernel->Store->Flusher->Status())
+                {
+                    access_set(DBL_INTERRUPT);
+                    return;
+                }
+
+                rawstring = it->key().ToString();
+
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+
+                unsigned int strcounter = 0;
+
+                bool int_match = false;
+                bool key_match = false;
+                bool select_match = false;
+
+
+                while (stream.items_extract(token))
+                {
+                        if (it->value().ToString() != this->value)
+                        {
+                            break;
+                        }
+
+                        if (strcounter == 2)
+                        {
+                             if (token != this->key)
+                             {
+                                  break;
+                             }
+                             else
+                             {
+                                 key_match = true;
+                             }
+                        }
+
+                        if (strcounter == 0)
+                        {
+                            if (this->int_keys != token)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                int_match = true;
+                            }
+                        }
+
+                        if (strcounter == 1)
+                        {
+                            if (this->select_query != token)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                select_match = true;
+                            }
+                        }
+                        
+                        strcounter++;
+                }
+
+                if (select_match && int_match && key_match)
+                {
+                     found = true;
+                     foundvalue = it->value().ToString();
+                     break;
+                }
+    }
+    
+    if (!found)
+    {
+            this->access_set(DBL_NO_ENTRY);
+            return;
+    }
+    
+    this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+
+    const std::string& newformat = this->int_keys + ":" + this->hesh + ":" + this->key;
+    
+    rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), newformat, foundvalue);
+    
+    /* Finished. */
+    
+    this->counter = this->id;
+    this->SetOK();
+}
+
+void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
+{
+        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
+        {
+            return;
+        }
+
+        if (!query->finished)
+        {
+                   user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query->key, "Item not found.");
+        }
+        else
+        {
+                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, "OK");
+        }
+}
+
 void lpop_query::Run()
 {
     if (!this->Check())
     {
-        return;
+            this->access_set(DBL_STATUS_BROKEN);
+            return;
     }
 
     if (this->key.empty())
@@ -224,7 +362,8 @@ void lget_query::Run()
 {
     if (!this->Check())
     {
-        return;
+            this->access_set(DBL_STATUS_BROKEN);
+            return;
     }
 
     if (this->key.empty())

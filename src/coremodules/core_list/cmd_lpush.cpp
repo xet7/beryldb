@@ -37,3 +37,24 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
         ListHelper::Add(user, Kernel->Store->Default, user->select, key, value);
         return SUCCESS;  
 }
+
+CommandLMove::CommandLMove(Module* Creator) : Command(Creator, "LMOVE", 3, 3)
+{
+         syntax = "<key> <select> <value>";
+}
+
+COMMAND_RESULT CommandLMove::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
+        const std::string select = parameters[1];
+        const std::string back = parameters.back();
+
+        if (!Daemon::CheckFormat(user, back))
+        {
+            return FAILED;
+        }
+        
+        ListHelper::Move(user, Kernel->Store->Default, user->select, select, key, back);
+        return SUCCESS;  
+}
+

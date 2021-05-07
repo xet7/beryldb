@@ -51,5 +51,6 @@ enum DBL_CODE
     DBL_TYPE_GETDEL		=		37,
     DBL_TYPE_HMOVE    		=		38,
     DBL_TYPE_TOUCH		=		39,
-    DBL_TYPE_APPEND		=		40
+    DBL_TYPE_APPEND		=		40,
+    DBL_TYPE_LMOVE		=		41
 };

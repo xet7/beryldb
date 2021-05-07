@@ -24,6 +24,7 @@ class CoreModuleList : public Module
         CommandLGet cmdlget;
         CommandLExist cmdlexist;
         CommandLCount cmdlcount;
+        CommandLMove cmdlmove;
 
     public:	
         
@@ -32,7 +33,8 @@ class CoreModuleList : public Module
                            cmdlpopall(this),
                            cmdlget(this),
                            cmdlexist(this),
-                           cmdlcount(this)
+                           cmdlcount(this),
+                           cmdlmove(this)
 
         {
         
@@ -40,7 +42,7 @@ class CoreModuleList : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides list-related commands, push as LPUSH, LGET and LPOP.", VF_BERYLDB);
+                return Version("Provides list-related commands, LMOVE, LPUSH, LGET and LPOP.", VF_BERYLDB);
         }
 };
 

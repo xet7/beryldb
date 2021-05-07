@@ -36,6 +36,8 @@ Great! You may now run your very first BerylDB command using
 ```
 beryl> set hello "world"
 beryl> OK
+beryl> get hello
+beryl> "world"
 ```
 
 ## External Links

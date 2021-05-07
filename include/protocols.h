@@ -143,6 +143,7 @@ enum BRLD_PROTOCOL
 	BRLD_RESTART			=		221,
 	DBL_TYPE_RAND			=		222,
 	DBL_AGENT_SET			=		223,
+	DBL_JUMP			=		224,
 	
 	/* Error protocol codes. */
 	
