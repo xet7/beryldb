@@ -47,9 +47,6 @@ Configuration::~Configuration()
 	delete EmptyTag;
 }
 
-
-typedef std::map<std::string, config_rule*> LocalIndex;
-
 void Configuration::CrossCheckConnectBlocks()
 {
 	

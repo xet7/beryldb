@@ -300,7 +300,6 @@ bool LocalUser::Deserialize(Serializable::Data& data)
 		.Load("touchbase", touchbase)
 		.Load("lastping", user_lastping)
 		.Load("next_ping_check", next_ping_check)
-		.Load("password", password)
 		.Load("server_sa.addr", server_addr)
 		.Load("server_sa.port", server_port);
 
@@ -327,7 +326,6 @@ bool LocalUser::Serialize(Serializable::Data& data)
 		.Store("touchbase", touchbase)
 		.Store("lastping", lastping)
 		.Store("next_ping_check", next_ping_check)
-		.Store("password", password)
 		.Store("server_sa.addr", server_sa.addr())
 		.Store("server_sa.port", server_sa.port());
 	return true;

@@ -398,9 +398,6 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
 
 	ProtocolTrigger::Serializer* serializer;
 	
-	std::string password;
-
-	
 	reference<connect_config> assigned_class;
 
 	

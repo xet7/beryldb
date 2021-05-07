@@ -197,6 +197,11 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		return;
 	}
 	
+	if (command != "PONG" && command != "PUBLISH")
+	{
+		user->touchbase = Kernel->Now();
+	}
+	
 	user->next_ping_check = Kernel->Now() + PING_INTVL;
 
 	if (handler->requires)

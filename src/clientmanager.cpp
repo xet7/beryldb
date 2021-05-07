@@ -234,6 +234,7 @@ void ClientManager::Disconnect(User* user, const std::string& quitmessage)
 	
 	if (localuser)
 	{
+		user->SendProtocol(BRLD_ERROR, quitmsg);
 		ProtocolTrigger::Messages::Error errormsg(Daemon::Format("Closing connection: (%s@%s) [%s]", user->agent.c_str(), user->GetRealHost().c_str(), quitmsg.c_str()));
 		localuser->Send(Kernel->GetBRLDEvents().error, errormsg);
 	}
