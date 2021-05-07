@@ -73,3 +73,13 @@ class CommandDBReset : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandSFlush : public Command 
+{
+    public: 
+
+        CommandSFlush(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+

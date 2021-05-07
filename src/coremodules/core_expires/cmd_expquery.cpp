@@ -57,7 +57,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  if (ExpireManager::Delete(key))
+                  if (ExpireManager::Delete(key, user->select))
                   {
                            user->SendProtocol(BRLD_PERSIST, 1, key, Daemon::Format("%s has persisted.", key.c_str()).c_str());
                   }

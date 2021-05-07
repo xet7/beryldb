@@ -115,8 +115,8 @@ void advget_query::Run()
            
            if (ttl != -1)
            {
-               Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
-               Kernel->Store->Expires->Delete(this->key);
+                Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
+                Kernel->Store->Expires->Delete(this->key, this->select_query);
            }
 
            this->access_set(DBL_STATUS_OK);
@@ -141,7 +141,7 @@ void advget_query::Run()
     
     if (this->qtype == TYPE_GETDEL)
     {
-          Kernel->Store->Expires->Delete(this->key);
+          Kernel->Store->Expires->Delete(this->key, this->select_query);
           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
           this->access_set(DBL_STATUS_OK);
           this->SetOK();
@@ -509,6 +509,14 @@ void move_query::Run()
           return;
     }
 
+    signed int ttl = ExpireManager::TriggerTIME(key);
+    
+    if (ttl != -1)
+    {
+             Kernel->Store->Expires->Delete(this->key, this->select_query);
+             Kernel->Store->Expires->Add(ttl, this->key, this->newkey, true);          
+    }
+
     this->database->db->Delete(rocksdb::WriteOptions(), current);
     this->database->db->Put(rocksdb::WriteOptions(), newdb, dbvalue);
     
@@ -600,7 +608,7 @@ void del_query::Run()
 
     /* Deletes key in case it is expiring. */
     
-    Kernel->Store->Expires->Delete(this->key);
+    Kernel->Store->Expires->Delete(this->key, this->select_query);
     
     rocksdb::Status auxstatus = this->database->db->Delete(rocksdb::WriteOptions(), where);
     this->access_set(DBL_STATUS_OK);
@@ -806,16 +814,16 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
              {
                  if (query->counter > 0)
                  {
-                      user->SendProtocol(BRLD_FIND_ITEM, DBL_TYPE_RAND, query->response, query->response);
+                      user->SendProtocol(BRLD_FIND_ITEM, DBL_TYPE_GET, query->response, query->response);
                  }   
                  else
                  {
-                      user->SendProtocol(ERR_FLUSH, DBL_TYPE_RAND, UNABLE_MAP);
+                      user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, UNABLE_MAP);
                  }
              }
              else
              {
-                     user->SendProtocol(ERR_FLUSH, DBL_TYPE_RAND, "An error has occured.");
+                     user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, "An error has occured.");
              } 
              
              return;

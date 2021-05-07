@@ -29,7 +29,7 @@ ExpireManager::ExpireManager()
 
 }
 
-bool ExpireManager::Delete(const std::string& key)
+bool ExpireManager::Delete(const std::string& key, const std::string& select)
 {
         ExpireMap& all = Kernel->Store->Expires->GetExpires();
 
@@ -48,6 +48,12 @@ bool ExpireManager::Delete(const std::string& key)
                 {
                     it++;
                     continue;
+                }
+                
+                if (it->second.select != select)
+                {
+                     it++;
+                     continue;
                 }
 
                 Kernel->Store->Expires->ExpireList.erase(it++);
@@ -99,7 +105,7 @@ signed int ExpireManager::Add(signed int schedule, const std::string& key, const
         
         if (ExpireManager::TriggerTIME(key) > 0)
         {
-            ExpireManager::Delete(key);
+              ExpireManager::Delete(key, select);
         }
         
         ExpireManager::mute.lock();

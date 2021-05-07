@@ -24,11 +24,12 @@ class CoreModDBManager : public Module
         CommandPWD cmdpwd;
         CommandDBSize cmddbsize;
         CommandDBReset cmddbreset;
+        CommandSFlush cmdsflush;
 
     public:     
         
         CoreModDBManager() : cmduse(this), cmdcurrent(this), cmdflushdb(this), cmdpwd(this),
-                             cmddbsize(this), cmddbreset(this)
+                             cmddbsize(this), cmddbreset(this), cmdsflush(this)
         {
         
         }

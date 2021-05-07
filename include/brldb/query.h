@@ -455,7 +455,17 @@ class Externalize append_query  : public query_base
         void Run();
 };
 
+class Externalize sflush_query  : public query_base
+{
+    public:
 
+        sflush_query() : query_base(DBL_TYPE_SFLUSH)
+        {
+
+        }
+
+        void Run();
+};
 
 class Flusher
 {
@@ -509,5 +519,7 @@ class Flusher
         static void Append(User* user, std::shared_ptr<query_base> query);
 
         static void LMove(User* user, std::shared_ptr<query_base> query);
+
+        static void SFlush(User* user, std::shared_ptr<query_base> query);
 
 };

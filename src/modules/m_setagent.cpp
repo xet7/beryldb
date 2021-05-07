@@ -53,7 +53,7 @@ class CommandSetAgent : public Command
                 if (IS_LOCAL(target))
                 {
                         target->SetAgent(parameters[1]);
-                        user->SendProtocol(DBL_AGENT_SET, agent, instance, Daemon::Format("Agent for %s changed.", instance.c_str()).c_str());
+                        user->SendProtocol(BRLD_AGENT_SET, agent, instance, Daemon::Format("Agent for %s changed.", instance.c_str()).c_str());
                 }                
                 
                 return SUCCESS;
@@ -81,7 +81,7 @@ class ModuleSetAgent : public Module
 
         Version GetDescription()
         {
-                return Version("Adds SetAgent command.", VF_BERYLDB|VF_CORE);
+                return Version("Adds SETAGENT command.", VF_BERYLDB|VF_CORE);
         }
 };
 

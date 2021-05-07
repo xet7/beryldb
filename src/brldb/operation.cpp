@@ -194,3 +194,78 @@ void Flusher::DBSize(User* user, std::shared_ptr<query_base> query)
         }
 }
 
+
+void sflush_query::Run()
+{
+     if (!this->Check())
+     {
+            this->access_set(DBL_STATUS_BROKEN);
+            return;
+     }
+
+     if (this->value.empty())
+     {
+            this->access_set(DBL_MISS_ARGS);
+            return;
+     }
+
+     unsigned int found_counter = 0;
+     
+     rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+
+     for (it->SeekToFirst(); it->Valid(); it->Next()) 
+     {
+                if (this->user && this->user->IsQuitting())
+                {
+                     access_set(DBL_NOT_FOUND);
+                     return;
+                }
+
+                if (!Kernel->Store->Flusher->Status())
+                {
+                     access_set(DBL_INTERRUPT);
+                     return;
+                }
+                
+                std::string rawstring = it->key().ToString();
+                
+                /* By definition, this should never happen. */
+                
+                if (rawstring.length() < 2)
+                {
+                    continue;
+                }
+                
+                if (convto_string(rawstring[0]) == convto_string(INT_KEYS))
+                {
+                      if (convto_string(rawstring[1]) == this->value)
+                      {  
+                            this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                            found_counter++;
+                      }
+                }
+                else
+                {
+                      if (convto_string(rawstring[2]) == this->value)
+                      {
+                            this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                            found_counter++;
+                      }
+                }
+     }
+     
+     this->counter = found_counter;
+     this->SetOK();	
+}
+
+void Flusher::SFlush(User* user, std::shared_ptr<query_base> query)
+{
+    if (query->finished)
+    {
+          user->SendProtocol(BRLD_SFLUSHED, query->select_query, Daemon::Format("Select %s erased. Total items: %s", query->select_query.c_str(), convto_string(query->counter).c_str()).c_str());
+    }
+    else
+    {
+         user->SendProtocol(ERR_SFLUSH, query->select_query, Daemon::Format("Unable to slufh %s.", query->select_query.c_str()).c_str());
+    }
+}

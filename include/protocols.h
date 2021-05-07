@@ -141,9 +141,10 @@ enum BRLD_PROTOCOL
 	BRLD_MOD_LOADED			=		219,
 	BRLD_SHUTDOWN			=		220,
 	BRLD_RESTART			=		221,
-	DBL_TYPE_RAND			=		222,
-	DBL_AGENT_SET			=		223,
-	DBL_JUMP			=		224,
+	BRLD_TYPE_RAND			=		222,
+	BRLD_AGENT_SET			=		223,
+	BRLD_SFLUSH			=		225,
+	BRLD_SFLUSHED			=		225,
 	
 	/* Error protocol codes. */
 	
@@ -200,5 +201,6 @@ enum BRLD_PROTOCOL
         ERR_UNABLE_DBRESET		=		554,
         ERR_NO_ORIGIN			=		555,
         ERR_EXCEED_BUFFER        	=		556,
-        ERR_LOGIN_NO_FLAGS		=		557
+        ERR_LOGIN_NO_FLAGS		=		557,
+        ERR_SFLUSH			=		558
 };

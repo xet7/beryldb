@@ -61,7 +61,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
 
         /* Deletes an entry from the expire map. */
         
-        static bool Delete(const std::string& key);
+        static bool Delete(const std::string& key, const std::string& select);
 
         /* Finds an expiring entry. */
         

@@ -36,5 +36,8 @@ class Externalize DBHelper
         /* Calculate db size */
         
         static void DBSize(User* user, std::shared_ptr<Database> database);
+        
+        static void SFlush(User* user, std::shared_ptr<Database> database, const std::string& select);
+        
     
 };

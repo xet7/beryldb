@@ -30,6 +30,17 @@ void DBHelper::DBSize(User* user, std::shared_ptr<Database> database)
        Kernel->Store->Push(query);
 }
 
+void DBHelper::SFlush(User* user, std::shared_ptr<Database> database, const std::string& select)
+{
+       std::shared_ptr<sflush_query> query = std::make_shared<sflush_query>();
+
+       query->database = database;
+       query->user = user;
+       query->value = select;
+       
+       Kernel->Store->Push(query);
+}
+
 bool DBHelper::Add(const std::string& name, const std::string& path)
 {
         /* default database add */
