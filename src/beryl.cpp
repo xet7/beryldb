@@ -455,7 +455,7 @@ void Beryl::PrepareExit()
 		csize++;
 	}
 	
-	/* Only display disconnecting counter if it is greater than 0 */
+	/* Displays counter only if it is greater than zero. */
 	
 	if (csize > 0)
 	{

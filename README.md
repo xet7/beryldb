@@ -46,4 +46,4 @@ beryl> "world"
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)
 
-![Logo](https://docs.beryl.dev/img/smaller.png)
+![Logo](https://docs.beryl.dev/img/logo.png)
