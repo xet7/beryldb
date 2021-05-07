@@ -162,6 +162,7 @@ void lmove_query::Run()
 
                 if (select_match && int_match && key_match)
                 {
+                     
                      found = true;
                      foundvalue = it->value().ToString();
                      break;
@@ -380,7 +381,9 @@ void lget_query::Run()
     unsigned int aux_counter = 0;
     unsigned int return_counter = 0;
     unsigned int tracker = 0;
-
+    
+    unsigned int match_count = 0;
+    
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
                 if (this->user && this->user->IsQuitting())
@@ -437,6 +440,9 @@ void lget_query::Run()
 
                 if (match)
                 {
+                
+                        match_count++;
+                        
                         if (this->qtype == TYPE_EXIST)
                         {
                             if (it->value().ToString() == this->value)
@@ -446,9 +452,26 @@ void lget_query::Run()
                                 return;
                             }
                         }
+                        
+                        else if (this->qtype == TYPE_LPOS)
+                        {
+                            if (it->value().ToString() != this->value)
+                            {
+                                    continue;
+                            }
+                            
+                            if (aux_counter == this->id)
+                            {
+                                  return_counter = match_count;
+                                  break;
+                            }
+
+                            aux_counter++;
+                        }
+                        
                         else if (this->qtype == TYPE_COUNT_RECORDS)
                         {
-                            return_counter++;
+                                return_counter++;        
                         }
                         
                         else
@@ -536,6 +559,12 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
             return;
         }
 
+        if (query->qtype == TYPE_LPOS)
+        {	
+                 user->SendProtocol(BRLD_LPOS, query->key, query->counter,  Daemon::Format("%u", query->counter).c_str());
+                 return;
+        }
+        
         if (query->finished && query->qtype == TYPE_EXIST)
         {
                     user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LGET, query->key, convto_string(query->exists));

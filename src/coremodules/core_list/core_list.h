@@ -78,3 +78,13 @@ class CommandLMove : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+
+class CommandLPos : public Command 
+{
+    public: 
+
+        CommandLPos(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

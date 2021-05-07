@@ -146,7 +146,8 @@ enum BRLD_PROTOCOL
 	BRLD_SFLUSH			=		225,
 	BRLD_SFLUSHED			=		225,
 	BRLD_PARTALL			=		226,
-	
+	BRLD_LPOS 			=		227,
+		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

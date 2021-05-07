@@ -102,7 +102,7 @@ void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string
        Kernel->Store->Push(query);
 }
 
-void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
+void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type, unsigned int index)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
 
@@ -110,6 +110,7 @@ void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::stri
        query->user = user;
        query->value = to_bin(stripe(value));
        query->int_keys = INT_LIST;
+       query->id = index;
        query->select_query = where;
        query->key = key;
        query->qtype = type;

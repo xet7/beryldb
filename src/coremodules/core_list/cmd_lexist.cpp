@@ -50,3 +50,25 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
        ListHelper::Exist(user, Kernel->Store->Default, user->select, key, "", TYPE_COUNT_RECORDS);
        return SUCCESS;  
 }
+
+CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 3, 3)
+{
+         syntax = "<position> <key> <value>";
+}
+
+COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
+{  
+       const std::string& index = parameters[0];
+       const std::string& key = parameters[1];
+       const std::string& value = parameters[2];
+
+       if (!Daemon::CheckFormat(user, value))
+       {
+           return FAILED;
+       }
+       
+       unsigned int n_index = convto_num<unsigned int>(index);
+       ListHelper::Exist(user, Kernel->Store->Default, user->select, key, value, TYPE_LPOS, n_index);
+       return SUCCESS;  
+}
+
