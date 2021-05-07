@@ -145,6 +145,7 @@ enum BRLD_PROTOCOL
 	BRLD_AGENT_SET			=		223,
 	BRLD_SFLUSH			=		225,
 	BRLD_SFLUSHED			=		225,
+	BRLD_PARTALL			=		226,
 	
 	/* Error protocol codes. */
 	
@@ -202,5 +203,6 @@ enum BRLD_PROTOCOL
         ERR_NO_ORIGIN			=		555,
         ERR_EXCEED_BUFFER        	=		556,
         ERR_LOGIN_NO_FLAGS		=		557,
-        ERR_SFLUSH			=		558
+        ERR_SFLUSH			=		558,
+        ERR_PARTALL			=		559
 };

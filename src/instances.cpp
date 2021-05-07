@@ -641,7 +641,7 @@ void User::SendRemoteProtocol(const Numeric::Numeric& numeric)
 
 bool User::CommonSubscription(User *other)
 {
-	for (User::ChanList::iterator i = this->chans.begin(); i != this->chans.end(); ++i)
+	for (User::SubsList::iterator i = this->chans.begin(); i != this->chans.end(); ++i)
 	{
 		if ((*i)->chan->IsSubscribed(other))
 		{
@@ -787,7 +787,7 @@ void LocalUser::set_class(const std::string &classname)
 
 void User::CheckEmptyChannels()
 {
-	for (User::ChanList::iterator i = this->chans.begin(); i != this->chans.end(); )
+	for (User::SubsList::iterator i = this->chans.begin(); i != this->chans.end(); )
 	{
 		Channel* c = (*i)->chan;
 		++i;

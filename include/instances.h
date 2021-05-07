@@ -121,7 +121,7 @@ class Externalize User : public Expandable
 		virtual void Execute(LocalUser* user) = 0;
 	};
 
-	typedef brld::node_list<Subscription> ChanList;
+	typedef brld::node_list<Subscription> SubsList;
 	
 	time_t age;
 
@@ -155,7 +155,7 @@ class Externalize User : public Expandable
 	
 	std::string agent;
 
-	ChanList chans;
+	SubsList chans;
 	
 	Server* server;
 	

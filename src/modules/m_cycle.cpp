@@ -54,12 +54,15 @@ class CommandCycle : public MultiCommand
 
 class ModuleCycle : public Module
 {
+  private:
+  
         CommandCycle cmd;
 
- public:
+  public:
  
         ModuleCycle() : cmd(this)
         {
+        
         }
 
         Version GetDescription()
