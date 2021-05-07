@@ -38,6 +38,44 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters.back();
+
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETNX);
+       return SUCCESS;
+}
+
+CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters.back();
+
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETTX);
+       return SUCCESS;
+}
+
 CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
          syntax = "<key> <value>";

@@ -53,5 +53,5 @@ enum DBL_CODE
     DBL_TYPE_TOUCH		=		39,
     DBL_TYPE_APPEND		=		40,
     DBL_TYPE_LMOVE		=		41,
-    DBL_TYPE_SFLUSH		=		42
+    DBL_TYPE_SFLUSH		=		42,
 };

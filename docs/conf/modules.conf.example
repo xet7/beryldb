@@ -50,6 +50,13 @@
 # If you uncomment 'idlers' tag, users will be disconnected
 # after one hour of innactivity. If limit is set, module defaults to 7200
 # seconds (2 hours).
+#
+# Keep in mind that 'PONG' commands are not counted towards idle
+# requirements.
 
 #<module name="quit_idlers">
 #<idlers limit="3600">
+
+# End of modules.conf
+##############################################################
+

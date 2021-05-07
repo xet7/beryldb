@@ -202,11 +202,12 @@ void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom)
+void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom, QUERY_TYPE type)
 {
        std::shared_ptr<set_query> query = std::make_shared<set_query>();
        query->database = database;
        query->user = user;
+       query->qtype = type;
        query->select_query = where;
        query->customreply = custom;
        query->int_keys = INT_KEYS;

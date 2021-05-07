@@ -38,7 +38,9 @@ class CoreModKeys : public Module
         CommandConcat cmdconcat;
         CommandSConcat cmdsconcat;
         CommandAppend cmdappend;
-         
+        CommandSetNX cmdsetnx;
+        CommandSetTX cmdsettx;
+        
     public:	
         
         CoreModKeys() : cmdset(this), 
@@ -60,7 +62,9 @@ class CoreModKeys : public Module
                         cmdtcount(this),
                         cmdconcat(this),
                         cmdsconcat(this),
-                        cmdappend(this)
+                        cmdappend(this),
+                        cmdsetnx(this),
+                        cmdsettx(this)
 
         {
         

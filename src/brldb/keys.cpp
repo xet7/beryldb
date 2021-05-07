@@ -551,6 +551,30 @@ void set_query::Run()
     
     const std::string& where = this->format;
     const std::string& entry_value = to_bin(this->value);
+    
+    if (this->qtype == TYPE_SETNX)
+    {
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+
+        if (fstatus2.ok())
+        {
+            this->access_set(DBL_ENTRY_EXISTS);
+            return;
+        }
+    }
+    else if (this->qtype == TYPE_SETTX)
+    {
+           signed int ttl = ExpireManager::TriggerTIME(this->key);
+           
+           if (ttl != -1)
+           {
+                 Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
+                this->access_set(DBL_ENTRY_EXISTS);
+             return;                
+           }
+           
+    }
 
     rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where, entry_value);
   
@@ -567,8 +591,22 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
 {       
         if (query && !query->customreply.empty())
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, query->customreply);
-            return;
+             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, query->customreply);
+             return;
+        }
+        
+        if (query->qtype == TYPE_SETNX || query->qtype == TYPE_SETTX)
+        {
+             if (query->access == DBL_ENTRY_EXISTS)
+             {
+                    user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, 0);
+             }
+             else
+             {
+                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_SET, query->key, 1);
+             }
+             
+             return;
         }
         
         if (query->finished)

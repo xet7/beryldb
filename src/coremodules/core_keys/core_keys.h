@@ -25,6 +25,26 @@ class CommandSet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandSetTX : public Command 
+{
+    public: 
+
+        CommandSetTX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
+class CommandSetNX : public Command 
+{
+    public: 
+
+        CommandSetNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
 class CommandGet : public Command 
 {
     public: 

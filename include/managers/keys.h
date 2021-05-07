@@ -41,7 +41,7 @@ class Externalize KeyHelper
 
         static void Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet = false);
         
-        static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom = "");
+        static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom = "", QUERY_TYPE type = TYPE_NONE);
 
         /* Moves an entry to another select. */
         
