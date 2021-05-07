@@ -28,7 +28,7 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::TriggerTIME(key);
+         signed int ttl = ExpireManager::TriggerTIME(key, user->select);
          
          if (ttl != -1)
          {
@@ -53,7 +53,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
           
-         signed int ttl = ExpireManager::TriggerTIME(key);
+         signed int ttl = ExpireManager::TriggerTIME(key, user->select);
          
          if (ttl != -1)
          {

@@ -238,19 +238,52 @@ void sflush_query::Run()
                 
                 if (convto_string(rawstring[0]) == convto_string(INT_KEYS))
                 {
-                      if (convto_string(rawstring[1]) == this->value)
-                      {  
-                            this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
-                            found_counter++;
-                      }
+                            size_t found =  rawstring.find_first_of(":");
+                            std::string path = rawstring.substr(0,found);
+                            std::string file = rawstring.substr(found+1);
+                
+                            std::string track = path.erase(0, 1);
+                
+                            if (track == this->value)
+                            {
+                                this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                                found_counter++;
+                            }
                 }
                 else
                 {
-                      if (convto_string(rawstring[2]) == this->value)
-                      {
+                     engine::colon_node_stream stream(rawstring);
+                std::string token;
+
+                unsigned int strcounter = 0;
+                bool match = true;
+
+                while (stream.items_extract(token))
+                {
+                        if (match && strcounter == 0)
+                        {
+                            if (convto_string(INT_KEYS) == token)
+                            {
+                                match = false;
+                            }
+                        }
+
+                        if (match && strcounter == 1)
+                        {
+                            if (this->value != token)
+                            {
+                                match = false;
+                            }
+                        }
+
+                        strcounter++;
+                }
+                     
+                    if (match)
+                    {
                             this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
                             found_counter++;
-                      }
+                    }
                 }
      }
      

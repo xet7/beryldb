@@ -65,7 +65,7 @@ bool ExpireManager::Delete(const std::string& key, const std::string& select)
         return false;
 }
 
-signed int ExpireManager::TriggerTIME(const std::string& key)
+signed int ExpireManager::TriggerTIME(const std::string& key, const std::string& select)
 {
         ExpireMap& expires = Kernel->Store->Expires->GetExpires();
 
@@ -73,7 +73,7 @@ signed int ExpireManager::TriggerTIME(const std::string& key)
 
         for (ExpireMap::iterator it = expires.begin(); it != expires.end(); it++)
         {
-                        if (it->second.key == key)
+                        if (it->second.key == key && it->second.select == select)
                         {
                                 return it->first;
                         }
@@ -103,7 +103,7 @@ signed int ExpireManager::Add(signed int schedule, const std::string& key, const
 
         /* If entry already exists, we remove it and insert it again. */
         
-        if (ExpireManager::TriggerTIME(key) > 0)
+        if (ExpireManager::TriggerTIME(key, select) > 0)
         {
               ExpireManager::Delete(key, select);
         }
@@ -138,7 +138,7 @@ signed int ExpireManager::Add(signed int schedule, const std::string& key, const
         return New.schedule;
 }
 
-ExpireEntry ExpireManager::Find(const std::string& key)
+ExpireEntry ExpireManager::Find(const std::string& key, const std::string& select)
 {
         std::lock_guard<std::mutex> lg(ExpireManager::mute);
 
@@ -146,7 +146,7 @@ ExpireEntry ExpireManager::Find(const std::string& key)
 
         for (ExpireMap::iterator it = current.begin(); it != current.end(); it++)
         {
-                        if (it->second.key == key)
+                        if (it->second.key == key && it->second.select == select)
                         {
                                 return it->second;
                         }
@@ -199,10 +199,10 @@ void ExpireManager::Flush(time_t TIME)
         ExpireManager::mute.unlock();
 }
 
-signed int ExpireManager::GetTTL(const std::string& key)
+signed int ExpireManager::GetTTL(const std::string& key, const std::string& select)
 {
       std::lock_guard<std::mutex> lg(ExpireManager::mute);
-      return ExpireManager::TriggerTIME(key);
+      return ExpireManager::TriggerTIME(key, select);
 }
 
 void ExpireManager::Reset()
@@ -210,3 +210,25 @@ void ExpireManager::Reset()
       std::lock_guard<std::mutex> lg(ExpireManager::mute);
       Kernel->Store->Expires->ExpireList.clear();
 }
+
+unsigned int ExpireManager::Count(const std::string& select)
+{
+        ExpireMap& expires = Kernel->Store->Expires->GetExpires();
+        std::lock_guard<std::mutex> lg(ExpireManager::mute);
+        
+        unsigned int counter = 0;
+
+        for (ExpireMap::iterator it = expires.begin(); it != expires.end(); it++)
+        {
+                ExpireEntry entry = it->second;
+
+                if (entry.select == select)       
+                {
+                       counter++;
+                }
+        }
+        
+        return counter;
+}
+        
+        

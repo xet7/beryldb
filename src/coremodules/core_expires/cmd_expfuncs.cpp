@@ -19,23 +19,30 @@
 #include "converter.h"
 #include "core_expires.h"
 
-CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 1)
+CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 2)
 {
          last_empty_ok = true;
+         syntax = "<*argument> <*option>";
 }
 
 COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
 {       
          const std::string& arg = parameters[0];
+         std::string opt;
          
          /* No argument provided, we simply count expire items. */
          
          if (!parameters.size() || arg.length() > 1)
          {
-                  unsigned int count = Kernel->Store->Expires->Count();
+                  unsigned int count = Kernel->Store->Expires->Count(user->select);
                   user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), Daemon::Format("Expire count: %d", count).c_str());
                   return SUCCESS;
          }
+         
+         if (parameters.size() == 2)
+         {
+               opt = parameters[1];
+         } 
          
          /* 
           * These two arguments are valid.  Arguments valid are:
@@ -53,12 +60,25 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
          /* User has requested all expires with expiration date. */
          
          ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+         
+         /* Counts expires. */
+         
+         unsigned int counter = 0;
 
          user->SendProtocol(BRLD_EXPIRE_BEGIN, arg, "Begin of EXPIRE list.");
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                ExpireEntry entry = it->second;
+               
+               if (opt.empty() || opt != "a")
+               {
+                     if (entry.select != user->select)
+                     {	
+                         continue;
+                     }
+               }
+               
                std::string schedule;
                
                if (arg == "h")
@@ -73,7 +93,7 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        user->SendProtocol(BRLD_EXPIRE_END, arg, Daemon::Format("End of EXPIRE list (%li)", expiring.size()).c_str());
+        user->SendProtocol(BRLD_EXPIRE_END, arg, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
         return SUCCESS;
 }
 
@@ -84,7 +104,7 @@ CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
 
 COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
 {       
-         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting %d expires ...", Kernel->Store->Expires->Count()).c_str());
+         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting %d expires ...", Kernel->Store->Expires->CountAll()).c_str());
 
          /* Clears all expires pending. */
          

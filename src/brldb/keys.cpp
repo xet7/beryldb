@@ -111,7 +111,7 @@ void advget_query::Run()
            this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
            this->database->db->Delete(rocksdb::WriteOptions(), where_query);
            
-           signed int ttl = ExpireManager::TriggerTIME(key);
+           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
            
            if (ttl != -1)
            {
@@ -128,7 +128,7 @@ void advget_query::Run()
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
            this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
 
-           signed int ttl = ExpireManager::TriggerTIME(key);
+           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
            
            if (ttl != -1)
            {
@@ -526,7 +526,7 @@ void move_query::Run()
           return;
     }
 
-    signed int ttl = ExpireManager::TriggerTIME(key);
+    signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
     
     if (ttl != -1)
     {
@@ -582,7 +582,7 @@ void set_query::Run()
     }
     else if (this->qtype == TYPE_SETTX)
     {
-           signed int ttl = ExpireManager::TriggerTIME(this->key);
+           signed int ttl = ExpireManager::TriggerTIME(this->key, this->select_query);
            
            if (ttl != -1)
            {

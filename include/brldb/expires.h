@@ -57,7 +57,9 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         signed int Add(signed int schedule, const std::string& key, const std::string& select, bool epoch = false);
 
-        static signed int TriggerTIME(const std::string& key);
+        /* Returns triggering time for a timer. */
+        
+        static signed int TriggerTIME(const std::string& key, const std::string& select);
 
         /* Deletes an entry from the expire map. */
         
@@ -65,21 +67,24 @@ class Externalize ExpireManager : public safecast<ExpireManager>
 
         /* Finds an expiring entry. */
         
-        ExpireEntry Find(const std::string& key);
+        ExpireEntry Find(const std::string& key, const std::string& select);
         
         ExpireMap& GetExpires();        
 
-        signed int GetTTL(const std::string& key);
+        signed int GetTTL(const std::string& key, const std::string& select);
         
         /* Clears everything inside ExpireList. */
         
         static void Reset();
         
-        unsigned int Count()
+        /* Counts all timers. */
+        
+        unsigned int CountAll()
         {
             return this->ExpireList.size();
         }
-
+        
+        unsigned int Count(const std::string& select);
 };
 
 
