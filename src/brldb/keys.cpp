@@ -156,6 +156,8 @@ void advget_query::Run()
                 return;
            }
            
+           this->response = to_string(dbvalue);
+           
            this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->value));
            this->access_set(DBL_STATUS_OK);
            this->SetOK();
@@ -207,8 +209,23 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 return;
         }
 
-        if (query->qtype == TYPE_GETSET || query->qtype == TYPE_RENAME || query->qtype == TYPE_COPY)
+        if (query->qtype == TYPE_GETSET)
         {
+                if (query->finished)
+                {
+                        user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, query->response);
+                }
+                else
+                {
+                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("Error: %d", query->access).c_str());
+                }
+                
+                return;
+        }
+        
+        if (query->qtype == TYPE_RENAME || query->qtype == TYPE_COPY)
+        {
+                
                 if (query->finished)
                 {
                         user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, "OK");
