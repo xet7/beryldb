@@ -217,7 +217,7 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 }
                 else
                 {
-                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("Error: %d", query->access).c_str());
+                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, 0);
                 }
                 
                 return;

@@ -135,7 +135,7 @@ class ModuleCoreDB : public Module
                    Kernel->Lock = false;
               }
 
-              user->SendProtocol(BRLD_CONNECTED, convto_string(Kernel->Now()).c_str());
+              user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
 
               const std::string& flags = UserHelper::FindAdmin(user->login);    
               Kernel->Logins->Sessions->Attach(user, user->login, flags);

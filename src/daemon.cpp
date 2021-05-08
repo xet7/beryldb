@@ -17,19 +17,19 @@
 const char* ExitMap[] =
 {
            "No errors took place",
-           "DIE command",
+           "Core error",
            "Config file error",
            "Logfile error",
            "POSIX fork failed",
            "Bad commandline parameters",
            "Unable to write PID file",
-           "Problem with our SocketPool",
+           "Problem with SocketPool",
            "Refusing to start up as root",
            "Couldn't load module on startup",
            "Received SIGTERM",
            "Database error",
            "SIG INT received",
-           "Shutdown command received."
+           "Shutdown command received"
 };
 
 unsigned const char *locale_case_insensitive_map = brld_case_insensitive_map;
