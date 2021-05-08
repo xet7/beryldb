@@ -370,7 +370,7 @@ void Beryl::AssignSignal(int signal)
 	s_signal = signal;
 }
 
-void Beryl::Exit(int status, bool nline, bool skip)
+void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 {
         if (nline)
         {
@@ -379,13 +379,20 @@ void Beryl::Exit(int status, bool nline, bool skip)
         
         if (!skip)
         {
-        	this->PrepareExit();
+        	if (!exitmsg.empty())
+        	{
+        		this->PrepareExit(exitmsg);
+		}
+		else
+		{
+			this->PrepareExit(SERVER_EXITING);
+		}
 	}
 	
         exit (status);
 }
 
-void Beryl::PrepareExit()
+void Beryl::PrepareExit(const std::string& quitmsg)
 {
 	bprint(INFO, "Preparing exit.");
 	
@@ -444,14 +451,14 @@ void Beryl::PrepareExit()
 	/* Disconnecting counter. */
 	
 	unsigned int csize = 0;
-
+	
 	/* We disconnect all connected clients. */
 	
 	while (!clients.empty())
 	{
 		/* NOTE: SERVER_EXITING is defined in constants.h */
 		
-		this->Clients->Disconnect(clients.front(), SERVER_EXITING);
+		this->Clients->Disconnect(clients.front(), quitmsg);
 		csize++;
 	}
 	

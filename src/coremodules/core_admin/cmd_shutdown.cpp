@@ -32,15 +32,14 @@ COMMAND_RESULT CommandShutdown::Handle(User* user, const Params& parameters)
         
         if (!reason.empty())
         {
-                Kernel->Clients->NotifyAll(BRLD_SHUTDOWN, "%s", reason.c_str());
                 slog("STARTUP", LOG_DEFAULT, Daemon::Format("Shutting down request by %s: %s", user->login.c_str(), reason.c_str()));
+                Kernel->Exit(EXIT_CODE_SHUTDOWN, false, false, Daemon::Format("Shutting down: %s", reason.c_str()).c_str());
         }
         else
         {
-                Kernel->Clients->NotifyAll(BRLD_SHUTDOWN, "Shutting down.");
                 slog("STARTUP", LOG_DEFAULT, "Shutting down request by " + user->login);
+                Kernel->Exit(EXIT_CODE_SHUTDOWN, false, false, "Shutting down.");
         }
         
-        Kernel->Exit(EXIT_CODE_SHUTDOWN);
         return SUCCESS;
 }

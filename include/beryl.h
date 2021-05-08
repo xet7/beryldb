@@ -117,7 +117,7 @@ class Externalize Beryl
 	
 	/* Prepares BerylDB for a shut down. */
 	        
-	void PrepareExit();
+	void PrepareExit(const std::string& quitmsg);
 	
 	/* Handles signals. */
 	
@@ -247,7 +247,7 @@ class Externalize Beryl
 
 	/* Exits Beryl. This function will call PrepareExit() before exiting. */
 	
-	void Exit(int status, bool nline = false, bool skip = false);
+	void Exit(int status, bool nline = false, bool skip = false, const std::string& exitmsg = "");
 
 	/* Returns current time. */
 	
