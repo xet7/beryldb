@@ -381,24 +381,24 @@ void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
         {
         	if (!exitmsg.empty())
         	{
-        		this->PrepareExit(exitmsg);
+        		this->PrepareExit(status, exitmsg);
 		}
 		else
 		{
-			this->PrepareExit(SERVER_EXITING);
+			this->PrepareExit(status, Daemon::Format("%s: %s", SERVER_EXITING, ExitMap[status]).c_str());
 		}
 	}
 	
         exit (status);
 }
 
-void Beryl::PrepareExit(const std::string& quitmsg)
+void Beryl::PrepareExit(int status, const std::string& quitmsg)
 {
-	bprint(INFO, "Preparing exit.");
+	bprint(INFO, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
 	/* Always a great idea to keep track of exiting date. */
 	
-	slog("STARTUP", LOG_DEFAULT, "Preparing exit");
+	slog("STARTUP", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
 	/* Login cache will not be needed anymore. */
 	
