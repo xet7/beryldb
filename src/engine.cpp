@@ -437,7 +437,7 @@ void Daemon::printb(const int type, const char *fmt, ...)
 
 void Daemon::printb(const int type, const std::string& buff)
 {
-       if (!Kernel->Config->printbdebug || !Kernel->Config->usercmd.nofork)
+       if (!Kernel->Config->printbdebug)
        {
                return;
        }
