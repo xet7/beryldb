@@ -134,7 +134,7 @@ sub find_output
 	{
 		return "modules/$base.so";
 	} 
-	elsif ($path eq '' || $path eq 'modes/' || $path =~ /^[a-z]+engines\/$/) 
+	elsif ($path eq '') 
 	{
 		return "obj/$base.o";
 	} 

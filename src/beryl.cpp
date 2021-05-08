@@ -372,6 +372,10 @@ void Beryl::AssignSignal(int signal)
 
 void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 {
+        /* No need to block anymore. */
+
+        this->Lock = false;
+
         if (nline)
         {
                 do_newline;
@@ -491,13 +495,21 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	SocketPool::CloseAll();
 
-	/* Beryl should stop logging at this point. */
+	/* Calculate uptime. */
 	
-	this->Logs->CloseLogs();
+	unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
 	
-	/* Info message. */
+	/* Exit msg. */
 	
-	bprint(INFO, "Exit finished.");
+	std::string exit =  Daemon::Format("Exiting after working for %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
+	
+        slog("STARTUP", LOG_DEFAULT, exit);
+	
+	bprint(INFO, exit);
+
+        /* Beryl should stop logging at this point. */
+        
+        this->Logs->CloseLogs();
 
         /* Configuration class is not needed anymore, so we reset it. */
 
@@ -506,8 +518,4 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* Cleans up config file. */
 	
         this->ConfigFile.clear();
-        
-        /* No need to block anymore. */
-        
-        this->Lock = false;
 }
