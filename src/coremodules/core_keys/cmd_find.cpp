@@ -59,10 +59,15 @@ CommandSearch::CommandSearch(Module* Creator) : Command(Creator, "SEARCH", 1, 3)
 COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!Daemon::CheckFormat(user, key))
+       {
+            return FAILED;
+       }
        
        signed int offset;
        signed int limit;
-       
+
        if (parameters.size() == 2)
        {
              limit = convto_num<signed int>(parameters[1]); 

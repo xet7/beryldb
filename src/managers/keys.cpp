@@ -31,7 +31,7 @@ void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std
        query->qtype = type;
        query->select_query = where;
        query->int_keys = INT_KEYS;
-       query->key = key;
+       query->key = stripe(key);
 
        Kernel->Store->Push(query);
 }
