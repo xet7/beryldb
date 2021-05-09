@@ -156,7 +156,7 @@ void Flusher::Search(User* user, std::shared_ptr<query_base> query)
         {
                  std::string key = i->first;
                  std::string value = i->second;
-                 user->SendProtocol(BRLD_SEARCH_ITEM, key, Daemon::Format("%s | \"%s\"", key.c_str(), value.c_str()));
+                 user->SendProtocol(BRLD_SEARCH_ITEM, key, value, Daemon::Format("%s | \"%s\"", key.c_str(), value.c_str()));
         }
 
         if (!query->partial)

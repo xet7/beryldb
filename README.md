@@ -1,5 +1,5 @@
-This README is brief introduction to Beryl. For extended information, you
-can visit our site at [beryl.dev](https://docs.beryl.dev/).
+This README is a brief introduction to Beryl. For extended information, you
+can visit our full documentation site at [beryl.dev](https://docs.beryl.dev/).
 
 ## What is Beryl?
 

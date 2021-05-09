@@ -322,24 +322,34 @@ void lpop_query::Run()
 }
 
 void Flusher::LPop(User* user, std::shared_ptr<query_base> query)
-{
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
+{	
+        switch (query->access)
         {
-            return;
-        }
-
-        if (query->access == DBL_NO_ENTRY)
-        {
-              if (query->all)
-              {
-                   user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->key, "Item not found.");
-              }
-              else
-              {
-                  user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP_ALL, query->key, "Items not found.");
-              }
+               case DBL_INTERRUPT:
+               case DBL_NOT_FOUND:
+                        
+                        return;
+             
+              break;  
+                                     
+              case DBL_NO_ENTRY:
               
-              return;
+                  {
+                       if (query->all)
+                       {
+                               user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->key, NOT_FOUND_KEY);
+                       }
+                       else
+                       {
+                              user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP_ALL, query->key, NOT_FOUND_KEY);
+                       }
+                  }
+                  
+              break;     
+            
+             default:
+             
+                 break;
         }
 
         if (query->finished)
