@@ -20,6 +20,22 @@
 #include "brldb/query.h"
 #include "managers/keys.h"
 
+void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+{
+       std::shared_ptr<search_query> query = std::make_shared<search_query>();
+
+       query->database = database;
+       query->user = user;
+       query->limit = limit;
+       query->offset = offset;
+       query->qtype = type;
+       query->select_query = where;
+       query->int_keys = INT_KEYS;
+       query->key = key;
+
+       Kernel->Store->Push(query);
+}
+
 void KeyHelper::Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value)
 {
        std::shared_ptr<append_query> query = std::make_shared<append_query>();

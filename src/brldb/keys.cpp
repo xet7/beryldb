@@ -810,7 +810,6 @@ void find_query::Run()
                                                 request->partial = true;                                  
                                                 request->subresult = tracker;
                                                 request->VecData = result;
-                                                request->counter = result.size();
                                                 result.clear();
                                                 request->SetOK();
                                                 DataFlush::AttachResult(request);
@@ -835,7 +834,6 @@ void find_query::Run()
                                         request->partial = true;
                                         request->subresult = tracker;
                                         request->VecData = result;
-                                        request->counter = result.size();
                                         result.clear();
                                         request->SetOK();
                                         DataFlush::AttachResult(request);
@@ -869,7 +867,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
              {
                  if (query->counter > 0)
                  {
-                      user->SendProtocol(BRLD_FIND_ITEM, DBL_TYPE_GET, query->response, query->response);
+                      user->SendProtocol(BRLD_FIND_ITEM, query->response, query->response);
                  }   
                  else
                  {

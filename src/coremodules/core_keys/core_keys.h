@@ -220,3 +220,13 @@ class CommandAppend : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandSearch : public Command 
+{
+    public: 
+
+        CommandSearch(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

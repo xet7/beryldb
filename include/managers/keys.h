@@ -19,6 +19,8 @@ class Externalize KeyHelper
 {
     public:
 
+        static void Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+
         static void Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value);
 
         static void Touch(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value = "", QUERY_TYPE type = TYPE_NONE);

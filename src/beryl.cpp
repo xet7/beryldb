@@ -402,7 +402,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	/* Always a great idea to keep track of exiting date. */
 	
-	slog("STARTUP", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
+	slog("EXIT", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
 	/* Login cache will not be needed anymore. */
 	
@@ -471,12 +471,12 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	if (csize > 0)
 	{
 		bprint(DONE, "%i client%s disconnected.", csize, csize > 1 ? "s" : "");
-                slog("STARTUP", LOG_DEFAULT, "%i client%s disconnected.", csize, csize > 1 ? "s" : "");
+                slog("EXIT", LOG_DEFAULT, "%i client%s disconnected.", csize, csize > 1 ? "s" : "");
 	}
 	else
 	{
 		bprint(INFO, "No clients have been disconnected.");
-                slog("STARTUP", LOG_DEFAULT, "No clients have been disconnected.");
+                slog("EXIT", LOG_DEFAULT, "No clients have been disconnected.");
 	}
 
 	/* Reset channels. */
@@ -503,7 +503,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	std::string exit =  Daemon::Format("Exiting after working for %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
 	
-        slog("STARTUP", LOG_DEFAULT, exit);
+        slog("EXIT", LOG_DEFAULT, exit);
 	
 	bprint(INFO, exit);
 

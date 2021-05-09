@@ -37,7 +37,7 @@ enum QUERY_TYPE
     TYPE_SCONCAT = 17,
     TYPE_SETNX	= 18,
     TYPE_SETTX = 19,
-    TYPE_LPOS = 20
+    TYPE_LPOS = 20,
 };
 
 enum OP_TYPE
@@ -115,6 +115,8 @@ class Externalize query_base
         
         Args VecData;
         
+        std::multimap<std::string, std::string> mmap;
+        
         std::shared_ptr<Database> database;
         
         std::vector<std::string> list;
@@ -165,6 +167,18 @@ class Externalize query_base
         
         virtual void Run() = 0;
 
+};
+
+class Externalize search_query : public query_base
+{
+    public:
+
+        search_query() : query_base(DBL_TYPE_KSEARCH)
+        {
+
+        }
+
+        void Run();
 };
 
 class Externalize hset_query : public query_base
@@ -524,5 +538,8 @@ class Flusher
         static void LMove(User* user, std::shared_ptr<query_base> query);
 
         static void SFlush(User* user, std::shared_ptr<query_base> query);
+        
+        static void Search(User* user, std::shared_ptr<query_base> query);
+        
 
 };

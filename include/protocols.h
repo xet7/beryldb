@@ -147,7 +147,10 @@ enum BRLD_PROTOCOL
 	BRLD_SFLUSHED			=		225,
 	BRLD_PARTALL			=		226,
 	BRLD_LPOS 			=		227,
-		
+	BRLD_SEARCH_ITEM		=		228,
+	BRLD_SEARCH_END			=		229,
+	BRLD_SEARCH_BEGIN		=		230,
+	
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

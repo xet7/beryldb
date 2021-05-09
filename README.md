@@ -1,6 +1,13 @@
-## About
+This README is brief introduction to Beryl. For extended information, you
+can visit our site at [beryl.dev](https://docs.beryl.dev/).
 
-Beryl is a modular database written in C++. Beryl provides lists, maps, keys, and channel subscription for its clients. It is
+## What is Beryl?
+
+Beryl is a data structures server. This basically means that Beryl provides
+access to structures via a wide range of commands. Processes are thus queued
+and dispatched to an internal processor.
+
+Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
 
 NOTE: Beryl is currently in beta and should **NOT** be used in a production
@@ -22,9 +29,9 @@ make -j4
 make install
 ```
 
-## Running
+## Running Beryl
 
-You can now start beryl by typing:
+To run Beryl with default configuration, just type:
 
 ```
 ./run/beryldb start
@@ -39,6 +46,13 @@ beryl> OK
 beryl> get hello
 beryl> "world"
 ```
+
+## Contributing
+
+We are always welcoming new members. If you wish to start contributing code to the 
+Beryl project in any form, such as in the form of pull requests via Github, 
+a code snippet or a patch, you would need to agree to release your work under the terms of the
+BSD license.
 
 ## External Links
 

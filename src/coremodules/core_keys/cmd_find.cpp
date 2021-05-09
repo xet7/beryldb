@@ -51,6 +51,38 @@ COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandSearch::CommandSearch(Module* Creator) : Command(Creator, "SEARCH", 1, 3)
+{
+         syntax = "<\%key> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       
+       signed int offset;
+       signed int limit;
+       
+       if (parameters.size() == 2)
+       {
+             limit = convto_num<signed int>(parameters[1]); 
+             offset = 0;
+       }
+       else if (parameters.size() == 3)
+       {
+             limit = convto_num<signed int>(parameters[2]); 
+             offset = convto_num<signed int>(parameters[1]);
+       }
+       else
+       {
+            limit = -1;
+            offset = 0;
+       }
+
+       KeyHelper::Search(user, user->current_db, user->select, key, offset, limit);
+       return SUCCESS;
+}
+
 CommandRKey::CommandRKey(Module* Creator) : Command(Creator, "RKEY", 0, 0)
 {
 
