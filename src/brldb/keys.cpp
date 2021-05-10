@@ -789,6 +789,11 @@ void find_query::Run()
                                 this->response = rawstring;
                         }
                         
+                        if (aux_counter > 1000)
+                        {
+                              break;
+                        }
+                        
                         continue;
                 }
                 

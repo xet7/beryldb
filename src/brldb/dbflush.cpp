@@ -99,6 +99,11 @@ void DataFlush::GetResults()
                   {
                         std::shared_ptr<query_base> signal = user->notifications.front();
                         
+                        if (signal->Lock)
+                        {
+                                continue;
+                        }
+                        
                         /* Removes signal from queue. */
                         
                         user->notifications.pop_front();
@@ -377,9 +382,13 @@ void DataThread::Process()
                                 queue.pop();
                           }
 
+                          request->Lock = true;
+                          
                           /* Executes signal request. */
 
                           request->Run();
+                          
+                          request->Lock = false;
 
                           if (!request->format.empty())
                           {

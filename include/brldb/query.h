@@ -56,8 +56,9 @@ class Externalize query_base
 {
     public:
         
-        time_t started;
+        std::atomic<bool> Lock;
         
+        time_t started;
         
         bool core;
         
@@ -153,7 +154,7 @@ class Externalize query_base
             this->finished  = true;
         }
         
-        query_base(DBL_CODE base) : started(0), core(false), subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
+        query_base(DBL_CODE base) : Lock(false), started(0), core(false), subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
         {
         
         }
