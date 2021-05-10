@@ -541,7 +541,7 @@ class Externalize ModuleHandler : public safecast<ModuleHandler>
 
 	ServiceProvider* FindService(ServiceID Type, const std::string& name);
 
-	template<typename T> inline T* FindDataService(const std::string& name)
+	template<typename T> inline T* DataModule(const std::string& name)
 	{
 		return static_cast<T*>(FindService(SERVICE_DATA, name));
 	}

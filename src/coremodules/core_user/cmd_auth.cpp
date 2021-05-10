@@ -24,7 +24,7 @@ COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameter
 {
 	const std::string& password = parameters[0];
 	
-	if (password.length() < 3 || password.length() > 30)
+	if (password.length() < 3 || password.length() > 100)
 	{
 		/* Password must be of at least 3 characters */
 		

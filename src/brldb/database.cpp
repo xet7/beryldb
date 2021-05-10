@@ -119,6 +119,19 @@ void CoreManager::Open()
        this->DB = New;
 }
 
+void CoreManager::UserDefaults()
+{
+     if (!Kernel->Store->First)
+     {
+         return;
+     }
+     
+     /* We add our default user. */
+  
+     UserHelper::Add("root", "default");
+     UserHelper::AddAdmin("root", "r");
+}
+
 void CoreManager::CheckDefaults()
 {
        std::string result = STHelper::Get("instance", "first_ran");
@@ -136,29 +149,26 @@ void CoreManager::CheckDefaults()
                  bprint(DONE, "Welcome to Beryl.");
                  bprint(INFO, "Creating defaults.");
 
-                 /* We add our default user. */
-  
-                 UserHelper::Add("root", "default");
-                 UserHelper::AddAdmin("root", "r");                    
-                 
                  /* Default settings. */
                  
                  STHelper::Set("conf", "allowchans", "true");
                  STHelper::Set("conf", "syntaxhints", "true");
                  STHelper::Set("conf", "autojoin", "off");
                  STHelper::Set("conf", "chansync", "off");
+                 
+                 Kernel->Store->First = true;
        }
        else
        {		
                instance = convto_num<time_t>(result);
                bprint(DONE, "Instance created: %s", Daemon::HumanEpochTime(instance).c_str());
+               Kernel->Store->First = false;
        }
        
        Kernel->Store->instance = instance;
-       
 }
 
-StoreManager::StoreManager() 
+StoreManager::StoreManager() : First(false)
 {
 
 }

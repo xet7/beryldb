@@ -10,8 +10,12 @@
  *
  * More information about our licensing can be found at https://docs.beryl.dev
  */
+/// $CompilerFlags: -Ietc_directory("bcrypt")
 
 #include "beryl.h"
+#include "modules/encrypt.h"
+
+#include <crypt_blowfish.c>
 
 #ifdef ENABLE_TESTOFFICE
 
@@ -38,6 +42,20 @@ TestOffice::~TestOffice()
 
 void TestOffice::Run()
 {
+        const std::string password = "test1";
+       
+        HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
+                
+        if (!provider)
+        {
+              return;
+        }
+
+        std::string hashed_pass = provider->Generate(password);
+        std::cout << "Hashed password: " << hashed_pass << std::endl;
+       
+        std::cout << "Compare wrong: " << provider->Compare("test2", hashed_pass) << std::endl;
+        std::cout << "Compare ok: " << provider->Compare("test1", hashed_pass) << std::endl;
         
         /* Let's verify if a given string is in the right format. */
         

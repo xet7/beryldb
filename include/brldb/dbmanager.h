@@ -33,12 +33,18 @@ class Externalize CoreManager : public safecast<CoreManager>
         /* Checks if defaults have been set. */
         
         void CheckDefaults();
+        
+        void UserDefaults();
 };
 
 class Externalize StoreManager : public safecast<StoreManager>
 {
     public:
             
+        /* Whether this is the first time this instance is ran. */
+        
+        bool First;
+        
         /* Time this instance was created. */
         
         time_t instance;

@@ -150,6 +150,7 @@ enum BRLD_PROTOCOL
 	BRLD_SEARCH_ITEM		=		228,
 	BRLD_SEARCH_END			=		229,
 	BRLD_SEARCH_BEGIN		=		230,
+	BRLD_HASH			=		231,
 	
 	/* Error protocol codes. */
 	
@@ -208,5 +209,7 @@ enum BRLD_PROTOCOL
         ERR_EXCEED_BUFFER        	=		556,
         ERR_LOGIN_NO_FLAGS		=		557,
         ERR_SFLUSH			=		558,
-        ERR_PARTALL			=		559
+        ERR_PARTALL			=		559,
+	ERR_UNKNOWN_HASH		=		560,
+	ERR_HASH_NOT_FOUND		=		561
 };

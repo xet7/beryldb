@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "login.h"
+#include "modules/encrypt.h"
 
 std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags)
 {
@@ -257,10 +258,15 @@ signed int LoginCache::InCache(const std::string& user, const std::string& pass)
     {
          if (i->first == user)
          {
-                 if (i->second == pass)
+                 HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
+
+                 if (!provider)
                  {
-                       /* Login found, password is correct. */
-                      
+                       return -1;
+                 }
+
+                 if (provider->Compare(pass, i->second))
+                 {
                        return 1;
                  }
                  else

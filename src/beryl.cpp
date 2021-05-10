@@ -144,10 +144,10 @@ void Beryl::Initialize()
 	
 	this->Core->Open();
 		
-	/* Checks if this instance has ever been ran. */
-	
-	this->Core->CheckDefaults();
-	
+        /* Checks if this instance has ever been ran. */
+
+        this->Core->CheckDefaults();
+
 	/* Configuration file is valid and ready. */
 	
 	if (this->Config->Ready)
@@ -200,7 +200,7 @@ void Beryl::Initialize()
         }
 
         /* Loads all modules (both, core and modules will be loaded). */
-        
+
         this->Modules->LoadAll();
 
 	/* server name in bold. */
@@ -220,6 +220,8 @@ void Beryl::Initialize()
 	this->Engine->RunAs();
 
 	slog("STARTUP", LOG_DEFAULT, "BerylDB running as %s [%s], with max. sockets: %lu ", this->Config->ServerName.c_str(), Config->GetSID().c_str(), SocketPool::GetMaxFds());
+
+        this->Core->UserDefaults();
 
 	/* Checks whether user wants to run TestOffice. */
 	

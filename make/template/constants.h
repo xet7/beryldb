@@ -55,7 +55,7 @@
 
 /* Password indication. */
 
-#define PASS_MIMMAX_LENGTH "Min password length is 3, max is 30."
+#define PASS_MIMMAX_LENGTH "Min password length is 3, max is 100."
 
 /* Used when indicating that an user length must be inside this range. */
 

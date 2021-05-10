@@ -18,6 +18,7 @@
 #include "brldb/dbnumeric.h"
 #include "managers/maps.h"
 #include "managers/user.h"
+#include "modules/encrypt.h"
 
 bool UserHelper::CheckPass(const std::string& user, const std::string& key)
 {
@@ -37,12 +38,18 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
         BasicTuple tuple = MapsHelper::Get(TABLE_USERS, user, "pass");
         
         const std::string provided_pass = std::get<1>(tuple);
+        HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
 
-        if (provided_pass != key)
+        if (!provider)
+        {
+               return false;
+        }
+
+        if (!provider->Compare(key, provided_pass))
         {
              return false;
         }
-        
+
         /* We may add this login to the cache. */
         
         Kernel->Logins->AddCache(user, provided_pass);
@@ -59,13 +66,22 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 {
         /* Min length is 3 for an user. */
         
-        if (user.length() < 3 || pass.length() < 3)
+        if (user.length() < 3 || user.length() > 15)
         {
             return false;
         }
+
+        HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
         
+        if (!provider)
+        {
+               return false;
+        }
+
+        std::string hashed_pass = provider->Generate(pass);
+            
         MapsHelper::Set(TABLE_USERS, user, "userlogin", user);
-        MapsHelper::Set(TABLE_USERS, user, "pass", pass);
+        MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
         return MapsHelper::Set(TABLE_USERS, user, "created", convto_string(Kernel->Now()));
 }
 
@@ -82,8 +98,17 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
         */
         
        Kernel->Logins->RemoveCache(user); 
+
+        HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
+
+        if (!provider)
+        {
+               return false;
+        }
+
+        std::string hashed_pass = provider->Generate(pass);
        
-       return MapsHelper::Set(TABLE_USERS, user, "pass", pass);
+        return MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
 }
 
 bool UserHelper::AddAdmin(const std::string& user, const std::string& flags)

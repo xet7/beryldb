@@ -62,8 +62,6 @@ class Externalize Daemon : public safecast<Daemon>
         
 
         STR1::function<void(char*, size_t)> GenRandom;
-
-
         
 
         STR1::function<bool(const std::string&)> ValidLogin;
