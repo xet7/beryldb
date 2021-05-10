@@ -147,4 +147,12 @@
 
 #define TABLE_USERS "users"
 
+/* Key removed." */
+
+#define KEY_REMOVED "Key removed."
+
+/* A problem occured while obtaining key. */
+
+#define UNABLE_GET_KEY "Unable to retrieve key."
+
 %target include/constants.h

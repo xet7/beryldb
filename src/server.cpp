@@ -181,7 +181,7 @@ void Beryl::SignalManager(int signal)
 	}
 	else if (signal == SIGINT)
 	{
-		Kernel->Exit(EXIT_CODE_SIGINT, true);
+		Kernel->Exit(EXIT_CODE_SIGINT, true, false, "Exiting.");
 	}
 }
 

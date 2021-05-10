@@ -683,20 +683,20 @@ void Flusher::Del(User* user, std::shared_ptr<query_base> query)
                 return;
         }
         
-        if (query->finished || query->access != 0)
+        if (query->finished)
         {
             if (query->access == DBL_NOT_FOUND)
             {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, query->key, NOT_FOUND_KEY);
+                  user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, query->key, NOT_FOUND_KEY);
             }
             else
             {
-                user->SendProtocol(BRLD_FLUSH, DBL_TYPE_DEL, query->key, "Removed.");
+                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_DEL, query->key, KEY_REMOVED);
             }
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, UNABLE_KEY);
+             user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, UNABLE_KEY);
         }
 }
 

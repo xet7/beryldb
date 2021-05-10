@@ -13,6 +13,8 @@ optimized for GNU/Linux systems.
 NOTE: Beryl is currently in beta and should **NOT** be used in a production
 environment. At this time, BerylDB is only available for Linux systems.
 
+Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
+
 ## Installation
 
 It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/installation/).
@@ -21,7 +23,14 @@ Beryl's source code is available in [our GitHub webpage](https://github.com/bery
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
 using 4 cores. Feel free to change this number according to your available cpu.
 
-You may install BerylDB following these quick steps:
+Download latest version:
+
+```
+wget https://github.com/beryldb/beryldb/archive/refs/heads/unstable.zip
+unzip unstable.zip
+```
+
+You may now install BerylDB following these quick steps: 
 
 ```
 ./configure
@@ -59,5 +68,6 @@ BSD license.
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)
+* [Twitter](https://twitter.com/Beryldlabs)
 
 ![Logo](https://docs.beryl.dev/img/smaller.png)

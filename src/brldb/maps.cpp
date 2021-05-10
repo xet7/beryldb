@@ -63,11 +63,11 @@ void Flusher::HGet(User* user, std::shared_ptr<query_base> query)
         
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
+             user->SendProtocol(BRLD_FLUSH, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, query->key, "Unable to get key.");
+             user->SendProtocol(ERR_FLUSH, query->key, UNABLE_GET_KEY);
         }
 }
 
@@ -114,7 +114,6 @@ void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
             user->SendProtocol(ERR_FLUSH, DBL_TYPE_HMOVE, UNABLE_KEY);
         }
 }
-
 
 void hdel_query::Run()
 {

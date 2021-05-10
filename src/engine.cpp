@@ -406,8 +406,6 @@ std::string Daemon::HumanEpochTime(time_t curtime, const char* format, bool utc)
 	return buffer;
 }
 
-
-
 bool Daemon::TimingSafeCompare(const std::string& one, const std::string& two)
 {
 	if (one.length() != two.length())
