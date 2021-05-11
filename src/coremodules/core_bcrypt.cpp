@@ -67,7 +67,7 @@ class BcryptServer : public HashProvider
                 return raw;
         }
 
-        BcryptServer(Module* parent) : HashProvider(parent, "bcrypt", 60), rounds(12)
+        BcryptServer(Module* parent) : HashProvider(parent, "bcrypt", 60), rounds(7)
         {
         
         }

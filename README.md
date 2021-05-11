@@ -15,6 +15,8 @@ environment. At this time, BerylDB is only available for Linux systems.
 
 Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
 
+![cli](https://docs.beryl.dev/img/render.gif)
+
 ## Installation
 
 It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/installation/).
@@ -37,6 +39,8 @@ You may now install BerylDB following these quick steps:
 make -j4 
 make install
 ```
+
+![Logo](https://docs.beryl.dev/img/smaller.png)
 
 ## Running Beryl
 
@@ -70,4 +74,3 @@ BSD license.
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)
 * [Twitter](https://twitter.com/Beryldlabs)
 
-![Logo](https://docs.beryl.dev/img/smaller.png)
