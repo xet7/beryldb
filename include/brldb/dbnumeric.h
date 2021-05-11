@@ -55,4 +55,5 @@ enum DBL_CODE
     DBL_TYPE_LMOVE		=		41,
     DBL_TYPE_SFLUSH		=		42,
     DBL_TYPE_KSEARCH		=		43,
+    DBL_TYPE_LSEARCH		=		44,
 };

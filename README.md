@@ -1,7 +1,7 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our full documentation site at [beryl.dev](https://docs.beryl.dev/).
 
-![Logo](https://docs.beryl.dev/img/smaller.png?)
+![Logo](https://docs.beryl.dev/img/smaller.png??)
 
 ## What is Beryl?
 
@@ -17,7 +17,7 @@ environment. At this time, BerylDB is only available for Linux systems.
 
 Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
 
-![cli](https://docs.beryl.dev/img/render.gif?)
+![cli](https://docs.beryl.dev/img/render.gif??)
 
 ## Installation
 

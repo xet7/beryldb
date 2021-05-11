@@ -15,7 +15,7 @@
 
 /* Max. length of a line of text */
 
-#define INPUT_LIMIT 65530
+const int INPUT_LIMIT = 65530;
 
 /* Linux distro */
 
@@ -27,11 +27,11 @@
 
 /* Time to wait before starting accepting requests. */
 
-#define PRELOOP_WAIT 1000000
+const int PRELOOP_WAIT = 1000000;
 
 /* Max client target for a loop command. */
 
-#define MAX_DEST 100
+const int MAX_DEST = 100;
 
 /* Default configuration file */
 
@@ -43,7 +43,7 @@
 
 /* Default buffer size. */
 
-#define BUFFERSIZE 65536
+const unsigned int BUFFERSIZE = 65536;
 
 /* The branch version that is shown to unprivileged users. */
 

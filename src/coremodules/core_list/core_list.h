@@ -88,3 +88,14 @@ class CommandLPos : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+
+class CommandLSearch : public Command 
+{
+    public: 
+
+        CommandLSearch(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

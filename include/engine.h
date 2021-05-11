@@ -152,7 +152,11 @@ class Externalize Daemon : public safecast<Daemon>
         void printb(const int type, const std::string& buff);
 
         void printb(const int type, const char *fmt, ...) BERYL_PRINTF(3, 4);
-
-        
-
 };
+
+/*class Externalize Daemon : public safecast<Daemon>
+{
+   public:
+   
+   
+} */

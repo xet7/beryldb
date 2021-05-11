@@ -151,6 +151,9 @@ enum BRLD_PROTOCOL
 	BRLD_SEARCH_END			=		229,
 	BRLD_SEARCH_BEGIN		=		230,
 	BRLD_HASH			=		231,
+	BRLD_LSEARCH_BEGIN		=		232,
+	BRLD_LSEARCH_ITEM		=		233,
+	BRLD_LSEARCH_END		=		234,
 	
 	/* Error protocol codes. */
 	

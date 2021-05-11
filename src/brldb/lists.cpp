@@ -611,3 +611,190 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
         }
 }
 
+
+void lsearch_query::Run()
+{
+    if (!this->Check())
+    {
+            this->access_set(DBL_STATUS_BROKEN);
+            return;
+    }
+
+    if (this->key.empty())
+    {
+            this->access_set(DBL_MISS_ARGS);
+            return;
+    }
+
+    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    std::vector<std::string> rlist;
+    std::vector<std::string> allitems;
+    
+    unsigned int aux_counter = 0;
+    unsigned int return_counter = 0;
+    unsigned int total_counter = 0;
+    unsigned int tracker = 0;
+    
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+                if (this->user && this->user->IsQuitting())
+                {
+                    access_set(DBL_NOT_FOUND);
+                    return;
+                }
+
+                if (!Kernel->Store->Flusher->Status())
+                {
+                    access_set(DBL_INTERRUPT);
+                    return;
+                }
+
+                std::string rawstring = it->key().ToString();
+                
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+
+                unsigned int strcounter = 0;
+                bool match = true;
+                
+                std::string asstr;
+
+                while (stream.items_extract(token))
+                {
+                        if (match && strcounter == 0)
+                        {
+                            if (this->int_keys != token)
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+
+                        if (match && strcounter == 2)
+                        {
+                             asstr = to_string(token);
+                             
+                             if (!Daemon::Match(asstr, this->key))
+                             {
+                                  match = false;
+                                  break;
+                             }
+                        }
+
+                        if (match && strcounter == 1)
+                        {
+                            if (this->select_query != token)
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+
+                        strcounter++;
+                }
+                
+                if (match)
+                {
+                        if (std::find(allitems.begin(), allitems.end(), asstr) != allitems.end()) 
+                        {
+                              continue;
+                        }
+                        
+                        if (limit != -1)
+                        {
+                                   if (((signed int)total_counter >= offset))
+                                   {
+                                        if (((signed int)aux_counter < limit))
+                                        {
+                                            rlist.push_back(asstr);
+                                            allitems.push_back(asstr);
+                                            aux_counter++;
+
+                                            if (return_counter % 200 == 0)
+                                            {
+                                                    tracker++;
+                                                    std::shared_ptr<lsearch_query> request = std::make_shared<lsearch_query>();
+                                                    request->user = this->user;
+                                                    request->partial = true;
+                                                    request->subresult = tracker;
+                                                    request->VecData = rlist;
+                                                    request->counter = rlist.size();
+                                                    request->qtype = this->qtype;
+                                                    rlist.clear();
+                                                    request->SetOK();
+                                                    DataFlush::AttachResult(request);
+                                            }
+
+                                            if (return_counter == (unsigned int)limit)
+                                            {
+                                                break;
+                                            }
+
+                                            return_counter++;
+                                        }
+                                    }
+                              }
+                              
+                              else if (limit == -1)
+                              {
+                                            rlist.push_back(asstr);
+                                            allitems.push_back(asstr);
+
+                                            if (return_counter % 200 == 0)
+                                            {
+                                                    tracker++;
+                                                    std::shared_ptr<lsearch_query> request = std::make_shared<lsearch_query>();
+                                                    request->user = this->user;
+                                                    request->partial = true;
+                                                    request->subresult = tracker;
+                                                    request->qtype = this->qtype;
+                                                    request->VecData = rlist;
+                                                    request->counter = rlist.size();
+                                                    rlist.clear();
+                                                    request->SetOK();
+                                                    DataFlush::AttachResult(request);
+                                            }
+                                            
+                                            return_counter++;  
+                                }
+
+                                total_counter++;
+                         }
+                              
+                        
+                }                
+
+    this->counter = return_counter;
+    this->subresult = ++tracker;
+    this->partial = false;
+
+    this->VecData = rlist;
+    this->SetOK();
+
+}
+
+void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
+{
+        if (!query->finished)
+        {
+                user->SendProtocol(ERR_FLUSH, DBL_TYPE_LSEARCH, UNABLE_MAP);
+                return;
+        }
+
+        if (query->subresult == 1)
+        {
+                user->SendProtocol(BRLD_LSEARCH_BEGIN, query->key, "BEGIN of LSEARCH list.");
+        }
+
+        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        {            
+                 std::string key = *i;
+                 user->SendProtocol(BRLD_LSEARCH_ITEM, key, Daemon::Format("\"%s\"", key.c_str()));
+        }
+
+        if (!query->partial)
+        {
+                user->SendProtocol(BRLD_LSEARCH_END, query->key, Daemon::Format("END of LSEARCH list (%i).", query->counter).c_str());
+        }
+
+}

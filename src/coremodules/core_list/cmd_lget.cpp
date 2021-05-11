@@ -51,3 +51,36 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
         ListHelper::Get(user, Kernel->Store->Default, user->select, key, offset, limit);
         return SUCCESS;  
 }
+
+CommandLSearch::CommandLSearch(Module* Creator) : Command(Creator, "LSEARCH", 1, 3)
+{
+         syntax = "<%key> <limit> <offset>";
+}
+
+COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+        
+       signed int offset;
+       signed int limit;
+       
+       if (parameters.size() == 2)
+       {
+             limit = convto_num<signed int>(parameters[1]); 
+             offset = 0;
+       }
+       else if (parameters.size() == 3)
+       {
+             limit = convto_num<signed int>(parameters[2]); 
+             offset = convto_num<signed int>(parameters[1]);
+       }
+       else
+       {
+            limit = -1;
+            offset = 0;
+       }
+
+
+        ListHelper::Search(user, Kernel->Store->Default, user->select, key, offset, limit);
+        return SUCCESS;  
+}

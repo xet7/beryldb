@@ -473,6 +473,19 @@ class Externalize append_query  : public query_base
         void Run();
 };
 
+class Externalize lsearch_query  : public query_base
+{
+    public:
+
+        lsearch_query() : query_base(DBL_TYPE_LSEARCH)
+        {
+
+        }
+
+        void Run();
+};
+
+
 class Externalize sflush_query  : public query_base
 {
     public:
@@ -541,6 +554,8 @@ class Flusher
         static void SFlush(User* user, std::shared_ptr<query_base> query);
         
         static void Search(User* user, std::shared_ptr<query_base> query);
+        
+        static void LSearch(User* user, std::shared_ptr<query_base> query);
         
 
 };

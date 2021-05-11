@@ -26,6 +26,7 @@ class CoreModuleList : public Module
         CommandLCount cmdlcount;
         CommandLMove cmdlmove;
         CommandLPos cmdlpos;
+        CommandLSearch cmdlsearch;
 
     public:	
         
@@ -36,7 +37,8 @@ class CoreModuleList : public Module
                            cmdlexist(this),
                            cmdlcount(this),
                            cmdlmove(this),
-                           cmdlpos(this)
+                           cmdlpos(this),
+                           cmdlsearch(this)
 
         {
         

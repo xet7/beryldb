@@ -391,7 +391,7 @@ void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 		}
 		else
 		{
-			this->PrepareExit(status, Daemon::Format("%s: %s", SERVER_EXITING, ExitMap[status]).c_str());
+			this->PrepareExit(status, Daemon::Format("%s: %s", SERVER_EXITING.c_str(), ExitMap[status]).c_str());
 		}
 	}
 	

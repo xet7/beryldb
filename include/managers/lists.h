@@ -33,4 +33,7 @@ class Externalize ListHelper
     static void Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type = TYPE_EXIST, unsigned int index = 0);
 
     static void Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value, const std::string& back);
+    
+    static void Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+    
 };

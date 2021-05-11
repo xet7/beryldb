@@ -31,7 +31,7 @@ COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_INVALID_PARAM, Daemon::Format("%s", MUST_BE_NUMERIC));
+                user->SendProtocol(ERR_INVALID_PARAM, Daemon::Format("%s", MUST_BE_NUMERIC.c_str()));
                 return FAILED;
         }
 

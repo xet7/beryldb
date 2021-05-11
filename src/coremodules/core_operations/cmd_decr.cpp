@@ -44,7 +44,7 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_BE_NUMERIC));
+                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_BE_NUMERIC.c_str()));
                 return FAILED;
         }
 

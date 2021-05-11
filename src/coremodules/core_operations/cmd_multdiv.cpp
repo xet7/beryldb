@@ -31,7 +31,7 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG));
+                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG.c_str()));
                 return FAILED;
         }
 
@@ -51,7 +51,7 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG));
+                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG.c_str()));
                 return FAILED;
         }
 

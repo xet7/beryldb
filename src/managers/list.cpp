@@ -83,6 +83,22 @@ DBL_CODE ListHelper::Delete(const std::string& where, const std::string& entry, 
        return DBL_MANAGER_OK;
 }
 
+void ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+{
+       std::shared_ptr<lsearch_query> query = std::make_shared<lsearch_query>();
+
+       query->database = db;
+       query->user = user;
+       query->offset = offset;
+       query->limit = limit;
+       query->int_keys = INT_LIST;
+       query->select_query = where;
+       query->key = key;
+       query->qtype = type;
+
+       Kernel->Store->Push(query);
+}
+
 /* User helpers */
 
 void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
