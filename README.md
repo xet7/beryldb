@@ -17,7 +17,7 @@ environment. At this time, BerylDB is only available for Linux systems.
 
 Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
 
-![cli](https://docs.beryl.dev/img/render.gif)
+![cli](https://docs.beryl.dev/img/render.gif?)
 
 ## Installation
 
