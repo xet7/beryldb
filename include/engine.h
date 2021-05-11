@@ -154,9 +154,9 @@ class Externalize Daemon : public safecast<Daemon>
         void printb(const int type, const char *fmt, ...) BERYL_PRINTF(3, 4);
 };
 
-/*class Externalize Daemon : public safecast<Daemon>
+class Externalize Dispatcher : public safecast<Dispatcher>
 {
    public:
-   
-   
-} */
+    
+      static void Smart(User* user, DBL_CODE code, const std::string& msg);  
+};

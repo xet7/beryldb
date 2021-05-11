@@ -36,13 +36,13 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
 
        if (!is_number(use))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC);
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
                  return FAILED;
        }
 
        if (!is_positive_number(use))
        {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT);
+                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
                 return FAILED;
        }
        

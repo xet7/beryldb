@@ -32,13 +32,13 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
           
           if (!is_number(exp_str))
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_NUMERIC);
+                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_NUMERIC.c_str());
                  return FAILED;
           }
           
           if (!is_positive_number(exp_str))
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_POSIT);
+                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_POSIT.c_str());
                  return FAILED;
           }
                   

@@ -298,3 +298,7 @@ std::string Daemon::duration_as_string(time_t duration)
 	return formatted;
 }
 
+void Dispatcher::Smart(User* user, DBL_CODE code, const std::string& msg)
+{
+
+}
