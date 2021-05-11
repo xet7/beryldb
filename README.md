@@ -1,6 +1,8 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our full documentation site at [beryl.dev](https://docs.beryl.dev/).
 
+![Logo](https://docs.beryl.dev/img/smaller.png?)
+
 ## What is Beryl?
 
 Beryl is a data structures server. This basically means that Beryl provides
@@ -32,7 +34,7 @@ wget https://github.com/beryldb/beryldb/archive/refs/heads/unstable.zip
 unzip unstable.zip
 ```
 
-You may now install BerylDB following these quick steps: 
+You may now configure BerylDB following these quick steps: 
 
 ```
 ./configure
@@ -40,11 +42,9 @@ make -j4
 make install
 ```
 
-![Logo](https://docs.beryl.dev/img/smaller.png)
-
 ## Running Beryl
 
-To run Beryl with default configuration, just type:
+To run Beryl with default configuration, type:
 
 ```
 ./run/beryldb start
@@ -53,12 +53,6 @@ To run Beryl with default configuration, just type:
 Great! You may now run your very first BerylDB command using
 [Beryldb-cli](https://github.com/beryldb/beryldb-cli) (also known as Emerald):
 
-```
-beryl> set hello "world"
-beryl> OK
-beryl> get hello
-beryl> "world"
-```
 
 ## Contributing
 
@@ -73,4 +67,5 @@ BSD license.
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)
 * [Twitter](https://twitter.com/Beryldlabs)
+
 
