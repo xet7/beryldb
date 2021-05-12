@@ -158,5 +158,5 @@ class Externalize Dispatcher : public safecast<Dispatcher>
 {
    public:
     
-      static void Smart(User* user, DBL_CODE code, const std::string& msg);  
+     static void Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl = DBL_NONE);
 };

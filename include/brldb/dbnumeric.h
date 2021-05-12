@@ -15,6 +15,7 @@
 
 enum DBL_CODE
 {
+    DBL_NONE			=		0,
     DBL_TYPE_HSET 		=		1,
     DBL_STATUS_FAILED		=		2,
     DBL_STATUS_OK		=		3,

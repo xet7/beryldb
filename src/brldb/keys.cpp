@@ -608,19 +608,19 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
 {       
         if (query && !query->customreply.empty())
         {
-             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, query->customreply);
-             return;
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, query->customreply, query->key, DBL_TYPE_SET);
+               return;
         }
         
         if (query->qtype == TYPE_SETNX || query->qtype == TYPE_SETTX)
         {
              if (query->access == DBL_ENTRY_EXISTS)
              {
-                    user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, 0);
+                    Dispatcher::Smart(user, 0, ERR_FLUSH, "0", query->key, DBL_TYPE_SET);
              }
              else
              {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_SET, query->key, 1);
+                    Dispatcher::Smart(user, 1, BRLD_FLUSH, "1", query->key, DBL_TYPE_SET);
              }
              
              return;
@@ -674,8 +674,8 @@ void del_query::Run()
 void Flusher::Del(User* user, std::shared_ptr<query_base> query)
 {
         /* 
-         * Quiet means no result should be shown. The 'quiet' var is
-         * mostly used by the expire class, but any developer may use this.
+         * Quiet means no result should be returned to user. The 'quiet' var is
+         * mostly used by the expire class.
          */
            
         if (query && query->quiet)
@@ -683,20 +683,19 @@ void Flusher::Del(User* user, std::shared_ptr<query_base> query)
                 return;
         }
         
+        if (query->access == DBL_NOT_FOUND)
+        {
+               Dispatcher::Smart(user, 0, ERR_FLUSH, NOT_FOUND_KEY, query->key, DBL_TYPE_DEL);
+               return;          
+        }
+        
         if (query->finished)
         {
-            if (query->access == DBL_NOT_FOUND)
-            {
-                  user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, query->key, NOT_FOUND_KEY);
-            }
-            else
-            {
-                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_DEL, query->key, KEY_REMOVED);
-            }
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, KEY_REMOVED, query->key, DBL_TYPE_DEL);
         }
         else
         {
-             user->SendProtocol(ERR_FLUSH, DBL_TYPE_DEL, UNABLE_KEY);
+              Dispatcher::Smart(user, 0, ERR_FLUSH, NOT_FOUND_KEY, query->key, DBL_TYPE_DEL);
         }
 }
 

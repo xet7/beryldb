@@ -710,7 +710,7 @@ void lsearch_query::Run()
                                             allitems.push_back(asstr);
                                             aux_counter++;
 
-                                            if (return_counter % 200 == 0)
+                                            if (return_counter % 100 == 0)
                                             {
                                                     tracker++;
                                                     std::shared_ptr<lsearch_query> request = std::make_shared<lsearch_query>();
@@ -740,7 +740,7 @@ void lsearch_query::Run()
                                             rlist.push_back(asstr);
                                             allitems.push_back(asstr);
 
-                                            if (return_counter % 200 == 0)
+                                            if (return_counter % 100 == 0)
                                             {
                                                     tracker++;
                                                     std::shared_ptr<lsearch_query> request = std::make_shared<lsearch_query>();
