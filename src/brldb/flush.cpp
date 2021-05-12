@@ -173,6 +173,12 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          Flusher::LSearch(user, signal);
                          break;
                     }
+
+                    case DBL_TYPE_LFIND:
+                    {
+                         Flusher::LFind(user, signal);
+                         break;
+                    }
                     
                     
         };      

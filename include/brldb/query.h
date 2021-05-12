@@ -556,6 +556,6 @@ class Flusher
         static void Search(User* user, std::shared_ptr<query_base> query);
         
         static void LSearch(User* user, std::shared_ptr<query_base> query);
-        
 
+        static void LFind(User* user, std::shared_ptr<query_base> query);
 };

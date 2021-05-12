@@ -798,3 +798,29 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
         }
 
 }
+
+void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
+{
+        if (!query->finished)
+        {
+                user->SendProtocol(ERR_FLUSH, DBL_TYPE_LSEARCH, UNABLE_MAP);
+                return;
+        }
+
+        if (query->subresult == 1)
+        {
+                user->SendProtocol(BRLD_LFIND_BEGIN, query->key, "BEGIN of LFIND list.");
+        }
+
+        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        {
+                 std::string key = *i;
+                 user->SendProtocol(BRLD_LFIND_ITEM, key, Daemon::Format("\"%s\"", key.c_str()));
+        }
+
+        if (!query->partial)
+        {
+                user->SendProtocol(BRLD_LFIND_END, query->key, Daemon::Format("END of LFIND list (%i).", query->counter).c_str());
+        }
+
+}
