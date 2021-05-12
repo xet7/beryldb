@@ -12,9 +12,6 @@ and dispatched to an internal processor.
 Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
 
-NOTE: Beryl is currently in beta and should **NOT** be used in a production
-environment. At this time, BerylDB is only available for Linux systems.
-
 Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
 
 ![cli](https://docs.beryl.dev/img/render.gif??)
@@ -27,11 +24,18 @@ Beryl's source code is available in [our GitHub webpage](https://github.com/bery
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
 using 4 cores. Feel free to change this number according to your available cpu.
 
+Install dependencies:
+
+```
+apt-get install librocksdb-dev build-essential
+```
+
 Download latest version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/heads/unstable.zip
-unzip unstable.zip
+wget https://github.com/beryldb/beryldb/archive/refs/tags/0.0.1.tar.gz
+tar -xvzf 0.0.1.tar.gz
+cd beryldb-0.0.1/
 ```
 
 You may now configure BerylDB following these quick steps: 
