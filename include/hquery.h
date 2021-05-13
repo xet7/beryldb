@@ -23,9 +23,9 @@ class Externalize HQuery
         
         unsigned int limit;
         
-        bool contains;
-        
-        bool match_all;
+        std::string contains;
+    
+        std::string field;
         
         std::string sort;
         

@@ -172,6 +172,19 @@ class Externalize query_base
 
 };
 
+class Externalize lfind_query : public query_base
+{
+    public:
+
+        lfind_query() : query_base(DBL_TYPE_LFIND)
+        {
+
+        }
+
+        void Run();
+};
+
+
 class Externalize search_query : public query_base
 {
     public:

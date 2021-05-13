@@ -84,3 +84,53 @@ COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
         ListHelper::Search(user, Kernel->Store->Default, user->select, key, offset, limit);
         return SUCCESS;  
 }
+
+CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
+{
+         syntax = "<key> <%value> <limit> <offset>";
+}
+
+COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       signed int offset;
+       signed int limit;
+
+       if (parameters.size() == 3)
+       {
+             if (!is_zero_or_great(parameters[2]))
+             {
+                 user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                return FAILED;
+             }
+       
+             limit = convto_num<signed int>(parameters[2]); 
+             offset = 0;
+       }
+       else if (parameters.size() == 4)
+       {
+             if (!is_zero_or_great(parameters[3]) || !is_zero_or_great(parameters[2]))
+             {
+                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                  return FAILED;
+             }
+       
+             limit = convto_num<signed int>(parameters[3]); 
+             offset = convto_num<signed int>(parameters[2]);
+       }
+       else
+       {
+            limit = -1;
+            offset = 0;
+       }
+       
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Find(user, Kernel->Store->Default, user->select, key, value, offset, limit);
+       return SUCCESS;  
+}

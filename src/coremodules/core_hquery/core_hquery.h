@@ -43,3 +43,12 @@ class CommandHLimits : public Command
         
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
+
+class CommandHReset : public Command
+{
+ public:
+
+        CommandHReset(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

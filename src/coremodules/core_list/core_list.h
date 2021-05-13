@@ -99,3 +99,12 @@ class CommandLSearch : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandLFind : public Command 
+{
+    public: 
+
+        CommandLFind(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
