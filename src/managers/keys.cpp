@@ -95,7 +95,7 @@ void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std
        
        /* RENAME does not need to stripe its value. */
        
-       if (type != TYPE_RENAME)
+       if (type != TYPE_RENAME || type != TYPE_RENAMENX)
        {
               query->value = stripe(value);
        }

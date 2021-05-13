@@ -23,6 +23,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 					  age(Kernel->Now())
 					, connected(0)
 					, logged(0)
+					, hquery(nullptr)
 					, uuid(uid)
 					, server(srv)
 					, session(nullptr)

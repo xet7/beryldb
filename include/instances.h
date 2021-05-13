@@ -22,6 +22,7 @@
 #include "subscription.h"
 #include "login.h"
 #include "brldb/query.h"
+#include "hquery.h"
 
 /* Connect class flags. */
 
@@ -136,6 +137,8 @@ class Externalize User : public Expandable
 	std::string login;
 
 	time_t logged;
+	
+	std::shared_ptr<HQuery> hquery;
 	
 	engine::sockets::sockaddrs client_sa;
 

@@ -38,6 +38,8 @@ enum QUERY_TYPE
     TYPE_SETNX	= 18,
     TYPE_SETTX = 19,
     TYPE_LPOS = 20,
+    TYPE_RENAMENX = 21
+    
 };
 
 enum OP_TYPE

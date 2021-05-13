@@ -30,6 +30,7 @@ class CoreModKeys : public Module
         CommandGetSet cmdgetset;
         CommandGetRange cmdgetrange;
         CommandRename cmdrename;
+        CommandRenameNX cmdrenamenx;
         CommandCopy cmdcopy;
         CommandRKey cmdrkey;
         CommandTouch cmdtouch;
@@ -56,6 +57,7 @@ class CoreModKeys : public Module
                         cmdgetset(this),
                         cmdgetrange(this),
                         cmdrename(this),
+                        cmdrenamenx(this),
                         cmdcopy(this),
                         cmdrkey(this),
                         cmdtouch(this),

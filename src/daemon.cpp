@@ -298,14 +298,28 @@ std::string Daemon::duration_as_string(time_t duration)
 	return formatted;
 }
 
-void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl)
+void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl, QUERY_TYPE type)
 {
 	if (user->agent == "emerald0")
 	{
-		user->SendProtocol(brld, dbl, msg);
+		if (type == TYPE_NONE)
+		{
+                        user->SendProtocol(brld, dbl, type, msg);
+		}
+		else
+		{
+			user->SendProtocol(brld, dbl, msg);
+		}
 	}
 	else
 	{
-                user->SendProtocol(brld, dbl, key, status);
+		if (type == TYPE_NONE)
+		{
+                        user->SendProtocol(brld, dbl, key, type, status);
+                }
+                else
+                {
+                	user->SendProtocol(brld, dbl, key, status);
+		}
 	}
 }

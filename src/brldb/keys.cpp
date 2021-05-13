@@ -123,6 +123,33 @@ void advget_query::Run()
            this->SetOK();
     }
     
+    if (this->qtype == TYPE_RENAMENX)
+    {
+           const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
+           rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), newdest, &dbvalue);
+           
+           if (fstatus2.ok())
+           {
+                  this->access_set(DBL_ENTRY_EXISTS);
+                  return;           
+           }
+           
+           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
+           
+           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
+           
+           if (ttl != -1)
+           {
+                Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
+                Kernel->Store->Expires->Delete(this->key, this->select_query);
+           }
+
+           this->access_set(DBL_STATUS_OK);
+           this->SetOK();
+           
+        
+    }
     if (this->qtype == TYPE_COPY)
     {
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
@@ -223,16 +250,29 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 return;
         }
         
-        if (query->qtype == TYPE_RENAME || query->qtype == TYPE_COPY)
+        if (query->qtype == TYPE_RENAMENX)
         {
-                
                 if (query->finished)
                 {
-                        user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, "OK");
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
                 }
                 else
                 {
-                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("Error: %d", query->access).c_str());
+                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
+                }
+                
+                return;
+        }
+        
+        if (query->qtype == TYPE_RENAME || query->qtype == TYPE_COPY)
+        {
+                if (query->finished)
+                {
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
+                }
+                else
+                {
+                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
                 }
                 
                 return;

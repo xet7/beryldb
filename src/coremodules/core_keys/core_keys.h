@@ -147,6 +147,16 @@ class CommandRename : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandRenameNX : public Command 
+{
+    public: 
+
+        CommandRenameNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
 class CommandCopy : public Command 
 {
     public: 
