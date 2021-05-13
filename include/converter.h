@@ -72,18 +72,18 @@ inline bool is_number(const std::string& str, bool allowdots = false)
         {
                 if (counter == 0 && (c == '-' || c == '+'))
                 {
-                continue;
+                    continue;
                 }
 
                 if (allowdots && (c == '.' || c == '+' || c == 'e'))
                 {
-                counter++;
-                continue;
+                     counter++;
+                     continue;
                 }
                 
                 if (std::isdigit(c) == 0) 
                 {
-                return false;
+                     return false;
                 }
                 
                 counter++;
@@ -129,6 +129,21 @@ inline bool is_positive_number(const std::string& str)
         }
  
         return true;
+}
+
+inline bool is_zero_or_great(const std::string& str)
+{
+       if (!is_number(str))
+       {
+            return false;
+       }
+       
+       if (str == "0" || is_positive_number(str))
+       {
+             return true;
+       }
+       
+       return false;
 }
 
 template<typename T> inline std::string conv_numeric(const T& in)

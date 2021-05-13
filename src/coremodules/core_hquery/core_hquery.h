@@ -34,3 +34,12 @@ class CommandHSend : public Command
         
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
+
+class CommandHLimits : public Command
+{
+ public:
+        
+        CommandHLimits(Module* parent);
+        
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

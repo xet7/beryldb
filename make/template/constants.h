@@ -13,6 +13,10 @@
 
 #pragma once
 
+/* > 0 */
+
+const std::string MUST_BE_GREAT_ZERO = "Number must be greater than zero.";
+
 /* Command not found. */
 
 const std::string CMD_NOT_FOUND = "Command not found.";

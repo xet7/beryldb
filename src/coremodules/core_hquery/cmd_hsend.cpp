@@ -16,10 +16,9 @@
 #include "core_hquery.h"
 #include "managers/maps.h"
 
-/*
 CommandHLimits::CommandHLimits(Module* parent) : Command(parent, "HLIMITS", 2, 2) 
 {
-        syntax = "<limit> <offset>"
+        syntax = "<limit> <offset>";
 }
 
 COMMAND_RESULT CommandHLimits::Handle(User* user, const Params& parameters)
@@ -29,11 +28,23 @@ COMMAND_RESULT CommandHLimits::Handle(User* user, const Params& parameters)
                 user->SendProtocol(ERR_NO_HQUERY, "No hquery found");
                 return FAILED;
         }
+
+        const std::string& offset = parameters[0];
+        const std::string& limit = parameters[1];
         
-        user->SendProtocol(BRLD_HQUERY_SENT, "HQuery sent.");
+        if (!is_zero_or_great(offset) || !is_zero_or_great(limit))
+        {
+                user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                return FAILED;
+        }
+        
+        user->hquery->offset = convto_num<unsigned int>(offset);
+        user->hquery->limit = convto_num<unsigned int>(limit);
+        
+        user->SendProtocol(BRLD_HLIMITS_OK, offset, limit, "HLimits set.");
         return SUCCESS;
 }
-*/
+
 CommandHSend::CommandHSend(Module* parent) : Command(parent, "HSEND", 0) 
 {
 

@@ -33,11 +33,23 @@ COMMAND_RESULT CommandHSearch::Handle(User* user, const Params& parameters)
        
        if (parameters.size() == 2)
        {
+             if (!is_zero_or_great(parameters[1]))
+             {
+                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                  return FAILED;
+             }
+
              limit = convto_num<signed int>(parameters[1]); 
              offset = 0;
        }
        else if (parameters.size() == 3)
        {
+             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
+             {
+                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                  return FAILED;
+             }
+
              limit = convto_num<signed int>(parameters[2]); 
              offset = convto_num<signed int>(parameters[1]);
        }
@@ -66,11 +78,23 @@ COMMAND_RESULT CommandHSeek::Handle(User* user, const Params& parameters)
        
        if (parameters.size() == 2)
        {
+             if (!is_zero_or_great(parameters[1]))
+             {
+                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                  return FAILED;
+             }
+
              limit = convto_num<signed int>(parameters[1]); 
              offset = 0;
        }
        else if (parameters.size() == 3)
        {
+             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
+             {
+                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                  return FAILED;
+             }
+
              limit = convto_num<signed int>(parameters[2]); 
              offset = convto_num<signed int>(parameters[1]);
        }

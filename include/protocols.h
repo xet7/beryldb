@@ -160,7 +160,8 @@ enum BRLD_PROTOCOL
 	BRLD_PREPARE_OK			=		238,
 	BRLD_HQUERY_SENT		=		239,
 	BRLD_HOVER_OK			=		240,
-			
+	BRLD_HLIMITS_OK			=		241,
+				
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
@@ -221,5 +222,6 @@ enum BRLD_PROTOCOL
         ERR_PARTALL			=		559,
 	ERR_UNKNOWN_HASH		=		560,
 	ERR_HASH_NOT_FOUND		=		561,
-	ERR_NO_HQUERY			=		562
+	ERR_NO_HQUERY			=		562,
+	ERR_GREAT_ZERO			=		563
 };

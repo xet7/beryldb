@@ -20,10 +20,11 @@ class CoreModHQuery : public Module
           
           CommandHSend cmdhsend;
           CommandHQuery cmdhquery;
+          CommandHLimits cmdhlimits;
      
  public:
 
-        CoreModHQuery() : cmdhsend(this), cmdhquery(this)
+        CoreModHQuery() : cmdhsend(this), cmdhquery(this), cmdhlimits(this)
         {
         
         }
