@@ -77,4 +77,12 @@ class CommandL : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandSyntax : public Command
+{
+ public:
+
+        CommandSyntax(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
 

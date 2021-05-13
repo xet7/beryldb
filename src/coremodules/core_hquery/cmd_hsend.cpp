@@ -16,6 +16,24 @@
 #include "core_hquery.h"
 #include "managers/maps.h"
 
+/*
+CommandHLimits::CommandHLimits(Module* parent) : Command(parent, "HLIMITS", 2, 2) 
+{
+        syntax = "<limit> <offset>"
+}
+
+COMMAND_RESULT CommandHLimits::Handle(User* user, const Params& parameters)
+{
+        if (user->hquery == nullptr)
+        {
+                user->SendProtocol(ERR_NO_HQUERY, "No hquery found");
+                return FAILED;
+        }
+        
+        user->SendProtocol(BRLD_HQUERY_SENT, "HQuery sent.");
+        return SUCCESS;
+}
+*/
 CommandHSend::CommandHSend(Module* parent) : Command(parent, "HSEND", 0) 
 {
 

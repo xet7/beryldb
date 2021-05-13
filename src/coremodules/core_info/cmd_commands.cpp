@@ -14,6 +14,27 @@
 #include "beryl.h"
 #include "core_info.h"
 
+CommandSyntax::CommandSyntax(Module* parent) : Command(parent, "SYNTAX", 1, 1)
+{
+	syntax = "<command>";
+}
+
+COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
+{
+	const std::string& cmd = parameters[0];
+	
+	Command* Found = Kernel->Commander.GetBase(cmd);
+	
+	if (!Found)
+	{
+		user->SendProtocol(ERR_CMD_NOFND, cmd, CMD_NOT_FOUND.c_str());
+		return FAILED;
+	}
+	
+	user->SendProtocol(BRLD_SYNTAX, Found->name, Found->syntax);
+	return SUCCESS;
+}
+
 CommandCommands::CommandCommands(Module* parent) : Command(parent, "COMMANDS", 0, 0)
 {
 

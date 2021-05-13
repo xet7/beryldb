@@ -163,7 +163,7 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		{
 			if (user->registered == REG_OK)
 			{
-				user->SendProtocol(ERR_CMD_NOFND, command, "Command not found");
+				user->SendProtocol(ERR_CMD_NOFND, command, CMD_NOT_FOUND.c_str());
 			}
 
 			Kernel->Stats.Unknown++;

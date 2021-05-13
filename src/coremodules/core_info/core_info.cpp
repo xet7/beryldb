@@ -33,12 +33,12 @@ class CoreModInfo : public Module
 	CommandTime cmdtime;
 	CommandVersion cmdversion;
 	CommandL cmdl;
-
+	CommandSyntax cmdsyntax;
 
   public:
  
 	CoreModInfo() : cmdcommands(this), cmdmodules(this), cmdtime(this),
-			cmdversion(this), cmdl(this)
+			cmdversion(this), cmdl(this), cmdsyntax(this)
 	{
 
 	}

@@ -40,6 +40,7 @@ Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsi
 	: CommandModel(mod, cmd, minpara, maxpara)
 	, requires(0)
 	, force_manual_route(false)
+        , syntax("No syntax required.")
 	, pre_reg_ok(false)
 	, no_hint_until_reg(false)
 {

@@ -13,6 +13,12 @@
 
 #pragma once
 
+/* Command not found. */
+
+const std::string CMD_NOT_FOUND = "Command not found.";
+
+/* Unknown issue happened. */
+
 const std::string UNKNOWN_ISSUE	= "A problem has occured while performing this operation.";
 
 /* Incorrect agent format. */
