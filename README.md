@@ -1,6 +1,9 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our full documentation site at [beryl.dev](https://docs.beryl.dev/).
 
+**Note:** This is an experimental/learning project and is not intended to be used in
+a production setting.
+
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
 ## What is Beryl?
@@ -18,7 +21,7 @@ Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
 
 ## Installation
 
-It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/installation/).
+It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/server/installation/).
 Beryl's source code is available in [our GitHub webpage](https://github.com/beryldb/beryldb).
 
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
@@ -27,7 +30,7 @@ using 4 cores. Feel free to change this number according to your available cpu.
 Install dependencies:
 
 ```
-apt-get install librocksdb-dev build-essential
+sudo apt-get install librocksdb-dev build-essential
 ```
 
 Download latest version:
