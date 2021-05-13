@@ -13,6 +13,8 @@
 
 #pragma once
 
+const std::string UNKNOWN_ISSUE	= "A problem has occured while performing this operation.";
+
 /* Incorrect agent format. */
 
 const std::string WRONG_AGENT = "Your agent is not valid.";

@@ -367,30 +367,38 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
 {
       if (query->finished)
       {
-              if (query->qtype == TYPE_NTOUCH)
+              switch (query->qtype)
               {
-                  user->SendProtocol(BRLD_FLUSH, TYPE_NTOUCH, query->counter2);
+                   case TYPE_NTOUCH:
+                          Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->counter2), convto_string(query->counter2), DBL_NONE, TYPE_NTOUCH);
+                   return;
+                   
+                   case TYPE_TCOUNT:
+                          Dispatcher::Smart(user, query->id, BRLD_FLUSH, convto_string(query->id), convto_string(query->id), DBL_NONE, TYPE_NTOUCH);
+                   return;
+                   
+                   case TYPE_CONCAT:
+                   case TYPE_SCONCAT:
+                   {
+                               if (query->counter > 0)
+                               {
+                                      Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->response), query->key, DBL_NONE, query->qtype);
+                               }
+                               else
+                               {
+                                     Dispatcher::Smart(user, query->qtype, BRLD_FLUSH, UNDEF_KEY, query->key, DBL_NONE, query->qtype);
+                               }
+                   } 
+                   
+                   return;
+                    
+                   default:
+                       return;
               }
-              else if (query->qtype == TYPE_TCOUNT)
-              {
-                  user->SendProtocol(BRLD_FLUSH, TYPE_TCOUNT, query->id);
-              }
-              else if ((query->qtype == TYPE_CONCAT || query->qtype == TYPE_SCONCAT))
-              {
-                  if (query->counter > 0)
-                  {
-                      user->SendProtocol(BRLD_FLUSH, query->qtype, query->response);
-                  }
-                  else
-                  {
-                      user->SendProtocol(ERR_FLUSH, query->qtype, UNDEF_KEY);
-                  }
-              }
-              else
-              {
-                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_TOUCH, query->counter);
-              }
-      }
+              
+    }
+    
+    Dispatcher::Smart(query->user, query->qtype, ERR_FLUSH, UNKNOWN_ISSUE.c_str(), query->key, DBL_NONE, query->qtype);
 }     
 
 void get_query::Run()

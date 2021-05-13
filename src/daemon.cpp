@@ -304,18 +304,42 @@ void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::st
 	{
 		if (type == TYPE_NONE)
 		{
-                        user->SendProtocol(brld, dbl, type, msg);
+			if (dbl == DBL_NONE)
+			{
+                                user->SendProtocol(brld, type, msg);
+                        }
+                        else
+                        {
+                        	user->SendProtocol(brld, dbl, type, msg);
+			}
 		}
 		else
 		{
-			user->SendProtocol(brld, dbl, msg);
+		        if (dbl == DBL_NONE)
+                        {
+                                user->SendProtocol(brld, type, msg);
+                        }
+                        else
+                        {
+                                user->SendProtocol(brld, dbl, msg);
+                        }
+
 		}
 	}
 	else
 	{
 		if (type == TYPE_NONE)
 		{
-                        user->SendProtocol(brld, dbl, key, type, status);
+                        
+                        if (dbl == DBL_NONE)
+                        {
+                                user->SendProtocol(brld, key, type, status);
+                        }
+                        else
+                        {
+                                user->SendProtocol(brld, dbl, type, msg, status);
+                        }
+                        
                 }
                 else
                 {
