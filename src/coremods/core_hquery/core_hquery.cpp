@@ -22,10 +22,12 @@ class CoreModHQuery : public Module
           CommandHQuery cmdhquery;
           CommandHLimits cmdhlimits;
           CommandHReset cmdhreset;
+          CommandHParam cmdhparam;
      
  public:
 
-        CoreModHQuery() : cmdhsend(this), cmdhquery(this), cmdhlimits(this), cmdhreset(this)
+        CoreModHQuery() : cmdhsend(this), cmdhquery(this), cmdhlimits(this), cmdhreset(this),
+                          cmdhparam(this)
         {
         
         }

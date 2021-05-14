@@ -15,7 +15,7 @@
 #pragma once
 
 #include "brldb/database.h"
-#include "hquery.h"
+#include "brldb/hquery.h"
 
 class Externalize MapsHelper
 {

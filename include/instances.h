@@ -22,7 +22,7 @@
 #include "subscription.h"
 #include "login.h"
 #include "brldb/query.h"
-#include "hquery.h"
+#include "brldb/hquery.h"
 
 /* Connect class flags. */
 

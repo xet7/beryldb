@@ -12,7 +12,7 @@
  */
 
 #include "beryl.h"
-#include "hquery.h"
+#include "brldb/hquery.h"
 #include "core_hquery.h"
 #include "managers/maps.h"
 

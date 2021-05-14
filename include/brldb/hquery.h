@@ -13,12 +13,19 @@
 
 #pragma once
 
+enum HQUERY_TYPE
+{
+     HQUERY_REPEAT_COUNT = 0,
+};
+
 class Externalize HQuery
 {
     public:
         
         HQuery();
         
+        HQUERY_TYPE type;
+                
         unsigned int offset;
         
         unsigned int limit;
@@ -28,6 +35,8 @@ class Externalize HQuery
         std::string field;
         
         std::string sort;
-        
+
         std::string key;
+        
+        
 };

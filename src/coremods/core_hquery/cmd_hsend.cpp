@@ -12,7 +12,7 @@
  */
 
 #include "beryl.h"
-#include "hquery.h"
+#include "brldb/hquery.h"
 #include "core_hquery.h"
 #include "managers/maps.h"
 
@@ -60,5 +60,65 @@ COMMAND_RESULT CommandHSend::Handle(User* user, const Params& parameters)
         
         user->SendProtocol(BRLD_HQUERY_SENT, "HQuery sent.");
         MapsHelper::PreHQuery(user, user->current_db, user->select, user->hquery);
+        return SUCCESS;
+}
+
+CommandHParam::CommandHParam(Module* parent) : Command(parent, "HPARAM", 2, 2) 
+{
+        syntax = "<var> <param>";
+}
+
+COMMAND_RESULT CommandHParam::Handle(User* user, const Params& parameters)
+{
+        if (user->hquery == nullptr)
+        {
+                user->SendProtocol(ERR_NO_HQUERY, "No hquery found");
+                return FAILED;
+        }
+
+        const std::string& var = parameters[0];
+        const std::string& param = parameters.back();
+        
+        if (!Daemon::CheckFormat(user, param))
+        {
+             return FAILED;
+        }
+        
+        const unsigned int i_var = convto_num<unsigned int>(var);
+        
+        switch (i_var)
+        {
+                case 1:
+                
+                     {
+                          user->hquery->field = param;       
+                          break;
+                     }
+                     
+                case 2:
+                
+                     {
+                          user->hquery->sort = param;       
+                          break;
+                     }
+                     
+                case 3:
+                
+                     {
+                          user->hquery->key = param;       
+                          break;
+                     }
+                     
+                
+                default:
+                
+                     { 
+                          user->SendProtocol(ERR_WRONG_HPARAMS, "Wrong param.");
+                          return FAILED;     
+                     }
+                
+        }
+        
+        user->SendProtocol(BRLD_HPARAM_OK, "OK");
         return SUCCESS;
 }

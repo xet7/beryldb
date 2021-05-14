@@ -501,6 +501,19 @@ class Externalize lsearch_query  : public query_base
 };
 
 
+class Externalize hquery_query  : public query_base
+{
+    public:
+
+        hquery_query() : query_base(DBL_TYPE_HQUERY)
+        {
+
+        }
+
+        void Run();
+};
+
+
 class Externalize sflush_query  : public query_base
 {
     public:

@@ -11,10 +11,13 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include "beryl.h"
-#include "brldb/hquery.h"
+#pragma once
 
-HQuery::HQuery()
+#include "brldb/database.h"
+
+class Externalize HQHelper
 {
-
-}
+    public:
+    
+        static void Search(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery);
+};

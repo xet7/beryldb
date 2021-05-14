@@ -1,4 +1,3 @@
-
 /*
  * BerylDB - A modular database.
  * http://www.beryldb.com
@@ -23,7 +22,7 @@ class CommandHQuery : public Command
         
         CommandHQuery(Module* parent);
         
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandHSend : public Command
@@ -32,7 +31,7 @@ class CommandHSend : public Command
         
         CommandHSend(Module* parent);
         
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandHLimits : public Command
@@ -41,7 +40,7 @@ class CommandHLimits : public Command
         
         CommandHLimits(Module* parent);
         
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandHReset : public Command
@@ -50,5 +49,14 @@ class CommandHReset : public Command
 
         CommandHReset(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandHParam : public Command
+{
+ public:
+
+        CommandHParam(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

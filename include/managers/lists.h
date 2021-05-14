@@ -10,6 +10,7 @@
  *
  * More information about our licensing can be found at https://docs.beryl.dev
  */
+
 #pragma once
 
 #include "brldb/database.h"
