@@ -17,11 +17,11 @@
 #include <rocksdb/db.h>
 #include <rocksdb/c.h>
 #include <rocksdb/options.h>
+#include <rocksdb/env.h>
 
 class Database
 {
     public:
-
 
         /* Pointer to the rocksdb instance. */
         

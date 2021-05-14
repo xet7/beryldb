@@ -179,9 +179,9 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          Flusher::LFind(user, signal);
                          break;
                     }
-                    
-                    
         };      
+        
+        signal = nullptr;
 }
 
 

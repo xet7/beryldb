@@ -26,7 +26,7 @@ use constant
 	SOURCEPATH => $ENV{SOURCEPATH}
 };
 
-sub find_output;
+sub locate_outputs;
 sub gendep($);
 sub dep_cpp($$$);
 sub dep_so($);
@@ -67,14 +67,15 @@ all: beryldb modules
 
 END
 	my(@core_deps, @modlist);
+	
 	for my $file (<brldb/*.cpp>, <managers/*.cpp>, <*.cpp>) 
 	{
-		my $out = find_output $file;
+		my $out = locate_outputs $file;
 		dep_cpp $file, $out, 'gen-o';
 
 		if ($file =~ /^(m|core)_.*\.cpp/) 
 		{
-			my $correctsubdir = ($file =~ /^m_/ ? "modules" : "coremodules");
+			my $correctsubdir = ($file =~ /^m_/ ? "modules" : "coremods");
 			print "Error: module $file is in the src directory, put it in src/$correctsubdir instead!\n";
 			exit 1;
 		}
@@ -82,10 +83,12 @@ END
 		push @core_deps, $out;
 	}
 
-	for my $directory (qw(coremodules modules)) 
+	for my $directory (qw(coremods modules)) 
 	{
 		opendir(my $moddir, $directory);
-		for my $file (sort readdir $moddir) {
+		
+		for my $file (sort readdir $moddir) 
+		{
 			next if $file =~ /^\./;
 
 			if ($directory eq 'modules' && -e "modules/extra/$file" && !-l "modules/$file") 
@@ -125,12 +128,12 @@ modules: $mods
 END
 }
 
-sub find_output 
+sub locate_outputs 
 {
 	my $file = shift;
 	my($path,$base) = $file =~ m#^((?:.*/)?)([^/]+)\.cpp# or die "Bad file $file";
 	
-	if ($path eq 'modules/' || $path eq 'coremodules/') 
+	if ($path eq 'modules/' || $path eq 'coremods/') 
 	{
 		return "modules/$base.so";
 	} 
@@ -138,7 +141,7 @@ sub find_output
 	{
 		return "obj/$base.o";
 	} 
-	elsif ($path =~ m#modules/(m_.*)/# || $path =~ m#coremodules/(core_.*)/#) 
+	elsif ($path =~ m#modules/(m_.*)/# || $path =~ m#coremods/(core_.*)/#) 
 	{
 		return "obj/$1/$base.o";
 	} 
@@ -218,7 +221,7 @@ sub dep_cpp($$$)
 sub dep_so($) 
 {
 	my($file) = @_;
-	my $out = find_output $file;
+	my $out = locate_outputs $file;
 
 	my $name = basename $out, '.so';
 	print MAKE ".PHONY: $name\n";
@@ -237,7 +240,7 @@ sub dep_dir($$)
 	for my $file (sort readdir DIR) 
 	{
 		next unless $file =~ /(.*)\.cpp$/;
-		my $ofile = find_output "$dir/$file";
+		my $ofile = locate_outputs "$dir/$file";
 		dep_cpp "$dir/$file", $ofile, 'gen-o';
 		push @ofiles, $ofile;
 	}

@@ -44,7 +44,7 @@ class Externalize config_rule : public refcountbase
 	
 	long as_int(const std::string& key, long def, long min = LONG_MIN, long max = LONG_MAX);
 	
-	unsigned long as_uint(const std::string& key, unsigned long def, unsigned long min = 0, unsigned long max = ULONG_MAX);
+	unsigned long as_uint(const std::string& key, unsigned long def, unsigned long min = 0, unsigned long max = ULONG_MAX, bool force = false);
 	
 	double as_float(const std::string& key, double def, double min = DBL_MIN, double max = DBL_MAX);
 
@@ -66,6 +66,19 @@ class Externalize config_rule : public refcountbase
  private:
 
 	config_rule(const std::string& Tag, const std::string& file, int line);
+};
+
+struct DBOptions
+{
+	unsigned int increaseparal;
+	
+        unsigned int datathread;
+        
+        unsigned int yieldusec;
+        
+        bool createim;
+        
+        bool pipeline;
 };
 
 /* Stores user-cmd line arguments. */
@@ -173,6 +186,8 @@ class Externalize Configuration
 
 	
 	UserArguments usercmd;
+	
+	DBOptions DB;
 
 	
 	unsigned char c_ipv4_range;
@@ -186,10 +201,6 @@ class Externalize Configuration
 	
 	std::string Network;
 
-	
-	int MaxConn;
-
-	
 	
 	unsigned int MaxClients;
 
@@ -240,7 +251,14 @@ class Externalize Configuration
 	
 	void SetAll();
 
+	/* Fills data tags with reading vars. */
+	
 	void Fill();
+	
+	void CheckDatabases();
+
+	
+	
 
 	
 	static std::string Escape(const std::string& str, bool xml = true);

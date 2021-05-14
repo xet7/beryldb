@@ -676,11 +676,11 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
         
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, "OK");
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, "OK", query->key, DBL_TYPE_SET);
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_SET, query->key, "Error while setting this key.");
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, UNABLE_SET_KEY.c_str(), query->key, DBL_TYPE_SET);
         }
 }
 

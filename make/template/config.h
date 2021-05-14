@@ -39,7 +39,7 @@ const int MAX_DEST = 100;
 
 /* Number of processors available. */
 
-#define CORE_COUNT @CORE_COUNT@
+const unsigned int CORE_COUNT = @CORE_COUNT@;
 
 /* Default buffer size. */
 

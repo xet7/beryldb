@@ -15,7 +15,6 @@
 #include "exit.h"
 
 #include "brldb/dbmanager.h"
-#include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/datathread.h"
 #include "managers/lists.h"
@@ -23,6 +22,7 @@
 #include "managers/databases.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
+
 
 Database::Database(time_t dbcreated, const std::string& dbname, const std::string& dbpath) : created(dbcreated), name(dbname), path(Kernel->Config->Paths.PrependDB(dbpath))
 {
@@ -54,16 +54,18 @@ void Database::Close()
 bool Database::Open()
 {	
         this->db = NULL;
-  
-        options.create_if_missing = true;
-        options.IncreaseParallelism(2);
+        
+        options.env = Kernel->Store->env;
+        options.create_if_missing = Kernel->Config->DB.createim;
+        options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
         options.keep_log_file_num = 1;
-        options.write_thread_max_yield_usec = 1;
+        options.write_thread_max_yield_usec = Kernel->Config->DB.yieldusec;
         options.OptimizeLevelStyleCompaction();
         options.enable_thread_tracking = true;
-        options.enable_pipelined_write = true;
-        options.max_background_flushes = 4;
-
+        options.enable_pipelined_write = Kernel->Config->DB.pipeline;
+        options.max_background_flushes = 1;
+        options.max_background_compactions = 1;
+        
         this->status = rocksdb::DB::Open(options, this->path, &this->db);
         
         if (!this->status.ok()) 
@@ -168,22 +170,25 @@ void CoreManager::CheckDefaults()
        Kernel->Store->instance = instance;
 }
 
-StoreManager::StoreManager() : First(false)
+StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
 {
-
+       env->SetBackgroundThreads(2, rocksdb::Env::LOW);
+       env->SetBackgroundThreads(1, rocksdb::Env::HIGH);
 }
 
 void StoreManager::OpenAll()
 {
        unsigned int counter = 0;
 
-       for (unsigned int i = 1; i <= 2; i++)
+       for (unsigned int i = 1; i <= Kernel->Config->DB.datathread; i++)
        {
              DataThread* New = new DataThread();   
              New->Create();
              Kernel->Store->Flusher->threadslist.push_back(New);
              counter++;
        }
+       
+       bprint(DONE, "Threads opened: %u", counter);
        
        this->Default = this->Create("default", "default.db");
 }

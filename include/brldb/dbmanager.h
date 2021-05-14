@@ -15,6 +15,7 @@
 
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
+#include "brldb/database.h"
 
 class Externalize CoreManager : public safecast<CoreManager>
 {
@@ -40,6 +41,8 @@ class Externalize CoreManager : public safecast<CoreManager>
 class Externalize StoreManager : public safecast<StoreManager>
 {
     public:
+
+        rocksdb::Env* env = NULL;
             
         /* Whether this is the first time this instance is ran. */
         

@@ -66,15 +66,21 @@ BindingPort::BindingPort(config_rule* tag, const engine::sockets::sockaddrs& lis
 	SocketPool::SetReusable(fd);
 	
 	int rv = SocketPool::Bind(this->fd, listen_to);
+	
 	if (rv >= 0)
-		rv = SocketPool::Listen(this->fd, Kernel->Config->MaxConn);
+	{
+		rv = SocketPool::Listen(this->fd, 128);
+	}
 
 	if (listen_to.family() == AF_UNIX)
 	{
 		const std::string permissionstr = tag->as_string("permissions");
 		unsigned int permissions = strtoul(permissionstr.c_str(), NULL, 8);
+	
 		if (permissions && permissions <= 07777)
+		{
 			chmod(listen_to.str().c_str(), permissions);
+		}
 	}
 
 	int timeout = tag->get_duration("defer", (tag->as_string("ssl").empty() ? 0 : 3));

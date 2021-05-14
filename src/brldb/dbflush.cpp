@@ -259,6 +259,12 @@ void DataFlush::ResetAll()
 {
       Kernel->Store->Flusher->Pause();
 
+      if (Kernel->Clients->Global)
+      {
+          Kernel->Clients->Global->pending.clear();
+          Kernel->Clients->Global->notifications.clear();
+      }
+      
       /* Clear up pending notifications. */
 
       const UserMap& users = Kernel->Clients->GetInstances();
@@ -332,6 +338,11 @@ void DataThread::Process()
                     usleep(10);
               }
 
+              if (!Kernel->Store->Flusher->Status())
+              {
+                    continue;
+              }
+
               switch (signal->id)
               {
                     case MSG_POST_USER_DATA:
@@ -357,7 +368,6 @@ void DataThread::Process()
                                signal = nullptr;
                                
                                continue;
-
                           }
                           
                           /* Indicates this thread is busy. */
@@ -411,12 +421,8 @@ void DataThread::Process()
 
                     default:
                     {
-
+                           break;
                     }
-
-                    signal.reset();
-                    signal = nullptr;
-
               }
         }
 }
