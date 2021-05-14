@@ -222,22 +222,25 @@ void advget_query::Run()
 
 void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
 {
-        if (query->qtype == TYPE_GETDEL || query->qtype == TYPE_GETRANGE)
+        switch (query->qtype)
         {
-                if (query->finished)
-                {
+            case TYPE_GETRANGE:
+            case TYPE_GETDEL:
+            {
+                  if (query->finished)
+                  {
                         user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
-                }
-                else
-                {
+                  }
+                  else
+                  {
                        user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, UNDEF_KEY);
-                }
+                  }
                 
-                return;
-        }
-
-        if (query->qtype == TYPE_GETSET)
-        {
+                  return;
+            }
+            
+            case TYPE_GETSET:
+            {
                 if (query->finished)
                 {
                         user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, query->response);
@@ -248,10 +251,10 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 }
                 
                 return;
-        }
-        
-        if (query->qtype == TYPE_RENAMENX)
-        {
+            }
+            
+            case TYPE_RENAMENX:
+            {
                 if (query->finished)
                 {
                         Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
@@ -260,12 +263,14 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 {
                        Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
                 }
-                
+
                 return;
-        }
-        
-        if (query->qtype == TYPE_RENAME || query->qtype == TYPE_COPY)
-        {
+
+            }
+            
+            case TYPE_RENAME:
+            case TYPE_COPY:
+            {
                 if (query->finished)
                 {
                         Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
@@ -274,8 +279,11 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
                 {
                        Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
                 }
-                
+
                 return;
+            
+            }
+            
         }
 }
 

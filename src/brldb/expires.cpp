@@ -131,7 +131,7 @@ signed int ExpireManager::Add(signed int schedule, const std::string& key, const
         
         Kernel->Store->Expires->ExpireList.insert(std::make_pair(New.schedule, New));
         
-//        ExpiresHelper::Add(key, convto_string(Now), convto_string(schedule));
+//        MapsHelper::Add(key, convto_string(Now), convto_string(schedule));
 
         ExpireManager::mute.unlock();
         

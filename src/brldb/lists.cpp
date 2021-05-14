@@ -799,33 +799,6 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
 
 }
 
-/*void ldiff_query::Run()
-{
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
-
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
-    std::vector<std::string> rlist;
-    
-    std::multimap<std::string, std::string> keys;
-    
-    for (it->SeekToFirst(); it->Valid(); it->Next()) 
-    {
-        
-    }
-    
-
-}
-*/
 
 void lfind_query::Run()
 {
