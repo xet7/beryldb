@@ -67,6 +67,16 @@ class DataThread
 
         std::thread::id Create();
 
+        /* Exists thread */
+        
+        void Exit();
+        
+        /* Destructor */
+        
+        ~DataThread();
+        
+        /* Ads a new request to the processor. */
+        
         void Post(std::shared_ptr<query_base> query);
-
+        
 };

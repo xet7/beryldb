@@ -106,11 +106,21 @@ class Externalize DataFlush : public safecast<DataFlush>
         
         static void DispatchAll();
 
+        /* Close all threads */
+        
+        void CloseThreads();     
+        
         /* Returns vector of threads. */
         
         DataThreadVector& GetThreads()
         {
                 return this->threadslist;
         }
+        
+        void EraseAll()
+        {
+                return this->threadslist.clear();
+        }
+        
 
 };

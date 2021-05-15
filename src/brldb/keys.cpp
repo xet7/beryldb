@@ -23,10 +23,10 @@ namespace
 {
        /* Thread safe random int. */
         
-       int IntRand(const int & min, const int & max) 
+       unsigned int IntRand(const int & min, const int & max) 
        {
             static thread_local std::mt19937 generator;
-            std::uniform_int_distribution<int> distribution(min,max);
+            std::uniform_int_distribution<unsigned int> distribution(min,max);
             return distribution(generator);
         }
 }
@@ -828,30 +828,40 @@ void find_query::Run()
                 if (this->qtype == TYPE_RAKEY)
                 {
                         aux_counter++;
+                        
+                        bool last = false;
 
                         if (!this->response.empty())
                         {
-                            if ((IntRand(0, 10) % aux_counter) == 0)
+                            if ((IntRand(1, aux_counter) == aux_counter))
                             {
                                  continue;
                             }
                         }
                         else
                         {
-                            this->response = rawstring;
+                              this->response = rawstring;
+                              last = true;
                         }
                         
-                        if ((IntRand(0, 10) % aux_counter) == 0)
+                        if ((aux_counter % 100 == IntRand(0, 5)) && last == false)
                         {
-                                this->response = rawstring;
+                              this->response = rawstring;
                         }
                         
-                        if (aux_counter > 1000)
+                        if (IntRand(1, aux_counter) == aux_counter)
                         {
-                              break;
+                              this->response = rawstring;
+                              last = true;
+                        }
+                        
+                        if (aux_counter > 500)
+                        {
+                                break;
                         }
                         
                         continue;
+                        
                 }
                 
                 if (Daemon::Match(rawstring, key))

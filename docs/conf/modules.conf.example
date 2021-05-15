@@ -57,7 +57,11 @@
 #<module name="quit_idlers">
 #<idlers limit="3600">
 
+# Chan Restrict ##############################################
+#
+# Only users with 'e' flag can create channels.
 
+#<module name="chanrestrict">
 
 # End of modules.conf
 ##############################################################

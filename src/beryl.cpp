@@ -418,10 +418,15 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	 */
 	
 	DataFlush::ResetAll();
-
-	/* No more requests will be processed. */
 	
-	Kernel->Store->Flusher->Pause();
+        /* Close all data threads */
+
+        this->Store->Flusher->CloseThreads();
+
+        /* No more requests will be processed. */
+
+        this->Store->Flusher->Pause();
+
 	
 	/* Stop listening in all ports. */
 	
@@ -503,7 +508,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	/* Exit msg. */
 	
-	std::string exit =  Daemon::Format("Exiting after working for %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
+	std::string exit = Daemon::Format("Exiting after working for %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
 	
         slog("EXIT", LOG_DEFAULT, exit);
 	

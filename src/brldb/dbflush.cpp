@@ -332,6 +332,10 @@ void DataThread::Process()
 
                       signal = queue.front();
               }
+
+              /* Indicates this thread is busy. */
+
+              this->SetStatus(true);
               
               if (Kernel->Lock)
               {
@@ -342,9 +346,14 @@ void DataThread::Process()
               {
                     continue;
               }
-              
+
               switch (signal->id)
               {
+                    case MSG_EXIT_THREAD:
+                    {
+                          return;
+                    }
+                    
                     case MSG_POST_USER_DATA:
                     {
                           std::shared_ptr<query_base> request = signal->msg;
@@ -393,18 +402,10 @@ void DataThread::Process()
 
                           request->Lock = true;
 
-                          /* Indicates this thread is busy. */
-
-                          this->SetStatus(true);
-                          
                           /* Executes signal request. */
 
                           request->Run();
 
-                          /* No longer busy. */
-
-                          this->SetStatus(false);
-                          
                           request->Lock = false;
 
                           if (!request->format.empty())
@@ -427,8 +428,48 @@ void DataThread::Process()
                            break;
                     }
               }
+              
+              /* Thread is no longer busy. */
+
+              this->SetStatus(false);
+              
         }
 }
 
+void DataThread::Exit()
+{
+      if (!m_thread)
+      {
+           return;
+      }
+      
+      std::shared_ptr<ThreadMsg> Input(new ThreadMsg(MSG_EXIT_THREAD, 0));
+      {
+		std::lock_guard<std::mutex> lock(m_mutex);
+		queue.push(Input);
+		m_cv.notify_one();
+      }
 
+      m_thread->join();
+      m_thread = nullptr;          
+}
 
+DataThread::~DataThread()
+{
+
+}
+
+void DataFlush::CloseThreads()
+{
+      DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
+
+      for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
+      {
+             DataThread* thread = *iter;
+             thread->Exit();
+      }     
+      
+      Kernel->Store->Flusher->EraseAll();
+      
+      bprint(INFO, "Threads closed.");
+}
