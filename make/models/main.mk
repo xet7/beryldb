@@ -159,7 +159,7 @@ install: target
 	@echo '· To start the server, run:'  $(SCRPATH)/beryldb start
 	@echo ""
 
-Makefile: make/template/main.mk src/version.sh configure @CONF_CACHEFILE@
+Makefile: make/models/main.mk src/version.sh configure @CONF_CACHEFILE@
 	./configure --update
 
 clean:

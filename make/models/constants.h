@@ -13,6 +13,8 @@
 
 #pragma once
 
+/* Unable to set key. */
+
 const std::string UNABLE_SET_KEY = "Unable to set key.";
 
 /* > 0 */

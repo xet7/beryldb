@@ -19,7 +19,7 @@ const int INPUT_LIMIT = 65530;
 
 /* Linux distro */
 
-#define LINUX_DISTRO @LINUX_DISTRO@
+#define LINUX_DISTRO "@LINUX_DISTRO@"
 
 /* Enables testsuite. */
 

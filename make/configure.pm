@@ -46,7 +46,7 @@ our @EXPORT = qw(CONF_CACHEFILE
                  process_make);
 
 
-sub __get_template_settings($$$) 
+sub __get_models_settings($$$) 
 {
 
 	my ($config, $compiler, $version) = @_;
@@ -305,12 +305,12 @@ sub process_make($$$)
 
 	my ($config, $compiler, $version) = @_;
 
-	my %settings = __get_template_settings($config, $compiler, $version);
+	my %settings = __get_models_settings($config, $compiler, $version);
 
-	for my $template (<${\CONFIGURE_ROOT}/make/template/*>) 
+	for my $models (<${\CONFIGURE_ROOT}/make/models/*>) 
 	{
-		say brld_format "Parsing <|GREEN ${\abs2rel $template, CONFIGURE_ROOT}|> ...";
-		open(my $file_handler, $template) or show_error "unable to read $template: $!";
+		say brld_format "Parsing <|GREEN ${\abs2rel $models, CONFIGURE_ROOT}|> ...";
+		open(my $file_handler, $models) or show_error "unable to read $models: $!";
 		my (@lines, $mode, @platforms, @targets);
 
 		while (my $line = <$file_handler>) 
@@ -331,7 +331,7 @@ sub process_make($$$)
 				} 
 				else 
 				{
-					show_warning "Unknown template variable '$name' in $template!";
+					show_warning "Unknown models variable '$name' in $models!";
 					last;
 				}
 			}
@@ -363,7 +363,7 @@ sub process_make($$$)
 				} 
 				else 
 				{
-					show_warning "Unknown template command '$2' in $template!";
+					show_warning "Unknown models command '$2' in $models!";
 					push @lines, $line;
 				}
 				
@@ -379,7 +379,7 @@ sub process_make($$$)
 
 			unless (@targets) 
 			{
-				push @targets, catfile(CONFIGURE_DIRECTORY, basename $template);
+				push @targets, catfile(CONFIGURE_DIRECTORY, basename $models);
 			}
 
 			for my $target (@targets) 

@@ -342,7 +342,7 @@ void DataThread::Process()
               {
                     continue;
               }
-
+              
               switch (signal->id)
               {
                     case MSG_POST_USER_DATA:
@@ -354,6 +354,7 @@ void DataThread::Process()
                           if (request->user && !request->user->IsQuitting())
                           {
                                 /* OK */
+                                
                           }
                           else
                           {
@@ -364,15 +365,13 @@ void DataThread::Process()
                                      request->user->SetLock(false);
                                }
                                
+                               queue.pop();
+                               
                                signal.reset();
                                signal = nullptr;
                                
                                continue;
                           }
-                          
-                          /* Indicates this thread is busy. */
-                          
-                          this->SetStatus(true);
 
                           if (!request->format.empty())
                           {
@@ -393,10 +392,18 @@ void DataThread::Process()
                           }
 
                           request->Lock = true;
+
+                          /* Indicates this thread is busy. */
+
+                          this->SetStatus(true);
                           
                           /* Executes signal request. */
 
                           request->Run();
+
+                          /* No longer busy. */
+
+                          this->SetStatus(false);
                           
                           request->Lock = false;
 
@@ -406,10 +413,6 @@ void DataThread::Process()
 
                               Kernel->Store->Flusher->Unlock(request->format);
                           }
-                            
-                          /* No longer busy. */
-                          
-                          this->SetStatus(false);
                           
                           /* Adds result to the pending notification list. */
                           
