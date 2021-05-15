@@ -162,7 +162,9 @@ enum BRLD_PROTOCOL
 	BRLD_HOVER_OK			=		240,
 	BRLD_HLIMITS_OK			=		241,
 	BRLD_HPARAM_OK			=		242,
-				
+	BRLD_END_MASS_JOIN		=		243,
+	BRLD_MASS_JOIN			=		244,
+	
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
