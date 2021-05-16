@@ -23,6 +23,11 @@ MonitorHandler::MonitorHandler()
 
 bool MonitorHandler::Add(User* user, MONITOR_LEVEL level)
 {
+       if (level < 5 || level > 10)
+       {
+            return false;
+       }
+       
        this->MonitorList.insert(std::make_pair(user, level));
        return true;
 }
@@ -46,7 +51,7 @@ void MonitorHandler::Remove(User* user)
 
 void MonitorHandler::Push(const std::string& instance, const std::string& cmd, MONITOR_LEVEL level, const CommandModel::Params& params)
 {
-        if (!this->IsActive())
+        if (!this->MonitorList.size())
         {
              return;
         }

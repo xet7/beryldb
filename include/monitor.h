@@ -72,4 +72,19 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         {
             return this->MonitorList.size();
         }
+        
+        /* Counts all monitor size. */
+        
+        unsigned int Count()
+        {
+               return this->MonitorList.size();
+        }
+        
+        /* Clears all monitoring users */
+        
+        void Reset()
+        {
+              this->MonitorList.clear();
+        }
+        
 };

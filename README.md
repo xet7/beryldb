@@ -1,11 +1,6 @@
 
-<a href="https://twitter.com/beryldlabs">
-		<img
-			alt="Twitter: Beryldlabs" src="https://img.shields.io/twitter/follow/beryldlabs.svg?style=social"
-			target="_blank"
-		/>
-	</a>
-
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldblabs)](https://twitter.com/beryldlabs) [![BerylDB build status](https://github.com/beryldb/beryldb/workflows/Linux%20CI/badge.svg)](https://github.com/beryldb/beryldb/actions?workflow=Linux CI) <a href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb" /></a>
+<br>
 
 
 This README is a brief introduction to Beryl. For extended information, you

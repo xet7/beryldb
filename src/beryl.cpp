@@ -414,6 +414,10 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	slog("EXIT", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
+	/* Stop all monitoring. */
+	
+	this->Monitor->Reset();
+	
 	/* Login cache will not be needed anymore. */
 	
 	this->Logins->ResetCache();
