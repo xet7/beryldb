@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -126,25 +126,12 @@ void hdel_all_query::Run()
 
 void Flusher::HDelAll(User* user, std::shared_ptr<query_base> query)
 {
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
+        if (query->finished && query->counter > 0)
         {
-            return;
-        }
-
-        if (query->finished)
-        {
-            if (query->counter > 0)
-            {
-                user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HDEL, query->key, Daemon::Format("%d map key removed.", query->counter).c_str());
-            }
-            else
-            {
-                user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HDEL, query->key, "No key founds.");
-            
-            }
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, Daemon::Format("%d map key removed.", query->counter).c_str(), query->key, DBL_TYPE_HDEL);
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_HDEL, query->key, "Unable to remove key.");
+               Dispatcher::Smart(user, 0, ERR_FLUSH, UNABLE_KEY, query->key, DBL_TYPE_HDEL);
         }
 }

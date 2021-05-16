@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -203,6 +203,32 @@ signed int ExpireManager::GetTTL(const std::string& key, const std::string& sele
 {
       std::lock_guard<std::mutex> lg(ExpireManager::mute);
       return ExpireManager::TriggerTIME(key, select);
+}
+
+unsigned int ExpireManager::SReset(const std::string& select)
+{
+      /* Keeps track of deleted expires */
+      
+      unsigned int counter = 0;
+
+      ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+      ExpireManager::mute.lock();
+
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+            if (it->second.select == select)
+            {
+                       Kernel->Store->Expires->ExpireList.erase(it++);
+                       counter++;
+            }
+            else
+            {
+                       it++;
+            }
+      }
+      
+      ExpireManager::mute.unlock();
+      return counter;
 }
 
 void ExpireManager::Reset()

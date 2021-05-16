@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -73,34 +73,31 @@ void Flusher::HGet(User* user, std::shared_ptr<query_base> query)
 
 void hmove_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
-
-    if (this->format.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
+        if (!this->Check())
+        {
+            this->access_set(DBL_STATUS_BROKEN);
             return;
-    }
+        }
 
-    std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), this->format, &dbvalue);
+        if (this->format.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    if (!fstatus2.ok())
-    {
-          this->access_set(DBL_STATUS_FAILED);
-          return;
-    }    
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), this->format, &dbvalue);
 
-    const std::string newfmt = this->int_keys + ":" + this->select_query + ":" + to_bin(this->key) + ":" + to_bin(this->value);
+        if (!fstatus2.ok())
+        {
+            this->access_set(DBL_STATUS_FAILED);
+            return;
+        }    
 
-    
-    this->database->db->Put(rocksdb::WriteOptions(), newfmt, dbvalue);
-    this->database->db->Delete(rocksdb::WriteOptions(), this->format);
-    
-    this->SetOK();
+        const std::string newfmt = this->int_keys + ":" + this->select_query + ":" + to_bin(this->key) + ":" + to_bin(this->value);
+        this->database->db->Put(rocksdb::WriteOptions(), newfmt, dbvalue);
+        this->database->db->Delete(rocksdb::WriteOptions(), this->format);
+        this->SetOK();
 }
 
 void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
@@ -117,38 +114,38 @@ void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
 
 void hdel_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
-
-    if (this->format.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
+        if (!this->Check())
+        {
+            this->access_set(DBL_STATUS_BROKEN);
             return;
-    }
+        }
 
-    const std::string inserting = this->format;
-    std::string dbvalue;
-    bool dirty = false;
-    
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
+        if (this->format.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    if (fstatus2.ok())
-    {
-              dirty = true;
-              this->database->db->Delete(rocksdb::WriteOptions(), inserting);
-              
-    }     
-    
-    if (!dirty)
-    {
-          this->access_set(DBL_STATUS_FAILED);
-          return;
-    }
+        const std::string inserting = this->format;
+        std::string dbvalue;
+        bool dirty = false;
+        
+        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
 
-    this->SetOK();
+        if (fstatus2.ok())
+        {
+                dirty = true;
+                this->database->db->Delete(rocksdb::WriteOptions(), inserting);
+                
+        }     
+        
+        if (!dirty)
+        {
+            this->access_set(DBL_STATUS_FAILED);
+            return;
+        }
+
+        this->SetOK();
 }
 
 void Flusher::HDel(User* user, std::shared_ptr<query_base> query)
@@ -165,30 +162,30 @@ void Flusher::HDel(User* user, std::shared_ptr<query_base> query)
 
 void hset_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
-
-    if (this->value.empty() || this->format.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
+        if (!this->Check())
+        {
+            this->access_set(DBL_STATUS_BROKEN);
             return;
-    }
+        }
 
-    const std::string& where_to = this->format;
-    
-    rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where_to, this->value);
+        if (this->value.empty() || this->format.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    if (!fstatus2.ok())
-    {
-          this->access_set(DBL_STATUS_FAILED);
-    }
-    else
-    {
-          this->SetOK();
-    }
+        const std::string& where_to = this->format;
+        
+        rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where_to, this->value);
+
+        if (!fstatus2.ok())
+        {
+            this->access_set(DBL_STATUS_FAILED);
+        }
+        else
+        {
+            this->SetOK();
+        }
 }
 
 void Flusher::HSet(User* user, std::shared_ptr<query_base> query)
@@ -369,13 +366,6 @@ void hkeys_query::Run()
 
 void Flusher::HKeys(User* user, std::shared_ptr<query_base> query)
 {
-        /* User disconnected or query interrupted. */
-
-        if (query->access == DBL_INTERRUPT)
-        {
-            return;
-        }
-
         if (!query->finished)
         {
                 user->SendProtocol(ERR_FLUSH, DBL_TYPE_HKEYS, UNABLE_MAP);

@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -86,6 +86,7 @@ User::~User()
 {
         this->SetLock(false);
 
+        Kernel->Monitor->Remove(this);
 	pending.clear();
 	notifications.clear();
 	
@@ -122,7 +123,6 @@ const std::string& User::GetHostFormat()
 	this->cached_user_real_host = instance + "!" + agent + "@" + GetRealHost();
 	return this->cached_user_real_host;
 }
-
 
 bool User::CanPerform(unsigned char flag)
 {

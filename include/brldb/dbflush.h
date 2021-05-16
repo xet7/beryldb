@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -23,6 +23,10 @@ class Externalize DataFlush : public safecast<DataFlush>
       friend class StoreManager;
 
       private:
+
+        /* Mute used to add notifications. */
+
+        static std::mutex mute;
         
         /* Thread vector. */
        
@@ -30,11 +34,7 @@ class Externalize DataFlush : public safecast<DataFlush>
 
         /* Determines whether DataFlush should be delivering pendings. */
         
-        bool running;
-        
-        /* Mute used to add notifications. */
-        
-        static std::mutex mute;
+        std::atomic<bool> running;
         
         /* Vector containing all threads. */
 
@@ -70,9 +70,15 @@ class Externalize DataFlush : public safecast<DataFlush>
         
         std::atomic<bool> opmute;
 
+        /* Locks a entry. */
+        
         void Lock(const std::string& format);
 
+        /* Unlocks an entry. */
+        
         void Unlock(const std::string& format);
+        
+        /* Checks if an entry is locked. */
 
         bool IsLocked(const std::string& format);
 
@@ -121,6 +127,4 @@ class Externalize DataFlush : public safecast<DataFlush>
         {
                 return this->threadslist.clear();
         }
-        
-
 };

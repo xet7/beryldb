@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -65,6 +65,8 @@ bool Database::Open()
         options.enable_pipelined_write = Kernel->Config->DB.pipeline;
         options.max_background_flushes = 1;
         options.max_background_compactions = 1;
+
+        slog("DATABASE", LOG_VERBOSE, "Database opened: %s", this->path.c_str());
         
         this->status = rocksdb::DB::Open(options, this->path, &this->db);
         
@@ -189,6 +191,7 @@ void StoreManager::OpenAll()
        }
        
        bprint(DONE, "Threads opened: %u", counter);
+       slog("DATABASE", LOG_VERBOSE, "Threads opeend: %u", counter);
        
        this->Default = this->Create("default", "default.db");
 }

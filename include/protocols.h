@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -164,7 +164,10 @@ enum BRLD_PROTOCOL
 	BRLD_HPARAM_OK			=		242,
 	BRLD_END_MASS_JOIN		=		243,
 	BRLD_MASS_JOIN			=		244,
-	
+	BRLD_MONITOR			=		245,
+	BRLD_NOW_MONITORING		=		246,
+ 	BRLD_STOP_MONITOR		=		247,
+ 		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
@@ -188,7 +191,7 @@ enum BRLD_PROTOCOL
         ERR_CHANFULL                    =		518,
         ERR_LOGIN_NO_EXISTS		=		519,
 
-	ERR_NOTREGISTERED               =	 	520,
+	ERR_NO_AUTH               =	 	520,
 	ERR_NEEDMOREPARAMS		=		521,
 	ERR_AGENT_IS_SET           	= 		522,
 	ERR_CHANOPRIVSNEEDED            = 		527, 
@@ -228,5 +231,7 @@ enum BRLD_PROTOCOL
 	ERR_NO_HQUERY			=		562,
 	ERR_GREAT_ZERO			=		563,
 	ERR_HUNABLE_RESET		=		564,
-	ERR_WRONG_HPARAMS		=		565
+	ERR_WRONG_HPARAMS		=		565,
+	ERR_WRONG_MONITOR		=		566,
+	ERR_NO_MONITOR			=		567
 };

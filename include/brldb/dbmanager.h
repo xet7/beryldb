@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -15,6 +15,7 @@
 
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
+#include "brldb/futures.h"
 #include "brldb/database.h"
 
 class Externalize CoreManager : public safecast<CoreManager>
@@ -60,17 +61,23 @@ class Externalize StoreManager : public safecast<StoreManager>
         
         ExpireManager Expires;
         
+        /* Handles futures. */
+        
+        FutureManager Futures;
+        
         /* Constructor. */
         
         StoreManager();
+
+        /* Flusher class */
+        
+        DataFlush Flusher; 
         
         /* Opens threads. */
 
         void OpenAll();
 
         std::shared_ptr<Database> Create(const std::string& name, const std::string& path);
-
-        DataFlush Flusher; 
 
         void Push(std::shared_ptr<query_base> request);
         

@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -731,22 +731,6 @@ void del_query::Run()
 
 void Flusher::Del(User* user, std::shared_ptr<query_base> query)
 {
-        /* 
-         * Quiet means no result should be returned to user. The 'quiet' var is
-         * mostly used by the expire class.
-         */
-           
-        if (query && query->quiet)
-        {
-                return;
-        }
-        
-        if (query->access == DBL_NOT_FOUND)
-        {
-               Dispatcher::Smart(user, 0, ERR_FLUSH, NOT_FOUND_KEY, query->key, DBL_TYPE_DEL);
-               return;          
-        }
-        
         if (query->finished)
         {
                Dispatcher::Smart(user, 1, BRLD_FLUSH, KEY_REMOVED, query->key, DBL_TYPE_DEL);

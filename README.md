@@ -1,3 +1,13 @@
+
+<a href="https://twitter.com/beryldlabs">
+		<img
+			alt="Twitter: Beryldlabs" src="https://img.shields.io/twitter/follow/beryldlabs.svg?style=social"
+			target="_blank"
+		/>
+	</a>
+
+
+
 This README is a brief introduction to Beryl. For extended information, you
 can visit our full documentation site at [beryl.dev](https://docs.beryl.dev/).
 

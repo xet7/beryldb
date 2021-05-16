@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -65,6 +65,7 @@ Externalize extern std::unique_ptr<Beryl> Kernel;
 #include "stats.h"
 #include "engine.h"
 #include "login.h"
+#include "monitor.h"
 
 #include "brldb/dbmanager.h"
 
@@ -176,6 +177,10 @@ class Externalize Beryl
 	/* Handles unique ids. */
         
 	UIDHandler UID;
+	
+	/* Handles monitors. */
+	
+	MonitorHandler Monitor;
 
 	/* Handles class objects that are awaiting to be removed. */
 	
@@ -197,7 +202,7 @@ class Externalize Beryl
 	
 	/* Manages databases, both user-related and core ones. */
 	
-	StoreManager	Store;
+	StoreManager Store;
 	
 	/* Parses and processes user-provided commands. */
 	

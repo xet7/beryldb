@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -426,6 +426,20 @@ UserVector ClientManager::FindLogin(const std::string& login, registration_state
 	
 	return users;
 }
+
+/*UserVector ClientManager::FindPrivs(const std::string& login, const std::string& flag)
+{
+        const LoginHash& AllLogins = Kernel->Clients.GetLogins();
+
+        for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
+        {
+		User* user = i->second;
+		
+		if (user->session->
+		
+        
+        }
+}*/
 
 void ClientManager::ExitLogins(const std::string& login, const std::string& reason)
 {

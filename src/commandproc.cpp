@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -161,6 +161,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 	
 		if (!handler)
 		{
+		        Kernel->Monitor->Push(user->instance, command, MONITOR_DEBUG, command_p);
+		
 			if (user->registered == REG_OK)
 			{
 				user->SendProtocol(ERR_CMD_NOFND, command, CMD_NOT_FOUND.c_str());
@@ -174,7 +176,6 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 
 	if (handler->max_params && command_p.size() > handler->max_params)
 	{
-		
 		const CommandModel::Params::iterator lastbase = command_p.begin() + (handler->max_params - 1);
 		const CommandModel::Params::iterator firstexcess = lastbase + 1;
 
@@ -187,9 +188,10 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		command_p.erase(firstexcess, command_p.end());
 	}
 
-	
 	ModuleResult MOD_RESULT;
 	UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, command_p, user, false));
+	
+	Kernel->Monitor->Push(user->instance, command, MONITOR_DEFAULT, command_p);
 
 	if (MOD_RESULT == MOD_RES_STOP)
 	{
@@ -212,7 +214,6 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 			NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
 			return;
 		}
-
 	}
 
 	if ((!command_p.empty()) && (command_p.back().empty()) && (!handler->last_empty_ok))
@@ -234,7 +235,6 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 	}
 	else
 	{
-		
 		UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, command_p, user, true));
 
 		if (MOD_RESULT == MOD_RES_STOP)
@@ -243,9 +243,7 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 			return;
 		}
 
-		
 		COMMAND_RESULT result = handler->Handle(user, command_p);
-
 		NOTIFY_MODS(OnPostCommand, (handler, command_p, user, result, false));
 	}
 }

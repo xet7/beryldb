@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -296,6 +296,18 @@ std::string Daemon::duration_as_string(time_t duration)
 	}
 
 	return formatted;
+}
+
+void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key, const std::string& msg, const std::string& div)
+{
+        if (user->agent == "emerald0")
+        {
+		user->SendProtocol(brld, Daemon::Format("%s%s %s", key.c_str(), div.c_str(), msg.c_str()));
+        }
+        else
+        {
+                user->SendProtocol(brld, key, msg);
+        }
 }
 
 void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl, QUERY_TYPE type)

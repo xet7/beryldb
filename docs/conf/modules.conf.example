@@ -63,6 +63,15 @@
 
 #<module name="chanrestrict">
 
+# Auto Join #################################################
+#
+# Automatically joins all users connecting to this server.
+# This tag has its own config tag. You must separate channels
+# by a comma if you wish to add more than one automatic chan to join.
+
+#<module name="autojoin">
+#<autojoin chans="#hello,#world">
+
 # End of modules.conf
 ##############################################################
 

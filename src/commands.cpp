@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -77,7 +77,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
 
 void Command::NotLogged(LocalUser* user, const Params& parameters)
 {
-	user->SendProtocol(ERR_NOTREGISTERED, name, "You have not logged in.");
+	user->SendProtocol(ERR_NO_AUTH, name, "You have not logged in.");
 }
 
 MultiCommand::MultiCommand(Module* me, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : Command(me, cmd, minpara, maxpara)

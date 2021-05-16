@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -113,3 +113,48 @@ COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
          
          return SUCCESS;
 }
+
+CommandSReset::CommandSReset(Module* Creator) : Command(Creator, "SRESET", 0, 1)
+{
+        syntax = "<select>";
+}
+
+COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
+{
+        std::string use;
+       
+        if (parameters.size())
+        { 
+            use = parameters[0];
+        
+            if (!is_number(use))
+            {
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+            }
+
+            if (!is_positive_number(use))
+            {
+                  user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                  return FAILED;
+            }
+            
+            if (!Daemon::CheckRange(user, use, "Must be a value between 1 and 100", 1, 100))
+            {
+                  return FAILED;
+            }
+        }
+        else
+        {
+             use = user->select;
+        }
+
+        /* Clears all expires pending. */
+
+        unsigned int counter = ExpireManager::SReset(use);
+        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleted %d expires in select %s.", counter, use.c_str()).c_str());
+
+        return SUCCESS;
+}
+
+

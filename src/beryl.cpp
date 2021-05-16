@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -311,6 +311,10 @@ void Beryl::Loop()
          */
         
         this->Atomics->Run();
+        
+        /* Delivers data to monitors. */
+        
+        this->Monitor->Flush();
 }
 
 void Beryl::RunTimed(time_t current)
@@ -356,6 +360,10 @@ void Beryl::RunTimed(time_t current)
         /* Removes expiring entries. */
  	
   	this->Store->Expires->Flush(current);        
+
+  	/* Futures exerciser. */
+  	
+  	this->Store->Futures->Flush(current);
         
         /* 
          * CPU stats, we need this information to handle
@@ -426,7 +434,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         /* No more requests will be processed. */
 
         this->Store->Flusher->Pause();
-
 	
 	/* Stop listening in all ports. */
 	

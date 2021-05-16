@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  *
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -117,7 +117,10 @@ void DataFlush::GetResults()
                          * we flush it so this signal can be delivered.
                          */
                          
-                        DataFlush::Flush(user, signal);
+                        if (signal->access != DBL_INTERRUPT && signal->access != DBL_NOT_FOUND && !signal->quiet)
+                        {
+                            DataFlush::Flush(user, signal);
+                        }
 
                         if (user)
                         {
@@ -190,7 +193,7 @@ bool DataThread::IsBusy()
 
 void DataFlush::Process(User* user, std::shared_ptr<query_base> signal)
 {
-      if (!signal)
+      if (!signal || !Kernel->Store->Flusher->Status())
       {
             return;
       }
@@ -293,9 +296,32 @@ DataThread::DataThread() : m_thread(nullptr), busy(false)
 
 }
 
+void DataThread::Exit()
+{
+      if (!m_thread)
+      {
+           return;
+      }
+
+      std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_EXIT_THREAD, 0));
+      {
+                std::lock_guard<std::mutex> lock(m_mutex);
+                queue.push(Input);
+                m_cv.notify_one();
+      }
+
+      m_thread->join();
+      m_thread = nullptr;
+}
+
 void DataThread::Post(std::shared_ptr<query_base> query)
 {
-      std::shared_ptr<ThreadMsg> Input(new ThreadMsg(MSG_POST_USER_DATA, query));
+      if (!m_thread)
+      {
+            return;
+      }
+      
+      std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_SIGNAL, query));
 
       std::unique_lock<std::mutex> lk(m_mutex);
       queue.push(Input);
@@ -349,12 +375,13 @@ void DataThread::Process()
 
               switch (signal->id)
               {
-                    case MSG_EXIT_THREAD:
+                    case PROC_EXIT_THREAD:
                     {
+                          this->clear();
                           return;
                     }
                     
-                    case MSG_POST_USER_DATA:
+                    case PROC_SIGNAL:
                     {
                           std::shared_ptr<query_base> request = signal->msg;
                           
@@ -436,24 +463,6 @@ void DataThread::Process()
         }
 }
 
-void DataThread::Exit()
-{
-      if (!m_thread)
-      {
-           return;
-      }
-      
-      std::shared_ptr<ThreadMsg> Input(new ThreadMsg(MSG_EXIT_THREAD, 0));
-      {
-		std::lock_guard<std::mutex> lock(m_mutex);
-		queue.push(Input);
-		m_cv.notify_one();
-      }
-
-      m_thread->join();
-      m_thread = nullptr;          
-}
-
 DataThread::~DataThread()
 {
 
@@ -463,13 +472,16 @@ void DataFlush::CloseThreads()
 {
       DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
 
+      unsigned int counter = 0;
+      
       for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
       {
              DataThread* thread = *iter;
              thread->Exit();
+             counter++;
       }     
       
       Kernel->Store->Flusher->EraseAll();
-      
-      bprint(INFO, "Threads closed.");
+      bprint(INFO, "Threads closed: %u", counter);
+      slog("DATABASE", LOG_VERBOSE, "Threads closed: %u", counter);
 }

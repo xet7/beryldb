@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -23,8 +23,8 @@
 
 enum THR_CMD
 {
-        MSG_EXIT_THREAD = 1,
-        MSG_POST_USER_DATA = 2,
+        PROC_EXIT_THREAD = 1,
+        PROC_SIGNAL = 2,
 };
 
 struct ThreadMsg
@@ -37,7 +37,6 @@ struct ThreadMsg
       THR_CMD id;
       std::shared_ptr<query_base> msg;
 };
-
 
 class DataThread
 {   
@@ -63,6 +62,8 @@ class DataThread
 
         bool IsBusy();
     
+        /* A mainloop for a datathread. */
+        
         void Process();
 
         std::thread::id Create();
@@ -78,5 +79,12 @@ class DataThread
         /* Ads a new request to the processor. */
         
         void Post(std::shared_ptr<query_base> query);
+
+        /* Removes all items in this->queue */
         
+        void clear()
+        {
+              std::queue<std::shared_ptr<ThreadMsg>> empty;
+              std::swap( this->queue, empty );
+        }        
 };

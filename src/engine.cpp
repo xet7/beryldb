@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -37,17 +37,16 @@ Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
 
 void Daemon::print_newline(unsigned int loops)
 {
-    
-    for (unsigned int i = 0; i < loops; i++)
-    {
-         std::cout << std::endl;
-    }
+        for (unsigned int i = 0; i < loops; i++)
+        {
+            std::cout << std::endl;
+        }
 }
 
 std::string Daemon::Welcome(std::string& msg)
 {
-    const std::string& casted = msg;
-    return Daemon::Welcome(casted);
+        const std::string& casted = msg;
+        return Daemon::Welcome(casted);
 }
 
 std::string Daemon::Welcome(const std::string& msg)
@@ -96,7 +95,7 @@ bool Daemon::ChannelValidator(const std::string& chname)
                 return false;
         }
 
-        if (chname[0] != '#')
+        if (chname[0] != '#' || chname == "#")
         {
                 return false;
         }

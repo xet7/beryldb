@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -183,6 +183,16 @@ void KeyHelper::Find(User* user, std::shared_ptr<Database> database, const std::
 
 void KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type, unsigned int usig, std::string value)
 {
+       if (type == TYPE_EXPIREAT)
+       {
+              /* Epoch time already passed. */
+              
+              if (usig < Kernel->Now())
+              {
+                     return;
+              }
+       }
+       
        std::shared_ptr<get_query> query = std::make_shared<get_query>();
        query->database = database;
        query->select_query = where;

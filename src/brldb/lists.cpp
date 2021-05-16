@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -68,123 +68,121 @@ void Flusher::LPush(User* user, std::shared_ptr<query_base> query)
 
 void lmove_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
+        if (!this->Check())
+        {
+                this->access_set(DBL_STATUS_BROKEN);
+                return;
+        }
 
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
+        if (this->key.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
 
-    std::string rawstring;
+        std::string rawstring;
 
-    std::string foundvalue;
-    
-    bool found = false;
+        std::string foundvalue;
+        
+        bool found = false;
 
-    for (it->SeekToFirst(); it->Valid(); it->Next()) 
-    {
-                if (this->user && this->user->IsQuitting())
-                {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
+        for (it->SeekToFirst(); it->Valid(); it->Next()) 
+        {
+                    if (this->user && this->user->IsQuitting())
+                    {
+                        access_set(DBL_NOT_FOUND);
+                        return;
+                    }
 
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
-                }
+                    if (!Kernel->Store->Flusher->Status())
+                    {
+                        access_set(DBL_INTERRUPT);
+                        return;
+                    }
 
-                rawstring = it->key().ToString();
+                    rawstring = it->key().ToString();
 
-                engine::colon_node_stream stream(rawstring);
-                std::string token;
+                    engine::colon_node_stream stream(rawstring);
+                    std::string token;
 
-                unsigned int strcounter = 0;
+                    unsigned int strcounter = 0;
 
-                bool int_match = false;
-                bool key_match = false;
-                bool select_match = false;
+                    bool int_match = false;
+                    bool key_match = false;
+                    bool select_match = false;
 
+                    while (stream.items_extract(token))
+                    {
+                            if (it->value().ToString() != this->value)
+                            {
+                                break;
+                            }
 
-                while (stream.items_extract(token))
-                {
-                        if (it->value().ToString() != this->value)
-                        {
+                            if (strcounter == 2)
+                            {
+                                    if (token != this->key)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        key_match = true;
+                                    }
+                            }
+
+                            if (strcounter == 0)
+                            {
+                                    if (this->int_keys != token)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        int_match = true;
+                                    }
+                            }
+
+                            if (strcounter == 1)
+                            {
+                                    if (this->select_query != token)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        select_match = true;
+                                    }
+                            }
+
+                            strcounter++;
+                    }
+
+                    if (select_match && int_match && key_match)
+                    {                 
+                            found = true;
+                            foundvalue = it->value().ToString();
                             break;
-                        }
+                    }
+        }
+        
+        if (!found)
+        {
+                this->access_set(DBL_NO_ENTRY);
+                return;
+        }
+        
+        this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
 
-                        if (strcounter == 2)
-                        {
-                             if (token != this->key)
-                             {
-                                  break;
-                             }
-                             else
-                             {
-                                 key_match = true;
-                             }
-                        }
-
-                        if (strcounter == 0)
-                        {
-                            if (this->int_keys != token)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                int_match = true;
-                            }
-                        }
-
-                        if (strcounter == 1)
-                        {
-                            if (this->select_query != token)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                select_match = true;
-                            }
-                        }
-                        
-                        strcounter++;
-                }
-
-                if (select_match && int_match && key_match)
-                {
-                     
-                     found = true;
-                     foundvalue = it->value().ToString();
-                     break;
-                }
-    }
-    
-    if (!found)
-    {
-            this->access_set(DBL_NO_ENTRY);
-            return;
-    }
-    
-    this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
-
-    const std::string& newformat = this->int_keys + ":" + this->hesh + ":" + this->key;
-    
-    rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), newformat, foundvalue);
-    
-    /* Finished. */
-    
-    this->counter = this->id;
-    this->SetOK();
+        const std::string& newformat = this->int_keys + ":" + this->hesh + ":" + this->key;
+        
+        rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), newformat, foundvalue);
+        
+        /* Finished. */
+        
+        this->counter = this->id;
+        this->SetOK();
 }
 
 void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
@@ -371,195 +369,194 @@ void Flusher::LPop(User* user, std::shared_ptr<query_base> query)
 
 void lget_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
+        if (!this->Check())
+        {
+                this->access_set(DBL_STATUS_BROKEN);
+                return;
+        }
 
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
-    
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
-    std::vector<std::string> rlist;
-    std::string rawstring;
+        if (this->key.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
+        
+        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        std::vector<std::string> rlist;
+        std::string rawstring;
 
-    unsigned int total_counter = 0;
-    unsigned int aux_counter = 0;
-    unsigned int return_counter = 0;
-    unsigned int tracker = 0;
-    
-    unsigned int match_count = 0;
-    
-    for (it->SeekToFirst(); it->Valid(); it->Next()) 
-    {
-                if (this->user && this->user->IsQuitting())
-                {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
+        unsigned int total_counter = 0;
+        unsigned int aux_counter = 0;
+        unsigned int return_counter = 0;
+        unsigned int tracker = 0;
+        
+        unsigned int match_count = 0;
+        
+        for (it->SeekToFirst(); it->Valid(); it->Next()) 
+        {
+                    if (this->user && this->user->IsQuitting())
+                    {
+                        access_set(DBL_NOT_FOUND);
+                        return;
+                    }
 
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
-                }
+                    if (!Kernel->Store->Flusher->Status())
+                    {
+                        access_set(DBL_INTERRUPT);
+                        return;
+                    }
 
-                rawstring = it->key().ToString();
-                
-                engine::colon_node_stream stream(rawstring);
-                std::string token;
-                
-                unsigned int strcounter = 0;
-                bool match = true;
-                
-                while (stream.items_extract(token))
-                {
-                        if (match && strcounter == 0)
-                        {
-                            if (this->int_keys != token)
+                    rawstring = it->key().ToString();
+                    
+                    engine::colon_node_stream stream(rawstring);
+                    std::string token;
+                    
+                    unsigned int strcounter = 0;
+                    bool match = true;
+                    
+                    while (stream.items_extract(token))
+                    {
+                            if (match && strcounter == 0)
                             {
-                                match = false;
-                                break;
+                                if (this->int_keys != token)
+                                {
+                                    match = false;
+                                    break;
+                                }
                             }
-                        }
-                
-                        if (match && strcounter == 2)
-                        {
-                             if (to_string(token) != this->key)
-                             {
-                                  match = false;
-                                  break;
-                             }
-                        }
-                        
-                        if (match && strcounter == 1)
-                        {
-                            if (this->select_query != token)
+                    
+                            if (match && strcounter == 2)
                             {
-                                match = false;
-                                break;
-                            }
-                        }
-                        
-                        strcounter++;
-                }
-
-                if (match)
-                {
-                
-                        match_count++;
-                        
-                        if (this->qtype == TYPE_EXIST)
-                        {
-                            if (it->value().ToString() == this->value)
-                            {
-                                this->exists = true;
-                                this->SetOK();
-                                return;
-                            }
-                        }
-                        
-                        else if (this->qtype == TYPE_LPOS)
-                        {
-                            if (it->value().ToString() != this->value)
-                            {
-                                    continue;
+                                if (to_string(token) != this->key)
+                                {
+                                    match = false;
+                                    break;
+                                }
                             }
                             
-                            if (aux_counter == this->id)
+                            if (match && strcounter == 1)
                             {
-                                  return_counter = match_count;
-                                  break;
+                                if (this->select_query != token)
+                                {
+                                    match = false;
+                                    break;
+                                }
                             }
-
-                            aux_counter++;
-                        }
-                        
-                        else if (this->qtype == TYPE_COUNT_RECORDS)
-                        {
-                                return_counter++;        
-                        }
-                        
-                        else
-                        { 
-                             if (this->core)
-                             {
-                                    rlist.push_back(to_string(it->value().ToString()));
-                                    return_counter++;
-                                    continue;
-                             }
                             
-                             if (limit != -1)
-                             {
-                                   if (((signed int)total_counter >= offset))
-                                   {
-                                        if (((signed int)aux_counter < limit))
-                                        {
-                                            rlist.push_back(to_string(it->value().ToString()));
-                                            aux_counter++;
-            
-                                            if (return_counter % 200 == 0)
-                                            {                              
-                                                    tracker++;            
-                                                    std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
-                                                    request->user = this->user;
-                                                    request->partial = true;
-                                                    request->subresult = tracker;
-                                                    request->VecData = rlist;
-                                                    request->counter = rlist.size();
-                                                    request->qtype = this->qtype;
-                                                    rlist.clear();
-                                                    request->SetOK();
-                                                    DataFlush::AttachResult(request);
-                                            }
-                                            
-                                            if (return_counter == (unsigned int)limit)
-                                            {
-                                                break;               
-                                            }
-                                            
-                                            return_counter++;
-                                        }
-                                    }
-                              }          
-                              else if (limit == -1)
-                              {
-                                            rlist.push_back(to_string(it->value().ToString()));
+                            strcounter++;
+                    }
 
-                                            if (return_counter % 200 == 0)
-                                            {
-                                                    tracker++;
-                                                    std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
-                                                    request->user = this->user;
-                                                    request->partial = true;
-                                                    request->subresult = tracker;
-                                                    request->qtype = this->qtype;
-                                                    request->VecData = rlist;
-                                                    request->counter = rlist.size();
-                                                    rlist.clear();
-                                                    request->SetOK();
-                                                    DataFlush::AttachResult(request);
-                                            }
-                                            
-                                            return_counter++;  
+                    if (match)
+                    {
+                    
+                            match_count++;
+                            
+                            if (this->qtype == TYPE_EXIST)
+                            {
+                                if (it->value().ToString() == this->value)
+                                {
+                                    this->exists = true;
+                                    this->SetOK();
+                                    return;
+                                }
+                            }
+                            
+                            else if (this->qtype == TYPE_LPOS)
+                            {
+                                if (it->value().ToString() != this->value)
+                                {
+                                        continue;
                                 }
                                 
-                                total_counter++;
-                         }
-                }
-    }
+                                if (aux_counter == this->id)
+                                {
+                                    return_counter = match_count;
+                                    break;
+                                }
 
-    this->counter = return_counter;
-    this->subresult = ++tracker;
-    this->partial = false;
-        
-    this->VecData = rlist;
-    this->SetOK();
-    
+                                aux_counter++;
+                            }
+                            
+                            else if (this->qtype == TYPE_COUNT_RECORDS)
+                            {
+                                    return_counter++;        
+                            }
+                            
+                            else
+                            { 
+                                if (this->core)
+                                {
+                                        rlist.push_back(to_string(it->value().ToString()));
+                                        return_counter++;
+                                        continue;
+                                }
+                                
+                                if (limit != -1)
+                                {
+                                    if (((signed int)total_counter >= offset))
+                                    {
+                                            if (((signed int)aux_counter < limit))
+                                            {
+                                                rlist.push_back(to_string(it->value().ToString()));
+                                                aux_counter++;
+                
+                                                if (return_counter % 200 == 0)
+                                                {                              
+                                                        tracker++;            
+                                                        std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
+                                                        request->user = this->user;
+                                                        request->partial = true;
+                                                        request->subresult = tracker;
+                                                        request->VecData = rlist;
+                                                        request->counter = rlist.size();
+                                                        request->qtype = this->qtype;
+                                                        rlist.clear();
+                                                        request->SetOK();
+                                                        DataFlush::AttachResult(request);
+                                                }
+                                                
+                                                if (return_counter == (unsigned int)limit)
+                                                {
+                                                    break;               
+                                                }
+                                                
+                                                return_counter++;
+                                            }
+                                        }
+                                }          
+                                else if (limit == -1)
+                                {
+                                                rlist.push_back(to_string(it->value().ToString()));
+
+                                                if (return_counter % 200 == 0)
+                                                {
+                                                        tracker++;
+                                                        std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
+                                                        request->user = this->user;
+                                                        request->partial = true;
+                                                        request->subresult = tracker;
+                                                        request->qtype = this->qtype;
+                                                        request->VecData = rlist;
+                                                        request->counter = rlist.size();
+                                                        rlist.clear();
+                                                        request->SetOK();
+                                                        DataFlush::AttachResult(request);
+                                                }
+                                                
+                                                return_counter++;  
+                                    }
+                                    
+                                    total_counter++;
+                            }
+                    }
+        }
+
+        this->counter = return_counter;
+        this->subresult = ++tracker;
+        this->partial = false;
+            
+        this->VecData = rlist;
+        this->SetOK();
 }
 
 void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
@@ -759,10 +756,8 @@ void lsearch_query::Run()
                                 }
 
                                 total_counter++;
-                         }
-                              
-                        
-                }                
+                }
+    }                
 
     this->counter = return_counter;
     this->subresult = ++tracker;
@@ -798,7 +793,6 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
         }
 
 }
-
 
 void lfind_query::Run()
 {
@@ -946,8 +940,8 @@ void lfind_query::Run()
                                 }
 
                                 total_counter++;
-                         }
                 }
+    }
     
     this->counter = return_counter;
     this->subresult = ++tracker;
@@ -979,5 +973,4 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
         {
                 user->SendProtocol(BRLD_LFIND_END, query->key, Daemon::Format("END of LFIND list (%i).", query->counter).c_str());
         }
-
 }

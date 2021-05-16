@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2015-2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -81,6 +81,12 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
           }
                   
           unsigned int exp_usig = convto_num<unsigned int>(exp_str);
+
+          if ((time_t)exp_usig < Kernel->Now())
+          {
+                 user->SendProtocol(ERR_EXPIRE, exp_str, "Expire already passed.");
+                 return FAILED;
+          }
           
           KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_EXPIREAT, exp_usig, "");
           return SUCCESS;
