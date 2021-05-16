@@ -1,5 +1,7 @@
 
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldblabs)](https://twitter.com/beryldlabs) [![BerylDB build status](https://github.com/beryldb/beryldb/workflows/Linux%20CI/badge.svg)](https://github.com/beryldb/beryldb/actions?workflow=Linux CI) <a href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb" /></a>
+<a href="https://twitter.com/Beryldlabs"><img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldblabs"></a>
+<a href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/Linux%20CI/badge.svg"></a>
+<a href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb?3" /></a>
 <br>
 
 
