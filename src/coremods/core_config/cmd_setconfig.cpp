@@ -63,7 +63,7 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
              return FAILED;
         }
         
-        user->SendRemoteProtocol(BRLD_CONF_OK, Kernel->Config->GetServerName(), "OK");
+        user->SendRemoteProtocol(BRLD_CONF_OK, Kernel->Config->GetServerName(), PROCESS_OK);
         return SUCCESS;
 }
 

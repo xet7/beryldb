@@ -147,6 +147,10 @@ class Externalize Beryl
         /* CommandLine arguments reader. */
 
        void CommandLine();
+
+        /* Refreshes TIME, this function is called in every loop. */
+
+        void Refresh();
        
   public:
          
@@ -281,10 +285,6 @@ class Externalize Beryl
 	{
 		return	this->ConfigFile;
 	}
-
-	/* Refreshes TIME, this function is called in every loop. */
-	
-	void Refresh();
 
 	/* Returns BerylDB's version */
 	 

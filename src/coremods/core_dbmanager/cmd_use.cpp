@@ -91,7 +91,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        
        DataFlush::ResetAll();
        
-       user->SendProtocol(BRLD_DB_RESET, "OK");
+       user->SendProtocol(BRLD_DB_RESET, PROCESS_OK);
        
        return SUCCESS;
 }

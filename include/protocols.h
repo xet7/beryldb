@@ -167,7 +167,8 @@ enum BRLD_PROTOCOL
 	BRLD_MONITOR			=		245,
 	BRLD_NOW_MONITORING		=		246,
  	BRLD_STOP_MONITOR		=		247,
- 		
+	BRLD_RESET_MONITOR		=		248,
+		 		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

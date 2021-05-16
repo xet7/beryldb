@@ -13,6 +13,10 @@
 
 #pragma once
 
+/* Everything OK */
+
+const std::string PROCESS_OK = "OK";
+
 /* Unable to set key. */
 
 const std::string UNABLE_SET_KEY = "Unable to set key.";

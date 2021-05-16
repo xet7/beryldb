@@ -56,3 +56,17 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
        user->SendProtocol(BRLD_NOW_MONITORING, "DEFAULT", "Monitor activated: Default");          
        return SUCCESS;
 }
+
+CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MRESET", 0, 0)
+{
+
+}
+
+COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
+{
+     unsigned int count = Kernel->Monitor->Count();
+     
+     Kernel->Monitor->Reset();
+     user->SendProtocol(BRLD_RESET_MONITOR, count, Daemon::Format("Monitor reset: %u", count).c_str());
+     return SUCCESS;
+}

@@ -443,7 +443,7 @@ void Daemon::printb(const int type, const std::string& buff)
        {
             case DONE:
                    
-                    std::cout << "[ " << engine::color::green << "OK" << engine::color::reset << " ] " << buff << engine::color::reset << "\r\t" << std::endl;
+                    std::cout << "[ " << engine::color::green << PROCESS_OK << engine::color::reset << " ] " << buff << engine::color::reset << "\r\t" << std::endl;
                     break;
 
             case INFO:

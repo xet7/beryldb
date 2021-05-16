@@ -259,7 +259,7 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
                 }
                 else
                 {
@@ -275,7 +275,7 @@ void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, "OK", query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
                 }
                 else
                 {
@@ -602,7 +602,7 @@ void Flusher::Move(User* user, std::shared_ptr<query_base> query)
 {       
         if (query->finished)
         {
-             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, 1, "OK");
+             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, 1, PROCESS_OK);
         }
         else
         {
@@ -686,7 +686,7 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
         
         if (query->finished)
         {
-              Dispatcher::Smart(user, 1, BRLD_FLUSH, "OK", query->key, DBL_TYPE_SET);
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_SET);
         }
         else
         {
@@ -733,7 +733,7 @@ void Flusher::Del(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, KEY_REMOVED, query->key, DBL_TYPE_DEL);
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_DEL);
         }
         else
         {

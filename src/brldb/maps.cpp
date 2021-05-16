@@ -104,7 +104,7 @@ void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HMOVE, query->key, query->value, "OK");
+            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HMOVE, query->key, query->value, PROCESS_OK);
         }
         else
         {
@@ -192,7 +192,7 @@ void Flusher::HSet(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HSET, 1, "OK");
+            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HSET, 1, PROCESS_OK);
         }
         else
         {

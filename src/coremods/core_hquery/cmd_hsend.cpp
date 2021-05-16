@@ -119,6 +119,6 @@ COMMAND_RESULT CommandHParam::Handle(User* user, const Params& parameters)
                 
         }
         
-        user->SendProtocol(BRLD_HPARAM_OK, "OK");
+        user->SendProtocol(BRLD_HPARAM_OK, PROCESS_OK);
         return SUCCESS;
 }

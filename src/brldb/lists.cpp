@@ -58,7 +58,7 @@ void Flusher::LPush(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, query->id, "OK");
+            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, query->id, PROCESS_OK);
         }
         else
         {
@@ -198,7 +198,7 @@ void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
         }
         else
         {
-                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, "OK");
+                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, PROCESS_OK);
         }
 }
 

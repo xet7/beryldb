@@ -34,3 +34,13 @@ class CommandStopMonitor : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandMonitorReset : public Command 
+{
+
+    public: 
+
+        CommandMonitorReset(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

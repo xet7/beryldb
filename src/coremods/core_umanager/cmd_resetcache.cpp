@@ -26,7 +26,7 @@ COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 {
         Kernel->Logins->ResetCache();
         
-        user->SendProtocol(BRLD_RESET_CACHE, "OK");
+        user->SendProtocol(BRLD_RESET_CACHE, PROCESS_OK);
         return SUCCESS;
 }
 

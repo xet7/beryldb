@@ -65,14 +65,12 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         void Push(const std::string& instance, const std::string& cmd, MONITOR_LEVEL level, const CommandModel::Params& params);
         
         void Flush();
-        
-        /* Returns true if any monitor is present. */
-        
-        bool IsActive()
+
+        MonitorMap& GetList()
         {
-            return this->MonitorList.size();
+             return this->MonitorList;
         }
-        
+                
         /* Counts all monitor size. */
         
         unsigned int Count()

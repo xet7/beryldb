@@ -20,10 +20,11 @@ class CoreModuleMonitor : public Module
     
         CommandMonitor cmdmonitor;
         CommandStopMonitor cmdstopmonitor;
+        CommandMonitorReset cmdmonitoreset;
 
     public:     
         
-        CoreModuleMonitor() : cmdmonitor(this), cmdstopmonitor(this)
+        CoreModuleMonitor() : cmdmonitor(this), cmdstopmonitor(this), cmdmonitoreset(this)
 
         {
         
