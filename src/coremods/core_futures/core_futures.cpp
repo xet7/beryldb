@@ -11,32 +11,26 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#pragma once
+#include "beryl.h"
+#include "core_futures.h"
 
-enum HQUERY_TYPE
+class CoreModuleFutures : public Module
 {
-     HQUERY_REPEAT_COUNT = 0,
-};
-
-class Externalize HQuery
-{
+    private:
+        
+        CommandFuture      cmdfuture;
+        
     public:
-        
-        HQuery();
-        
-        HQUERY_TYPE type;
-                
-        unsigned int offset;
-        
-        unsigned int limit;
-        
-        std::string contains;
     
-        std::string field;
+        CoreModuleFutures() : cmdfuture(this)
+        {
         
-        std::string sort;
+        }
 
-        std::string key;
-        
-        
+        Version GetDescription() 
+        {
+                return Version("Provides future and associated commands.", VF_BERYLDB);
+        }
 };
+
+MODULE_LOAD(CoreModuleFutures)

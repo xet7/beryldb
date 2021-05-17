@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -130,6 +130,7 @@ enum BRLD_PROTOCOL
 	BRLD_RESET_CACHE		=		208,
 	BRLD_DB_RESET			=		209,	
 	BRLD_DB_RESET_TIMED		=		210,
+	
 	BRLD_LOGINS_BEGIN		=		211,
 	BRLD_LOGINS_END			=		212,
 	BRLD_LOGINS_LIST		=		213,
@@ -140,6 +141,7 @@ enum BRLD_PROTOCOL
 	BRLD_MOD_UNLOAD			=		218,
 	BRLD_MOD_LOADED			=		219,
 	BRLD_SHUTDOWN			=		220,
+	
 	BRLD_RESTART			=		221,
 	BRLD_TYPE_RAND			=		222,
 	BRLD_AGENT_SET			=		223,
@@ -150,6 +152,7 @@ enum BRLD_PROTOCOL
 	BRLD_SEARCH_ITEM		=		228,
 	BRLD_SEARCH_END			=		229,
 	BRLD_SEARCH_BEGIN		=		230,
+	
 	BRLD_HASH			=		231,
 	BRLD_LSEARCH_BEGIN		=		232,
 	BRLD_LSEARCH_ITEM		=		233,
@@ -160,6 +163,7 @@ enum BRLD_PROTOCOL
 	BRLD_PREPARE_OK			=		238,
 	BRLD_HQUERY_SENT		=		239,
 	BRLD_HOVER_OK			=		240,
+	
 	BRLD_HLIMITS_OK			=		241,
 	BRLD_HPARAM_OK			=		242,
 	BRLD_END_MASS_JOIN		=		243,
@@ -168,7 +172,11 @@ enum BRLD_PROTOCOL
 	BRLD_NOW_MONITORING		=		246,
  	BRLD_STOP_MONITOR		=		247,
 	BRLD_RESET_MONITOR		=		248,
-		 		
+	BRLD_FUTURE_ADD			=		249,
+	BRLD_MONITOR_LIST		=		250,
+		
+	BRLD_MONITOR_USER		=		251,
+			 		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
@@ -234,5 +242,7 @@ enum BRLD_PROTOCOL
 	ERR_HUNABLE_RESET		=		564,
 	ERR_WRONG_HPARAMS		=		565,
 	ERR_WRONG_MONITOR		=		566,
-	ERR_NO_MONITOR			=		567
+	ERR_NO_MONITOR			=		567,
+	ERR_FUTURE			=		568,
+	ERR_INVALID_MONITORLVL		=		569
 };

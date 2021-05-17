@@ -1,4 +1,3 @@
-
 /*
  * BerylDB - A modular database.
  * http://www.beryldb.com
@@ -12,30 +11,16 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#pragma once
+#include "beryl.h"
+#include "brldb/dbmanager.h"
+#include "engine.h"
 
-class Serverstats
+class CommandFuture : public Command 
 {
-	public:
-			
-		unsigned long Accept;
-		
-		unsigned long Refused;
-		
-		unsigned long Unknown;
-				
-		unsigned long Collisions;
+    public: 
 
-		unsigned long Connects;
+        CommandFuture(Module* parent);
 
-
-		timeval LastCPU;
-
-		timespec LastSampled;
-
-		
-		Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0)
-		{
-		
-		}
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+

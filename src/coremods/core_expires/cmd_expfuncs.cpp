@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -19,10 +19,10 @@
 #include "converter.h"
 #include "core_expires.h"
 
-CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 2)
+CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 1)
 {
          last_empty_ok = true;
-         syntax = "<*argument> <*option>";
+         syntax = "<*argument>";
 }
 
 COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
@@ -38,11 +38,6 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
                   user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), Daemon::Format("Expire count: %d", count).c_str());
                   return SUCCESS;
          }
-         
-         if (parameters.size() == 2)
-         {
-               opt = parameters[1];
-         } 
          
          /* 
           * These two arguments are valid.  Arguments valid are:
@@ -65,7 +60,7 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
          
          unsigned int counter = 0;
 
-         user->SendProtocol(BRLD_EXPIRE_BEGIN, arg, "Begin of EXPIRE list.");
+         user->SendProtocol(BRLD_EXPIRE_BEGIN, "Begin of EXPIRE list.");
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -93,7 +88,7 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        user->SendProtocol(BRLD_EXPIRE_END, arg, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
+        user->SendProtocol(BRLD_EXPIRE_END, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
         return SUCCESS;
 }
 

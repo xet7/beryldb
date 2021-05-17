@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -66,11 +66,8 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         
         void Flush();
 
-        MonitorMap& GetList()
-        {
-             return this->MonitorList;
-        }
-                
+        MonitorMap GetList(const std::string& arg = "");
+                        
         /* Counts all monitor size. */
         
         unsigned int Count()
@@ -84,5 +81,4 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         {
               this->MonitorList.clear();
         }
-        
 };

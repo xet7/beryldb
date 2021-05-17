@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -73,4 +73,50 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          
          return SUCCESS;
 
+}
+
+CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 1, 1)
+{
+         syntax = "<select>";
+}
+
+COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters) 
+{
+         std::string select;
+         
+         /* No argument provided, we simply count expire items. */
+         
+         if (!parameters.size())
+         {
+                  select = user->select;
+         }
+         else
+         {
+                  select  = parameters[0];
+         }
+         
+         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+         /* Counts expires. */
+
+         unsigned int counter = 0;
+
+         user->SendProtocol(BRLD_EXPIRE_BEGIN, "Begin of EXPIRE list.");
+
+         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         {
+               ExpireEntry entry = it->second;
+
+               if (entry.select != select)
+               {  
+                         continue;
+               }
+               
+               std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+               
+               user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
+         }
+         
+        user->SendProtocol(BRLD_EXPIRE_END, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
+        return SUCCESS;
 }

@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -304,6 +304,10 @@ void Beryl::Loop()
         /* Dispatches both, pending queries and notifications. */
         
         DataFlush::DispatchAll();
+
+        /* Delivers data to monitors. */
+
+        this->Monitor->Flush();
         
         /* 
          * Runs functions meant to be run outside current 
@@ -311,10 +315,6 @@ void Beryl::Loop()
          */
         
         this->Atomics->Run();
-        
-        /* Delivers data to monitors. */
-        
-        this->Monitor->Flush();
 }
 
 void Beryl::RunTimed(time_t current)

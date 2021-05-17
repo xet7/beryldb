@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -228,11 +228,12 @@ void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom, QUERY_TYPE type)
+void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom, QUERY_TYPE type, bool quiet)
 {
        std::shared_ptr<set_query> query = std::make_shared<set_query>();
        query->database = database;
        query->user = user;
+       query->quiet = quiet;
        query->qtype = type;
        query->select_query = where;
        query->customreply = custom;
@@ -277,8 +278,7 @@ void KeyHelper::Delete(User* user, std::shared_ptr<Database> database, const std
        query->int_keys = INT_KEYS;
        query->user = user;
        query->key = key;
-       query->quiet = false;
-       
+       query->quiet = quiet;
 
        query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
 

@@ -1,21 +1,82 @@
-
+/*
+ * BerylDB - A modular database.
+ * http://www.beryldb.com
+ *
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
+ * 
+ * This file is part of BerylDB. BerylDB is free software: you can
+ * redistribute it and/or modify it under the terms of the BSD License
+ * version 3.
+ *
+ * More information about our licensing can be found at https://docs.beryl.dev
+ */
 
 #include "beryl.h"
 #include "algo.h"
+#include "brldb/futures.h"
 #include "brldb/dbflush.h"
 #include "brldb/database.h"
 #include "brldb/datathread.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/dbmanager.h"
 #include "managers/keys.h"
-#include "managers/maps.h"
-#include "managers/settings.h"
 
 std::mutex FutureManager::mute;
 
 FutureManager::FutureManager()
 {
 
+}
+
+signed int FutureManager::Add(signed int schedule, const std::string& key, const std::string& value, const std::string& select, bool epoch)
+{
+        if (schedule < 0)
+        {
+                return -1;
+        }
+        
+        if (epoch)
+        {
+              /* We cannot add an expiring epoch that has already passed. */
+              
+              if (schedule < Kernel->Now())
+              {
+                    return -1;
+              }
+        }
+
+        if (FutureManager::TriggerTIME(key, select) > 0)
+        {
+              FutureManager::Delete(key, select);
+        }
+        
+        FutureManager::mute.lock();
+
+        time_t Now = Kernel->Now();
+        FutureEntry New;
+
+        New.epoch = epoch;
+
+        if (epoch)
+        {
+            New.schedule = schedule;
+        }
+        else
+        {
+            New.schedule = Now + schedule;
+        }
+        
+        New.key = key;
+        New.value = value;
+        New.added = Now;
+        New.secs = schedule;
+        New.select = select;
+        
+        Kernel->Store->Futures->FutureList.insert(std::make_pair(New.schedule, New));
+
+        FutureManager::mute.unlock();
+
+        return New.schedule;
 }
 
 bool FutureManager::Delete(const std::string& key, const std::string& select)
@@ -73,7 +134,8 @@ void FutureManager::Flush(time_t TIME)
               }
               
               FutureEntry entry = it->second;
-          
+              KeyHelper::Set(Kernel->Clients->Global, Kernel->Store->Default, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
+              Kernel->Store->Futures->FutureList.erase(it++);
         }
         
         FutureManager::mute.unlock();    

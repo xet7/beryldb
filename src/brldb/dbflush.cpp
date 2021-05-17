@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  *
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -112,16 +112,8 @@ void DataFlush::GetResults()
                         
                         DataFlush::mute.unlock();
                         
-                        /* 
-                         * After removing item from notifications queue,
-                         * we flush it so this signal can be delivered.
-                         */
-                         
-                        if (signal->access != DBL_INTERRUPT && signal->access != DBL_NOT_FOUND && !signal->quiet)
-                        {
-                            DataFlush::Flush(user, signal);
-                        }
-
+                        DataFlush::Flush(user, signal);
+                        
                         if (user)
                         {
                                 user->SetLock(false);
@@ -442,9 +434,21 @@ void DataThread::Process()
                               Kernel->Store->Flusher->Unlock(request->format);
                           }
                           
-                          /* Adds result to the pending notification list. */
-                          
-                          DataFlush::AttachResult(request);
+                         /* 
+                          * After removing item from notifications queue,
+                          * we flush it so this signal can be delivered.
+                          */
+                         
+                         if (request->access == DBL_INTERRUPT || !request->quiet)
+                         {
+                                 /* Adds result to the pending notification list. */
+ 
+                                 DataFlush::AttachResult(request);
+                         }
+                         else
+                         {
+//request->access == DBL_NOT_FOUND                         
+                         }
                           
                     }
 

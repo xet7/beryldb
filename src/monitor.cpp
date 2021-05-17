@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -23,13 +23,13 @@ MonitorHandler::MonitorHandler()
 
 bool MonitorHandler::Add(User* user, MONITOR_LEVEL level)
 {
-       if (level < 5 || level > 10)
-       {
+        if (level < MONITOR_DEFAULT || level > MONITOR_DEBUG)
+        {
             return false;
-       }
+        }
        
-       this->MonitorList.insert(std::make_pair(user, level));
-       return true;
+        this->MonitorList.insert(std::make_pair(user, level));
+        return true;
 }
 
 bool MonitorHandler::Has(User* user)
@@ -60,8 +60,51 @@ void MonitorHandler::Push(const std::string& instance, const std::string& cmd, M
         this->buffer.push_back(adding);
 }
 
+MonitorMap MonitorHandler::GetList(const std::string& arg)
+{
+      MonitorMap list;
+      
+      if (arg.empty())
+      {
+          return this->MonitorList;
+      }
+      
+      MONITOR_LEVEL monitor = MONITOR_DEFAULT;
+      
+      if (arg == "DEFAULT")
+      {
+          monitor = MONITOR_DEFAULT;
+      }
+      else if (arg == "DEBUG")
+      {
+          monitor = MONITOR_DEBUG;
+      }
+      
+      MonitorMap all = this->MonitorList;
+      
+      for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
+      {
+               User* user = uit->first;
+               MONITOR_LEVEL level = uit->second;
+               
+               if (level != monitor)
+               {
+                     continue;
+               }
+               
+               list.insert(std::make_pair(user, level));
+      }
+      
+      return list;
+}
+
 void MonitorHandler::Flush()
 {
+        if (!this->MonitorList.size())
+        {
+             return;
+        }
+
         BufferQueue pending = this->buffer;
         MonitorMap& all = this->MonitorList;
 

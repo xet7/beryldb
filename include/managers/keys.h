@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -43,7 +43,7 @@ class Externalize KeyHelper
 
         static void Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet = false);
         
-        static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom = "", QUERY_TYPE type = TYPE_NONE);
+        static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom = "", QUERY_TYPE type = TYPE_NONE, bool quiet = false);
 
         /* Moves an entry to another select. */
         

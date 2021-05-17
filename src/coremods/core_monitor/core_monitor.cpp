@@ -2,7 +2,7 @@
  * BerylDB - A modular database.
  * http://www.beryldb.com
  *
- * Copyright (C) 2021 Carlos F. Ferry <cferry@beryldb.com>
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
  * redistribute it and/or modify it under the terms of the BSD License
@@ -21,10 +21,12 @@ class CoreModuleMonitor : public Module
         CommandMonitor cmdmonitor;
         CommandStopMonitor cmdstopmonitor;
         CommandMonitorReset cmdmonitoreset;
+        CommandMonitorList cmdmonitorlist;
 
     public:     
         
-        CoreModuleMonitor() : cmdmonitor(this), cmdstopmonitor(this), cmdmonitoreset(this)
+        CoreModuleMonitor() : cmdmonitor(this), cmdstopmonitor(this), cmdmonitoreset(this),
+                              cmdmonitorlist(this)
 
         {
         
