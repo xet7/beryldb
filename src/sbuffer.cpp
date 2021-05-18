@@ -210,13 +210,21 @@ int StreamSocket::ProcessRevQueue(std::string& rq)
 	{
 		SocketPool::EventSwitch(this, Q_FAST_READ | Q_ADD_TRIAL_READ);
 		rq.append(PendingBuffer, n);
-		Kernel->Interval = 0;
+		
+		if (!Kernel->Lock)
+		{
+			Kernel->Interval = 0;
+		}
 	}
 	else if (n > 0)
 	{
 		SocketPool::EventSwitch(this, Q_FAST_READ);
 		rq.append(PendingBuffer, n);
-                Kernel->Interval = 0;
+
+                if (!Kernel->Lock)
+                {
+                        Kernel->Interval = 0;
+                }
 	}
 	else if (n == 0)
 	{

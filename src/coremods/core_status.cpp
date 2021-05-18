@@ -92,16 +92,16 @@ void CommandStatus::DispatchData(Status::Context& status)
 				status.AppendLine(BRLD_SWAPS, "Swaps:            "+convto_string(R.ru_nswap));
 				status.AppendLine(BRLD_CSW, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
 #endif
-				float n_elapsed = (Kernel->Now() - Kernel->Stats.LastSampled.tv_sec) * 1000000
+				float sample_sincelast = (Kernel->Now() - Kernel->Stats.LastSampled.tv_sec) * 1000000
 					+ (Kernel->TimeStamp() - Kernel->Stats.LastSampled.tv_nsec) / 1000;
-				float n_eaten = ((R.ru_utime.tv_sec - Kernel->Stats.LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats.LastCPU.tv_usec);
-				float per = (n_eaten / n_elapsed) * 100;
+				float sample_used = ((R.ru_utime.tv_sec - Kernel->Stats.LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats.LastCPU.tv_usec);
+				float per = (sample_used / sample_sincelast) * 100;
 
 				status.AppendLine(BRLD_CPU_NOW, Daemon::Format("CPU Usage (current):    %03.5f%%", per));
 
-				n_elapsed = Kernel->Now() - Kernel->GetStartup();
-				n_eaten = (float)R.ru_utime.tv_sec + R.ru_utime.tv_usec / 100000.0;
-				per = (n_eaten / n_elapsed) * 100;
+				sample_sincelast = Kernel->Now() - Kernel->GetStartup();
+				sample_used = (float)R.ru_utime.tv_sec + R.ru_utime.tv_usec / 100000.0;
+				per = (sample_used / sample_sincelast) * 100;
 
 				status.AppendLine(BRLD_CPU_USE, Daemon::Format("CPU Usage (total):  %03.5f%%", per));
 			}

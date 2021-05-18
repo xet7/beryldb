@@ -57,38 +57,9 @@ class ModuleCoreDB : public Module
 
         ModuleCoreDB()
         {
-              Kernel->Lock = false;
-        }
-        
-        void OnEveryTwoSeconds(time_t current)
-        {
-               if (Kernel->Lock)
-               {
-                     return;
-               }
-             
-               if (Kernel->Interval != 2)
-               {
-                     Kernel->Interval = 2;
-               }
-        }
-        
-        void OnEveryHalfMinute(time_t current)
-        {
-               if (Kernel->Lock)
-               {
-                      return;
-               }
-               
-               /* We sleep, as there is no activity in the system. */
-               
-               if (!Kernel->Clients->GetLocals().size())
-               {
-                      Kernel->Interval = 1000;
-                      Kernel->Lock = true;
-               }
-        }
 
+        }
+        
         void OnUserJoin(Subscription* memb, bool sync, bool created_by_local, DiscardList& excepts)
         {
                  /* Checks if this user is joining from the autojoin() function. */

@@ -32,8 +32,6 @@ void SocketPool::Start()
 	{
 		InitError();
 	}
-	
-	Kernel->Interval = 10;
 }
 
 void SocketPool::SafeInit()
