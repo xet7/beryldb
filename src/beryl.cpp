@@ -108,7 +108,7 @@ void Beryl::Initialize()
 {
 	/* Signals to recognize. */
 	
-	Daemon::AssignSignals();
+	Daemon::Signalizers();
 
 	/* Checks whether we are allowed to be running as root. */
 	
@@ -128,7 +128,7 @@ void Beryl::Initialize()
 	}
 	else
 	{
-	        bprint(INFO, "This instance will %s detach.", Daemon::Welcome("NOT").c_str());
+	        bprint(INFO, "This server will %s detach.", Daemon::Welcome("NOT").c_str());
         	do_newline;
 	}
 	
@@ -375,7 +375,7 @@ void Beryl::RunTimed(time_t current)
 
 sig_atomic_t Beryl::s_signal = 0;
 
-void Beryl::AssignSignal(int signal)
+void Beryl::Signalizer(int signal)
 {
 	s_signal = signal;
 }

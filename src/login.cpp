@@ -104,6 +104,7 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
     std::shared_ptr<Session> New = std::make_shared<Session>();
     
     SetFlags(New, flags);
+    New->rawflags = flags;
     
     this->sessions.insert(std::make_pair(login, New));
     return New;

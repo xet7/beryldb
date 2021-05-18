@@ -28,7 +28,7 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::TriggerTIME(key, user->select);
+         signed int ttl = ExpireManager::TriggerTIME(user->current_db, key, user->select);
          
          if (ttl != -1)
          {
@@ -53,11 +53,11 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
           
-         signed int ttl = ExpireManager::TriggerTIME(key, user->select);
+         signed int ttl = ExpireManager::TriggerTIME(user->current_db, key, user->select);
          
          if (ttl != -1)
          {
-                  if (ExpireManager::Delete(key, user->select))
+                  if (ExpireManager::Delete(user->current_db, key, user->select))
                   {
                            user->SendProtocol(BRLD_PERSIST, 1, key, Daemon::Format("%s has persisted.", key.c_str()).c_str());
                   }

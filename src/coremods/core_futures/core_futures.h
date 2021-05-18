@@ -24,3 +24,49 @@ class CommandFuture : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandTTE : public Command 
+{
+    public: 
+
+        CommandTTE(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandExec : public Command 
+{
+    public: 
+
+        CommandExec(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandFReset : public Command 
+{
+    public: 
+
+        CommandFReset(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandCancel : public Command 
+{
+    public: 
+
+        CommandCancel(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandFResetAll : public Command 
+{
+    public: 
+
+        CommandFResetAll(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+

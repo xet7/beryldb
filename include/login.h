@@ -23,6 +23,10 @@ class Externalize Session : public safecast<Session>
         
         Session();
         
+        /* Raw flags */
+        
+        std::string rawflags;
+        
         /* Associated login. */
         
         std::string login;
@@ -133,13 +137,23 @@ class Externalize LoginCache : public safecast<LoginCache>
          * Checks whether a given user is in the cache.
          * 
          * @return:
-         *         ·  1: User pass matches.
-         *	   · -1: User found, but pass does not match.
-         *         ·  0: User not found.  
+         *
+         *  ·  1: User pass matches.
+         *  · -1: User found, but pass does not match.
+         *  ·  0: User not found.  
          */            
          
         signed int InCache(const std::string& user, const std::string& pass);
 
+        /* 
+         * Checks if an user is in cache.
+         * 
+         * @return:
+         *
+         *  · true: User is in cache.
+         *  · false: User not present.
+         */    
+         
         bool InCache(const std::string& user);
         
         /* Removes all logins from cache. */

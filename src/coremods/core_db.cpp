@@ -136,7 +136,18 @@ class ModuleCoreDB : public Module
               }
 
               user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
-
+              
+              /* Verify if user has a identical loggin logged. */
+              
+              std::shared_ptr<Session> session = Kernel->Logins->Sessions->Find(user->login);
+              
+              if (session)
+              {
+                    Kernel->Logins->Sessions->Attach(user, user->login, session->rawflags);
+                    user->SendProtocol(BRLD_YOUR_FLAGS, user->login, session->rawflags.c_str());
+                    return;
+              }
+              
               const std::string& flags = UserHelper::FindAdmin(user->login);    
               Kernel->Logins->Sessions->Attach(user, user->login, flags);
               

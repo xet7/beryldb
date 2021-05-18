@@ -48,7 +48,156 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
           }   
 
           unsigned int exp_usig = convto_num<unsigned int>(seconds);
-          Kernel->Store->Futures->Add(exp_usig, key, value, user->select, false);
-          user->SendProtocol(BRLD_FUTURE_ADD, key, value, "New future added.");
+          Kernel->Store->Futures->Add(user->current_db, exp_usig, key, value, user->select, false);
+          user->SendProtocol(BRLD_FUTURE_ADD, key, value, PROCESS_OK);
           return SUCCESS;
 }
+
+CommandTTE::CommandTTE(Module* Creator) : Command(Creator, "TTE", 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
+{
+         const std::string& key = parameters[0];
+         
+         signed int ttl = FutureManager::TriggerTIME(user->current_db, key, user->select);
+         
+         if (ttl != -1)
+         {
+                  user->SendProtocol(BRLD_TTE, key, user->select, Daemon::Format("%s excersised in %d seconds.", key.c_str(), ((int)ttl - (int)Kernel->Now())).c_str());
+         }
+         else
+         {      
+                  /* Unable to remove this 'key' from ExpireManager. */
+                  
+                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, Daemon::Format("%s is not exercising.", key.c_str()).c_str());
+         }
+         
+         return SUCCESS;
+}
+
+CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
+{
+         const std::string& key = parameters[0];
+         
+         bool result = FutureManager::Exec(user->current_db, key, user->select);
+         
+         if (result)
+         {
+               user->SendProtocol(BRLD_FUTURE_EXEC, key, user->select, PROCESS_OK); 
+         }
+         else
+         {      
+               user->SendProtocol(ERR_NOT_FUTURE, key, user->select, Daemon::Format("Future not found: %s", key.c_str()).c_str());
+               return FAILED;
+         }
+
+         return SUCCESS;
+}
+
+CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETALL", 0, 0)
+{
+
+}
+
+COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
+{
+         user->SendProtocol(BRLD_INFO_FUT_DEL, Daemon::Format("Deleting %d futures ...", Kernel->Store->Futures->CountAll()).c_str());
+
+         FutureManager::Reset();
+         user->SendProtocol(BRLD_FUTURE_DELETED, "Futures removed.");
+         return SUCCESS;
+}
+
+CommandFReset::CommandFReset(Module* Creator) : Command(Creator, "FRESET", 0, 1)
+{
+        syntax = "<select>";
+}
+
+COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
+{
+        std::string use;
+
+        if (parameters.size())
+        { 
+            use = parameters[0];
+
+            if (!is_number(use))
+            {
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+            }
+
+            if (!is_positive_number(use))
+            {
+                  user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                  return FAILED;
+            }
+
+            if (!Daemon::CheckRange(user, use, "Must be a value between 1 and 100", 1, 100))
+            {
+                  return FAILED;
+            }
+        }
+        else
+        {
+             use = user->select;
+        }
+
+        unsigned int counter = FutureManager::SReset(user->current_db, use);
+        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleted %d futures in select %s.", counter, use.c_str()).c_str());
+
+        return SUCCESS;
+}
+
+CommandCancel::CommandCancel(Module* Creator) : Command(Creator, "CANCEL", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
+{
+        const std::string& key = parameters[0];
+        
+        if (FutureManager::Delete(user->current_db, key, user->select))
+        {
+              user->SendProtocol(BRLD_FUTURE_DEL, key, user->select, PROCESS_OK);
+        }
+        else
+        {
+              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, Daemon::Format("Future not found: %s", key.c_str()).c_str());
+              return FAILED;
+        }
+        
+        return SUCCESS;
+}
+
+/*CommandFkey::CommandFkey(Module* Creator) : Command(Creator, "FKEY", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
+{
+        const std::string& key = parameters[0];
+        
+        const std::string& value = FutureManager::GetVal(user->current_db, key, user->select);
+        
+        {
+              user->SendProtocol(BRLD_FUTURE_DEL, key, user->select, PROCESS_OK);
+        }
+        else
+        {
+              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, Daemon::Format("Future no
+              return FAILED;
+        }
+        
+        return SUCCESS;
+}*/

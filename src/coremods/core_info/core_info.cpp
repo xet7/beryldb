@@ -34,11 +34,14 @@ class CoreModInfo : public Module
 	CommandVersion cmdversion;
 	CommandL cmdl;
 	CommandSyntax cmdsyntax;
+	CommandMyChans cmdmychans;
+	CommandChans cmdchans;
 
   public:
  
 	CoreModInfo() : cmdcommands(this), cmdmodules(this), cmdtime(this),
-			cmdversion(this), cmdl(this), cmdsyntax(this)
+			cmdversion(this), cmdl(this), cmdsyntax(this),
+			cmdmychans(this), cmdchans(this)
 	{
 
 	}

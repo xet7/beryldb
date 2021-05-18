@@ -114,7 +114,7 @@ void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::AdvGet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
+void KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
        query->database = database;

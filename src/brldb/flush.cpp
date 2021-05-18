@@ -126,9 +126,9 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          break;
                     }
 
-                    case DBL_TYPE_ADVGET:
+                    case DBL_TYPE_AdvancedGET:
                     {
-                         Flusher::AdvGet(user, signal);
+                         Flusher::AdvancedGET(user, signal);
                          break;
                     }
                     

@@ -34,7 +34,7 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
          
          if (!parameters.size() || arg.length() > 1)
          {
-                  unsigned int count = Kernel->Store->Expires->Count(user->select);
+                  unsigned int count = Kernel->Store->Expires->Count(user->current_db, user->select);
                   user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), Daemon::Format("Expire count: %d", count).c_str());
                   return SUCCESS;
          }
@@ -146,7 +146,7 @@ COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
 
         /* Clears all expires pending. */
 
-        unsigned int counter = ExpireManager::SReset(use);
+        unsigned int counter = ExpireManager::SReset(user->current_db, use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleted %d expires in select %s.", counter, use.c_str()).c_str());
 
         return SUCCESS;

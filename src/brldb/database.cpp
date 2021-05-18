@@ -102,6 +102,7 @@ bool Database::FlushDB()
     rocksdb::DestroyDB(this->path, d_options);
     
     ExpireManager::Reset();
+    FutureManager::Reset();
     
     /* We report the opening bool. */
     

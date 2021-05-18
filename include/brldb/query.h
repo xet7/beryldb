@@ -431,7 +431,7 @@ class Externalize advget_query  : public query_base
 {
     public:
 
-        advget_query() : query_base(DBL_TYPE_ADVGET)
+        advget_query() : query_base(DBL_TYPE_AdvancedGET)
         {
 
         }
@@ -569,7 +569,7 @@ class Flusher
 
         static void DBSize(User* user, std::shared_ptr<query_base> query);
 
-        static void AdvGet(User* user, std::shared_ptr<query_base> query);
+        static void AdvancedGET(User* user, std::shared_ptr<query_base> query);
 
         static void HMove(User* user, std::shared_ptr<query_base> query);
 

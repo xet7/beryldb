@@ -292,7 +292,7 @@ class Externalize Beryl
 
 	/* Sets a signal, which is later processed with SignalManager() */
 
-	static void AssignSignal(int signal);
+	static void Signalizer(int signal);
 	
 	/* Returns pending buffer. */
 	

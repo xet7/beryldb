@@ -18,11 +18,17 @@ class CoreModuleFutures : public Module
 {
     private:
         
-        CommandFuture      cmdfuture;
+        CommandFuture   cmdfuture;
+        CommandTTE	cmdtte;
+        CommandExec 	cmdexec;
+        CommandFReset   cmdfreset;
+        CommandCancel   cmdcancel;
+        CommandFResetAll cmdfresetall;
         
     public:
     
-        CoreModuleFutures() : cmdfuture(this)
+        CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
+                              cmdcancel(this), cmdfresetall(this)
         {
         
         }

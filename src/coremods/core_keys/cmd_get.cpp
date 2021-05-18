@@ -76,7 +76,7 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       KeyHelper::AdvGet(user, user->current_db, user->select, key, TYPE_GETDEL);
+       KeyHelper::AdvancedGET(user, user->current_db, user->select, key, TYPE_GETDEL);
        return SUCCESS;
 }
 

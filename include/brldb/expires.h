@@ -55,25 +55,28 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         void Flush(time_t TIME);
         
-        signed int Add(signed int schedule, const std::string& key, const std::string& select, bool epoch = false);
+        /* Adds a new expire */
+        
+        signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& select, bool epoch = false);
 
         /* Returns triggering time for a timer. */
         
-        static signed int TriggerTIME(const std::string& key, const std::string& select);
+        static signed int TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         /* Deletes an entry from the expire map. */
         
-        static bool Delete(const std::string& key, const std::string& select);
+        static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         /* Finds an expiring entry. */
         
-        ExpireEntry Find(const std::string& key, const std::string& select);
+        ExpireEntry Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        
         
         /* Get all Expires */
         
         ExpireMap& GetExpires();        
 
-        signed int GetTTL(const std::string& key, const std::string& select);
+        signed int GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
         
         /* Clears everything inside ExpireList. */
         
@@ -81,7 +84,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         /* Select reset */
         
-        static unsigned int SReset(const std::string& select);
+        static unsigned int SReset(std::shared_ptr<Database> database, const std::string& select);
 
         /* Counts all timers. */
         
@@ -92,7 +95,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         /* Counts items on a given select. */
         
-        unsigned int Count(const std::string& select);
+        unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
 };
 
 

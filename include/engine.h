@@ -34,7 +34,7 @@ class Externalize Daemon : public safecast<Daemon>
 
         void SetCoreLimits();
         
-        static void AssignSignals();
+        static void Signalizers();
 
 
     public:

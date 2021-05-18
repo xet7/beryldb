@@ -27,7 +27,7 @@ class Externalize KeyHelper
 
         static void GetRange(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, int from, int to);
 
-        static void AdvGet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type = TYPE_NONE);
+        static void AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type = TYPE_NONE);
 
         static void AdvSet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type = TYPE_NONE);
 

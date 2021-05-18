@@ -331,7 +331,7 @@ void Daemon::DaemonFork()
         else
         {
                 setsid();
-                signal(SIGTERM, Beryl::AssignSignal);
+                signal(SIGTERM, Beryl::Signalizer);
                 SocketPool::SafeInit();
         }
 
@@ -356,14 +356,14 @@ void Daemon::SetCoreLimits()
         }
 }
 
-void Daemon::AssignSignals()
+void Daemon::Signalizers()
 {
         signal(SIGALRM, SIG_IGN);
         signal(SIGCHLD, SIG_IGN);
         signal(SIGPIPE, SIG_IGN);
         signal(SIGXFSZ, SIG_IGN);
-        signal(SIGINT, Beryl::AssignSignal);
-        signal(SIGTERM, Beryl::AssignSignal);
+        signal(SIGINT, Beryl::Signalizer);
+        signal(SIGTERM, Beryl::Signalizer);
 }
 
 void Daemon::VoidSignalManager(int)

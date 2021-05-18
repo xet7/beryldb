@@ -50,7 +50,6 @@ bool DBHelper::Add(const std::string& name, const std::string& path)
         return MapsHelper::Set(TABLE_DBS, name, "created", convto_string(Kernel->Now()));
 }
 
-
 std::string DBHelper::Find(const std::string& name, const std::string& key)
 {
         BasicTuple tuple = MapsHelper::Get(TABLE_DBS, name, key);

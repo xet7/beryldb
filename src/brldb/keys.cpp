@@ -113,12 +113,12 @@ void advget_query::Run()
            this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
            this->database->db->Delete(rocksdb::WriteOptions(), where_query);
            
-           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
+           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
            if (ttl != -1)
            {
-                Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
-                Kernel->Store->Expires->Delete(this->key, this->select_query);
+                Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
            }
 
            this->access_set(DBL_STATUS_OK);
@@ -139,12 +139,12 @@ void advget_query::Run()
            this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
            this->database->db->Delete(rocksdb::WriteOptions(), where_query);
            
-           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
+           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
            if (ttl != -1)
            {
-                Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
-                Kernel->Store->Expires->Delete(this->key, this->select_query);
+                Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
            }
 
            this->access_set(DBL_STATUS_OK);
@@ -157,11 +157,11 @@ void advget_query::Run()
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
            this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
 
-           signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
+           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
            if (ttl != -1)
            {
-               Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
+               Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
            }
 
            this->access_set(DBL_STATUS_OK);
@@ -170,7 +170,7 @@ void advget_query::Run()
     
     if (this->qtype == TYPE_GETDEL)
     {
-          Kernel->Store->Expires->Delete(this->key, this->select_query);
+          Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
           this->access_set(DBL_STATUS_OK);
           this->SetOK();
@@ -222,7 +222,7 @@ void advget_query::Run()
     this->SetOK();
 }
 
-void Flusher::AdvGet(User* user, std::shared_ptr<query_base> query)
+void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
 {
         switch (query->qtype)
         {
@@ -485,7 +485,7 @@ void get_query::Run()
                     epoch = true;
             }
             
-            signed int result = Kernel->Store->Expires->Add(this->id, this->key, this->select_query, epoch);
+            signed int result = Kernel->Store->Expires->Add(this->database, this->id, this->key, this->select_query, epoch);
             this->data = result;
         }
     }
@@ -536,11 +536,11 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
                    {
                            if (query->qtype == TYPE_EXPIREAT)
                            {
-                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, Daemon::Format("%s to be deleted in %ld seconds.", query->key.c_str(), (query->id - Kernel->Now())).c_str());
+                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, PROCESS_OK);
                            }
                            else
                            {
-                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, Daemon::Format("%s to be deleted in %d seconds.", query->key.c_str(), query->id).c_str());
+                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, PROCESS_OK);
                            }
                    }
                    else
@@ -584,12 +584,12 @@ void move_query::Run()
           return;
     }
 
-    signed int ttl = ExpireManager::TriggerTIME(key, this->select_query);
+    signed int ttl = ExpireManager::TriggerTIME(database, key, this->select_query);
     
     if (ttl != -1)
     {
-             Kernel->Store->Expires->Delete(this->key, this->select_query);
-             Kernel->Store->Expires->Add(ttl, this->key, this->newkey, true);          
+             Kernel->Store->Expires->Delete(database, this->key, this->select_query);
+             Kernel->Store->Expires->Add(database, ttl, this->key, this->newkey, true);          
     }
 
     this->database->db->Delete(rocksdb::WriteOptions(), current);
@@ -640,11 +640,11 @@ void set_query::Run()
     }
     else if (this->qtype == TYPE_SETTX)
     {
-           signed int ttl = ExpireManager::TriggerTIME(this->key, this->select_query);
+           signed int ttl = ExpireManager::TriggerTIME(this->database, this->key, this->select_query);
            
            if (ttl != -1)
            {
-                 Kernel->Store->Expires->Add(ttl, this->value, this->select_query, true);          
+                 Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
                 this->access_set(DBL_ENTRY_EXISTS);
              return;                
            }
@@ -669,6 +669,7 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
                Dispatcher::Smart(user, 1, BRLD_FLUSH, query->customreply, query->key, DBL_TYPE_SET);
                return;
         }
+        
         
         if (query->qtype == TYPE_SETNX || query->qtype == TYPE_SETTX)
         {
@@ -721,7 +722,7 @@ void del_query::Run()
 
     /* Deletes key in case it is expiring. */
     
-    Kernel->Store->Expires->Delete(this->key, this->select_query);
+    Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
     
     rocksdb::Status auxstatus = this->database->db->Delete(rocksdb::WriteOptions(), where);
     this->access_set(DBL_STATUS_OK);
@@ -767,7 +768,6 @@ void find_query::Run()
     unsigned int tracker = 0;
     
     std::string rawstring;
-    
     
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
@@ -907,7 +907,6 @@ void find_query::Run()
             return;
     }
 
-
     this->subresult = ++tracker;
     this->partial = false;
     this->counter = aux_counter;
@@ -966,7 +965,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
                 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_FIND_BEGIN, query->key, "BEGIN of FIND list.");
+                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, query->key, "BEGIN of FIND list.");
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
