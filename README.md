@@ -1,5 +1,5 @@
 
-<a target="_blank" href="https://twitter.com/beryldb"><img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldblabs"></a>
+<a target="_blank" href="https://twitter.com/beryldb"><img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldb"></a>
 <a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/Linux%20CI/badge.svg?4"></a>
 <a target="_blank" href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb?5" /></a>
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
@@ -24,7 +24,7 @@ and dispatched to an internal processor.
 Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
 
-Don't forget to follow us on [Twitter](https://twitter.com/Beryldlabs)!
+Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
 ![cli](https://docs.beryl.dev/img/render.gif??)
 

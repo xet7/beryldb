@@ -1,5 +1,5 @@
 /*
- * BerylDB - A modular database.
+ * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
@@ -19,6 +19,28 @@
 #include "converter.h"
 #include "engine.h"
 #include "core_dbmanager.h"
+
+CommandUsing::CommandUsing(Module* Creator) : Command(Creator, "USING", 1, 1)
+{	
+         requires = 'm';
+         syntax = "<instance>";
+}
+
+COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
+{  
+       const std::string& instance = parameters[0];
+       
+       User* found = Kernel->Clients->FindInstance(instance);
+       
+       if (!found)
+       {
+              user->SendProtocol(ERR_NO_INSTANCE, "Instance not found.");
+              return FAILED;
+       }
+       
+       user->SendProtocol(BRLD_USING, found->select, found->select.c_str());
+       return SUCCESS;
+}
 
 CommandUse::CommandUse(Module* Creator) : Command(Creator, "USE", 1)
 {          

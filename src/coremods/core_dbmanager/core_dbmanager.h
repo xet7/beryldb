@@ -1,5 +1,5 @@
 /*
- * BerylDB - A modular database.
+ * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
@@ -82,4 +82,12 @@ class CommandSFlush : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandUsing : public Command 
+{
+    public: 
+
+        CommandUsing(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
 

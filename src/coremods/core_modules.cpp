@@ -1,5 +1,5 @@
 /*
- * BerylDB - A modular database.
+ * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>

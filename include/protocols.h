@@ -1,5 +1,5 @@
 /*
- * BerylDB - A modular database.
+ * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
@@ -183,6 +183,7 @@ enum BRLD_PROTOCOL
 	BRLD_FUTURE_DELETED		=		256,
 	BRLD_MY_CHANS			=		257,
 	BRLD_CHANS			=		258,
+	BRLD_USING			=		259,
 					 		
 	/* Error protocol codes. */
 	
@@ -207,7 +208,7 @@ enum BRLD_PROTOCOL
         ERR_CHANFULL                    =		518,
         ERR_LOGIN_NO_EXISTS		=		519,
 
-	ERR_NO_AUTH               =	 	520,
+	ERR_NO_AUTH               	=	 	520,
 	ERR_NEEDMOREPARAMS		=		521,
 	ERR_AGENT_IS_SET           	= 		522,
 	ERR_CHANOPRIVSNEEDED            = 		527, 

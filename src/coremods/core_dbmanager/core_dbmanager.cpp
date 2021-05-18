@@ -1,5 +1,5 @@
 /*
- * BerylDB - A modular database.
+ * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
@@ -25,11 +25,12 @@ class CoreModDBManager : public Module
         CommandDBSize cmddbsize;
         CommandDBReset cmddbreset;
         CommandSFlush cmdsflush;
+        CommandUsing cmdusing;
 
     public:     
         
         CoreModDBManager() : cmduse(this), cmdcurrent(this), cmdflushdb(this), cmdpwd(this),
-                             cmddbsize(this), cmddbreset(this), cmdsflush(this)
+                             cmddbsize(this), cmddbreset(this), cmdsflush(this), cmdusing(this)
         {
         
         }
