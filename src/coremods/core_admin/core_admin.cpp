@@ -23,10 +23,15 @@ class CoreModuleAdmin : public Module
         CommandLogins cmdlogins;
         CommandShutdown cmdshutdown;
         CommandRestart cmdrestart;
+        CommandFindFlags cmdfindflags;
+        CommandPause cmdpause;
+        CommandResume cmdresume;
+        CommandIdle cmdidle;
         
   public:
   
-	CoreModuleAdmin() : cmdlogout(this), cmdfinger(this), cmdlogins(this), cmdshutdown(this), cmdrestart(this)
+	CoreModuleAdmin() : cmdlogout(this), cmdfinger(this), cmdlogins(this), cmdshutdown(this), cmdrestart(this),
+	                    cmdfindflags(this), cmdpause(this), cmdresume(this), cmdidle(this)
 	{
 
 	}

@@ -143,6 +143,14 @@ COMMAND_RESULT CommandHandler::CallHandler(const std::string& commandname, const
 
 void CommandHandler::run_command(LocalUser* user, std::string& command, CommandModel::Params& command_p)
 {
+	if (user->Paused)
+	{
+		if (command != "PONG")
+		{
+			return;
+		}
+	}
+	
 	Command* handler = GetBase(command);
 
 	if (!handler)

@@ -20,7 +20,8 @@
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) : 
-					  age(Kernel->Now())
+				         Paused(false)
+				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
 					, hquery(nullptr)

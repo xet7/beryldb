@@ -427,19 +427,66 @@ UserVector ClientManager::FindLogin(const std::string& login, registration_state
 	return users;
 }
 
-/*UserVector ClientManager::FindPrivs(const std::string& login, const std::string& flag)
+UserVector ClientManager::FindPrivs(const std::string& flag)
 {
+	UserVector UserList;
+	
+	bool all = false;
+	
+	if (flag.empty() || flag.length() > 1)
+	{
+		all = true;	
+	}
+	
         const LoginHash& AllLogins = Kernel->Clients.GetLogins();
 
         for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
         {
 		User* user = i->second;
 		
-		if (user->session->
+		if (all)
+		{
+			if (user->session->can_admin || user->session->can_execute || user->session->can_manage)
+			{
+				UserList.push_back(user);
+			}
+			
+			continue;	
+		}
 		
-        
+		if (flag[0] == 'r')
+		{
+			if (user->session->can_admin)
+			{
+				UserList.push_back(user);
+			}
+			
+			continue;
+		}
+		
+		if (flag[0] == 'e')
+		{
+			if (user->session->can_execute)
+			{
+				UserList.push_back(user);
+			}
+			
+			continue;
+		}
+		
+		if (flag[0] == 'a')
+		{
+			if (user->session->can_manage)
+			{
+				UserList.push_back(user);
+			}
+			
+			continue;
+		}
         }
-}*/
+        
+        return UserList;
+}
 
 void ClientManager::ExitLogins(const std::string& login, const std::string& reason)
 {

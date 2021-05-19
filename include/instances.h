@@ -123,9 +123,11 @@ class Externalize User : public Expandable
 	};
 
 	typedef brld::node_list<Subscription> SubsList;
+
+        bool Paused;
 	
 	time_t age;
-
+	
 	/* When this connection was created. */
 
 	time_t connected;
@@ -381,17 +383,16 @@ typedef unsigned int sent_id;
 
 class Externalize LocalUser : public User, public brld::node_list_node<LocalUser>
 {
-	
+  private:
+  
 	void Write(const ProtocolTrigger::SerializedMessage& serialized);
-
 	
 	void Send(ProtocolTrigger::Event& protoev, ProtocolTrigger::MessageList& msglist);
-
 	
 	static ProtocolTrigger::MessageList SendMsgList;
 
  public:
- 
+
 	LocalUser(int fd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
 	LocalUser(int fd, const std::string& uuid, Serializable::Data& data);
 

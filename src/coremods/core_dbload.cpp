@@ -99,13 +99,6 @@ class ModuleCoreDB : public Module
          
         void OnPostConnect(User* user)
         {       
-              /* This user may bring activity to the system. */
-              
-              if (Kernel->Lock)
-              {
-                   Kernel->Lock = false;
-              }
-
               user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
               
               /* Verify if user has a identical loggin logged. */

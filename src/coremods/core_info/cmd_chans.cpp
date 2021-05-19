@@ -14,6 +14,18 @@
 #include "beryl.h"
 #include "core_info.h"
 
+CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
+{
+
+}
+
+
+COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
+{
+         user->SendProtocol(1, user->login, user->login.c_str());
+         return SUCCESS;
+}
+
 CommandMyChans::CommandMyChans(Module* parent) : Command(parent, "MYCHANS", 0, 0)
 {
 

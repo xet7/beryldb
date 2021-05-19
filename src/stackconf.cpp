@@ -727,7 +727,7 @@ namespace
 	}
 }
 
-long config_rule::as_int(const std::string &key, long default_value, long min, long max)
+long config_rule::as_int(const std::string &key, long default_value, long min, long max, bool force)
 {
 	std::string result;
 
@@ -744,6 +744,13 @@ long config_rule::as_int(const std::string &key, long default_value, long min, l
 	{
 		return default_value;
 	}
+
+        if (force && (convto_num<int>(result) > max || convto_num<int>(result) < min))
+        {
+                bprint(ERROR, "Configuration error: %s", this->tag.c_str());
+                bprint(ERROR, "%s must have a valid range. Max: %lu, Min: %lu", key.c_str(), max, min);
+                Kernel->Exit(EXIT_CODE_CONFIG, false, true);
+        }
 
 	readable_magnitude(tag, key, result, res, default_value, res_tail);
 	readable_range(tag, key, res, default_value, min, max);

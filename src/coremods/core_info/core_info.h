@@ -104,3 +104,12 @@ class CommandChans : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandWhoami : public Command
+{
+ public:
+
+        CommandWhoami(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
+

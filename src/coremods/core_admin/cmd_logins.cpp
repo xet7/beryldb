@@ -36,5 +36,35 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 
     	user->SendProtocol(BRLD_LOGINS_END, Daemon::Format("End of LOGINS list (%li)", logins.size()).c_str());
 	return SUCCESS;
+}
+
+
+CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "LISTFLAGS", 0, 1)
+{
+        requires = 'e';
+        syntax = "<flag>";
+}
+
+COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
+{
+        std::string flag;
+        
+        if (parameters.size())
+        {
+                flag = parameters[0];
+        }
+        
+        UserVector logins = ClientManager::FindPrivs(flag);
+
+//        user->SendProtocol(BRLD_LOGINS_BEGIN, "Begin of LOGINS list.");
+
+        for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
+        {
+                User* const login = *i;
+                user->SendProtocol(BRLD_LOGINS_LIST, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->rawflags.c_str()).c_str());
+        }
+
+  //      user->SendProtocol(BRLD_LOGINS_END, Daemon::Format("End of LOGINS list (%li)", logins.size()).c_str());
+        return SUCCESS;
 
 }

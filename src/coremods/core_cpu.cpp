@@ -30,7 +30,7 @@ class ModuleCoreCPU : public Module
         {
               last_lock = 0;
               Kernel->Lock = false;
-              Kernel->Interval = 2;
+              Kernel->Interval = 20;
         }
         
         void Update()
@@ -74,6 +74,12 @@ class ModuleCoreCPU : public Module
                      {
                           Kernel->Interval = 4;
                      }
+                     
+                     if (this->last_lock > Kernel->Now() + 10)
+                     {
+                           Kernel->Interval = 10;
+                     }
+                     
                }
 
                if (usage > 20)
@@ -81,9 +87,23 @@ class ModuleCoreCPU : public Module
                      Kernel->Lock = true;
                      this->last_lock = Kernel->Now();
                      Kernel->Interval = 10;
+                     
+                     if (this->last_lock > Kernel->Now() + 10)
+                     {
+                           Kernel->Interval = 20;
+                     }
                }
-               
         }
+        
+        void OnPostConnect(User* user)
+        {
+              /* This user may bring activity to the system. */
+
+              if (Kernel->Lock && Kernel->Clients->GetLocals().size() == 1)
+              {
+                   Kernel->Lock = false;
+              }
+       }
         
         void OnEveryTwoSeconds(time_t current)
         {

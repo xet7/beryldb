@@ -15,6 +15,7 @@
 
 #include "beryl.h"
 
+
 class CommandLogout : public Command
 {
  private:
@@ -72,5 +73,42 @@ class CommandRestart : public Command
         CommandRestart(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
-        
 };
+
+class CommandFindFlags : public Command
+{
+   public:
+
+        CommandFindFlags(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandPause : public Command
+{
+   public:
+    
+        CommandPause(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandResume : public Command
+{
+   public:
+    
+        CommandResume(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
+class CommandIdle : public Command
+{
+   public:
+    
+        CommandIdle(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

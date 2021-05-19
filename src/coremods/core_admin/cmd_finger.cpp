@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "core_admin.h"
 
+
 CommandFinger::CommandFinger(Module* parent) : Command(parent, "FINGER", 0)
 {
         requires = 'e';
@@ -39,5 +40,77 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 
     	user->SendProtocol(BRLD_FINGER_END, Daemon::Format("End of FINGER list (%li)", users.size()).c_str());
 	return SUCCESS;
+}
 
+
+CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 1)
+{
+        requires = 'm';
+        syntax = "<instance>";
+}
+
+COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
+{
+        User* target = Kernel->Clients->FindInstance(parameters[0]);
+
+        if (!target)
+        {
+                user->SendProtocol(Protocols::NoInstance(parameters[0]));
+                return FAILED;
+        }
+        
+        target->Paused = true;
+        
+        user->SendProtocol(1, target->instance, PROCESS_OK);
+        return SUCCESS;
+}
+
+CommandResume::CommandResume(Module* parent) : Command(parent, "RESUME", 1, 1)
+{
+        requires = 'm';
+        syntax = "<instance>";
+}
+
+COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
+{
+        User* target = Kernel->Clients->FindInstance(parameters[0]);
+
+        if (!target)
+        {
+                user->SendProtocol(Protocols::NoInstance(parameters[0]));
+                return FAILED;
+        }
+
+        target->Paused = false;
+
+        user->SendProtocol(1, target->instance, PROCESS_OK);
+        return SUCCESS;
+}
+
+CommandIdle::CommandIdle(Module* parent) : Command(parent, "IDLE", 1, 1)
+{
+        requires = 'm';
+        syntax = "<instance>";
+}
+
+COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
+{
+        User* target = Kernel->Clients->FindInstance(parameters[0]);
+
+        if (!target)
+        {
+                user->SendProtocol(Protocols::NoInstance(parameters[0]));
+                return FAILED;
+        }	
+
+        LocalUser* luser = IS_LOCAL(target);
+        
+        if (luser)
+        {
+                time_t idle = Kernel->Now() - luser->touchbase;
+                user->SendProtocol(1, target->instance, idle);
+                return SUCCESS;
+        }
+        
+        return FAILED;
 }

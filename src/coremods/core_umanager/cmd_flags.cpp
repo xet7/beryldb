@@ -80,6 +80,12 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_ADD_FLAGS, Daemon::Format("User does not exists: %s", newlogin.c_str()));
                 return FAILED;             
         }
+
+        if (newlogin == "root")
+        {
+                user->SendProtocol(ERR_PROTECTED_LOGIN, "You cannot modify root's flags.");
+                return FAILED;
+        }
         
         bool exists = UserHelper::AdminExists(newlogin);
         

@@ -48,7 +48,7 @@ enum DBL_CODE
     DBL_INTERRUPT		=		33,
     DBL_NO_ENTRY		=		34,
     DBL_TYPE_LPOP_ALL		=		35,
-    DBL_TYPE_AdvancedGET		=		36,
+    DBL_TYPE_ADVGET		=		36,
     DBL_TYPE_GETDEL		=		37,
     DBL_TYPE_HMOVE    		=		38,
     DBL_TYPE_TOUCH		=		39,

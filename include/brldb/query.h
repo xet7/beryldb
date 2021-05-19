@@ -431,7 +431,7 @@ class Externalize advget_query  : public query_base
 {
     public:
 
-        advget_query() : query_base(DBL_TYPE_AdvancedGET)
+        advget_query() : query_base(DBL_TYPE_ADVGET)
         {
 
         }

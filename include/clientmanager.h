@@ -135,6 +135,18 @@ class Externalize ClientManager : public safecast<ClientManager>
 
 	void PublishAll(const char* text, ...) BERYL_PRINTF(2, 3);
 
+        /* 
+         * Returns a user vector containing all users with provided flags.
+         * 
+         * @parameters:
+	 *             · flag: Flag to find.
+	 *
+         * @return:
+         *             · UserVector: All users with 'flag' flags. 
+         */    
+         	
+	static UserVector FindPrivs(const std::string& flag);
+
 	sent_id next_sentid();
 
 	/* Finds an instance. */

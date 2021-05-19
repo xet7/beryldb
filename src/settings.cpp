@@ -33,11 +33,39 @@ void Settings::SetDefaults()
       Kernel->Config->AutoJoin = false;
       Kernel->Config->ChanSync = false;
       
+      this->Set("allowchans", "true");
+      this->Set("syntaxhints", "true");
+      this->Set("autojoin", "true");
+      this->Set("chansync", "true");
+      
       STHelper::Set("conf", "allowchans", "true");
       STHelper::Set("conf", "syntaxhints", "true");
       STHelper::Set("conf", "autojoin", "off");
       STHelper::Set("conf", "chansync", "off");
 }
+
+/*std::string Settings::Get(const std::string& key)
+{
+
+}
+
+bool Settings::Set(const std::string& key, const std::string& value)
+{
+      bool v_as_bool = false;
+      
+      if (value == "true")
+      {
+            v_as_bool = true;
+      }
+      
+      bools.insert(std::make_pair(key, v_as_bool));
+                 
+      if (!skip)
+      {
+               STHelper::Set("conf", key, value);
+      }
+}
+*/
 
 bool Settings::Set(const std::string& key, const std::string& value, bool skip)
 {
