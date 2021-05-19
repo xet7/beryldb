@@ -21,7 +21,12 @@
 
 void DataFlush::NotFound(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_FLUSH, "0", signal->key, DBL_NOT_FOUND);
+        Dispatcher::Smart(user, 0, ERR_FLUSH, PROCESS_NULL, signal);
+}
+
+void DataFlush::MissArgs(User* user, std::shared_ptr<query_base> signal)
+{
+        Dispatcher::Smart(user, 0, ERR_FLUSH, "Missing arguments.", signal);
 }
 
 void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)

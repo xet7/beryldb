@@ -30,7 +30,7 @@ void hdel_all_query::Run()
             return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     std::string rawstring;
     
     unsigned int total_match = 0;
@@ -106,19 +106,15 @@ void hdel_all_query::Run()
                             }
                         }
 
-
                     strcounter++;
-                    
-                    
                 }
                 
                 if (select_match && int_match && key_match)
                 {       
                      total_match++;                    
-                     this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                     this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                 }
     }    
-    
     
     this->counter = total_match;
     this->SetOK();
@@ -128,10 +124,10 @@ void Flusher::HDelAll(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished && query->counter > 0)
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, Daemon::Format("%d map key removed.", query->counter).c_str(), query->key, DBL_TYPE_HDEL);
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
         }
         else
         {
-               Dispatcher::Smart(user, 0, ERR_FLUSH, UNABLE_KEY, query->key, DBL_TYPE_HDEL);
+               Dispatcher::Smart(user, 0, ERR_FLUSH, PROCESS_NULL, query);
         }
 }

@@ -17,6 +17,10 @@
 
 const std::string INVALID_MLEVEL = "Invalid monitor level.";
 
+/* Item not found. */
+
+const std::string PROCESS_NULL = "NULL";
+
 /* Everything OK */
 
 const std::string PROCESS_OK = "OK";
@@ -44,10 +48,6 @@ const std::string WRONG_AGENT = "Your agent is not valid.";
 /* Valid agent. */
 
 const std::string VALID_AGENT = "Agent must be in the 3 to 15 length range.";
-
-/* Undefined key. */
-
-const std::string UNDEF_KEY =  "Undefined key.";
 
 /* Default ping interval. */
 

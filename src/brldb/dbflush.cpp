@@ -116,6 +116,10 @@ void DataFlush::GetResults()
                         {
                               DataFlush::NotFound(user, signal);
                         }
+                        else if (signal->access == DBL_MISS_ARGS)
+                        {
+                             DataFlush::MissArgs(user, signal);
+                        }
                         else
                         {
                               DataFlush::Flush(user, signal);
@@ -347,12 +351,12 @@ void DataThread::Process()
 
                       while (queue.empty())
                       {
-                          m_cv.wait(lk);
+                            m_cv.wait(lk);
                       }
 
                       if (queue.empty())
                       {
-                          continue;
+                            continue;
                       }
 
                       signal = queue.front();

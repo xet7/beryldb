@@ -21,8 +21,13 @@
 
 class Database
 {
-    public:
-
+    friend class CoreDatabase;
+    friend class UserDatabase;
+    friend class CoreManager;
+    friend class StoreManager;
+    
+    private:
+    
         /* Pointer to the rocksdb instance. */
         
         rocksdb::DB* db = NULL;
@@ -46,11 +51,32 @@ class Database
         /* Path to a database. */
        
         std::string path;
+     
+    public:
 
         /* Constructor. */
         
         Database(time_t dbcreated, const std::string& dbname, const std::string& dbpath);
 
+        rocksdb::DB* GetAddress()
+        {
+             return this->db;
+        }
+        
+        /* Returns current path */
+        
+        std::string GetPath()
+        {
+             return this->path;
+        }
+         
+        /* Returns database name. */
+        
+        std::string GetName()
+        {
+             return this->name;
+        }
+        
         /* Opens database. */
         
         bool Open();

@@ -37,7 +37,7 @@ void hquery_query::Run()
             return;
     }
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());	    
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());	    
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {

@@ -32,7 +32,7 @@ void hget_query::Run()
 
     const std::string inserting = this->format;
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
 
     if (!fstatus2.ok())
     {
@@ -86,17 +86,17 @@ void hmove_query::Run()
         }
 
         std::string dbvalue;
-        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), this->format, &dbvalue);
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->format, &dbvalue);
 
         if (!fstatus2.ok())
         {
-            this->access_set(DBL_STATUS_FAILED);
-            return;
+              this->access_set(DBL_NOT_FOUND);
+              return;
         }    
 
         const std::string newfmt = this->int_keys + ":" + this->select_query + ":" + to_bin(this->key) + ":" + to_bin(this->value);
-        this->database->db->Put(rocksdb::WriteOptions(), newfmt, dbvalue);
-        this->database->db->Delete(rocksdb::WriteOptions(), this->format);
+        this->database->GetAddress()->Put(rocksdb::WriteOptions(), newfmt, dbvalue);
+        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->format);
         this->SetOK();
 }
 
@@ -104,11 +104,7 @@ void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HMOVE, query->key, query->value, PROCESS_OK);
-        }
-        else
-        {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_HMOVE, UNABLE_KEY);
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
         }
 }
 
@@ -130,18 +126,18 @@ void hdel_query::Run()
         std::string dbvalue;
         bool dirty = false;
         
-        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
 
         if (fstatus2.ok())
         {
                 dirty = true;
-                this->database->db->Delete(rocksdb::WriteOptions(), inserting);
+                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), inserting);
                 
         }     
         
         if (!dirty)
         {
-            this->access_set(DBL_STATUS_FAILED);
+            this->access_set(DBL_NOT_FOUND);
             return;
         }
 
@@ -152,11 +148,7 @@ void Flusher::HDel(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HDEL, "map key removed.");
-        }
-        else
-        {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_HDEL, UNABLE_KEY);
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
         }
 }
 
@@ -176,7 +168,7 @@ void hset_query::Run()
 
         const std::string& where_to = this->format;
         
-        rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where_to, this->value);
+        rocksdb::Status fstatus2 =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_to, this->value);
 
         if (!fstatus2.ok())
         {
@@ -208,7 +200,7 @@ void hkeys_query::Run()
         return;
     }
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     std::string rawstring;
     

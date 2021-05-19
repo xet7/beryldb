@@ -48,13 +48,13 @@ void append_query::Run()
         const std::string& where_query = this->format;
         
         std::string dbvalue;
-        rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+        rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
         if (fstatus.ok())
         {
                 this->response = to_string(dbvalue);
                 this->response.append(this->value);
-                this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
         }
         else
         {
@@ -74,7 +74,7 @@ void Flusher::Append(User* user, std::shared_ptr<query_base> query)
         }
         else
         {
-                user->SendProtocol(ERR_FLUSH, query->key, UNDEF_KEY);
+                user->SendProtocol(ERR_FLUSH, query->key, PROCESS_NULL);
         }
 }
 
@@ -95,7 +95,7 @@ void advget_query::Run()
     const std::string& where_query = this->format;
     
     std::string dbvalue;
-    rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+    rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
     if (fstatus.ok())
     {
@@ -110,8 +110,8 @@ void advget_query::Run()
     if (this->qtype == TYPE_RENAME)
     {
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
-           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
+           this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+           this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
            
            signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
@@ -128,7 +128,7 @@ void advget_query::Run()
     if (this->qtype == TYPE_RENAMENX)
     {
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), newdest, &dbvalue);
+           rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), newdest, &dbvalue);
            
            if (fstatus2.ok())
            {
@@ -136,8 +136,8 @@ void advget_query::Run()
                   return;           
            }
            
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
-           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
+           this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+           this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
            
            signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
@@ -155,7 +155,7 @@ void advget_query::Run()
     if (this->qtype == TYPE_COPY)
     {
            const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+           this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
 
            signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
            
@@ -171,7 +171,7 @@ void advget_query::Run()
     if (this->qtype == TYPE_GETDEL)
     {
           Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-          this->database->db->Delete(rocksdb::WriteOptions(), where_query);
+          this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
           this->access_set(DBL_STATUS_OK);
           this->SetOK();
           
@@ -187,7 +187,7 @@ void advget_query::Run()
            
            this->response = to_string(dbvalue);
            
-           this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->value));
+           this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, to_bin(this->value));
            this->access_set(DBL_STATUS_OK);
            this->SetOK();
     }
@@ -235,7 +235,7 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
                   }
                   else
                   {
-                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, UNDEF_KEY);
+                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, PROCESS_NULL);
                   }
                 
                   return;
@@ -259,11 +259,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query);
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
+                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, PROCESS_NULL, query);
                 }
 
                 return;
@@ -275,11 +275,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query);
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
+                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, PROCESS_NULL, query);
                 }
 
                 return;
@@ -326,7 +326,7 @@ void touch_query::Run()
             std::string tformat = this->int_keys + this->select_query + ":" + to_bin(token);
 
             std::string dbvalue;
-            rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), tformat, &dbvalue);
+            rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), tformat, &dbvalue);
 
             if (fstatus2.ok())
             {
@@ -378,11 +378,15 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
               switch (query->qtype)
               {
                    case TYPE_NTOUCH:
-                          Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->counter2), convto_string(query->counter2), DBL_NONE, TYPE_NTOUCH);
+                          
+                          Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->counter2), query);
+                          
                    return;
                    
                    case TYPE_TCOUNT:
-                          Dispatcher::Smart(user, query->id, BRLD_FLUSH, convto_string(query->id), convto_string(query->id), DBL_NONE, TYPE_NTOUCH);
+                          
+                          Dispatcher::Smart(user, query->id, BRLD_FLUSH, convto_string(query->id), query);
+                          
                    return;
                    
                    case TYPE_CONCAT:
@@ -390,11 +394,11 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
                    {
                                if (query->counter > 0)
                                {
-                                      Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->response), query->key, DBL_NONE, query->qtype);
+                                      Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->response), query);
                                }
                                else
                                {
-                                     Dispatcher::Smart(user, query->qtype, BRLD_FLUSH, UNDEF_KEY, query->key, DBL_NONE, query->qtype);
+                                     Dispatcher::Smart(user, query->qtype, BRLD_FLUSH, PROCESS_NULL, query);
                                }
                    } 
                    
@@ -406,7 +410,7 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
               
     }
     
-    Dispatcher::Smart(query->user, query->qtype, ERR_FLUSH, UNKNOWN_ISSUE.c_str(), query->key, DBL_NONE, query->qtype);
+    Dispatcher::Smart(query->user, 0, ERR_FLUSH, UNKNOWN_ISSUE.c_str(), query);
 }     
 
 void get_query::Run()
@@ -426,7 +430,7 @@ void get_query::Run()
     const std::string& where_query = this->format;
 
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
     if (fstatus2.ok())
     {
@@ -469,7 +473,7 @@ void get_query::Run()
                }
                       
                const std::string& entry_value = to_bin(this->value);
-               this->database->db->Put(rocksdb::WriteOptions(), where_query, entry_value);
+               this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, entry_value);
         }
         
         this->data = 0;
@@ -507,7 +511,7 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
                 }
                 else
                 {
-                    user->SendProtocol(ERR_EXPIRE, query->key, UNDEF_KEY);
+                    user->SendProtocol(ERR_EXPIRE, query->key, PROCESS_NULL);
                 }
                 
                 return;
@@ -521,7 +525,7 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
                 }
                 else
                 {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, UNDEF_KEY);
+                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, PROCESS_NULL);
                     return;
                 }
         }
@@ -543,7 +547,7 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
                    }
                    else
                    {
-                           user->SendProtocol(ERR_EXPIRE, query->key, UNDEF_KEY);
+                           user->SendProtocol(ERR_EXPIRE, query->key, PROCESS_NULL);
                    }
                    
               }
@@ -574,7 +578,7 @@ void move_query::Run()
     const std::string& newdb = this->int_keys + this->newkey + ":" + to_bin(this->key);
 
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), current, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), current, &dbvalue);
 
     if (!fstatus2.ok())
     {
@@ -590,8 +594,8 @@ void move_query::Run()
              Kernel->Store->Expires->Add(database, ttl, this->key, this->newkey, true);          
     }
 
-    this->database->db->Delete(rocksdb::WriteOptions(), current);
-    this->database->db->Put(rocksdb::WriteOptions(), newdb, dbvalue);
+    this->database->GetAddress()->Delete(rocksdb::WriteOptions(), current);
+    this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdb, dbvalue);
     
     this->SetOK();
 }
@@ -628,7 +632,7 @@ void set_query::Run()
     if (this->qtype == TYPE_SETNX)
     {
         std::string dbvalue;
-        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
 
         if (fstatus2.ok())
         {
@@ -649,7 +653,7 @@ void set_query::Run()
            
     }
 
-    rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where, entry_value);
+    rocksdb::Status fstatus2 =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where, entry_value);
   
     if (!fstatus2.ok())
     {
@@ -664,7 +668,7 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
 {       
         if (query && !query->customreply.empty())
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, query->customreply, query->key, DBL_TYPE_SET);
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, query->customreply, query);
                return;
         }
         
@@ -672,11 +676,11 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
         {
              if (query->access == DBL_ENTRY_EXISTS)
              {
-                    Dispatcher::Smart(user, 0, ERR_FLUSH, "0", query->key, DBL_TYPE_SET);
+                    Dispatcher::Smart(user, 0, ERR_FLUSH, "0", query);
              }
              else
              {
-                    Dispatcher::Smart(user, 1, BRLD_FLUSH, "1", query->key, DBL_TYPE_SET);
+                    Dispatcher::Smart(user, 1, BRLD_FLUSH, "1", query);
              }
              
              return;
@@ -684,11 +688,11 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
         
         if (query->finished)
         {
-              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_SET);
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
         }
         else
         {
-              Dispatcher::Smart(user, 1, BRLD_FLUSH, UNABLE_SET_KEY.c_str(), query->key, DBL_TYPE_SET);
+              Dispatcher::Smart(user, 1, BRLD_FLUSH, UNABLE_SET_KEY.c_str(), query);
         }
 }
 
@@ -709,7 +713,7 @@ void del_query::Run()
     const std::string& where = this->format;
 
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
 
     if (!fstatus2.ok())
     {
@@ -721,9 +725,7 @@ void del_query::Run()
     
     Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
     
-    rocksdb::Status auxstatus = this->database->db->Delete(rocksdb::WriteOptions(), where);
-    this->access_set(DBL_STATUS_OK);
-    
+    rocksdb::Status auxstatus = this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where);
     this->SetOK();
 }
 
@@ -731,11 +733,7 @@ void Flusher::Del(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_DEL);
-        }
-        else
-        {
-              Dispatcher::Smart(user, 0, ERR_FLUSH, NOT_FOUND_KEY, query->key, DBL_TYPE_DEL);
+               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
         }
 }
 
@@ -756,7 +754,7 @@ void find_query::Run()
     std::string where = this->int_keys + this->select_query + ":" + this->key;
     std::string where_path = this->int_keys + this->select_query;
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     
     Args result;
     
@@ -955,7 +953,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
                 
         if (query->subresult == 1)
         {
-                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, query->key, "BEGIN of FIND list.");
+                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, "BEGIN of FIND list.", query);
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
