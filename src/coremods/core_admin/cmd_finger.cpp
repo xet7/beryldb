@@ -61,7 +61,7 @@ COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
         
         target->Paused = true;
         
-        user->SendProtocol(1, target->instance, PROCESS_OK);
+        user->SendProtocol(BRLD_PAUSED, target->instance, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -83,7 +83,7 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 
         target->Paused = false;
 
-        user->SendProtocol(1, target->instance, PROCESS_OK);
+        user->SendProtocol(BRLD_RESUMED, target->instance, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -108,7 +108,7 @@ COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
         if (luser)
         {
                 time_t idle = Kernel->Now() - luser->touchbase;
-                user->SendProtocol(1, target->instance, idle);
+                user->SendProtocol(BRLD_IDLE, target->instance, idle);
                 return SUCCESS;
         }
         

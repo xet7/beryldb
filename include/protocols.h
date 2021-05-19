@@ -184,7 +184,11 @@ enum BRLD_PROTOCOL
 	BRLD_MY_CHANS			=		257,
 	BRLD_CHANS			=		258,
 	BRLD_USING			=		259,
-					 		
+	BRLD_WHOAMI			=		260,
+	BRLD_PAUSED			=		261,
+	BRLD_RESUMED			=		262,
+	BRLD_IDLE			=		263,
+						 		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

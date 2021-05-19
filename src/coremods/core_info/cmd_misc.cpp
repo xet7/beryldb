@@ -78,3 +78,15 @@ COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
       user->SendProtocol(BRLD_VERSION, Kernel->GetVersion(user->CanPerform('e')));
       return SUCCESS;
 }
+
+CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
+{
+
+}
+
+
+COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
+{
+         user->SendProtocol(BRLD_WHOAMI, user->login, user->login.c_str());
+         return SUCCESS;
+}
