@@ -33,49 +33,49 @@ namespace
 
 void append_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
+        if (!this->Check())
+        {
+                this->access_set(DBL_STATUS_BROKEN);
+                return;
+        }
 
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
+        if (this->key.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    const std::string& where_query = this->format;
-    
-    std::string dbvalue;
-    rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+        const std::string& where_query = this->format;
+        
+        std::string dbvalue;
+        rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
-    if (fstatus.ok())
-    {
-           this->response = to_string(dbvalue);
-           this->response.append(this->value);
-           this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
-    }
-    else
-    {
-           this->access_set(DBL_STATUS_FAILED);
-           return;
-    }
-    
-    this->access_set(DBL_STATUS_OK);
-    this->SetOK();
+        if (fstatus.ok())
+        {
+                this->response = to_string(dbvalue);
+                this->response.append(this->value);
+                this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
+        }
+        else
+        {
+                this->access_set(DBL_STATUS_FAILED);
+                return;
+        }
+        
+        this->access_set(DBL_STATUS_OK);
+        this->SetOK();
 }
 
 void Flusher::Append(User* user, std::shared_ptr<query_base> query)
 {
-      if (query->finished)
-      {
-               user->SendProtocol(BRLD_FLUSH, query->type, query->key, query->response);
-      }
-      else
-      {
-               user->SendProtocol(ERR_FLUSH, query->key, UNDEF_KEY);
-      }
+        if (query->finished)
+        {
+                user->SendProtocol(BRLD_FLUSH, query->type, query->key, query->response);
+        }
+        else
+        {
+                user->SendProtocol(ERR_FLUSH, query->key, UNDEF_KEY);
+        }
 }
 
 void advget_query::Run()
@@ -283,9 +283,7 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
                 }
 
                 return;
-            
             }
-            
         }
 }
 
@@ -670,7 +668,6 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
                return;
         }
         
-        
         if (query->qtype == TYPE_SETNX || query->qtype == TYPE_SETTX)
         {
              if (query->access == DBL_ENTRY_EXISTS)
@@ -935,13 +932,6 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
              } 
              
              return;
-        }
-
-        /* User disconnected or query interrupted. */
-        
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
-        {
-            return;
         }
 
         if (!query->finished)
