@@ -103,11 +103,24 @@ class Externalize TickManager : public safecast<TickManager>
 	
 	void Flush(time_t TIME);
 
-	/* Adds a new timer */
+	/* 
+	 * Adds a new timer to TimerMap.
+         * 
+         * @parameters:
+	 *
+	 *         · timer: Class inherting timer that will be added
+	 *                  to pending timers.
+         */    
 	
 	void Add(std::shared_ptr<Timer> timer);
 
-	/* Removes a timer. */
-	
+        /* 
+         * Removes a timer.
+         * 
+         * @parameters:
+	 *
+	 *         · timer: Timer to remove.
+         */    	
+         
 	void Remove(std::shared_ptr<Timer> timer);
 };

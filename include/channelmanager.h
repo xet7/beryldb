@@ -22,6 +22,8 @@ class Externalize ChannelManager : public safecast<ChannelManager>
 {
     public: 
 
+        /* Map containing all channels. */
+        
         ChanMap ChannelList;
 
         /* Constructor. */
@@ -32,8 +34,19 @@ class Externalize ChannelManager : public safecast<ChannelManager>
         
         ~ChannelManager();
 
-        /* Finds a chan within ChannelList. */
-        
+        /* 
+         * Finds a channel.
+         * 
+         * @parameters:
+	 *
+	 *         · chan: Chan name to look for.
+	 * 
+         * @return:
+ 	 *
+         *         · Channel*: Pointer to channel found. This function
+         *		       will return NULL if chan is not found.
+         */            
+         
 	Channel* Find(const std::string &chan);
    
         /* Deletes all channnels */

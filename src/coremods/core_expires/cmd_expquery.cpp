@@ -32,13 +32,13 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_TTL, key, Daemon::Format("%s expires in %d seconds.", key.c_str(), ((int)ttl - (int)Kernel->Now())).c_str());
+                  user->SendProtocol(BRLD_TTL, key, ((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_EXPIRE, key, Daemon::Format("%s is not expiring", key.c_str()).c_str());
+                  user->SendProtocol(ERR_NOT_EXPIRE, key, "0");
          }
          
          return SUCCESS;

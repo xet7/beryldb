@@ -69,4 +69,11 @@ class CommandFResetAll : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandFKey : public Command 
+{
+    public: 
 
+        CommandFKey(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

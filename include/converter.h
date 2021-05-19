@@ -16,6 +16,18 @@
 #include <bitset>
 #include <sstream>
 
+/* 
+ * Converts binary to string.
+ * 
+ * @parameters:
+ *
+ *         · string: Binary data.
+ * 
+ * @return:
+ *
+ *         · string: ASCII text.
+ */ 
+
 inline std::string to_string(const std::string& data)
 {
          std::stringstream sstream(data);
@@ -31,8 +43,18 @@ inline std::string to_string(const std::string& data)
          return output;
 }
 
-/* Converts a string to binary. */
-
+/* 
+ * Converts a string to binary.
+ * 
+ * @parameters:
+ *
+ *         · string: ASCII text.
+ * 
+ * @return:
+ *
+ *         · string: Binary data.
+ */ 
+ 
 inline std::string to_bin(const std::string& data)
 {
         std::string result;
@@ -62,7 +84,18 @@ inline bool is_correct(const std::string& str)
 	return false;
 }
 
-/* Checks if a number is a number or not. */
+/* 
+ * Checks if a number is a number or not. 
+ * 
+ * @parameters:
+ *
+ *         · string str: Number to check.
+ *         · allowdots: Include floats.
+ * 
+ * @return:
+ *
+ *         · bool: True if is number, false if not.
+ */ 
 
 inline bool is_number(const std::string& str, bool allowdots = false)
 {
@@ -92,8 +125,18 @@ inline bool is_number(const std::string& str, bool allowdots = false)
         return true;
 }
 
-/* Removes quote marks from a string. */
-
+/* 
+ * Removes quote marks from a string. 
+ * 
+ * @parameters:
+ *
+ *         · string str: Data to check.
+ * 
+ * @return:
+ *
+ *         · string: Full string without quote marks.
+ */
+ 
 inline std::string stripe(const std::string& str)
 {
         if (is_number(str, true))

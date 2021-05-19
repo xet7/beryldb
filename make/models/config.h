@@ -19,7 +19,7 @@ const int INPUT_LIMIT = 65530;
 
 /* Linux distro */
 
-#define LINUX_DISTRO "@LINUX_DISTRO@"
+const std::string LINUX_DISTRO = "@LINUX_DISTRO@";
 
 /* Enables testsuite. */
 
@@ -35,7 +35,7 @@ const int MAX_DEST = 100;
 
 /* Default configuration file */
 
-#define DEFAULT_CONFIG "beryldb.conf"
+const std::string DEFAULT_CONFIG = "beryldb.conf";
 
 /* Number of processors available. */
 
@@ -63,31 +63,31 @@ const unsigned int BUFFERSIZE = 65536;
 
 /* The default location that config files are stored in. */
 
-#define CONFIG_PATH "@CONFIG_DIR@"
+const std::string CONFIG_PATH = "@CONFIG_DIR@";
 
 /* The default location that data files are stored in. */
 
-#define DATA_PATH "@DATA_DIR@"
+const std::string DATA_PATH = "@DATA_DIR@";
 
 /* Default database path. */
 
-#define DB_PATH "@DB_DIR@"
+const std::string DB_PATH = "@DB_DIR@";
 
 /* The default location that log files are stored in. */
 
-#define LOG_PATH "@LOG_DIR@"
+const std::string LOG_PATH = "@LOG_DIR@";
 
 /* The default location that module files are stored in. */
 
-#define MODULE_PATH "@MODULE_DIR@"
+const std::string MODULE_PATH = "@MODULE_DIR@";
 
 /* The default location that runtime files are stored in. */
 
-#define RUNTIME_PATH "@RUNTIME_DIR@"
+const std::string RUNTIME_PATH = "@RUNTIME_DIR@";
 
 /* The URL of the BerylDB docs site. */
 
-#define DOCS "https://docs.beryl.dev"
+const std::string DOCS_URL = "https://docs.beryl.dev";
 
 %target include/config.h
 

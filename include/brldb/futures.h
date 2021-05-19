@@ -70,6 +70,22 @@ class Externalize FutureManager : public safecast<FutureManager>
         /* Time to exercise. */
 
         signed int GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+
+        /* 
+         * Returns a value from FutureMap.
+         * 
+         * @parameters:
+	 *
+	 *         · database: Database to lookup.
+	 *         · key: Key to find.
+	 *         · select: Select to utilize.
+	 * 
+         * @return:
+ 	 *
+         *         · tuple: int (0 if not found, 1 if found), string found.
+         */    
+         
+        static std::tuple<int, std::string> GetVal(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
             
         FutureMap& GetFutures();        
 

@@ -116,8 +116,15 @@ class Externalize Beryl
 	
 	void StartListening();
 	
-	/* Prepares BerylDB for a shut down. */
-	        
+	/* 
+	 * Prepares BerylDB for a shut down. 
+	 *
+         * @parameters:
+	 *
+	 *         · Status: Exit code.
+	 *         · Exit msg to display to clients.
+         */    	        
+         
 	void PrepareExit(int status, const std::string& quitmsg);
 	
 	/* Handles signals. */
@@ -243,7 +250,15 @@ class Externalize Beryl
 	/*
 	 * Beryl's main. This function will initialize most of the beryl's core system
 	 * and will read the config file.
-	 */
+         * 
+         * @parameters:
+	 *
+	 *         · User commandline arguments.
+	 * 
+         * @return:
+ 	 *
+         *         · 1: Beryl is exiting.
+         */    
 
 	Beryl(int argc, char** argv);
 
@@ -286,7 +301,17 @@ class Externalize Beryl
 		return	this->ConfigFile;
 	}
 
-	/* Returns BerylDB's version */
+        /* 
+         * Returns BerylDB's version.
+         * 
+         * @parameters:
+         *
+	 *        · full: Whether return full or basic version.
+	 * 
+         * @return:
+         *
+         *        · string: Version.
+         */    
 	 
 	std::string GetVersion(bool full = false);
 

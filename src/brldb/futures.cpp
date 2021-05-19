@@ -153,6 +153,22 @@ FutureEntry FutureManager::Find(std::shared_ptr<Database> database, const std::s
         throw KernelException("ne");
 }
 
+std::tuple<int, std::string> FutureManager::GetVal(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+{
+        FutureEntry entry;
+ 
+        try
+        {
+              entry = FutureManager::Find(database, key, select);
+        }
+        catch (KernelException& err)
+        {
+              return std::make_tuple(0, "");
+        }
+        
+        return std::make_tuple(1, entry.value);
+}
+
 bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
         FutureEntry entry;

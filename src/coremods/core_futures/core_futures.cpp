@@ -24,11 +24,12 @@ class CoreModuleFutures : public Module
         CommandFReset   cmdfreset;
         CommandCancel   cmdcancel;
         CommandFResetAll cmdfresetall;
+        CommandFKey cmdfkey;
         
     public:
     
         CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
-                              cmdcancel(this), cmdfresetall(this)
+                              cmdcancel(this), cmdfresetall(this), cmdfkey(this)
         {
         
         }

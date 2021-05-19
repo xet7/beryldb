@@ -72,7 +72,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, Daemon::Format("%s is not exercising.", key.c_str()).c_str());
+                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, "0");
          }
          
          return SUCCESS;
@@ -179,25 +179,28 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
-/*CommandFkey::CommandFkey(Module* Creator) : Command(Creator, "FKEY", 1, 1)
+CommandFKey::CommandFKey(Module* Creator) : Command(Creator, "FKEY", 1, 1)
 {
          syntax = "<key>";
 }
 
-COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
+COMMAND_RESULT CommandFKey::Handle(User* user, const Params& parameters) 
 {
         const std::string& key = parameters[0];
+
+        std::tuple<int, std::string> response = FutureManager::GetVal(user->current_db, key, user->select);
         
-        const std::string& value = FutureManager::GetVal(user->current_db, key, user->select);
-        
+        if (std::get<0>(response))
         {
-              user->SendProtocol(BRLD_FUTURE_DEL, key, user->select, PROCESS_OK);
+              FutureManager::Delete(user->current_db, key, user->select);
+              user->SendProtocol(BRLD_FUTURE_DEL, key, user->select, PROCESS_OK, PROCESS_OK);
         }
         else
         {
-              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, Daemon::Format("Future no
+              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, 0, "0");
               return FAILED;
         }
         
         return SUCCESS;
-}*/
+}
+

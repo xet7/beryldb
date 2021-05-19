@@ -43,7 +43,7 @@ class Externalize Channel : public Expandable
 	
 	/* Deletes an user from subscribedlist. */
 
-    void DeleteUser(User* user);
+	void DeleteUser(User* user);
 
   public:
 	
@@ -76,8 +76,8 @@ class Externalize Channel : public Expandable
 	/*
 	 * Adds a user to the reference list.
 	 * 
-	 * @params:
-	 *           · user to add.
+	 * @parameters:
+	 *           · User*: user to add.
 	 */
 
 	Subscription* AddUser(User* user);

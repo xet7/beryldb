@@ -1,4 +1,3 @@
-
 /*
  * BerylDB - A lightweight database.
  * http://www.beryldb.com
@@ -28,12 +27,10 @@ class Serverstats
 
 		unsigned long Connects;
 
-
 		timeval LastCPU;
 
 		timespec LastSampled;
 
-		
 		Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0)
 		{
 		
