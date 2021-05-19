@@ -51,7 +51,13 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         ExpireMap ExpireList;
         
-        /* Submits all expires to main queue */
+        /* 
+         * Flushes all pending expires.
+         *
+         * @parameters:
+         *
+         *         · time_t: Current time, as provided in mainloop.
+         */
         
         void Flush(time_t TIME);
         

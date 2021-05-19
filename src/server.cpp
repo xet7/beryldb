@@ -201,10 +201,10 @@ std::string Beryl::GetVersion(bool full)
          
 	if (full)
 	{
-		return Daemon::Format("%s %s %s", BRANCH, VERSION, custom.c_str());
+		return Daemon::Format("%s %s %s", BRANCH.c_str(), VERSION, custom.c_str());
 	}
 	
-	return Daemon::Format("%s %s", BRANCH, custom.c_str());
+	return Daemon::Format("%s %s", BRANCH.c_str(), custom.c_str());
 }
 
 std::string UIDHandler::Create()

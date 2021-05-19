@@ -47,7 +47,7 @@ const unsigned int BUFFERSIZE = 65536;
 
 /* The branch version that is shown to unprivileged users. */
 
-#define BRANCH "BerylDB-@VERSION_MAJOR@"
+const std::string BRANCH = "BerylDB-@VERSION_MAJOR@";
 
 /* The full version that is shown to privileged users. */
 

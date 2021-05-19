@@ -43,9 +43,21 @@ class Externalize FutureManager : public safecast<FutureManager>
 {
       public:
 
+        /* Constructor */
+
         FutureManager();
+        
+        /* Future list. */
 
         FutureMap FutureList;
+
+        /* 
+         * Flushes all pending futures. 
+         *
+         * @parameters:
+         *
+         *         · time_t: Current time, as provided in mainloop.
+         */
 
         void Flush(time_t TIME);
 
@@ -57,6 +69,20 @@ class Externalize FutureManager : public safecast<FutureManager>
 
         static void Reset();
 
+        /* 
+         * Finds a future.
+         * 
+         * @parameters:
+	 *
+	 *         · database: Database to look for.
+	 *         · key: Key to look up.
+	 *         · select: Select to use.
+	 * 
+         * @return:
+ 	 *
+         *         · FutureEntry: An static object to a FutureEntry class. 
+         */    
+         
         static FutureEntry Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         /* Exercises an entry. */
@@ -67,8 +93,14 @@ class Externalize FutureManager : public safecast<FutureManager>
 
         signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& value, const std::string& select, bool epoch);
 
-        /* Time to exercise. */
-
+        /* 
+         * Pending time on a future to be executed.
+         * 
+         * @return:
+ 	 *
+         *         · int: Seconds remaining for this entry to be executed.
+         */    
+         
         signed int GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         /* 
