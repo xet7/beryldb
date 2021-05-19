@@ -43,6 +43,21 @@ class Externalize DataFlush : public safecast<DataFlush>
         /* Flush processor */
         
         static void Flush(User* user, std::shared_ptr<query_base> signal);
+
+        /* 
+         * NotFound is called when a database was not found when processing
+         * a signal.
+         * 
+         * @parameters:
+	 *
+	 *         · User: User to process.
+	 * 
+         * @return:
+ 	 *
+         *         · signal: Original requesting signal.
+         */    
+         
+         static void NotFound(User* user, std::shared_ptr<query_base> signal);
         
         /* Results from the processing threads. */
         

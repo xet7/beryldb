@@ -112,7 +112,14 @@ void DataFlush::GetResults()
                         
                         DataFlush::mute.unlock();
                         
-                        DataFlush::Flush(user, signal);
+                        if (signal->access == DBL_NOT_FOUND)
+                        {
+                              DataFlush::NotFound(user, signal);
+                        }
+                        else
+                        {
+                              DataFlush::Flush(user, signal);
+                        }
                         
                         if (user)
                         {
@@ -434,22 +441,12 @@ void DataThread::Process()
                               Kernel->Store->Flusher->Unlock(request->format);
                           }
                           
-                         /* 
-                          * After removing item from notifications queue,
-                          * we flush it so this signal can be delivered.
-                          */
-                         
-                         if (request->access == DBL_INTERRUPT || !request->quiet)
-                         {
+                          if (request->access != DBL_INTERRUPT && !request->quiet)
+                          {
                                  /* Adds result to the pending notification list. */
  
                                  DataFlush::AttachResult(request);
-                         }
-                         else
-                         {
-//request->access == DBL_NOT_FOUND                         
-                         }
-                          
+                          }
                     }
 
                     break;

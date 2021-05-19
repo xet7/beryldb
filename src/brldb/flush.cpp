@@ -19,6 +19,11 @@
 #include "brldb/dbflush.h"
 #include "brldb/query.h"
 
+void DataFlush::NotFound(User* user, std::shared_ptr<query_base> signal)
+{
+        Dispatcher::Smart(user, 0, ERR_FLUSH, "0", signal->key, DBL_NOT_FOUND);
+}
+
 void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
 {
         switch (signal->type)
