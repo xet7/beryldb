@@ -14,6 +14,30 @@
 #include "beryl.h"
 #include "core_admin.h"
 
+class AutoResume : public Timer
+{
+   private:
+           
+           User* user;
+           
+   public:
+   
+           AutoResume(User* usr, unsigned int seconds) : Timer(seconds, false), user(usr)
+           {
+                   Kernel->Tickers->Add(this);
+           }
+           
+           bool Run(time_t current)
+           {
+                   if (!this->user || this->user->IsQuitting())
+                   {
+                           return false;
+                   }
+                   
+                   user->Paused = false;
+                   return false;
+           }
+};
 
 CommandFinger::CommandFinger(Module* parent) : Command(parent, "FINGER", 0)
 {
@@ -43,10 +67,10 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 }
 
 
-CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 1)
+CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 2)
 {
         requires = 'm';
-        syntax = "<instance>";
+        syntax = "<instance> <*seconds>";
 }
 
 COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
@@ -58,8 +82,13 @@ COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
                 user->SendProtocol(Protocols::NoInstance(parameters[0]));
                 return FAILED;
         }
-        
+
         target->Paused = true;
+        
+        if (parameters.size() == 2)
+        {
+             new AutoResume(target, convto_num<unsigned int>(parameters[1]));
+        }
         
         user->SendProtocol(BRLD_PAUSED, target->instance, PROCESS_OK);
         return SUCCESS;

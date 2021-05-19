@@ -91,7 +91,7 @@ class Externalize TickManager : public safecast<TickManager>
 {
   private:
   
-	typedef std::multimap<time_t,  std::shared_ptr<Timer>> TimerMap;
+	typedef std::multimap<time_t, Timer*> TimerMap;
 
 	/* Pending timers. */
 	
@@ -112,7 +112,7 @@ class Externalize TickManager : public safecast<TickManager>
 	 *                  to pending timers.
          */    
 	
-	void Add(std::shared_ptr<Timer> timer);
+	void Add(Timer* timer);
 
         /* 
          * Removes a timer.
@@ -122,5 +122,5 @@ class Externalize TickManager : public safecast<TickManager>
 	 *         · timer: Timer to remove.
          */    	
          
-	void Remove(std::shared_ptr<Timer> timer);
+	void Remove(Timer* timer);
 };

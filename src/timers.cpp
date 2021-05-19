@@ -15,10 +15,10 @@
 
 void Timer::SetNextTick(unsigned int tick)
 {
-	Kernel->Tickers->Remove(std::shared_ptr<Timer>(this));
+	Kernel->Tickers->Remove(this);
 	secs = tick;
 	SetSchedule(Kernel->Now() + tick);
-	Kernel->Tickers->Add(std::shared_ptr<Timer>(this));
+	Kernel->Tickers->Add(this);
 }
 
 Timer::Timer(unsigned int add_secs, bool repeating) : schedule(Kernel->Now() + add_secs)
@@ -30,14 +30,14 @@ Timer::Timer(unsigned int add_secs, bool repeating) : schedule(Kernel->Now() + a
 
 Timer::~Timer()
 {
-	Kernel->Tickers->Remove(std::shared_ptr<Timer>(this));
+	Kernel->Tickers->Remove(this);
 }
 
 void TickManager::Flush(time_t TIME)
 {
 	for (TimerMap::iterator i = Timers.begin(); i != Timers.end(); )
 	{
-		std::shared_ptr<Timer> timer = i->second;
+		Timer* timer = i->second;
 
 		/* We must break if no pending timers are present. */
 		
@@ -65,7 +65,7 @@ void TickManager::Flush(time_t TIME)
 	}
 }
 
-void TickManager::Remove(std::shared_ptr<Timer> timer)
+void TickManager::Remove(Timer* timer)
 {
 	std::pair<TimerMap::iterator, TimerMap::iterator> itpair = Timers.equal_range(timer->GetSchedule());
 
@@ -79,7 +79,7 @@ void TickManager::Remove(std::shared_ptr<Timer> timer)
 	}
 }
 
-void TickManager::Add(std::shared_ptr<Timer> timer)
+void TickManager::Add(Timer* timer)
 {
-	this->Timers.insert(std::make_pair(timer->GetSchedule(), std::shared_ptr<Timer>(timer)));
+	this->Timers.insert(std::make_pair(timer->GetSchedule(), timer));
 }

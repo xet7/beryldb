@@ -99,7 +99,7 @@ LiveSocketError LiveSocket::TryLink(const engine::sockets::sockaddrs& dest, cons
 	}
 
 	this->Timeout = new SocketTimer(this->GetDescriptor(), std::shared_ptr<LiveSocket>(this), timeout);
-	Kernel->Tickers->Add(std::shared_ptr<Timer>(this->Timeout));
+	Kernel->Tickers->Add(this->Timeout);
 
 	return L_ERR_NONE;
 }
