@@ -113,3 +113,11 @@ class CommandWhoami : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandAgent : public Command
+{
+ public:
+
+        CommandAgent(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

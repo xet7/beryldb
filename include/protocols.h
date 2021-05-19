@@ -191,7 +191,8 @@ enum BRLD_PROTOCOL
 	BRLD_FUTURE_VALUE		=		264,
         BRLD_FUTURE_BEGIN		=		265,
         BRLD_FUTURE_ITEM		=		266,
-        BRLD_FUTURE_END			=		267,        
+	BRLD_FUTURE_END			=		267,        
+	BRLD_AGENT			=		268,
         							 		
 	/* Error protocol codes. */
 	

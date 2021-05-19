@@ -37,12 +37,14 @@ class CoreModInfo : public Module
 	CommandMyChans cmdmychans;
 	CommandChans cmdchans;
 	CommandWhoami cmdwhoami;
+	CommandAgent cmdagent;
 
   public:
  
 	CoreModInfo() : cmdcommands(this), cmdmodules(this), cmdtime(this),
 			cmdversion(this), cmdl(this), cmdsyntax(this),
-			cmdmychans(this), cmdchans(this), cmdwhoami(this)
+			cmdmychans(this), cmdchans(this), cmdwhoami(this),
+			cmdagent(this)
 	{
 
 	}

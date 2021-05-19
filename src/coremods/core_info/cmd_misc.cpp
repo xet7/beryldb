@@ -79,6 +79,17 @@ COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
       return SUCCESS;
 }
 
+CommandAgent::CommandAgent(Module* parent) : Command(parent, "MYAGENT", 0, 0)
+{
+
+}
+
+COMMAND_RESULT CommandAgent::Handle(User* user, const Params& parameters)
+{
+         user->SendProtocol(BRLD_AGENT, user->agent, user->agent.c_str());
+         return SUCCESS;
+}
+
 CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
 {
 
