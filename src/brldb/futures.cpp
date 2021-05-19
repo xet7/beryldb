@@ -204,7 +204,6 @@ signed int FutureManager::TriggerTIME(std::shared_ptr<Database> database, const 
         return -1;
 }
 
-
 signed int FutureManager::GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
       return FutureManager::TriggerTIME(database, key, select);
@@ -244,3 +243,21 @@ unsigned int FutureManager::SReset(std::shared_ptr<Database> database, const std
       return counter;
 }
 
+unsigned int FutureManager::Count(std::shared_ptr<Database> database, const std::string& select)
+{
+        FutureMap& expires = Kernel->Store->Futures->GetFutures();
+
+        unsigned int counter = 0;
+
+        for (FutureMap::iterator it = expires.begin(); it != expires.end(); it++)
+        {
+                FutureEntry entry = it->second;
+
+                if (entry.select == select && entry.database == database)
+                {
+                       counter++;
+                }
+        }
+
+        return counter;
+}

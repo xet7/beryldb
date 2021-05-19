@@ -188,7 +188,11 @@ enum BRLD_PROTOCOL
 	BRLD_PAUSED			=		261,
 	BRLD_RESUMED			=		262,
 	BRLD_IDLE			=		263,
-						 		
+	BRLD_FUTURE_VALUE		=		264,
+        BRLD_FUTURE_BEGIN		=		265,
+        BRLD_FUTURE_ITEM		=		266,
+        BRLD_FUTURE_END			=		267,        
+        							 		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

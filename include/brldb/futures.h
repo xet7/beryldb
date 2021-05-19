@@ -101,5 +101,7 @@ class Externalize FutureManager : public safecast<FutureManager>
             return this->FutureList.size();
         }
 
+        unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
+
         static unsigned int SReset(std::shared_ptr<Database> database, const std::string& select);      
 };

@@ -35,7 +35,7 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
          if (!parameters.size() || arg.length() > 1)
          {
                   unsigned int count = Kernel->Store->Expires->Count(user->current_db, user->select);
-                  user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), Daemon::Format("Expire count: %d", count).c_str());
+                  user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), count);
                   return SUCCESS;
          }
          

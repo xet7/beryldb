@@ -16,6 +16,12 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
+
+HQuery::HQuery()
+{
+
+}
+
 /*
 void hquery_query::Run()
 {

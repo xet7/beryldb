@@ -77,3 +77,22 @@ class CommandFKey : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandFValue : public Command 
+{
+    public: 
+
+        CommandFValue(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandFutureCount : public Command 
+{
+    public: 
+
+        CommandFutureCount(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
