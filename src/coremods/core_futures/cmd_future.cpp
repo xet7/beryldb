@@ -72,7 +72,8 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, "0");
+                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, PROCESS_NULL);
+                  return FAILED;
          }
          
          return SUCCESS;
@@ -95,7 +96,7 @@ COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
          }
          else
          {      
-               user->SendProtocol(ERR_NOT_FUTURE, key, user->select, Daemon::Format("Future not found: %s", key.c_str()).c_str());
+               user->SendProtocol(ERR_NOT_FUTURE, key, user->select, PROCESS_NULL);
                return FAILED;
          }
 
@@ -172,7 +173,7 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
         }
         else
         {
-              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, Daemon::Format("Future not found: %s", key.c_str()).c_str());
+              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, PROCESS_NULL);
               return FAILED;
         }
         

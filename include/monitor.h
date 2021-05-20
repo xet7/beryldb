@@ -48,13 +48,30 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
 {
    private:
         
+        /* Monitor map: keeps track of all active monitors. */
+        
         MonitorMap MonitorList;
         
         BufferQueue buffer;
    
    public:
    
+        /* Constructor */
+        
         MonitorHandler();
+        
+        /* 
+         * Checks whether an user is monitoring.
+         * 
+         * @parameters:
+	 *
+	 *         · User: User to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is monitoring.
+         *         · False: User is not monitoring.
+         */    
         
         bool Has(User* user);
         

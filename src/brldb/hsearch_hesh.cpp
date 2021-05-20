@@ -24,7 +24,7 @@ void hsearch_hesh_query::Run()
         return;
     }
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     std::string rawstring;
 

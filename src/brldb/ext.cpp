@@ -42,7 +42,7 @@ void search_query::Run()
 
     unsigned int total_counter = 0;
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {

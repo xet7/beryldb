@@ -46,20 +46,20 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
         {
                 if (it->second.key != key)
                 {
-                      it++;
-                      continue;
+                       it++;
+                       continue;
                 }
                 
                 if (it->second.select != select)
                 {
-                      it++;
-                      continue;
+                       it++;
+                       continue;
                 }
                 
                 if (it->second.database != database)
                 {
-                      it++;
-                      continue;
+                       it++;
+                       continue;
                 }
 
                 Kernel->Store->Expires->ExpireList.erase(it++);

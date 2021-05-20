@@ -41,6 +41,8 @@ class Externalize ExpireManager : public safecast<ExpireManager>
 {
     public:
         
+        /* Expires have mutex, as these are called inside db threads. */
+        
         static std::mutex mute;
         
         /* Constructor */
@@ -61,27 +63,71 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         void Flush(time_t TIME);
         
-        /* Adds a new expire */
-        
+        /* 
+         * Adds a new expire.
+         * 
+         * @parameters:
+	 *
+	 *         · Epoch: If this is an epoch (UNIX timestamp) entry.
+	 * 
+         * @return:
+ 	 *
+         *         · -1 : Schedule already passed.
+         *         · int: Time at which this timer will run.
+         */            
+         
         signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& select, bool epoch = false);
 
-        /* Returns triggering time for a timer. */
-        
+        /* 
+         * Returns triggering time of a timer.
+         * 
+         * @return:
+ 	 *
+         *         · -1: Expire not found.
+         *         · int: time_t to expiring time.
+         */          
+           
         static signed int TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
-        /* Deletes an entry from the expire map. */
-        
+        /* 
+         * Deletes an entry from expires.
+         * 
+         * @return:
+ 	 *
+         *         · True: Entry has been deleted. False: Not found.
+         */            
+         
         static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
-        /* Finds an expiring entry. */
-        
+        /* 
+         * Finds an expire.
+         * 
+         * @return:
+ 	 *
+         *         · ExpireEntry: An static object to ExpireEntry.
+         */    
+                 
         ExpireEntry Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
         
-        
-        /* Get all Expires */
-        
+        /* 
+         * Gets all expires.
+	 * 
+         * @return:
+ 	 *
+         *         · ExpireMap: A map to all expires, keyed by time_t and a 
+         *                      static object of a ExpireEntry.
+         */          
+           
         ExpireMap& GetExpires();        
 
+        /* 
+         * Time to live.
+         * 
+         * @return:
+ 	 *
+         *         · Same as ExpireManager::TriggerTIME();
+         */    
+         
         signed int GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
         
         /* Clears everything inside ExpireList. */
@@ -92,15 +138,31 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         static unsigned int SReset(std::shared_ptr<Database> database, const std::string& select);
 
-        /* Counts all timers. */
-        
+        /* 
+         * Counts all expires.
+	 * 
+         * @return:
+ 	 *
+         *         · unsigned int: All expires.
+         */    
+                 
         unsigned int CountAll()
         {
             return this->ExpireList.size();
         }
         
-        /* Counts items on a given select. */
-        
+        /* 
+         * Returns all items on provided select.
+         * 
+         * @parameters:
+	 *
+	 *         · select: Select to look for.
+	 * 
+         * @return:
+ 	 *
+         *         · unsigned int: Counter of all items found.
+         */
+                     
         unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
 };
 

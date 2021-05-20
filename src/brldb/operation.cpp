@@ -44,7 +44,7 @@ void op_query::Run()
     }
 
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
   
     if (!fstatus2.ok())
     {
@@ -111,7 +111,7 @@ void op_query::Run()
     std::string inserting = convto_string(real_value);        
     
     std::string newvalue = to_bin(inserting);
-    this->database->db->Put(rocksdb::WriteOptions(), where, newvalue);    
+    this->database->GetAddress()->Put(rocksdb::WriteOptions(), where, newvalue);    
     this->response = inserting;
     this->SetOK();
     Kernel->Store->Flusher->opmute = false;
@@ -145,7 +145,7 @@ void dbsize_query::Run()
         return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     std::string rawstring;
     
@@ -211,7 +211,7 @@ void sflush_query::Run()
 
      unsigned int found_counter = 0;
      
-     rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
      for (it->SeekToFirst(); it->Valid(); it->Next()) 
      {
@@ -246,7 +246,7 @@ void sflush_query::Run()
                 
                             if (track == this->value)
                             {
-                                this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                                 found_counter++;
                             }
                 }
@@ -281,7 +281,7 @@ void sflush_query::Run()
                      
                     if (match)
                     {
-                            this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                            this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                             found_counter++;
                     }
                 }

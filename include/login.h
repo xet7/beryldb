@@ -114,7 +114,6 @@ class Externalize LoginCache : public safecast<LoginCache>
 
         bool RemoveLastCache();
 
-
     public: 
     
         /* Session handler. */
@@ -125,7 +124,14 @@ class Externalize LoginCache : public safecast<LoginCache>
 
         LoginCache();
         
-        /* Adds a user pass key to the cache. */
+        /* 
+         * Adds a user pass key to the cache.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User to add.
+	 *         · password: Pass to add.
+         */            
         
         void AddCache(const std::string& user, const std::string& pass);
 
@@ -138,9 +144,9 @@ class Externalize LoginCache : public safecast<LoginCache>
          * 
          * @return:
          *
-         *  ·  1: User pass matches.
-         *  · -1: User found, but pass does not match.
-         *  ·  0: User not found.  
+         *      ·  1: User pass matches.
+         *      · -1: User found, but pass does not match.
+         *      ·  0: User not found.  
          */            
          
         signed int InCache(const std::string& user, const std::string& pass);
@@ -150,8 +156,8 @@ class Externalize LoginCache : public safecast<LoginCache>
          * 
          * @return:
          *
-         *  · true: User is in cache.
-         *  · false: User not present.
+         *     · True: User is in cache.
+         *     · False: User not present.
          */    
          
         bool InCache(const std::string& user);
@@ -167,9 +173,14 @@ class Externalize LoginCache : public safecast<LoginCache>
                 return this->logins.size();
         }
         
-        /* Removes a given user from the cache list. */
+        /* 
+         *  Removes a given user from the cache list. 
+         *
+         * @parameters:
+	 *
+	 *         · login: Login to look for.
+         */            
         
         void Remove(const std::string& login);
-        
 };
 

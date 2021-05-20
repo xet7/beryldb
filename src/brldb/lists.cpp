@@ -46,7 +46,7 @@ void lpush_query::Run()
     
         std::string where_to = this->format + ":" + modified;
     
-        rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), where_to, this->value);
+        rocksdb::Status fstatus =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_to, this->value);
     
         /* Finished. */
     
@@ -58,11 +58,11 @@ void Flusher::LPush(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, query->id, PROCESS_OK);
+            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query, query->id, PROCESS_OK);
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query->key, "Unable to add item to list.");
+            user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query, "Unable to add item to list.");
         }
 }
 
@@ -80,7 +80,7 @@ void lmove_query::Run()
                 return;
         }
 
-        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
         std::string rawstring;
 
@@ -173,11 +173,11 @@ void lmove_query::Run()
                 return;
         }
         
-        this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
 
         const std::string& newformat = this->int_keys + ":" + this->hesh + ":" + this->key;
         
-        rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), newformat, foundvalue);
+        rocksdb::Status fstatus =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), newformat, foundvalue);
         
         /* Finished. */
         
@@ -187,16 +187,7 @@ void lmove_query::Run()
 
 void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
 {
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
-        {
-            return;
-        }
-
-        if (!query->finished)
-        {
-                   user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query->key, "Item not found.");
-        }
-        else
+        if (query->finished)
         {
                   user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, PROCESS_OK);
         }
@@ -216,7 +207,7 @@ void lpop_query::Run()
             return;
     }
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     
     std::string rawstring;
     
@@ -297,7 +288,7 @@ void lpop_query::Run()
 
                 if (select_match && int_match && key_match)
                 {
-                     this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                     this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                      found = true;
                      
                      total++;
@@ -323,13 +314,6 @@ void Flusher::LPop(User* user, std::shared_ptr<query_base> query)
 {	
         switch (query->access)
         {
-               case DBL_INTERRUPT:
-               case DBL_NOT_FOUND:
-                        
-                        return;
-             
-              break;  
-                                     
               case DBL_NO_ENTRY:
               
                   {
@@ -381,7 +365,7 @@ void lget_query::Run()
                 return;
         }
         
-        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
         std::vector<std::string> rlist;
         std::string rawstring;
 
@@ -623,7 +607,7 @@ void lsearch_query::Run()
             return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     std::vector<std::string> rlist;
     std::vector<std::string> allitems;
     
@@ -808,7 +792,7 @@ void lfind_query::Run()
             return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     std::vector<std::string> rlist;
 
     unsigned int aux_counter = 0;

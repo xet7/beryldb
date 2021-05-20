@@ -15,7 +15,7 @@
 
 /* Max. length of a line of text */
 
-const int INPUT_LIMIT = 65530;
+const unsigned int INPUT_LIMIT = 65530;
 
 /* Linux distro */
 
@@ -88,7 +88,6 @@ const std::string RUNTIME_PATH = "@RUNTIME_DIR@";
 /* The URL of the BerylDB docs site. */
 
 const std::string DOCS_URL = "https://docs.beryl.dev";
-
 %target include/config.h
 
 /* Whether the clock_gettime() function was available at compile time. */
