@@ -81,19 +81,25 @@ void Configuration::CrossCheckConnectBlocks()
 			}
 
 			connect_config* parent = NULL;
-			std::string parentName = tag->as_string("parent");
+			std::string ParentName = tag->as_string("parent");
 			
-			if (!parentName.empty())
+			if (!ParentName.empty())
 			{
-				std::map<std::string, size_t>::const_iterator parentIter = names.find(parentName);
-				if (parentIter == names.end())
+				std::map<std::string, size_t>::const_iterator ParentIter = names.find(ParentName);
+
+				if (ParentIter == names.end())
 				{
 					try_again = true;
+				
 					if (attempts >= connect_counts)
-						throw KernelException("Could not find parent connect class \"" + parentName + "\" for connect block at " + tag->get_tag_location());
+					{
+						throw KernelException("Could not find parent connect class \"" + ParentName + "\" for connect block at " + tag->get_tag_location());
+					}
+					
 					continue;
 				}
-				parent = Classes[parentIter->second];
+				
+				parent = Classes[ParentIter->second];
 			}
 
 			std::string name = tag->as_string("name");

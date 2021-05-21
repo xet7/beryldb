@@ -33,7 +33,7 @@ class Externalize ProtocolInterface
 	{
 	 public:
 		std::string servername;
-		std::string parentname;
+		std::string ParentName;
 		std::string description;
 		unsigned int usercount;
 		unsigned int opercount;

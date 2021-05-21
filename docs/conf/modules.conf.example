@@ -72,6 +72,14 @@
 #<module name="autojoin">
 #<autojoin chans="#hello,#world">
 
+# Forward #################################################
+#
+# Forwards an user from channel A to channel B.
+# This tag can be present multiple times.
+
+#<module name="forward">
+#<forward from="#A" to="#B">
+
 # End of modules.conf
 ##############################################################
 
