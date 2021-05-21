@@ -510,7 +510,7 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, key, query);
+                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)

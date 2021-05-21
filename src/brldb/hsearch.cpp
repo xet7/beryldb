@@ -18,11 +18,6 @@
 
 void hsearch_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
     
     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
@@ -39,16 +34,10 @@ void hsearch_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                 }
 
                 rawstring = it->key().ToString();
@@ -96,8 +85,6 @@ void hsearch_query::Run()
 
                         if (strcounter == 1)
                         {
-
-                        
                             if (this->select_query != token)
                             {
                                 break;
@@ -107,11 +94,8 @@ void hsearch_query::Run()
                                 select_match = true;
                             }
                         }
-
-
-                    strcounter++;
-                    
-                    
+    
+                        strcounter++;
                 }
                 
                 
@@ -121,13 +105,13 @@ void hsearch_query::Run()
 
                     if (std::find(rlist.begin(), rlist.end(), asstr) != rlist.end()) 
                     {
-                        continue;
+                          continue;
                     }
                     
                     if (this->qtype == TYPE_COUNT_RECORDS)
                     {   
-                        return_counter++;
-                        continue;           
+                          return_counter++;
+                          continue;           
                     }
                     
                     if (((signed int)total_match >= offset))
@@ -205,13 +189,6 @@ void hsearch_query::Run()
 
 void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
 {
-        /* User disconnected or query interrupted. */
-        
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
-        {
-            return;
-        }
-        
         if (!query->finished)
         {
              user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_MAP);
@@ -227,7 +204,6 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         if (!query->partial && !query->counter)
         {
                user->SendProtocol(BRLD_HSEARCH_BEGIN, query->key, "BEGIN of HSEARCH list.");
-               user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_ITEMS);
                user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
                return;
         }
@@ -240,13 +216,208 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {           
                std::string key = *i;
-               user->SendProtocol(BRLD_HSEARCH_ITEM, DBL_TYPE_HSEARCH, key.c_str());
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
         }
         
         if (!query->partial)
         {
                 user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
         }        
+}
+
+void hsearch_hesh_query::Run()
+{
+    
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+    std::string rawstring;
+
+    unsigned int total_match = 0;
+    unsigned int return_counter = 0;
+    
+    DualMMap rlist;
+    
+    unsigned int tracker = 0;
+    unsigned int aux_counter = 0;
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                {
+                         this->access_set(DBL_INTERRUPT);
+                         return;
+                }
+
+                rawstring = it->key().ToString();
+
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+
+                unsigned int strcounter = 0;
+                bool int_match = false;
+                bool key_match = false;
+                bool select_match = false;
+
+                std::string asstr;
+                std::string ashesh;
+                
+                while (stream.items_extract(token))
+                {
+                    
+                    if (strcounter == 2)
+                    {
+                        asstr = to_string(token);
+                    }
+                    
+                    if (strcounter == 3)
+                    {
+                        ashesh = to_string(token);
+                        
+                        if (ashesh != this->hesh)
+                        {
+                            
+                            break;
+                        }
+                        else
+                        {
+                            
+                            key_match = true;
+                        }
+                          
+                     }
+                        
+                     if (strcounter == 0)
+                     {
+                            
+                            if (this->int_keys != token)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                int_match = true;
+                            }
+                     }
+
+                     if (strcounter == 1)
+                     {
+
+                        
+                            if (this->select_query != token)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                select_match = true;
+                            }
+                     }
+
+                    strcounter++;
+                }
+                
+                if (select_match && int_match && key_match)
+                {	
+                    if (this->core)
+                    {
+                        rlist.insert(std::make_pair(asstr, to_string(it->value().ToString())));
+                        total_match++;
+                        continue;
+                    }
+
+                    if (((signed int)total_match >= offset))
+                    {
+
+                        if (limit != -1 && ((signed int)aux_counter < limit))
+                        {
+                            aux_counter++;
+                    
+                            rlist.insert(std::make_pair(asstr, to_string(it->value().ToString())));
+                       
+                            if (return_counter % 100 == 0)
+                            {
+                                  tracker++;
+
+                                  std::shared_ptr<hsearch_hesh_query> request = std::make_shared<hsearch_hesh_query>();
+                                  request->user = this->user;
+                                  request->partial = true;
+                                  request->hesh = this->hesh;
+
+                                  request->subresult = tracker;
+                                  request->mlist = rlist;
+                                  request->counter = rlist.size();
+                                  rlist.clear();
+                                  request->SetOK();
+                                  DataFlush::AttachResult(request);
+
+                            }
+                       
+                       
+                          return_counter++;
+                }
+                else if (limit == -1)
+                {
+
+                    rlist.insert(std::make_pair(asstr, to_string(it->value().ToString())));
+
+                            if (return_counter % 100 == 0)
+                            {
+                              tracker++;
+
+                                  std::shared_ptr<hsearch_hesh_query> request = std::make_shared<hsearch_hesh_query>();
+                                  request->user = this->user;
+                                  request->partial = true;
+                                  request->hesh = this->hesh;
+
+                                  request->subresult = tracker;
+                                  request->mlist = rlist;
+                                  request->counter = rlist.size();
+                                  rlist.clear();
+                                  request->SetOK();
+                                  DataFlush::AttachResult(request);
+                            }
+
+                    return_counter++;
+                
+                }
+            }
         
-            
+           total_match++;
+                
+        }
+    }    
+
+    this->counter = return_counter;
+    this->mlist = rlist;
+    this->subresult = ++tracker;
+    this->partial = false;
+    this->SetOK();
+    
+}
+
+void Flusher::HSearch_Hesh(User* user, std::shared_ptr<query_base> query)
+{
+        if (!query->finished)
+        {
+             user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_MAP);
+             return;
+        }
+        
+        if (query->subresult == 1)
+        {
+                user->SendProtocol(BRLD_HSEARCH_BEGIN, "BEGIN of HSEARCH list.");
+        }
+                 
+        for (DualMMap::iterator i = query->mlist.begin(); i != query->mlist.end(); ++i)
+        {            
+                std::string key = i->first;
+                std::string value = i->second;
+                Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+        }
+        
+        if (!query->partial)
+        {
+                user->SendProtocol(BRLD_HSEARCH_END, query->counter, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
+        }   
+                            
 }
