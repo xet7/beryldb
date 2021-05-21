@@ -48,12 +48,12 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
              }
        
              Kernel->Monitor->Add(user, monitor);
-             user->SendProtocol(BRLD_NOW_MONITORING, level, Daemon::Format("Monitor activated: %s", level.c_str()));       
+             user->SendProtocol(BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
              return SUCCESS;  
        }
        
        Kernel->Monitor->Add(user, MONITOR_DEFAULT);
-       user->SendProtocol(BRLD_NOW_MONITORING, "DEFAULT", "Monitor activated: Default");          
+       user->SendProtocol(BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
        return SUCCESS;
 }
 
@@ -64,11 +64,10 @@ CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MR
 
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
-     unsigned int count = Kernel->Monitor->Count();
-     
-     Kernel->Monitor->Reset();
-     user->SendProtocol(BRLD_RESET_MONITOR, count, Daemon::Format("Monitor reset: %u", count).c_str());
-     return SUCCESS;
+       unsigned int count = Kernel->Monitor->Count();
+       Kernel->Monitor->Reset();
+       user->SendProtocol(BRLD_RESET_MONITOR, count, Daemon::Format("OK: %u", count).c_str());
+       return SUCCESS;
 }
 
 
@@ -79,7 +78,7 @@ CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MLIS
 
 COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
 {
-       std::string arg;
+        std::string arg;
         
         if (parameters.size())
         {
@@ -101,7 +100,6 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         }
         
         MonitorMap all = Kernel->Monitor->GetList(arg);
-
         user->SendProtocol(BRLD_MONITOR_LIST, arg, Daemon::Format("BEGIN of MONITOR list.").c_str());
         
         unsigned int counter = 0;

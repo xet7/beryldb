@@ -27,7 +27,7 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 
 	if (newlogin.empty())
 	{
-		user->SendProtocol(ERR_EMPTY_LOGIN, "No login has been provided.");
+		user->SendProtocol(ERR_ALREADY_LOGGED, "No login has been provided.");
 		return FAILED;
 	}
 

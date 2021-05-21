@@ -53,7 +53,6 @@ COMMAND_RESULT CommandEpoch::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
-
 CommandL::CommandL(Module* parent) : Command(parent, "L", 0)
 {
 
@@ -90,8 +89,8 @@ CommandVersion::CommandVersion(Module* parent) : Command(parent, "VERSION", 0, 0
 COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
 {
       /* 
-       * Any user can perform this command, however, only users 
-       * with 'e' flags can obtain a full version of this server. 
+       * All connected users can run VERSION command. However, only users 
+       * with 'e' or higher flags can obtain a full version of this server. 
        */
 	
       user->SendProtocol(BRLD_VERSION, Kernel->GetVersion(user->CanPerform('e')));

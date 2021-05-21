@@ -21,7 +21,7 @@
 
 void DataFlush::EntryExists(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_EXISTS, signal);
+        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_FALSE, signal);
 }
 
 void DataFlush::NotFound(User* user, std::shared_ptr<query_base> signal)

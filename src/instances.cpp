@@ -175,12 +175,12 @@ int User::GetFirstFlag()
 
         if (this->session == nullptr)
         {
-            return 0;
+                return 0;
         }
 
         if (session->can_admin)
         {
-            return 3;
+                return 3;
         }
         
         if (session->can_execute)
@@ -357,8 +357,8 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 {
 	if (this->logged)
 	{       
-			this->SendProtocol(ERR_EMPTY_LOGIN, "Already logged.");
-			return false;
+		this->SendProtocol(ERR_ALREADY_LOGGED, "Already logged.");
+		return false;
 	}
 
 	if (IsQuitting())
@@ -427,7 +427,6 @@ const std::string& User::GetReadableIP()
 
 	return user_ip;
 }
-
 
 const std::string& User::GetRealHost() const
 {
@@ -626,8 +625,8 @@ void User::for_each_neighbor(for_each_neighbor_handler& handler, bool include_se
 			{
 		                if (!curr->IsAdmin())
 		                {	
-                                continue;
-						}
+                                     continue;
+				}
                                 
 				curr->already_sent = newerid;
 				handler.Execute(curr);
@@ -669,7 +668,7 @@ bool User::SetPublicHost(const std::string& shost)
 		}
 	}
 
-	NOTIFY_MODS(OnHostSet, (this,shost));
+	NOTIFY_MODS(OnHostSet, (this, shost));
 
 	this->ResetCache();
 	return true;
@@ -826,7 +825,10 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 	for (file_config_items::const_iterator piter = parentkeys.begin(); piter != parentkeys.end(); ++piter)
 	{
 		if (stdhelpers::string::equalsci(piter->first, "name") || stdhelpers::string::equalsci(piter->first, "parent"))
+		{
 			continue;
+		}
+		
 		(*items)[piter->first] = piter->second;
 	}
 

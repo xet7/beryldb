@@ -209,7 +209,7 @@ enum BRLD_PROTOCOL
 	ERR_NOSUCHSERVICE               = 		510,
 	 
 	ERR_CMD_NOFND              	= 		511,
-	ERR_EMPTY_LOGIN                 = 		512,
+	ERR_ALREADY_LOGGED                 = 		512,
 	ERR_INVALID_LOGIN            	= 		513,
 	ERR_INSTANCE_NOT_SUBS           = 		514,
 	ERR_NOT_SUBSCRIBED              = 		515,

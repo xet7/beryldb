@@ -19,7 +19,7 @@ const std::string PROCESS_ERROR = "ERROR";
 
 /* Entry exists. */
 
-const std::string PROCESS_EXISTS = "FALSE";
+const std::string PROCESS_FALSE = "FALSE";
 
 /* Invalid monitor level */
 
