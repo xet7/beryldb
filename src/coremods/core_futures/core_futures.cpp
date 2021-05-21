@@ -27,12 +27,13 @@ class CoreModuleFutures : public Module
         CommandFKey cmdfkey;
         CommandFValue cmdfvalue;
         CommandFutureCount cmdfcount;
+        CommandFutureAT cmdfutureat;
         
     public:
     
         CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
                               cmdcancel(this), cmdfresetall(this), cmdfkey(this), cmdfvalue(this),
-                              cmdfcount(this)
+                              cmdfcount(this), cmdfutureat(this)
         {
         
         }

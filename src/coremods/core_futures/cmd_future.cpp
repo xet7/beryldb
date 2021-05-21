@@ -230,3 +230,38 @@ COMMAND_RESULT CommandFValue::Handle(User* user, const Params& parameters)
 }        
 
 
+CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT", 3, 3)
+{
+          syntax = "<epoch time> <key> <value>";
+}
+
+COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
+{    
+          const std::string& exp_str = parameters[0];
+          const std::string& key = parameters[1];
+          const std::string& value = parameters[1];
+          
+          if (!is_number(exp_str))
+          {
+                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+          }
+          
+          if (!is_positive_number(exp_str))
+          {
+                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_POSIT.c_str());
+                 return FAILED;
+          }
+                  
+          unsigned int exp_usig = convto_num<unsigned int>(exp_str);
+
+          if ((time_t)exp_usig < Kernel->Now())
+          {
+                 user->SendProtocol(ERR_EXPIRE, exp_str, "Expire already passed.");
+                 return FAILED;
+          }
+
+          Kernel->Store->Futures->Add(user->current_db, exp_usig, key, value, user->select, true);
+          user->SendProtocol(BRLD_FUTURE_ADD, key, value, PROCESS_OK);
+          return SUCCESS;
+}

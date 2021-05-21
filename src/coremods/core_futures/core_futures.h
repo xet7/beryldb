@@ -96,3 +96,12 @@ class CommandFutureCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandFutureAT : public Command 
+{
+    public: 
+
+        CommandFutureAT(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
