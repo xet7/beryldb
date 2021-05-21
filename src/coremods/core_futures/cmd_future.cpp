@@ -62,7 +62,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 {
          const std::string& key = parameters[0];
          
-         signed int ttl = FutureManager::TriggerTIME(user->current_db, key, user->select);
+         signed int ttl = FutureManager::GetTIME(user->current_db, key, user->select);
          
          if (ttl != -1)
          {

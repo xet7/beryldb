@@ -216,20 +216,6 @@ void Daemon::DefaultGenRandom(char* output, size_t max)
         }
 }
 
-void Daemon::TellThat(std::string& who, const std::string& msg, int rpl)
-{
-        User* user = NULL;
-
-        user = Kernel->Clients->FindInstance(who);
-
-        if (!user)
-        {
-                return;
-        }
-
-        user->SendProtocol(rpl, msg);
-}   
-
 void Daemon::SnapshotStats()
 {
         static rusage ru;
@@ -581,3 +567,17 @@ bool Daemon::CheckRange(User* user, const std::string& value, const std::string&
      user->SendProtocol(ERR_INVALID_RANGE, value, reason.c_str());
      return false;
 }
+
+void Dispatcher::TellThat(std::string& who, const std::string& msg, int rpl)
+{
+        User* user = NULL;
+
+        user = Kernel->Clients->FindInstance(who);
+
+        if (!user)
+        {
+                return;
+        }
+
+        user->SendProtocol(rpl, msg);
+}   

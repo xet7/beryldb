@@ -58,6 +58,14 @@ class Database
         
         Database(time_t dbcreated, const std::string& dbname, const std::string& dbpath);
 
+        /* 
+         * GetAddress(): Processing database to rocksdb.
+	 * 
+         * @return:
+ 	 *
+         *         · Returns database address to this->db.
+         */    
+         
         rocksdb::DB* GetAddress()
         {
              return this->db;
@@ -77,8 +85,14 @@ class Database
              return this->name;
         }
         
-        /* Opens database. */
-        
+        /* 
+         * Opens a database.
+         * 
+         * @return:
+ 	 *
+         *         · True: Database opened correctly.
+         */            
+         
         bool Open();
 
         /* Remove all content */
@@ -97,7 +111,6 @@ class UserDatabase : public Database
   public:
 
        UserDatabase(const std::string& dbname, const std::string& dbpath);
-
 };
 
 

@@ -87,7 +87,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
          *         · int: time_t to expiring time.
          */          
            
-        static signed int TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         /* 
          * Deletes an entry from expires.
@@ -125,7 +125,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
          * 
          * @return:
  	 *
-         *         · Same as ExpireManager::TriggerTIME();
+         *         · Same as ExpireManager::GetTIME();
          */    
          
         signed int GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select);

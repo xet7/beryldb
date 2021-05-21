@@ -71,7 +71,7 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
         return false;
 }
 
-signed int ExpireManager::TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int ExpireManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
         ExpireMap& expires = Kernel->Store->Expires->GetExpires();
 
@@ -109,7 +109,7 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
 
         /* If entry already exists, we remove it and insert it again. */
         
-        if (ExpireManager::TriggerTIME(database, key, select) > 0)
+        if (ExpireManager::GetTIME(database, key, select) > 0)
         {
               ExpireManager::Delete(database, key, select);
         }
@@ -207,7 +207,7 @@ void ExpireManager::Flush(time_t TIME)
 signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
       std::lock_guard<std::mutex> lg(ExpireManager::mute);
-      return ExpireManager::TriggerTIME(database, key, select);
+      return ExpireManager::GetTIME(database, key, select);
 }
 
 unsigned int ExpireManager::SReset(std::shared_ptr<Database> database, const std::string& select)
