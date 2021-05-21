@@ -60,6 +60,10 @@ class Externalize DataFlush : public safecast<DataFlush>
          static void NotFound(User* user, std::shared_ptr<query_base> signal);
 
          static void MissArgs(User* user, std::shared_ptr<query_base> signal);
+
+         static void StatusFailed(User* user, std::shared_ptr<query_base> signal);
+
+         static void EntryExists(User* user, std::shared_ptr<query_base> signal);
         
          /* Results from the processing threads. */
         

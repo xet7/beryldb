@@ -28,7 +28,6 @@ CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPC
 COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
 {       
          const std::string& arg = parameters[0];
-         std::string opt;
          
          /* No argument provided, we simply count expire items. */
          
@@ -65,14 +64,6 @@ COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                ExpireEntry entry = it->second;
-               
-               if (opt.empty() || opt != "a")
-               {
-                     if (entry.select != user->select)
-                     {	
-                         continue;
-                     }
-               }
                
                std::string schedule;
                
@@ -147,7 +138,7 @@ COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
         /* Clears all expires pending. */
 
         unsigned int counter = ExpireManager::SReset(user->current_db, use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleted %d expires in select %s.", counter, use.c_str()).c_str());
+        user->SendProtocol(BRLD_INFO_EXP_DEL, counter);
 
         return SUCCESS;
 }

@@ -62,7 +62,7 @@ void Command::RegisterService()
 
 void Command::MissingParameters(LocalUser* user, const Params& parameters)
 {
-	user->SendProtocol(ERR_NEEDMOREPARAMS, name, "Missing parameters.");
+	user->SendProtocol(ERR_NEEDMOREPARAMS, name, "Missing parameters, USE:");
 
         if (user->registered != REG_OK && this->no_hint_until_reg)
         {
@@ -71,7 +71,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
 
 	if (Kernel->Config->SyntaxHints && user->registered == REG_OK && syntax.length())
 	{
-		user->SendProtocol(BRLD_SYNTAX, name, syntax);
+		user->SendProtocol(BRLD_SYNTAX, name, Daemon::Format("%s %s", name.c_str(), syntax.c_str()));
 	}
 }
 

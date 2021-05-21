@@ -214,7 +214,7 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         
         if (!query->finished)
         {
-             user->SendProtocol(ERR_FLUSH, DBL_TYPE_HSEARCH, UNABLE_MAP);
+             user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_MAP);
              return;
         }
 
@@ -227,7 +227,7 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         if (!query->partial && !query->counter)
         {
                user->SendProtocol(BRLD_HSEARCH_BEGIN, query->key, "BEGIN of HSEARCH list.");
-               user->SendProtocol(ERR_FLUSH, DBL_TYPE_HSEARCH, UNABLE_ITEMS);
+               user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_ITEMS);
                user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
                return;
         }

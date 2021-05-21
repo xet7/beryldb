@@ -124,10 +124,10 @@ void Flusher::HDelAll(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished && query->counter > 0)
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query);
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
         else
         {
-               Dispatcher::Smart(user, 0, ERR_FLUSH, PROCESS_NULL, query);
+               Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
         }
 }

@@ -35,6 +35,25 @@ COMMAND_RESULT CommandTime::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
+CommandEpoch::CommandEpoch(Module* parent) : ServerTargetCommand(parent, "EPOCH")
+{
+        syntax = "[<server>]";
+}
+
+COMMAND_RESULT CommandEpoch::Handle(User* user, const Params& parameters)
+{
+        /* Checks whether this command is routes to us. */
+        
+        if (parameters.size() > 0 && !engine::equals(parameters[0], Kernel->Config->ServerName))
+        {
+                return SUCCESS;
+        }
+
+        user->SendRemoteProtocol(BRLD_LOCAL_EPOCH, Kernel->Config->GetServerName(), convto_string(Kernel->Now()));
+        return SUCCESS;
+}
+
+
 CommandL::CommandL(Module* parent) : Command(parent, "L", 0)
 {
 

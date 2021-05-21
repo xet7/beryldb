@@ -210,7 +210,7 @@ void Flusher::HSearch_Hesh(User* user, std::shared_ptr<query_base> query)
 
         if (!query->finished)
         {
-             user->SendProtocol(ERR_FLUSH, DBL_TYPE_HSEARCH, UNABLE_MAP);
+             user->SendProtocol(ERR_QUERY, DBL_TYPE_HSEARCH, UNABLE_MAP);
              return;
         }
         
@@ -223,7 +223,7 @@ void Flusher::HSearch_Hesh(User* user, std::shared_ptr<query_base> query)
         {            
                 std::string key = i->first;
                 std::string value = i->second;
-                user->SendProtocol(BRLD_FLUSH, DBL_TYPE_HSEARCH_HESH, Daemon::Format("%s %s \"%s\"", key.c_str(), query->hesh.c_str(), value.c_str()).c_str());
+                user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_HSEARCH_HESH, Daemon::Format("%s %s \"%s\"", key.c_str(), query->hesh.c_str(), value.c_str()).c_str());
         }
         
         if (!query->partial)

@@ -38,7 +38,6 @@ class CommandCommands : public Command
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-
 class CommandModules : public ServerTargetCommand
 {
    public:
@@ -48,7 +47,6 @@ class CommandModules : public ServerTargetCommand
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-
 class CommandTime : public ServerTargetCommand
 {
  public:
@@ -56,6 +54,15 @@ class CommandTime : public ServerTargetCommand
 	CommandTime(Module* parent);
 	
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
+
+class CommandEpoch:  public ServerTargetCommand
+{
+ public:
+
+        CommandEpoch(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 

@@ -112,17 +112,34 @@ void DataFlush::GetResults()
                         
                         DataFlush::mute.unlock();
                         
-                        if (signal->access == DBL_NOT_FOUND)
+                        switch (signal->access)
                         {
-                              DataFlush::NotFound(user, signal);
-                        }
-                        else if (signal->access == DBL_MISS_ARGS)
-                        {
-                             DataFlush::MissArgs(user, signal);
-                        }
-                        else
-                        {
-                              DataFlush::Flush(user, signal);
+                             case DBL_NOT_FOUND:
+                             
+                                     DataFlush::NotFound(user, signal);
+                             
+                             break;
+                             
+                             case DBL_MISS_ARGS:
+                             
+                                    DataFlush::MissArgs(user, signal);
+                             
+                             break;
+                             
+                             case DBL_ENTRY_EXISTS:
+        
+                                     DataFlush::EntryExists(user, signal);
+                             
+                             break;
+                             
+                             case DBL_STATUS_BROKEN:
+                             
+                                     DataFlush::StatusFailed(user, signal);
+                            break;
+                            
+                            default:
+                             
+                               DataFlush::Flush(user, signal);
                         }
                         
                         if (user)
@@ -433,9 +450,12 @@ void DataThread::Process()
                           request->Lock = true;
 
                           /* Executes signal request. */
-
-                          request->Run();
-
+                          
+                          if (request->Check())
+                          {
+                              request->Run();
+                          }
+                          
                           request->Lock = false;
 
                           if (!request->format.empty())
@@ -451,9 +471,9 @@ void DataThread::Process()
  
                                  DataFlush::AttachResult(request);
                           }
+                          
+                          break;
                     }
-
-                    break;
 
                     default:
                     {

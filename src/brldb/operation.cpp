@@ -121,17 +121,17 @@ void Flusher::Operation(User* user, std::shared_ptr<query_base> query)
 {       
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_OP, Daemon::Format("\"%s\"", query->response.c_str()));
+            user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_OP, Daemon::Format("\"%s\"", query->response.c_str()));
         }
         else
         {
             if (query->access == DBL_NOT_NUM)
             {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_OP, "Not numeric.");
+                    user->SendProtocol(ERR_QUERY, DBL_TYPE_OP, "Not numeric.");
             }
             else
             {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_OP, "Unable to perform operation.");
+                    user->SendProtocol(ERR_QUERY, DBL_TYPE_OP, "Unable to perform operation.");
             }
             
         }
@@ -186,11 +186,11 @@ void Flusher::DBSize(User* user, std::shared_ptr<query_base> query)
 {       
         if (query->finished)
         {
-             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_DBSIZE, query->size, query->response, Daemon::Format("%s %s", convto_string(query->size).c_str(), query->response.c_str()));
+             user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_DBSIZE, query->size, query->response, Daemon::Format("%s %s", convto_string(query->size).c_str(), query->response.c_str()));
         }
         else
         {
-             user->SendProtocol(ERR_FLUSH, DBL_TYPE_DBSIZE, query->access, "Unable to obtain dbsize.");
+             user->SendProtocol(ERR_QUERY, DBL_TYPE_DBSIZE, query->access, "Unable to obtain dbsize.");
         }
 }
 

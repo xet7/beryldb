@@ -138,7 +138,7 @@ void Flusher::Search(User* user, std::shared_ptr<query_base> query)
 {
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_FIND, UNABLE_MAP);
+                user->SendProtocol(ERR_QUERY, DBL_TYPE_FIND, UNABLE_MAP);
                 return;
         }
 

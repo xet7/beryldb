@@ -13,6 +13,14 @@
 
 #pragma once
 
+/* An error has occured. */
+
+const std::string PROCESS_ERROR = "ERROR";
+
+/* Entry exists. */
+
+const std::string PROCESS_EXISTS = "FALSE";
+
 /* Invalid monitor level */
 
 const std::string INVALID_MLEVEL = "Invalid monitor level.";
