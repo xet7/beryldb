@@ -56,8 +56,31 @@ class Externalize Daemon : public safecast<Daemon>
         
         void DeletePID();
 
+        /* 
+         * Saves PID.
+         * 
+         * @parameters:
+         *
+         *         · exitonfail: Will Exit Beryl if unable to write.
+         */
+
+        void SavePID(bool exitonfail = true);
+
         STR1::function<bool(const std::string&)> ValidChannel;
 
+        /* 
+         * Validates a channel.
+         * 
+         * @parameters:
+	 *
+	 *         · channel: Channel to validate.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Valid channel.
+         *         · False: Unable to validate channel.
+         */    
+         
         static bool ChannelValidator(const std::string& channel);
 
         static void DefaultGenRandom(char* output, size_t max);
@@ -129,8 +152,6 @@ class Externalize Daemon : public safecast<Daemon>
         void CheckRoot();
 
         std::string get_real_path(const char* path);
-
-        void SavePID(bool exitonfail = true);
 
         
        

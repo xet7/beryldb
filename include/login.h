@@ -48,6 +48,8 @@ class Externalize SessionManager : public safecast<SessionManager>
 {
     public:
         
+        /* Constructor */
+        
         SessionManager();
         
         /* map of login and ptr to Session. */
@@ -90,7 +92,6 @@ class Externalize SessionManager : public safecast<SessionManager>
          */
          
         void NotifyFlags(const std::string& login, const std::string& flags);
-
 };
 
 /* 

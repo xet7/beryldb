@@ -320,7 +320,16 @@ class Externalize Module : public base_class, public usecountbase
 
 	virtual void OnChannelDelete(Channel* chan);
 
-	
+        /* 
+         * Method called before an user joins a channel.
+         *
+         * @parameters:
+         *
+         *         · Subscription: Membership class.
+         *         · sync: True if channel is synced between servers.
+         *         · created: true if this channel is created.
+         */
+
 	virtual void OnUserJoin(Subscription* memb, bool sync, bool created, DiscardList& except_list);
 
 	

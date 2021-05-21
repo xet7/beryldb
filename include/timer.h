@@ -91,6 +91,8 @@ class Externalize TickManager : public safecast<TickManager>
 {
   private:
   
+  	/* Timer map structure */
+  	
 	typedef std::multimap<time_t, Timer*> TimerMap;
 
 	/* Pending timers. */

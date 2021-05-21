@@ -63,10 +63,13 @@ class Events::ModuleEventProvider : public ServiceProvider, private ddl_base_ref
 	}
 
  private:
+
 	void OnCapture() 
 	{
 		if (*prov != this)
+		{
 			subscribers.clear();
+		}
 	}
 
 	

@@ -38,7 +38,6 @@ class Externalize FileHandler
 	/* Appends a line to a log file. */
 		
 	void AppendLine(const std::string &line);
-
 		
 	virtual ~FileHandler();
 };
@@ -54,7 +53,9 @@ class Externalize LogStream : public base_class
 	/* A log stream header. */
 
 	static const std::string StreamHead;
-
+	
+	/* Constructor */
+	
 	LogStream(log_level loglevel) : loglvl(loglevel)
 	{
 	
@@ -88,7 +89,6 @@ class Externalize LogHandler : public safecast<LogHandler>
 
 	std::map<std::string, std::vector<LogStream *> > ActiveStreams;
 
-
 	std::map<LogStream *, int> AllStreams;
 
 
@@ -111,6 +111,7 @@ class Externalize LogHandler : public safecast<LogHandler>
 	void AddLogReference(FileHandler* fw)
 	{
 		FileLogMap::iterator i = FileLogs.find(fw);
+
 		if (i == FileLogs.end())
 		{
 			FileLogs.insert(std::make_pair(fw, 1));
