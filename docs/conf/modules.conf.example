@@ -80,6 +80,14 @@
 #<module name="forward">
 #<forward from="#A" to="#B">
 
+# ChainJoin #################################################
+#
+# Automatically joins an user to join #B channel when joining 
+# channel #A.
+ 
+#<module name="chainjoin">
+#<chain when="#A" do="#B">
+
 # End of modules.conf
 ##############################################################
 

@@ -16,15 +16,15 @@
 #include "beryl.h"
 #include "exit.h"
 
-class ModuleForward : public Module
+class ModuleChainJoin : public Module
 {
   private:
   
-       std::map<std::string, std::string> forwards;
+       std::map<std::string, std::string> couples;
        
   public:
  
-        ModuleForward()
+        ModuleChainJoin()
         {
         
         }
@@ -33,13 +33,12 @@ class ModuleForward : public Module
         {
                 std::string target = cname;
                 std::transform(target.begin(), target.end(), target.begin(), ::toupper);
-
-                std::map<std::string, std::string>::iterator finding = forwards.find(target);
                 
-                if (finding != forwards.end())
+                std::map<std::string, std::string>::iterator finding = couples.find(target);
+                
+                if (finding != couples.end())
                 {
                         Channel::JoinUser(false, user, finding->second, true);
-                        return MOD_RES_STOP;
                 }
                 
                 return MOD_RES_SKIP;
@@ -47,38 +46,38 @@ class ModuleForward : public Module
         
         void ConfigReading(config_status& status)
         {
-                MultiTag tags = Kernel->Config->GetTags("forward");
+                MultiTag tags = Kernel->Config->GetTags("chain");
 
                 for (config_iterator i = tags.first; i != tags.second; ++i)
                 {
                         config_rule* tag = i->second;
                         
-                        std::string from = tag->as_string("from");
-                        std::string to = tag->as_string("to");
+                        std::string when = tag->as_string("when");
+                        std::string dochan = tag->as_string("do");
                         
-                        if (!Kernel->Engine->ValidChannel(from))
+                        if (!Kernel->Engine->ValidChannel(when))
                         {
-                              bprint(ERROR, "Invalid channel: %s", from.c_str());
+                              bprint(ERROR, "Invalid channel: %s", when.c_str());
                               Kernel->Exit(EXIT_CODE_CONFIG, true, true);
                         }
                         
-                        if (!Kernel->Engine->ValidChannel(to))
+                        if (!Kernel->Engine->ValidChannel(dochan))
                         {
-                              bprint(ERROR, "Invalid channel: %s", to.c_str());
+                              bprint(ERROR, "Invalid channel: %s", dochan.c_str());
                               Kernel->Exit(EXIT_CODE_CONFIG, true, true);
                         }
                         
-                        std::transform(from.begin(), from.end(), from.begin(), ::toupper);
-                        this->forwards.insert(std::make_pair(from, to));
+                        std::transform(when.begin(), when.end(), when.begin(), ::toupper);
+                        this->couples.insert(std::make_pair(when, dochan));
                 }
         }
         
 
         Version GetDescription()
         {
-                return Version("Provides Forward module.", VF_BERYLDB|VF_CORE);
+                return Version("Provides ChanJoin module.", VF_BERYLDB|VF_CORE);
         }
 };
 
-MODULE_LOAD(ModuleForward)
+MODULE_LOAD(ModuleChainJoin)
         
