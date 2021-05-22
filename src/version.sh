@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "BerylDB-0.1.0"
+echo "BerylDB-0.2.0"
