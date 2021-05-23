@@ -54,7 +54,7 @@ class ModuleQuitIdlers : public Module
 
         Version GetDescription()
         {
-                return Version("Disconnects users that are idling.", VF_BERYLDB|VF_CORE);
+                return Version("Disconnects users that are idling.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

@@ -45,6 +45,11 @@ class ModuleForward : public Module
                 return MOD_RES_SKIP;
         }
         
+        void OnUnloadModule(Module* module)
+        {
+                this->forwards.clear();
+        }
+        
         void ConfigReading(config_status& status)
         {
                 MultiTag tags = Kernel->Config->GetTags("forward");
@@ -76,7 +81,7 @@ class ModuleForward : public Module
 
         Version GetDescription()
         {
-                return Version("Provides Forward module.", VF_BERYLDB|VF_CORE);
+                return Version("Provides Forward module.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

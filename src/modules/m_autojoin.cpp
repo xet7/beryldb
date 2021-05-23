@@ -42,6 +42,11 @@ class ModuleAutojoin : public Module
                   }
              }
         }
+
+        void OnUnloadModule(Module* module)
+        {
+                this->chans.clear();
+        }
         
         void ConfigReading(config_status& status)
         {
@@ -71,7 +76,7 @@ class ModuleAutojoin : public Module
 
         Version GetDescription()
         {
-                return Version("Provides AUTOJOIN module.", VF_BERYLDB|VF_CORE);
+                return Version("Provides AUTOJOIN module.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

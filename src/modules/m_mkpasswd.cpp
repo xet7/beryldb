@@ -132,7 +132,7 @@ class ModulePasswordHash : public Module
 
 	Version GetDescription()
 	{
-		return Version("", VF_BERYLDB|VF_CORE);
+		return Version("Provides MKPASSWD command.", VF_BERYLDB|VF_OPTCOMMON); 
 	}
 };
 

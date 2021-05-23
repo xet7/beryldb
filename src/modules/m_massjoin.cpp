@@ -19,6 +19,7 @@ class CommandMassJoin : public Command
   
         CommandMassJoin(Module* Creator) : Command(Creator, "MASSJOIN", 1, 1)
         {
+             requires = 'm';
              syntax = "<chan>";
         }
 
@@ -76,7 +77,7 @@ class ModuleMassJoin : public Module
 
         Version GetDescription()
         {
-                return Version("Provides MASSJOIN command.", VF_BERYLDB|VF_CORE);
+                return Version("Provides MASSJOIN command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

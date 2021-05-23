@@ -20,7 +20,7 @@ class ModuleChainJoin : public Module
 {
   private:
   
-       std::map<std::string, std::string> couples;
+       std::map<std::string, std::string> chain;
        
   public:
  
@@ -34,14 +34,19 @@ class ModuleChainJoin : public Module
                 std::string target = cname;
                 std::transform(target.begin(), target.end(), target.begin(), ::toupper);
                 
-                std::map<std::string, std::string>::iterator finding = couples.find(target);
+                std::map<std::string, std::string>::iterator finding = chain.find(target);
                 
-                if (finding != couples.end())
+                if (finding != chain.end())
                 {
                         Channel::JoinUser(false, user, finding->second, true);
                 }
                 
                 return MOD_RES_SKIP;
+        }
+        
+        void OnUnloadModule(Module* module)
+        {
+                this->chain.clear();
         }
         
         void ConfigReading(config_status& status)
@@ -68,14 +73,14 @@ class ModuleChainJoin : public Module
                         }
                         
                         std::transform(when.begin(), when.end(), when.begin(), ::toupper);
-                        this->couples.insert(std::make_pair(when, dochan));
+                        this->chain.insert(std::make_pair(when, dochan));
                 }
         }
         
 
         Version GetDescription()
         {
-                return Version("Provides ChanJoin module.", VF_BERYLDB|VF_CORE);
+                return Version("Provides ChanJoin module.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

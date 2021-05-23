@@ -51,7 +51,7 @@ class ModuleEcho : public Module
 
         Version GetDescription()
         {
-                return Version("Provides ECHO module.", VF_BERYLDB|VF_CORE);
+                return Version("Provides ECHO module.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

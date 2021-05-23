@@ -67,7 +67,7 @@ class ModuleCycle : public Module
 
         Version GetDescription()
         {
-                return Version("Provides CYCLE command.", VF_BERYLDB|VF_CORE);
+                return Version("Provides CYCLE command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

@@ -79,7 +79,7 @@ class ModuleForcePart : public Module
 
         Version GetDescription()
         {
-                return Version("Adds FORCEPART command.", VF_OPTCOMMON | VF_BERYLDB);
+                return Version("Adds FORCEPART command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 
