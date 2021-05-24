@@ -315,6 +315,8 @@ void lget_query::Run()
         
         unsigned int match_count = 0;
         
+        bool dirty = false;
+        
         for (it->SeekToFirst(); it->Valid(); it->Next()) 
         {
                     if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
@@ -383,6 +385,10 @@ void lget_query::Run()
                                   if (it->value().ToString() != this->value)
                                   {
                                         continue;
+                                  }
+                                  else
+                                  {
+                                        dirty = true;
                                   }
                                 
                                   if (aux_counter == this->id)
@@ -467,6 +473,18 @@ void lget_query::Run()
                             }
                     }
         }
+        
+        if (this->qtype == TYPE_COUNT_RECORDS && return_counter == 0)
+        {
+              this->access_set(DBL_NOT_FOUND);
+              return;
+        }
+
+        if (this->qtype == TYPE_LPOS && !dirty)
+        {
+              this->access_set(DBL_NOT_FOUND);
+              return;
+        }
 
         this->counter = return_counter;
         this->subresult = ++tracker;
@@ -504,7 +522,7 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_FIND_BEGIN, query->key, "BEGIN of HSEARCH list.");
+                user->SendProtocol(BRLD_LGET_BEGIN, query->key, "BEGIN of LGET list.");
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -515,7 +533,7 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+                user->SendProtocol(BRLD_LGET_END, query->key, Daemon::Format("END of LGET list (%i).", query->counter).c_str());
         }
 }
 

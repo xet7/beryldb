@@ -86,11 +86,9 @@ class Externalize LogHandler : public safecast<LogHandler>
 
 	bool Locked;
 
-
 	std::map<std::string, std::vector<LogStream *> > ActiveStreams;
 
 	std::map<LogStream *, int> AllStreams;
-
 
 	std::map<LogStream *, std::vector<std::string> > GeneralStreams;
 

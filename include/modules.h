@@ -28,7 +28,7 @@ enum ModuleID
 	
 	VF_NONE = 0,
 	
-	/* Module is a core module. */
+	/* Module is part of the core. */
 
 	VF_CORE = 1,
 	
@@ -40,7 +40,7 @@ enum ModuleID
 
 	VF_COMMON = 4,
 	
-	/* Common module. */
+	/* Optional module. */
 	
 	VF_OPTCOMMON = 8
 };
@@ -292,8 +292,10 @@ class Externalize Module : public base_class, public usecountbase
 
 	virtual ~Module();
 
+	virtual void Prioritize() 
+	{
 	
-	virtual void Prioritize() { }
+	}
 
 	
 	virtual void ConfigReading(config_status& status);
@@ -310,6 +312,15 @@ class Externalize Module : public base_class, public usecountbase
 
 	
 	virtual ModuleResult OnUserPreExit(LocalUser* user, std::string& message);
+
+        /* 
+         * This overload is invoked everytime an user gets disconnected.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User disconnecting.
+	 *         · quitmsg: Reason of exiting.
+         */    
 
 	virtual void OnUserExit(User* user, const std::string &message);
 	
@@ -332,6 +343,13 @@ class Externalize Module : public base_class, public usecountbase
 
 	virtual void OnUserJoin(Subscription* memb, bool sync, bool created, DiscardList& except_list);
 
+        /* 
+         * Overload called whenever an user has joined a channel.
+         * 
+         * @parameters:
+	 *
+	 *         · Memb: Membership (user-chan relationship).
+         */    
 	
 	virtual void OnPostJoin(Subscription* memb);
 
@@ -435,7 +453,15 @@ class Externalize Module : public base_class, public usecountbase
 	virtual void OnServiceDel(ServiceProvider& service);
 
 	virtual ModuleResult OnConnectionFail(LocalUser* user, LiveSocketError error);
-	
+
+        /* 
+         * Called as Beryl prepares to shutdown.
+         * 
+         * @parameters:
+	 *
+	 *         · reason: Shutdown reason.
+         */    
+         	
 	virtual void OnHalt(const std::string& reason);
 };
 
@@ -512,7 +538,7 @@ class Externalize ModuleHandler : public safecast<ModuleHandler>
 	/*
 	 * Checks if a module can be unloaded.
 	 * 
-	 * @params: 
+	 * @parameters: 
 	 *          · Module to be unloaded.
 	 */
 
@@ -521,7 +547,7 @@ class Externalize ModuleHandler : public safecast<ModuleHandler>
 	/*
 	 * Finds a module by a given name.
 	 *
-	 * @params:
+	 * @parameters:
 	 *         · name: Name to look for.
 	 * @returns:
 	 *         · A pointer referencing given module.
@@ -531,10 +557,8 @@ class Externalize ModuleHandler : public safecast<ModuleHandler>
 
 	void AttachService(ServiceProvider&);
 
-	
 	void UnAttachService(ServiceProvider&);
 
-	
 	 
 	void AttachServices(const ServiceList& list);
 

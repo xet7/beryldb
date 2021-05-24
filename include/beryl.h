@@ -267,8 +267,18 @@ class Externalize Beryl
 	 
 	void Dispatcher();
 
-	/* Exits Beryl. This function will call PrepareExit() before exiting. */
-	
+        /* 
+         * Exits Beryl. This function will call PrepareExit() before exiting.
+         * 
+         * @parameters:
+	 *
+	 *         · status: Exiting code.
+	 *         · nline: whether to print a newline before exiting.
+	 *         · skip: whether to skip PrepareExit().
+	 *         · exitmsg: Exit message. If exitmsg is defined, users
+	 *                    will be sent this msg before disconnect.
+         */    	
+         
 	void Exit(int status, bool nline = false, bool skip = false, const std::string& exitmsg = "");
 
 	/* Returns current time. */
@@ -304,14 +314,14 @@ class Externalize Beryl
          * 
          * @parameters:
          *
-	 *        · full: Whether return full or basic version.
+	 *        · Full: Whether to return full or basic version.
 	 * 
          * @return:
          *
          *        · string: Version.
          */    
 	 
-	std::string GetVersion(bool full = false);
+	std::string GetVersion(bool Full = false);
 
 	/* Sets a signal, which is later processed with SignalManager() */
 

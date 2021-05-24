@@ -19,7 +19,7 @@
 #include "converter.h"
 #include "core_futures.h"
 
-CommandFutureCount::CommandFutureCount(Module* Creator) : Command(Creator, "FUTCOUNT", 0, 1)
+CommandFutureCount::CommandFutureCount(Module* Creator) : Command(Creator, "FCOUNT", 0, 1)
 {
          last_empty_ok = true;
          syntax = "<*argument>";

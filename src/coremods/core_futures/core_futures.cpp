@@ -24,7 +24,6 @@ class CoreModuleFutures : public Module
         CommandFReset   cmdfreset;
         CommandCancel   cmdcancel;
         CommandFResetAll cmdfresetall;
-        CommandFKey cmdfkey;
         CommandFValue cmdfvalue;
         CommandFutureCount cmdfcount;
         CommandFutureAT cmdfutureat;
@@ -32,7 +31,7 @@ class CoreModuleFutures : public Module
     public:
     
         CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
-                              cmdcancel(this), cmdfresetall(this), cmdfkey(this), cmdfvalue(this),
+                              cmdcancel(this), cmdfresetall(this), cmdfvalue(this),
                               cmdfcount(this), cmdfutureat(this)
         {
         
@@ -40,7 +39,7 @@ class CoreModuleFutures : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides future and associated commands.", VF_BERYLDB);
+                return Version("Provides future and associated commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

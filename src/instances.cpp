@@ -87,6 +87,8 @@ User::~User()
 {
         this->SetLock(false);
 
+        /* We remove this user from monitoring list, if applicable. */
+        
         Kernel->Monitor->Remove(this);
 	pending.clear();
 	notifications.clear();
@@ -708,7 +710,6 @@ bool User::SetAgent(const std::string& newagent)
 
 	this->agent.assign(newagent, 0, 200);
 	this->ResetCache();
-
 	return true;
 }
 

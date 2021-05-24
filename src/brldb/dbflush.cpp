@@ -267,7 +267,8 @@ void DataFlush::Process(User* user, std::shared_ptr<query_base> signal)
       
       if (!ToUse)
       {
-            user->SetLock(true);
+            user->SetLock(false);
+            user->pending.clear();
             return;
       }
 
@@ -484,7 +485,6 @@ void DataThread::Process()
               /* Thread is no longer busy. */
 
               this->SetStatus(false);
-              
         }
 }
 

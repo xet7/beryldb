@@ -145,6 +145,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 {
 	if (user->Paused)
 	{
+		/* PONG can still be sent if user is paused. */
+		
 		if (command != "PONG")
 		{
 			return;
@@ -169,6 +171,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 	
 		if (!handler)
 		{
+		        /* Reports not found command to monitoring clients. */
+		        
 		        Kernel->Monitor->Push(user->instance, command, MONITOR_DEBUG, command_p);
 		
 			if (user->registered == REG_OK)
@@ -207,6 +211,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		return;
 	}
 	
+	/* Touch base is updated, as long as command is not PONG or PUBLISH */
+	
 	if (command != "PONG" && command != "PUBLISH")
 	{
 		user->touchbase = Kernel->Now();
@@ -214,6 +220,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 	
 	user->next_ping_check = Kernel->Now() + PING_INTVL;
 
+	/* Verifies whether command requires special flags. */
+	
 	if (handler->requires)
 	{
 		if (!user->CanPerform(handler->requires))
@@ -229,6 +237,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		command_p.pop_back();
 	}
 
+	/* Verifies whether user provided required parameters. */
+	
 	if (command_p.size() < handler->min_params)
 	{
 		handler->MissingParameters(user, command_p);

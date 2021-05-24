@@ -32,7 +32,7 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_TTL, key, ((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_TTL, key, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	

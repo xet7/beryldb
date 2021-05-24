@@ -91,7 +91,6 @@ void* DLLHandler::GetSymbol(const char* name) const
 	}
 
 	return dlsym(lib, name);
-	
 }
 
 void DLLHandler::GetLastError()

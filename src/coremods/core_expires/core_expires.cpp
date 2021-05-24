@@ -22,7 +22,7 @@ class CoreModuleExpires : public Module
         CommandTTL         cmdttl;
         CommandSetex       cmdsetex;
         CommandPersist     cmdpersist;
-        CommandExpireCount cmdexpcount;
+        CommandExpireLIST cmdexplist;
         CommandReset       cmdreset;
         CommandExpireAT    cmdexpireat;
         CommandSReset	   cmdsreset;
@@ -31,7 +31,7 @@ class CoreModuleExpires : public Module
     public:     
         
         CoreModuleExpires() : cmdexpire(this), cmdttl(this), cmdsetex(this), cmdpersist(this),
-                           cmdexpcount(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
+                           cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
                            cmdselectcount(this)
         {
         
@@ -39,7 +39,7 @@ class CoreModuleExpires : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides expire and associated commands.", VF_BERYLDB);
+                return Version("Provides expire and associated commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

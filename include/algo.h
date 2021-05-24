@@ -17,6 +17,19 @@
 #include  <random>
 #include  <iterator>
 
+/* 
+ * Returns a random item from a provided template.
+ * 
+ * @parameters:
+ *
+ *         · Start: Starting item.
+ *         · End: Ending item.
+ * 
+ * @return:
+ *
+ *         · Iter: Random Iter.
+ */ 
+
 template<typename Iter, typename R> Iter random_item(Iter start, Iter end, R& g) 
 {
     std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);

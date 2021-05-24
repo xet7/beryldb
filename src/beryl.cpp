@@ -15,7 +15,6 @@
 
 #include "beryl.h"
 #include "exit.h"
-
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
@@ -28,7 +27,6 @@ std::unique_ptr<Beryl> Kernel = nullptr;
 int main(int argc, char** argv)
 {
 	Kernel = std::make_unique<Beryl>(argc, argv);
-	Kernel.reset();
 	return 1;
 }
 
@@ -46,8 +44,8 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	 * Startup time. 
 	 *
 	 * time_t startup is used in order to calculate uptime.
-	 * You may see your instance's uptime in Emerald
-	 * by using the 'status u' command.
+	 * You may see your instance's uptime in cli
+	 * by calling the 'status u' command.
  	 */
 	
 	this->startup = this->Now();
@@ -60,7 +58,7 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	
 	this->RandomSeed();
 
-	/* Creates epoll's fds */
+	/* Creates sockets fds */
 	
 	SocketPool::Start();
 
@@ -72,11 +70,9 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	
 	this->Config->usercmd.argv = argv;
 	
-	/* We must pass both, argv and argc */
-	
 	this->Config->usercmd.argc = argc;
 
-	/* Goes over user arguments by parsing with getopt. */
+	/* Goes over user cmdline arguments by parsing with getopt. */
 	
 	this->CommandLine();
 
@@ -119,7 +115,8 @@ void Beryl::Initialize()
 
 	/* 
 	 * Checks whether the --nofork arg has been provided, and if so,
-         * move to the background .. or not. 
+         * move to the background. 
+         * Keep in mind that Beryl detaches to the background by default.
 	 */
 	  
 	if (!this->Config->usercmd.nofork)
@@ -309,10 +306,7 @@ void Beryl::Loop()
 
         this->Monitor->Flush();
         
-        /* 
-         * Runs functions meant to be run outside current 
-         * (at time of addition) loop. 
-         */
+        /* Runs functions meant to be run outside current loop. */
         
         this->Atomics->Run();
 }
@@ -414,7 +408,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	slog("EXIT", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
-	/* Stop all monitoring. */
+	/* Stop all monitoring and pending flushes. */
 	
 	this->Monitor->Reset();
 	
@@ -513,7 +507,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	SocketPool::CloseAll();
 
-	/* Calculate uptime. */
+	/* Calculate uptime before exiting. */
 	
 	unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
 	

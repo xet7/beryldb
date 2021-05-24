@@ -48,7 +48,7 @@ class CoreModuleMaps : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides commands to handle maps.", VF_BERYLDB);
+                return Version("Provides commands to handle maps.", VF_BERYLDB|VF_CORE);
         }
 };
 

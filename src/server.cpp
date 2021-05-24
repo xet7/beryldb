@@ -185,7 +185,7 @@ void Beryl::SignalManager(int signal)
 	}
 }
 
-std::string Beryl::GetVersion(bool full)
+std::string Beryl::GetVersion(bool Full)
 {
 	std::string custom;
 
@@ -194,12 +194,7 @@ std::string Beryl::GetVersion(bool full)
                custom = this->Config->ModifiedVersion;
         }
 
-        /* 
-         * Full versions are typically reserved for 
-         * those that have 'e' privileges or superior.
-         */
-         
-	if (full)
+	if (Full)
 	{
 		return Daemon::Format("%s %s %s", BRANCH.c_str(), VERSION, custom.c_str());
 	}

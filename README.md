@@ -76,14 +76,15 @@ a brief discussion board is always appreacited.
 
 ## Source code organization
 
-Source code is contained in the `src/` directory. The Makefile, which is
+Beryl's source code is contained in the `src/` directory. The Makefile, which is
 created after configuring Beryl, is located in the root directory.
 
 Inside the root directory, you will find:
 
-* `src`: contains Beryl's implementation, written in C++.
-
-
+* `src`: Contains Beryl's implementation, written in C++.
+* `include`: Contains Beryl's headers.
+* `etc`: Libraries developed by 3rd party organizations.
+* `make`: Contains several Perl-based functions to compile BerylDB.
 
 ## Contributing
 

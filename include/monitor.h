@@ -17,8 +17,8 @@ class CMDBuffer;
 
 enum MONITOR_LEVEL
 {
-      MONITOR_DEFAULT = 5, /* Shows all found commands */
-      MONITOR_DEBUG = 10   /* Shows not-found commands plus everything on Default */
+      MONITOR_DEBUG = 10, /* Shows all found commands */
+      MONITOR_DEFAULT = 20   /* Shows not-found commands plus everything on Default */
 };
 
 typedef std::deque<CMDBuffer> BufferQueue;
@@ -52,6 +52,8 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         
         MonitorMap MonitorList;
         
+        /* Pending buffer */
+        
         BufferQueue buffer;
    
    public:
@@ -74,15 +76,64 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
          */    
         
         bool Has(User* user);
-        
+
+        /* 
+         * Adds an user to the monitor watchlist.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User to add.
+	 *         · level: May be Default or Debug.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User added. 
+         *         · False: Unable to add user.
+         */    
+                 
         bool Add(User* user, MONITOR_LEVEL level);
-        
+
+        /* 
+         * Removes an user from the monitor map.
+         * 
+         * @parameters:
+	 *
+	 *         · User: User to remove.
+         */            
+         
         void Remove(User* user);
         
+        /* 
+         * Pushes a new event to be delivered to users. 
+         * 
+         * @parameters:
+	 *
+	 *         · instance: Instance that is sending a given command.
+	 *         · level: Who to deliver this event to: debug or default subscribers.
+	 *         · params: Original parameters of sent command.
+         */        
+             
         void Push(const std::string& instance, const std::string& cmd, MONITOR_LEVEL level, const CommandModel::Params& params);
-        
+
+        /* 
+         * Flushes all pending events. This function is
+         * called inside the mainloop.
+         */    
+                 
         void Flush();
 
+        /* 
+         * Returns a MonitorMap containing all monitoring users.
+         * 
+         * @parameters:
+	 *
+	 *         · arg: Requesting all debugs or defaults.
+	 * 
+         * @return:
+ 	 *
+         *         · MonitorMap map (user-level).
+         */    
+         
         MonitorMap GetList(const std::string& arg = "");
                         
         /* Counts all monitor size. */
@@ -97,5 +148,6 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         void Reset()
         {
               this->MonitorList.clear();
+              this->buffer.clear();
         }
 };

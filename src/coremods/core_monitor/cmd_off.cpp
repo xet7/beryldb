@@ -17,7 +17,7 @@
 
 CommandStopMonitor::CommandStopMonitor(Module* Creator) : Command(Creator, "STOPMONITOR", 0, 0)
 {
-
+        requires = 'm';
 }
 
 COMMAND_RESULT CommandStopMonitor::Handle(User* user, const Params& parameters)

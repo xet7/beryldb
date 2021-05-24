@@ -25,7 +25,7 @@ const char* ExitMap[] =
            "Unable to write PID file",
            "Problem with SocketPool",
            "Refusing to start up as root",
-           "Couldn't load module on startup",
+           "Unable to load module during boot",
            "Received SIGTERM",
            "Database error",
            "SIG INT received",

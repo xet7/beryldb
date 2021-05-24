@@ -17,6 +17,7 @@
 
 CommandMonitor::CommandMonitor(Module* Creator) : Command(Creator, "MONITOR", 0, 1)
 {
+         requires = 'm';
          syntax = "<level>";
 }
 
@@ -59,21 +60,22 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
 
 CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MRESET", 0, 0)
 {
-
+        requires = 'm';
 }
 
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
        unsigned int count = Kernel->Monitor->Count();
        Kernel->Monitor->Reset();
-       user->SendProtocol(BRLD_RESET_MONITOR, count, Daemon::Format("OK: %u", count).c_str());
+       user->SendProtocol(BRLD_RESET_MONITOR, count, PROCESS_OK);
        return SUCCESS;
 }
 
 
 CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MLIST", 0, 1)
 {
-
+        requires = 'm';
+        syntax = "<*argument>";
 }
 
 COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)

@@ -16,9 +16,9 @@
 #include "subscription.h"
 
 /*
- * Keeps track of a given channel. This class
- * will maintain a channel by keeping a track record
- * of name, user list and more.
+ * Class Channel maintains data of a given channel. This class
+ * handles relevant data, such as subscribed users, name, and provides
+ * basic functionalities, such as join and part functions.
  */
 
 class Externalize Channel : public Expandable
@@ -36,7 +36,7 @@ class Externalize Channel : public Expandable
 	
 	/* 
 	 * DeleteUser is invoked from PartUser() and removes references
-	 * to this->subscribedlist
+	 * of a given subscription in this->subscribedlist.
 	 */
 
 	void DeleteUser(const SubscriptionMap::iterator& subsiter);
@@ -89,7 +89,18 @@ class Externalize Channel : public Expandable
 		return subscribedlist; 
 	}
 
-	/* Checks whether an user is subscribed to a channel. */
+	/* 
+	 * Checks whether an user is subscribed to a channel. 
+         *
+         * @parameters:
+	 *
+	 *         · User: User to verify if subscribed,
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is subscribed.
+         *         · False: User is not subscribed.
+         */    
 
 	bool IsSubscribed(User* user);
 
@@ -97,7 +108,18 @@ class Externalize Channel : public Expandable
 
 	Subscription* GetUser(User* user);
 
-	/* Parts an user. Returns true if parted. */
+	/* 
+	 * Parts an user from channel.
+         *
+         * @parameters:
+	 *
+	 *         · User: User to unsubscribe.
+	 * 
+         * @return:
+ 	 *
+         *         · True: OK
+         *         · False: Operation failed.
+         */    	
 	
 	bool PartUser(User* user);
 	
@@ -113,8 +135,6 @@ class Externalize Channel : public Expandable
 
 	void Write(ProtocolTrigger::EventProvider& protoevprov, ProtocolTrigger::Message& msg, char status = 0, const DiscardList& except_list = DiscardList(), User* joining = NULL);
 };
-
-/* Returns true if channel has a given user. */
 
 inline bool Channel::IsSubscribed(User* user)
 {

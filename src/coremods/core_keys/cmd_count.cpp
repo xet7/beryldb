@@ -52,7 +52,7 @@ COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_TCOUNT);
+       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NONE);
        return SUCCESS;
 }
 

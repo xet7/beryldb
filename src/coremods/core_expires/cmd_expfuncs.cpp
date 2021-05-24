@@ -19,13 +19,13 @@
 #include "converter.h"
 #include "core_expires.h"
 
-CommandExpireCount::CommandExpireCount(Module* Creator) : Command(Creator, "EXPCOUNT", 0, 1)
+CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIST", 0, 1)
 {
          last_empty_ok = true;
          syntax = "<*argument>";
 }
 
-COMMAND_RESULT CommandExpireCount::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
 {       
          const std::string& arg = parameters[0];
          
@@ -90,12 +90,12 @@ CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
 
 COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
 {       
-         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting %d expires ...", Kernel->Store->Expires->CountAll()).c_str());
+         unsigned int counter = Kernel->Store->Expires->CountAll();
 
          /* Clears all expires pending. */
          
          ExpireManager::Reset();
-         user->SendProtocol(BRLD_EXP_DELETED, "Expires removed.");
+         user->SendProtocol(BRLD_EXP_DELETED, counter, PROCESS_OK);
          
          return SUCCESS;
 }
@@ -138,7 +138,8 @@ COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
         /* Clears all expires pending. */
 
         unsigned int counter = ExpireManager::SReset(user->current_db, use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, counter);
+        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting: %d", counter).c_str());
+        user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
 
         return SUCCESS;
 }

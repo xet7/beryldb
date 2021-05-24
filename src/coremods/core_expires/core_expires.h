@@ -51,15 +51,14 @@ class CommandPersist : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandExpireCount : public Command 
+class CommandExpireLIST : public Command 
 {
     public: 
 
-        CommandExpireCount(Module* parent);
+        CommandExpireLIST(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
-
 
 class CommandReset : public Command 
 {

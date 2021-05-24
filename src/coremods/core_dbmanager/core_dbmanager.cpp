@@ -37,7 +37,7 @@ class CoreModDBManager : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides commands USE, CURRENT, FLUSHDB and PWD.", VF_BERYLDB);
+                return Version("Provides commands USE, CURRENT, FLUSHDB and PWD.", VF_BERYLDB|VF_CORE);
         }
 };
 

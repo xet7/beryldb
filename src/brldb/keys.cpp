@@ -243,7 +243,7 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_NULL, query);
+                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_FALSE, query);
                 }
 
                 return;
@@ -259,7 +259,7 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_NULL, query);
+                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_FALSE, query);
                 }
 
                 return;
@@ -269,11 +269,6 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
 
 void touch_query::Run()
 {
-        if (!this->Check())
-        {
-                return;
-        }
-
         if (this->key.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
@@ -354,9 +349,15 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
       {
               switch (query->qtype)
               {
+                   case TYPE_NONE:
+                   
+                          Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
+                          
+                  return;
+                   
                    case TYPE_NTOUCH:
                           
-                          Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter2), query);
+                          Dispatcher::Smart(user, query->counter2, BRLD_QUERY_OK, convto_string(query->counter2), query);
                           
                    return;
                    

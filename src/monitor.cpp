@@ -23,11 +23,11 @@ MonitorHandler::MonitorHandler()
 
 bool MonitorHandler::Add(User* user, MONITOR_LEVEL level)
 {
-        if (level < MONITOR_DEFAULT || level > MONITOR_DEBUG)
+        if (!user || user->IsQuitting())
         {
             return false;
         }
-       
+
         this->MonitorList.insert(std::make_pair(user, level));
         return true;
 }
@@ -56,6 +56,8 @@ void MonitorHandler::Push(const std::string& instance, const std::string& cmd, M
              return;
         }
 
+        /* CMDBuffer, which is later inserted in a buffered list. */
+        
         CMDBuffer adding(instance, cmd, level, params);
         this->buffer.push_back(adding);
 }
@@ -122,7 +124,7 @@ void MonitorHandler::Flush()
                            continue;
                       }
                       
-                      if (level >= flushing.level)
+                      if (level <= flushing.level)
                       {
                              std::ostringstream fullparams;
                              
