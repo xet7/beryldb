@@ -197,7 +197,10 @@ enum BRLD_PROTOCOL
 	BRLD_TEST			=		270,
 	BRLD_LGET_BEGIN			=		271,
 	BRLD_LGET_END			=		272,
-	     							 		
+	BRLD_USER_LIST_BEGIN		=		273,
+	BRLD_ADMIN_LIST_BEGIN		=		274,
+	BRLD_ADMIN_LIST_END		=		275,
+	
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
@@ -222,7 +225,7 @@ enum BRLD_PROTOCOL
         ERR_LOGIN_NO_EXISTS		=		519,
 
 	ERR_NO_AUTH               	=	 	520,
-	ERR_MISS_PARAMS		=		521,
+	ERR_MISS_PARAMS			=		521,
 	ERR_AGENT_IS_SET           	= 		522,
 	ERR_CHANOPRIVSNEEDED            = 		527, 
 	ERR_USERSDONTMATCH              = 		529,

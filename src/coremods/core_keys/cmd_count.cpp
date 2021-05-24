@@ -95,16 +95,3 @@ COMMAND_RESULT CommandConcat::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandSConcat::CommandSConcat(Module* Creator) : Command(Creator, "SCONCAT", 2, 2)
-{
-         syntax = "<div> [keys]";
-}
-
-COMMAND_RESULT CommandSConcat::Handle(User* user, const Params& parameters)
-{  
-       const std::string& div = parameters[0];
-       const std::string& keys = parameters.back();
-
-       KeyHelper::Touch(user, user->current_db, user->select, keys, div, TYPE_SCONCAT);
-       return SUCCESS;
-}

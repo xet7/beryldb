@@ -55,23 +55,29 @@ class Externalize NotifyStream : public safecast<NotifyStream>
          
 };
 
+typedef std::map<std::string, std::shared_ptr<NotifyStream>> StreamMap;
+
 class Externalize Notifier : public safecast<Notifier>
 {
    private:
    
          NotifyMap NotifyList;
 
-         std::map<std::string, std::vector<NotifyStream *> > ActiveStreams;
+         std::map<std::string, std::vector<std::shared_ptr<NotifyStream>> > ActiveStreams;
+
+         StreamMap AllStreams;
    
    public: 
    
          Notifier();
 
-         void AttachType(const std::string &type);
+         void AttachType(const std::string &type, std::shared_ptr<NotifyStream> stream);
 
          void Create(const std::string& name);
-      
-      void Flush();
-      
+         
+         std::shared_ptr<NotifyStream> Find(const std::string& name);
+       
+         void Flush();
+         
       
 };

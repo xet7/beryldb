@@ -70,6 +70,10 @@ class Externalize ClientManager : public safecast<ClientManager>
 	
 	void Flush(time_t current);
 
+        /* Disconnects all users that are using a given login. */
+
+        static unsigned int DisconnectAll(const std::string& login, const std::string& msg);
+
 	/* Adds an user to the clientlist. */
 	
 	void AddUser(int socket, BindingPort* via, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
@@ -95,6 +99,30 @@ class Externalize ClientManager : public safecast<ClientManager>
          */    
          
 	void ExitLogins(const std::string& login, const std::string& reason);
+
+        /* 
+         * Joins all users sharing a given login to a given channel.
+         * 
+         * @parameters:
+	 *
+	 *         · skip: Skip providing user (User already joined).
+	 *         · login: Login to find.
+	 *         · chan: Chan to join.
+         */    
+         
+        void Join(User* skip, const std::string& login, const std::string& chan);
+
+        /* 
+         * Part all users sharing a given login to a given channel.
+         * 
+         * @parameters:
+         *
+         *         · skip: Skip providing user.
+         *         · login: Login to find.
+         *         · chan: Chan to leave.
+         */
+
+        void Part(User* skip, const std::string& login, const std::string& chan);
 
 	/* Counts all logins associated with 'X' login id. 
          *

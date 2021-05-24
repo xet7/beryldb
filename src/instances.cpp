@@ -93,7 +93,7 @@ User::~User()
 	pending.clear();
 	notifications.clear();
 	
-        Kernel->Logins->Sessions->ShouldDestroy(this->login);
+        Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
 
 void User::SetQuit(bool flag)

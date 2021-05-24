@@ -38,7 +38,7 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 
                         if (Kernel->Config->ChanSync)
                         {
-                                Kernel->Logins->Sessions->Join(user, login, parameters[0]);
+                                Kernel->Clients->Join(user, login, parameters[0]);
                         }
 
 			return SUCCESS;
@@ -60,7 +60,7 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 
 		        if (Kernel->Config->ChanSync)
 		        {
-	                        Kernel->Logins->Sessions->Join(user, login, parameters[0]);
+	                        Kernel->Clients->Join(user, login, parameters[0]);
 			}
 			
 			return SUCCESS;
@@ -103,7 +103,7 @@ COMMAND_RESULT CommandPart::Handle(User* user, const Params& parameters)
                 if (Kernel->Config->ChanSync)
                 {
                 	std::string login = user->login;
-	                Kernel->Logins->Sessions->Part(user, login, parameters[0]);
+	                Kernel->Clients->Part(user, login, parameters[0]);
                 }
 	}
 

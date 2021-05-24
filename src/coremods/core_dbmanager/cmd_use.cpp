@@ -94,7 +94,7 @@ CommandCurrent::CommandCurrent(Module* Creator) : Command(Creator, "CURRENT", 0)
 COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 {  
        const std::string use = user->select;
-       user->SendProtocol(BRLD_CURRENT_USE, use, Daemon::Format("You are using %s", use.c_str()).c_str());
+       user->SendProtocol(BRLD_CURRENT_USE, use, use.c_str());
        return SUCCESS;
 }
 

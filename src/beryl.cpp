@@ -342,7 +342,7 @@ void Beryl::RunTimed(time_t current)
 			      * data for weeks.
 			      */
 			     
-			     this->Logins->ResetCache();
+			     this->Logins->Reset();
 			     
 			     /* Runs every one hour. */
 			     
@@ -414,7 +414,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	/* Login cache will not be needed anymore. */
 	
-	this->Logins->ResetCache();
+	this->Logins->Reset();
 
 	/* 
 	 * ResetAll removes all pending flushes. 

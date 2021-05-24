@@ -34,7 +34,6 @@ enum QUERY_TYPE
     TYPE_NTOUCH = 14,
     TYPE_TCOUNT = 15,
     TYPE_CONCAT =  16,
-    TYPE_SCONCAT = 17,
     TYPE_SETNX	= 18,
     TYPE_SETTX = 19,
     TYPE_LPOS = 20,

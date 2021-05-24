@@ -295,10 +295,10 @@ void Flusher::SFlush(User* user, std::shared_ptr<query_base> query)
 {
     if (query->finished)
     {
-          user->SendProtocol(BRLD_SFLUSHED, query->select_query, Daemon::Format("Select %s erased. Total items: %s", query->select_query.c_str(), convto_string(query->counter).c_str()).c_str());
+          user->SendProtocol(BRLD_SFLUSHED, query->select_query, convto_string(query->counter).c_str());
     }
     else
     {
-         user->SendProtocol(ERR_SFLUSH, query->select_query, Daemon::Format("Unable to slufh %s.", query->select_query.c_str()).c_str());
+         user->SendProtocol(ERR_SFLUSH, query->select_query, Daemon::Format("Unable to sflush %s.", query->select_query.c_str()).c_str());
     }
 }

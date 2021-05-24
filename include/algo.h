@@ -18,12 +18,12 @@
 #include  <iterator>
 
 /* 
- * Returns a random item from a provided template.
+ * Returns a random item from provided template.
  * 
  * @parameters:
  *
- *         · Start: Starting item.
- *         · End: Ending item.
+ *         · Start: Starting iter item.
+ *         · End: Ending iter item.
  * 
  * @return:
  *

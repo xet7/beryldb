@@ -64,7 +64,7 @@ void Flusher::Append(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-                user->SendProtocol(BRLD_QUERY_OK, query->type, query->key, query->response);
+                user->SendProtocol(BRLD_QUERY_OK, query->type, query->key, Daemon::Format("\"%s\"", query->response.c_str()).c_str());
         }
 }
 
@@ -313,22 +313,6 @@ void touch_query::Run()
                         {
                                 concat.append(to_string(dbvalue)); 
                         }
-                        else if (this->qtype == TYPE_SCONCAT)
-                        {
-                                concat.append(to_string(dbvalue));
-                                
-                                if (total_counter != iter) 
-                                {
-                                        if (this->value.empty())
-                                        {
-                                                concat.append(" ");
-                                        }
-                                        else
-                                        {
-                                                concat.append(this->value);
-                                        }
-                                }
-                        } 
                 }            
                 else
                 {
@@ -368,11 +352,10 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
                    return;
                    
                    case TYPE_CONCAT:
-                   case TYPE_SCONCAT:
                    {
                                if (query->counter > 0)
                                {
-                                      Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->response), query);
+                                      Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()).c_str(), query);
                                }
                                else
                                {
@@ -473,7 +456,6 @@ void get_query::Run()
 
                         break;
             }
-
     }
  
     this->SetOK();
@@ -851,6 +833,11 @@ void find_query::Run()
 
     if (this->qtype == TYPE_RAKEY)
     {
+            if (aux_counter == 0)
+            {
+                    access_set(DBL_NOT_FOUND);
+            }
+            
             this->counter = aux_counter;
             this->SetOK();
             return;

@@ -92,7 +92,15 @@ void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
        query->database = database;
        query->select_query = where;
-       query->value = value;
+       
+       if (type == TYPE_GETSET)
+       {
+               query->value = stripe(value);
+       }
+       else
+       {
+              query->value = value;
+       }
        
        
        query->int_keys = INT_KEYS;

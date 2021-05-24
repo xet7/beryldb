@@ -28,11 +28,11 @@ CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0)
 
 COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
 {  
-       user->SendProtocol(BRLD_FLUSHING, Daemon::Format("OK: %s", Kernel->Store->Default->GetName().c_str()));
+       user->SendProtocol(BRLD_FLUSHING, Daemon::Format("Flushing: %s", Kernel->Store->Default->GetName().c_str()));
        
        if (DBHelper::FlushDB())
        {
-            user->SendProtocol(BRLD_QUERY_OK_DONE, Daemon::Format("FlushDB finished: %s ", Kernel->Store->Default->GetName().c_str()));
+            user->SendProtocol(BRLD_QUERY_OK_DONE, PROCESS_OK);
             return SUCCESS;
        }
        

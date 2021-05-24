@@ -37,7 +37,6 @@ class CoreModKeys : public Module
         CommandNTouch cmdntouch;
         CommandTCount cmdtcount;
         CommandConcat cmdconcat;
-        CommandSConcat cmdsconcat;
         CommandAppend cmdappend;
         CommandSetNX cmdsetnx;
         CommandSetTX cmdsettx;
@@ -64,7 +63,6 @@ class CoreModKeys : public Module
                         cmdntouch(this),
                         cmdtcount(this),
                         cmdconcat(this),
-                        cmdsconcat(this),
                         cmdappend(this),
                         cmdsetnx(this),
                         cmdsettx(this),

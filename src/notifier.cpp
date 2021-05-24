@@ -1,3 +1,15 @@
+/*
+ * BerylDB - A lightweight database.
+ * http://www.beryldb.com
+ *
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
+ * 
+ * This file is part of BerylDB. BerylDB is free software: you can
+ * redistribute it and/or modify it under the terms of the BSD License
+ * version 3.
+ *
+ * More information about our licensing can be found at https://docs.beryl.dev
+ */
 
 #include "beryl.h"
 #include "notifier.h"
@@ -38,13 +50,21 @@ void Notifier::Create(const std::string& name)
   
 }
 
-void Notifier::AttachType(const std::string &type)
+std::shared_ptr<NotifyStream> Notifier::Find(const std::string& name)
 {
+        StreamMap::iterator it = this->AllStreams.find(name);
 
+        if (it == this->AllStreams.end())
+        {
+                return nullptr;
+        }
+
+        return it->second;
+}
+
+void Notifier::AttachType(const std::string &type, std::shared_ptr<NotifyStream> stream)
+{
+        ActiveStreams[type].push_back(stream);
 }
 
 
-void Notifier::Flush()
-{
-
-}

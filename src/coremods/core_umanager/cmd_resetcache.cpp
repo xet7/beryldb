@@ -24,7 +24,7 @@ CommandResetCache::CommandResetCache(Module* parent) : Command(parent, "RESETCAC
 
 COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 {
-        Kernel->Logins->ResetCache();
+        Kernel->Logins->Reset();
         
         user->SendProtocol(BRLD_RESET_CACHE, PROCESS_OK);
         return SUCCESS;
@@ -41,7 +41,6 @@ COMMAND_RESULT CommandInCache::Handle(User* user, const Params& parameters)
         const std::string& login = parameters[0];
         
         user->SendProtocol(BRLD_IN_CACHE, login, convto_string(Kernel->Logins->InCache(login)));
-        
         return SUCCESS;
 }
 
