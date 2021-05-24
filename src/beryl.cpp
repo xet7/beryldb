@@ -102,7 +102,7 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 
 void Beryl::Initialize()
 {
-	/* Signals to recognize. */
+	/* Signals to recognize inside mainloop. */
 	
 	Daemon::Signalizers();
 
