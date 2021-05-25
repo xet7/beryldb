@@ -107,15 +107,17 @@ void MonitorHandler::Flush()
              return;
         }
 
-        BufferQueue pending = this->buffer;
         MonitorMap& all = this->MonitorList;
-
-        for (BufferQueue::iterator it = pending.begin(); it != pending.end(); it++)
+        
+        if (!this->buffer.size())
         {
-               CMDBuffer flushing = *it;
+            return;
+        }
+        
+        CMDBuffer flushing = this->buffer.front();
                
-               for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
-               {
+        for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
+        {
                       User* user = uit->first;
                       MONITOR_LEVEL level = uit->second;
                       
@@ -145,8 +147,7 @@ void MonitorHandler::Flush()
                              std::string sfinal(fullparams.str());
                              Dispatcher::SmartDiv(user, BRLD_MONITOR, flushing.instance, Daemon::Format("%s %s", flushing.command.c_str(), sfinal.c_str()).c_str(), ":");
                       }
-               }     
+        }     
                
-               this->buffer.pop_front();
-        } 
+        this->buffer.pop_front();
 }

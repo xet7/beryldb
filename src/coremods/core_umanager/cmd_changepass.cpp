@@ -29,7 +29,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
 
                 if (UserHelper::ChangePass(user->login, pass))
                 {
-                        user->SendProtocol(BRLD_LOGIN_CHPASS, user->login, PASS_CHANGED);
+                        user->SendProtocol(BRLD_LOGIN_CHPASS, user->login, PROCESS_OK);
                 }
                 else
                 {
@@ -73,13 +73,13 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
         
         if (exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_NO_EXISTS, "Login does not exists.");
+                user->SendProtocol(ERR_LOGIN_NO_EXISTS, PROCESS_FALSE);
                 return FAILED;
         }
         
         if (UserHelper::ChangePass(newlogin, pass))
         {
-                user->SendProtocol(BRLD_LOGIN_CHPASS, newlogin, PASS_CHANGED);
+                user->SendProtocol(BRLD_LOGIN_CHPASS, newlogin, PROCESS_OK);
         }
         else
         {

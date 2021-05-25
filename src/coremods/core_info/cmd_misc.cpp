@@ -62,7 +62,6 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
         user->SendProtocol(BRLD_VERSION, Daemon::Format("Version: %s", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
         user->SendRemoteProtocol(BRLD_VIEW_INFO, Daemon::Format("Current select in use: %s", user->select.c_str()));
-	KeyHelper::Count(user, user->current_db, user->select, "*", "Total Keys:");
         
         /* Returns admin flags to requesting user, if any. */
         
@@ -77,7 +76,8 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         /* Requesting user login. */
         
         user->SendRemoteProtocol(BRLD_VIEW_INFO, Daemon::Format("Your login: %s - Your instance: %s", user->login.c_str(), user->instance.c_str()));	
-
+        user->SendProtocol(BRLD_END_L);
+        
 	return SUCCESS;
 }
 

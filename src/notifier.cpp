@@ -19,52 +19,75 @@ Notifier::Notifier()
 
 }
 
-bool NotifyStream::Add(User* user)
+bool Notifier::Add(NOTIFY_LEVEL lvl, User* user)
 {
         if (!user || user->IsQuitting())
         {
             return false;
         }
         
-        this->users.push_back(user);
+//        this->ulevels.insert(std::make_pair(user, lvl));
         return true;
 }
 
-bool NotifyStream::Has(User* user)
+bool Notifier::Has(User* user)
 {
-        if (std::find(users.begin(), users.end(), user) != users.end())
-        {
-             return true;
-        }
-        
-        return false;
+   return false;
 }
 
-void NotifyStream::Remove(User* user)
+void Notifier::Remove(User* user)
 {
 
 }
 
-void Notifier::Create(const std::string& name)
+
+void Notifier::AddTrigger(const std::string& trigger, std::shared_ptr<NotifyStream> stream)
 {
-  
+        stream->triggers.push_back(trigger);
 }
 
-std::shared_ptr<NotifyStream> Notifier::Find(const std::string& name)
+
+void Notifier::Push(NOTIFY_LEVEL lvl, const std::string& trigger, const std::string& msg)
 {
-        StreamMap::iterator it = this->AllStreams.find(name);
 
-        if (it == this->AllStreams.end())
-        {
-                return nullptr;
-        }
-
-        return it->second;
 }
 
-void Notifier::AttachType(const std::string &type, std::shared_ptr<NotifyStream> stream)
+void Notifier::Flush()
 {
-        ActiveStreams[type].push_back(stream);
+       if (this->events.empty())
+       {
+           return;
+       }
+       
+       Event ready = this->events.front();
+       
+       for (StreamMapVec::iterator it = all.begin(); it != all.end(); it++)
+       {
+              std::string trigger = it->first;
+              
+              if (trigger != ready.trigger)
+              {
+                    continue;
+              }       
+              
+              StreamVector streams = it->second;
+              
+              for (StreamVector::iterator ft = streams.begin(); ft != streams.end(); ft++)
+              {
+                    std::shared_ptr<NotifyStream> stream = *ft;
+                    
+                    if (stream->level != ready.level)
+                    {
+                          continue;
+                    }
+                    
+              }
+       }
+               
+       this->events.pop_front();
+       
 }
+
+
 
 

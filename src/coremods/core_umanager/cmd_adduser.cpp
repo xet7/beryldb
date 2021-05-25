@@ -58,7 +58,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Add(newlogin, pass))
         {
-                user->SendProtocol(BRLD_USER_ADD, newlogin, "User added.");
+                user->SendProtocol(BRLD_USER_ADD, newlogin, PROCESS_OK);
         }
 
         return SUCCESS;
@@ -102,7 +102,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Remove(newlogin))
         {
-                user->SendProtocol(BRLD_LOGIN_DEL, newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
+                user->SendProtocol(BRLD_LOGIN_DEL, newlogin, PROCESS_OK);
                 ClientManager::DisconnectAll(newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
         }
 

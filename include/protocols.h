@@ -200,7 +200,8 @@ enum BRLD_PROTOCOL
 	BRLD_USER_LIST_BEGIN		=		273,
 	BRLD_ADMIN_LIST_BEGIN		=		274,
 	BRLD_ADMIN_LIST_END		=		275,
-	
+	BRLD_END_L			=		276,
+		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,

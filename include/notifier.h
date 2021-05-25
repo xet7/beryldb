@@ -28,12 +28,43 @@ class Externalize NotifyStream : public safecast<NotifyStream>
 {
     public: 
        
-        std::string name;
-        
-        UserVector users;   
+        std::vector<std::string> triggers;
         
         NOTIFY_LEVEL level;
+};
 
+typedef std::vector<std::shared_ptr<NotifyStream>> StreamVector;
+
+typedef std::map<std::string, std::vector<std::shared_ptr<NotifyStream>> > StreamMapVec;
+
+struct Event
+{
+   public:
+    
+     std::string trigger;
+     std::string data;
+     NOTIFY_LEVEL level;
+     
+     Event()
+     {
+     
+     }
+};
+
+class Externalize Notifier : public safecast<Notifier>
+{
+   private:
+   
+         NotifyMap NotifyList;
+
+         StreamMapVec all;
+         
+         std::deque<Event> events;
+            
+   public: 
+
+         Notifier();
+         
         /* 
          * Adds an user to the notification list.
          * 
@@ -47,36 +78,16 @@ class Externalize NotifyStream : public safecast<NotifyStream>
          *         · bool: User added successfuly.
          */
 
-         bool Add(User* user);
+         bool Add(NOTIFY_LEVEL lvl, User* user);
 
          bool Has(User* user);
-  
+
          void Remove(User* user);
+
+         void Push(NOTIFY_LEVEL lvl, const std::string& trigger, const std::string& msg);
+
+         void AddTrigger(const std::string& trigger, std::shared_ptr<NotifyStream> stream);
          
-};
-
-typedef std::map<std::string, std::shared_ptr<NotifyStream>> StreamMap;
-
-class Externalize Notifier : public safecast<Notifier>
-{
-   private:
-   
-         NotifyMap NotifyList;
-
-         std::map<std::string, std::vector<std::shared_ptr<NotifyStream>> > ActiveStreams;
-
-         StreamMap AllStreams;
-   
-   public: 
-   
-         Notifier();
-
-         void AttachType(const std::string &type, std::shared_ptr<NotifyStream> stream);
-
-         void Create(const std::string& name);
-         
-         std::shared_ptr<NotifyStream> Find(const std::string& name);
-       
          void Flush();
          
       

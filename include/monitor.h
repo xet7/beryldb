@@ -13,15 +13,13 @@
 
 #pragma once
 
-class CMDBuffer;
+//class CMDBuffer;
 
 enum MONITOR_LEVEL
 {
       MONITOR_DEBUG = 10, /* Shows all found commands */
       MONITOR_DEFAULT = 20   /* Shows not-found commands plus everything on Default */
 };
-
-typedef std::deque<CMDBuffer> BufferQueue;
 
 typedef std::multimap<User*, MONITOR_LEVEL> MonitorMap;
 
@@ -54,8 +52,8 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
         
         /* Pending buffer */
         
-        BufferQueue buffer;
-   
+        std::deque<CMDBuffer> buffer;
+        
    public:
    
         /* Constructor */
