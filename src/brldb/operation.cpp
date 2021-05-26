@@ -133,7 +133,7 @@ void Flusher::Operation(User* user, std::shared_ptr<query_base> query)
 
 void swapdb_query::Run()
 {
-    if (this->key.empty())
+    if (this->key.empty() || this->value.empty())
     {
             this->access_set(DBL_MISS_ARGS);
             return;
@@ -141,31 +141,105 @@ void swapdb_query::Run()
 
     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
-    std::string rawstring;
-
-    double size_calc = 0;
-
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-           if (this->user && this->user->IsQuitting())
-           {
-                  access_set(DBL_NOT_FOUND);
-                  return;
-           }
+              if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+              {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+              }
+              
+                std::string rawstring = it->key().ToString();
 
-           if (!Kernel->Store->Flusher->Status())
-           {
-                  access_set(DBL_INTERRUPT);
-                  return;
-           }
-           
-     }
+                /* By definition, this should never happen. */
 
+                if (rawstring.length() < 2)
+                {
+                    continue;
+                }
+
+                if (convto_string(rawstring[0]) == INT_KEYS)
+                {
+                            size_t found =  rawstring.find_first_of(":");
+                            std::string path = rawstring.substr(0, found);
+                            std::string file = rawstring.substr(found+1);
+
+                            std::string track = path.erase(0, 1);
+
+                            if (track == this->key)
+                            {
+                                  std::string dest = INT_KEYS + this->value + ":" + file;
+                                  this->database->GetAddress()->Put(rocksdb::WriteOptions(), dest, it->value().ToString());
+                                  this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
+                            }
+                            
+                }
+                else
+                {
+                     engine::colon_node_stream stream(rawstring);
+                    std::string token;
+
+                    unsigned int strcounter = 0;
+                    bool match = true;
+                    
+                    std::string where;
+                    std::string path2;
+                    std::string keys;
+                    std::string dhesh;
+
+                    while (stream.items_extract(token))
+                    {
+                            if (match && strcounter == 0)
+                            {
+                                if (INT_KEYS != token)
+                                {
+                                     match = true;
+                                     keys = token;
+                                }
+                            }
+
+                            if (match && strcounter == 1)
+                            {
+                                if (this->key != token)
+                                {
+                                     match = false;
+                                }
+                                else
+                                {
+                                     where = token;
+                                }
+                            }
+                            
+                            if (match && strcounter == 2)
+                            {
+                                 path2 = token;
+                            }
+                            
+                            if (match && strcounter == 3)
+                            {
+                                 dhesh = token;
+                            }
+
+                            strcounter++;
+                        }
+                    
+                        if (match)
+                        {
+                        
+                            std::string dest = keys + ":" + this->value + ":" + path2 + ":" + dhesh;
+                            this->database->GetAddress()->Put(rocksdb::WriteOptions(), dest, it->value().ToString());
+                            this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
+                        }
+                }
+    }
+
+    this->SetOK();
 }
 
 void Flusher::SwapDB(User* user, std::shared_ptr<query_base> query)
 {
-    bprint(DONE, "FLUSHED");
+       bprint(DONE, "SWAPDB Finished.");
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 
 void dbsize_query::Run()
@@ -178,25 +252,17 @@ void dbsize_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-           if (this->user && this->user->IsQuitting())
-           {
-                  access_set(DBL_NOT_FOUND);
-                  return;
-           }
-
-           if (!Kernel->Store->Flusher->Status())
-           {
-                  access_set(DBL_INTERRUPT);
-                  return;
-           }
+            if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+            {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+            }
     
             /* We can count size from binary keys/values. */
             
             size_calc += it->key().size() + 2;
             size_calc += it->value().size() + 2;  
     }
-    
-    this->SetOK();
     
     float as_mb = size_calc / 1024 / 1024;
     
@@ -217,6 +283,8 @@ void dbsize_query::Run()
     }
     
     this->size = std::trunc(this->size * 10)/10;
+    this->SetOK();
+    
 }
 
 void Flusher::DBSize(User* user, std::shared_ptr<query_base> query)
@@ -225,20 +293,10 @@ void Flusher::DBSize(User* user, std::shared_ptr<query_base> query)
         {
              user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_DBSIZE, query->size, query->response, Daemon::Format("%s %s", convto_string(query->size).c_str(), query->response.c_str()));
         }
-        else
-        {
-             user->SendProtocol(ERR_QUERY, DBL_TYPE_DBSIZE, query->access, "Unable to obtain dbsize.");
-        }
 }
-
 
 void sflush_query::Run()
 {
-     if (!this->Check())
-     {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-     }
 
      if (this->value.empty())
      {
@@ -252,16 +310,10 @@ void sflush_query::Run()
 
      for (it->SeekToFirst(); it->Valid(); it->Next()) 
      {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                     access_set(DBL_NOT_FOUND);
-                     return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                     access_set(DBL_INTERRUPT);
-                     return;
+                      this->access_set(DBL_INTERRUPT);
+                      return;
                 }
                 
                 std::string rawstring = it->key().ToString();
@@ -289,39 +341,39 @@ void sflush_query::Run()
                 }
                 else
                 {
-                     engine::colon_node_stream stream(rawstring);
-                std::string token;
+                        engine::colon_node_stream stream(rawstring);
+                        std::string token;
 
-                unsigned int strcounter = 0;
-                bool match = true;
+                        unsigned int strcounter = 0;
+                        bool match = true;
 
-                while (stream.items_extract(token))
-                {
-                        if (match && strcounter == 0)
+                        while (stream.items_extract(token))
                         {
-                            if (convto_string(INT_KEYS) == token)
-                            {
-                                match = false;
-                            }
-                        }
+                                if (match && strcounter == 0)
+                                {
+                                        if (convto_string(INT_KEYS) == token)
+                                        {
+                                            match = false;
+                                        }
+                                }
 
-                        if (match && strcounter == 1)
-                        {
-                            if (this->value != token)
-                            {
-                                match = false;
-                            }
-                        }
+                                if (match && strcounter == 1)
+                                {
+                                        if (this->value != token)
+                                        {
+                                            match = false;
+                                        }
+                                }
 
-                        strcounter++;
-                }
-                     
+                                strcounter++;
+                    }
+                            
                     if (match)
                     {
                             this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                             found_counter++;
                     }
-                }
+            }
      }
      
      this->counter = found_counter;
@@ -333,9 +385,5 @@ void Flusher::SFlush(User* user, std::shared_ptr<query_base> query)
     if (query->finished)
     {
           user->SendProtocol(BRLD_SFLUSHED, query->select_query, convto_string(query->counter).c_str());
-    }
-    else
-    {
-         user->SendProtocol(ERR_SFLUSH, query->select_query, Daemon::Format("Unable to sflush %s.", query->select_query.c_str()).c_str());
     }
 }

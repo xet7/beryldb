@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include <csignal>
 #include <map>
 #include <string>

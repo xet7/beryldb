@@ -31,13 +31,16 @@ void DBHelper::DBSize(User* user, std::shared_ptr<Database> database)
        Kernel->Store->Push(query);
 }
 
-void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database)
+void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database, const std::string& db1, const std::string& db2)
 {
        std::shared_ptr<swapdb_query> query = std::make_shared<swapdb_query>();
 
        user->Blocked = true;
        query->database = database;
        query->user = user;
+       
+       query->key = db1;
+       query->value = db2;
 
        Kernel->Store->Push(query);
 }

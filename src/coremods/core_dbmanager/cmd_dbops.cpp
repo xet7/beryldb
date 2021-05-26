@@ -41,13 +41,53 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        return FAILED;
 }
 
-CommandSwapDB::CommandSwapDB(Module* Creator) : Command(Creator, "SWAPDB", 1, 1)
+CommandSwapDB::CommandSwapDB(Module* Creator) : Command(Creator, "SWAPDB", 2, 2)
 {
          requires = 'r';
+         syntax = "<select1> <select2>";
 }
 
 COMMAND_RESULT CommandSwapDB::Handle(User* user, const Params& parameters)
 {  
 
+       const std::string& db1 = parameters[0];
+       const std::string& db2 = parameters[1];
+       
+       if (!is_number(db1))
+       {
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+       }
+
+       if (!is_positive_number(db1))
+       {
+                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                return FAILED;
+       }
+
+       if (!Daemon::CheckRange(user, db1, "Must be a value between 1 and 100", 1, 100))
+       {
+               return FAILED;
+       }
+       
+       if (!is_number(db2))
+       {
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+       }
+
+       if (!is_positive_number(db2))
+       {
+                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                return FAILED;
+       }
+
+       if (!Daemon::CheckRange(user, db2, "Must be a value between 1 and 100", 1, 100))
+       {
+               return FAILED;
+       }
+       
+       DBHelper::SwapDB(user, user->current_db, db1, db2);
+       return SUCCESS;
 }
 
