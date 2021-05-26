@@ -74,9 +74,8 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         }
         
         /* Requesting user login. */
-        
+
         user->SendRemoteProtocol(BRLD_VIEW_INFO, Daemon::Format("Your login: %s - Your instance: %s", user->login.c_str(), user->instance.c_str()));	
-        user->SendProtocol(BRLD_END_L);
         
 	return SUCCESS;
 }

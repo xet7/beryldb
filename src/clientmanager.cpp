@@ -274,6 +274,7 @@ void ClientManager::Disconnect(User* user, const std::string& quitmessage)
 	uuid_list.erase(user->uuid);
 	user->CheckEmptyChannels();
 
+        falert(NOTIFY_DEBUG, "User disconnected: %s (%s)", user->login.c_str(), user->GetRealHost().c_str());
 }
 
 void ClientManager::NotifyAll(BRLD_PROTOCOL protocol, const char* text, ...)

@@ -17,49 +17,32 @@ enum NOTIFY_LEVEL
 {
       NOTIFY_DEBUG = 10,  
       NOTIFY_VERBOSE = 20,
-      NOTIFY_DEFAULT = 30, 
-      NOTIFY_NONE  = 50
+      NOTIFY_DEFAULT = 30
 };
-
-
-typedef std::multimap<User*, NOTIFY_LEVEL> NotifyMap;
-
-class Externalize NotifyStream : public safecast<NotifyStream>
-{
-    public: 
-       
-        std::vector<std::string> triggers;
-        
-        NOTIFY_LEVEL level;
-};
-
-typedef std::vector<std::shared_ptr<NotifyStream>> StreamVector;
-
-typedef std::map<std::string, std::vector<std::shared_ptr<NotifyStream>> > StreamMapVec;
 
 struct Event
 {
-   public:
+    public:
     
-     std::string trigger;
-     std::string data;
-     NOTIFY_LEVEL level;
-     
-     Event()
-     {
-     
-     }
+       std::string command;
+
+       NOTIFY_LEVEL level;
+
+       Event(const std::string& cmd, NOTIFY_LEVEL lvl) : command(cmd), level(lvl)
+       {
+       
+       }
 };
+
+typedef std::multimap<User*, NOTIFY_LEVEL> NotifyMap;
 
 class Externalize Notifier : public safecast<Notifier>
 {
    private:
-   
-         NotifyMap NotifyList;
-
-         StreamMapVec all;
          
          std::deque<Event> events;
+         
+         NotifyMap NotifyList;
             
    public: 
 
@@ -84,11 +67,29 @@ class Externalize Notifier : public safecast<Notifier>
 
          void Remove(User* user);
 
-         void Push(NOTIFY_LEVEL lvl, const std::string& trigger, const std::string& msg);
+        /* 
+         * Adds an event to the event queue.
+         * 
+         * @parameters:
+	 *
+	 *         · msg: Message to dispatch.
+	 *         · level: Log Level.
+         */    
+         
+         void Push(NOTIFY_LEVEL level, const std::string& buff);
 
-         void AddTrigger(const std::string& trigger, std::shared_ptr<NotifyStream> stream);
-         
-         void Flush();
-         
-      
+         void Push(NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(3, 4);
+
+         /* 
+          * Flushes all pending events. This function is
+          * called inside the mainloop.
+          */
+
+          void Flush();
+          
+          void Reset()
+          {
+                this->events.clear();
+                this->NotifyList.clear();
+          }
 };

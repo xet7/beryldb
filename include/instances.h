@@ -121,6 +121,8 @@ class Externalize User : public Expandable
 	
  public:
 
+ 	bool Blocked;
+ 	
 	class for_each_neighbor_handler
 	{
  	   public:

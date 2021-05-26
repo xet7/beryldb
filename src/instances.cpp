@@ -20,7 +20,8 @@
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) : 
-				         Paused(false)
+	                                 Blocked(false)
+				        , Paused(false)
 				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
@@ -203,6 +204,11 @@ void UserSockets::StreamData()
 	if (user->IsQuitting())
 	{
 		return;
+	}
+	
+	if (user->Blocked)
+	{
+		 return;
 	}
 
 	std::string line;
@@ -402,6 +408,8 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 	const std::string oldlogin = instance;
 	instance = newlogin;
 
+        falert(NOTIFY_DEBUG, "User connected: %s (%s)", this->login.c_str(), this->GetRealHost().c_str());
+
 	ResetCache();
 	Kernel->Clients->clientlist.erase(oldlogin);
 	Kernel->Clients->clientlist[newlogin] = this;
@@ -411,7 +419,7 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 	{
 		NOTIFY_MODS(OnUserPostLogin, (this, oldlogin));
 	}
-
+	
 	return true;
 }
 

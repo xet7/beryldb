@@ -107,16 +107,16 @@ void MonitorHandler::Flush()
              return;
         }
 
-        MonitorMap& all = this->MonitorList;
-        
         if (!this->buffer.size())
         {
             return;
         }
+
+        const MonitorMap& all = this->MonitorList;
         
         CMDBuffer flushing = this->buffer.front();
                
-        for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
+        for (MonitorMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
         {
                       User* user = uit->first;
                       MONITOR_LEVEL level = uit->second;

@@ -23,7 +23,9 @@
 void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<search_query> query = std::make_shared<search_query>();
-
+       
+       user->Blocked = true;
+       
        query->database = database;
        query->user = user;
        query->limit = limit;
@@ -39,6 +41,8 @@ void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std
 void KeyHelper::Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value)
 {
        std::shared_ptr<append_query> query = std::make_shared<append_query>();
+
+       user->Blocked = true;
 
        query->database = database;
        query->user = user;
@@ -56,6 +60,8 @@ void KeyHelper::Touch(User* user, std::shared_ptr<Database> database, const std:
 {
        std::shared_ptr<touch_query> query = std::make_shared<touch_query>();
 
+       user->Blocked = true;
+
        query->database = database;
        query->user = user;
        query->value = stripe(value);
@@ -72,6 +78,8 @@ void KeyHelper::Touch(User* user, std::shared_ptr<Database> database, const std:
 void KeyHelper::GetRange(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, int from, int to)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
+       user->Blocked = true;
+
        query->database = database;
        query->select_query = where;
        query->int_keys = INT_KEYS;
@@ -90,6 +98,8 @@ void KeyHelper::GetRange(User* user, std::shared_ptr<Database> database, const s
 void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
+       user->Blocked = true;
+
        query->database = database;
        query->select_query = where;
        
@@ -116,6 +126,8 @@ void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std
 void KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
+       user->Blocked = true;
+
        query->database = database;
        query->select_query = where;
        query->int_keys = INT_KEYS;
@@ -131,6 +143,7 @@ void KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, cons
 void KeyHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& new_select)
 {
        std::shared_ptr<move_query> query = std::make_shared<move_query>();
+       user->Blocked = true;
 
        query->database = database;
        query->user = user;
@@ -146,6 +159,7 @@ void KeyHelper::Move(User* user, std::shared_ptr<Database> database, const std::
 void KeyHelper::Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply)
 {
        std::shared_ptr<find_query> query = std::make_shared<find_query>();
+       user->Blocked = true;
        
        query->customreply = customreply;
 
@@ -167,6 +181,7 @@ void KeyHelper::Count(User* user, std::shared_ptr<Database> database, const std:
 void KeyHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<find_query> query = std::make_shared<find_query>();
+       user->Blocked = true;
 
        query->database = database;
        query->user = user;
@@ -191,8 +206,11 @@ void KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std
                      return;
               }
        }
+
+       user->Blocked = true;
        
        std::shared_ptr<get_query> query = std::make_shared<get_query>();
+
        query->database = database;
        query->select_query = where;
        query->int_keys = INT_KEYS;
@@ -214,6 +232,8 @@ void KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std
 
 void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
 {
+       user->Blocked = true;
+
        std::shared_ptr<get_query> query = std::make_shared<get_query>();
        query->database = database;
        query->select_query = where;
@@ -229,6 +249,8 @@ void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::s
 
 void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom, QUERY_TYPE type, bool quiet)
 {
+       user->Blocked = true;
+
        std::shared_ptr<set_query> query = std::make_shared<set_query>();
        query->database = database;
        query->user = user;
@@ -245,6 +267,8 @@ void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::s
 
 void KeyHelper::Operation(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, OP_TYPE type, const std::string& oper)
 {
+       user->Blocked = true;
+
        std::shared_ptr<op_query> query = std::make_shared<op_query>();
 
        query->database = database;
@@ -270,6 +294,8 @@ void KeyHelper::Operation(User* user, std::shared_ptr<Database> database, const 
 
 void KeyHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet)
 {
+       user->Blocked = true;
+
        std::shared_ptr<del_query> query = std::make_shared<del_query>();
 
        query->database = database;

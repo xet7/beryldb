@@ -64,7 +64,7 @@ Externalize extern std::unique_ptr<Beryl> Kernel;
 #include "engine.h"
 #include "login.h"
 #include "monitor.h"
-
+#include "notifier.h"
 #include "brldb/dbmanager.h"
 
 int main(int argc, char** argv);
@@ -212,6 +212,10 @@ class Externalize Beryl
 	/* Manages databases, both user-related and core ones. */
 	
 	StoreManager Store;
+	
+	/* Notification manager. */
+	
+	Notifier Notify;
 	
 	/* Parses and processes user-provided commands. */
 	

@@ -201,6 +201,7 @@ enum BRLD_PROTOCOL
 	BRLD_ADMIN_LIST_BEGIN		=		274,
 	BRLD_ADMIN_LIST_END		=		275,
 	BRLD_END_L			=		276,
+	BRLD_NOTIFICATION		=		277,
 		
 	/* Error protocol codes. */
 	

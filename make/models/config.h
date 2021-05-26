@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <string>
+
 /* Max. length of a line of text */
 
 const unsigned int INPUT_LIMIT = 65530;

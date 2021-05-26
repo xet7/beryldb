@@ -26,30 +26,43 @@ bool Notifier::Add(NOTIFY_LEVEL lvl, User* user)
             return false;
         }
         
-//        this->ulevels.insert(std::make_pair(user, lvl));
+        this->NotifyList.insert(std::make_pair(user, lvl));
         return true;
 }
 
 bool Notifier::Has(User* user)
 {
-   return false;
+        NotifyMap::iterator it = this->NotifyList.find(user);
+
+        if (it == this->NotifyList.end())
+        {
+                return false;
+        }
+
+        return true;
 }
 
 void Notifier::Remove(User* user)
 {
-
+        this->NotifyList.erase(user);
 }
 
-
-void Notifier::AddTrigger(const std::string& trigger, std::shared_ptr<NotifyStream> stream)
+void Notifier::Push(NOTIFY_LEVEL level, const std::string& buff)
 {
-        stream->triggers.push_back(trigger);
+        if (!this->NotifyList.size())
+        {
+             return;
+        }
+
+        Event adding(buff, level);
+        this->events.push_back(adding);
 }
 
-
-void Notifier::Push(NOTIFY_LEVEL lvl, const std::string& trigger, const std::string& msg)
+void Notifier::Push(NOTIFY_LEVEL level, const char *fmt, ...) 
 {
-
+       std::string buff;
+       SCHEME(buff, fmt, fmt);
+       this->Push(level, buff);
 }
 
 void Notifier::Flush()
@@ -60,32 +73,21 @@ void Notifier::Flush()
        }
        
        Event ready = this->events.front();
-       
-       for (StreamMapVec::iterator it = all.begin(); it != all.end(); it++)
+
+       const NotifyMap& all = this->NotifyList;
+
+       for (NotifyMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
        {
-              std::string trigger = it->first;
-              
-              if (trigger != ready.trigger)
-              {
-                    continue;
-              }       
-              
-              StreamVector streams = it->second;
-              
-              for (StreamVector::iterator ft = streams.begin(); ft != streams.end(); ft++)
-              {
-                    std::shared_ptr<NotifyStream> stream = *ft;
-                    
-                    if (stream->level != ready.level)
-                    {
-                          continue;
-                    }
-                    
-              }
+                      User* user = uit->first;
+                      NOTIFY_LEVEL level = uit->second;
+                      
+                      if (level <= ready.level)
+                      {
+                             user->SendProtocol(BRLD_NOTIFICATION, Daemon::Format("%s", ready.command.c_str()).c_str());
+                      }
        }
-               
+
        this->events.pop_front();
-       
 }
 
 
