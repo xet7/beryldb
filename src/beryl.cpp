@@ -416,6 +416,10 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	this->Monitor->Reset();
 	
+	/* Remove pending notifications. */
+	
+	this->Notify->Reset();
+	
 	/* Login cache will not be needed anymore. */
 	
 	this->Logins->Reset();

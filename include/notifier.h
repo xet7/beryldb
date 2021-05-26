@@ -23,7 +23,9 @@ enum NOTIFY_LEVEL
 struct Event
 {
     public:
-    
+
+       /* User to skip while showing this event. */
+           
        User* skip;
     
        std::string command;
@@ -65,10 +67,41 @@ class Externalize Notifier : public safecast<Notifier>
 
          bool Add(NOTIFY_LEVEL lvl, User* user);
 
+        /* 
+         * Checks if provided user is in NotifyList.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User to check:
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in NotifyList.
+         *         · False: User is not.
+         */    
+         
          bool Has(User* user);
 
+        /* 
+         * Removes an user from NotifyList.
+         * 
+         * @parameters:
+	 *
+	 *         · user: Uset to remove.
+         */    
+         
          void Remove(User* user);
 
+        /* 
+         * Adds an user to the Skipping event list.
+         * 
+         * @parameters:
+	 *
+	 *         · skip: User to skip.
+	 *         · level: Level of events this event is from.
+	 *         · buff: Message.
+         */    
+         
          void SPush(User* skip, NOTIFY_LEVEL level, const std::string& buff);
 
          void SPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(4, 5);
@@ -78,8 +111,8 @@ class Externalize Notifier : public safecast<Notifier>
          * 
          * @parameters:
          *
-         *         · msg: Message to dispatch.
          *         · level: Log Level.
+         *         · uff: Message.
          */    
          
          void Push(NOTIFY_LEVEL level, const std::string& buff);
@@ -92,10 +125,16 @@ class Externalize Notifier : public safecast<Notifier>
           */
 
           void Flush();
-          
-          void Reset()
-          {
+
+        /* 
+         * Resets NotifyList and pending events.
+         * 
+         * This function should be called before exiting Beryl.
+         */    
+                   
+         void Reset()
+         {
                 this->events.clear();
                 this->NotifyList.clear();
-          }
+         }
 };

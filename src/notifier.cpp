@@ -86,9 +86,17 @@ void Notifier::Push(NOTIFY_LEVEL level, const char *fmt, ...)
 
 void Notifier::Flush()
 {
+       /* Nobody is subscribed to any event. */
+       
+       if (!this->NotifyList.size())
+       {
+            this->events.clear();
+            return;
+       }
+
        if (this->events.empty())
        {
-           return;
+            return;
        }
        
        Event ready = this->events.front();
