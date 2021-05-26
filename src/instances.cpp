@@ -199,7 +199,7 @@ int User::GetFirstFlag()
         return 0;
 }
 
-void UserSockets::StreamData()
+void InstanceStream::StreamData()
 {
 	if (user->IsQuitting())
 	{
@@ -259,25 +259,25 @@ void UserSockets::StreamData()
 	}
 }
 
-void UserSockets::AddWriteData(const std::string &data)
+void InstanceStream::AddWriteData(const std::string &data)
 {
 	this->AppendBuffer(data);
 }
 
-void UserSockets::swap_internal(UserSockets& other)
+void InstanceStream::swap_internal(InstanceStream& other)
 {
 	StreamSocket::swap_internal(other);
 	std::swap(checked_until, other.checked_until);
 }
 
-bool UserSockets::OnSetEndPoint(const engine::sockets::sockaddrs& server, const engine::sockets::sockaddrs& client)
+bool InstanceStream::OnSetEndPoint(const engine::sockets::sockaddrs& server, const engine::sockets::sockaddrs& client)
 {
 	memcpy(&user->server_sa, &server, sizeof(engine::sockets::sockaddrs));
 	user->set_client_ip(client);
 	return !user->IsQuitting();
 }
 
-void UserSockets::OnError(LiveSocketError sockerr)
+void InstanceStream::OnError(LiveSocketError sockerr)
 {
 	ModuleResult res;
 	UNTIL_RESULT(OnConnectionFail, res, (user, sockerr));

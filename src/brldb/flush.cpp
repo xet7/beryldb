@@ -49,6 +49,12 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                            break; 
                     }
 
+                    case DBL_TYPE_SWAPDB:
+                    {
+                           Flusher::SwapDB(user, signal);
+                           break; 
+                    }
+
                     case DBL_TYPE_GET:
                     {
                            Flusher::Get(user, signal);      

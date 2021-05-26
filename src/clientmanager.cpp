@@ -113,7 +113,7 @@ ClientManager::~ClientManager()
 void ClientManager::AddUser(int socket, BindingPort* via, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server)
 {
 	LocalUser* const New = new LocalUser(socket, client, server);
-	UserSockets* ehandler = &New->usercon;
+	InstanceStream* ehandler = &New->usercon;
 
 	this->not_registered_track++;
 	this->clientlist[New->instance] = New;

@@ -64,6 +64,8 @@
 
 #define falert Kernel->Notify->Push
 
+#define sfalert Kernel->Notify->SPush
+
 /* Allow modularization */
 
 #define ExternalModule __attribute__ ((visibility ("default")))

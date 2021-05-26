@@ -21,12 +21,6 @@
 
 void op_query::Run()
 {    
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
@@ -137,14 +131,45 @@ void Flusher::Operation(User* user, std::shared_ptr<query_base> query)
         }
 }
 
-void dbsize_query::Run()
+void swapdb_query::Run()
 {
-    if (!this->Check())
+    if (this->key.empty())
     {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
+            this->access_set(DBL_MISS_ARGS);
+            return;
     }
 
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+    std::string rawstring;
+
+    double size_calc = 0;
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+           if (this->user && this->user->IsQuitting())
+           {
+                  access_set(DBL_NOT_FOUND);
+                  return;
+           }
+
+           if (!Kernel->Store->Flusher->Status())
+           {
+                  access_set(DBL_INTERRUPT);
+                  return;
+           }
+           
+     }
+
+}
+
+void Flusher::SwapDB(User* user, std::shared_ptr<query_base> query)
+{
+    bprint(DONE, "FLUSHED");
+}
+
+void dbsize_query::Run()
+{
     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     std::string rawstring;
@@ -153,6 +178,18 @@ void dbsize_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
+           if (this->user && this->user->IsQuitting())
+           {
+                  access_set(DBL_NOT_FOUND);
+                  return;
+           }
+
+           if (!Kernel->Store->Flusher->Status())
+           {
+                  access_set(DBL_INTERRUPT);
+                  return;
+           }
+    
             /* We can count size from binary keys/values. */
             
             size_calc += it->key().size() + 2;

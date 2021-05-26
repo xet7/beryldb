@@ -174,6 +174,18 @@ class Externalize query_base
 
 };
 
+class Externalize swapdb_query : public query_base
+{
+    public:
+
+        swapdb_query() : query_base(DBL_TYPE_SWAPDB)
+        {
+
+        }
+
+        void Run();
+};
+
 class Externalize lfind_query : public query_base
 {
     public:
@@ -588,4 +600,7 @@ class Flusher
         static void LSearch(User* user, std::shared_ptr<query_base> query);
 
         static void LFind(User* user, std::shared_ptr<query_base> query);
+
+        static void SwapDB(User* user, std::shared_ptr<query_base> query);
+        
 };

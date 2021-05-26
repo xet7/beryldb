@@ -35,7 +35,19 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
             user->SendProtocol(BRLD_QUERY_OK_DONE, PROCESS_OK);
             return SUCCESS;
        }
-       
+
+       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", Kernel->Store->Default->GetName().c_str());      
        user->SendProtocol(ERR_UNABLE_FLUSH, Daemon::Format("%s: %s.", PROCESS_FALSE.c_str(), Kernel->Store->Default->GetName().c_str()));
        return FAILED;
 }
+
+CommandSwapDB::CommandSwapDB(Module* Creator) : Command(Creator, "SWAPDB", 1, 1)
+{
+         requires = 'r';
+}
+
+COMMAND_RESULT CommandSwapDB::Handle(User* user, const Params& parameters)
+{  
+
+}
+

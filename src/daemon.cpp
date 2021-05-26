@@ -310,6 +310,16 @@ void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key
         }
 }
 
+void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
+{
+        if (user->agent == "emerald1")
+        {
+        	 return;
+        }
+        
+        user->SendProtocol(brld);
+}
+
 void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query)	
 {
 	if (user->agent == "emerald1")
@@ -343,17 +353,17 @@ void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::st
 		{
                         if (query->type == DBL_NONE)
                         {
-                                user->SendProtocol(brld, query->database->GetName(), query->select_query, query->key, query->type, status);
+                                user->SendProtocol(brld, status, query->database->GetName(), query->select_query, query->key, query->type);
                         }
                         else
                         {
-                                user->SendProtocol(brld, query->qtype, query->type, msg, status);
+                                user->SendProtocol(brld, status, query->qtype, query->type, msg);
                         }
                         
                 }
                 else
                 {
-                	user->SendProtocol(brld, query->type, query->database->GetName(), query->select_query, query->key, status);
+                	user->SendProtocol(brld, status, query->type, query->database->GetName(), query->select_query, query->key);
 		}
 	}
 }

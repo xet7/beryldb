@@ -894,7 +894,8 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
                 
         if (query->subresult == 1)
         {
-                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, "BEGIN of FIND list.", query);
+//                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, "BEGIN of FIND list.", query);
+                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -905,7 +906,8 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+//                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 

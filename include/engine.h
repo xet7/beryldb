@@ -218,4 +218,6 @@ class Externalize Dispatcher : public safecast<Dispatcher>
      static void Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query);
      
      static void TellThat(std::string& who, const std::string& msg, int rpl);      
+     
+     static void JustAPI(User* user, BRLD_PROTOCOL brld);
 };

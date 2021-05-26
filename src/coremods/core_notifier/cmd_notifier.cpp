@@ -17,7 +17,7 @@
 
 CommandNotifier::CommandNotifier(Module* Creator) : Command(Creator, "NOTIFY", 0, 1)
 {
-         requires = 'e';
+         requires = 'm';
          syntax = "<level>";
 }
 
@@ -46,48 +46,48 @@ COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
              }
              else
              {
-                    user->SendProtocol(ERR_INVALID_MONITORLVL, level, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), level.c_str())); 
+                    user->SendProtocol(ERR_INVALID_NOTLVL, level, Daemon::Format("%s: %s", INVALID_NLEVEL.c_str(), level.c_str())); 
                     return FAILED;
              }
        
              Kernel->Notify->Add(monitor, user);
-             user->SendProtocol(BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
+             user->SendProtocol(BRLD_NOW_NOTIFYING, level, Daemon::Format("OK: %s", level.c_str()));       
              return SUCCESS;  
        }
        
        Kernel->Notify->Add(NOTIFY_DEFAULT, user);
-       user->SendProtocol(BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
+       user->SendProtocol(BRLD_NOW_NOTIFYING, "DEFAULT", "OK: DEFAULT");          
        return SUCCESS;
 }
 
 CommandNotifyReset::CommandNotifyReset(Module* Creator) : Command(Creator, "NRESET", 0, 0)
 {
-        requires = 'e';
+        requires = 'm';
 }
 
 COMMAND_RESULT CommandNotifyReset::Handle(User* user, const Params& parameters)
 {
        unsigned int count = Kernel->Monitor->Count();
        Kernel->Notify->Reset();
-       user->SendProtocol(BRLD_RESET_MONITOR, count, PROCESS_OK);
+       user->SendProtocol(BRLD_NRESET, count, PROCESS_OK);
        return SUCCESS;
 }
 
 CommandStopNotify::CommandStopNotify(Module* Creator) : Command(Creator, "STOPNOTIFY", 0, 0)
 {
-        requires = 'e';
+        requires = 'm';
 }
 
 COMMAND_RESULT CommandStopNotify::Handle(User* user, const Params& parameters)
 {  
        if (!Kernel->Notify->Has(user))
        {
-               user->SendProtocol(ERR_NO_MONITOR, PROCESS_FALSE);
+               user->SendProtocol(ERR_NO_NOTIFY, PROCESS_FALSE);
                return FAILED;
        }
        
        Kernel->Notify->Remove(user);
-       user->SendProtocol(BRLD_STOP_MONITOR, PROCESS_OK);          
+       user->SendProtocol(BRLD_STOP_NOTIFY, PROCESS_OK);          
        return SUCCESS;
 }
 

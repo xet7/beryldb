@@ -25,6 +25,10 @@ const std::string PROCESS_FALSE = "FALSE";
 
 const std::string INVALID_MLEVEL = "Invalid monitor level.";
 
+/* Invalid notification level */
+
+const std::string INVALID_NLEVEL = "Invalid notification level.";
+
 /* Item not found. */
 
 const std::string PROCESS_NULL = "NULL";

@@ -24,11 +24,13 @@ struct Event
 {
     public:
     
+       User* skip;
+    
        std::string command;
 
        NOTIFY_LEVEL level;
 
-       Event(const std::string& cmd, NOTIFY_LEVEL lvl) : command(cmd), level(lvl)
+       Event(User* usr, const std::string& cmd, NOTIFY_LEVEL lvl) : skip(usr), command(cmd), level(lvl)
        {
        
        }
@@ -67,13 +69,17 @@ class Externalize Notifier : public safecast<Notifier>
 
          void Remove(User* user);
 
+         void SPush(User* skip, NOTIFY_LEVEL level, const std::string& buff);
+
+         void SPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(4, 5);
+
         /* 
          * Adds an event to the event queue.
          * 
          * @parameters:
-	 *
-	 *         · msg: Message to dispatch.
-	 *         · level: Log Level.
+         *
+         *         · msg: Message to dispatch.
+         *         · level: Log Level.
          */    
          
          void Push(NOTIFY_LEVEL level, const std::string& buff);

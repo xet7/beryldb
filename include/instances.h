@@ -390,7 +390,7 @@ class Externalize User : public Expandable
 	bool Serialize(Serializable::Data& data) ;
 };
 
-class Externalize UserSockets : public StreamSocket
+class Externalize InstanceStream : public StreamSocket
 {
  private:
 
@@ -400,7 +400,7 @@ class Externalize UserSockets : public StreamSocket
 
 	LocalUser* const user;
 
-	UserSockets(LocalUser* me) : StreamSocket(StreamSocket::SS_USER), checked_until(0), user(me)
+	InstanceStream(LocalUser* me) : StreamSocket(StreamSocket::SS_USER), checked_until(0), user(me)
 	{
 
 	}
@@ -413,7 +413,7 @@ class Externalize UserSockets : public StreamSocket
 	void AddWriteData(const std::string &data);
 
 	
-	void swap_internal(UserSockets& other);
+	void swap_internal(InstanceStream& other);
 };
 
 typedef unsigned int sent_id;
@@ -437,7 +437,7 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
 
 	DiscardResult discard();
 
-	UserSockets usercon;
+	InstanceStream usercon;
 
 	ProtocolTrigger::Serializer* serializer;
 	

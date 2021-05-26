@@ -52,7 +52,7 @@ void Channel::DeleteUser(const SubscriptionMap::iterator& subsiter)
 	subs->discard();
 	subs->~Subscription();
 	subscribedlist.erase(subsiter);
-	Kernel->Channels->ShouldExists(this);
+	Kernel->Channels->CheckRemoval(this);
 }
 
 Subscription* Channel::GetUser(User* user)
@@ -107,6 +107,7 @@ Channel* Channel::JoinUser(bool fromconnect, LocalUser* user, std::string cname,
 		}
 
 		chan = new Channel(cname, Kernel->Now());
+                falert(NOTIFY_DEFAULT, "New channel: %s", cname.c_str());
 	}
 	else
 	{
