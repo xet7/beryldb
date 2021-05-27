@@ -96,7 +96,7 @@ COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
          
          ExpireManager::Reset();
          user->SendProtocol(BRLD_EXP_DELETED, counter, PROCESS_OK);
-         
+         sfalert(user, NOTIFY_DEFAULT, "All expires have been removed: %u", counter);
          return SUCCESS;
 }
 
@@ -138,9 +138,10 @@ COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
         /* Clears all expires pending. */
 
         unsigned int counter = ExpireManager::SReset(user->current_db, use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting: %d", counter).c_str());
+        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting: %u", counter).c_str());
         user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
-
+        
+        sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);
         return SUCCESS;
 }
 

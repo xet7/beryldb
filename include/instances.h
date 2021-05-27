@@ -409,10 +409,6 @@ class Externalize InstanceStream : public StreamSocket
 	bool OnSetEndPoint(const engine::sockets::sockaddrs& local, const engine::sockets::sockaddrs& remote) ;
 	void OnError(LiveSocketError error) ;
 
-	
-	void AddWriteData(const std::string &data);
-
-	
 	void swap_internal(InstanceStream& other);
 };
 

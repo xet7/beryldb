@@ -540,6 +540,18 @@ class Externalize sflush_query  : public query_base
         void Run();
 };
 
+class Externalize geo_add : public query_base
+{
+    public:
+
+        geo_add() : query_base(DBL_TYPE_GEOADD)
+        {
+
+        }
+
+        void Run();
+};
+
 class Flusher
 {
     public:

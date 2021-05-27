@@ -77,6 +77,7 @@ class Externalize Channel : public Expandable
 	 * Adds a user to the reference list.
 	 * 
 	 * @parameters:
+	 *
 	 *           · User*: user to add.
 	 */
 
@@ -123,7 +124,19 @@ class Externalize Channel : public Expandable
 	
 	bool PartUser(User* user);
 	
-	/* Joins an user to a given channel.*/
+	/* 
+	 * Joins an user to a given channel.
+         * 
+         * @parameters:
+	 *
+	 *         · fromconnect: If this is a join calling from the core_db.cpp (database).
+	 *         · user: User to join.
+	 *         · channame: Channel's name.
+	 * 
+         * @return:
+ 	 *
+         *         · Channel: Reference to channel's dynamic object.
+         */    	
 
 	static Channel* JoinUser(bool fromconnect, LocalUser* user, std::string channame, bool override = false);
 

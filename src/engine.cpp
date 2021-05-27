@@ -123,7 +123,6 @@ void Daemon::DeletePID()
 
 void Daemon::SavePID(bool exitonfail)
 {
-
         if (!Kernel->Config->usercmd.writepid)
         {
                 slog("STARTUP", LOG_DEFAULT, "--nopid specified on command line; PID file not written.");

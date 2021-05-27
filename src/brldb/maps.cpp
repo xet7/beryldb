@@ -57,7 +57,7 @@ void Flusher::HGet(User* user, std::shared_ptr<query_base> query)
         
         if (query->finished)
         {
-              Dispatcher::Smart(user, query->exists, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()), query);
+              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()), query);
         }
 }
 

@@ -58,5 +58,6 @@ enum DBL_CODE
     DBL_TYPE_LSEARCH		=		44,
     DBL_TYPE_LFIND		=		45,
     DBL_TYPE_HQUERY		=		46,
-    DBL_TYPE_SWAPDB    		=		47
+    DBL_TYPE_SWAPDB    		=		47,
+    DBL_TYPE_GEOADD		=		48
 };

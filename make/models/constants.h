@@ -151,6 +151,10 @@ const std::string INT_MAP = "2";
 
 const std::string INT_LIST = "3";
 
+/* GEO functions */ 
+
+const std::string INT_GEO = "4";
+
 /* Table expires. */
 
 const std::string TABLE_EXPIRES = "expires";

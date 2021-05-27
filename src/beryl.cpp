@@ -406,6 +406,12 @@ void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 
 void Beryl::PrepareExit(int status, const std::string& quitmsg)
 {
+        falert(NOTIFY_DEFAULT, "Server is preparing to shutdown.");
+	
+	/* One last flush. */
+	
+        Kernel->Notify->Flush();
+
 	bprint(INFO, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	
 	/* Always a great idea to keep track of exiting date. */
@@ -538,4 +544,8 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* Cleans up config file. */
 	
         this->ConfigFile.clear();
+        
+        /* The END. */
+        
+        Kernel = nullptr;
 }

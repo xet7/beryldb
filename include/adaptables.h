@@ -64,6 +64,8 @@
 
 #define falert Kernel->Notify->Push
 
+/* Skip alerts */
+
 #define sfalert Kernel->Notify->SPush
 
 /* Allow modularization */

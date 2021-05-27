@@ -50,6 +50,8 @@ class Externalize Notifier : public safecast<Notifier>
             
    public: 
 
+         /* Constructor */
+         
          Notifier();
          
         /* 
@@ -119,12 +121,12 @@ class Externalize Notifier : public safecast<Notifier>
 
          void Push(NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(3, 4);
 
-         /* 
-          * Flushes all pending events. This function is
-          * called inside the mainloop.
-          */
+        /* 
+         * Flushes all pending events. This function is
+         * called inside the mainloop.
+         */
 
-          void Flush();
+         void Flush();
 
         /* 
          * Resets NotifyList and pending events.

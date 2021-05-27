@@ -86,6 +86,8 @@ COMMAND_RESULT CommandSwapDB::Handle(User* user, const Params& parameters)
        {
                return FAILED;
        }
+
+       sfalert(user, NOTIFY_DEFAULT, "Database swap: %s <=> %s", db1.c_str(), db2.c_str());
        
        DBHelper::SwapDB(user, user->current_db, db1, db2);
        return SUCCESS;

@@ -259,11 +259,6 @@ void InstanceStream::StreamData()
 	}
 }
 
-void InstanceStream::AddWriteData(const std::string &data)
-{
-	this->AppendBuffer(data);
-}
-
 void InstanceStream::swap_internal(InstanceStream& other)
 {
 	StreamSocket::swap_internal(other);
@@ -525,7 +520,7 @@ void LocalUser::Write(const ProtocolTrigger::SerializedMessage& text)
 		return;
 	}
 
-	usercon.AddWriteData(text);
+	usercon.AppendBuffer(text);
 }
 
 void LocalUser::Send(ProtocolTrigger::Event& protoev)

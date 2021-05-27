@@ -152,6 +152,16 @@ class Externalize LogHandler : public safecast<LogHandler>
 
 	bool DeleteType(const std::string &type, LogStream *l);
 
+        /* 
+         * Logs en event. 
+         * 
+         * @parameters:
+	 *
+	 *         · type: Log type, for instance: "STARTUP"
+	 *         · log_level: For instance: DEFAULT
+	 *         · msg: Message to write.
+         */    
+         
 	void Log(const std::string &type, log_level loglevel, const std::string &msg);
 
 	void Log(const std::string &type, log_level loglevel, const char *fmt, ...) BERYL_PRINTF(4, 5);

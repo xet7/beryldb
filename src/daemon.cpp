@@ -349,21 +349,13 @@ void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::st
 	}
 	else
 	{
-		if (query->qtype == TYPE_NONE)
-		{
-                        if (query->type == DBL_NONE)
-                        {
+                if (query->type == DBL_NONE)
+                {
                                 user->SendProtocol(brld, status, query->database->GetName(), query->select_query, query->key, query->type);
-                        }
-                        else
-                        {
-                                user->SendProtocol(brld, status, query->qtype, query->type, msg);
-                        }
-                        
                 }
                 else
                 {
-                	user->SendProtocol(brld, status, query->type, query->database->GetName(), query->select_query, query->key);
-		}
+                                user->SendProtocol(brld, status, query->qtype, query->type, msg);
+                }
 	}
 }
