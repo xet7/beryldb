@@ -210,6 +210,7 @@ enum BRLD_PROTOCOL
 	BRLD_END_LIST			=		283,
         BRLD_START_UNQ_LIST             =               284,
         BRLD_END_UNQ_LIST               =               285,
+        BRLD_CORES			=		286,
 		
 	/* Error protocol codes. */
 	

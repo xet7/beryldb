@@ -109,8 +109,10 @@ void CommandStatus::DispatchData(Status::Context& status)
 
 		break;
 
-
-	
+		case 't':
+                        status.AppendLine(BRLD_CORES, Daemon::Format("Cores: %u", CORE_COUNT));
+		break;
+		
 		case 'u':
 		{
 			unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
