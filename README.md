@@ -104,6 +104,7 @@ BSD license.
 
 ## External Links
 
+* **IRC**: Libera.chat - #beryl
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)

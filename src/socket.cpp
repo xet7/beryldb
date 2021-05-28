@@ -272,7 +272,7 @@ static void sa2cidr(engine::sockets::cidr_mask& cidr, const engine::sockets::soc
 	unsigned int border = cidr.length / 8;
 	unsigned int bitmask = (0xFF00 >> (range & 7)) & 0xFF;
 
-	for(unsigned int i=0; i < target_byte; i++)
+	for (unsigned int i=0; i < target_byte; i++)
 	{
 		if (i < border)
 		{
@@ -346,8 +346,7 @@ std::string engine::sockets::cidr_mask::str() const
 
 bool engine::sockets::cidr_mask::operator==(const cidr_mask& other) const
 {
-	return type == other.type && length == other.length &&
-		0 == memcmp(bits, other.bits, 16);
+	return type == other.type && length == other.length && 0 == memcmp(bits, other.bits, 16);
 }
 
 bool engine::sockets::cidr_mask::operator<(const cidr_mask& other) const

@@ -17,14 +17,14 @@
 
 std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags)
 {
-      /* Session has no flags by default. */
+       /* Session has no flags by default. */
       
-      New->can_admin = false;
-      New->can_execute = false;
-      New->can_manage = false;
-      
-      for (auto it = flags.cbegin() ; it != flags.cend(); ++it) 
-      {
+       New->can_admin = false;
+       New->can_execute = false;
+       New->can_manage = false;
+       
+       for (auto it = flags.cbegin() ; it != flags.cend(); ++it) 
+       {
             if (*it == 'r')
             {
                   New->can_admin = true;
@@ -39,9 +39,9 @@ std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::strin
             {
                   New->can_manage = true;
             }
-     }
+      }
      
-     return New;
+      return New;
 }
 
 SessionManager::SessionManager()
