@@ -18,7 +18,8 @@ a production setting.
 
 Beryl is a data structures server. Our software provides access to structures via a 
 wide range of commands, which are later queued, processed and dispatched to an 
-internal processor.
+internal processor. Beryl is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb)
+
 
 Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
@@ -65,8 +66,16 @@ To run Beryl with default configuration, type:
 ./run/beryldb start
 ```
 
+**NOTE**: Beryl runs in the background by default. If you wish to avoid
+forking, you can run the server using nofork:
+
+```
+./run/beryldb start --nofork
+```
+
+
 Great! You may now run your very first BerylDB command using
-[Beryldb-cli](https://github.com/beryldb/beryldb-cli) 
+[Beryl-cli](https://github.com/beryldb/beryldb-cli).
 
 ## Internals
 
