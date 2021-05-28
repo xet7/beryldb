@@ -19,9 +19,24 @@
 #include "brldb/dbflush.h"
 #include "brldb/query.h"
 
+void DataFlush::EntryExists(User* user, std::shared_ptr<query_base> signal)
+{
+        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_FALSE, signal);
+}
+
 void DataFlush::NotFound(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_FLUSH, "0", signal->key, DBL_NOT_FOUND);
+        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, signal);
+}
+
+void DataFlush::StatusFailed(User* user, std::shared_ptr<query_base> signal)
+{
+        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, signal);
+}
+
+void DataFlush::MissArgs(User* user, std::shared_ptr<query_base> signal)
+{
+        Dispatcher::Smart(user, 0, ERR_QUERY, "Missing arguments.", signal);
 }
 
 void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
@@ -31,6 +46,12 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                     case DBL_TYPE_SET:
                     {
                            Flusher::Set(user, signal);      
+                           break; 
+                    }
+
+                    case DBL_TYPE_SWAPDB:
+                    {
+                           Flusher::SwapDB(user, signal);
                            break; 
                     }
 

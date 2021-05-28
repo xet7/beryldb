@@ -26,18 +26,20 @@ class CoreModDBManager : public Module
         CommandDBReset cmddbreset;
         CommandSFlush cmdsflush;
         CommandUsing cmdusing;
-
+        CommandSwapDB cmdswapdb;
+        
     public:     
         
         CoreModDBManager() : cmduse(this), cmdcurrent(this), cmdflushdb(this), cmdpwd(this),
-                             cmddbsize(this), cmddbreset(this), cmdsflush(this), cmdusing(this)
+                             cmddbsize(this), cmddbreset(this), cmdsflush(this), cmdusing(this),
+                             cmdswapdb(this)
         {
         
         }
         
         Version GetDescription() 
         {
-                return Version("Provides commands USE, CURRENT, FLUSHDB and PWD.", VF_BERYLDB);
+                return Version("Provides commands USE, CURRENT, FLUSHDB and PWD.", VF_BERYLDB|VF_CORE);
         }
 };
 

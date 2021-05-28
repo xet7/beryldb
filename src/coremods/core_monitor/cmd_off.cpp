@@ -17,17 +17,18 @@
 
 CommandStopMonitor::CommandStopMonitor(Module* Creator) : Command(Creator, "STOPMONITOR", 0, 0)
 {
-
+        requires = 'm';
 }
 
 COMMAND_RESULT CommandStopMonitor::Handle(User* user, const Params& parameters)
 {  
        if (!Kernel->Monitor->Has(user))
        {
-               user->SendProtocol(ERR_NO_MONITOR, "No longer monitoring.");
+               user->SendProtocol(ERR_NO_MONITOR, PROCESS_FALSE);
+               return FAILED;
        }
        
        Kernel->Monitor->Remove(user);
-       user->SendProtocol(BRLD_STOP_MONITOR, "Monitor stopped.");          
+       user->SendProtocol(BRLD_STOP_MONITOR, PROCESS_OK);          
        return SUCCESS;
 }

@@ -31,7 +31,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 		return FAILED;
 	}
 	
-	user->SendProtocol(BRLD_SYNTAX, Found->name, Found->syntax);
+	user->SendProtocol(BRLD_SYNTAX, Found->name, Daemon::Format("%s %s", Found->name.c_str(), Found->syntax.c_str()));
 	return SUCCESS;
 }
 

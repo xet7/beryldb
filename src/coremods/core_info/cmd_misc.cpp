@@ -35,6 +35,24 @@ COMMAND_RESULT CommandTime::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
+CommandEpoch::CommandEpoch(Module* parent) : ServerTargetCommand(parent, "EPOCH")
+{
+        syntax = "[<server>]";
+}
+
+COMMAND_RESULT CommandEpoch::Handle(User* user, const Params& parameters)
+{
+        /* Checks whether this command is routes to us. */
+        
+        if (parameters.size() > 0 && !engine::equals(parameters[0], Kernel->Config->ServerName))
+        {
+                return SUCCESS;
+        }
+
+        user->SendRemoteProtocol(BRLD_LOCAL_EPOCH, Kernel->Config->GetServerName(), convto_string(Kernel->Now()));
+        return SUCCESS;
+}
+
 CommandL::CommandL(Module* parent) : Command(parent, "L", 0)
 {
 
@@ -42,9 +60,8 @@ CommandL::CommandL(Module* parent) : Command(parent, "L", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-        user->SendProtocol(BRLD_VERSION, Daemon::Format("Version: %s", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendRemoteProtocol(BRLD_VIEW_INFO, Daemon::Format("Current select in use: %s", user->select.c_str()));
-	KeyHelper::Count(user, user->current_db, user->select, "*", "Total Keys:");
+        user->SendProtocol(BRLD_START_UNQ_LIST, Daemon::Format("Version: %s", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
+        user->SendProtocol(BRLD_VIEW_INFO, Daemon::Format("Current select in use: %s", user->select.c_str()));
         
         /* Returns admin flags to requesting user, if any. */
         
@@ -52,14 +69,13 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         
         if (!exists.empty())
         {
-                user->SendProtocol(BRLD_FLAG_INFO, user->login, Daemon::Format("Your flags: %s", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_INSTANCE, user->login, Daemon::Format("Instance created: %s", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
+                user->SendProtocol(BRLD_FLAG_INFO, Daemon::Format("Your flags: %s", exists.c_str()).c_str());
+                user->SendProtocol(BRLD_INSTANCE, Daemon::Format("Instance created: %s", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
         }
         
         /* Requesting user login. */
-        
-        user->SendRemoteProtocol(BRLD_VIEW_INFO, Daemon::Format("Your login: %s - Your instance: %s", user->login.c_str(), user->instance.c_str()));	
 
+        user->SendProtocol(BRLD_END_UNQ_LIST, Daemon::Format("Your login: %s - Your instance: %s", user->login.c_str(), user->instance.c_str()));	
 	return SUCCESS;
 }
 
@@ -71,12 +87,23 @@ CommandVersion::CommandVersion(Module* parent) : Command(parent, "VERSION", 0, 0
 COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
 {
       /* 
-       * Any user can perform this command, however, only users 
-       * with 'e' flags can obtain a full version of this server. 
+       * All connected users can run VERSION command. However, only users 
+       * with 'e' or higher flags can obtain a full version of this server. 
        */
 	
       user->SendProtocol(BRLD_VERSION, Kernel->GetVersion(user->CanPerform('e')));
       return SUCCESS;
+}
+
+CommandAgent::CommandAgent(Module* parent) : Command(parent, "MYAGENT", 0, 0)
+{
+
+}
+
+COMMAND_RESULT CommandAgent::Handle(User* user, const Params& parameters)
+{
+         user->SendProtocol(BRLD_AGENT, user->agent, user->agent.c_str());
+         return SUCCESS;
 }
 
 CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)

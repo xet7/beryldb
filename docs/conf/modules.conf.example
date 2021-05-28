@@ -72,6 +72,31 @@
 #<module name="autojoin">
 #<autojoin chans="#hello,#world">
 
+# Forward #################################################
+#
+# Forwards an user from channel A to channel B.
+# This tag can be declared multiple times.
+
+#<module name="forward">
+#<forward from="#A" to="#B">
+
+# ChainJoin #################################################
+#
+# Automatically joins an user to join #B channel when joining 
+# channel #A.
+ 
+#<module name="chainjoin">
+#<chain when="#A" do="#B">
+
+# ECHO ######################################################
+#
+# Echoes everything an user says.
+# NOTE: This module is in the extra/ directory. You should
+#       either create a dynanmic link or run:
+#       ./configure --enable-extras echo
+
+#<module name="echo">
+
 # End of modules.conf
 ##############################################################
 

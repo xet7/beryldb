@@ -42,7 +42,7 @@ void search_query::Run()
 
     unsigned int total_counter = 0;
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
@@ -138,7 +138,7 @@ void Flusher::Search(User* user, std::shared_ptr<query_base> query)
 {
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_FIND, UNABLE_MAP);
+                user->SendProtocol(ERR_QUERY, DBL_TYPE_FIND, UNABLE_MAP);
                 return;
         }
 

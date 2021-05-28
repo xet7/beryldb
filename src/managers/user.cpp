@@ -52,7 +52,7 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
 
         /* We may add this login to the cache. */
         
-        Kernel->Logins->AddCache(user, provided_pass);
+        Kernel->Logins->Add(user, provided_pass);
         return true;
 }
 
@@ -94,10 +94,11 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
       
        /* 
         * Removes the user from the cache so the 'current' password will
-        *  not continue working.
+        * not be accepted if an user tries to log-in utilizing same
+        * password.
         */
         
-       Kernel->Logins->RemoveCache(user); 
+        Kernel->Logins->Remove(user); 
 
         HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
 
@@ -154,7 +155,7 @@ bool UserHelper::RemoveAdmin(const std::string& user)
 
 bool UserHelper::Remove(const std::string& user)
 {
-        Kernel->Logins->RemoveCache(user); 
+        Kernel->Logins->Remove(user); 
 
         MapsHelper::DeleteAll(TABLE_ADMIN, user);
         return MapsHelper::DeleteAll(TABLE_USERS, user);

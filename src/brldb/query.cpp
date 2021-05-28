@@ -18,7 +18,7 @@ bool query_base::Check()
 {
        if (!this->database)
        {
-             this->access_set(DBL_STATUS_FAILED);
+             this->access_set(DBL_STATUS_BROKEN);
              return false;
        }
        else

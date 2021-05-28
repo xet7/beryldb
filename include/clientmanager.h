@@ -70,39 +70,121 @@ class Externalize ClientManager : public safecast<ClientManager>
 	
 	void Flush(time_t current);
 
+        /* Disconnects all users that are using a given login. */
+
+        static unsigned int DisconnectAll(const std::string& login, const std::string& msg);
+
 	/* Adds an user to the clientlist. */
 	
 	void AddUser(int socket, BindingPort* via, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
 
+        /* 
+         * Disconnects an user from the server.
+         * 
+         * @parameters:
+	 *
+	 *         · User: User to disconnect.
+	 *         · quitreason: Disconnecting reason.
+         */    
+         
 	void Disconnect(User* user, const std::string& quitreason);
 
-	/* Disconnecs all users from a given login. */
-	
+        /* 
+         * Disconnects all users that have a common login.
+         * 
+         * @parameters:
+	 *
+	 *         · login: Login to disconnect.
+	 *         · reason: Reason to use.
+         */    
+         
 	void ExitLogins(const std::string& login, const std::string& reason);
 
-	/* Counts all logins associated with 'X' login id. */
-	
+        /* 
+         * Joins all users sharing a given login to a given channel.
+         * 
+         * @parameters:
+	 *
+	 *         · skip: Skip providing user (User already joined).
+	 *         · login: Login to find.
+	 *         · chan: Chan to join.
+         */    
+         
+        void Join(User* skip, const std::string& login, const std::string& chan);
+
+        /* 
+         * Part all users sharing a given login to a given channel.
+         * 
+         * @parameters:
+         *
+         *         · skip: Skip providing user.
+         *         · login: Login to find.
+         *         · chan: Chan to leave.
+         */
+
+        void Part(User* skip, const std::string& login, const std::string& chan);
+
+	/* Counts all logins associated with 'X' login id. 
+         *
+         * 
+         * @parameters:
+	 *
+	 *         · login: Common login to find.
+	 * 
+         * @return:
+ 	 *
+         *         · unsigned int: Counter.
+         */    
+         	
 	unsigned int CountLogin(const std::string& login);
 	
-	/* Returns the size of all clients connected (un and registered). */
+	/* 
+	 * Returns the size of all clients connected (un and registered). 
+         *
+         * @return:
+         *
+         *         · unsigned int: Counter.
+         */
+
 		
 	unsigned int ClientCount() const 
 	{ 	
 		return this->clientlist.size(); 
 	}
 
+        /* 
+         * Counts all registered (logged in) users.
+         *
+         * @return:
+ 	 *
+         *         · unsigned int: Counter.
+         */    
 
 	unsigned int RegisteredClientCount() 
 	{ 
 		return this->clientlist.size() - this->UnregisteredClientCount(); 
 	}
 
+        /* 
+         * Counts all unregistered (not logged in) users.
+         *
+         * @return:
+         *
+         *         · unsigned int: Counter.
+         */
 
 	unsigned int UnregisteredClientCount() const 
 	{ 
 		return this->not_registered_track; 
 	}
 
+        /* 
+         * Counts all local users.
+         *
+         * @return:
+         *
+         *         · unsigned int: Counter.
+         */
 
 	unsigned int LocalClientCount() const 
 	{ 
@@ -111,8 +193,11 @@ class Externalize ClientManager : public safecast<ClientManager>
 
 	/*
 	 * Returns map containing clientlist.
-	 * This map stores data as User and client. 
-	 */
+         * 
+         * @return:
+ 	 *
+         *         · UserMap: User uuid keyed with User class pointer.
+         */    
 
 	UserMap& GetInstances() 
 	{ 
@@ -155,11 +240,33 @@ class Externalize ClientManager : public safecast<ClientManager>
 
 	User* FindInstanceOnly(const std::string &instance);
 
-	/* Finds an user by UID. */
-	
+	/* 
+	 * Finds an user by UID. 
+         *
+         * @parameters:
+	 *
+	 *         · Finds an user from its unique id.
+	 * 
+         * @return:
+ 	 *
+         *         · User: User class. Returns NULL if no user is found.
+         */    	
+         
 	User* FindUUID(const std::string &uid);
 	
-	/* Finds all users that are logged with a given session. */
+	/* 
+	 * Finds all users that are logged with a given session. 
+         * 
+         * @parameters:
+	 *
+	 *         · login: Common login to find.
+	 *         · registration_state: Registration state to find, by default 
+	 *                               this function looks for logged-in (REG_OK) users.
+	 * 
+         * @return:
+ 	 *
+         *         · UserVector: A vector containing all common users.
+         */    	
 		
 	UserVector FindLogin(const std::string& login, registration_state state = REG_OK);
 };

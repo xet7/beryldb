@@ -40,6 +40,7 @@ class StoreManager;
 class CoreManager;
 class Database;
 class SessionManager;
+class Notifier;
 
 #ifdef ENABLE_TESTOFFICE
 

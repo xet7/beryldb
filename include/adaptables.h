@@ -60,6 +60,14 @@
 
 #define slog Kernel->Logs->Log
 
+/* Appends a new event to notification list */
+
+#define falert Kernel->Notify->Push
+
+/* Skip alerts */
+
+#define sfalert Kernel->Notify->SPush
+
 /* Allow modularization */
 
 #define ExternalModule __attribute__ ((visibility ("default")))

@@ -58,88 +58,94 @@ class Externalize DataFlush : public safecast<DataFlush>
          */    
          
          static void NotFound(User* user, std::shared_ptr<query_base> signal);
-        
-        /* Results from the processing threads. */
-        
-        static void GetResults();
 
-        /* Gets pending queries by iterating all users. */
+         static void MissArgs(User* user, std::shared_ptr<query_base> signal);
 
-        static void GetPending();
+         static void StatusFailed(User* user, std::shared_ptr<query_base> signal);
 
-        /* mute that keep track of flushing status. */
-
-        std::atomic<bool> flushmute;
-
-        /* Format locker. */
+         static void EntryExists(User* user, std::shared_ptr<query_base> signal);
         
-        static std::mutex wlock;
+         /* Results from the processing threads. */
         
-        /* Locked words. */
+         static void GetResults();
+
+         /* Gets pending queries by iterating all users. */
+ 
+         static void GetPending();
+
+         /* mute that keep track of flushing status. */
+
+         std::atomic<bool> flushmute;
+
+         /* Format locker. */
         
-        std::vector<std::string> locks;
+         static std::mutex wlock;
+        
+         /* Locked words. */
+        
+         std::vector<std::string> locks;
    
    public:
            
-        /* Lock for operations. */
+         /* Lock for operations. */
         
-        std::atomic<bool> opmute;
+         std::atomic<bool> opmute;
 
-        /* Locks a entry. */
+         /* Locks a entry. */
         
-        void Lock(const std::string& format);
+         void Lock(const std::string& format);
 
-        /* Unlocks an entry. */
+         /* Unlocks an entry. */
         
-        void Unlock(const std::string& format);
+         void Unlock(const std::string& format);
         
-        /* Checks if an entry is locked. */
+         /* Checks if an entry is locked. */
 
-        bool IsLocked(const std::string& format);
+         bool IsLocked(const std::string& format);
 
-        /* Flush constructor, should should be set to OK after this. */
+         /* Flush constructor, should should be set to OK after this. */
         
-        DataFlush();
+         DataFlush();
 
-        static void Process(User* user, std::shared_ptr<query_base> signal);
+         static void Process(User* user, std::shared_ptr<query_base> signal);
         
-        /* Pauses this->running */
+         /* Pauses this->running */
         
-        void Pause();
+         void Pause();
         
-        /* Resumes this->running */
+         /* Resumes this->running */
         
-        void Resume();
+         void Resume();
         
-        /* Current status for this->running */
+         /* Current status for this->running */
         
-        bool Status();
+         bool Status();
     
-        /* Clears notifications and pending queries. */
+         /* Clears notifications and pending queries. */
         
-        static void ResetAll();
+         static void ResetAll();
 
-        /* Adds a new notification */
+         /* Adds a new notification */
 
-        static void AttachResult(std::shared_ptr<query_base> result);
+         static void AttachResult(std::shared_ptr<query_base> result);
 
-        /* Called in the mainloop, used to dispatch notifications and pending queries. */
+         /* Called in the mainloop, used to dispatch notifications and pending queries. */
         
-        static void DispatchAll();
+         static void DispatchAll();
 
-        /* Close all threads */
+         /* Close all threads */
         
-        void CloseThreads();     
+         void CloseThreads();     
         
-        /* Returns vector of threads. */
+         /* Returns vector of threads. */
         
-        DataThreadVector& GetThreads()
-        {
+         DataThreadVector& GetThreads()
+         {
                 return this->threadslist;
-        }
+         }
         
-        void EraseAll()
-        {
+         void EraseAll()
+         { 
                 return this->threadslist.clear();
-        }
+         }
 };

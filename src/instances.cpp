@@ -20,7 +20,8 @@
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) : 
-				         Paused(false)
+	                                 Blocked(false)
+				        , Paused(false)
 				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
@@ -87,11 +88,13 @@ User::~User()
 {
         this->SetLock(false);
 
+        /* We remove this user from monitoring list, if applicable. */
+        
         Kernel->Monitor->Remove(this);
 	pending.clear();
 	notifications.clear();
 	
-        Kernel->Logins->Sessions->ShouldDestroy(this->login);
+        Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
 
 void User::SetQuit(bool flag)
@@ -175,12 +178,12 @@ int User::GetFirstFlag()
 
         if (this->session == nullptr)
         {
-            return 0;
+                return 0;
         }
 
         if (session->can_admin)
         {
-            return 3;
+                return 3;
         }
         
         if (session->can_execute)
@@ -196,11 +199,16 @@ int User::GetFirstFlag()
         return 0;
 }
 
-void UserSockets::StreamData()
+void InstanceStream::StreamData()
 {
 	if (user->IsQuitting())
 	{
 		return;
+	}
+	
+	if (user->Blocked)
+	{
+		 return;
 	}
 
 	std::string line;
@@ -251,25 +259,20 @@ void UserSockets::StreamData()
 	}
 }
 
-void UserSockets::AddWriteData(const std::string &data)
-{
-	this->AppendBuffer(data);
-}
-
-void UserSockets::swap_internal(UserSockets& other)
+void InstanceStream::swap_internal(InstanceStream& other)
 {
 	StreamSocket::swap_internal(other);
 	std::swap(checked_until, other.checked_until);
 }
 
-bool UserSockets::OnSetEndPoint(const engine::sockets::sockaddrs& server, const engine::sockets::sockaddrs& client)
+bool InstanceStream::OnSetEndPoint(const engine::sockets::sockaddrs& server, const engine::sockets::sockaddrs& client)
 {
 	memcpy(&user->server_sa, &server, sizeof(engine::sockets::sockaddrs));
 	user->set_client_ip(client);
 	return !user->IsQuitting();
 }
 
-void UserSockets::OnError(LiveSocketError sockerr)
+void InstanceStream::OnError(LiveSocketError sockerr)
 {
 	ModuleResult res;
 	UNTIL_RESULT(OnConnectionFail, res, (user, sockerr));
@@ -357,8 +360,8 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 {
 	if (this->logged)
 	{       
-			this->SendProtocol(ERR_EMPTY_LOGIN, "Already logged.");
-			return false;
+		this->SendProtocol(ERR_ALREADY_LOGGED, "Already logged.");
+		return false;
 	}
 
 	if (IsQuitting())
@@ -400,6 +403,8 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 	const std::string oldlogin = instance;
 	instance = newlogin;
 
+        falert(NOTIFY_DEBUG, "User connected: %s (%s)", this->login.c_str(), this->GetRealHost().c_str());
+
 	ResetCache();
 	Kernel->Clients->clientlist.erase(oldlogin);
 	Kernel->Clients->clientlist[newlogin] = this;
@@ -409,7 +414,7 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 	{
 		NOTIFY_MODS(OnUserPostLogin, (this, oldlogin));
 	}
-
+	
 	return true;
 }
 
@@ -427,7 +432,6 @@ const std::string& User::GetReadableIP()
 
 	return user_ip;
 }
-
 
 const std::string& User::GetRealHost() const
 {
@@ -516,7 +520,7 @@ void LocalUser::Write(const ProtocolTrigger::SerializedMessage& text)
 		return;
 	}
 
-	usercon.AddWriteData(text);
+	usercon.AppendBuffer(text);
 }
 
 void LocalUser::Send(ProtocolTrigger::Event& protoev)
@@ -626,8 +630,8 @@ void User::for_each_neighbor(for_each_neighbor_handler& handler, bool include_se
 			{
 		                if (!curr->IsAdmin())
 		                {	
-                                continue;
-						}
+                                     continue;
+				}
                                 
 				curr->already_sent = newerid;
 				handler.Execute(curr);
@@ -669,7 +673,7 @@ bool User::SetPublicHost(const std::string& shost)
 		}
 	}
 
-	NOTIFY_MODS(OnHostSet, (this,shost));
+	NOTIFY_MODS(OnHostSet, (this, shost));
 
 	this->ResetCache();
 	return true;
@@ -709,7 +713,6 @@ bool User::SetAgent(const std::string& newagent)
 
 	this->agent.assign(newagent, 0, 200);
 	this->ResetCache();
-
 	return true;
 }
 
@@ -826,7 +829,10 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 	for (file_config_items::const_iterator piter = parentkeys.begin(); piter != parentkeys.end(); ++piter)
 	{
 		if (stdhelpers::string::equalsci(piter->first, "name") || stdhelpers::string::equalsci(piter->first, "parent"))
+		{
 			continue;
+		}
+		
 		(*items)[piter->first] = piter->second;
 	}
 

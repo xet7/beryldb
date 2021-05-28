@@ -42,12 +42,18 @@ class DataThread
 {   
     private:
 
+        /* Keeps this thread safe. */
+        
+        std::mutex m_mutex;
+        
         std::unique_ptr<std::thread> m_thread;
         
         /* Queue item to attach. */
         
         std::queue<std::shared_ptr<ThreadMsg>> queue;
-        std::mutex m_mutex;
+        
+        /* Conditional variable for thread. */
+        
         std::condition_variable m_cv;
         
         /* Keeps track of busy status */
@@ -55,16 +61,35 @@ class DataThread
         std::atomic<bool> busy;
         
     public:
-
+    
+        /* Thread constructor. */
+        
         DataThread();
 
         void SetStatus(bool flag);
 
+        /* 
+         * Checks if thread is busy.
+         
+         * @return:
+ 	 *
+         *         · True: Thread busy.
+         *         · False: Thread available.
+         */    
+         
         bool IsBusy();
     
         /* A mainloop for a datathread. */
         
         void Process();
+        
+        /* 
+         * Creates a new thread.
+         * 
+         * @return:
+ 	 *
+         *         · thread::id: Thread id.
+         */    
 
         std::thread::id Create();
 
@@ -75,8 +100,14 @@ class DataThread
         /* Destructor */
         
         ~DataThread();
-        
-        /* Ads a new request to the processor. */
+
+        /* 
+         * Adds a new query to the thread manager.
+         * 
+         * @parameters:
+	 *
+	 *         · query: Thread to process.
+         */            
         
         void Post(std::shared_ptr<query_base> query);
 

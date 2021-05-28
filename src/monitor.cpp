@@ -23,11 +23,11 @@ MonitorHandler::MonitorHandler()
 
 bool MonitorHandler::Add(User* user, MONITOR_LEVEL level)
 {
-        if (level < MONITOR_DEFAULT || level > MONITOR_DEBUG)
+        if (!user || user->IsQuitting())
         {
             return false;
         }
-       
+
         this->MonitorList.insert(std::make_pair(user, level));
         return true;
 }
@@ -56,6 +56,8 @@ void MonitorHandler::Push(const std::string& instance, const std::string& cmd, M
              return;
         }
 
+        /* CMDBuffer, which is later inserted in a buffered list. */
+        
         CMDBuffer adding(instance, cmd, level, params);
         this->buffer.push_back(adding);
 }
@@ -105,15 +107,17 @@ void MonitorHandler::Flush()
              return;
         }
 
-        BufferQueue pending = this->buffer;
-        MonitorMap& all = this->MonitorList;
-
-        for (BufferQueue::iterator it = pending.begin(); it != pending.end(); it++)
+        if (!this->buffer.size())
         {
-               CMDBuffer flushing = *it;
+            return;
+        }
+
+        const MonitorMap& all = this->MonitorList;
+        
+        CMDBuffer flushing = this->buffer.front();
                
-               for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
-               {
+        for (MonitorMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
+        {
                       User* user = uit->first;
                       MONITOR_LEVEL level = uit->second;
                       
@@ -122,7 +126,7 @@ void MonitorHandler::Flush()
                            continue;
                       }
                       
-                      if (level >= flushing.level)
+                      if (level <= flushing.level)
                       {
                              std::ostringstream fullparams;
                              
@@ -143,8 +147,7 @@ void MonitorHandler::Flush()
                              std::string sfinal(fullparams.str());
                              Dispatcher::SmartDiv(user, BRLD_MONITOR, flushing.instance, Daemon::Format("%s %s", flushing.command.c_str(), sfinal.c_str()).c_str(), ":");
                       }
-               }     
+        }     
                
-               this->buffer.pop_front();
-        } 
+        this->buffer.pop_front();
 }

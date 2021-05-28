@@ -63,7 +63,7 @@ class Externalize FutureManager : public safecast<FutureManager>
 
         /* Returns triggering time for a future. */
 
-        static signed int TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 

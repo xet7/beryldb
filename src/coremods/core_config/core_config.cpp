@@ -42,7 +42,7 @@ class CoreModConfig : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides configuration-related commands.", VF_CORE | VF_BERYLDB);
+                return Version("Provides configuration-related commands.", VF_CORE|VF_BERYLDB);
         }
 };
 

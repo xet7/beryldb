@@ -24,12 +24,6 @@
 
 void lpush_query::Run()
 {
-        if (!this->Check())
-        {
-              this->access_set(DBL_STATUS_BROKEN);
-              return;
-        }
-
         if (this->format.empty())
         {
               this->access_set(DBL_MISS_ARGS);
@@ -46,7 +40,7 @@ void lpush_query::Run()
     
         std::string where_to = this->format + ":" + modified;
     
-        rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), where_to, this->value);
+        rocksdb::Status fstatus =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_to, this->value);
     
         /* Finished. */
     
@@ -58,29 +52,19 @@ void Flusher::LPush(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-            user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, query->id, PROCESS_OK);
-        }
-        else
-        {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query->key, "Unable to add item to list.");
+                Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
 }
 
 void lmove_query::Run()
 {
-        if (!this->Check())
-        {
-                this->access_set(DBL_STATUS_BROKEN);
-                return;
-        }
-
         if (this->key.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
                 return;
         }
 
-        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
         std::string rawstring;
 
@@ -90,16 +74,10 @@ void lmove_query::Run()
 
         for (it->SeekToFirst(); it->Valid(); it->Next()) 
         {
-                    if (this->user && this->user->IsQuitting())
+                    if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                     {
-                        access_set(DBL_NOT_FOUND);
-                        return;
-                    }
-
-                    if (!Kernel->Store->Flusher->Status())
-                    {
-                        access_set(DBL_INTERRUPT);
-                        return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                     }
 
                     rawstring = it->key().ToString();
@@ -169,15 +147,13 @@ void lmove_query::Run()
         
         if (!found)
         {
-                this->access_set(DBL_NO_ENTRY);
+                this->access_set(DBL_NOT_FOUND);
                 return;
         }
         
-        this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
-
+        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
         const std::string& newformat = this->int_keys + ":" + this->hesh + ":" + this->key;
-        
-        rocksdb::Status fstatus =  this->database->db->Put(rocksdb::WriteOptions(), newformat, foundvalue);
+        rocksdb::Status fstatus =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), newformat, foundvalue);
         
         /* Finished. */
         
@@ -187,55 +163,33 @@ void lmove_query::Run()
 
 void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
 {
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
+        if (query->finished)
         {
-            return;
-        }
-
-        if (!query->finished)
-        {
-                   user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPUSH, query->key, "Item not found.");
-        }
-        else
-        {
-                  user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LPUSH, query->key, PROCESS_OK);
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
 }
 
 void lpop_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
             return;
     }
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
-    
-    std::string rawstring;
-    
     bool found = false;
+    
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+    std::string rawstring;
     
     unsigned int total = 0;
     
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                 }
 
                 rawstring = it->key().ToString();
@@ -260,11 +214,11 @@ void lpop_query::Run()
                         {
                              if (token != this->key)
                              {
-                                  break;
+                                    break;
                              }
                              else
                              {
-                                 key_match = true;
+                                    key_match = true;
                              }
                         }
 
@@ -272,11 +226,11 @@ void lpop_query::Run()
                         {
                             if (this->int_keys != token)
                             {
-                                break;
+                                  break;
                             }
                             else
                             {
-                                int_match = true;
+                                  int_match = true;
                             }
                         }
 
@@ -284,7 +238,7 @@ void lpop_query::Run()
                         {
                             if (this->select_query != token)
                             {
-                                break;
+                                   break;
                             }
                             else
                             {
@@ -297,7 +251,7 @@ void lpop_query::Run()
 
                 if (select_match && int_match && key_match)
                 {
-                     this->database->db->Delete(rocksdb::WriteOptions(), rawstring);
+                     this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
                      found = true;
                      
                      total++;
@@ -311,7 +265,7 @@ void lpop_query::Run()
     
     if (!found)
     {
-            this->access_set(DBL_NO_ENTRY);
+            this->access_set(DBL_NOT_FOUND);
             return;
     }
 
@@ -321,67 +275,36 @@ void lpop_query::Run()
 
 void Flusher::LPop(User* user, std::shared_ptr<query_base> query)
 {	
-        switch (query->access)
-        {
-               case DBL_INTERRUPT:
-               case DBL_NOT_FOUND:
-                        
-                        return;
-             
-              break;  
-                                     
-              case DBL_NO_ENTRY:
-              
-                  {
-                       if (query->all)
-                       {
-                               user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->key, NOT_FOUND_KEY);
-                       }
-                       else
-                       {
-                              user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP_ALL, query->key, NOT_FOUND_KEY);
-                       }
-                  }
-                  
-              break;     
-            
-             default:
-             
-                 break;
-        }
-
         if (query->finished)
         {
                 if (!query->all)
                 {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->counter, Daemon::Format("%d items deleted.", query->counter).c_str());
+                      /* LPOPALL displays all items removed. */
+                      
+                      Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
                 }
                 else
                 {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->key, 1, "Item deleted.");
+                     /* LPOP only removes one element. */
+                     
+                     Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
                 }
         }
         else
         {
-            user->SendProtocol(ERR_FLUSH, DBL_TYPE_LPOP, query->key, 0, "An error has occured.");
+                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
         }
 }
 
 void lget_query::Run()
 {
-        if (!this->Check())
-        {
-                this->access_set(DBL_STATUS_BROKEN);
-                return;
-        }
-
         if (this->key.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
                 return;
         }
         
-        rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
         std::vector<std::string> rlist;
         std::string rawstring;
 
@@ -392,18 +315,14 @@ void lget_query::Run()
         
         unsigned int match_count = 0;
         
+        bool dirty = false;
+        
         for (it->SeekToFirst(); it->Valid(); it->Next()) 
         {
-                    if (this->user && this->user->IsQuitting())
+                    if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                     {
-                        access_set(DBL_NOT_FOUND);
-                        return;
-                    }
-
-                    if (!Kernel->Store->Flusher->Status())
-                    {
-                        access_set(DBL_INTERRUPT);
-                        return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                     }
 
                     rawstring = it->key().ToString();
@@ -418,29 +337,29 @@ void lget_query::Run()
                     {
                             if (match && strcounter == 0)
                             {
-                                if (this->int_keys != token)
-                                {
-                                    match = false;
-                                    break;
-                                }
+                                   if (this->int_keys != token)
+                                   {
+                                       match = false;
+                                       break;
+                                   }
                             }
                     
                             if (match && strcounter == 2)
                             {
-                                if (to_string(token) != this->key)
-                                {
-                                    match = false;
-                                    break;
-                                }
+                                   if (to_string(token) != this->key)
+                                   {
+                                       match = false;
+                                       break;
+                                   }
                             }
                             
                             if (match && strcounter == 1)
                             {
-                                if (this->select_query != token)
-                                {
-                                    match = false;
-                                    break;
-                                }
+                                   if (this->select_query != token)
+                                   {
+                                       match = false;
+                                       break;
+                                   }
                             }
                             
                             strcounter++;
@@ -453,28 +372,32 @@ void lget_query::Run()
                             
                             if (this->qtype == TYPE_EXIST)
                             {
-                                if (it->value().ToString() == this->value)
-                                {
-                                    this->exists = true;
-                                    this->SetOK();
-                                    return;
-                                }
+                                  if (it->value().ToString() == this->value)
+                                  { 
+                                      this->exists = true;
+                                      this->SetOK();
+                                      return;
+                                  }
                             }
                             
                             else if (this->qtype == TYPE_LPOS)
                             {
-                                if (it->value().ToString() != this->value)
-                                {
+                                  if (it->value().ToString() != this->value)
+                                  {
                                         continue;
-                                }
+                                  }
+                                  else
+                                  {
+                                        dirty = true;
+                                  }
                                 
-                                if (aux_counter == this->id)
-                                {
-                                    return_counter = match_count;
-                                    break;
-                                }
+                                  if (aux_counter == this->id)
+                                  {
+                                      return_counter = match_count;
+                                      break;
+                                  }
 
-                                aux_counter++;
+                                  aux_counter++;
                             }
                             
                             else if (this->qtype == TYPE_COUNT_RECORDS)
@@ -550,6 +473,18 @@ void lget_query::Run()
                             }
                     }
         }
+        
+        if (this->qtype == TYPE_COUNT_RECORDS && return_counter == 0)
+        {
+              this->access_set(DBL_NOT_FOUND);
+              return;
+        }
+
+        if (this->qtype == TYPE_LPOS && !dirty)
+        {
+              this->access_set(DBL_NOT_FOUND);
+              return;
+        }
 
         this->counter = return_counter;
         this->subresult = ++tracker;
@@ -561,69 +496,57 @@ void lget_query::Run()
 
 void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 {
-        if (query->access == DBL_INTERRUPT || query->access == DBL_NOT_FOUND)
-        {
-            return;
-        }
-
         if (query->qtype == TYPE_LPOS)
         {	
-                 user->SendProtocol(BRLD_LPOS, query->key, query->counter,  Daemon::Format("%u", query->counter).c_str());
+                 Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query); 
                  return;
         }
         
         if (query->finished && query->qtype == TYPE_EXIST)
         {
-                    user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LGET, query->key, convto_string(query->exists));
-                    return;
+                 Dispatcher::Smart(user, query->exists, BRLD_QUERY_OK, convto_string(query->exists), query);
+                 return;
         }
     
         if (query->finished && query->qtype == TYPE_COUNT_RECORDS)
         {
-                user->SendProtocol(BRLD_FLUSH, DBL_TYPE_LGET, query->key, convto_string(query->counter));
+                Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
                 return;
         }
     
-    
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_FIND, UNABLE_MAP);
+                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query); 
                 return;
         }
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_FIND_BEGIN, query->key, "BEGIN of HSEARCH list.");
+                user->SendProtocol(BRLD_LGET_BEGIN, query->key, "BEGIN of LGET list.");
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 user->SendProtocol(BRLD_FIND_ITEM, DBL_TYPE_FIND, key, Daemon::Format("\"%s\"", key.c_str()));
+                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+                user->SendProtocol(BRLD_LGET_END, query->key, Daemon::Format("END of LGET list (%i).", query->counter).c_str());
         }
 }
 
 
 void lsearch_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
             return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     std::vector<std::string> rlist;
     std::vector<std::string> allitems;
     
@@ -634,16 +557,10 @@ void lsearch_query::Run()
     
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                 }
 
                 std::string rawstring = it->key().ToString();
@@ -772,8 +689,8 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
 {
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_LSEARCH, UNABLE_MAP);
-                return;
+                 Dispatcher::Smart(user, 0, BRLD_QUERY_OK, PROCESS_NULL, query);
+                 return;
         }
 
         if (query->subresult == 1)
@@ -784,7 +701,7 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 user->SendProtocol(BRLD_LSEARCH_ITEM, key, Daemon::Format("\"%s\"", key.c_str()));
+                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
@@ -796,19 +713,13 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
 
 void lfind_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
             return;
     }
 
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     std::vector<std::string> rlist;
 
     unsigned int aux_counter = 0;
@@ -818,16 +729,10 @@ void lfind_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                         this->access_set(DBL_INTERRUPT);
+                         return;
                 }
                 
                 std::string rawstring = it->key().ToString();
@@ -954,7 +859,7 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
 {
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_LSEARCH, UNABLE_MAP);
+                Dispatcher::Smart(user, query->counter, ERR_QUERY, PROCESS_NULL, query);
                 return;
         }
 
@@ -966,7 +871,7 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {
                  std::string key = *i;
-                 user->SendProtocol(BRLD_LFIND_ITEM, key, Daemon::Format("\"%s\"", key.c_str()));
+                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)

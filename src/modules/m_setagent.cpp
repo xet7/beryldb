@@ -81,7 +81,7 @@ class ModuleSetAgent : public Module
 
         Version GetDescription()
         {
-                return Version("Adds SETAGENT command.", VF_BERYLDB|VF_CORE);
+                return Version("Adds SETAGENT command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

@@ -15,7 +15,7 @@
 
 /*
  * ChannelManager handles all created channels. This class also provides
- * a Find and ShouldExists functions.
+ * a Find and CheckRemoval functions.
  */
  
 class Externalize ChannelManager : public safecast<ChannelManager>
@@ -59,7 +59,7 @@ class Externalize ChannelManager : public safecast<ChannelManager>
          * and is checked against users subscribed. 
          */
         
-        void ShouldExists(Channel* chan);
+        void CheckRemoval(Channel* chan);
         
 	/* Returns a map of current channels. */
 	

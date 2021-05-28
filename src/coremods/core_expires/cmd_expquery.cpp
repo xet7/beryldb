@@ -28,17 +28,17 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::TriggerTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_TTL, key, ((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_TTL, key, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_EXPIRE, key, "0");
+                  user->SendProtocol(ERR_NOT_EXPIRE, key, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -53,22 +53,22 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
           
-         signed int ttl = ExpireManager::TriggerTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
          
          if (ttl != -1)
          {
                   if (ExpireManager::Delete(user->current_db, key, user->select))
                   {
-                           user->SendProtocol(BRLD_PERSIST, 1, key, Daemon::Format("%s has persisted.", key.c_str()).c_str());
+                           user->SendProtocol(BRLD_PERSIST, 1, key, PROCESS_OK);
                   }
                   else
                   {
-                           user->SendProtocol(ERR_PERSIST, 0, key, Daemon::Format("%s is unable to persist.", key.c_str()).c_str());
+                           user->SendProtocol(ERR_PERSIST, 0, key, PROCESS_NULL);
                   }
          }
          else
          {
-                  user->SendProtocol(ERR_NOT_EXPIRE, key, Daemon::Format("%s is not expiring.", key.c_str()).c_str());
+                 user->SendProtocol(ERR_PERSIST, 0, key, PROCESS_NULL);
          }
          
          return SUCCESS;

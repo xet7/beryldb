@@ -13,9 +13,25 @@
 
 #pragma once
 
+/* An error has occured. */
+
+const std::string PROCESS_ERROR = "ERROR";
+
+/* Entry exists. */
+
+const std::string PROCESS_FALSE = "FALSE";
+
 /* Invalid monitor level */
 
 const std::string INVALID_MLEVEL = "Invalid monitor level.";
+
+/* Invalid notification level */
+
+const std::string INVALID_NLEVEL = "Invalid notification level.";
+
+/* Item not found. */
+
+const std::string PROCESS_NULL = "NULL";
 
 /* Everything OK */
 
@@ -45,13 +61,9 @@ const std::string WRONG_AGENT = "Your agent is not valid.";
 
 const std::string VALID_AGENT = "Agent must be in the 3 to 15 length range.";
 
-/* Undefined key. */
-
-const std::string UNDEF_KEY =  "Undefined key.";
-
 /* Default ping interval. */
 
-const int PING_INTVL = 20;
+const int PING_INTVL = 30;
 
 /* Default publish command. */
 
@@ -138,6 +150,10 @@ const std::string INT_MAP = "2";
 /* Lists. */
 
 const std::string INT_LIST = "3";
+
+/* GEO functions */ 
+
+const std::string INT_GEO = "4";
 
 /* Table expires. */
 

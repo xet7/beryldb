@@ -37,7 +37,7 @@ class CoreModOperations : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides operational-based commands: INCR, DECR, INCRBY, DECRBY, AVG, MULT and DIV.", VF_BERYLDB);
+                return Version("Provides operational-based commands: INCR, DECR, INCRBY, DECRBY, AVG, MULT and DIV.", VF_BERYLDB|VF_CORE);
         }
 };
 

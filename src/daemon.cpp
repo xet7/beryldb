@@ -25,7 +25,7 @@ const char* ExitMap[] =
            "Unable to write PID file",
            "Problem with SocketPool",
            "Refusing to start up as root",
-           "Couldn't load module on startup",
+           "Unable to load module during boot",
            "Received SIGTERM",
            "Database error",
            "SIG INT received",
@@ -300,7 +300,7 @@ std::string Daemon::duration_as_string(time_t duration)
 
 void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key, const std::string& msg, const std::string& div)
 {
-        if (user->agent == "emerald0")
+        if (user->agent == "emerald1")
         {
 		user->SendProtocol(brld, Daemon::Format("%s%s %s", key.c_str(), div.c_str(), msg.c_str()));
         }
@@ -310,52 +310,52 @@ void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key
         }
 }
 
-void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl, QUERY_TYPE type)
+void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
 {
-	if (user->agent == "emerald0")
+        if (user->agent == "emerald1")
+        {
+        	 return;
+        }
+        
+        user->SendProtocol(brld);
+}
+
+void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query)	
+{
+	if (user->agent == "emerald1")
 	{
-		if (type == TYPE_NONE)
+		if (query->qtype == TYPE_NONE)
 		{
-			if (dbl == DBL_NONE)
+			if (query->type == DBL_NONE)
 			{
-                                user->SendProtocol(brld, type, msg);
+                                user->SendProtocol(brld, query->type, msg);
                         }
                         else
                         {
-                        	user->SendProtocol(brld, dbl, type, msg);
+                        	user->SendProtocol(brld, query->qtype, query->type, msg);
 			}
 		}
 		else
 		{
-		        if (dbl == DBL_NONE)
+		        if (query->type == DBL_NONE)
                         {
-                                user->SendProtocol(brld, type, msg);
+                                user->SendProtocol(brld, query->type, msg);
                         }
                         else
                         {
-                                user->SendProtocol(brld, dbl, msg);
+                                user->SendProtocol(brld, query->qtype, query->type, msg);
                         }
-
 		}
 	}
 	else
 	{
-		if (type == TYPE_NONE)
-		{
-                        
-                        if (dbl == DBL_NONE)
-                        {
-                                user->SendProtocol(brld, key, type, status);
-                        }
-                        else
-                        {
-                                user->SendProtocol(brld, dbl, type, msg, status);
-                        }
-                        
+                if (query->type == DBL_NONE)
+                {
+                                user->SendProtocol(brld, status, query->database->GetName(), query->select_query, query->key);
                 }
                 else
                 {
-                	user->SendProtocol(brld, dbl, key, status);
-		}
+                                user->SendProtocol(brld, status, msg);
+                }
 	}
 }

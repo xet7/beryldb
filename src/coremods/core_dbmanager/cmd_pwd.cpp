@@ -27,7 +27,7 @@ CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 
 COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
-       const std::string path = Kernel->Store->Default->path.c_str();
+       const std::string path = Kernel->Store->Default->GetPath().c_str();
        
        user->SendProtocol(BRLD_CURRENT_DIR, path, Daemon::Format("Database path: %s", path.c_str()).c_str());
        return SUCCESS;

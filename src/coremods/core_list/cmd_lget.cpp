@@ -54,7 +54,7 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 
 CommandLSearch::CommandLSearch(Module* Creator) : Command(Creator, "LSEARCH", 1, 3)
 {
-         syntax = "<%key> <limit> <offset>";
+         syntax = "<%key> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
@@ -87,7 +87,7 @@ COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
 
 CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
 {
-         syntax = "<key> <%value> <limit> <offset>";
+         syntax = "<key> <%value> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)

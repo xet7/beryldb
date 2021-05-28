@@ -36,11 +36,14 @@ class Externalize Daemon : public safecast<Daemon>
         
         static void Signalizers();
 
-
     public:
     
+    	/* Main thread */
+    	
     	std::thread::id main_threadid;
-
+        
+        /* Constructor */
+        
         Daemon();  
         
         static void print_newline(unsigned int loops);
@@ -49,13 +52,35 @@ class Externalize Daemon : public safecast<Daemon>
 
         static std::string Welcome(std::string& msg);
         
-        void TellThat(std::string& who, const std::string& msg, int rpl);      
-
+        /* Deletes PID file. */
+        
         void DeletePID();
 
+        /* 
+         * Saves PID.
+         * 
+         * @parameters:
+         *
+         *         · exitonfail: Will Exit Beryl if unable to write.
+         */
+
+        void SavePID(bool exitonfail = true);
 
         STR1::function<bool(const std::string&)> ValidChannel;
 
+        /* 
+         * Validates a channel.
+         * 
+         * @parameters:
+	 *
+	 *         · channel: Channel to validate.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Valid channel.
+         *         · False: Unable to validate channel.
+         */    
+         
         static bool ChannelValidator(const std::string& channel);
 
         static void DefaultGenRandom(char* output, size_t max);
@@ -66,17 +91,40 @@ class Externalize Daemon : public safecast<Daemon>
 
         STR1::function<bool(const std::string&)> ValidLogin;
 
-        
+        /* 
+         * Validates provided login.
+         * 
+         * @parameters:
+	 *
+	 *         · login to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Login has a correct format.
+         *         · False: Poorly-formated login.
+         */            
 
         static bool LoginValidator(const std::string& login);
 
+        /* 
+         * Checks whether a valid agent has been provided.
+         * 
+         * @parameters:
+	 *
+	 *         · agent to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Valid agent.
+         *         · False: Invalid agent.
+         */    
         
+
+        static bool AgentValidator(const std::string& agent);
 
         STR1::function<bool(const std::string&)> IsAgent;
 
         
-
-        static bool AgentValidator(const std::string& agent);
 
         
         static bool ValidHost(const std::string& host);
@@ -91,12 +139,19 @@ class Externalize Daemon : public safecast<Daemon>
         
         unsigned long generate_random_int(unsigned long max);
 
+        /* 
+         * Checks if BerylDB had been started as root.
+         *
+         * @exit:
+         *
+         *       · This function will exit if started using root, unless
+         *         --asoot argument was provided.
+         */
 
+        
         void CheckRoot();
 
         std::string get_real_path(const char* path);
-
-        void SavePID(bool exitonfail = true);
 
         
        
@@ -160,5 +215,9 @@ class Externalize Dispatcher : public safecast<Dispatcher>
     
      static void SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key, const std::string& msg, const std::string& div);
 
-     static void Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, const std::string& key, DBL_CODE dbl = DBL_NONE, QUERY_TYPE type = TYPE_NONE);
+     static void Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query);
+     
+     static void TellThat(std::string& who, const std::string& msg, int rpl);      
+     
+     static void JustAPI(User* user, BRLD_PROTOCOL brld);
 };

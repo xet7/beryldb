@@ -113,7 +113,7 @@ ClientManager::~ClientManager()
 void ClientManager::AddUser(int socket, BindingPort* via, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server)
 {
 	LocalUser* const New = new LocalUser(socket, client, server);
-	UserSockets* ehandler = &New->usercon;
+	InstanceStream* ehandler = &New->usercon;
 
 	this->not_registered_track++;
 	this->clientlist[New->instance] = New;
@@ -274,6 +274,7 @@ void ClientManager::Disconnect(User* user, const std::string& quitmessage)
 	uuid_list.erase(user->uuid);
 	user->CheckEmptyChannels();
 
+        falert(NOTIFY_DEBUG, "User disconnected: %s (%s)", user->login.c_str(), user->GetRealHost().c_str());
 }
 
 void ClientManager::NotifyAll(BRLD_PROTOCOL protocol, const char* text, ...)
@@ -312,7 +313,7 @@ void ClientManager::Flush(time_t current)
 	{
 		LocalUser* curr = *i;
 		++i;
-
+		
 		if (curr->usercon.Getsend_queueSize())
 		{
 
@@ -323,8 +324,6 @@ void ClientManager::Flush(time_t current)
 		{
 			case REG_OK:
 			
-				/* Checks optimization to every 10 secs. */
-				
 				if ((current % 10) == 0)
 				{
 					VerifyPingTimeouts(curr);
@@ -488,6 +487,28 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
         return UserList;
 }
 
+unsigned int ClientManager::DisconnectAll(const std::string& login, const std::string& msg)
+{
+       unsigned int counter = 0;
+       
+       UserVector logins = Kernel->Clients->FindLogin(login);
+
+       for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+       {
+             User* user = *o;
+             
+             if (user->login != login)
+             {
+		   continue;
+             }
+       		      
+             Kernel->Clients->Disconnect(user, msg);
+             counter++;
+       }
+       
+       return counter;
+}
+
 void ClientManager::ExitLogins(const std::string& login, const std::string& reason)
 {
 	UserVector foundl = this->FindLogin(login);	
@@ -497,4 +518,50 @@ void ClientManager::ExitLogins(const std::string& login, const std::string& reas
 		User* user = *i;
 		this->Disconnect(user, reason);
 	}
+}
+
+void ClientManager::Part(User* skip, const std::string& login, const std::string& channel)
+{
+     Channel* chan = Kernel->Channels->Find(channel);
+
+     if (!chan)
+     {
+         return;
+     }
+
+     UserVector FoundLogins = Kernel->Clients->FindLogin(login);
+
+     for (UserVector::iterator o = FoundLogins.begin(); o != FoundLogins.end(); ++o)
+     {
+           User* user = *o;
+
+           if (user == skip)
+           {
+                continue;
+           }
+
+           chan->PartUser(user);
+     }
+}
+
+void ClientManager::Join(User* skip, const std::string& login, const std::string& channel)
+{
+     UserVector FoundLogins = Kernel->Clients->FindLogin(login);
+
+     for (UserVector::iterator o = FoundLogins.begin(); o != FoundLogins.end(); ++o)
+     {
+           User* user = *o;
+
+           if (user == skip)
+           {
+             continue;
+           }
+
+           LocalUser* localuser = IS_LOCAL(user);
+
+           if (localuser)
+           {
+                 Channel::JoinUser(false, localuser, channel, true);
+           }
+     }
 }

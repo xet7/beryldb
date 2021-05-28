@@ -46,19 +46,104 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 		Module* m = i->second;
 		Version V = m->GetDescription();
 
+                bool is_core = false;
+
 		if (IS_LOCAL(user) && user->IsAdmin())
 		{
 			std::string flags("VCO");
 			size_t pos = 0;
 	
-			for (int mult = 2; mult <= VF_OPTCOMMON; mult *= 2, ++pos)
+			for (int mult = 1; mult <= VF_OPTCOMMON; mult *= 2, ++pos)
 			{
 				if (!(V.Flags & mult))
 				{
 					flags[pos] = '-';
 				}
-			}
+                                else
+                                {
+                                        if (mult == VF_CORE && is_core == false)
+                                        {
+                                             is_core = true;
+                                        }
+                                }
+                        }
+                        
+                        if (is_core)
+                        {
+                              continue;
+                        }
 
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+		}
+		else
+		{
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+		}
+	}
+	
+	user->SendRemoteProtocol(BRLD_END_OF_MODLIST, "End of MODULES list");
+	return SUCCESS;
+}
+
+CommandCoreModules::CommandCoreModules(Module* parent) : ServerTargetCommand(parent, "COREMODULES")
+{
+	syntax = "[<server>]";
+}
+
+COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
+{
+	bool for_us = (parameters.empty() || engine::equals(parameters[0], Kernel->Config->ServerName));
+
+	if ((!for_us) || (!IS_LOCAL(user)))
+	{
+		if (!user->IsAdmin())
+		{
+			user->SendProtocol(BRLD_ALERT, "Access denied.");
+			return FAILED;
+		}
+
+		if (!for_us)
+		{
+			return SUCCESS;
+		}
+	}
+
+        user->SendRemoteProtocol(BRLD_BEGIN_OF_MODLIST, "Begin of MODULES list");
+
+	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
+
+  	for (ModuleHandler::ModuleMap::const_iterator i = mods.begin(); i != mods.end(); ++i)
+	{
+		Module* m = i->second;
+		Version V = m->GetDescription();
+		
+		bool is_core = false;
+		
+		if (IS_LOCAL(user) && user->IsAdmin())
+		{
+			std::string flags("VCO");
+			size_t pos = 0;
+	
+			for (int mult = 1; mult <= VF_OPTCOMMON; mult *= 2, ++pos)
+			{
+				if (!(V.Flags & mult))
+				{
+					flags[pos] = '-';
+				}
+				else
+				{
+		                        if (mult == VF_CORE && is_core == false)
+		                        {
+	        	                     is_core = true;
+	                	        }
+	                        }
+			}
+			
+			if (!is_core)
+			{
+			      continue;
+			}
+			
 			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else

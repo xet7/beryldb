@@ -30,6 +30,7 @@ COMMAND_RESULT CommandLoadmodule::Handle(User* user, const Params& parameters)
 {
         if (Kernel->Modules->Load(parameters[0]))
         {
+                sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
                 user->SendProtocol(BRLD_MOD_LOADED, parameters[0], Daemon::Format("Module %s loaded.", parameters[0].c_str()).c_str());
                 return SUCCESS;
         }
@@ -70,7 +71,8 @@ COMMAND_RESULT CommandUnloadmodule::Handle(User* user, const Params& parameters)
        
        if (InUse && Kernel->Modules->Unload(InUse))
        {
-             user->SendProtocol(BRLD_MOD_UNLOAD, parameters[0], Daemon::Format("Module %s unloaded.", parameters[0].c_str()).c_str());          
+              sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
+              user->SendProtocol(BRLD_MOD_UNLOAD, parameters[0], Daemon::Format("Module %s unloaded.", parameters[0].c_str()).c_str());          
        }
        else
        {

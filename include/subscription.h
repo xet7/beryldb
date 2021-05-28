@@ -20,8 +20,8 @@ class Externalize Subscription : public Expandable, public brld::node_list_node<
   public:
 
 	/* 
-	 * boolean that indicates whether a given join is a product
-	 * of the autojoin list.
+	 * from_connect: boolean that indicates whether this 
+	 * join is the result of the autojoin helper.
 	 */
 	 
 	bool from_connect;

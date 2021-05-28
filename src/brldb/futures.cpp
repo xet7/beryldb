@@ -43,7 +43,7 @@ signed int FutureManager::Add(std::shared_ptr<Database> database, signed int sch
               }
         }
 
-        if (FutureManager::TriggerTIME(database, key, select) > 0)
+        if (FutureManager::GetTIME(database, key, select) > 0)
         {
               FutureManager::Delete(database, key, select);
         }
@@ -187,7 +187,7 @@ bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& 
         return true;
 }
 
-signed int FutureManager::TriggerTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
         FutureMap& futures = Kernel->Store->Futures->GetFutures();
 
@@ -206,7 +206,7 @@ signed int FutureManager::TriggerTIME(std::shared_ptr<Database> database, const 
 
 signed int FutureManager::GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
-      return FutureManager::TriggerTIME(database, key, select);
+      return FutureManager::GetTIME(database, key, select);
 }
 
 FutureMap& FutureManager::GetFutures()

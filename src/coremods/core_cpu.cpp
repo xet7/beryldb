@@ -33,6 +33,12 @@ class ModuleCoreCPU : public Module
               Kernel->Interval = 20;
         }
         
+        void OnUnloadModule(Module* module)
+        {	
+              Kernel->Lock = false;
+              Kernel->Interval = 300;
+        }
+        
         void Update()
         {
               rusage R;

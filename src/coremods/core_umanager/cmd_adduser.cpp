@@ -58,7 +58,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Add(newlogin, pass))
         {
-                user->SendProtocol(BRLD_USER_ADD, newlogin, "User added.");
+                user->SendProtocol(BRLD_USER_ADD, newlogin, PROCESS_OK);
         }
 
         return SUCCESS;
@@ -102,8 +102,8 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Remove(newlogin))
         {
-                user->SendProtocol(BRLD_LOGIN_DEL, newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
-                SessionManager::DisconnectAll(newlogin);
+                user->SendProtocol(BRLD_LOGIN_DEL, newlogin, PROCESS_OK);
+                ClientManager::DisconnectAll(newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
         }
 
         return SUCCESS;
@@ -121,6 +121,8 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         MMapTuple tpl = MapsHelper::SearchHesh(TABLE_USERS, "userlogin");
         DualMMap users = std::get<1>(tpl);
         
+        user->SendProtocol(BRLD_USER_LIST_BEGIN, counter, "BEGIN of LISTUSERS list.");
+        
         for (DualMMap::iterator i = users.begin(); i != users.end(); i++)
         {
                 counter++;
@@ -128,7 +130,7 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_USER_LIST, counter, entry, Daemon::Format("%i: %s", counter, entry.c_str()).c_str());
         }
         
-        user->SendProtocol(BRLD_USER_LIST_END, counter, "End of LISTUSERS list.");
+        user->SendProtocol(BRLD_USER_LIST_END, counter, Daemon::Format("End of LISTUSERS list (%u)", counter).c_str());
         
         return SUCCESS;
 }
@@ -145,6 +147,8 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         MMapTuple tpl = MapsHelper::SearchHesh(TABLE_ADMIN, "flags");
         DualMMap users = std::get<1>(tpl);
         
+        user->SendProtocol(BRLD_ADMIN_LIST_BEGIN, counter, "BEGIN of LISTADMINS list.");
+
         for (DualMMap::iterator i = users.begin(); i != users.end(); i++)
         {
                 counter++;
@@ -152,7 +156,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_USER_LIST, counter, entry, Daemon::Format("%i: %s", counter, entry.c_str()).c_str());
         }
         
-        user->SendProtocol(BRLD_USER_LIST_END, counter, "End of LISTADMINS list.");
+        user->SendProtocol(BRLD_ADMIN_LIST_END, counter, Daemon::Format("End of LISTADMINS list (%u)", counter).c_str());
         
         return SUCCESS;
 }

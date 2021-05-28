@@ -34,7 +34,6 @@ enum QUERY_TYPE
     TYPE_NTOUCH = 14,
     TYPE_TCOUNT = 15,
     TYPE_CONCAT =  16,
-    TYPE_SCONCAT = 17,
     TYPE_SETNX	= 18,
     TYPE_SETTX = 19,
     TYPE_LPOS = 20,
@@ -156,7 +155,10 @@ class Externalize query_base
             this->finished  = true;
         }
         
-        query_base(DBL_CODE base) : Lock(false), started(0), core(false), subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
+        query_base(DBL_CODE base) : Lock(false), started(0), core(false), 
+                                    subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), 
+                                    offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), 
+                                    type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
         {
         
         }
@@ -170,6 +172,18 @@ class Externalize query_base
         
         virtual void Run() = 0;
 
+};
+
+class Externalize swapdb_query : public query_base
+{
+    public:
+
+        swapdb_query() : query_base(DBL_TYPE_SWAPDB)
+        {
+
+        }
+
+        void Run();
 };
 
 class Externalize lfind_query : public query_base
@@ -526,6 +540,18 @@ class Externalize sflush_query  : public query_base
         void Run();
 };
 
+class Externalize geo_add : public query_base
+{
+    public:
+
+        geo_add() : query_base(DBL_TYPE_GEOADD)
+        {
+
+        }
+
+        void Run();
+};
+
 class Flusher
 {
     public:
@@ -586,4 +612,7 @@ class Flusher
         static void LSearch(User* user, std::shared_ptr<query_base> query);
 
         static void LFind(User* user, std::shared_ptr<query_base> query);
+
+        static void SwapDB(User* user, std::shared_ptr<query_base> query);
+        
 };

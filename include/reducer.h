@@ -49,10 +49,21 @@ class Externalize ActionHandler : public safecast<ActionHandler>
 
  public:
 
+        /* 
+         * Adds a promise action to be executed during
+         * next cycle. 
+         *
+         * @parameters:
+	 *
+	 *         · PromiseAction: Inheriting class.
+         */    
+         
 	void AddAction(PromiseAction* item) 
 	{ 
 		this->list.push_back(item); 
 	}
+	
+	/* Executes all pending promises. */
 
 	void Run();
 };

@@ -38,7 +38,6 @@ class CommandCommands : public Command
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-
 class CommandModules : public ServerTargetCommand
 {
    public:
@@ -48,6 +47,14 @@ class CommandModules : public ServerTargetCommand
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandCoreModules : public ServerTargetCommand
+{
+   public:
+
+        CommandCoreModules(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
 
 class CommandTime : public ServerTargetCommand
 {
@@ -56,6 +63,15 @@ class CommandTime : public ServerTargetCommand
 	CommandTime(Module* parent);
 	
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
+
+class CommandEpoch:  public ServerTargetCommand
+{
+ public:
+
+        CommandEpoch(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 
@@ -113,3 +129,11 @@ class CommandWhoami : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandAgent : public Command
+{
+ public:
+
+        CommandAgent(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

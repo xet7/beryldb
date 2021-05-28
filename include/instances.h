@@ -61,7 +61,8 @@ struct Externalize connect_config : public refcountbase
 	std::string name;
 	
 	std::string host;
-
+	
+	/* Connecting port */
 	
 	brld::flat_set<int> ports;
 	
@@ -85,14 +86,19 @@ struct Externalize connect_config : public refcountbase
 };
 
 /*
- * class User keeps the information of a given user.
- * Data about an user may include time logged in,
- * file descriptors, current database and more.
+ * Class User maintains all information of a given user.
+ * 
+ * Information about an user varies, but it can be: time logged in,
+ * file descriptors, current database and pending queries, etc.
  */
 
 class Externalize User : public Expandable
 {
-  
+   /* 
+    * DataFlush needs to access this class in order to
+    * retrieve pending queries and notifications. 
+    */
+    
    friend class DataFlush;
    
    private:
@@ -115,6 +121,8 @@ class Externalize User : public Expandable
 	
  public:
 
+ 	bool Blocked;
+ 	
 	class for_each_neighbor_handler
 	{
  	   public:
@@ -126,9 +134,11 @@ class Externalize User : public Expandable
 
         bool Paused;
 	
+	/* Time since logged. */
+	
 	time_t age;
 	
-	/* When this connection was created. */
+	/* Time at which this connection was established. */
 
 	time_t connected;
 
@@ -137,6 +147,8 @@ class Externalize User : public Expandable
 	/* login this user is using to access the server. */
 
 	std::string login;
+	
+	/* Time at which this user was logged. */
 
 	time_t logged;
 	
@@ -146,8 +158,25 @@ class Externalize User : public Expandable
 
 	std::string instance;
 	
+        /* 
+         * Sets quit flag to true or false.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: User is either disconnecting or not.
+         */    
+         	
 	void SetQuit(bool flag);
 	
+        /* 
+         * Checks whether this user is disconnecting.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is disconnecting.
+         *         · False: Unable to disconnect.
+         */    
+         	
 	bool IsQuitting();
 	
 	void SetLock(bool flag);
@@ -164,9 +193,18 @@ class Externalize User : public Expandable
 	
 	Server* server;
 	
+	/* User's session. */
+	
 	std::shared_ptr<Session> session;
 
-	/* Returns true if the user has 'can_admin' flags. */
+        /* 
+         * Checks whether user has 'r' flags (can_admin).
+         *
+         * @return:
+ 	 *
+         *         · True: User has 'r' flags.
+         *         · False: User is not an admin.
+         */    	
 	
 	bool IsAdmin();
 
@@ -352,7 +390,7 @@ class Externalize User : public Expandable
 	bool Serialize(Serializable::Data& data) ;
 };
 
-class Externalize UserSockets : public StreamSocket
+class Externalize InstanceStream : public StreamSocket
 {
  private:
 
@@ -362,7 +400,7 @@ class Externalize UserSockets : public StreamSocket
 
 	LocalUser* const user;
 
-	UserSockets(LocalUser* me) : StreamSocket(StreamSocket::SS_USER), checked_until(0), user(me)
+	InstanceStream(LocalUser* me) : StreamSocket(StreamSocket::SS_USER), checked_until(0), user(me)
 	{
 
 	}
@@ -371,11 +409,7 @@ class Externalize UserSockets : public StreamSocket
 	bool OnSetEndPoint(const engine::sockets::sockaddrs& local, const engine::sockets::sockaddrs& remote) ;
 	void OnError(LiveSocketError error) ;
 
-	
-	void AddWriteData(const std::string &data);
-
-	
-	void swap_internal(UserSockets& other);
+	void swap_internal(InstanceStream& other);
 };
 
 typedef unsigned int sent_id;
@@ -394,11 +428,12 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
  public:
 
 	LocalUser(int fd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
+
 	LocalUser(int fd, const std::string& uuid, Serializable::Data& data);
 
-	DiscardResult discard() ;
+	DiscardResult discard();
 
-	UserSockets usercon;
+	InstanceStream usercon;
 
 	ProtocolTrigger::Serializer* serializer;
 	
@@ -413,7 +448,6 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
 	
 	engine::sockets::sockaddrs server_sa;
 
-	
 	unsigned int lastping:1;
 
 	unsigned int exempt:1;

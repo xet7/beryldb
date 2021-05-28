@@ -46,7 +46,6 @@ enum DBL_CODE
     DBL_TYPE_DBSIZE		=		31,
     DBL_QUERY_LARGE		=		32,
     DBL_INTERRUPT		=		33,
-    DBL_NO_ENTRY		=		34,
     DBL_TYPE_LPOP_ALL		=		35,
     DBL_TYPE_ADVGET		=		36,
     DBL_TYPE_GETDEL		=		37,
@@ -58,5 +57,7 @@ enum DBL_CODE
     DBL_TYPE_KSEARCH		=		43,
     DBL_TYPE_LSEARCH		=		44,
     DBL_TYPE_LFIND		=		45,
-    DBL_TYPE_HQUERY		=		46
+    DBL_TYPE_HQUERY		=		46,
+    DBL_TYPE_SWAPDB    		=		47,
+    DBL_TYPE_GEOADD		=		48
 };

@@ -213,14 +213,6 @@ class CommandConcat : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandSConcat : public Command 
-{
-    public: 
-
-        CommandSConcat(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandAppend : public Command 
 {

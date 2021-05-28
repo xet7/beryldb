@@ -29,6 +29,23 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& new_select = parameters[1];
 
+       if (!is_number(new_select))
+       {
+                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+       }
+
+       if (!is_positive_number(new_select))
+       {
+                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                return FAILED;
+       }
+
+       if (!Daemon::CheckRange(user, new_select, "Must be a value between 1 and 100", 1, 100))
+       {
+               return FAILED;
+       }
+
        KeyHelper::Move(user, user->current_db, user->select, key, new_select);
        return SUCCESS;
 }

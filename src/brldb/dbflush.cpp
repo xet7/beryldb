@@ -112,18 +112,40 @@ void DataFlush::GetResults()
                         
                         DataFlush::mute.unlock();
                         
-                        if (signal->access == DBL_NOT_FOUND)
+                        switch (signal->access)
                         {
-                              DataFlush::NotFound(user, signal);
-                        }
-                        else
-                        {
-                              DataFlush::Flush(user, signal);
+                             case DBL_NOT_FOUND:
+                             
+                                     DataFlush::NotFound(user, signal);
+                             
+                             break;
+                             
+                             case DBL_MISS_ARGS:
+                             
+                                    DataFlush::MissArgs(user, signal);
+                             
+                             break;
+                             
+                             case DBL_ENTRY_EXISTS:
+        
+                                     DataFlush::EntryExists(user, signal);
+                             
+                             break;
+                             
+                             case DBL_STATUS_BROKEN:
+                             
+                                     DataFlush::StatusFailed(user, signal);
+                            break;
+                            
+                            default:
+                             
+                               DataFlush::Flush(user, signal);
                         }
                         
                         if (user)
                         {
                                 user->SetLock(false);
+                                user->Blocked = false;
                         }
 
                         signal.reset();
@@ -246,7 +268,8 @@ void DataFlush::Process(User* user, std::shared_ptr<query_base> signal)
       
       if (!ToUse)
       {
-            user->SetLock(true);
+            user->SetLock(false);
+            user->pending.clear();
             return;
       }
 
@@ -347,12 +370,12 @@ void DataThread::Process()
 
                       while (queue.empty())
                       {
-                          m_cv.wait(lk);
+                            m_cv.wait(lk);
                       }
 
                       if (queue.empty())
                       {
-                          continue;
+                            continue;
                       }
 
                       signal = queue.front();
@@ -429,9 +452,12 @@ void DataThread::Process()
                           request->Lock = true;
 
                           /* Executes signal request. */
-
-                          request->Run();
-
+                          
+                          if (request->Check())
+                          {
+                              request->Run();
+                          }
+                          
                           request->Lock = false;
 
                           if (!request->format.empty())
@@ -447,9 +473,9 @@ void DataThread::Process()
  
                                  DataFlush::AttachResult(request);
                           }
+                          
+                          break;
                     }
-
-                    break;
 
                     default:
                     {
@@ -460,7 +486,6 @@ void DataThread::Process()
               /* Thread is no longer busy. */
 
               this->SetStatus(false);
-              
         }
 }
 

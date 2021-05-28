@@ -37,7 +37,6 @@ class CoreModKeys : public Module
         CommandNTouch cmdntouch;
         CommandTCount cmdtcount;
         CommandConcat cmdconcat;
-        CommandSConcat cmdsconcat;
         CommandAppend cmdappend;
         CommandSetNX cmdsetnx;
         CommandSetTX cmdsettx;
@@ -64,7 +63,6 @@ class CoreModKeys : public Module
                         cmdntouch(this),
                         cmdtcount(this),
                         cmdconcat(this),
-                        cmdsconcat(this),
                         cmdappend(this),
                         cmdsetnx(this),
                         cmdsettx(this),
@@ -76,7 +74,7 @@ class CoreModKeys : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides commands related to keys, such as SET, DEL and GET.", VF_BERYLDB);
+                return Version("Provides commands related to keys, such as SET, DEL and GET.", VF_BERYLDB|VF_CORE);
         }
 };
 

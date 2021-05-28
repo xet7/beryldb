@@ -69,14 +69,6 @@ class CommandFResetAll : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandFKey : public Command 
-{
-    public: 
-
-        CommandFKey(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandFValue : public Command 
 {
@@ -92,6 +84,15 @@ class CommandFutureCount : public Command
     public: 
 
         CommandFutureCount(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandFutureAT : public Command 
+{
+    public: 
+
+        CommandFutureAT(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

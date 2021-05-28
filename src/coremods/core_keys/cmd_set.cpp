@@ -123,7 +123,6 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-
 CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
 {
          syntax = "<key> <dest key>";

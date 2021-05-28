@@ -58,7 +58,7 @@ class ModulePartAll : public Module
 
         Version GetDescription()
         {
-                return Version("Provides PARTALL command.", VF_BERYLDB|VF_CORE);
+                return Version("Provides PARTALL command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 

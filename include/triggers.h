@@ -229,7 +229,7 @@ class Protocols::NoChannel : public Numeric::Numeric
 	NoChannel(const std::string& chan) : Numeric(ERR_NO_CHAN)
 	{
 		push(chan.empty() ? "*" : chan);
-		push("Channel does not exists");
+		push(PROCESS_NULL);
 	}
 };
 
@@ -240,6 +240,6 @@ class Protocols::NoInstance : public Numeric::Numeric
 	NoInstance(const std::string& instance) : Numeric(ERR_NO_INSTANCE)
 	{
 		push(instance.empty() ? "*" : instance);
-		push("No such instance");
+		push(PROCESS_NULL);
 	}
 };

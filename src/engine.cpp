@@ -123,7 +123,6 @@ void Daemon::DeletePID()
 
 void Daemon::SavePID(bool exitonfail)
 {
-
         if (!Kernel->Config->usercmd.writepid)
         {
                 slog("STARTUP", LOG_DEFAULT, "--nopid specified on command line; PID file not written.");
@@ -215,20 +214,6 @@ void Daemon::DefaultGenRandom(char* output, size_t max)
 		output[i] = random();
         }
 }
-
-void Daemon::TellThat(std::string& who, const std::string& msg, int rpl)
-{
-        User* user = NULL;
-
-        user = Kernel->Clients->FindInstance(who);
-
-        if (!user)
-        {
-                return;
-        }
-
-        user->SendProtocol(rpl, msg);
-}   
 
 void Daemon::SnapshotStats()
 {
@@ -581,3 +566,17 @@ bool Daemon::CheckRange(User* user, const std::string& value, const std::string&
      user->SendProtocol(ERR_INVALID_RANGE, value, reason.c_str());
      return false;
 }
+
+void Dispatcher::TellThat(std::string& who, const std::string& msg, int rpl)
+{
+        User* user = NULL;
+
+        user = Kernel->Clients->FindInstance(who);
+
+        if (!user)
+        {
+                return;
+        }
+
+        user->SendProtocol(rpl, msg);
+}   

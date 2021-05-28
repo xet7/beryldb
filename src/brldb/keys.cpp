@@ -33,12 +33,6 @@ namespace
 
 void append_query::Run()
 {
-        if (!this->Check())
-        {
-                this->access_set(DBL_STATUS_BROKEN);
-                return;
-        }
-
         if (this->key.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
@@ -48,17 +42,17 @@ void append_query::Run()
         const std::string& where_query = this->format;
         
         std::string dbvalue;
-        rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+        rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
         if (fstatus.ok())
         {
                 this->response = to_string(dbvalue);
                 this->response.append(this->value);
-                this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, to_bin(this->response));
         }
         else
         {
-                this->access_set(DBL_STATUS_FAILED);
+                this->access_set(DBL_NOT_FOUND);
                 return;
         }
         
@@ -70,156 +64,142 @@ void Flusher::Append(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-                user->SendProtocol(BRLD_FLUSH, query->type, query->key, query->response);
-        }
-        else
-        {
-                user->SendProtocol(ERR_FLUSH, query->key, UNDEF_KEY);
+                user->SendProtocol(BRLD_QUERY_OK, query->type, query->key, Daemon::Format("\"%s\"", query->response.c_str()).c_str());
         }
 }
 
 void advget_query::Run()
 {    
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
-    if (this->key.empty())
-    {
+      if (this->key.empty())
+      {
             this->access_set(DBL_MISS_ARGS);
             return;
-    }
+      }
 
-    const std::string& where_query = this->format;
+      const std::string& where_query = this->format;
     
-    std::string dbvalue;
-    rocksdb::Status fstatus = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+      std::string dbvalue;
+      rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
-    if (fstatus.ok())
-    {
-           this->response = to_string(dbvalue);
-    }
-    else
-    {
-           this->access_set(DBL_STATUS_FAILED);
-           return;
-    }
+      if (fstatus.ok())
+      {
+            this->response = to_string(dbvalue);
+      }
+      else
+      {
+            this->access_set(DBL_NOT_FOUND);
+            return;
+      }
 
-    if (this->qtype == TYPE_RENAME)
-    {
-           const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
-           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
-           
-           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
-           
-           if (ttl != -1)
-           {
-                Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
-                Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-           }
-
-           this->access_set(DBL_STATUS_OK);
-           this->SetOK();
-    }
-    
-    if (this->qtype == TYPE_RENAMENX)
-    {
-           const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), newdest, &dbvalue);
-           
-           if (fstatus2.ok())
-           {
-                  this->access_set(DBL_ENTRY_EXISTS);
-                  return;           
-           }
-           
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
-           this->database->db->Delete(rocksdb::WriteOptions(), where_query);
-           
-           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
-           
-           if (ttl != -1)
-           {
-                Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
-                Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-           }
-
-           this->access_set(DBL_STATUS_OK);
-           this->SetOK();
-           
-        
-    }
-    if (this->qtype == TYPE_COPY)
-    {
-           const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
-           this->database->db->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
-
-           signed int ttl = ExpireManager::TriggerTIME(this->database, key, this->select_query);
-           
-           if (ttl != -1)
-           {
-               Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
-           }
-
-           this->access_set(DBL_STATUS_OK);
-           this->SetOK();
-    }
-    
-    if (this->qtype == TYPE_GETDEL)
-    {
-          Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-          this->database->db->Delete(rocksdb::WriteOptions(), where_query);
-          this->access_set(DBL_STATUS_OK);
-          this->SetOK();
-          
-    }
-    
-    if (this->qtype == TYPE_GETSET)
-    {
-           if (this->value.empty())
-           {
-                this->access_set(DBL_MISS_ARGS);
-                return;
-           }
-           
-           this->response = to_string(dbvalue);
-           
-           this->database->db->Put(rocksdb::WriteOptions(), where_query, to_bin(this->value));
-           this->access_set(DBL_STATUS_OK);
-           this->SetOK();
-    }
-    
-    if (this->qtype == TYPE_GETRANGE)
-    {
-            if (from < 0 || to < 0)
-            {
-                 if ((long unsigned int)this->from > this->response.length())
+      switch (this->qtype)
+      {
+          case TYPE_RENAME:
+          {
+                const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
+                
+                signed int ttl = ExpireManager::GetTIME(this->database, key, this->select_query);
+                
+                if (ttl != -1)
                 {
-                     this->from = this->response.length();
+                        Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                        Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
                 }
 
-                this->response = this->response.erase(abs(this->from), abs(this->to));
-            }
-            else
-            {
-                if ((long unsigned int)this->from > this->response.length())
+                this->SetOK();
+                return;
+          }
+
+          case TYPE_RENAMENX:
+          {
+                const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
+                rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), newdest, &dbvalue);
+                
+                if (fstatus2.ok())
                 {
-                     this->from = this->response.length();
+                        this->access_set(DBL_ENTRY_EXISTS);
+                        return;           
                 }
                 
-                this->response = this->response.substr(abs(this->from), abs(this->to));
-            }
-            
-        this->access_set(DBL_STATUS_OK);
-        this->SetOK();
-            
-    }
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
+                
+                signed int ttl = ExpireManager::GetTIME(this->database, key, this->select_query);
+                
+                if (ttl != -1)
+                {
+                        Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                        Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+                }
 
-    this->access_set(DBL_STATUS_OK);
-    this->SetOK();
+                this->SetOK();
+                return;
+          }
+
+          case TYPE_COPY:
+          {
+                const std::string& newdest = this->int_keys + this->select_query + ":" + to_bin(this->value);
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, to_bin(this->response));
+
+                signed int ttl = ExpireManager::GetTIME(this->database, key, this->select_query);
+                
+                if (ttl != -1)
+                {
+                         Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                }
+
+                this->SetOK();
+                return;     
+          }
+
+          case TYPE_GETDEL:
+          {
+                Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where_query);
+                this->SetOK();
+                return;     
+          }
+
+          case TYPE_GETSET:
+          {
+                 if (this->value.empty())
+                {
+                        this->access_set(DBL_MISS_ARGS);
+                        return;
+                }
+           
+                this->response = to_string(dbvalue);
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, to_bin(this->value));
+                this->SetOK();
+                return;    
+          }
+
+          case TYPE_GETRANGE:
+          {
+                if (from < 0 || to < 0)
+                {
+                        if ((long unsigned int)this->from > this->response.length())
+                        {
+                                  this->from = this->response.length();
+                        }
+
+                        this->response = this->response.erase(abs(this->from), abs(this->to));
+                }
+                else
+                {
+                        if ((long unsigned int)this->from > this->response.length())
+                        {
+                                  this->from = this->response.length();
+                        }
+                        
+                        this->response = this->response.substr(abs(this->from), abs(this->to));
+                }
+                
+                this->SetOK();
+                return;
+          }
+      }
 }
 
 void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
@@ -231,11 +211,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                   if (query->finished)
                   {
-                        user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
+                        user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_GET, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
                   }
                   else
                   {
-                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, UNDEF_KEY);
+                       user->SendProtocol(ERR_QUERY, DBL_TYPE_GET, query->key, PROCESS_NULL);
                   }
                 
                   return;
@@ -245,11 +225,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, query->response);
+                        user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_GET, query->key, query->response);
                 }
                 else
                 {
-                       user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, 0);
+                       user->SendProtocol(ERR_QUERY, DBL_TYPE_GET, query->key, 0);
                 }
                 
                 return;
@@ -259,11 +239,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
+                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_FALSE, query);
                 }
 
                 return;
@@ -275,11 +255,11 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
             {
                 if (query->finished)
                 {
-                        Dispatcher::Smart(query->user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_NONE, TYPE_RENAME);
+                        Dispatcher::Smart(query->user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
                 }
                 else
                 {
-                       Dispatcher::Smart(query->user, 0, ERR_FLUSH, "0", query->key, DBL_NONE, TYPE_RENAME);
+                       Dispatcher::Smart(query->user, 0, ERR_QUERY, PROCESS_FALSE, query);
                 }
 
                 return;
@@ -289,86 +269,62 @@ void Flusher::AdvancedGET(User* user, std::shared_ptr<query_base> query)
 
 void touch_query::Run()
 {
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
-    
-    engine::space_node_stream tlist(this->key);
-    std::string token;
+        if (this->key.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
         
-    unsigned int touch_count = 0;
-    unsigned int not_found = 0;
-    unsigned int tcount = 0;
-    unsigned int total_counter = 0;
-    
-    engine::space_node_stream clist(this->key);
-    
-    while (clist.items_extract(token))
-    {
-        total_counter++;
-    }
-    
-    std::string concat;
-    
-    unsigned int iter = 0;
+        engine::space_node_stream tlist(this->key);
+        std::string token;
+                
+        unsigned int touch_count = 0;
+        unsigned int not_found = 0;
+        unsigned int tcount = 0;
+        unsigned int total_counter = 0;
+        
+        engine::space_node_stream clist(this->key);
+        
+        while (clist.items_extract(token))
+        {
+                total_counter++;
+        }
+        
+        std::string concat;
+        unsigned int iter = 0;
 
-    while (tlist.items_extract(token))
-    {	
-            iter++;
-            std::string tformat = this->int_keys + this->select_query + ":" + to_bin(token);
+        while (tlist.items_extract(token))
+        {	
+                iter++;
+                std::string tformat = this->int_keys + this->select_query + ":" + to_bin(token);
 
-            std::string dbvalue;
-            rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), tformat, &dbvalue);
+                std::string dbvalue;
+                rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), tformat, &dbvalue);
 
-            if (fstatus2.ok())
-            {
-                    touch_count++;
-                    
-                    if (this->qtype == TYPE_TCOUNT)
-                    {
-                          tcount += to_string(dbvalue).length();
-                    }
-                    else if (this->qtype == TYPE_CONCAT)
-                    {
-                         concat.append(to_string(dbvalue)); 
-                    }
-                    else if (this->qtype == TYPE_SCONCAT)
-                    {
-                         concat.append(to_string(dbvalue));
-                         
-                         if (total_counter != iter) 
-                         {
-                              if (this->value.empty())
-                              {
-                                  concat.append(" ");
-                              }
-                              else
-                              {
-                                  concat.append(this->value);
-                              }
-                         }
-                    } 
-            }            
-            else
-            {
-                    not_found++;
-            }
-            
-    }
-    
-    this->response = concat;
-    this->id = tcount;
-    this->counter = touch_count;
-    this->counter2 = not_found;
-    this->SetOK();
+                if (fstatus2.ok())
+                {
+                        touch_count++;
+                        
+                        if (this->qtype == TYPE_TCOUNT)
+                        {
+                                tcount += to_string(dbvalue).length();
+                        }
+                        else if (this->qtype == TYPE_CONCAT)
+                        {
+                                concat.append(to_string(dbvalue)); 
+                        }
+                }            
+                else
+                {
+                        not_found++;
+                } 
+        }
+        
+        this->response = concat;
+        this->id = tcount;
+        this->counter = touch_count;
+        this->counter2 = not_found;
+        this->SetOK();
 }
 
 void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
@@ -377,24 +333,33 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
       {
               switch (query->qtype)
               {
+                   case TYPE_NONE:
+                   
+                          Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
+                          
+                  return;
+                   
                    case TYPE_NTOUCH:
-                          Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->counter2), convto_string(query->counter2), DBL_NONE, TYPE_NTOUCH);
+                          
+                          Dispatcher::Smart(user, query->counter2, BRLD_QUERY_OK, convto_string(query->counter2), query);
+                          
                    return;
                    
                    case TYPE_TCOUNT:
-                          Dispatcher::Smart(user, query->id, BRLD_FLUSH, convto_string(query->id), convto_string(query->id), DBL_NONE, TYPE_NTOUCH);
+                          
+                          Dispatcher::Smart(user, query->id, BRLD_QUERY_OK, convto_string(query->id), query);
+                          
                    return;
                    
                    case TYPE_CONCAT:
-                   case TYPE_SCONCAT:
                    {
                                if (query->counter > 0)
                                {
-                                      Dispatcher::Smart(user, query->counter, BRLD_FLUSH, convto_string(query->response), query->key, DBL_NONE, query->qtype);
+                                      Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()).c_str(), query);
                                }
                                else
                                {
-                                     Dispatcher::Smart(user, query->qtype, BRLD_FLUSH, UNDEF_KEY, query->key, DBL_NONE, query->qtype);
+                                     Dispatcher::Smart(user, query->qtype, BRLD_QUERY_OK, PROCESS_NULL, query);
                                }
                    } 
                    
@@ -406,17 +371,11 @@ void Flusher::Touch(User* user, std::shared_ptr<query_base> query)
               
     }
     
-    Dispatcher::Smart(query->user, query->qtype, ERR_FLUSH, UNKNOWN_ISSUE.c_str(), query->key, DBL_NONE, query->qtype);
+    Dispatcher::Smart(query->user, 0, ERR_QUERY, UNKNOWN_ISSUE.c_str(), query);
 }     
 
 void get_query::Run()
 {    
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
@@ -426,196 +385,200 @@ void get_query::Run()
     const std::string& where_query = this->format;
 
     std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
 
     if (fstatus2.ok())
     {
-        this->response = to_string(dbvalue);
+            this->response = to_string(dbvalue);
     }
 
-    if (this->qtype == TYPE_NONE)
+    switch (this->qtype)
     {
-            if (!fstatus2.ok())
+            case TYPE_NONE:
             {
-                this->access_set(DBL_STATUS_FAILED);
-                return;
-            }
-    }
-    
-    if (this->qtype == TYPE_LENGTH)
-    {
-            if (!fstatus2.ok())
-            {
-                this->access_set(DBL_STATUS_FAILED);
-                return;
+                if (!fstatus2.ok())
+                {
+                        this->access_set(DBL_NOT_FOUND);
+                        return;
+                }
+
+                break;
             }
 
-            this->length = convto_string(this->response.length());
-
-    }
-    else if (this->qtype == TYPE_EXIST || this->qtype == TYPE_EXPIRE || this->qtype == TYPE_SETEX || this->qtype == TYPE_EXPIREAT)
-    {
-        if (!this->response.empty())
-        {
-              this->exists = true;
-        } 
-        
-        if (this->qtype == TYPE_SETEX)
-        {
-               if (this->value.empty())
-               {
-                         this->access_set(DBL_MISS_ARGS);
-                         return;
-               }
-                      
-               const std::string& entry_value = to_bin(this->value);
-               this->database->db->Put(rocksdb::WriteOptions(), where_query, entry_value);
-        }
-        
-        this->data = 0;
-        
-        if ((this->qtype == TYPE_SETEX) || (this->exists && this->qtype == TYPE_EXPIRE) || (this->exists && this->qtype == TYPE_EXPIREAT))
-        {
-            bool epoch = false;
-            
-            if (this->qtype == TYPE_EXPIREAT)
+            case TYPE_LENGTH:
             {
-                    epoch = true;
+                        if (!fstatus2.ok())
+                        {
+                                this->access_set(DBL_NOT_FOUND);
+                                return;
+                        }
+
+                        this->length = convto_string(this->response.length());
+                        break;
             }
-            
-            signed int result = Kernel->Store->Expires->Add(this->database, this->id, this->key, this->select_query, epoch);
-            this->data = result;
-        }
+
+            case TYPE_EXIST:
+            case TYPE_EXPIRE:
+            case TYPE_SETEX:
+            case TYPE_EXPIREAT:
+            {
+                        if (!this->response.empty())
+                        {
+                                        this->exists = true;
+                        } 
+                        
+                        if (this->qtype == TYPE_SETEX)
+                        {
+                                if (this->value.empty())
+                                {
+                                                this->access_set(DBL_MISS_ARGS);
+                                                return;
+                                }
+                                        
+                                const std::string& entry_value = to_bin(this->value);
+                                this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_query, entry_value);
+                        }
+                        
+                        this->data = 0;
+                        
+                        if ((this->qtype == TYPE_SETEX) || (this->exists && this->qtype == TYPE_EXPIRE) || (this->exists && this->qtype == TYPE_EXPIREAT))
+                        {
+                                bool epoch = false;
+                                
+                                if (this->qtype == TYPE_EXPIREAT)
+                                {
+                                        epoch = true;
+                                }
+                                
+                                signed int result = Kernel->Store->Expires->Add(this->database, this->id, this->key, this->select_query, epoch);
+                                this->data = result;
+                        }
+
+                        break;
+            }
     }
-    
+ 
     this->SetOK();
 }
 
 void Flusher::Get(User* user, std::shared_ptr<query_base> query)
-{
-        if (query->qtype == TYPE_EXIST)
+{       
+        switch (query->qtype)
         {
-                user->SendProtocol(BRLD_EXISTS, DBL_TYPE_GET, query->key, query->exists);
-                return;
-        }
+                case TYPE_EXIST:
+                {
+                        Dispatcher::Smart(user, query->exists, BRLD_EXISTS, convto_string(query->exists), query);
+                        return;       
+                }
 
-        if (query->qtype == TYPE_LENGTH)
-        {
-                if (query->finished)
+                case TYPE_LENGTH:
                 {
-                    user->SendProtocol(BRLD_LENGTH, DBL_TYPE_GET, query->key, query->length);
-                }
-                else
-                {
-                    user->SendProtocol(ERR_EXPIRE, query->key, UNDEF_KEY);
-                }
-                
-                return;
-        }
+                        if (query->finished)
+                        {
+                                  Dispatcher::Smart(user, 1, BRLD_LENGTH, query->length, query);
+                        }
+                        else
+                        {
+                                Dispatcher::Smart(user, 0, BRLD_LENGTH, PROCESS_NULL, query);
+                        }   
 
-        if (query->qtype == TYPE_NONE)
-        {
-                if (query->finished)
-                {
-                    user->SendProtocol(BRLD_FLUSH, DBL_TYPE_GET, query->key, Daemon::Format("\"%s\"", query->response.c_str()));
+                        return;
                 }
-                else
+
+                case TYPE_NONE:
                 {
-                    user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, query->key, UNDEF_KEY);
-                    return;
+                        if (query->finished)
+                        {
+                               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()), query);
+                        }
+                        else
+                        {
+                              Dispatcher::Smart(user, 0, BRLD_QUERY_OK, PROCESS_NULL, query);
+                        }     
+
+                        return;      
                 }
-        }
-        
-        if (query->finished && (query->qtype == TYPE_EXPIRE || query->qtype == TYPE_SETEX || query->qtype == TYPE_EXPIREAT))
-        {
-              if (query->qtype == TYPE_EXPIRE || query->qtype == TYPE_SETEX || query->qtype == TYPE_EXPIREAT)
-              {
-                   if (query->data)
-                   {
-                           if (query->qtype == TYPE_EXPIREAT)
-                           {
-                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, PROCESS_OK);
-                           }
-                           else
-                           {
-                                   user->SendProtocol(BRLD_EXPIRE_ADD, query->key, PROCESS_OK);
-                           }
-                   }
-                   else
-                   {
-                           user->SendProtocol(ERR_EXPIRE, query->key, UNDEF_KEY);
-                   }
-                   
-              }
-              else
-              {
-                  user->SendProtocol(ERR_EXPIRE, query->key, UNABLE_EXPIRE);
-              }
-              
-              return;
+
+                case TYPE_EXPIREAT:
+                case TYPE_EXPIRE:
+                case TYPE_SETEX:
+                {
+                        if (query->finished)
+                        {
+                                        if (query->qtype == TYPE_EXPIRE || query->qtype == TYPE_SETEX || query->qtype == TYPE_EXPIREAT)
+                                        {
+                                                if (query->data)
+                                                {
+                                                        if (query->qtype == TYPE_EXPIREAT)
+                                                        {
+                                                                 Dispatcher::Smart(user, 1, BRLD_EXPIRE_ADD, PROCESS_OK, query);
+                                                        }
+                                                        else
+                                                        {
+                                                                Dispatcher::Smart(user, 1, BRLD_EXPIRE_ADD, PROCESS_OK, query);
+                                                        }
+                                                }
+                                                else
+                                                {
+                                                        Dispatcher::Smart(user, 0, ERR_EXPIRE, PROCESS_NULL, query);
+                                                }
+                                                
+                                        }
+                                        else
+                                        {
+                                                Dispatcher::Smart(user, 0, ERR_EXPIRE, PROCESS_NULL, query);
+                                        }    
+                        } 
+
+                        return;
+                }
         }
 }
 
 void move_query::Run()
 {    
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
+        if (format.empty() || select_query.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
+        
+        const std::string& current = this->format;
+        const std::string& newdb = this->int_keys + this->newkey + ":" + to_bin(this->key);
 
-    if (format.empty() || select_query.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
-    
-    const std::string& current = this->format;
-    const std::string& newdb = this->int_keys + this->newkey + ":" + to_bin(this->key);
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), current, &dbvalue);
 
-    std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), current, &dbvalue);
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
 
-    if (!fstatus2.ok())
-    {
-          this->access_set(DBL_STATUS_FAILED);
-          return;
-    }
+        signed int ttl = ExpireManager::GetTIME(database, key, this->select_query);
+        
+        if (ttl != -1)
+        {
+                Kernel->Store->Expires->Delete(database, this->key, this->select_query);
+                Kernel->Store->Expires->Add(database, ttl, this->key, this->newkey, true);          
+        }
 
-    signed int ttl = ExpireManager::TriggerTIME(database, key, this->select_query);
-    
-    if (ttl != -1)
-    {
-             Kernel->Store->Expires->Delete(database, this->key, this->select_query);
-             Kernel->Store->Expires->Add(database, ttl, this->key, this->newkey, true);          
-    }
-
-    this->database->db->Delete(rocksdb::WriteOptions(), current);
-    this->database->db->Put(rocksdb::WriteOptions(), newdb, dbvalue);
-    
-    this->SetOK();
+        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), current);
+        this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdb, dbvalue);
+        
+        this->SetOK();
 }
 
 void Flusher::Move(User* user, std::shared_ptr<query_base> query)
 {       
         if (query->finished)
         {
-             user->SendProtocol(BRLD_FLUSH, DBL_TYPE_SET, query->key, 1, PROCESS_OK);
-        }
-        else
-        {
-             user->SendProtocol(ERR_FLUSH, DBL_TYPE_SET, query->key, 0, NOT_FOUND_KEY);
+                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
 }
 
 void set_query::Run()
 {    
-    if (!this->Check())
-    {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-    }
-
     if (this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
@@ -625,128 +588,105 @@ void set_query::Run()
     const std::string& where = this->format;
     const std::string& entry_value = to_bin(this->value);
     
-    if (this->qtype == TYPE_SETNX)
+    switch (this->qtype)
     {
-        std::string dbvalue;
-        rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+            case TYPE_SETNX:
+            {
+                        std::string dbvalue;
+                        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
 
-        if (fstatus2.ok())
-        {
-            this->access_set(DBL_ENTRY_EXISTS);
-            return;
-        }
-    }
-    else if (this->qtype == TYPE_SETTX)
-    {
-           signed int ttl = ExpireManager::TriggerTIME(this->database, this->key, this->select_query);
-           
-           if (ttl != -1)
-           {
-                 Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
-                this->access_set(DBL_ENTRY_EXISTS);
-             return;                
-           }
-           
-    }
+                        if (fstatus2.ok())
+                        {
+                                 this->access_set(DBL_ENTRY_EXISTS);
+                                 return;
+                        }
+                        
+                        break;      
+            }
 
-    rocksdb::Status fstatus2 =  this->database->db->Put(rocksdb::WriteOptions(), where, entry_value);
-  
-    if (!fstatus2.ok())
-    {
-          this->access_set(DBL_STATUS_FAILED);
-          return;
-    }
-    
-    this->SetOK();
+            case TYPE_SETTX:
+            {
+                        signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
+           
+                        if (ttl != -1)
+                        {
+                                 Kernel->Store->Expires->Add(this->database, ttl, this->value, this->select_query, true);          
+                                 this->access_set(DBL_ENTRY_EXISTS);
+                        }   
+                        
+                        break;
+            }
+      }
+
+      rocksdb::Status fstatus2 =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where, entry_value);
+      this->SetOK();
 }
 
 void Flusher::Set(User* user, std::shared_ptr<query_base> query)
 {       
         if (query && !query->customreply.empty())
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, query->customreply, query->key, DBL_TYPE_SET);
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, query->customreply, query);
                return;
         }
         
         if (query->qtype == TYPE_SETNX || query->qtype == TYPE_SETTX)
         {
-             if (query->access == DBL_ENTRY_EXISTS)
-             {
-                    Dispatcher::Smart(user, 0, ERR_FLUSH, "0", query->key, DBL_TYPE_SET);
-             }
-             else
-             {
-                    Dispatcher::Smart(user, 1, BRLD_FLUSH, "1", query->key, DBL_TYPE_SET);
-             }
-             
-             return;
+              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
+              return;
         }
         
         if (query->finished)
         {
-              Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_SET);
+              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
         else
         {
-              Dispatcher::Smart(user, 1, BRLD_FLUSH, UNABLE_SET_KEY.c_str(), query->key, DBL_TYPE_SET);
+              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, UNABLE_SET_KEY.c_str(), query);
         }
 }
 
 void del_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
+        if (!this->Check())
+        {
+                return;
+        }
 
-    if (this->key.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
+        if (this->key.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
 
-    const std::string& where = this->format;
+        const std::string& where = this->format;
 
-    std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->db->Get(rocksdb::ReadOptions(), where, &dbvalue);
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
 
-    if (!fstatus2.ok())
-    {
-            this->access_set(DBL_NOT_FOUND);
-            return;
-    }
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
 
-    /* Deletes key in case it is expiring. */
-    
-    Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-    
-    rocksdb::Status auxstatus = this->database->db->Delete(rocksdb::WriteOptions(), where);
-    this->access_set(DBL_STATUS_OK);
-    
-    this->SetOK();
+        /* Deletes key in case it is expiring. */
+        
+        Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+        rocksdb::Status auxstatus = this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where);
+        this->SetOK();
 }
 
 void Flusher::Del(User* user, std::shared_ptr<query_base> query)
 {
         if (query->finished)
         {
-               Dispatcher::Smart(user, 1, BRLD_FLUSH, PROCESS_OK, query->key, DBL_TYPE_DEL);
-        }
-        else
-        {
-              Dispatcher::Smart(user, 0, ERR_FLUSH, NOT_FOUND_KEY, query->key, DBL_TYPE_DEL);
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
 }
 
 void find_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
-
     if (this->qtype != TYPE_RAKEY && this->key.empty())
     {
             this->access_set(DBL_MISS_ARGS);
@@ -756,7 +696,7 @@ void find_query::Run()
     std::string where = this->int_keys + this->select_query + ":" + this->key;
     std::string where_path = this->int_keys + this->select_query;
     
-    rocksdb::Iterator* it = this->database->db->NewIterator(rocksdb::ReadOptions());
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
     
     Args result;
     
@@ -768,16 +708,10 @@ void find_query::Run()
     
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if (this->user && this->user->IsQuitting())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
-                {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                      this->access_set(DBL_INTERRUPT);
+                      return;
                 }
                 
                 rawstring = it->key().ToString();
@@ -899,6 +833,11 @@ void find_query::Run()
 
     if (this->qtype == TYPE_RAKEY)
     {
+            if (aux_counter == 0)
+            {
+                    access_set(DBL_NOT_FOUND);
+            }
+            
             this->counter = aux_counter;
             this->SetOK();
             return;
@@ -917,26 +856,26 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
         {
              if (query->finished)
              {
-                 if (query->counter > 0)
-                 {
-                      user->SendProtocol(BRLD_FIND_ITEM, query->response, query->response);
-                 }   
-                 else
-                 {
-                      user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, UNABLE_MAP);
-                 }
+                        if (query->counter > 0)
+                        {
+                                Dispatcher::Smart(user, 1, BRLD_FIND_ITEM, query->response, query);
+                        }   
+                        else
+                        {
+                                Dispatcher::Smart(user, 0, ERR_QUERY, query->response, query);
+                        }
              }
              else
              {
-                     user->SendProtocol(ERR_FLUSH, DBL_TYPE_GET, "An error has occured.");
-             } 
+                      Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
+             }  
              
              return;
         }
 
         if (!query->finished)
         {
-                user->SendProtocol(ERR_FLUSH, DBL_TYPE_FIND, UNABLE_MAP);
+                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
                 return;
         }
         
@@ -955,18 +894,20 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
                 
         if (query->subresult == 1)
         {
-                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, query->key, "BEGIN of FIND list.");
+//                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, "BEGIN of FIND list.", query);
+                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 user->SendProtocol(BRLD_FIND_ITEM, DBL_TYPE_FIND, key, Daemon::Format("\"%s\"", key.c_str()));
+                 Dispatcher::Smart(user, 1, BRLD_FIND_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+//                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 

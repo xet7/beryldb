@@ -48,6 +48,8 @@ class Externalize SessionManager : public safecast<SessionManager>
 {
     public:
         
+        /* Constructor */
+        
         SessionManager();
         
         /* map of login and ptr to Session. */
@@ -69,20 +71,17 @@ class Externalize SessionManager : public safecast<SessionManager>
         void AttachExternal(const std::string& login, const std::string& flags);
         
         void Attach(User* user, const std::string& login, const std::string& flags);
-        
-        void Join(User* skip, const std::string& login, const std::string& chan);
-        void Part(User* skip, const std::string& login, const std::string& chan);
-        
-        /* Disconnects all users that are using a given login. */
-        
-        static void DisconnectAll(const std::string& login);
-                
+                        
         /* 
-         * Verifies if there are more users connected using this session,
+         * Verifies if there are logins connected using this session,
          * if not, this session is destroyed, otherwise is kept. 
-         */
+         * 
+         * @parameters:
+	 *
+	 *         · login: Login to check.
+         */    
            
-        void ShouldDestroy(const std::string& login);
+        void DetermineLifetime(const std::string& login);
 
         /* 
          * This function is typically used when a flag change takes place,
@@ -90,12 +89,12 @@ class Externalize SessionManager : public safecast<SessionManager>
          */
          
         void NotifyFlags(const std::string& login, const std::string& flags);
-
 };
 
 /* 
- * Caches user's login and password. This class is mostly
- * used when an user is logging in.
+ * This class manages an user's cache by storing login and password. 
+ * This class contains several functions related to user sessions, such as
+ * cache removal and adding.
  */
  
 class Externalize LoginCache : public safecast<LoginCache>
@@ -114,7 +113,6 @@ class Externalize LoginCache : public safecast<LoginCache>
 
         bool RemoveLastCache();
 
-
     public: 
     
         /* Session handler. */
@@ -125,22 +123,25 @@ class Externalize LoginCache : public safecast<LoginCache>
 
         LoginCache();
         
-        /* Adds a user pass key to the cache. */
+        /* 
+         * Adds a user pass key to the cache.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User to add.
+	 *         · password: Pass to add.
+         */            
         
-        void AddCache(const std::string& user, const std::string& pass);
-
-        /* Removes user from cache list. */
-        
-        void RemoveCache(const std::string& user);
+        void Add(const std::string& user, const std::string& pass);
 
         /* 
          * Checks whether a given user is in the cache.
          * 
          * @return:
          *
-         *  ·  1: User pass matches.
-         *  · -1: User found, but pass does not match.
-         *  ·  0: User not found.  
+         *      ·  1: User pass matches.
+         *      · -1: User found, but pass does not match.
+         *      ·  0: User not found.  
          */            
          
         signed int InCache(const std::string& user, const std::string& pass);
@@ -150,26 +151,31 @@ class Externalize LoginCache : public safecast<LoginCache>
          * 
          * @return:
          *
-         *  · true: User is in cache.
-         *  · false: User not present.
+         *     · True: User is in cache.
+         *     · False: User not present.
          */    
          
         bool InCache(const std::string& user);
         
         /* Removes all logins from cache. */
         
-        void ResetCache();
+        void Reset();
         
         /* Counts all items in the cache. */
         
-        unsigned int CountCache()
+        unsigned int Count()
         {
                 return this->logins.size();
         }
         
-        /* Removes a given user from the cache list. */
+        /* 
+         * Removes a given user from the cache list. 
+         *
+         * @parameters:
+	 *
+	 *         · login: Login to look for.
+         */            
         
         void Remove(const std::string& login);
-        
 };
 

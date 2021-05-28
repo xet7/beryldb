@@ -86,6 +86,7 @@ DBL_CODE ListHelper::Delete(const std::string& where, const std::string& entry, 
 void ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
+       user->Blocked = true;
        
        query->database = db;
        query->user = user;
@@ -104,6 +105,7 @@ void ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::strin
 void ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lsearch_query> query = std::make_shared<lsearch_query>();
+       user->Blocked = true;
 
        query->database = db;
        query->user = user;
@@ -122,6 +124,7 @@ void ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::str
 void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
+       user->Blocked = true;
 
        query->database = db;
        query->user = user;
@@ -139,6 +142,7 @@ void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string
 void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type, unsigned int index)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
+       user->Blocked = true;
 
        query->database = db;
        query->user = user;
@@ -157,6 +161,8 @@ void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::stri
 void ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();
+       user->Blocked = true;
+
        query->database = db;
        query->user = user;
        query->select_query = where;
@@ -181,6 +187,8 @@ void ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string
 void ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& select, const std::string& key, const std::string& value)
 {
        std::shared_ptr<lmove_query> query = std::make_shared<lmove_query>();
+       user->Blocked = true;
+
        query->database = db;
        query->user = user;
        query->select_query = where;
@@ -195,6 +203,7 @@ void ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::strin
 void ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry,  const std::string& value, bool onlyfirst)
 {
        std::shared_ptr<lpop_query> query = std::make_shared<lpop_query>();
+       user->Blocked = true;
 
        query->database = db;
        query->user = user;

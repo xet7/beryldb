@@ -14,7 +14,6 @@
 #include "beryl.h"
 #include "core_info.h"
 
-
 CommandMyChans::CommandMyChans(Module* parent) : Command(parent, "MYCHANS", 0, 0)
 {
 
@@ -48,7 +47,6 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
           return SUCCESS;
 }
 
-
 CommandChans::CommandChans(Module* parent) : Command(parent, "CHANS", 1, 1)
 {
           syntax = "<instance>";
@@ -62,7 +60,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
            
            if (!found)
            {
-                  user->SendProtocol(ERR_NO_INSTANCE, dest, "Instance not found.");
+                  user->SendProtocol(ERR_NO_INSTANCE, dest, PROCESS_NULL);
                   return FAILED;
            }
            

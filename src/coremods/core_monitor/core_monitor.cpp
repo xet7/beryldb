@@ -34,7 +34,7 @@ class CoreModuleMonitor : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides monitor-related functions.", VF_BERYLDB);
+                return Version("Provides monitor-related functions.", VF_BERYLDB|VF_CORE);
         }
 };
 

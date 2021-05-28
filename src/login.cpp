@@ -56,18 +56,7 @@ Session::Session() : can_admin(false)
 
 }
 
-void SessionManager::DisconnectAll(const std::string& login)
-{
-     UserVector logins = Kernel->Clients->FindLogin(login);
-
-     for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
-     {
-           User* user = *o;
-           Kernel->Clients->Disconnect(user, "User deleted.");
-     }
-}
-
-void SessionManager::ShouldDestroy(const std::string& login)
+void SessionManager::DetermineLifetime(const std::string& login)
 {
      unsigned int counter = Kernel->Clients->CountLogin(login);
      
@@ -108,53 +97,6 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
     
     this->sessions.insert(std::make_pair(login, New));
     return New;
-}
-
-void SessionManager::Part(User* skip, const std::string& login, const std::string& channel)
-{
-     Channel* chan = Kernel->Channels->Find(channel);
-     
-     if (!chan)
-     {
-         return;
-     }
-
-     UserVector logins = Kernel->Clients->FindLogin(login);
-
-     for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
-     {
-           User* user = *o;
-           
-           if (user == skip)
-           {
-                continue;
-           }
-           
-           chan->PartUser(user);
-     }
-}
-
-
-void SessionManager::Join(User* skip, const std::string& login, const std::string& channel)
-{
-     UserVector logins = Kernel->Clients->FindLogin(login);
-
-     for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
-     {
-           User* user = *o;
-           
-           if (user == skip)
-           {
-             continue;
-           }
-           
-           LocalUser* localuser = IS_LOCAL(user);
-
-           if (localuser)
-           {
-                 Channel::JoinUser(false, localuser, channel, true);
-           }
-     }
 }
 
 void SessionManager::AttachExternal(const std::string& login, const std::string& flags)
@@ -216,7 +158,7 @@ LoginCache::LoginCache()
 
 }
 
-void LoginCache::ResetCache()
+void LoginCache::Reset()
 {
      this->logins.clear();
 }
@@ -236,19 +178,19 @@ bool LoginCache::RemoveLastCache()
     return true;
 }
 
-void LoginCache::AddCache(const std::string& user, const std::string& pass)
+void LoginCache::Add(const std::string& user, const std::string& pass)
 {
-    this->logins.insert(std::make_pair(user, pass));
+      this->logins.insert(std::make_pair(user, pass));
   
-    /* This cache should not have more than 1024 entries. */
+      /* This cache should not have more than 1024 entries. */
         
-    if (logins.size() >= 1024)
-    {
-         this->RemoveLastCache();
-    }
+      if (logins.size() >= 1024)
+      {
+          this->RemoveLastCache();
+      }
 }
 
-void LoginCache::RemoveCache(const std::string& user)
+void LoginCache::Remove(const std::string& user)
 {
      logins.erase(user);
 }
@@ -294,5 +236,4 @@ bool LoginCache::InCache(const std::string& user)
         }
 
         return true;
-
 }

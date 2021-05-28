@@ -41,7 +41,7 @@ Channel* ChannelManager::Find(const std::string &chan)
 	return it->second;
 }
 
-void ChannelManager::ShouldExists(Channel* chan)
+void ChannelManager::CheckRemoval(Channel* chan)
 {
         if (!chan->subscribedlist.empty())
         {
@@ -66,4 +66,6 @@ void ChannelManager::ShouldExists(Channel* chan)
         NOTIFY_MODS(OnChannelDelete, (chan));
         Kernel->Channels->ChannelList.erase(iter);
         Kernel->Reducer->Add(chan);
+
+        falert(NOTIFY_DEFAULT, "Removed channel: %s", chan->name.c_str());
 }

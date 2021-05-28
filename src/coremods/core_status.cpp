@@ -165,7 +165,7 @@ class CoreModStatus : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides the STATUS command", VF_CORE | VF_BERYLDB);
+		return Version("Provides the STATUS command", VF_CORE|VF_BERYLDB);
 	}
 };
 

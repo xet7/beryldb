@@ -91,3 +91,11 @@ class CommandUsing : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandSwapDB : public Command 
+{
+    public: 
+
+        CommandSwapDB(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
