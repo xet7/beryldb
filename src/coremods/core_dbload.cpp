@@ -99,6 +99,8 @@ class ModuleCoreDB : public Module
          
         void OnPostConnect(User* user)
         {       
+//              result = STHelper::Get("conf", "notification::" + user->login);
+
               user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
               
               /* Verify if user has a identical loggin logged. */

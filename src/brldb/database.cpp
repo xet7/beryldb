@@ -191,8 +191,8 @@ void StoreManager::OpenAll()
              counter++;
        }
        
-       bprint(DONE, "Threads opened: %u", counter);
-       slog("DATABASE", LOG_VERBOSE, "Threads opeend: %u", counter);
+       bprint(DONE, "Threads created: %u", counter);
+       slog("DATABASE", LOG_VERBOSE, "Threads created: %u", counter);
        
        this->Default = this->Create("default", "default.db");
 }

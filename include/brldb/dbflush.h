@@ -18,6 +18,10 @@
 #include "query.h"
 #include "brldb/datathread.h"
 
+/* Thread vector. */
+       
+typedef std::vector<DataThread*> DataThreadVector;
+
 class Externalize DataFlush : public safecast<DataFlush>
 { 
       friend class StoreManager;
@@ -28,10 +32,6 @@ class Externalize DataFlush : public safecast<DataFlush>
 
         static std::mutex mute;
         
-        /* Thread vector. */
-       
-        typedef std::vector<DataThread*> DataThreadVector;
-
         /* Determines whether DataFlush should be delivering pendings. */
         
         std::atomic<bool> running;
@@ -64,6 +64,8 @@ class Externalize DataFlush : public safecast<DataFlush>
          static void StatusFailed(User* user, std::shared_ptr<query_base> signal);
 
          static void EntryExists(User* user, std::shared_ptr<query_base> signal);
+
+         static void CheckBlock(User* user, std::shared_ptr<query_base> signal);
         
          /* Results from the processing threads. */
         
@@ -144,6 +146,19 @@ class Externalize DataFlush : public safecast<DataFlush>
                 return this->threadslist;
          }
         
+        /* 
+         * Counts active threads.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Counter.
+         */            
+         
+         unsigned int CountThreads()
+         {
+                return this->threadslist.size();
+         }
+         
          void EraseAll()
          { 
                 return this->threadslist.clear();

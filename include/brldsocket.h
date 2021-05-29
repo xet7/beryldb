@@ -87,7 +87,7 @@ class Externalize StreamSocket : public EventHandler
 	
 	class send_queue
 	{
-	 public:
+  	  public:
 		
 		typedef std::string Element;
 
@@ -262,7 +262,7 @@ class Externalize StreamSocket : public EventHandler
 	
 	bool find_next_line(std::string& line, char delim = '\n');
 	
-	size_t Getsend_queueSize() const;
+	size_t GetQueueSize() const;
 
 	send_queue& Getsend_queue() { return sendq; }
 

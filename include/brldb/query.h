@@ -615,4 +615,5 @@ class Flusher
 
         static void SwapDB(User* user, std::shared_ptr<query_base> query);
         
+
 };

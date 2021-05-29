@@ -145,7 +145,6 @@ void DataFlush::GetResults()
                         if (user)
                         {
                                 user->SetLock(false);
-                                user->Blocked = false;
                         }
 
                         signal.reset();

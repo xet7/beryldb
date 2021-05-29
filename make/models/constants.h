@@ -63,7 +63,7 @@ const std::string VALID_AGENT = "Agent must be in the 3 to 15 length range.";
 
 /* Default ping interval. */
 
-const int PING_INTVL = 30;
+const int PING_INTVL = 120;
 
 /* Default publish command. */
 

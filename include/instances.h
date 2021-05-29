@@ -131,7 +131,7 @@ class Externalize User : public Expandable
 	};
 
 	typedef brld::node_list<Subscription> SubsList;
-
+	
         bool Paused;
 	
 	/* Time since logged. */

@@ -135,10 +135,14 @@ void StreamSocket::Close()
 
 void StreamSocket::Close(bool writeblock)
 {
-	if (Getsend_queueSize() != 0 && writeblock)
+	if (GetQueueSize() != 0 && writeblock)
+	{
 		closeonempty = true;
+	}
 	else
+	{
 		Close();
+	}
 }
 
 DiscardResult StreamSocket::discard()
@@ -256,19 +260,22 @@ static const int use_iov_max = iov_max < 128 ? iov_max : 128;
 
 void StreamSocket::QueueWrite()
 {
-	if (Getsend_queueSize() == 0)
+	if (GetQueueSize() == 0)
 	{
 		if (closeonempty)
+		{
 			Close();
-
+		}
+		
 		return;
 	}
+	
 	if (!error.empty() || !HasFileDesc())
 	{
 		slog("SOCKET", LOG_DEBUG, "QueueWrite on errored or closed socket");
 		return;
 	}
-
+	
 	send_queue* psendq = &sendq;
 	IOQueue* attach = GetIOQueue();
 	
@@ -303,7 +310,7 @@ void StreamSocket::QueueWrite()
 		Dispatchsend_queue(*psendq);
 	}
 
-	if (Getsend_queueSize() == 0 && closeonempty)
+	if (GetQueueSize() == 0 && closeonempty)
 	{
 		Close();
 	}
@@ -311,6 +318,7 @@ void StreamSocket::QueueWrite()
 
 void StreamSocket::Dispatchsend_queue(send_queue& sq)
 {
+	
 		if (GetEventMask() & Q_WRITE_BLOCK)
 		{
 			return;
@@ -581,7 +589,7 @@ void StreamSocket::AddIOQueue(IOQueue* newattach)
 	lastattach->SetNextHook(newattach);
 }
 
-size_t StreamSocket::Getsend_queueSize() const
+size_t StreamSocket::GetQueueSize() const
 {
 	size_t ret = sendq.bytes();
 	IOQueue* curr = GetIOQueue();

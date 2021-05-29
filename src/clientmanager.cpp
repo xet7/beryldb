@@ -45,6 +45,12 @@ namespace
 			return;
 		}
 		
+		if (user->Blocked)
+		{
+			user->next_ping_check += 10;
+			return;
+		}
+		
 		if (!user->lastping)
 		{
 			ModuleResult res;
@@ -314,9 +320,8 @@ void ClientManager::Flush(time_t current)
 		LocalUser* curr = *i;
 		++i;
 		
-		if (curr->usercon.Getsend_queueSize())
+		if (curr->usercon.GetQueueSize())
 		{
-
 			curr->usercon.StreamData();
 		}
 

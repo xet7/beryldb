@@ -26,6 +26,8 @@ bool Notifier::Add(NOTIFY_LEVEL lvl, User* user)
             return false;
         }
         
+//        result = STHelper::Set("conf", "notification::" + user->login);
+        
         this->NotifyList.insert(std::make_pair(user, lvl));
         return true;
 }
@@ -86,16 +88,14 @@ void Notifier::Push(NOTIFY_LEVEL level, const char *fmt, ...)
 
 void Notifier::Flush()
 {
-       /* Nobody is subscribed to any event. */
-       
-       if (!this->NotifyList.size())
+       if (this->events.empty())
        {
-            this->events.clear();
             return;
        }
 
-       if (this->events.empty())
+       if (!this->NotifyList.size())
        {
+            this->events.clear();
             return;
        }
        

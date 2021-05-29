@@ -205,19 +205,19 @@ void InstanceStream::StreamData()
 	{
 		return;
 	}
-	
-	if (user->Blocked)
-	{
-		 return;
-	}
 
+        if (user->IsLocked() || user->Blocked)
+        {
+                return;
+        }
+	
 	std::string line;
 
 	std::string::size_type ipos;
 
 	std::string::size_type queueindex;
 
-	while (Getsend_queueSize() < ULONG_MAX)
+	while (GetQueueSize() < ULONG_MAX)
 	{
 		ipos = recvq.find('\n', checked_until);
 

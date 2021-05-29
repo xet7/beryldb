@@ -142,6 +142,7 @@ void Beryl::Detach()
 	if ((!Config->usercmd.nofork) && (!Config->usercmd.forcedebug))
 	{
 	        bprint(DONE, "Detaching.");
+	        std::cout << std::endl;
 		
 		int fd = open("/dev/null", O_RDWR);
 

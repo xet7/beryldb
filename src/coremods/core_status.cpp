@@ -110,7 +110,11 @@ void CommandStatus::DispatchData(Status::Context& status)
 		break;
 
 		case 't':
+		{
                         status.AppendLine(BRLD_CORES, Daemon::Format("Cores: %u", CORE_COUNT));
+                        status.AppendLine(BRLD_CORES, Daemon::Format("Threads: %u", Kernel->Store->Flusher->CountThreads()));
+		}                        
+                        
 		break;
 		
 		case 'u':
