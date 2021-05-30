@@ -320,6 +320,18 @@ void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
         user->SendProtocol(brld);
 }
 
+void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg)
+{
+        if (user->agent == "emerald1")
+        {
+             user->SendProtocol(brld, brld2, msg);
+        }
+        else
+        {
+             user->SendProtocol(brld, brld2);
+        }
+}
+
 void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query)	
 {
 	if (user->agent == "emerald1")

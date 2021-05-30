@@ -13,6 +13,10 @@
 
 #pragma once
 
+/* Invalid coordinate */
+
+const std::string INVALID_COORD = "Invalid coordinate.";
+
 /* An error has occured. */
 
 const std::string PROCESS_ERROR = "ERROR";

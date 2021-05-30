@@ -222,4 +222,7 @@ class Externalize Dispatcher : public safecast<Dispatcher>
      static void JustAPI(User* user, BRLD_PROTOCOL brld);
      
      static void Check(std::shared_ptr<query_base> signal, User* user, MANAGER_TYPE mtype);
+     
+     static void SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg);
+     
 };

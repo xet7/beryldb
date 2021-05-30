@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
+#include "extras.h"
 #include "brldb/query.h"
 #include "managers/geo.h"
 #include "engine.h"
@@ -29,6 +30,24 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        const std::string& gname = parameters[0];
        const std::string& latitude = parameters[1];
        const std::string& longitude = parameters[2];
+       
+       if (!is_number(latitude, true) || !is_number(longitude, true))
+       {
+                 user->SendProtocol(ERR_USE, ERR_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 return FAILED;
+       }
+       
+       if (!ValidLong(convto_num<int>(longitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_USE, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+       
+       if (!ValidLat(convto_num<int>(latitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_USE, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
        
        GeoHelper::Add(user, user->current_db, user->select, gname, latitude, longitude);
        return SUCCESS;
