@@ -14,6 +14,7 @@
 #include <tuple>
 
 #include "beryl.h"
+#include "extras.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/dbnumeric.h"

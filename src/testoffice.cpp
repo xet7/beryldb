@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "extras.h"
 
 #ifdef ENABLE_TESTOFFICE
 
@@ -38,6 +39,8 @@ TestOffice::~TestOffice()
 
 void TestOffice::Run()
 {
+        std::cout << "Valid latitude: " << ValidLat(133.443) << std::endl;
+
         const std::string& ntest = "300";
         
         std::cout << "is_zero_or_great (" << ntest << ") : " << is_zero_or_great(ntest) << std::endl;

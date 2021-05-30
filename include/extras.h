@@ -58,3 +58,39 @@ inline bool ValidLat(int number)
 
     return false;
 }
+
+/* 
+ * Removes quote marks from a string. 
+ * 
+ * @parameters:
+ *
+ *         · string str: Data to check.
+ * 
+ * @return:
+ *
+ *         · string: Full string without quote marks.
+ */
+
+inline std::string stripe(const std::string& str)
+{
+        if (is_number(str, true))
+        {
+                return str;
+        }
+
+        if (str.length() == 1)
+        {
+                return str;
+        }
+
+        if (str.length() < 1)
+        {
+                return "";
+        }
+
+        std::string aux = str; 
+        aux.erase(0, 1);
+        aux.pop_back();
+
+        return aux;
+}

@@ -120,7 +120,7 @@ void CommandStatus::DispatchData(Status::Context& status)
 		case 'u':
 		{
 			unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
-			status.AppendLine(BRLD_UPTIME, Daemon::Format("Uptime: %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60));
+			status.AppendLine(BRLD_UPTIME, Daemon::Uptime("Uptime:", up));
 		}
 		
 		break;

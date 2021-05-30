@@ -527,7 +527,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	/* Exit msg. */
 	
-	std::string exit = Daemon::Format("Exiting after working for %u days, %.2u:%.2u:%.2u", up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
+	std::string exit = Daemon::Uptime("Exiting after working for", up);
 	
         slog("EXIT", LOG_DEFAULT, exit);
 	

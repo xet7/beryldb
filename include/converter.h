@@ -126,40 +126,17 @@ inline bool is_number(const std::string& str, bool allowdots = false)
 }
 
 /* 
- * Removes quote marks from a string. 
+ * Checks whether a given number is a positive one.
  * 
  * @parameters:
  *
- *         · string str: Data to check.
+ *         · string str: Number to check.
  * 
  * @return:
  *
- *         · string: Full string without quote marks.
+ *         · True: Positive number.
+ *         · False: Not positive.
  */
- 
-inline std::string stripe(const std::string& str)
-{
-        if (is_number(str, true))
-        {
-                return str;
-        }
-        
-        if (str.length() == 1)
-        {
-                return str;
-        }
-        
-        if (str.length() < 1)
-        {
-                return "";
-        }
-        
-        std::string aux = str; 
-        aux.erase(0, 1);
-        aux.pop_back();
-        
-        return aux;
-}
 
 inline bool is_positive_number(const std::string& str)
 {
@@ -167,7 +144,7 @@ inline bool is_positive_number(const std::string& str)
          {
                if (std::isdigit(c) == 0) 
                {
-                   return false;
+                     return false;
                }
         }
  

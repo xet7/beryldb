@@ -19,6 +19,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/keys.h"
+#include "extras.h"
 
 void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
