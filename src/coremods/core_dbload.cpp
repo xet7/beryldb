@@ -48,6 +48,40 @@ namespace
                        Channel::JoinUser(true, localuser, channel, true);
               }
      }
+     
+     void LoadNotify(User* user)
+     {
+             const std::string level = STHelper::Get("notify", user->login);
+             
+             if (level.empty())
+             {
+                    return;
+             }
+             
+             NOTIFY_LEVEL monitor = NOTIFY_DEFAULT;
+
+             if (level == "DEFAULT")
+             {
+                    monitor = NOTIFY_DEFAULT;
+             }
+             else if (level == "VERBOSE")
+             {
+                    monitor = NOTIFY_VERBOSE;
+             }
+             else if (level == "DEBUG")
+             {
+                    monitor = NOTIFY_DEBUG;
+             }
+             else
+             {
+                    /* Unable to detexct notify level. */
+                    
+                    return;
+             }
+
+             Kernel->Notify->Add(monitor, user);
+     }
+     
 }
 
 class ModuleCoreDB : public Module
@@ -99,8 +133,6 @@ class ModuleCoreDB : public Module
          
         void OnPostConnect(User* user)
         {       
-//              result = STHelper::Get("conf", "notification::" + user->login);
-
               user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
               
               /* Verify if user has a identical loggin logged. */
@@ -111,11 +143,13 @@ class ModuleCoreDB : public Module
               {
                     Kernel->Logins->Sessions->Attach(user, user->login, session->rawflags);
                     user->SendProtocol(BRLD_YOUR_FLAGS, user->login, session->rawflags.c_str());
+                    LoadNotify(user);
                     return;
               }
               
               const std::string& flags = UserHelper::FindAdmin(user->login);    
               Kernel->Logins->Sessions->Attach(user, user->login, flags);
+              LoadNotify(user);
               
               /* We should notify clients they have flags, only they do have them. */
               

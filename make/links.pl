@@ -122,6 +122,6 @@ sub do_compile
 	}
 
 	my $execstr = "$ENV{CXX} -o $out $flags $file $libs";
-	message 'BUILD', abs2rel($file, "$ENV{SOURCEPATH}/src"), $execstr;
+	message 'Compiling', abs2rel($file, "$ENV{SOURCEPATH}/src"), $execstr;
 	exec $execstr;
 }

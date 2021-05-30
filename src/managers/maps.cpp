@@ -22,13 +22,13 @@
 
 void MapsHelper::PreHQuery(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
 {
-       user->hquery = nullptr;
+        user->hquery = nullptr;
 }
 
 void MapsHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest)
 {
        std::shared_ptr<hmove_query> query = std::make_shared<hmove_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -47,7 +47,7 @@ void MapsHelper::Move(User* user, std::shared_ptr<Database> database, const std:
 void MapsHelper::Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key)
 {
        std::shared_ptr<hsearch_query> query = std::make_shared<hsearch_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -68,7 +68,7 @@ void MapsHelper::Count(User* user, std::shared_ptr<Database> database, const std
 void MapsHelper::HKeys(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
 {
        std::shared_ptr<hkeys_query> query = std::make_shared<hkeys_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_LIST);       
        
        query->database = database;
        query->user = user;
@@ -84,7 +84,7 @@ void MapsHelper::HKeys(User* user, std::shared_ptr<Database> database, const std
 void MapsHelper::SearchHesh(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& hesh, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_hesh_query> query = std::make_shared<hsearch_hesh_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_LIST);       
 
        query->database = database;
        query->user = user;
@@ -100,7 +100,7 @@ void MapsHelper::SearchHesh(User* user, std::shared_ptr<Database> database, cons
 void MapsHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_query> query = std::make_shared<hsearch_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_LIST);       
        
        query->database = database;
        query->user = user;
@@ -116,7 +116,7 @@ void MapsHelper::Search(User* user, std::shared_ptr<Database> database, const st
 void MapsHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, QUERY_TYPE type)
 {
        std::shared_ptr<hget_query> query = std::make_shared<hget_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -134,7 +134,7 @@ void MapsHelper::Get(User* user, std::shared_ptr<Database> database, const std::
 void MapsHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh, const std::string& value)
 {
        std::shared_ptr<hset_query> query = std::make_shared<hset_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -152,7 +152,7 @@ void MapsHelper::Set(User* user, std::shared_ptr<Database> database, const std::
 void MapsHelper::DeleteAll(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<hdel_all_query> query = std::make_shared<hdel_all_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -168,7 +168,7 @@ void MapsHelper::DeleteAll(User* user, std::shared_ptr<Database> database, const
 void MapsHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh)
 {
        std::shared_ptr<hdel_query> query = std::make_shared<hdel_query>();
-       user->Blocked = true;
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
 
        query->database = database;
        query->user = user;
@@ -225,6 +225,7 @@ DBL_CODE MapsHelper::Delete(const std::string& where, const std::string& entry, 
        query->select_query = where;
        query->int_keys = INT_MAP;
        query->key = entry;
+       query->hesh = value;
 
        query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key) + ":" + to_bin(query->hesh);
        query->Run();

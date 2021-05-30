@@ -15,6 +15,13 @@
 
 #include "dbnumeric.h"
 
+enum MANAGER_TYPE
+{
+    MANAGER_TYPE_NONE  = 0,
+    MANAGER_TYPE_LIST = 1,
+    MANAGER_TYPE_SINGLE = 2
+};
+
 enum QUERY_TYPE
 {
     TYPE_NONE = 0,
@@ -56,6 +63,8 @@ enum OP_TYPE
 class Externalize query_base
 {
     public:
+        
+        MANAGER_TYPE mtype;
         
         std::atomic<bool> Lock;
         
@@ -155,7 +164,7 @@ class Externalize query_base
             this->finished  = true;
         }
         
-        query_base(DBL_CODE base) : Lock(false), started(0), core(false), 
+        query_base(DBL_CODE base) : mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
                                     subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), 
                                     offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), 
                                     type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
@@ -390,6 +399,18 @@ class Externalize hsearch_query  : public query_base
         void Run();
 };
 
+class Externalize geofind_query  : public query_base
+{
+    public:
+
+        geofind_query() : query_base(DBL_TYPE_GEOFIND)
+        {
+
+        }
+
+        void Run();
+};
+
 
 class Externalize move_query  : public query_base
 {
@@ -540,11 +561,35 @@ class Externalize sflush_query  : public query_base
         void Run();
 };
 
-class Externalize geo_add : public query_base
+class Externalize geoadd_query : public query_base
 {
     public:
 
-        geo_add() : query_base(DBL_TYPE_GEOADD)
+        geoadd_query() : query_base(DBL_TYPE_GEOADD)
+        {
+
+        }
+
+        void Run();
+};
+
+class Externalize geoget_query : public query_base
+{
+    public:
+
+        geoget_query() : query_base(DBL_TYPE_GEOGET)
+        {
+
+        }
+
+        void Run();
+};
+
+class Externalize geodel_query : public query_base
+{
+    public:
+
+        geodel_query() : query_base(DBL_TYPE_GEODEL)
         {
 
         }
@@ -561,7 +606,6 @@ class Flusher
         static void Get(User* user, std::shared_ptr<query_base> query);
 
         static void Del(User* user, std::shared_ptr<query_base> query);
-
 
         static void HSet(User* user, std::shared_ptr<query_base> query);
 
@@ -615,5 +659,12 @@ class Flusher
 
         static void SwapDB(User* user, std::shared_ptr<query_base> query);
         
+        static void GeoAdd(User* user, std::shared_ptr<query_base> query);
+        
+        static void GeoGet(User* user, std::shared_ptr<query_base> query);
+        
+        static void GeoDel(User* user, std::shared_ptr<query_base> query);
+        
+        static void GeoFind(User* user, std::shared_ptr<query_base> query);
 
 };

@@ -22,6 +22,8 @@ class Externalize STHelper
         static std::string Get(const std::string& type, const std::string& key);
 
         static void Delete(const std::string& type, const std::string& key);
+
+        static void DeleteAll(const std::string& type);
     
 };
 

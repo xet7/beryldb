@@ -26,8 +26,6 @@ bool Notifier::Add(NOTIFY_LEVEL lvl, User* user)
             return false;
         }
         
-//        result = STHelper::Set("conf", "notification::" + user->login);
-        
         this->NotifyList.insert(std::make_pair(user, lvl));
         return true;
 }
@@ -98,7 +96,7 @@ void Notifier::Flush()
             this->events.clear();
             return;
        }
-       
+      
        Event ready = this->events.front();
        
        const NotifyMap& all = this->NotifyList;
@@ -107,7 +105,7 @@ void Notifier::Flush()
        {
                       User* user = uit->first;
                       
-                      if (!user || !user->IsQuitting())
+                      if (!user || user->IsQuitting())
                       {
                            continue;
                       }

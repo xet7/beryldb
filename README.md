@@ -58,6 +58,11 @@ make -j4
 make install
 ```
 
+Beryl is compiled in verbose level by default. If you prefer to build with minimal
+information, you use:
+
+% make BERYLDB_VERBOSE=0
+
 ## Running Beryl
 
 To run Beryl with default configuration, type:

@@ -54,50 +54,42 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                     case DBL_TYPE_SET:
                     {
                            Flusher::Set(user, signal);      
-                           user->Blocked = false;
                            break; 
                     }
 
                     case DBL_TYPE_SWAPDB:
                     {
                            Flusher::SwapDB(user, signal);
-                           user->Blocked = false;
                            break; 
                     }
 
                     case DBL_TYPE_GET:
                     {
                            Flusher::Get(user, signal);      
-                           user->Blocked = false;
-                           
                            break; 
                     }
                     
                     case DBL_TYPE_DEL:
                     {
                            Flusher::Del(user, signal);
-                           user->Blocked = false;
                            break;
                     }
                     
                     case DBL_TYPE_HSET:
                     {
                            Flusher::HSet(user, signal);      
-                           user->Blocked = false;
                            break; 
                     }
 
                     case DBL_TYPE_HGET:
                     {
                            Flusher::HGet(user, signal);      
-                           user->Blocked = false;
                            break; 
                     }
 
                     case DBL_TYPE_HDEL:
                     {
                            Flusher::HDel(user, signal);
-                           user->Blocked = false;
                            break;
                     }
 
@@ -123,121 +115,129 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                     case DBL_TYPE_OP:
                     {
                            Flusher::Operation(user, signal);
-                           user->Blocked = false;
                            break;
                     }
                     
                     case DBL_TYPE_FIND:
                     {
                            Flusher::Find(user, signal);
-                           DataFlush::CheckBlock(user, signal);
                            break;
                     }
 
                     case DBL_TYPE_SEARCH:
                     {
                            Flusher::HSearch(user, signal);
-                           DataFlush::CheckBlock(user, signal);
                            break;
                     }
 
                     case DBL_TYPE_MOVE:
                     {
                            Flusher::Move(user, signal);
-                           user->Blocked = false;
                            break;
                     }
                     
                     case DBL_TYPE_HDEL_ALL:
                     {
                           Flusher::HDelAll(user, signal);
-                          user->Blocked = false;
                           break;
                     }
                     
                     case DBL_TYPE_HSEARCH:
                     {
                           Flusher::HSearch_Hesh(user, signal);
-                          DataFlush::CheckBlock(user, signal);
                           break;
                     }
                     
                     case DBL_TYPE_HKEYS:
                     {
                          Flusher::HKeys(user, signal);
-                         DataFlush::CheckBlock(user, signal);
                          break;
                     }
 
                     case DBL_TYPE_DBSIZE:
                     {
                          Flusher::DBSize(user, signal);
-                         user->Blocked = false;
                          break;
                     }
 
                     case DBL_TYPE_ADVGET:
                     {
                          Flusher::AdvancedGET(user, signal);
-                         user->Blocked = false;                         
                          break;
                     }
                     
                     case DBL_TYPE_HMOVE:
                     {
                          Flusher::HMove(user, signal);
-                         user->Blocked = false;
                          break;
                     }
 
                     case DBL_TYPE_TOUCH:
                     {
                          Flusher::Touch(user, signal);
-                         user->Blocked = false;
                          break;
                     }
                     
                     case DBL_TYPE_APPEND:
                     {
                          Flusher::Append(user, signal);
-                         user->Blocked = false;
                          break;
                     }
                     
                     case DBL_TYPE_LMOVE:
                     {
                          Flusher::LMove(user, signal);
-                         user->Blocked = false;
                          break;
                     }
                     
                     case DBL_TYPE_SFLUSH:
                     {
                          Flusher::SFlush(user, signal);
-                         user->Blocked = false;
                          break;
                     }
                     
                     case DBL_TYPE_KSEARCH:
                     {
                          Flusher::Search(user, signal);
-                         DataFlush::CheckBlock(user, signal);
                          break;
                     }
                     
                     case DBL_TYPE_LSEARCH:
                     {
                          Flusher::LSearch(user, signal);
-                         DataFlush::CheckBlock(user, signal);
                          break;
                     }
 
                     case DBL_TYPE_LFIND:
                     {
                          Flusher::LFind(user, signal);
-                         DataFlush::CheckBlock(user, signal);
                          break;
                     }
+                    
+                    case DBL_TYPE_GEOADD:
+                    {
+                         Flusher::GeoAdd(user, signal);
+                         break;
+                    }
+                    
+                    case DBL_TYPE_GEOGET:
+                    {
+                         Flusher::GeoGet(user, signal);
+                         break;
+                    }
+                    
+                    case DBL_TYPE_GEODEL:
+                    {
+                         Flusher::GeoDel(user, signal);
+                         break;
+                    }
+                    
+                    case DBL_TYPE_GEOFIND:
+                    {
+                         Flusher::GeoFind(user, signal);
+                         break;
+                    }
+                    
         };      
         
         signal = nullptr;

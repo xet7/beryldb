@@ -38,3 +38,8 @@ void STHelper::Delete(const std::string& type, const std::string& key)
 {
         MapsHelper::Delete(TABLE_SETTINGS, type, key);
 }
+
+void STHelper::DeleteAll(const std::string& type)
+{
+        MapsHelper::DeleteAll(TABLE_SETTINGS, type);
+}

@@ -122,7 +122,7 @@ void MonitorHandler::Flush()
                       User* user = uit->first;
                       MONITOR_LEVEL level = uit->second;
                       
-                      if (!user || !user->IsQuitting())
+                      if (!user || user->IsQuitting())
                       {
                            continue;
                       }

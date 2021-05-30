@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "notifier.h"
 #include "core_notifier.h"
+#include "managers/settings.h"
 
 CommandNotifier::CommandNotifier(Module* Creator) : Command(Creator, "NOTIFY", 0, 1)
 {
@@ -50,11 +51,14 @@ COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
                     return FAILED;
              }
        
+             STHelper::Set("notify", user->login, level);
+
              Kernel->Notify->Add(monitor, user);
              user->SendProtocol(BRLD_NOW_NOTIFYING, level, Daemon::Format("OK: %s", level.c_str()));       
              return SUCCESS;  
        }
-       
+
+       STHelper::Set("notify", user->login, "DEFAULT");
        Kernel->Notify->Add(NOTIFY_DEFAULT, user);
        user->SendProtocol(BRLD_NOW_NOTIFYING, "DEFAULT", "OK: DEFAULT");          
        return SUCCESS;
@@ -69,6 +73,7 @@ COMMAND_RESULT CommandNotifyReset::Handle(User* user, const Params& parameters)
 {
        unsigned int count = Kernel->Monitor->Count();
        Kernel->Notify->Reset();
+       STHelper::DeleteAll("notify");
        user->SendProtocol(BRLD_NRESET, count, PROCESS_OK);
        return SUCCESS;
 }
@@ -86,8 +91,10 @@ COMMAND_RESULT CommandStopNotify::Handle(User* user, const Params& parameters)
                return FAILED;
        }
        
+       STHelper::Delete("notify", user->login);       
        Kernel->Notify->Remove(user);
        user->SendProtocol(BRLD_STOP_NOTIFY, PROCESS_OK);          
        return SUCCESS;
 }
+
 

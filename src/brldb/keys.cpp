@@ -25,9 +25,9 @@ namespace
         
        unsigned int IntRand(const int & min, const int & max) 
        {
-            static thread_local std::mt19937 generator;
-            std::uniform_int_distribution<unsigned int> distribution(min,max);
-            return distribution(generator);
+             static thread_local std::mt19937 generator;
+             std::uniform_int_distribution<unsigned int> distribution(min,max);
+             return distribution(generator);
         }
 }
 
@@ -894,7 +894,6 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
                 
         if (query->subresult == 1)
         {
-//                Dispatcher::Smart(user, 1, BRLD_FIND_BEGIN, "BEGIN of FIND list.", query);
                 Dispatcher::JustAPI(user, BRLD_START_LIST);                 
         }
 
@@ -906,7 +905,6 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-//                user->SendProtocol(BRLD_FIND_END, query->key, Daemon::Format("END of FIND list (%i).", query->counter).c_str());
                 Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }

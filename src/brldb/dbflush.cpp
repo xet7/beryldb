@@ -145,6 +145,15 @@ void DataFlush::GetResults()
                         if (user)
                         {
                                 user->SetLock(false);
+                        
+                                if (signal->mtype == MANAGER_TYPE_SINGLE)
+                                {
+                                       user->Blocked = false;
+                                }
+                                else if (signal->mtype == MANAGER_TYPE_LIST)
+                                {
+                                       DataFlush::CheckBlock(user, signal);
+                                }
                         }
 
                         signal.reset();

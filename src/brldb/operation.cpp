@@ -158,7 +158,7 @@ void swapdb_query::Run()
                     continue;
                 }
 
-                if (convto_string(rawstring[0]) == INT_KEYS)
+                if (convto_string(rawstring[0]) == INT_KEYS || convto_string(rawstring[0]) == INT_GEO)
                 {
                             size_t found =  rawstring.find_first_of(":");
                             std::string path = rawstring.substr(0, found);
@@ -325,7 +325,7 @@ void sflush_query::Run()
                     continue;
                 }
                 
-                if (convto_string(rawstring[0]) == convto_string(INT_KEYS))
+                if (convto_string(rawstring[0]) == INT_KEYS || convto_string(rawstring[0]) == INT_GEO)
                 {
                             size_t found =  rawstring.find_first_of(":");
                             std::string path = rawstring.substr(0,found);
@@ -335,8 +335,8 @@ void sflush_query::Run()
                 
                             if (track == this->value)
                             {
-                                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
-                                found_counter++;
+                                 this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
+                                 found_counter++;
                             }
                 }
                 else
