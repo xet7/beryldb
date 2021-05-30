@@ -91,6 +91,8 @@ User::~User()
         /* We remove this user from monitoring list, if applicable. */
         
         Kernel->Monitor->Remove(this);
+        Kernel->Notify->Remove(this);
+        
 	pending.clear();
 	notifications.clear();
 	

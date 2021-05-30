@@ -107,6 +107,11 @@ void Notifier::Flush()
        {
                       User* user = uit->first;
                       
+                      if (!user || !user->IsQuitting())
+                      {
+                           continue;
+                      }
+                       
                       if (ready.skip && !ready.skip->IsQuitting())
                       {
                             /* Continues on skipping user. */

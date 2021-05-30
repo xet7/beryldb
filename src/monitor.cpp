@@ -102,14 +102,15 @@ MonitorMap MonitorHandler::GetList(const std::string& arg)
 
 void MonitorHandler::Flush()
 {
-        if (!this->MonitorList.size())
-        {
-             return;
-        }
-
         if (!this->buffer.size())
         {
             return;
+        }
+
+        if (!this->MonitorList.size())
+        {
+             this->buffer.clear();
+             return;
         }
 
         const MonitorMap& all = this->MonitorList;
@@ -120,6 +121,11 @@ void MonitorHandler::Flush()
         {
                       User* user = uit->first;
                       MONITOR_LEVEL level = uit->second;
+                      
+                      if (!user || !user->IsQuitting())
+                      {
+                           continue;
+                      }
                       
                       if (user->instance == flushing.instance)
                       {

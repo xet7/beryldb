@@ -94,6 +94,7 @@ bool Database::FlushDB()
     bprint(DONE, "flushdb requested for: %s.", this->name.c_str());
     slog("DATABASE", LOG_DEFAULT, "flushdb requested for: %s.", this->name.c_str());
     
+    
     /* We must close our database before flushing it. */
     
     this->Close();

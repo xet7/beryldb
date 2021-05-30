@@ -26,11 +26,19 @@
 #define FERROR 11
 #define FWARNING 12
 
-#define STR1 std::tr1
-#include <tr1/array>
-#include <tr1/functional>
-#include <tr1/unordered_map>
-#include <tr1/type_traits>
+#if defined _LIBCPP_VERSION || defined _WIN32 || __cplusplus >= 201103L
+# define STR1 std
+# include <array>
+# include <functional>
+# include <unordered_map>
+# include <type_traits>
+#else
+# define STR1 std::tr1
+# include <tr1/array>
+# include <tr1/functional>
+# include <tr1/unordered_map>
+# include <tr1/type_traits>
+#endif
 
 #if defined __clang__ || defined __GNUC__
 # define BERYL_PRINTF(stringpos, firstpos) __attribute__((format(printf, stringpos, firstpos)))
