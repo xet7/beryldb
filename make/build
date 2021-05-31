@@ -23,7 +23,7 @@ use make::utils;
 use make::configure;
 
 $ENV{BERYLDB_DEBUG} = 3;
-$ENV{BERYLDB_VERBOSE} = 1;
+$ENV{VERBOSE} = 1;
 
 execute 'git', 'clean', '-dfx';
 

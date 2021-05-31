@@ -9,9 +9,6 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [beryl.dev](https://docs.beryl.dev/).
 
-**Note:** This is an experimental/learning project and is not intended to be used in
-a production setting.
-
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
 ## What is Beryl?
@@ -20,9 +17,10 @@ Beryl is a data structures server. Our software provides access to structures vi
 wide range of commands, which are later queued, processed and dispatched to an 
 internal processor. Beryl is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
 
-
 Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
+
+Check Beryl's [full list of commands](https://docs.beryl.dev/server/commands/).
 
 Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
@@ -62,7 +60,7 @@ Beryl is compiled in verbose level by default. If you prefer to build with minim
 information, you can use:
 
 ```
-make BERYLDB_VERBOSE=0
+make VERBOSE=0
 ```
 
 ## Running Beryl

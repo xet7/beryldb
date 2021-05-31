@@ -648,11 +648,6 @@ void Flusher::Set(User* user, std::shared_ptr<query_base> query)
 
 void del_query::Run()
 {
-        if (!this->Check())
-        {
-                return;
-        }
-
         if (this->key.empty())
         {
                 this->access_set(DBL_MISS_ARGS);

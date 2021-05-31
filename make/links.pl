@@ -60,7 +60,7 @@ sub message($$$)
 {
 	my ($type, $file, $command) = @_;
 
-	if ($ENV{BERYLDB_VERBOSE}) 
+	if ($ENV{VERBOSE}) 
 	{
 		say $command;
 	} 

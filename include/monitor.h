@@ -13,8 +13,6 @@
 
 #pragma once
 
-//class CMDBuffer;
-
 enum MONITOR_LEVEL
 {
       MONITOR_DEBUG = 10, /* Shows all found commands */
@@ -134,7 +132,13 @@ class Externalize MonitorHandler : public safecast<MonitorHandler>
          
         MonitorMap GetList(const std::string& arg = "");
                         
-        /* Counts all monitor size. */
+        /* 
+         * Counts all active users monitoring. 
+         * 
+         * @return:
+ 	 *
+         *         · uint: Monitor list size.
+         */            
         
         unsigned int Count()
         {

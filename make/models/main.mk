@@ -11,7 +11,7 @@
 #
 # More information about our licensing can be found at https://docs.beryl.dev
 
-BERYLDB_VERBOSE=1
+VERBOSE=1
 CXX = @CXX@
 COMPILER = @COMPILER_NAME@
 SYSTEM = @SYSTEM_NAME@
@@ -72,7 +72,7 @@ MAKEFLAGS += --no-print-directory
 
 SOURCEPATH = $(shell pwd)
 
-ifndef BERYLDB_VERBOSE
+ifndef VERBOSE
   MAKEFLAGS += --silent
 endif
 
@@ -85,7 +85,7 @@ export BUILDPATH
 export CORECXXFLAGS
 export CORELDFLAGS
 export CXX
-export BERYLDB_VERBOSE
+export VERBOSE
 export LDLIBS
 export PICLDFLAGS
 export SOURCEPATH
@@ -203,7 +203,7 @@ help:
 	@echo ''
 	@echo 'Settings:'
 	@echo ' '
-	@echo ' BERYLDB_VERBOSE=1  Displays full command compiling.'
+	@echo ' VERBOSE=1  Displays full command compiling.'
 	@echo ' BERYLDB_DEBUG=1    Enable debugging, for module development.'
 	@echo ' BERYLDB_DEBUG=2    Build with optimizations, for detailed traces.'
 	@echo ' BERYLDB_DEBUG=3    Fast build without improvements. '

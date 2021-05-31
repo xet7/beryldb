@@ -44,6 +44,8 @@ class Externalize Notifier : public safecast<Notifier>
 {
    private:
          
+         /* Pending events to be flushed */
+         
          std::deque<Event> events;
          
          NotifyMap NotifyList;

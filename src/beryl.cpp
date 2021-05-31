@@ -501,8 +501,8 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	}
 	else
 	{
-		bprint(INFO, "No clients have been disconnected.");
-                slog("EXIT", LOG_DEFAULT, "No clients have been disconnected.");
+		bprint(INFO, "No clients were disconnected.");
+                slog("EXIT", LOG_DEFAULT, "No clients were disconnected.");
 	}
 
 	/* Reset channels. */
