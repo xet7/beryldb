@@ -16,7 +16,7 @@ CXX = @CXX@
 COMPILER = @COMPILER_NAME@
 SYSTEM = @SYSTEM_NAME@
 BUILDPATH ?= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/build/@COMPILER_NAME@-@COMPILER_VERSION@
-CORECXXFLAGS = -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -pipe -Iinclude -Wall -Wextra -Wfatal-errors -Wno-unused-parameter -Wshadow -Wno-switch -std=c++14
+CORECXXFLAGS = -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -pipe -Iinclude -Wall -Wextra -Wfatal-errors -Wno-unused-parameter -Wshadow -Wno-switch 
 LDLIBS = -lstdc++ -lrocksdb -lpthread
 CORELDFLAGS = -rdynamic -L.
 PICLDFLAGS = -fPIC -shared -rdynamic
@@ -76,6 +76,9 @@ ifndef VERBOSE
   MAKEFLAGS += --silent
 endif
 
+ifndef CXXFLAGS
+   CXXFLAGS = -std=c++14
+endif
 
 CORECXXFLAGS += $(CPPFLAGS) $(CXXFLAGS)
 CORELDFLAGS += $(LDFLAGS)
