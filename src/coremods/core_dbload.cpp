@@ -81,7 +81,6 @@ namespace
 
              Kernel->Notify->Add(monitor, user);
      }
-     
 }
 
 class ModuleCoreDB : public Module

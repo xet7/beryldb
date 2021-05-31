@@ -81,7 +81,7 @@ COMMAND_RESULT CommandGeoDel::Handle(User* user, const Params& parameters)
 
 CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GFIND", 1, 3)
 {
-         syntax = "<\%key> <offset> <limit>";
+         syntax = "<\%name> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)

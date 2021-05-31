@@ -59,9 +59,11 @@ make install
 ```
 
 Beryl is compiled in verbose level by default. If you prefer to build with minimal
-information, you use:
+information, you can use:
 
-% make BERYLDB_VERBOSE=0
+```
+make BERYLDB_VERBOSE=0
+```
 
 ## Running Beryl
 
@@ -77,7 +79,6 @@ forking, you can run the server using nofork:
 ```
 ./run/beryldb start --nofork
 ```
-
 
 Great! You may now run your very first BerylDB command using
 [Beryl-cli](https://github.com/beryldb/beryldb-cli).
