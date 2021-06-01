@@ -320,11 +320,6 @@ void ClientManager::Flush(time_t current)
 		LocalUser* curr = *i;
 		++i;
 	
-	        if (curr->Blocked)
-	        {
-                	continue;
-                }
-	
 		if (curr->usercon.GetQueueSize())
 		{
 			curr->usercon.StreamData();

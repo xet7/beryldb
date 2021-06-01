@@ -73,8 +73,7 @@ sub __get_models_settings($$$)
 sub __test_compiler($) 
 {
 	my $compiler = shift;
-	return 0 unless run_test("`$compiler`", !system "$compiler -v ${\CONFIGURE_ERROR_PIPE}");
-	return 0 unless run_test("`$compiler`", test_file($compiler, 'compiler.cpp', '-fno-rtti -std=c++14'), 'compatible');
+	return 0 unless run_test("`$compiler`", test_file($compiler, 'compiler.cpp', '-std=c++14'), 'compatible');
 	return 1;
 }
 

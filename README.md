@@ -65,7 +65,7 @@ make VERBOSE=0
 
 ## Running Beryl
 
-To run Beryl with default configuration, type:
+To run Beryl using the default configuration, type:
 
 ```
 ./run/beryldb start

@@ -208,6 +208,11 @@ void InstanceStream::StreamData()
 		return;
 	}
 
+	if (user->Blocked)
+        {
+             return;
+        }
+
 	std::string line;
 
 	std::string::size_type ipos;
