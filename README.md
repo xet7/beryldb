@@ -81,7 +81,7 @@ forking, you can run the server using nofork:
 Great! You may now run your very first BerylDB command using
 [Beryl-cli](https://github.com/beryldb/beryldb-cli).
 
-## Internals
+## Discussions
 
 In order to maintain a documentation that is easy to follow, we try to maintain 
 discussions at a very shallow level. Our code is actively changing and thus
