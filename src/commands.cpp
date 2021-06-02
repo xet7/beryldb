@@ -62,7 +62,7 @@ void Command::RegisterService()
 
 void Command::MissingParameters(LocalUser* user, const Params& parameters)
 {
-	if (Kernel->Config->SyntaxHints)
+	if (Kernel->Sets->AsBool("syntaxhints"))
 	{
 		user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters. Syntax:");
 	}

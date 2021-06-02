@@ -66,6 +66,7 @@ Externalize extern std::unique_ptr<Beryl> Kernel;
 #include "engine.h"
 #include "login.h"
 #include "monitor.h"
+#include "settings.h"
 #include "notifier.h"
 #include "brldb/dbmanager.h"
 
@@ -246,6 +247,8 @@ class Externalize Beryl
 	/* Handles user's connections. */
 	
 	ClientManager Clients;
+	
+	Settings Sets;
 
 	/* Utils function to the Beryl class. */
 	

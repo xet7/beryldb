@@ -112,8 +112,6 @@ class Externalize Configuration
 
  public:
 	
-	Settings Sets;
-	
 	class ServerPaths
 	{
 	 public:
@@ -163,13 +161,6 @@ class Externalize Configuration
 	
 	std::stringstream errstr;
 
-       /* Allows the creation of new channels. */
-
-        bool AllowNew;
-        
-        bool ChanSync;
-	
-	bool AutoJoin;
 	
 	bool Ready;
 

@@ -28,120 +28,49 @@ Settings::Settings()
 
 void Settings::SetDefaults()
 {
-      Kernel->Config->AllowNew = true;
-      Kernel->Config->SyntaxHints = true;
-      Kernel->Config->AutoJoin = false;
-      Kernel->Config->ChanSync = false;
-      
-      this->Set("allowchans", "true");
-      this->Set("syntaxhints", "true");
-      this->Set("autojoin", "true");
-      this->Set("chansync", "true");
-      
-      STHelper::Set("conf", "allowchans", "true");
-      STHelper::Set("conf", "syntaxhints", "true");
-      STHelper::Set("conf", "autojoin", "off");
-      STHelper::Set("conf", "chansync", "off");
-}
+       defaults.insert({ "allowchans", "true" });
+       defaults.insert({ "syntaxhints", "true" });
+       defaults.insert({ "autojoin", "false" });
+       defaults.insert({ "chansync", "false" });
 
-/*std::string Settings::Get(const std::string& key)
-{
-
-}
-
-bool Settings::Set(const std::string& key, const std::string& value)
-{
-      bool v_as_bool = false;
-      
-      if (value == "true")
+      for (std::map<std::string, std::string> ::iterator i = this->defaults.begin(); i != this->defaults.end(); i++)      
       {
-            v_as_bool = true;
-      }
-      
-      bools.insert(std::make_pair(key, v_as_bool));
-                 
-      if (!skip)
-      {
-               STHelper::Set("conf", key, value);
+             std::string key = i->first;
+             std::string value = i->second;
+             this->Set(key, value);
       }
 }
-*/
 
-bool Settings::Set(const std::string& key, const std::string& value, bool skip)
+void Settings::Load()
 {
-        if (key == "allowchans")
-        {
-                 Kernel->Config->AllowNew = Helpers::as_bool(value, true);       
-                 
-                 if (skip)
-                 {
-                      STHelper::Set("conf", "allowchans", value);
-                 }
-                 
-                 return true;
-        }
-        else if (key == "syntaxhints")
-        {
-                 Kernel->Config->SyntaxHints = Helpers::as_bool(value, true);
+      for (std::map<std::string, std::string> ::iterator i = this->defaults.begin(); i != this->defaults.end(); i++)      
+      {
+             std::string key = i->first;
+             this->Set(key, STHelper::Get("conf", key));
+      }
+}
 
-                 if (skip)
-                 {
-                      STHelper::Set("conf", "syntaxhints", value);
-                 }
-
-                 return true;
-        }
-        else if (key == "autojoin")
-        {
-                 Kernel->Config->AutoJoin = Helpers::as_bool(value, true);
-
-                 if (skip)
-                 {
-                      STHelper::Set("conf", "autojoin", value);
-                 }
-
-                 return true;
-        }        
-        else if (key == "chansync")
-        {
-                 Kernel->Config->ChanSync = Helpers::as_bool(value, true);
-
-                 if (skip)
-                 {
-                      STHelper::Set("conf", "chansync", value);
-                 }
-
-                 return true;
-        }
-        
-
-        return false;
+void Settings::Set(const std::string& key, const std::string& value)
+{
+      this->SetMap[key] = value;
+      STHelper::Set("conf", key, value);
 }
 
 std::string Settings::Get(const std::string& key)
 {
-        if (key == "allowchans")
-        {
-                 return Helpers::to_bool(Kernel->Config->AllowNew);
-        }
-        
-        if (key == "syntaxhints")
-        {
-                 return Helpers::to_bool(Kernel->Config->SyntaxHints);
-        }
-        
-        if (key == "autojoin")
-        {
-                 return Helpers::to_bool(Kernel->Config->AutoJoin);
-        }
+        std::map<std::string, std::string>::iterator it = this->SetMap.find(key);
 
-        if (key == "chansync")
+        if (it == this->SetMap.end())
         {
-                 return Helpers::to_bool(Kernel->Config->ChanSync);
+                return "";
         }
         
-        
-        return "";
+        return it->second;
+}
+
+bool Settings::AsBool(const std::string& key)
+{
+        return Helpers::as_bool(this->Get(key), false);
 }
 
 std::string Helpers::to_bool(bool boolean)

@@ -155,12 +155,9 @@ void CoreManager::CheckDefaults()
                  bprint(DONE, "Welcome to Beryl.");
                  bprint(INFO, "Creating defaults.");
 
+                 Kernel->Sets->SetDefaults();
+
                  /* Default settings. */
-                 
-                 STHelper::Set("conf", "allowchans", "true");
-                 STHelper::Set("conf", "syntaxhints", "true");
-                 STHelper::Set("conf", "autojoin", "off");
-                 STHelper::Set("conf", "chansync", "off");
                  
                  Kernel->Store->First = true;
        }

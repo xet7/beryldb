@@ -104,7 +104,7 @@ class ModuleCoreDB : public Module
                  
                  /* Will only insert chans to the table if AutoJoin is enabled. */
                     
-                 if (!Kernel->Config->AutoJoin)
+                 if (!Kernel->Sets->AsBool("autojoin"))
                  {
                      return;
                  }
@@ -116,7 +116,7 @@ class ModuleCoreDB : public Module
 
         void OnUserPart(Subscription* memb, DiscardList& excepts)
         {		
-                 if (!Kernel->Config->AutoJoin)
+                 if (!Kernel->Sets->AsBool("autojoin"))
                  {
                       return;
                  }
@@ -159,7 +159,7 @@ class ModuleCoreDB : public Module
               
               /* User will not join chans */
               
-              if (!Kernel->Config->AutoJoin)
+              if (!Kernel->Sets->AsBool("autojoin"))
               {
                     return;
               }
@@ -173,18 +173,7 @@ class ModuleCoreDB : public Module
         
         void Initialize()
         {
-              std::string result = STHelper::Get("conf", "allowchans");
-              Kernel->Config->Sets->Set("allowchans", result, true);
-
-              result = STHelper::Get("conf", "syntaxhints");
-              Kernel->Config->Sets->Set("syntaxhints", result, true);
-
-              result = STHelper::Get("conf", "autojoin");
-              Kernel->Config->Sets->Set("autojoin", result, false);
-              
-              result = STHelper::Get("conf", "chansync");
-              Kernel->Config->Sets->Set("chansync", result, false);
-              
+               Kernel->Sets->Load();
         }
 
         Version GetDescription() 

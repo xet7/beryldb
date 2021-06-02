@@ -55,13 +55,7 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
              value = parameters[2];
         }
                 
-        bool result = Kernel->Config->Sets->Set(key, value, false);
-        
-        if (!result)
-        {
-             user->SendRemoteProtocol(ERR_CONFIG_NOT_FOUND, Kernel->Config->GetServerName(), SETTING_NOT_FOUND);
-             return FAILED;
-        }
+        Kernel->Sets->Set(key, value);
         
         user->SendRemoteProtocol(BRLD_CONF_OK, Kernel->Config->GetServerName(), PROCESS_OK);
         return SUCCESS;
@@ -104,7 +98,7 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
              key = parameters[1];
         }
         
-        std::string value = Kernel->Config->Sets->Get(key);
+        std::string value = Kernel->Sets->Get(key);
         
         if (value.empty())
         {

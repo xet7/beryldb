@@ -89,7 +89,7 @@ Channel* Channel::JoinUser(bool fromconnect, LocalUser* user, std::string cname,
 
 	if (!chan)
 	{
-		if (!Kernel->Config->AllowNew)
+		if (!Kernel->Sets->AsBool("allowchans"))
 		{
                         user->SendProtocol(ERR_NOT_ACCEPTING_C, cname, "Not accepting new channels.");
                         return NULL;

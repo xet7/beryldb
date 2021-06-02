@@ -35,7 +35,7 @@ COMMAND_RESULT CommandDefaults::Handle(User* user, const Params& parameters)
              return SUCCESS;
         }
         
-        Kernel->Config->Sets->SetDefaults();
+        Kernel->Sets->SetDefaults();
         
         user->SendRemoteProtocol(BRLD_CONF_DEFAULTS, Kernel->Config->GetServerName(), "Configuration defaults set.");
         return SUCCESS;

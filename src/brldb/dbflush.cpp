@@ -82,6 +82,11 @@ void DataFlush::GetResults()
 {
       const UserMap& users = Kernel->Clients->GetInstances();
       
+      if (!users.size())
+      {
+            return;
+      }
+      
       for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
       {
                   User* user = u->second;
@@ -189,6 +194,11 @@ void DataFlush::GetPending()
       }
 
       const UserMap& users = Kernel->Clients->GetInstances();
+      
+      if (!users.size())
+      {
+            return;
+      }
       
       for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
       {

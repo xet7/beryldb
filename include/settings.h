@@ -17,24 +17,28 @@
  
 class Externalize Settings : public safecast<Settings>
 {
-    public:
-
+   private:
+          
+        std::map<std::string, std::string> defaults;
+        
+        std::map<std::string, std::string> SetMap;
+        
+   public:
+        
         Settings();    
         
-       /* 
-        * Sets a new setting. This function will set a variable
-        * and store data in database.
-        */
-        
-        bool Set(const std::string& key, const std::string& value, bool skip = false);
+        void Set(const std::string& key, const std::string& value);
 
         /* Obtain a configuration value. */
         
         std::string Get(const std::string& key);
         
+        bool AsBool(const std::string& key);
+        
         /* Sets default configuration values */
 
         void SetDefaults();
         
+        void Load();
 };
 

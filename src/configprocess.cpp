@@ -190,8 +190,6 @@ static std::string GetServerHost()
 
 void Configuration::Fill()
 {
-	this->Sets.SetDefaults();
-
 	config_rule* options = GetConf("options");
 	config_rule* server = GetConf("server");
         config_rule* settings = GetConf("settings");
