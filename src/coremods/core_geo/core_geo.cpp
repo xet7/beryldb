@@ -22,11 +22,12 @@ class CoreModuleGeo : public Module
         CommandGeoGet cmdgeoget;
         CommandGeoDel cmdgeodel;
         CommandGFind cmdgfind;
+        CommandGeoCalc cmdgcalc;
 
     public:     
         
         CoreModuleGeo() : cmdgeoadd(this), cmdgeoget(this), cmdgeodel(this),
-                          cmdgfind(this)
+                          cmdgfind(this), cmdgcalc(this)
         {
         
         }

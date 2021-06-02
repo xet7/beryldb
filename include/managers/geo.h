@@ -18,6 +18,8 @@
 class Externalize GeoHelper
 {
     public:
+    
+       static void Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value);
 
        static void Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude);
 

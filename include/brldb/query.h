@@ -597,6 +597,19 @@ class Externalize geodel_query : public query_base
         void Run();
 };
 
+class Externalize geocalc_query : public query_base
+{
+    public:
+
+        geocalc_query() : query_base(DBL_TYPE_GEOCALC)
+        {
+
+        }
+
+        void Run();
+};
+
+
 class Flusher
 {
     public:
@@ -666,5 +679,7 @@ class Flusher
         static void GeoDel(User* user, std::shared_ptr<query_base> query);
         
         static void GeoFind(User* user, std::shared_ptr<query_base> query);
+
+        static void GeoCalc(User* user, std::shared_ptr<query_base> query);
 
 };

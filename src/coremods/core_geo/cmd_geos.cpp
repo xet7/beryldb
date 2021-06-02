@@ -123,5 +123,16 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2)
+{
+         syntax = "<name> <name2>";
+}
 
-
+COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
+{  
+         const std::string& gname = parameters[0];
+         const std::string& name2 = parameters[1];
+         
+         GeoHelper::Calc(user, user->current_db, user->select, gname, name2);
+         return SUCCESS;
+}

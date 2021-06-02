@@ -238,6 +238,11 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          break;
                     }
                     
+                    case DBL_TYPE_GEOCALC:
+                    {
+                         Flusher::GeoCalc(user, signal);
+                         break;
+                    }
         };      
         
         signal = nullptr;

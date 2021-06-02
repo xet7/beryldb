@@ -20,6 +20,21 @@
 #include "brldb/query.h"
 #include "managers/geo.h"
 
+void GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+       
+       query->database = database;
+       query->user = user;
+       query->select_query = where;
+       query->int_keys = INT_GEO;
+       query->key = entry;
+       query->value = value;
+       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
+       Kernel->Store->Push(query);
+}
+
 void GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude)
 {
        std::shared_ptr<geoadd_query> query = std::make_shared<geoadd_query>();

@@ -11,20 +11,36 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include <math.h>  
+#include <math.h>
+#include <cmath> 
+#define earthRadiusKm 6371.0
 
 #include "beryl.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 
-double CalculateDistance(double lat1, double long1, double lat2, double long2) 
+
+double deg2rad(double deg) 
 {
-      double dist;
-      dist = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(long1 - long2);
-      dist = acos(dist);
-      dist = (6371 * M_PI * dist) / 180;
-      return dist;
+    return (deg * M_PI / 180);
+}
+
+double rad2deg(double rad) 
+{
+  return (rad * 180 / M_PI);
+}
+
+double CalculateDistance(double lat1d, double lon1d, double lat2d, double lon2d) 
+{
+  double lat1r, lon1r, lat2r, lon2r, u, v;
+  lat1r = deg2rad(lat1d);
+  lon1r = deg2rad(lon1d);
+  lat2r = deg2rad(lat2d);
+  lon2r = deg2rad(lon2d);
+  u = sin((lat2r - lat1r)/2);
+  v = sin((lon2r - lon1r)/2);
+  return 2.0 * earthRadiusKm * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
 
 void geoadd_query::Run()
@@ -83,7 +99,6 @@ void Flusher::GeoGet(User* user, std::shared_ptr<query_base> query)
       Dispatcher::Smart(user, 1, BRLD_QUERY_OK, query->response, query);
 }
 
-
 void geodel_query::Run()
 {
         if (this->key.empty())
@@ -104,6 +119,63 @@ void Flusher::GeoDel(User* user, std::shared_ptr<query_base> query)
                Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
         }
 }
+
+void geocalc_query::Run()
+{
+        if (this->key.empty() || this->value.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
+        
+        const std::string& where_query = this->format;
+        
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+    
+        if (dbvalue.empty())
+        {
+               access_set(DBL_NOT_FOUND);
+               return;
+        }
+        
+        std::string second = this->int_keys + this->select_query + ":" + to_bin(this->value);
+        
+        std::string dbvalue2;
+        rocksdb::Status fstatus3 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), second, &dbvalue2);
+    
+        if (dbvalue2.empty())
+        {
+               access_set(DBL_NOT_FOUND);
+               return;
+        }
+        
+        
+        size_t found =  dbvalue.find_first_of(":");
+        std::string path = dbvalue.substr(0,found);
+        std::string file = dbvalue.substr(found+1);
+        
+        size_t found2 =  dbvalue2.find_first_of(":");
+        std::string path2 = dbvalue2.substr(0,found2);
+        std::string file2 = dbvalue2.substr(found2+1);
+        
+//double CalculateDistance(double lat1, double long1, double lat2, double long2) 
+        
+        std::cout << "lat1: " << convto_num<double>(to_string(path)) << " long1: " << to_string(file) << std::endl;
+        std::cout << "lat2: " << to_string(path2) << " long2: " << to_string(file2) << std::endl;
+      
+        this->response = convto_string(CalculateDistance(convto_num<double>(to_string(path)), convto_num<double>(to_string(file)), convto_num<double>(to_string(path2)), convto_num<double>(to_string(file2))));
+        this->SetOK();
+}
+
+void Flusher::GeoCalc(User* user, std::shared_ptr<query_base> query)
+{
+        if (query->finished)
+        {
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, query->response.c_str(), query);
+        }
+}
+
         
 void geofind_query::Run()
 {

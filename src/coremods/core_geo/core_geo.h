@@ -50,3 +50,13 @@ class CommandGFind : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGeoCalc : public Command 
+{
+    public: 
+
+        CommandGeoCalc(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
