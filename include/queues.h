@@ -71,16 +71,16 @@ class IOQueue : public base_class
 
 class IOQueueMiddle : public IOQueue
 {
+
+ private:
 	
 	StreamSocket::send_queue sendq;
 
-	
 	std::string precvq;
 
-	
 	IOQueue* nextattach;
 
- protected:
+  protected:
 	
 	std::string& GetRecvQ() { return precvq; }
 

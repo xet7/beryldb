@@ -14,13 +14,56 @@
 #include "beryl.h"
 #include "managers/databases.h"
 
+class CommandAutoFlush : public Command
+{
+   public:
+      
+        bool status;
+      
+        CommandAutoFlush(Module* Creator) : Command(Creator, "AUTOFLUSH", 1, 1)
+        {
+                syntax = "<on/off>";
+        }
+        
+        COMMAND_RESULT Handle(User* user, const Params& parameters)
+        {
+                const std::string& arg = parameters[0];
+                
+                if (arg == "on")
+                {
+                        status = true;
+                }
+                else
+                {
+                        status = false;
+                }
+                
+                user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+                return SUCCESS;
+        }
+};
+        
+
 class ModuleAutoFlush : public Module
 {
+  private:
+
+        CommandAutoFlush cmd;
           
   public:
 
+        void Initialize()
+        {
+                cmd.status = false;
+        }
+
         void OnEveryHour(time_t current)
         {
+                if (!cmd.status)
+                {
+                        return;
+                }
+                
                 if (DBHelper::FlushDB())
                 {
                         falert(NOTIFY_DEFAULT, "Database flushed.");
@@ -30,7 +73,7 @@ class ModuleAutoFlush : public Module
                 falert(NOTIFY_DEFAULT, "Unable to flush database.");
         }
         
-        ModuleAutoFlush()
+        ModuleAutoFlush() : cmd(this)
         {
             
         }

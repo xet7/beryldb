@@ -250,6 +250,14 @@ void hkeys_query::Run()
                 
                 if (select_match && int_match && key_match)
                 {	
+                       if (this->core == true)
+                       {
+                                aux.push_back(ashesh);
+                                aux_counter++;
+                                continue;
+                       }
+                       
+                       
                        if (((signed int)total_match >= offset))
                        {
                             if (limit != -1 && ((signed int)aux_counter < limit))

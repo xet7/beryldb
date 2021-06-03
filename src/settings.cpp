@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include "managers/user.h"
 #include "managers/settings.h"
+#include "managers/maps.h"
 
 #include "helpers.h"
 #include "subscription.h"
@@ -43,11 +44,16 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-      for (std::map<std::string, std::string> ::iterator i = this->defaults.begin(); i != this->defaults.end(); i++)      
-      {
-             std::string key = i->first;
-             this->Set(key, STHelper::Get("conf", key));
-      }
+//        bprint(INFO, "Loading settings.");
+  
+        VectorTuple tpl = MapsHelper::HKeys(TABLE_SETTINGS, "conf");
+        Args confs = std::get<1>(tpl);
+        
+        for (Args::iterator i = confs.begin(); i != confs.end(); i++)
+        {
+             std::string key = *i;
+             this->SetMap[key] = STHelper::Get("conf", key);
+        }
 }
 
 void Settings::Set(const std::string& key, const std::string& value)

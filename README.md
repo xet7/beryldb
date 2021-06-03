@@ -20,7 +20,7 @@ internal processor. Beryl is written in C++ and is powered by [RocksDB](https://
 Beryl provides lists, maps, keys, and channel subscription for its clients. It is
 optimized for GNU/Linux systems.
 
-Check Beryl's [full list of commands](https://docs.beryl.dev/server/commands/).
+Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 
 Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
@@ -28,7 +28,7 @@ Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
 ## Installation
 
-It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/server/installation/).
+It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/using/installation/).
 Beryl's development branches are available in [our GitHub repository](https://github.com/beryldb/beryldb).
 
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
@@ -43,9 +43,9 @@ sudo apt-get install librocksdb-dev build-essential
 Download latest version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/tags/0.2.1.tar.gz
-tar -xvzf 0.2.1.tar.gz
-cd beryldb-0.2.1/
+wget https://github.com/beryldb/beryldb/archive/refs/tags/0.3.2.tar.gz
+tar -xvzf 0.3.2.tar.gz
+cd beryldb-0.3.2/
 ```
 
 You may now configure BerylDB following these quick steps: 

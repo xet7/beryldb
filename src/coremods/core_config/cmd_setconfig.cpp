@@ -102,7 +102,7 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
         
         if (value.empty())
         {
-             user->SendRemoteProtocol(ERR_CONFIG_NOT_FOUND, Kernel->Config->GetServerName(), SETTING_NOT_FOUND);
+             user->SendRemoteProtocol(ERR_CONFIG_NOT_FOUND, Kernel->Config->GetServerName(), PROCESS_NULL);
              return FAILED;
         }
         

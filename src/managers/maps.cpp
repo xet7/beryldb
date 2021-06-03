@@ -267,6 +267,23 @@ VectorTuple MapsHelper::Search(QUERY_TYPE type, const std::string& where, const 
        return std::make_tuple(query->access, query->VecData);
 }
 
+VectorTuple MapsHelper::HKeys(const std::string& where, const std::string& key)
+{
+       std::shared_ptr<hkeys_query> query = std::make_shared<hkeys_query>();
+
+       query->database = Kernel->Core->DB;
+       
+       query->key = key;
+       query->offset = 0;
+       query->limit = -1;
+       query->int_keys = INT_MAP;
+       query->select_query = where;
+       query->core = true;
+
+       query->Run();
+
+       return std::make_tuple(query->access, query->VecData);
+}
 
 MMapTuple MapsHelper::SearchHesh(const std::string& where, const std::string& hesh, signed int offset, signed int limit)
 {

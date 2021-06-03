@@ -88,14 +88,22 @@
 #<module name="chainjoin">
 #<chain when="#A" do="#B">
 
-# ECHO ######################################################
+# Echo (extra) ######################################################
 #
 # Echoes everything an user says.
+#
 # NOTE: This module is in the extra/ directory. You should
 #       either create a dynanmic link or run:
 #       ./configure --enable-extras echo
 
 #<module name="echo">
+
+# AutoFlusher (extra) ######################################################
+#
+# Removes all entries in database every one hour.
+# Ths module may be used in demo purposes.
+
+#<module name="autoflush">
 
 # End of modules.conf
 ##############################################################

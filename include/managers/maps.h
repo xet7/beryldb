@@ -43,6 +43,7 @@ class Externalize MapsHelper
        
        static void Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key);
        
+       static VectorTuple HKeys(const std::string& where, const std::string& key);
 
        static DBL_CODE DeleteAll(const std::string& where, const std::string& entry);
        
