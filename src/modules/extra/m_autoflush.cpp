@@ -22,7 +22,7 @@ class CommandAutoFlush : public Command
       
         CommandAutoFlush(Module* Creator) : Command(Creator, "AUTOFLUSH", 1, 1)
         {
-                syntax = "<on/off>";
+                syntax = "<on or off>";
         }
         
         COMMAND_RESULT Handle(User* user, const Params& parameters)
