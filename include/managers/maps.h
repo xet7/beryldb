@@ -21,8 +21,6 @@ class Externalize MapsHelper
 {
     public:
 
-       static void PreHQuery(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery);
-
        static void Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest);
 
        static BasicTuple Get(const std::string& where, const std::string& key, const std::string& hesh);

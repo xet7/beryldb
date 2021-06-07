@@ -108,3 +108,12 @@ class CommandLFind : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandLRemove : public Command 
+{
+    public: 
+
+        CommandLRemove(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

@@ -60,9 +60,13 @@ enum OP_TYPE
     OP_MULT	=   7
 };
 
+class HQuery;
+
 class Externalize query_base
 {
     public:
+        
+        std::shared_ptr<HQuery> hquery;
         
         MANAGER_TYPE mtype;
         
@@ -164,7 +168,7 @@ class Externalize query_base
             this->finished  = true;
         }
         
-        query_base(DBL_CODE base) : mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
+        query_base(DBL_CODE base) : hquery(nullptr), mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
                                     subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), 
                                     offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), 
                                     type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
@@ -609,6 +613,17 @@ class Externalize geocalc_query : public query_base
         void Run();
 };
 
+class Externalize lremove_query : public query_base
+{
+    public:
+
+        lremove_query() : query_base(DBL_TYPE_LREMOVE)
+        {
+
+        }
+
+        void Run();
+};
 
 class Flusher
 {
@@ -681,5 +696,9 @@ class Flusher
         static void GeoFind(User* user, std::shared_ptr<query_base> query);
 
         static void GeoCalc(User* user, std::shared_ptr<query_base> query);
+
+        static void LRemove(User* user, std::shared_ptr<query_base> query);
+
+        static void HQuery(User* user, std::shared_ptr<query_base> query);
 
 };

@@ -38,5 +38,7 @@ class Externalize ListHelper
     static void Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
 
     static void Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+
+    static void LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry);
     
 };

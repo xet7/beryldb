@@ -29,6 +29,6 @@ class Names::EventListener : public Events::ModuleEventListener
 	
 	}
 
-	virtual ModuleResult OnInstanceList(LocalUser* issuer, Subscription* memb, std::string& prefixes, std::string& instance) = 0;
+	virtual ModuleResult OnInstanceList(LocalUser* origin, Subscription* memb, std::string& prefixes, std::string& instance) = 0;
 
 };

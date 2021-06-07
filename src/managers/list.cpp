@@ -218,3 +218,21 @@ void ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::str
 
        Kernel->Store->Push(query);
 }
+
+void ListHelper::LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry)
+{
+       std::shared_ptr<lremove_query> query = std::make_shared<lremove_query>();
+       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+
+       query->database = db;
+       query->user = user;
+       query->select_query = where;
+       query->int_keys = INT_LIST;
+       query->key = to_bin(entry);
+
+       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
+
+       Kernel->Store->Push(query);
+}
+
+

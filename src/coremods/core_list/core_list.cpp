@@ -28,6 +28,7 @@ class CoreModuleList : public Module
         CommandLPos cmdlpos;
         CommandLSearch cmdlsearch;
         CommandLFind cmdlfind;
+        CommandLRemove cmdlremove;
 
     public:	
         
@@ -40,7 +41,8 @@ class CoreModuleList : public Module
                            cmdlmove(this),
                            cmdlpos(this),
                            cmdlsearch(this),
-                           cmdlfind(this)
+                           cmdlfind(this),
+                           cmdlremove(this)
 
         {
         

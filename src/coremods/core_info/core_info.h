@@ -137,3 +137,12 @@ class CommandAgent : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
+
+class CommandFirstOf : public Command
+{
+ public:
+
+        CommandFirstOf(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

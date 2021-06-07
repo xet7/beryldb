@@ -169,6 +169,104 @@ void Flusher::LMove(User* user, std::shared_ptr<query_base> query)
         }
 }
 
+void lremove_query::Run()
+{
+    if (this->key.empty())
+    {
+            this->access_set(DBL_MISS_ARGS);
+            return;
+    }
+    
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+    std::string rawstring;
+    unsigned int aux_counter = 0;
+    
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+                    if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                    {
+                         this->access_set(DBL_INTERRUPT);
+                         return;
+                    }
+
+                    rawstring = it->key().ToString();
+                    engine::colon_node_stream stream(rawstring);
+                    std::string token;
+
+                    unsigned int strcounter = 0;
+
+                    bool int_match = false;
+                    bool key_match = false;
+                    bool select_match = false;
+
+                    while (stream.items_extract(token))
+                    {
+
+                            if (strcounter == 2)
+                            {
+                                    if (token != this->key)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        key_match = true;
+                                    }
+                            }
+
+                            if (strcounter == 0)
+                            {
+                                    if (this->int_keys != token)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        int_match = true;
+                                    }
+                            }
+
+                            if (strcounter == 1)
+                            {
+                                    if (this->select_query != token)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        select_match = true;
+                                    }
+                            }
+
+                            strcounter++;
+                    }
+
+                    if (select_match && int_match && key_match)
+                    {
+                            aux_counter++;
+                            this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawstring);
+                    }
+    }
+    
+    if (!aux_counter)
+    {
+            this->access_set(DBL_NOT_FOUND);
+            return;
+    }
+    
+    this->SetOK();
+}
+
+void Flusher::LRemove(User* user, std::shared_ptr<query_base> query)
+{
+        if (query->finished)
+        {
+               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
+        }
+}
+
 void lpop_query::Run()
 {
     if (this->key.empty())
@@ -522,7 +620,8 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_LGET_BEGIN, query->key, "BEGIN of LGET list.");
+                //user->SendProtocol(BRLD_LGET_BEGIN, query->key, "BEGIN of LGET list.");
+                Dispatcher::JustAPI(user, BRLD_START_LIST);                
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -533,7 +632,8 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_LGET_END, query->key, Daemon::Format("END of LGET list (%i).", query->counter).c_str());
+                //user->SendProtocol(BRLD_LGET_END, query->key, Daemon::Format("END of LGET list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                
         }
 }
 
@@ -695,7 +795,7 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_LSEARCH_BEGIN, query->key, "BEGIN of LSEARCH list.");
+               Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -706,7 +806,7 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_LSEARCH_END, query->key, Daemon::Format("END of LSEARCH list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);
         }
 
 }
@@ -865,7 +965,8 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_LFIND_BEGIN, query->key, "BEGIN of LFIND list.");
+               Dispatcher::JustAPI(user, BRLD_START_LIST);
+
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -876,6 +977,7 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_LFIND_END, query->key, Daemon::Format("END of LFIND list (%i).", query->counter).c_str());
+               Dispatcher::JustAPI(user, BRLD_END_LIST);
+        
         }
 }

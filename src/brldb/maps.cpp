@@ -131,12 +131,6 @@ void Flusher::HDel(User* user, std::shared_ptr<query_base> query)
 
 void hset_query::Run()
 {
-        if (!this->Check())
-        {
-            this->access_set(DBL_STATUS_BROKEN);
-            return;
-        }
-
         if (this->value.empty() || this->format.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
@@ -334,8 +328,8 @@ void Flusher::HKeys(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial && !query->counter)
         {
-               user->SendProtocol(BRLD_HSEARCH_BEGIN, query->key, "BEGIN of HSEARCH list.");
-               user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
+               Dispatcher::JustAPI(user, BRLD_START_LIST);
+               Dispatcher::JustAPI(user, BRLD_END_LIST);               
                return;
         }
         

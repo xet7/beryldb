@@ -211,7 +211,8 @@ enum BRLD_PROTOCOL
         BRLD_START_UNQ_LIST             =               284,
         BRLD_END_UNQ_LIST               =               285,
         BRLD_CORES			=		286,
-
+        BRLD_FIRSTOF			=		287,
+        
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
@@ -285,5 +286,6 @@ enum BRLD_PROTOCOL
 	ERR_INVALID_NOTLVL		=		572,
 	ERR_NO_NOTIFY			=		573,
 	ERR_NOT_VALID_COORDINATE	=		574,
-	ERR_NOT_NUM			=		575
+	ERR_NOT_NUM			=		575,
+	ERR_NOT_FOUND			=		576
 };

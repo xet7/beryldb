@@ -15,6 +15,7 @@
 #include "brldb/hquery.h"
 #include "core_hquery.h"
 #include "managers/maps.h"
+#include "managers/hq.h"
 
 CommandHLimits::CommandHLimits(Module* parent) : Command(parent, "HLIMITS", 2, 2) 
 {
@@ -59,7 +60,7 @@ COMMAND_RESULT CommandHSend::Handle(User* user, const Params& parameters)
         }
         
         user->SendProtocol(BRLD_HQUERY_SENT, "HQuery sent.");
-        MapsHelper::PreHQuery(user, user->current_db, user->select, user->hquery);
+        HQHelper::HSend(user, user->current_db, user->select, user->hquery);
         return SUCCESS;
 }
 
@@ -91,21 +92,21 @@ COMMAND_RESULT CommandHParam::Handle(User* user, const Params& parameters)
                 case 1:
                 
                      {
-                          user->hquery->field = param;       
+                          user->hquery->select = param;       
                           break;
                      }
                      
                 case 2:
                 
                      {
-                          user->hquery->sort = param;       
+                          user->hquery->key = param;       
                           break;
                      }
-                     
-                case 3:
                 
+                case 3:
+                     
                      {
-                          user->hquery->key = param;       
+                          user->hquery->contains = param;
                           break;
                      }
                      
@@ -113,7 +114,7 @@ COMMAND_RESULT CommandHParam::Handle(User* user, const Params& parameters)
                 default:
                 
                      { 
-                          user->SendProtocol(ERR_WRONG_HPARAMS, "Wrong param.");
+                          user->SendProtocol(ERR_WRONG_HPARAMS, PROCESS_FALSE);
                           return FAILED;     
                      }
                 

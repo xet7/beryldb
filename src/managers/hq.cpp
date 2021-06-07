@@ -18,18 +18,19 @@
 #include "brldb/query.h"
 #include "managers/hq.h"
 
-void HQHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
+void HQHelper::HSend(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
 {
-       std::shared_ptr<search_query> query = std::make_shared<search_query>();
+       std::shared_ptr<hquery_query> query = std::make_shared<hquery_query>();
+       
+       std::shared_ptr<HQuery> newptr = hquery;
 
+       hquery = nullptr;
+       user->hquery.reset();
+       user->hquery = nullptr;
+       
        query->database = database;
        query->user = user;
-/*       query->limit = limit;
-       query->offset = offset;
-       query->qtype = type;
-       query->select_query = where;
-       query->int_keys = INT_KEYS;
-       query->key = stripe(key);
-*/
+       query->hquery = newptr;
+       
        Kernel->Store->Push(query);
 }

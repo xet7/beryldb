@@ -117,3 +117,25 @@ COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
          user->SendProtocol(BRLD_WHOAMI, user->login, user->login.c_str());
          return SUCCESS;
 }
+
+CommandFirstOf::CommandFirstOf(Module* parent) : Command(parent, "FIRSTOF", 1, 1)
+{
+         syntax = "<user>";
+}
+
+COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
+{
+         const User* found = Kernel->Clients->FirstLogin(parameters[0]);
+         
+         if (found)
+         {
+                user->SendProtocol(BRLD_FIRSTOF, found->instance.c_str());
+         }
+         else
+         {
+               user->SendProtocol(ERR_NOT_FOUND, parameters[0].c_str());
+               return FAILED;
+         }
+         
+         return SUCCESS;
+}

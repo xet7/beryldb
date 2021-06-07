@@ -210,9 +210,6 @@ class Externalize Configuration
 	std::string ModifiedVersion;
 
 	
-	bool SyntaxHints;
-
-	
 	std::string CaseMapping;
 
 

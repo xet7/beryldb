@@ -21,10 +21,6 @@
 #include "brldb/query.h"
 #include "managers/maps.h"
 
-void MapsHelper::PreHQuery(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
-{
-        user->hquery = nullptr;
-}
 
 void MapsHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest)
 {

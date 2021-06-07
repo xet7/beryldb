@@ -76,7 +76,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
                   return;
         }
 
-	if (Kernel->Config->SyntaxHints && user->registered == REG_OK && syntax.length())
+	if (Kernel->Sets->AsBool("syntaxhints") && user->registered == REG_OK && syntax.length())
 	{
 		user->SendProtocol(BRLD_SYNTAX, name, Daemon::Format("%s %s", name.c_str(), syntax.c_str()));
 	}

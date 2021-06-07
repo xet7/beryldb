@@ -58,3 +58,16 @@ COMMAND_RESULT CommandLMove::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandLRemove::CommandLRemove(Module* Creator) : Command(Creator, "LREMOVE", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLRemove::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+
+        ListHelper::LRemove(user, Kernel->Store->Default, user->select, key);
+        return SUCCESS;  
+}
+

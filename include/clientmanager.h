@@ -269,4 +269,8 @@ class Externalize ClientManager : public safecast<ClientManager>
          */    	
 		
 	UserVector FindLogin(const std::string& login, registration_state state = REG_OK);
+	
+	
+	User* FirstLogin(const std::string& login, registration_state state = REG_OK);
+	
 };

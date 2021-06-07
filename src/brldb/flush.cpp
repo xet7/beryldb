@@ -243,6 +243,19 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          Flusher::GeoCalc(user, signal);
                          break;
                     }
+                    
+                    case DBL_TYPE_LREMOVE:
+                    {
+                         Flusher::LRemove(user, signal);
+                         break;
+                    }
+                    
+                    case DBL_TYPE_HQUERY:
+                    {
+                         Flusher::HQuery(user, signal);
+                         break;
+                    }
+                    
         };      
         
         signal = nullptr;

@@ -50,9 +50,9 @@ COMMAND_RESULT CommandHReset::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_HOVER_OK, "Reseting");
                 user->hquery.reset();
                 user->hquery = nullptr;
+                return SUCCESS;
         }
         
         user->SendProtocol(ERR_HUNABLE_RESET, "Not found");
-        
         return SUCCESS;
 }

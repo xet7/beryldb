@@ -431,6 +431,23 @@ UserVector ClientManager::FindLogin(const std::string& login, registration_state
 	return users;
 }
 
+User* ClientManager::FirstLogin(const std::string& login, registration_state state)
+{
+        const LoginHash& AllLogins = Kernel->Clients.GetLogins();
+
+        for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
+        {
+                User* user = i->second;
+
+                if (i->first == login || user->registered == state)
+                {
+                        return user;;
+                }
+        }
+
+        return NULL;
+}
+
 UserVector ClientManager::FindPrivs(const std::string& flag)
 {
 	UserVector UserList;

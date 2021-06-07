@@ -203,14 +203,14 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
 
         if (!query->partial && !query->counter)
         {
-               user->SendProtocol(BRLD_HSEARCH_BEGIN, query->key, "BEGIN of HSEARCH list.");
-               user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
+               Dispatcher::JustAPI(user, BRLD_START_LIST);
+               Dispatcher::JustAPI(user, BRLD_END_LIST);
                return;
         }
    
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_HSEARCH_BEGIN, query->key, "BEGIN of HSEARCH list.");
+               Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
                  
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -221,7 +221,7 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_HSEARCH_END, query->counter, query->key, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
+               Dispatcher::JustAPI(user, BRLD_END_LIST);
         }        
 }
 

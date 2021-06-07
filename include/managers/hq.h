@@ -19,5 +19,6 @@ class Externalize HQHelper
 {
     public:
     
-        static void Search(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery);
+        static void HSend(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery);
+
 };
