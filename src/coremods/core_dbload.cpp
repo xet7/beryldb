@@ -150,12 +150,9 @@ class ModuleCoreDB : public Module
               Kernel->Logins->Sessions->Attach(user, user->login, flags);
               LoadNotify(user);
               
-              /* We should notify clients they have flags, only they do have them. */
+              /* All users should be notified about their flags. */
               
-              if (!flags.empty())
-              {
-                    user->SendProtocol(BRLD_YOUR_FLAGS, user->login, flags.c_str());
-              }
+              user->SendProtocol(BRLD_YOUR_FLAGS, user->login, flags.c_str());
               
               /* User will not join chans */
               

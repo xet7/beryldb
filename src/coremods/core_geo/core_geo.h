@@ -60,3 +60,12 @@ class CommandGeoCalc : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
+class CommandGeoClose : public Command 
+{
+    public: 
+
+        CommandGeoClose(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

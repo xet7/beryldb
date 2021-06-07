@@ -64,5 +64,8 @@ enum DBL_CODE
     DBL_TYPE_GEODEL    		=		50,
     DBL_TYPE_GEOFIND		=		51,
     DBL_TYPE_GEOCALC    	=		52,
-    DBL_TYPE_LREMOVE		=		53
+    DBL_TYPE_LREMOVE		=		53,
+    DBL_TYPE_GEOCLOSE           =               54
+    
+    
 };

@@ -136,3 +136,48 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
          GeoHelper::Calc(user, user->current_db, user->select, gname, name2);
          return SUCCESS;
 }
+
+CommandGeoClose::CommandGeoClose(Module* Creator) : Command(Creator, "GEOCLOSE", 2, 4)
+{
+         syntax = "<name> <max distance> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandGeoClose::Handle(User* user, const Params& parameters)
+{  
+       const std::string& gname = parameters[0];
+       const std::string& distance = parameters[1];
+
+       signed int offset;
+       signed int limit;
+
+       if (parameters.size() == 3)
+       {
+             if (!is_zero_or_great(parameters[2]))
+             {
+                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                   return FAILED;
+             }
+
+             limit = convto_num<signed int>(parameters[2]); 
+             offset = 0;
+       }
+       else if (parameters.size() == 4)
+       {
+             limit = convto_num<signed int>(parameters[3]); 
+             offset = convto_num<signed int>(parameters[2]);
+
+             if (!is_zero_or_great(parameters[2]) || !is_zero_or_great(parameters[3]))
+             {
+                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                   return FAILED;
+             }
+       }
+       else
+       {
+            limit = -1;
+            offset = 0;
+       }
+
+         GeoHelper::GeoClose(user, user->current_db, user->select, gname, distance, offset, limit);
+         return SUCCESS;
+}

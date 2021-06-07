@@ -853,7 +853,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
              {
                         if (query->counter > 0)
                         {
-                                Dispatcher::Smart(user, 1, BRLD_FIND_ITEM, query->response, query);
+                                Dispatcher::Smart(user, 1, BRLD_ITEM, query->response, query);
                         }   
                         else
                         {
@@ -876,14 +876,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
         
         if (query->qtype == TYPE_COUNT_RECORDS)
         {   
-                std::string response = "Items:";
-                
-                if (query->customreply != "")
-                {
-                    response = query->customreply;
-                }
-                
-                user->SendProtocol(BRLD_COUNT, DBL_TYPE_FIND, query->key, Daemon::Format("%s %d", response.c_str(), query->counter).c_str());
+                user->SendProtocol(BRLD_QUERY_OK, convto_string(query->counter));
                 return;
         }
                 
@@ -895,7 +888,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 Dispatcher::Smart(user, 1, BRLD_FIND_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
+                 Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
