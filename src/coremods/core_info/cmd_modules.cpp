@@ -37,7 +37,7 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 		}
 	}
 
-        user->SendRemoteProtocol(BRLD_BEGIN_OF_MODLIST, "Begin of MODULES list");
+        Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
 
 	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
 
@@ -81,7 +81,7 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 		}
 	}
 	
-	user->SendRemoteProtocol(BRLD_END_OF_MODLIST, "End of MODULES list");
+        Dispatcher::JustAPI(user, BRLD_END_OF_MODLIST);
 	return SUCCESS;
 }
 
@@ -108,7 +108,7 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 		}
 	}
 
-        user->SendRemoteProtocol(BRLD_BEGIN_OF_MODLIST, "Begin of MODULES list");
+        Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
 
 	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
 
@@ -152,6 +152,6 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 		}
 	}
 	
-	user->SendRemoteProtocol(BRLD_END_OF_MODLIST, "End of MODULES list");
+        Dispatcher::JustAPI(user, BRLD_END_OF_MODLIST);
 	return SUCCESS;
 }

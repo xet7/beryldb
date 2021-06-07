@@ -20,8 +20,7 @@
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) : 
-	                                 Blocked(false)
-				        , Paused(false)
+				          Paused(false)
 				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
@@ -207,11 +206,6 @@ void InstanceStream::StreamData()
 	{
 		return;
 	}
-
-	if (user->Blocked)
-        {
-             return;
-        }
 
 	std::string line;
 

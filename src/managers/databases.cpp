@@ -24,7 +24,6 @@ void DBHelper::DBSize(User* user, std::shared_ptr<Database> database)
 {
        std::shared_ptr<dbsize_query> query = std::make_shared<dbsize_query>();
 
-       user->Blocked = true;
        query->database = database;
        query->user = user;
        
@@ -35,7 +34,6 @@ void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database, const std:
 {
        std::shared_ptr<swapdb_query> query = std::make_shared<swapdb_query>();
 
-       user->Blocked = true;
        query->database = database;
        query->user = user;
        
@@ -48,8 +46,6 @@ void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database, const std:
 void DBHelper::SFlush(User* user, std::shared_ptr<Database> database, const std::string& select)
 {
        std::shared_ptr<sflush_query> query = std::make_shared<sflush_query>();
-
-       user->Blocked = true;
 
        query->database = database;
        query->user = user;

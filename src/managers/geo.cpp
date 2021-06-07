@@ -23,7 +23,7 @@
 void GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
-       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+              
        
        query->database = database;
        query->user = user;
@@ -38,7 +38,7 @@ void GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::
 void GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude)
 {
        std::shared_ptr<geoadd_query> query = std::make_shared<geoadd_query>();
-       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+              
        
        query->database = database;
        query->user = user;
@@ -54,7 +54,7 @@ void GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::s
 void GeoHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<geoget_query> query = std::make_shared<geoget_query>();
-       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+              
        
        query->database = database;
        query->user = user;
@@ -69,7 +69,7 @@ void GeoHelper::Del(User* user, std::shared_ptr<Database> database, const std::s
 {
        std::shared_ptr<geodel_query> query = std::make_shared<geodel_query>();
        
-       Dispatcher::Check(query, user, MANAGER_TYPE_SINGLE);       
+              
        
        query->database = database;
        query->user = user;
@@ -84,7 +84,7 @@ void GeoHelper::Find(User* user, std::shared_ptr<Database> database, const std::
 {
        std::shared_ptr<geofind_query> query = std::make_shared<geofind_query>();
        
-       Dispatcher::Check(query, user, MANAGER_TYPE_LIST);       
+              
        
        query->database = database;
        query->user = user;

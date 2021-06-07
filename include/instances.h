@@ -36,9 +36,9 @@ enum class_flags
 enum registration_state 
 {
 	REG_NONE = 0,		/* The user has not sent any identification */
-	REG_USER = 1,		
-	REG_LOGIN = 2,		
-	REG_LOGINUSER = 3, 	
+	REG_USER = 1,		/* User has sent password */
+	REG_LOGIN = 2,		/* User has sent login */
+	REG_LOGINUSER = 3, 	/* User has sent password and login */
 	REG_OK = 7	  	
 };
 
@@ -121,8 +121,6 @@ class Externalize User : public Expandable
 	
  public:
 
- 	bool Blocked;
- 	
 	class for_each_neighbor_handler
 	{
  	   public:

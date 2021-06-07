@@ -45,7 +45,7 @@ namespace
 			return;
 		}
 		
-		if (user->Blocked)
+		if (user->IsLocked())
 		{
 			user->next_ping_check += 10;
 			return;

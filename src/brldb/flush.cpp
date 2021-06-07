@@ -39,13 +39,6 @@ void DataFlush::MissArgs(User* user, std::shared_ptr<query_base> signal)
         Dispatcher::Smart(user, 0, ERR_QUERY, "Missing arguments.", signal);
 }
 
-void DataFlush::CheckBlock(User* user, std::shared_ptr<query_base> signal)
-{
-        if (!signal->partial)
-        {
-              user->Blocked = false;
-        }
-}
 
 void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
 {

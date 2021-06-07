@@ -43,9 +43,9 @@ sudo apt-get install librocksdb-dev build-essential
 Download latest version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/tags/0.3.2.tar.gz
-tar -xvzf 0.3.2.tar.gz
-cd beryldb-0.3.2/
+wget https://github.com/beryldb/beryldb/archive/refs/tags/0.3.3.tar.gz
+tar -xvzf 0.3.3.tar.gz
+cd beryldb-0.3.3/
 ```
 
 You may now configure BerylDB following these quick steps: 

@@ -601,9 +601,3 @@ void Dispatcher::TellThat(std::string& who, const std::string& msg, int rpl)
         user->SendProtocol(rpl, msg);
 }
 
-void Dispatcher::Check(std::shared_ptr<query_base> signal, User* user, MANAGER_TYPE mtype)
-{
-      user->Blocked = true;
-      signal->mtype = mtype;
-}
-   
