@@ -26,13 +26,44 @@ class Externalize Settings : public safecast<Settings>
    public:
         
         Settings();    
-        
-        void Set(const std::string& key, const std::string& value);
 
-        /* Obtain a configuration value. */
+        /* 
+         * Sets a key to SetMap.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to define.
+	 *         · value: String value to assign.
+         */    
+                 
+        void Set(const std::string& key, const std::string& value);
+        
+        /* 
+         * Returns a particular setting found in SetMap.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to lookup.
+	 * 
+         * @return:
+ 	 *
+         *         · std::string: value, as keyed in this->SetMap.
+         */    
         
         std::string Get(const std::string& key);
-        
+
+        /* 
+         * Returns configuration setting as boolean.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to lookup.
+	 * 
+         * @return:
+ 	 *
+         *         · bool: Returning value in value.
+         */            
+         
         bool AsBool(const std::string& key);
         
         /* Sets default configuration values */

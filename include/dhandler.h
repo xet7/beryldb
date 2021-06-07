@@ -33,7 +33,7 @@ class Externalize DLLHandler : public base_class
 
 		~DLLHandler();
 
-		Module* CallInit();
+		Module* StartMod();
 
 		void* GetSymbol(const char* name) const;
 

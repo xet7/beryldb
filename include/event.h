@@ -108,14 +108,19 @@ class Events::ModuleEventListener : private ddl_base_ref::aptureAttach
 		, eventpriority(eventprio)
 	{
 		prov.SetaptureAttach(this);
+
 		if (prov)
+		{
 			ModuleEventListener::OnCapture();
+		}
 	}
 
 	~ModuleEventListener()
 	{
 		if (prov)
+		{
 			prov->Unsubscribe(this);
+		}
 	}
 
 	

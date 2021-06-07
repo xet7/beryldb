@@ -50,7 +50,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 
 	try
 	{
-		loading = handler->CallInit();
+		loading = handler->StartMod();
 		this->new_services = NULL;
 
 		if (loading)

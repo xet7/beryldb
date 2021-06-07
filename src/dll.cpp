@@ -45,7 +45,7 @@ DLLHandler::~DLLHandler()
 	dlclose(lib);
 }
 
-Module* DLLHandler::CallInit()
+Module* DLLHandler::StartMod()
 {
 	if (!lib)
 	{
