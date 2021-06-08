@@ -322,7 +322,6 @@ void Flusher::GeoFind(User* user, std::shared_ptr<query_base> query)
                 return;
         }
         
-        
 
         if (query->subresult == 1)
         {

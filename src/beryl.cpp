@@ -461,6 +461,10 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	this->Store->Expires->Reset();
 	
+	/* Removes pending futures. */
+	
+	this->Store->Futures->Reset();
+	
 	/* 
 	 * Removes PID file (if any). Keep in mind that this function
 	 * will not have any effect when running using --nofork.
