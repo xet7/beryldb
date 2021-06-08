@@ -84,7 +84,6 @@ enum BRLD_PROTOCOL
 	BRLD_ADD_FLAGS			=		166,
 	BRLD_LOGIN_CHPASS		=		167,
 	BRLD_LOGIN_DEL			=		168,
-	BRLD_FLUSHING			=		169,
 	BRLD_EXPIRE_ADD			=		170,
 	
 	BRLD_TTL			=		171,
@@ -109,9 +108,6 @@ enum BRLD_PROTOCOL
 	BRLD_HSEARCH_END		=		189,
 	BRLD_HSEARCH_ITEM		=		190,
 	
-	BRLD_HKEYS_END			=		191,
-	BRLD_HKEYS_BEGIN		=		192,
-	BRLD_HKEYS_ITEM			=		193,
 	BRLD_FIND_BEGIN			=		194,
 	BRLD_FIND_END			=		195,
 	BRLD_ITEM			=		196,
@@ -195,8 +191,6 @@ enum BRLD_PROTOCOL
 	BRLD_AGENT			=		268,
 	BRLD_LOCAL_EPOCH		=		269,
 	BRLD_TEST			=		270,
-	BRLD_LGET_BEGIN			=		271,
-	BRLD_LGET_END			=		272,
 	BRLD_USER_LIST_BEGIN		=		273,
 	BRLD_ADMIN_LIST_BEGIN		=		274,
 	BRLD_ADMIN_LIST_END		=		275,
@@ -211,7 +205,8 @@ enum BRLD_PROTOCOL
         BRLD_START_UNQ_LIST             =               284,
         BRLD_END_UNQ_LIST               =               285,
         BRLD_CORES			=		286,
-        BRLD_FIRSTOF			=		287,
+        BRLD_FIRSTOF			=		287,	
+        BRLD_FLUSHED			=		288,
         
 	/* Error protocol codes. */
 	

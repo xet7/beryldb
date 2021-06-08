@@ -20,6 +20,21 @@
 #include "brldb/query.h"
 #include "managers/geo.h"
 
+void GeoHelper::Remove(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& arg)
+{
+       std::shared_ptr<georemove_query> query = std::make_shared<georemove_query>();
+       
+       query->database = database;
+       query->user = user;
+       query->select_query = where;
+       query->int_keys = INT_GEO;
+       query->hesh = arg;
+       query->key = entry;
+       query->value = value;
+       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
+       Kernel->Store->Push(query);
+}
+
 void GeoHelper::GeoClose(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, signed int offset, signed int limit)
 {
        std::shared_ptr<geoclose_query> query = std::make_shared<geoclose_query>();

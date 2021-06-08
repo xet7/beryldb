@@ -637,6 +637,19 @@ class Externalize geoclose_query : public query_base
         void Run();
 };
 
+class Externalize georemove_query : public query_base
+{
+    public:
+
+        georemove_query() : query_base(DBL_TYPE_GEOREMOVE)
+        {
+
+        }
+
+        void Run();
+};
+
+
 
 class Flusher
 {
@@ -716,5 +729,6 @@ class Flusher
         
         static void GeoClose(User* user, std::shared_ptr<query_base> query);
         
+        static void GeoRemove(User* user, std::shared_ptr<query_base> query);
 
 };

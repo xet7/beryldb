@@ -341,7 +341,7 @@ void Flusher::HKeys(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                std::string key = *i;
-               Dispatcher::Smart(user, 1, BRLD_HKEYS_ITEM, Daemon::Format("%s", key.c_str()), query);
+               Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("%s", key.c_str()), query);
         }
 
         if (!query->partial)

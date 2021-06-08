@@ -69,3 +69,12 @@ class CommandGeoClose : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGeoRemove : public Command 
+{
+    public: 
+
+        CommandGeoRemove(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

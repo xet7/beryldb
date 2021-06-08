@@ -255,6 +255,11 @@ void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
                          break;
                     }
                     
+                    case DBL_TYPE_GEOREMOVE:
+                    {
+                         Flusher::GeoRemove(user, signal);
+                         break;
+                    }
         };      
         
         signal = nullptr;

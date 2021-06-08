@@ -19,6 +19,8 @@ class Externalize GeoHelper
 {
     public:
 
+       static void Remove(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& arg);
+
        static void GeoClose(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, signed int offset, signed int limit);
     
        static void Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value);

@@ -181,3 +181,23 @@ COMMAND_RESULT CommandGeoClose::Handle(User* user, const Params& parameters)
          GeoHelper::GeoClose(user, user->current_db, user->select, gname, distance, offset, limit);
          return SUCCESS;
 }
+
+CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2, 3)
+{
+         syntax = "<name> <dist> <g/l>";
+}
+
+COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
+{  
+         const std::string& gname = parameters[0];
+         const std::string& dist = parameters[1];
+         std::string arg = parameters[2];
+         
+         if (arg.empty())
+         {
+              arg = "g";
+         }
+         
+         GeoHelper::Remove(user, user->current_db, user->select, gname, dist, arg);
+         return SUCCESS;
+}

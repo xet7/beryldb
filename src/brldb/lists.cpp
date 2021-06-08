@@ -620,19 +620,17 @@ void Flusher::LGet(User* user, std::shared_ptr<query_base> query)
 
         if (query->subresult == 1)
         {
-                //user->SendProtocol(BRLD_LGET_BEGIN, query->key, "BEGIN of LGET list.");
                 Dispatcher::JustAPI(user, BRLD_START_LIST);                
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+                 Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
         {
-                //user->SendProtocol(BRLD_LGET_END, query->key, Daemon::Format("END of LGET list (%i).", query->counter).c_str());
                 Dispatcher::JustAPI(user, BRLD_END_LIST);                
         }
 }

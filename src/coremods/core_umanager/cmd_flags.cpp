@@ -44,7 +44,7 @@ COMMAND_RESULT CommandFlags::Handle(User* user, const Params& parameters)
         }
         else 
         {
-                user->SendProtocol(ERR_LOGIN_NO_FLAGS, "Flags not found.");
+                user->SendProtocol(ERR_LOGIN_NO_FLAGS, PROCESS_FALSE);
         }
         
         return FAILED;
@@ -126,11 +126,11 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
             /* We delete the user from the TABLE_ADMIN */
             
             UserHelper::RemoveAdmin(newlogin);
-            user->SendProtocol(BRLD_ADD_FLAGS, Daemon::Format("%s is no longer with any flags.", newlogin.c_str()));
+            user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_OK);
         }
         else
         {
-            user->SendProtocol(BRLD_ADD_FLAGS, Daemon::Format("Delete. Flags for %s: %s", newlogin.c_str(), creating.c_str()));
+            user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_OK);
         }
         
         /* We notify all users connected about the change */
