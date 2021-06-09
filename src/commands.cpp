@@ -62,18 +62,24 @@ void Command::RegisterService()
 
 void Command::MissingParameters(LocalUser* user, const Params& parameters)
 {
-	if (Kernel->Sets->AsBool("syntaxhints"))
-	{
-		user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters. Syntax:");
-	}
-	else
-	{
-                user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters.");
-	}
-
         if (user->registered != REG_OK && this->no_hint_until_reg)
         {
                   return;
+        }
+        
+        if (user->agent != DEFAULT_EMERALD)
+        {
+        	user->SendProtocol(ERR_MISS_PARAMS);
+        	return;
+        }
+        
+        if (Kernel->Sets->AsBool("syntaxhints"))
+        {
+                user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters. Syntax:");
+        }
+        else
+        {
+                user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters.");
         }
 
 	if (Kernel->Sets->AsBool("syntaxhints") && user->registered == REG_OK && syntax.length())

@@ -300,7 +300,7 @@ std::string Daemon::duration_as_string(time_t duration)
 
 void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key, const std::string& msg, const std::string& div)
 {
-        if (user->agent == "emerald1")
+        if (user->agent == DEFAULT_EMERALD)
         {
 		user->SendProtocol(brld, Daemon::Format("%s%s %s", key.c_str(), div.c_str(), msg.c_str()));
         }
@@ -312,7 +312,7 @@ void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key
 
 void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
 {
-        if (user->agent == "emerald1")
+        if (user->agent == DEFAULT_EMERALD)
         {
         	 return;
         }
@@ -322,7 +322,7 @@ void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
 
 void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg)
 {
-        if (user->agent == "emerald1")
+        if (user->agent == DEFAULT_EMERALD)
         {
              user->SendProtocol(brld, brld2, msg);
         }
@@ -334,7 +334,7 @@ void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, c
 
 void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query)	
 {
-	if (user->agent == "emerald1")
+	if (user->agent ==  DEFAULT_EMERALD)
 	{
 		if (query->qtype == TYPE_NONE)
 		{

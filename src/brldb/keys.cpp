@@ -467,7 +467,7 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
         {
                 case TYPE_EXIST:
                 {
-                        Dispatcher::Smart(user, query->exists, BRLD_EXISTS, convto_string(query->exists), query);
+                        Dispatcher::Smart(user, query->exists, BRLD_QUERY_OK, convto_string(query->exists), query);
                         return;       
                 }
 
@@ -475,11 +475,11 @@ void Flusher::Get(User* user, std::shared_ptr<query_base> query)
                 {
                         if (query->finished)
                         {
-                                  Dispatcher::Smart(user, 1, BRLD_LENGTH, query->length, query);
+                                  Dispatcher::Smart(user, 1, BRLD_QUERY_OK, query->length, query);
                         }
                         else
                         {
-                                Dispatcher::Smart(user, 0, BRLD_LENGTH, PROCESS_NULL, query);
+                                Dispatcher::Smart(user, 0, BRLD_QUERY_OK, PROCESS_NULL, query);
                         }   
 
                         return;
@@ -837,7 +837,7 @@ void find_query::Run()
             this->SetOK();
             return;
     }
-
+    
     this->subresult = ++tracker;
     this->partial = false;
     this->counter = aux_counter;

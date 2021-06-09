@@ -15,6 +15,10 @@
 
 #include <string>
 
+/* Default emerald client. */
+
+const std::string DEFAULT_EMERALD = "emerald";
+
 /* Max. length of a line of text */
 
 const unsigned int INPUT_LIMIT = 65530;
