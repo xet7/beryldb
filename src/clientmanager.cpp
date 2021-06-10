@@ -325,6 +325,10 @@ void ClientManager::Flush(time_t current)
 			curr->usercon.StreamData();
 		}
 
+	        /* Flushes pending commands. */
+
+	        Kernel->Commander.Queue->Flush();
+
 		switch (curr->registered)
 		{
 			case REG_OK:

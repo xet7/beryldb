@@ -21,6 +21,7 @@
 #include "brldsocket.h"
 #include "subscription.h"
 #include "login.h"
+#include "commandproc.h"
 #include "brldb/query.h"
 #include "brldb/hquery.h"
 
@@ -428,6 +429,8 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
 	LocalUser(int fd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
 
 	LocalUser(int fd, const std::string& uuid, Serializable::Data& data);
+
+        std::deque<PendingCMD> PendingList;
 
 	DiscardResult discard();
 

@@ -141,7 +141,7 @@ COMMAND_RESULT CommandHandler::CallHandler(const std::string& commandname, const
 	return INVALID;
 }
 
-void CommandHandler::run_command(LocalUser* user, std::string& command, CommandModel::Params& command_p)
+void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel::Params& command_p)
 {
 	if (user->Paused)
 	{
@@ -155,8 +155,8 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 	
 	if (user->IsLocked())
 	{
-  	    this->Queue->Add(user, command, command_p);
-  	    return;
+  	       this->Queue->Add(user, command, command_p);
+  	       return;
 	}
 	
 	Command* handler = GetBase(command);
@@ -172,7 +172,6 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 			return;
 		}
 
-		
 		handler = GetBase(command);
 	
 		if (!handler)
@@ -295,7 +294,7 @@ void CommandHandler::ProcessBuffer(LocalUser* user, const std::string& buffer)
 	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
 
 	CommandModel::Params parameters(parseoutput.params, parseoutput.tags);
-	run_command(user, command, parameters);
+	Execute(user, command, parameters);
 }
 
 bool CommandHandler::add_command(Command *cmd)
@@ -399,34 +398,51 @@ void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Para
         }
 
         PendingCMD adding(user, command_p, command);
-        this->PendingList.push_back(adding);
+        user->PendingList.push_back(adding);
+}
+
+void CommandQueue::Reset()
+{
+       const ClientManager::LocalList& clients = Kernel->Clients->GetLocals();
+
+       for (ClientManager::LocalList::const_iterator u = clients.begin(); u != clients.end(); ++u)
+       {
+                  LocalUser* user = *u;
+
+                  if (user == NULL || user->IsQuitting() || user->IsLocked())
+                  {
+                        continue;
+                  }
+                  
+                  user->PendingList.clear();
+	}
 }
 
 void CommandQueue::Flush()
 {
-       if (!this->PendingList.size())
+       const ClientManager::LocalList& users = Kernel->Clients->GetLocals();
+       
+       if (!users.size())
        {
             return;
        }
-       
-       PendingCMD event = this->PendingList.front();
-       
-       LocalUser* user = event.user;
-       
-       if (!user || user->IsQuitting())
+      
+       for (ClientManager::LocalList::const_iterator u = users.begin(); u != users.end(); ++u)
        {
-		this->PendingList.pop_front();
-		return;
-       }
-       
-       if (user->IsLocked())
-       {
-	      this->PendingList.push_back(event);
-	      this->PendingList.pop_front();
-       	      return;
-       }
+                  LocalUser* user = *u;
 
-       this->PendingList.pop_front();
-       
-       Kernel->Commander.run_command(user, event.command, event.command_p);
+                  if (user == NULL || user->IsQuitting() || user->IsLocked())
+                  {
+                        continue;
+                  }
+                  
+                  if (!user->PendingList.size())
+                  {
+                        continue;
+                  }
+
+	          PendingCMD event = user->PendingList.front();
+	          user->PendingList.pop_front();
+          	  Kernel->Commander.Execute(user, event.command, event.command_p);
+        }
 }

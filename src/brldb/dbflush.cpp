@@ -228,8 +228,6 @@ void DataFlush::Process(User* user, std::shared_ptr<query_base> signal)
             return;
       }
 
-      user->SetLock(true);
-
       /* Only one operation at a time. */
       
       if (signal->type == DBL_TYPE_OP)
@@ -346,11 +344,13 @@ void DataThread::Exit()
 }
 
 void DataThread::Post(std::shared_ptr<query_base> query)
-{
+{	
       if (!m_thread)
       {
             return;
       }
+      
+      query->user->SetLock(true);
       
       std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_SIGNAL, query));
 

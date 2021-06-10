@@ -86,7 +86,7 @@ LocalUser::LocalUser(int myfd, const std::string& uid, Serializable::Data& data)
 User::~User()
 {
         this->SetLock(false);
-
+        
         /* We remove this user from monitoring list, if applicable. */
         
         Kernel->Monitor->Remove(this);

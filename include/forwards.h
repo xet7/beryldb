@@ -42,6 +42,7 @@ class Database;
 class SessionManager;
 class Notifier;
 class CommandQueue;
+class PendingCMD;
 
 #ifdef ENABLE_TESTOFFICE
 

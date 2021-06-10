@@ -309,14 +309,11 @@ void Beryl::Loop()
         /* Pending notifications */
         
         this->Notify->Flush();
-        
+
         /* Runs functions meant to be run outside current loop. */
         
         this->Atomics->Run();
         
-        /* Flushes pending commands. */
-        
-        this->Commander.Queue->Flush();
 }
 
 void Beryl::RunTimed(time_t current)

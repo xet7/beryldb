@@ -29,9 +29,6 @@ struct PendingCMD
 
 class CommandQueue : public safecast<CommandQueue>
 {
-   private:
-
-      std::deque<PendingCMD> PendingList;
 
    public:
 
@@ -41,10 +38,7 @@ class CommandQueue : public safecast<CommandQueue>
 
       void Flush();
 
-      void Reset()
-      {
-           this->PendingList.clear();
-      }
+      void Reset();
 
 };
 
@@ -58,7 +52,7 @@ class Externalize CommandHandler
 
 	private:
 
-		void run_command(LocalUser* user, std::string& command, CommandModel::Params& parameters);
+		void Execute(LocalUser* user, std::string& command, CommandModel::Params& parameters);
 
 		CommandMap CommandList;
 
