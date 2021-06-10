@@ -13,8 +13,45 @@
 
 #pragma once
 
+struct PendingCMD
+{
+    public:
+    
+        LocalUser* user;
+        CommandModel::Params command_p;
+        std::string command;
+        
+        PendingCMD(LocalUser* usr, const CommandModel::Params command_params, const std::string& cmd) : user(usr), command_p(command_params), command(cmd)
+        {
+        
+        }
+};
+
+class CommandQueue : public safecast<CommandQueue>
+{
+   private:
+
+      std::deque<PendingCMD> PendingList;
+
+   public:
+
+      CommandQueue();
+
+      void Add(LocalUser* user, std::string& command, CommandModel::Params& command_p);
+
+      void Flush();
+
+      void Reset()
+      {
+           this->PendingList.clear();
+      }
+
+};
+
 class Externalize CommandHandler
 {
+	friend class CommandQueue;
+	
 	public:
 
 		typedef STR1::unordered_map<std::string, Command*, engine::insensitive, engine::str_hash_comparison> CommandMap;
@@ -27,6 +64,8 @@ class Externalize CommandHandler
 
 	public:
 
+		CommandQueue Queue;
+		
 		CommandHandler();
 
 		const CommandMap& GetCommands() const 
@@ -50,3 +89,4 @@ class Externalize CommandHandler
 
 		static std::string TranslateUIDs(const std::vector<InterpretationType>& to, const CommandModel::Params& source, bool prefix_final = false, CommandModel* custom_translator = NULL);
 };
+

@@ -41,6 +41,7 @@ class CoreManager;
 class Database;
 class SessionManager;
 class Notifier;
+class CommandQueue;
 
 #ifdef ENABLE_TESTOFFICE
 

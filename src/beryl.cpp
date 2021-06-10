@@ -313,6 +313,10 @@ void Beryl::Loop()
         /* Runs functions meant to be run outside current loop. */
         
         this->Atomics->Run();
+        
+        /* Flushes pending commands. */
+        
+        this->Commander.Queue->Flush();
 }
 
 void Beryl::RunTimed(time_t current)
@@ -411,6 +415,8 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* One last flush. */
 	
         Kernel->Notify->Flush();
+
+        this->Commander.Queue->Reset();
 
 	bprint(INFO, "Preparing exit: %s (code %i)", ExitMap[status], status);
 	

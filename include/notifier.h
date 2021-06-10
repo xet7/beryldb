@@ -38,7 +38,7 @@ struct Event
        }
 };
 
-typedef std::multimap<User*, NOTIFY_LEVEL> NotifyMap;
+typedef std::map<User*, NOTIFY_LEVEL> NotifyMap;
 
 class Externalize Notifier : public safecast<Notifier>
 {

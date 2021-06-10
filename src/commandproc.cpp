@@ -153,6 +153,12 @@ void CommandHandler::run_command(LocalUser* user, std::string& command, CommandM
 		}
 	}
 	
+	if (user->IsLocked())
+	{
+  	    this->Queue->Add(user, command, command_p);
+  	    return;
+	}
+	
 	Command* handler = GetBase(command);
 
 	if (!handler)
@@ -378,4 +384,49 @@ void CommandHandler::TranslateSingleParam(InterpretationType to, const std::stri
 			dest.append(item);
 		break;
 	}
+}
+
+CommandQueue::CommandQueue()
+{
+
+}
+
+void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Params& command_p)
+{
+	if (!user || user->IsQuitting())
+        {
+             return;
+        }
+
+        PendingCMD adding(user, command_p, command);
+        this->PendingList.push_back(adding);
+}
+
+void CommandQueue::Flush()
+{
+       if (!this->PendingList.size())
+       {
+            return;
+       }
+       
+       PendingCMD event = this->PendingList.front();
+       
+       LocalUser* user = event.user;
+       
+       if (!user || user->IsQuitting())
+       {
+		this->PendingList.pop_front();
+		return;
+       }
+       
+       if (user->IsLocked())
+       {
+	      this->PendingList.push_back(event);
+	      this->PendingList.pop_front();
+       	      return;
+       }
+
+       this->PendingList.pop_front();
+       
+       Kernel->Commander.run_command(user, event.command, event.command_p);
 }
