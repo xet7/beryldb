@@ -283,6 +283,10 @@ void Beryl::Dispatcher()
 
 void Beryl::Loop()
 {
+        /* Flushes pending commands. */
+
+        Kernel->Commander.Queue->Flush();
+
         /*
          * Calls our socket pool to wait on all active file descriptors.
          * This pool handles all socket-related writes,

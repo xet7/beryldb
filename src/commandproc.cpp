@@ -153,11 +153,6 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		}
 	}
 	
-	if (user->IsLocked())
-	{
-  	       this->Queue->Add(user, command, command_p);
-  	       return;
-	}
 	
 	Command* handler = GetBase(command);
 
@@ -294,7 +289,10 @@ void CommandHandler::ProcessBuffer(LocalUser* user, const std::string& buffer)
 	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
 
 	CommandModel::Params parameters(parseoutput.params, parseoutput.tags);
-	Execute(user, command, parameters);
+  
+        this->Queue->Add(user, command, parameters);
+	
+//	Execute(user, command, parameters);
 }
 
 bool CommandHandler::add_command(Command *cmd)

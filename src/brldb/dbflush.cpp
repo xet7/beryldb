@@ -159,14 +159,12 @@ void DataFlush::GetResults()
                         DataFlush::mute.unlock();
                   }
       }
-      
-      /* Flushes pending commands. */
 
-      Kernel->Commander.Queue->Flush();
 }
 
 void DataFlush::DispatchAll()
 {
+
       /* We should not dispatch anything if we are paused. */
       
       if (!Kernel->Store->Flusher->Status())  
