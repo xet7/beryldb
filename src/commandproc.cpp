@@ -291,8 +291,6 @@ void CommandHandler::ProcessBuffer(LocalUser* user, const std::string& buffer)
 	CommandModel::Params parameters(parseoutput.params, parseoutput.tags);
   
         this->Queue->Add(user, command, parameters);
-	
-//	Execute(user, command, parameters);
 }
 
 bool CommandHandler::add_command(Command *cmd)
