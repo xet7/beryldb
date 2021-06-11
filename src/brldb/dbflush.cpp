@@ -159,6 +159,10 @@ void DataFlush::GetResults()
                         DataFlush::mute.unlock();
                   }
       }
+      
+      /* Flushes pending commands. */
+
+      Kernel->Commander.Queue->Flush();
 }
 
 void DataFlush::DispatchAll()

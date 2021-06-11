@@ -7,7 +7,7 @@
 
 
 This README is a brief introduction to Beryl. For extended information, you
-can visit our documentation site at [beryl.dev](https://docs.beryl.dev/).
+can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 

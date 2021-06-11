@@ -413,6 +413,8 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
         Kernel->Notify->Flush();
 
+        /* Remove commands queue. */
+        
         this->Commander.Queue->Reset();
 
 	bprint(INFO, "Preparing exit: %s (code %i)", ExitMap[status], status);
