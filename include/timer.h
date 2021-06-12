@@ -125,4 +125,19 @@ class Externalize TickManager : public safecast<TickManager>
          */    	
          
 	void Remove(Timer* timer);
+
+        /* 
+         * Counts pending timers.
+         * 
+         * @return:
+ 	 *
+         *         · unsigned int: Timers' size.
+         */    
+         	
+	unsigned int Count()
+	{
+		  return this->Timers.size();
+	}
+	
+	
 };
