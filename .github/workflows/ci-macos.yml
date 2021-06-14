@@ -1,0 +1,31 @@
+name: MacOS Build
+on:
+  - pull_request
+  - push
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      CXXFLAGS: -std=${{ matrix.standard }} -I/usr/local/opt/openssl@1.1/include -Wno-error=deprecated-declarations
+      LDFLAGS: -L/usr/local/opt/openssl@1.1/lib
+      PKG_CONFIG_PATH: /usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/sqlite/lib/pkgconfig
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          brew update || true
+          for PACKAGE in pkg-config rocksdb openssl@1.1 pcre re2 tre;
+          do
+            brew install $PACKAGE || brew upgrade $PACKAGE
+          done
+          brew link --force --overwrite rocksdb
+      - name: Run build
+        run: ./make/build ${{ matrix.compiler }}
+      - name: Check version
+        run: ./run/beryldb version          
+    strategy:
+      matrix:
+        compiler:
+          - g++
+        standard:
+          - c++14

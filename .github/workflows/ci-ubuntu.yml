@@ -16,6 +16,8 @@ jobs:
           sudo apt-get install --assume-yes --no-install-recommends librocksdb-dev g++ git make libc++-dev libc++abi-dev pkg-config
       - name: Run build
         run: ./make/build ${{ matrix.compiler }}
+      - name: Check version
+        run: ./run/beryldb version      
     strategy:
       matrix:
         compiler:
