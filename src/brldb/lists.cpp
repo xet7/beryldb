@@ -21,7 +21,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/handler.h"
 #include "managers/maps.h"
-
+/*
 void lpush_query::Run()
 {
         if (this->format.empty())
@@ -35,7 +35,7 @@ void lpush_query::Run()
     
         for (size_t i = 0; i < id_num.size(); i++)
         {
-            modified.insert(0, id_num.size(), id_num.size());
+            modified.insert(modified.begin(), id_num.size(), id_num.size());
         }
     
         std::string where_to = this->format + ":" + modified;
@@ -44,7 +44,7 @@ void lpush_query::Run()
     
         /* Finished. */
     
-        this->counter = this->id;      
+  /*      this->counter = this->id;      
         this->SetOK();
 }
 
@@ -157,7 +157,7 @@ void lmove_query::Run()
         
         /* Finished. */
         
-        this->counter = this->id;
+    /*    this->counter = this->id;
         this->SetOK();
 }
 
@@ -379,12 +379,12 @@ void Flusher::LPop(User* user, std::shared_ptr<query_base> query)
                 {
                       /* LPOPALL displays all items removed. */
                       
-                      Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
+      /*                Dispatcher::Smart(user, query->counter, BRLD_QUERY_OK, convto_string(query->counter), query);
                 }
                 else
                 {
                      /* LPOP only removes one element. */
-                     
+        /*             
                      Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
                 }
         }
@@ -799,7 +799,7 @@ void Flusher::LSearch(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
                  std::string key = *i;
-                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+                 Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
@@ -970,7 +970,7 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {
                  std::string key = *i;
-                 Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+                 Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
 
         if (!query->partial)
@@ -979,3 +979,4 @@ void Flusher::LFind(User* user, std::shared_ptr<query_base> query)
         
         }
 }
+*/

@@ -17,10 +17,7 @@
 #include "managers/user.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
-
-#include "helpers.h"
 #include "subscription.h"
-#include "settings.h"
 
 Settings::Settings() 
 {
@@ -46,20 +43,20 @@ void Settings::Load()
 {
 //        bprint(INFO, "Loading settings.");
   
-        VectorTuple tpl = MapsHelper::HKeys(TABLE_SETTINGS, "conf");
+ /*       VectorTuple tpl = //MapsHelper::HKeys(TABLE_SETTINGS, "conf");
         Args confs = std::get<1>(tpl);
         
         for (Args::iterator i = confs.begin(); i != confs.end(); i++)
         {
              std::string key = *i;
              this->SetMap[key] = STHelper::Get("conf", key);
-        }
+        }*/
 }
 
 void Settings::Set(const std::string& key, const std::string& value)
 {
       this->SetMap[key] = value;
-      STHelper::Set("conf", key, value);
+//      STHelper::Set("conf", key, value);
 }
 
 std::string Settings::Get(const std::string& key)
@@ -112,4 +109,53 @@ bool Helpers::as_bool(const std::string &key, bool def)
 
         return def;
 }
+
+std::string Helpers::Format(const std::string& fmt)
+{
+    return Daemon::Format("\"%s\"", fmt.c_str());
+}
+
+void Helpers::make_query(User* user, std::shared_ptr<query_base> base, const std::string& key)     
+{
+      base->user = user;
+      base->database = user->current_db;
+      base->select_query = user->select;
+      
+      if (!key.empty())
+      {
+            base->key = key;
+            base->format = key + base->select_query; 
+            base->dest = to_bin(key) + ":" + base->select_query + ":" + base->base_request;
+      }
+}
+
+void Helpers::make_map(User* user, std::shared_ptr<query_base> base, const std::string& key, const std::string& hesh)
+{
+     base->user = user;
+     base->database = user->current_db;
+     base->select_query = user->select;
+      
+     if (!key.empty() && !hesh.empty())
+     {
+            base->key = key;
+            base->hesh = hesh;
+            base->format = key + base->select_query; 
+            base->dest = to_bin(base->key) + ":" + base->select_query + ":" + base->base_request + ":" + to_bin(base->hesh);
+     }
+}
+
+
+std::string Helpers::TypeString(const std::string& type)
+{
+     if (type == "1")
+     {
+          return "KEY";
+     }
+     
+     if (type == "2")
+     {
+         return "MAP";
+     }
+}
+
 

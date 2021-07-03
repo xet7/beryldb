@@ -17,8 +17,6 @@
 #include "exit.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
-#include "brldb/expires.h"
-#include "managers/databases.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 
@@ -35,7 +33,7 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Main link. */
 	
 	Kernel = std::unique_ptr<Beryl>(this);
-	
+
 	/* Refreshing this->TIME for the very first time. */
 	
 	this->Refresh();
@@ -102,9 +100,9 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 
 void Beryl::Initialize()
 {
-	/* Signals to recognize inside mainloop. */
-	
-	Daemon::Signalizers();
+        /* Signals to recognize inside mainloop. */
+
+        Signalizers();
 
 	/* Checks whether we are allowed to be running as root. */
 	
@@ -121,11 +119,11 @@ void Beryl::Initialize()
 	  
 	if (!this->Config->usercmd.nofork)
 	{
-		this->Engine->DaemonFork();
+		this->DaemonFork();
 	}
 	else
 	{
-	        bprint(INFO, "This server will %s detach.", Daemon::Welcome("NOT").c_str());
+	        bprint(INFO, "This server will %s detach (--nofork provided).", Daemon::Welcome("NOT").c_str());
         	do_newline;
 	}
 	
@@ -185,28 +183,21 @@ void Beryl::Initialize()
 
 	this->Store->OpenAll();
 
-        /* Checks whether flushdb argument was provided by user. */
+        /* Open all databases. */
 
-        if (this->Config->usercmd.flushdb)
-        {
-                DBHelper::FlushDB(true);
-                
-                /* Flushes and exists. */
-                
-                this->Exit(EXIT_CODE_OK, false, true);
-        }
+        this->Store->DBM->OpenAll();
+	
+	/* If applies, Detach() sends BerylDB to the background. */
+	
+	this->Detach();
 
         /* Loads all modules (both, core and modules will be loaded). */
 
         this->Modules->LoadAll();
 
-	/* server name in bold. */
-	
-	bprint(DONE, "Beryl is now running as '%s'", Daemon::Welcome(this->Config->ServerName).c_str());
-	
-	/* If applies, Detach() sends BerylDB to the background. */
-	
-	this->Detach();
+        /* server name in bold. */
+        
+        bprint(DONE, "Beryl is now running as '%s'", Daemon::Welcome(this->Config->ServerName).c_str());
 
 	/* Saves beryldb.pid file so we can later make calls to our bin */
 	
@@ -285,7 +276,7 @@ void Beryl::Loop()
 {
         /* Flushes pending commands. */
 
-        Kernel->Commander.Queue->Flush();
+        Kernel->Commander->Queue->Flush();
 
         /*
          * Calls our socket pool to wait on all active file descriptors.
@@ -304,7 +295,7 @@ void Beryl::Loop()
 
         /* Dispatches both, pending queries and notifications. */
         
-        DataFlush::DispatchAll();
+        DataFlush::Process();
 
         /* Delivers data to monitors. */
 
@@ -314,10 +305,9 @@ void Beryl::Loop()
         
         this->Notify->Flush();
 
-        /* Runs functions meant to be run outside current loop. */
+        /* Functions queued to run outside current loop. */
         
         this->Atomics->Run();
-        
 }
 
 void Beryl::RunTimed(time_t current)
@@ -330,6 +320,8 @@ void Beryl::RunTimed(time_t current)
         
         if ((current % 2) == 0)
         {
+	           this->Interval->Flush();
+	           
 	           /* Forces the exit of users with quitting status. */
 	           
 	           this->Clients->ForceExits();
@@ -357,8 +349,7 @@ void Beryl::RunTimed(time_t current)
 			     
 			     NOTIFY_MODS(OnEveryHour, (current));
                    }
-                   
-         }
+        }
          
         /* Removes expiring entries. */
  	
@@ -385,10 +376,6 @@ void Beryl::Signalizer(int signal)
 
 void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 {
-        /* No need to block anymore. */
-
-        this->Lock = false;
-
         if (nline)
         {
                 do_newline;
@@ -411,29 +398,29 @@ void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
 
 void Beryl::PrepareExit(int status, const std::string& quitmsg)
 {
+	/* Timers reset */
+	
+	this->Tickers->Reset();
+	
         falert(NOTIFY_DEFAULT, "Server is preparing to shutdown.");
 	
 	/* One last flush. */
 	
         Kernel->Notify->Flush();
 
-        /* Remove commands queue. */
+        /* Remove pending queues. */
         
-        this->Commander.Queue->Reset();
+        this->Commander->Queue->Reset();
 
-	bprint(INFO, "Preparing exit: %s (code %i)", ExitMap[status], status);
+	bprint(INFO, "Preparing exit: %s (code %i).", ExitMap[status], status);
 	
-	/* Always a great idea to keep track of exiting date. */
+	/* Log our exit: always a great idea to keep track of exiting date. */
 	
-	slog("EXIT", LOG_DEFAULT, "Preparing exit: %s (code %i)", ExitMap[status], status);
+	slog("EXIT", LOG_DEFAULT, "Preparing exit: %s (code %i).", ExitMap[status], status);
 	
 	/* Stop all monitoring and pending flushes. */
 	
 	this->Monitor->Reset();
-	
-	/* Remove pending notifications. */
-	
-	this->Notify->Reset();
 	
 	/* Login cache will not be needed anymore. */
 	
@@ -473,16 +460,16 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* Removes pending futures. */
 	
 	this->Store->Futures->Reset();
+
+        /* 
+         * Removes PID file (if any). Keep in mind that this function
+         * will not have any effect when running using --nofork.
+         *
+         * Just to recap, --nofork prevents a pid file to be written.
+         */
+
+        this->Engine->DeletePID();
 	
-	/* 
-	 * Removes PID file (if any). Keep in mind that this function
-	 * will not have any effect when running using --nofork.
-	 *
-	 * Just to recap, --nofork prevents a pid file to be written.
-	 */
-	
-	this->Engine->DeletePID();
-			
 	/* Modules should remove their local data. */
 	
 	NOTIFY_MODS(OnHalt, (SERVER_EXITING));
@@ -533,18 +520,31 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* Shuts down socket pool. */
 	
 	SocketPool::CloseAll();
+	
+	/* Close all databases */
+	
+        this->Store->DBM->CloseAll();
+        
+        /* Close core db. */
+         
+        this->Core->DB->Close();
 
 	/* Calculate uptime before exiting. */
 	
 	unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
 	
-	/* Exit msg. */
+	/* Exit msg */
 	
-	std::string exit = Daemon::Uptime("Exiting after working for", up);
+	if (up > 1)
+	{
+		std::string exit = Daemon::Uptime("Exiting after uptime:", up);
 	
-        slog("EXIT", LOG_DEFAULT, exit);
+		/* Log uptime. */
+		
+	        slog("EXIT", LOG_DEFAULT, exit);
 	
-	bprint(INFO, exit);
+		bprint(INFO, exit);
+	}
 
         /* Beryl should stop logging at this point. */
         

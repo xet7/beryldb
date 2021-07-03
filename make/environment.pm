@@ -248,7 +248,7 @@ sub __function_require_compiler
 	return "";
 }
 
-sub __function_require_system 
+sub __function_system_depends 
 {
 	my ($file, $name, $minimum, $maximum) = @_;
 	my ($system, $version);

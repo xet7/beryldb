@@ -28,7 +28,7 @@ COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_DECR);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_DECR);
         return SUCCESS;  
 }
 
@@ -48,6 +48,6 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_MIN, value);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_MIN, value);
         return SUCCESS;  
 }

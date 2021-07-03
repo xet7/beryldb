@@ -13,9 +13,11 @@
 
 #pragma once
 
-class Externalize DBHelper
+class ExportAPI DBHelper
 {
     public:
+
+       static void Type(User* user, const std::string& key);
     
         /* Creates a new map hash */
         
@@ -31,11 +33,11 @@ class Externalize DBHelper
 
         /* Flushes default database. */
         
-        static bool FlushDB(bool notify = false);
+        static bool FlushDB(std::shared_ptr<Database> database, bool notify);
 
         /* Calculate db size */
         
-        static void DBSize(User* user, std::shared_ptr<Database> database);
+        static void DBSize(User* user);
         
         static void SFlush(User* user, std::shared_ptr<Database> database, const std::string& select);
         

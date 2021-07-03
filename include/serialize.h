@@ -3,7 +3,7 @@
 
 
 
-class Externalize Serializable
+class ExportAPI Serializable
 {
  protected:
 
@@ -16,7 +16,7 @@ class Externalize Serializable
 	
 	
 	
-	class Externalize Data
+	class ExportAPI Data
 	{
 	public:
 		

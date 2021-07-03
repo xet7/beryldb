@@ -47,6 +47,7 @@ my ($set_binary_dir,
     $set_prefix,
     $set_runtime_dir,
     $set_script_dir,
+    $set_engine,
     $set_system,
     $set_uid);
 
@@ -81,6 +82,7 @@ exit 1 unless GetOptions(
 	'prefix=s'             => \$set_prefix,
 	'runtime-dir=s'        => \$set_runtime_dir,
 	'script-dir=s'         => \$set_script_dir,
+        'engine=s'             => \$set_engine,
 	'system'               => \$set_system,
 	'uid=s'                => \$set_uid,
 
@@ -118,6 +120,7 @@ our $interactive_setup = !(
 	defined $set_prefix ||
 	defined $set_runtime_dir ||
 	defined $set_script_dir ||
+        defined $set_engine ||
 	defined $set_system ||
 	defined $set_uid
 );
@@ -126,25 +129,7 @@ my %config;
 
 my %version = get_version $set_distribution_label;
 
-if ($^O eq 'openbsd' || $^O eq 'freebsd' || $^O eq 'netbsd') 
-{
-        show_warning <<'EOW';
-        BerylDB is not supported in BSD systems.
-EOW
-exit;
-}
-
-if ($^O ne 'linux')
-{
-        show_warning <<'EOW';
-        BerylDB is only supported in Linux systems.
-EOW
-exit;
-}
-
-my $distro = get_distro_version();
-
-my $welcome = "Setting up BerylDB $version{FULL} for GNU/" . ucfirst($^O) . " " . $distro . ".";
+my $welcome = "Setting up BerylDB $version{FULL} for " . ucfirst($^O) . ".";
 
 say brld_format "\n<|BOLD $welcome |>\n";
 
@@ -165,7 +150,6 @@ if ($interactive_setup)
 }
 
 $config{CXX} = locate_compiler($config{CXX} // $ENV{CXX});
-$config{LINUX_DISTRO} = get_distro_version();
 
 unless ($config{CXX}) 
 {
@@ -186,39 +170,53 @@ unless ($config{CXX})
 
 my %compiler = retrieve_compiler($config{CXX});
 
+my @engines;
+push @engines, 'epoll'  if run_test 'epoll', test_header $config{CXX}, 'sys/epoll.h';
+push @engines, 'kqueue' if run_test 'kqueue', verify_file $config{CXX}, 'kqueue.cpp';
+
+if (defined $set_engine) 
+{
+        unless (grep { $_ eq $set_engine } @engines) 
+        {
+                my $reason = -f "src/engines/engine_$set_engine.cpp" ? 'was not located' : 'was not found';
+                show_error "The engine you selected ($set_engine) $reason!",
+                        'Available engines are:',
+                        map { "  * $_" } @engines;
+        }
+}
+
+$config{ENGINE} = $set_engine // $engines[0];
+
 strict_test 'signal.h', test_header $config{CXX}, 'signal.h';
+strict_test 'sys/resource.h', test_header $config{CXX}, 'sys/resource.h';
 strict_test 'getopt.h', test_header $config{CXX}, 'getopt.h';
 strict_test 'pwd.h',   test_header $config{CXX}, 'pwd.h';
+strict_test 'math.h', test_header $config{CXX}, 'math.h';
 strict_test 'dlfcn.h', test_header $config{CXX}, 'dlfcn.h';
 strict_test 'stdlib.h', test_header $config{CXX}, 'stdlib.h';
 strict_test 'netinet/tcp.h', test_header $config{CXX}, 'netinet/tcp.h';
 strict_test 'dirent.h', test_header $config{CXX}, 'dirent.h';
 strict_test 'unistd.h', test_header $config{CXX}, 'unistd.h';
 
-$config{CLOCK_GETTIME_OK} = run_test 'clock_gettime()', test_file($config{CXX}, 'clock_gettime.cpp', '-lrt -std=c++14');
+$config{CLOCK_GETTIME_OK} = run_test 'clock_gettime()', verify_file($config{CXX}, 'clock_gettime.cpp', '-lrt -std=c++14');
 $config{CORE_COUNT} = get_cpu_count();
-$config{ROCKS_OK} = run_test 'rocksdb', test_file($config{CXX}, 'rocksdb.cpp', '-lrocksdb -std=c++14');
+
+if ($^O eq "freebsd")
+{
+        $config{ROCKS_OK} = run_test 'rocksdb', verify_file($config{CXX}, 'rocksdb.cpp', '-I/usr/local/include -L/usr/local/lib -lrocksdb');
+}
+else
+{
+        $config{ROCKS_OK} = run_test 'rocksdb', verify_file($config{CXX}, 'rocksdb.cpp', '-lrocksdb -std=c++14');
+
+}
 
 if (!$config{ROCKS_OK})
 {
 	show_warning "rocksdb is missing.";
-	
-	if ($distro eq "Ubuntu" || $distro eq "Debian")
-	{
-		show_error "You may install rocksdb using: sudo apt-get install librocksdb-dev";
-	}
-	else
-	{
-		show_warning "If you are using fedora-based distros, you may install it with: yum install rocksdb-devel.x86_64";
-                show_error "If using a debian-based distro, you may use: apt-get install librocksdb-dev";
-		
-	}
-	
         exit;
 }
  
-strict_test 'epoll', test_header $config{CXX}, 'sys/epoll.h';
-
 print "\n";
 print_ok "Dependency test passed. BerylDB is now ready to be configured.\n";
 
@@ -501,11 +499,21 @@ print brld_format <<"EOM";
   <|GREEN Runtime:|> $config{RUNTIME_DIR}
   <|GREEN Script:|>  $config{SCRIPT_DIR}
 
+<|GREEN Engine:|>   $config{ENGINE}
 <|GREEN Execution Group:|> $config{GROUP} ($config{GID})
 <|GREEN Execution User:|>  $config{USER} ($config{UID})
 
-Configure completed, in order to compile BerylDB run: '<|GREEN make ${\join ' ', @arguments} install|>'
+EOM
 
+my $make_using = "make";
+
+if ($^O eq "freebsd")
+{
+	$make_using = "gmake";
+}
+
+print brld_format <<"EOM";
+Configure completed, in order to compile Beryl run: '<|GREEN $make_using ${\join ' ', @arguments} install|>'
 EOM
 
 sub list_extras () 

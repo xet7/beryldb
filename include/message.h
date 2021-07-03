@@ -13,7 +13,7 @@
 
 #pragma once
 
-class Externalize MessageLoad
+class ExportAPI MessageLoad
 {
   public:
 
@@ -45,7 +45,7 @@ class Externalize MessageLoad
 	}
 };
 
-class Externalize MessageTarget
+class ExportAPI MessageTarget
 {
  public:
 

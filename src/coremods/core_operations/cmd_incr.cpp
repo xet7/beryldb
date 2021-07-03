@@ -28,7 +28,7 @@ COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_INCR);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_INCR);
         return SUCCESS;  
 }
 
@@ -48,6 +48,6 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_ADD, value);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_ADD, value);
         return SUCCESS;  
 }

@@ -31,9 +31,14 @@ COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
        signed int offset;
        signed int limit;
 
+       if (!Daemon::CheckFormat(user, key))
+       {
+            return FAILED;
+       }
+
        if (parameters.size() == 2)
        {
-             if (!is_zero_or_great(parameters[1]))
+             if (!is_zero_or_great_or_mone(parameters[1]))
              {
                    user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
                    return FAILED;
@@ -47,7 +52,7 @@ COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
              limit = convto_num<signed int>(parameters[2]); 
              offset = convto_num<signed int>(parameters[1]);
              
-             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
+             if (!is_zero_or_great_or_mone(parameters[1]) || !is_zero_or_great_or_mone(parameters[2]))
              {
                    user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
                    return FAILED;
@@ -59,7 +64,7 @@ COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
             offset = 0;
        }
        
-       KeyHelper::Find(user, user->current_db, user->select, key, offset, limit);
+       KeyHelper::Find(user, key, offset, limit);
        return SUCCESS;
 }
 
@@ -96,7 +101,7 @@ COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
             offset = 0;
        }
 
-       KeyHelper::Search(user, user->current_db, user->select, key, offset, limit);
+       KeyHelper::Search(user, key, offset, limit);
        return SUCCESS;
 }
 
@@ -107,6 +112,6 @@ CommandRKey::CommandRKey(Module* Creator) : Command(Creator, "RKEY", 0, 0)
 
 COMMAND_RESULT CommandRKey::Handle(User* user, const Params& parameters)
 {
-       KeyHelper::Find(user, user->current_db, user->select, "", 0, 0, TYPE_RAKEY);
+       //KeyHelper::Find(user, user->current_db, user->select, "", 0, 0, TYPE_RAKEY);
        return SUCCESS;
 }

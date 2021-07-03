@@ -23,17 +23,17 @@
 #include "beryl.h"
 #include "converter.h"
 
-Externalize extern unsigned const char *locale_case_insensitive_map;
+ExportAPI extern unsigned const char *locale_case_insensitive_map;
 
-Externalize extern unsigned const char brld_case_insensitive_map[256];
+ExportAPI extern unsigned const char brld_case_insensitive_map[256];
 
-Externalize extern unsigned const char ascii_case_insensitive[256];
+ExportAPI extern unsigned const char ascii_case_insensitive[256];
 
 namespace engine
 {
-	Externalize bool equals(const std::string& s1, const std::string& s2);
+	ExportAPI bool equals(const std::string& s1, const std::string& s2);
 
-	Externalize size_t find(const std::string& haystack, const std::string& needle);
+	ExportAPI size_t find(const std::string& haystack, const std::string& needle);
 
 	struct str_hash_comparison
 	{
@@ -45,15 +45,15 @@ namespace engine
 
 	struct insensitive
 	{
-		size_t Externalize operator()(const std::string &s) const;
+		size_t ExportAPI operator()(const std::string &s) const;
 	};
 
 	struct insensitive_swo
 	{
-		bool Externalize operator()(const std::string& a, const std::string& b) const;
+		bool ExportAPI operator()(const std::string& a, const std::string& b) const;
 	};
 
-	class Externalize node_stream
+	class ExportAPI node_stream
 	{
  	 protected:
 		
@@ -97,7 +97,7 @@ namespace engine
 	};
 
 	
-	class Externalize comma_node_stream : public node_stream
+	class ExportAPI comma_node_stream : public node_stream
 	{
 	 public:
 		
@@ -108,7 +108,7 @@ namespace engine
 	};
 
 	
-	class Externalize space_node_stream : public node_stream
+	class ExportAPI space_node_stream : public node_stream
 	{
 	 public:
 		
@@ -118,7 +118,7 @@ namespace engine
 		}
 	};
 
-        class Externalize colon_node_stream : public node_stream
+        class ExportAPI colon_node_stream : public node_stream
         {
          public:
                 
@@ -128,7 +128,7 @@ namespace engine
                 }
         };
 
-	class Externalize token_node_stream
+	class ExportAPI token_node_stream
 	{
 	private:
 		
@@ -158,7 +158,7 @@ namespace engine
 	};
 
 	
-	class Externalize port_template
+	class ExportAPI port_template
 	{
 	 private:
 

@@ -13,6 +13,14 @@
 
 #pragma once
 
+const std::string DB_NULL = "DATABASE_NULL";
+
+const std::string MIS_ARGS = "MISSING_ARGUMENTS";
+
+/* Invalid type. */
+
+const std::string INVALID_TYPE = "INVALID";
+
 /* Invalid coordinate */
 
 const std::string INVALID_COORD = "Invalid coordinate.";
@@ -143,6 +151,10 @@ const std::string MUST_BE_POSIT = "Value provided must be a positive number.";
 
 const std::string UNABLE_EXPIRE = "Unable to set expire.";
 
+/* Internal registry. */
+
+const std::string INT_REG = "9";
+
 /* Keys definition */
 
 const std::string INT_KEYS = "1";
@@ -158,6 +170,10 @@ const std::string INT_LIST = "3";
 /* GEO functions */ 
 
 const std::string INT_GEO = "4";
+
+/* Expires definition. */
+
+const std::string INT_EXPIRE = "8";
 
 /* Table expires. */
 

@@ -34,7 +34,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::Set(user, user->current_db, user->select, key, value);
+       KeyHelper::Set(user, key, value);
        return SUCCESS;
 }
 
@@ -53,7 +53,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETNX);
+       //KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETNX);
        return SUCCESS;
 }
 
@@ -72,7 +72,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETTX);
+       //KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETTX);
        return SUCCESS;
 }
 
@@ -91,7 +91,7 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::AdvSet(user, user->current_db, user->select, key, value, TYPE_GETSET);
+       KeyHelper::GetSet(user, key, value);
        return SUCCESS;
 }
 
@@ -105,7 +105,7 @@ COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& newkey = parameters[1];
 
-       KeyHelper::AdvSet(user, user->current_db, user->select, key, newkey, TYPE_RENAME);
+       KeyHelper::Rename(user, key, newkey);
        return SUCCESS;
 }
 
@@ -119,7 +119,7 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& newkey = parameters[1];
 
-       KeyHelper::AdvSet(user, user->current_db, user->select, key, newkey, TYPE_RENAMENX);
+       //KeyHelper::AdvSet(user, user->current_db, user->select, key, newkey, TYPE_RENAMENX);
        return SUCCESS;
 }
 
@@ -133,7 +133,7 @@ COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& destkey = parameters[1];
 
-       KeyHelper::AdvSet(user, user->current_db, user->select, key, destkey, TYPE_COPY);
+       KeyHelper::Copy(user, key, destkey);
        return SUCCESS;
 }
 
@@ -147,6 +147,6 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       KeyHelper::Append(user, user->current_db, user->select, key, value);
+       //KeyHelper::Append(user, user->current_db, user->select, key, value);
        return SUCCESS;
 }

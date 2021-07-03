@@ -14,7 +14,7 @@
 #include "beryl.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
-#include "brldb/expires.h"
+#include "managers/expires.h"
 #include "engine.h"
 #include "converter.h"
 #include "core_expires.h"
@@ -28,15 +28,6 @@ CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIS
 COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
 {       
          const std::string& arg = parameters[0];
-         
-         /* No argument provided, we simply count expire items. */
-         
-         if (!parameters.size() || arg.length() > 1)
-         {
-                  unsigned int count = Kernel->Store->Expires->Count(user->current_db, user->select);
-                  user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), count);
-                  return SUCCESS;
-         }
          
          /* 
           * These two arguments are valid.  Arguments valid are:
@@ -55,11 +46,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          
          ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
          
-         /* Counts expires. */
-         
-         unsigned int counter = 0;
-
-         user->SendProtocol(BRLD_EXPIRE_BEGIN, "Begin of EXPIRE list.");
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -79,8 +66,8 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        user->SendProtocol(BRLD_EXPIRE_END, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
-        return SUCCESS;
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
+         return SUCCESS;
 }
 
 CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
@@ -100,12 +87,12 @@ COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
-CommandSReset::CommandSReset(Module* Creator) : Command(Creator, "SRESET", 0, 1)
+CommandSelectReset::CommandSelectReset(Module* Creator) : Command(Creator, "SRESET", 0, 1)
 {
         syntax = "<select>";
 }
 
-COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 {
         std::string use;
        
@@ -137,7 +124,7 @@ COMMAND_RESULT CommandSReset::Handle(User* user, const Params& parameters)
 
         /* Clears all expires pending. */
 
-        unsigned int counter = ExpireManager::SReset(user->current_db, use);
+        unsigned int counter = ExpireManager::SelectReset(user->current_db, use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting: %u", counter).c_str());
         user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
         

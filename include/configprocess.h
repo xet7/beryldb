@@ -26,7 +26,7 @@
 #include "socket.h"
 #include "settings.h"
 
-class Externalize config_rule : public refcountbase
+class ExportAPI config_rule : public refcountbase
 {
   private:
   
@@ -95,8 +95,6 @@ struct UserArguments
 	
 	bool asroot;
 	
-	int flushdb;
-	
 	int run_tests;
 	
 	int argc;
@@ -104,7 +102,7 @@ struct UserArguments
 	char** argv;
 };
 
-class Externalize Configuration
+class ExportAPI Configuration
 {
   private:
   
@@ -255,7 +253,7 @@ class Externalize Configuration
 	
 };
 
-class Externalize config_status
+class ExportAPI config_status
 {
 	public:
 		

@@ -72,11 +72,13 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 
 	std::sort(list.begin(), list.end());
 	
+	Dispatcher::JustAPI(user, BRLD_COMMANDS_START);
+	
 	for (unsigned int i = 0; i < list.size(); i++)
 	{
-		user->SendProtocol(BRLD_COMMANDS, list[i]);
+		user->SendProtocol(BRLD_COMMAND_ITEM, list[i]);
 	}
 	
-	user->SendProtocol(BRLD_COMMANDSEND, "End of COMMANDS list");
+        Dispatcher::JustAPI(user, BRLD_COMMANDS_END);
 	return SUCCESS;
 }

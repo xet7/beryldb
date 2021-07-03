@@ -68,10 +68,11 @@ all: beryldb modules
 END
 	my(@core_deps, @modlist);
 	
-	for my $file (<brldb/*.cpp>, <managers/*.cpp>, <*.cpp>) 
+	for my $file (<brldb/*.cpp>, <managers/*.cpp>, <*.cpp>, <engines/*.cpp>) 
 	{
 		my $out = locate_outputs $file;
 		dep_cpp $file, $out, 'gen-o';
+                next if $file =~ m#^engines/# && $file ne "engines/engine_$ENV{ENGINE}.cpp";
 
 		if ($file =~ /^(m|core)_.*\.cpp/) 
 		{
@@ -137,11 +138,11 @@ sub locate_outputs
 	{
 		return "modules/$base.so";
 	} 
-	elsif ($path eq '') 
+	elsif ($path eq '' || $path =~ /^engines\/$/) 
 	{
 		return "obj/$base.o";
 	} 
-	elsif ($path =~ m#modules/(m_.*)/# || $path =~ m#coremods/(core_.*)/#) 
+	elsif ($path =~ m#modules/(m_.*)/# || $path =~ m#coremods/(core_.*)/#)
 	{
 		return "obj/$1/$base.o";
 	} 

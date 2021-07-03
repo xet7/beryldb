@@ -91,9 +91,8 @@ bool Database::FlushDB()
             return false;
     }
 
-    bprint(DONE, "flushdb requested for: %s.", this->name.c_str());
+    bprint(INFO, "flushdb requested for: %s.", this->name.c_str());
     slog("DATABASE", LOG_DEFAULT, "flushdb requested for: %s.", this->name.c_str());
-    
     
     /* We must close our database before flushing it. */
     
@@ -120,7 +119,7 @@ void CoreManager::Open()
        std::shared_ptr<CoreDatabase> New;
        New = std::make_shared<CoreDatabase>();
        New->created = Kernel->Now();
-       //bprint(DONE, "Core database opened.");
+       bprint(DONE, "Core database opened.");
        New->Open();
        this->DB = New;
 }
@@ -134,21 +133,21 @@ void CoreManager::UserDefaults()
      
      /* We add our default user. */
   
-     UserHelper::Add("root", "default");
-     UserHelper::AddAdmin("root", "r");
+//     UserHelper::Add("root", "default");
+  //   UserHelper::AddAdmin("root", "r");
 }
 
 void CoreManager::CheckDefaults()
 {
-       std::string result = STHelper::Get("instance", "first_ran");
+/*       std::string result = STHelper::Get("instance", "first_ran");
        
        /* Creating instance, unless otherwise specified. */
        
-       time_t instance = Kernel->Now();
+  /*     time_t instance = Kernel->Now();
 
        /* No entry set. */
        
-       if (result.empty() || result == "")
+    /*   if (result.empty() || result == "")
        {
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
@@ -156,10 +155,11 @@ void CoreManager::CheckDefaults()
                  bprint(INFO, "Creating defaults.");
 
                  Kernel->Sets->SetDefaults();
-
+                 Kernel->Store->DBM->Create("default", "default");
+                 
                  /* Default settings. */
                  
-                 Kernel->Store->First = true;
+      /*           Kernel->Store->First = true;
        }
        else
        {		
@@ -168,7 +168,7 @@ void CoreManager::CheckDefaults()
                Kernel->Store->First = false;
        }
        
-       Kernel->Store->instance = instance;
+       Kernel->Store->instance = instance;*/
 }
 
 StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
@@ -191,27 +191,8 @@ void StoreManager::OpenAll()
        
        bprint(DONE, "Threads created: %u", counter);
        slog("DATABASE", LOG_VERBOSE, "Threads created: %u", counter);
-       
-       this->Default = this->Create("default", "default.db");
 }
-
-std::shared_ptr<Database> StoreManager::Create(const std::string& name, const std::string& path)
-{
-        if (name.empty() || path.empty())
-        {
-            return nullptr;
-        }
-
-        std::shared_ptr<UserDatabase> New = nullptr;
-        New = std::make_shared<UserDatabase>(name, path);
-        
-        New->created = Kernel->Now();
-        this->databases.insert(std::make_pair(name, std::shared_ptr<UserDatabase>(New)));
-        bprint(DONE, "Adding database: %s", name.c_str());
-        New->Open();
-        this->Default = New;
-        return New;
-}
+ 
 
 void StoreManager::Push(std::shared_ptr<query_base> request)
 {

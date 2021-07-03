@@ -78,11 +78,11 @@ class CommandExpireAT : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandSReset : public Command 
+class CommandSelectReset : public Command 
 {
     public: 
 
-        CommandSReset(Module* parent);
+        CommandSelectReset(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

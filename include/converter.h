@@ -16,6 +16,117 @@
 #include <bitset>
 #include <sstream>
 
+#define SET_INDEX(start, end, len)         \
+    if (end > len)                          \
+        end = len;                          \
+    else if (end < 0) {                     \
+        end += len;                         \
+        if (end < 0)                        \
+        end = 0;                        \
+    }                                       \
+    if (start < 0) {                        \
+        start += len;                       \
+        if (start < 0)                      \
+        start = 0;                      \
+    }
+
+/* 
+ * Returns lowest index in a string where a substring is found.
+ *
+ * @parameters:
+ *
+ *         · string: string.
+ *         · string: substring.
+ *         · start: start from.
+ *         · end: Found.
+ * 
+ * @return:
+ *
+ *         · int: counter.
+ */ 
+
+inline int find(const std::string & str, const std::string & sub, int start = 0, int end = MAX_32BIT_INT)
+{
+        SET_INDEX(start, end, (int) str.size());
+        
+        std::string::size_type result = str.find( sub, start );
+        
+        if (result == std::string::npos || (result + sub.size() > (std::string::size_type)end))
+        {
+             return -1;
+        }
+        
+        return (int) result;
+}
+
+/* 
+ * Returns number of occurrences of substring in a string. 
+ *
+ * @parameters:
+ *
+ *         · string: string.
+ *         · string: substring.
+ * 
+ * @return:
+ *
+ *         · int: counter.
+ */ 
+
+inline int count_occur(const std::string & str, const std::string & substr, int start = 0, int end = MAX_32BIT_INT)
+{
+        int matches = 0;
+        int cursor = start;
+
+        while (1)
+        {
+            cursor = find(str, substr, cursor, end);
+
+            if (cursor < 0)
+            {
+                 break;
+            }
+
+            cursor += (int) substr.size();
+            matches += 1;
+        }
+
+        return matches;
+}
+
+/* 
+ * Checks if string is alpha numeric and has at least
+ * one character.
+ * 
+ * @parameters:
+ *
+ *         · string: text
+ * 
+ * @return:
+ *
+ *         · boolean: True if it is alpha, false if not.
+ */ 
+
+inline bool isalpha(const std::string & str)
+{
+        std::string::size_type len = str.size(), i;
+        
+        if (len == 0) 
+        {	
+            return false;
+        }
+        
+        if (len == 1)
+        {
+            return ::isalpha( (int) str[0] );
+         }
+
+        for (i = 0; i < len; ++i)
+        {
+            if (!::isalpha( (int) str[i] )) return false;
+        }
+        return true;
+}
+
 /* 
  * Converts binary to string.
  * 
@@ -159,6 +270,21 @@ inline bool is_zero_or_great(const std::string& str)
        }
        
        if (str == "0" || is_positive_number(str))
+       {
+             return true;
+       }
+       
+       return false;
+}
+
+inline bool is_zero_or_great_or_mone(const std::string& str)
+{
+       if (!is_number(str))
+       {
+            return false;
+       }
+       
+       if (str == "0" || str == "-1" || is_positive_number(str))
        {
              return true;
        }

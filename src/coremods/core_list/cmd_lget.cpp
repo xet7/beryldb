@@ -48,7 +48,7 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
        }
         
 
-        ListHelper::Get(user, Kernel->Store->Default, user->select, key, offset, limit);
+        //ListHelper::Get(user, Kernel->Store->GetDefault(), user->select, key, offset, limit);
         return SUCCESS;  
 }
 
@@ -81,7 +81,7 @@ COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
        }
 
 
-        ListHelper::Search(user, Kernel->Store->Default, user->select, key, offset, limit);
+        //ListHelper::Search(user, Kernel->Store->GetDefault(), user->select, key, offset, limit);
         return SUCCESS;  
 }
 
@@ -100,10 +100,10 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 
        if (parameters.size() == 3)
        {
-             if (!is_zero_or_great(parameters[2]))
+             if (!is_zero_or_great_or_mone(parameters[2]))
              {
                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                return FAILED;
+                 return FAILED;
              }
        
              limit = convto_num<signed int>(parameters[2]); 
@@ -111,10 +111,10 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
        }
        else if (parameters.size() == 4)
        {
-             if (!is_zero_or_great(parameters[3]) || !is_zero_or_great(parameters[2]))
+             if (!is_zero_or_great_or_mone(parameters[3]) || !is_zero_or_great(parameters[2]))
              {
                    user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                  return FAILED;
+                   return FAILED;
              }
        
              limit = convto_num<signed int>(parameters[3]); 
@@ -131,6 +131,6 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::Find(user, Kernel->Store->Default, user->select, key, value, offset, limit);
+       //ListHelper::Find(user, Kernel->Store->GetDefault(), user->select, key, value, offset, limit);
        return SUCCESS;  
 }

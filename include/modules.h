@@ -156,7 +156,7 @@ do { \
 
 /* contains information about a module. */
 
-class Externalize Version
+class ExportAPI Version
 {
    public:
    
@@ -181,7 +181,7 @@ class Externalize Version
 	Version(const std::string &desc, int flags, const std::string& clusterdata);
 };
 
-class Externalize DataProvider : public ServiceProvider
+class ExportAPI DataProvider : public ServiceProvider
 {
  
   public:
@@ -213,8 +213,9 @@ enum Application
 	I_OnSetAgent,
 	I_OnChannelDelete,
 	I_OnChannelPreDelete,
-	I_OnCheckReady,
+	I_OnUserReady,
 	I_OnCommandBlocked,
+	I_OnQueryFailed,
 	I_OnConnectionFail,
 	I_OnDecodeMetaData,
 	I_OnExpireLine,
@@ -253,7 +254,7 @@ enum Application
 	I_END
 };
 
-class Externalize Module : public base_class, public usecountbase
+class ExportAPI Module : public base_class, public usecountbase
 {
   private:
  
@@ -416,9 +417,9 @@ class Externalize Module : public base_class, public usecountbase
 	
 	virtual void OnPostCommand(Command* command, const CommandModel::Params& parameters, LocalUser* user, COMMAND_RESULT result, bool loop);
 
-	
 	virtual void OnCommandBlocked(const std::string& command, const CommandModel::Params& parameters, LocalUser* user);
-
+	
+	virtual void OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<query_base> bquery);
 	
 	virtual void OnInstanceInit(LocalUser* user);
 
@@ -426,7 +427,7 @@ class Externalize Module : public base_class, public usecountbase
 	virtual void OnInstancePostInit(LocalUser* user);
 
 	
-	virtual ModuleResult OnCheckReady(LocalUser* user);
+	virtual ModuleResult OnUserReady(LocalUser* user);
 
 	
 	virtual ModuleResult OnUserRegister(LocalUser* user);
@@ -466,7 +467,7 @@ class Externalize Module : public base_class, public usecountbase
 };
 
  
-class Externalize ModuleHandler : public safecast<ModuleHandler>
+class ExportAPI ModuleHandler : public safecast<ModuleHandler>
 {
   public:
  

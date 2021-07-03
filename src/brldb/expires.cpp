@@ -21,6 +21,7 @@
 #include "managers/keys.h"
 #include "managers/maps.h"
 #include "managers/settings.h"
+#include "managers/expires.h"
 
 std::mutex ExpireManager::mute;
 
@@ -97,16 +98,6 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
                 return -1;
         }
         
-        if (epoch)
-        {
-              /* We cannot add an expiring epoch that has already passed. */
-              
-              if (schedule < Kernel->Now())
-              {
-                    return -1;
-              }
-        }
-
         /* If entry already exists, we remove it and insert it again. */
         
         if (ExpireManager::GetTIME(database, key, select) > 0)
@@ -137,11 +128,9 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
         New.select = select;
         
         Kernel->Store->Expires->ExpireList.insert(std::make_pair(New.schedule, New));
-        
-//        MapsHelper::Add(key, convto_string(Now), convto_string(schedule));
-
         ExpireManager::mute.unlock();
         
+        bprint(DONE, "Adding expire: %s", key.c_str());
         return New.schedule;
 }
 
@@ -210,19 +199,28 @@ signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::
       return ExpireManager::GetTIME(database, key, select);
 }
 
-unsigned int ExpireManager::SReset(std::shared_ptr<Database> database, const std::string& select)
+unsigned int ExpireManager::SelectReset(std::shared_ptr<Database> database, const std::string& select)
 {
       /* Keeps track of deleted expires */
       
       unsigned int counter = 0;
 
       ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+      if (!expiring.size())
+      {
+              return 0;
+      }
+
       ExpireManager::mute.lock();
 
       for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
       {
             if (it->second.select == select && it->second.database == database)
             {
+                       ExpireEntry entry = it->second;
+                       ExpireHelper::Persist(Kernel->Clients->Global, entry.key, entry.select, entry.database);
+
                        Kernel->Store->Expires->ExpireList.erase(it++);
                        counter++;
             }
@@ -230,16 +228,35 @@ unsigned int ExpireManager::SReset(std::shared_ptr<Database> database, const std
             {
                        it++;
             }
-      }
-      
+      }  
+
       ExpireManager::mute.unlock();
+      
       return counter;
 }
 
 void ExpireManager::Reset()
 {
-      std::lock_guard<std::mutex> lg(ExpireManager::mute);
-      Kernel->Store->Expires->ExpireList.clear();
+      ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+      if (!expiring.size())
+      {
+              return;
+      }
+
+      ExpireManager::mute.lock();
+
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+              ExpireEntry entry = it->second;
+              ExpireHelper::Persist(Kernel->Clients->Global, entry.key, entry.select, entry.database);
+
+              /* Now we remove the entry from the ExpireList Map. */
+
+              Kernel->Store->Expires->ExpireList.erase(it++);
+      }  
+
+      ExpireManager::mute.unlock();
 }
 
 unsigned int ExpireManager::Count(std::shared_ptr<Database> database, const std::string& select)

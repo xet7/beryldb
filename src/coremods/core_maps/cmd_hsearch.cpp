@@ -59,7 +59,7 @@ COMMAND_RESULT CommandHSearch::Handle(User* user, const Params& parameters)
             offset = 0;
        }
 
-       MapsHelper::Search(user, user->current_db, user->select, key, offset, limit);
+       //MapsHelper::Search(user, user->current_db, user->select, key, offset, limit);
 
        return SUCCESS;
 }
@@ -104,7 +104,7 @@ COMMAND_RESULT CommandHSeek::Handle(User* user, const Params& parameters)
             offset = 0;
        }
 
-       MapsHelper::SearchHesh(user, user->current_db, user->select, hesh, offset, limit);
+       //MapsHelper::SearchHesh(user, user->current_db, user->select, hesh, offset, limit);
 
        return SUCCESS;
 }
@@ -137,6 +137,6 @@ COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
             offset = 0;
        }
 
-       MapsHelper::HKeys(user, user->current_db, user->select, key, offset, limit);
+       MapsHelper::HKeys(user, key, offset, limit);
        return SUCCESS;
 }

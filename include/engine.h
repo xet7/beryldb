@@ -16,7 +16,7 @@
 
 #include <thread>
 
-class Externalize Daemon : public safecast<Daemon>
+class ExportAPI Daemon : public safecast<Daemon>
 {
     friend class Beryl;
 
@@ -123,16 +123,14 @@ class Externalize Daemon : public safecast<Daemon>
         static bool AgentValidator(const std::string& agent);
 
         STR1::function<bool(const std::string&)> IsAgent;
-
         
+        static bool DBValidator(const std::string& name);
 
+        STR1::function<bool(const std::string&)> IsDatabase;
         
         static bool ValidHost(const std::string& host);
-
         
         static bool Valid_SID(const std::string& sid);
-        
-        
         
         std::string generate_random_str(unsigned int length, bool printable = true);
 
@@ -211,7 +209,7 @@ class Externalize Daemon : public safecast<Daemon>
         static std::string Uptime(const std::string& msg, unsigned int up);
 };
 
-class Externalize Dispatcher : public safecast<Dispatcher>
+class ExportAPI Dispatcher : public safecast<Dispatcher>
 {
    public:
     
@@ -224,5 +222,7 @@ class Externalize Dispatcher : public safecast<Dispatcher>
      static void JustAPI(User* user, BRLD_PROTOCOL brld);
      
      static void SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg);
+     
+     static void CondList(User* user, BRLD_PROTOCOL brld, const std::string& one_api, const std::string& second_api, bool comillas = false);
      
 };

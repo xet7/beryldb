@@ -13,7 +13,7 @@
 
 #pragma once
 
-class Externalize STHelper
+class ExportAPI STHelper
 {
     public:
     

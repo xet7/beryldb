@@ -19,12 +19,12 @@
 #include "engine.h"
 #include "core_list.h"
 
-CommandLPOP::CommandLPOP(Module* Creator) : Command(Creator, "LPOP", 2, 2)
+CommandPop::CommandPop(Module* Creator) : Command(Creator, "LPOP", 2, 2)
 {
          syntax = "<key> <value>";
 }
 
-COMMAND_RESULT CommandLPOP::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandPop::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
         const std::string value = parameters.back();
@@ -34,16 +34,16 @@ COMMAND_RESULT CommandLPOP::Handle(User* user, const Params& parameters)
             return FAILED;
         }
         
-        ListHelper::Delete(user, Kernel->Store->Default, user->select, key, value, true);
+        //ListHelper::Delete(user, Kernel->Store->GetDefault(), user->select, key, value, true);
         return SUCCESS;  
 }
 
-CommandL_POP_ALL::CommandL_POP_ALL(Module* Creator) : Command(Creator, "LPOPALL", 2, 2)
+CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2)
 {
          syntax = "<key> <value>";
 }
 
-COMMAND_RESULT CommandL_POP_ALL::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
         const std::string value = parameters.back();
@@ -53,7 +53,7 @@ COMMAND_RESULT CommandL_POP_ALL::Handle(User* user, const Params& parameters)
            return FAILED;
         }
 
-        ListHelper::Delete(user, Kernel->Store->Default, user->select, key, value, false);
+        //ListHelper::Delete(user, Kernel->Store->GetDefault(), user->select, key, value, false);
 
         return SUCCESS;  
 }

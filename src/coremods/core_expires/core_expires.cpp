@@ -25,7 +25,7 @@ class CoreModuleExpires : public Module
         CommandExpireLIST cmdexplist;
         CommandReset       cmdreset;
         CommandExpireAT    cmdexpireat;
-        CommandSReset	   cmdsreset;
+        CommandSelectReset	   cmdsreset;
         CommandSelectCount cmdselectcount;
         
     public:     

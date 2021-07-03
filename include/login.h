@@ -15,7 +15,7 @@
 
 #include <unordered_map>
 
-class Externalize Session : public safecast<Session>
+class ExportAPI Session : public safecast<Session>
 {
     public:
         
@@ -44,7 +44,7 @@ class Externalize Session : public safecast<Session>
         bool can_manage;
 };
 
-class Externalize SessionManager : public safecast<SessionManager>
+class ExportAPI SessionManager : public safecast<SessionManager>
 {
     public:
         
@@ -97,7 +97,7 @@ class Externalize SessionManager : public safecast<SessionManager>
  * cache removal and adding.
  */
  
-class Externalize LoginCache : public safecast<LoginCache>
+class ExportAPI LoginCache : public safecast<LoginCache>
 {
     private:
     

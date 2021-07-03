@@ -15,38 +15,40 @@
 
 #include "brldb/database.h"
 
-class Externalize KeyHelper
+class ExportAPI KeyHelper
 {
     public:
 
-        static void Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+        static void Rename(User* user, const std::string& entry, const std::string& value);
 
-        static void Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value);
+        static void Copy(User* user, const std::string& entry, const std::string& value);
 
-        static void Touch(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value = "", QUERY_TYPE type = TYPE_NONE);
+        static void GetSet(User* user, const std::string& entry, const std::string& value);
 
-        static void GetRange(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, int from, int to);
+        static void Count(User* user, const std::string& key);
 
-        static void AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type = TYPE_NONE);
+        static void Strlen(User* user, const std::string& key);
+        
+        static void GetDel(User* user, const std::string& key);
+        
+        static void Exists(User* user, const std::string& key);
 
-        static void AdvSet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type = TYPE_NONE);
+        static void Search(User* user, const std::string& key, signed int offset, signed int limit);
+
+        static void Find(User* user, const std::string& key, signed int offset, signed int limit);
 
         static void Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply = "");
 
-        static void Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
-
         static void Expire(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type, unsigned int usig, std::string value = "");
 
-        static void Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type = TYPE_NONE);
+        static void Get(User* user, const std::string& key);
 
         static void Operation(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, OP_TYPE type,  const std::string& oper = "");
 
+        static void Delete(User* user, const std::string& key);
+
         static void Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet = false);
         
-        static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom = "", QUERY_TYPE type = TYPE_NONE, bool quiet = false);
-
-        /* Moves an entry to another select. */
-        
-        static void Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& new_select);
+        static void Set(User* user, const std::string& entry, const std::string& value);
 
 };

@@ -34,20 +34,20 @@ class CommandLGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandLPOP : public Command 
+class CommandPop : public Command 
 {
     public: 
 
-        CommandLPOP(Module* Creator);
+        CommandPop(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandL_POP_ALL : public Command 
+class CommandPopAll : public Command 
 {
     public: 
 
-        CommandL_POP_ALL(Module* Creator);
+        CommandPopAll(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

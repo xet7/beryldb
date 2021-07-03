@@ -15,7 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
-#include "managers/keys.h"
+#include "managers/expires.h"
 #include "engine.h"
 #include "converter.h"
 #include "core_expires.h"
@@ -43,6 +43,6 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
           }
                   
           unsigned int exp_usig = convto_num<unsigned int>(exp_str);
-          KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_EXPIRE, exp_usig);
+          ExpireHelper::Expire(user, key, exp_usig);
           return SUCCESS;
 }

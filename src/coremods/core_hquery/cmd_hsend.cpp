@@ -60,7 +60,7 @@ COMMAND_RESULT CommandHSend::Handle(User* user, const Params& parameters)
         }
         
         user->SendProtocol(BRLD_HQUERY_SENT, "HQuery sent.");
-        HQHelper::HSend(user, user->current_db, user->select, user->hquery);
+//        HQHelper::HSend(user, user->current_db, user->select, user->hquery);
         return SUCCESS;
 }
 

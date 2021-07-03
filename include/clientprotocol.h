@@ -488,7 +488,7 @@ struct ProtocolTrigger::BRLDEvents
 };
 
 
-class Externalize ProtocolTrigger::Serializer : public DataProvider
+class ExportAPI ProtocolTrigger::Serializer : public DataProvider
 {
  private:
 

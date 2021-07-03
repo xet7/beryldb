@@ -39,8 +39,6 @@ TestOffice::~TestOffice()
 
 void TestOffice::Run()
 {
-        std::cout << "Valid latitude: " << ValidLat(133.443) << std::endl;
-
         const std::string& ntest = "300";
         
         std::cout << "is_zero_or_great (" << ntest << ") : " << is_zero_or_great(ntest) << std::endl;
@@ -54,11 +52,11 @@ void TestOffice::Run()
         
         /* Simulate an auto join list. */
                 
-        ListHelper::Add(TABLE_AUTOJOIN, "root", "#test1");
-        ListHelper::Add(TABLE_AUTOJOIN, "root", "#test2");
-        ListHelper::Add(TABLE_AUTOJOIN, "root", "$test3");
+        //ListHelper::Add(TABLE_AUTOJOIN, "root", "#test1");
+        //ListHelper::Add(TABLE_AUTOJOIN, "root", "#test2");
+        //ListHelper::Add(TABLE_AUTOJOIN, "root", "$test3");
         
-        VectorTuple tpl = ListHelper::Get(TABLE_AUTOJOIN, "root");
+/*        VectorTuple tpl = ListHelper::Get(TABLE_AUTOJOIN, "root");
         std::vector<std::string> lst = std::get<1>(tpl);
         
         for (std::vector<std::string>::iterator i = lst.begin(); i != lst.end(); i++)
@@ -66,7 +64,7 @@ void TestOffice::Run()
                std::string channel = *i;
                
                /* Let's verify if channel is properly formatted. */
-               
+  /*             
                if (!Kernel->Engine->ValidChannel(channel))
                {
                        bprint(ERROR, "%s is invalid", channel.c_str());
@@ -78,10 +76,10 @@ void TestOffice::Run()
         }
         
         bprint(INFO, "Removing channels.");
-
-        ListHelper::Delete(TABLE_AUTOJOIN, "root", "#test1");
-        ListHelper::Delete(TABLE_AUTOJOIN, "root", "#test2");
-        ListHelper::Delete(TABLE_AUTOJOIN, "root", "$test3");
+*/
+        //ListHelper::Delete(TABLE_AUTOJOIN, "root", "#test1");
+        //ListHelper::Delete(TABLE_AUTOJOIN, "root", "#test2");
+        //ListHelper::Delete(TABLE_AUTOJOIN, "root", "$test3");
 }
 
 #endif

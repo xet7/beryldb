@@ -15,7 +15,7 @@
 
 #include "converter.h"
  
-class Externalize Subscription : public Expandable, public brld::node_list_node<Subscription>
+class ExportAPI Subscription : public Expandable, public brld::node_list_node<Subscription>
 {
   public:
 

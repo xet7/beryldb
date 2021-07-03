@@ -15,7 +15,7 @@
 
 #include "brldb/database.h"
 
-class Externalize HQHelper
+class ExportAPI HQHelper
 {
     public:
     

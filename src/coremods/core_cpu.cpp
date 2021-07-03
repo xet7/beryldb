@@ -18,25 +18,20 @@ class ModuleCoreCPU : public Module
 
   private:
          
-         time_t last_lock;
-         
          float sample_sincelast;
          float sample_used;
          float usage;
          
   public:
 
-        ModuleCoreCPU()
+        ModuleCoreCPU() : sample_used(0), usage(0)
         {
-              last_lock = 0;
-              Kernel->Lock = false;
-              Kernel->Interval = 20;
+
         }
         
         void OnUnloadModule(Module* module)
         {	
-              Kernel->Lock = false;
-              Kernel->Interval = 300;
+
         }
         
         void Update()
@@ -59,71 +54,35 @@ class ModuleCoreCPU : public Module
                  
         void CheckUnlock()
         {
-               if (usage < 10)
-               {
-                     Kernel->Lock = false;
-                     
-                     if (Kernel->Interval != 0)
-                     {
-                          Kernel->Interval = 2;
-                     }
-                     
-                     return;
-               }
 
-               if (usage > 10)
-               {
-                     Kernel->Lock = true;
-                     this->last_lock = Kernel->Now();
-
-                     if (Kernel->Interval != 0)
-                     {
-                          Kernel->Interval = 4;
-                     }
-                     
-                     if (this->last_lock > Kernel->Now() + 10)
-                     {
-                           Kernel->Interval = 10;
-                     }
-                     
-               }
-
-               if (usage > 20)
-               {
-                     Kernel->Lock = true;
-                     this->last_lock = Kernel->Now();
-                     Kernel->Interval = 10;
-                     
-                     if (this->last_lock > Kernel->Now() + 10)
-                     {
-                           Kernel->Interval = 20;
-                     }
-               }
         }
         
         void OnPostConnect(User* user)
         {
-              /* This user may bring activity to the system. */
-
-              if (Kernel->Lock && Kernel->Clients->GetLocals().size() == 1)
+              if (Kernel->Interval->RestingStatus())
               {
-                   Kernel->Lock = false;
+                      Kernel->Interval->SleepMode(false);   
               }
-       }
+        }
         
         void OnEveryTwoSeconds(time_t current)
         {
-               this->Update();
-               CheckUnlock();
-
-               /* We sleep, as there is no activity in the system. */
-
-               if (!Kernel->Clients->GetLocals().size())
-               {
-                      Kernel->Interval = 1000;
-                      Kernel->Lock = true;
-                      this->last_lock = Kernel->Now();
-               }
+              if (!Kernel->Clients->GetLocals().size())
+              {
+                   Kernel->Interval->SleepMode(true);
+                   return;
+              }
+              
+              this->Update();
+              
+              if (this->usage > 1)
+              {
+                   usleep(10);
+              }
+              else if (this->usage > 2)
+              {
+                    usleep(100);
+              }
         }
 
         Version GetDescription() 

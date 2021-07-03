@@ -19,17 +19,17 @@
 #include "engine.h"
 #include "core_maps.h"
 
-CommandHGET::CommandHGET(Module* Creator) : Command(Creator, "HGET", 2, 2)
+CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)
 {
          syntax = "<map> <key>";
 }
 
-COMMAND_RESULT CommandHGET::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
 {  
        const std::string kmap = parameters[0];
        const std::string key = parameters[1];
 
-       MapsHelper::Get(user, user->current_db, user->select, kmap, key);
+       MapsHelper::Get(user, kmap, key);
        return SUCCESS;
 }
 
@@ -43,7 +43,7 @@ COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
 
-       MapsHelper::Count(user, user->current_db, user->select, kmap);
+       //MapsHelper::Count(user, user->current_db, user->select, kmap);
        return SUCCESS;
 }
 
@@ -58,7 +58,7 @@ COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
        const std::string kmap = parameters[0];
        const std::string key = parameters[1];
 
-       MapsHelper::Get(user, user->current_db, user->select, kmap, key, TYPE_EXIST);
+       MapsHelper::Exists(user, kmap, key);
        return SUCCESS;
 }
 

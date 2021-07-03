@@ -17,14 +17,20 @@ Beryl is a data structures server. Our software provides access to structures vi
 wide range of commands, which are later queued, processed and dispatched to an 
 internal processor. Beryl is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
 
-Beryl provides lists, maps, keys, and channel subscription for its clients. It is
-optimized for GNU/Linux systems.
+Beryl provides lists, maps, keys, and channel subscription for its clients. 
+Beryl is available for GNU/Linux, FreeBSD and MacOS.
 
 Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 
 Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
 ![cli](https://docs.beryl.dev/img/render.gif??)
+
+## Why use it?
+
+Beryl simplifies your system by allowing you to write fewer lines of code to store, retrieve, and manage data in your apps. 
+For instance, if your application relies on sessions to keep users connected,
+you may use Beryl's key-value data storage, and then remove expiring keys with Beryl's automatic expire managing system.
 
 ## Installation
 
@@ -43,9 +49,9 @@ sudo apt-get install librocksdb-dev build-essential
 Download latest version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/tags/0.3.3.tar.gz
-tar -xvzf 0.3.3.tar.gz
-cd beryldb-0.3.3/
+wget https://github.com/beryldb/beryldb/archive/refs/tags/0.5.2.tar.gz
+tar -xvzf 0.5.2.tar.gz
+cd beryldb-0.5.2/
 ```
 
 You may now configure BerylDB following these quick steps: 

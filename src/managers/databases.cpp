@@ -19,16 +19,40 @@
 #include "managers/databases.h"
 #include "managers/lists.h"
 #include "managers/maps.h"
+#include "helpers.h"
 
-void DBHelper::DBSize(User* user, std::shared_ptr<Database> database)
+bool DBHelper::FlushDB(std::shared_ptr<Database> database, bool notify)
 {
-       std::shared_ptr<dbsize_query> query = std::make_shared<dbsize_query>();
+        Kernel->Store->Flusher->Pause();
+        bool result = database->FlushDB();
+        Kernel->Store->Flusher->Resume();
 
-       query->database = database;
-       query->user = user;
-       
+        if (notify)
+        {
+             bprint(DONE, "Database flushed.");
+        }
+        
+        return result;
+}
+
+void DBHelper::Type(User* user, const std::string& key)
+{
+       std::shared_ptr<type_query> query = std::make_shared<type_query>();
+       Helpers::make_query(user, query);
+
+       query->key = key;
+       query->format = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
        Kernel->Store->Push(query);
 }
+
+void DBHelper::DBSize(User* user)
+{
+       std::shared_ptr<dbsize_query> query = std::make_shared<dbsize_query>();
+       Helpers::make_query(user, query);
+       Kernel->Store->Push(query);
+}
+
+/*
 
 void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database, const std::string& db1, const std::string& db2)
 {
@@ -58,29 +82,15 @@ bool DBHelper::Add(const std::string& name, const std::string& path)
 {
         /* default database add */
  
-        MapsHelper::Set(TABLE_DBS, name, "name", name);
-        MapsHelper::Set(TABLE_DBS, name, "path", path);
-        return MapsHelper::Set(TABLE_DBS, name, "created", convto_string(Kernel->Now()));
+        //MapsHelper::Set(TABLE_DBS, name, "name", name);
+        //MapsHelper::Set(TABLE_DBS, name, "path", path);
+  /*      return //MapsHelper::Set(TABLE_DBS, name, "created", convto_string(Kernel->Now()));
 }
 
 std::string DBHelper::Find(const std::string& name, const std::string& key)
 {
-        BasicTuple tuple = MapsHelper::Get(TABLE_DBS, name, key);
+        BasicTuple tuple = //MapsHelper::Get(TABLE_DBS, name, key);
         std::string lst = std::get<1>(tuple);
         return lst;
 }
-
-bool DBHelper::FlushDB(bool notify)
-{
-        Kernel->Store->Flusher->Pause();
-        bool result = Kernel->Store->Default->FlushDB();
-        MapsHelper::DeleteAll("lcounter", "id");
-        Kernel->Store->Flusher->Resume();
-
-        if (notify)
-        {
-             bprint(DONE, "Database flushed.");
-        }
-        
-        return result;
-}
+*/

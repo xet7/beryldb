@@ -112,6 +112,31 @@ bool Daemon::AgentValidator(const std::string& agent)
 	return true;
 }
 
+bool Daemon::DBValidator(const std::string& name)
+{
+        if (name.empty() || name.length() < 3 || name.length() > 15)
+        {
+                return false;
+        }
+
+        for (std::string::const_iterator i = name.begin(); i != name.end(); ++i)
+        {
+                if ((*i >= 'A') && (*i <= '}'))
+                {
+                        continue;
+                }
+
+                if (((*i >= '0') && (*i <= '9')) || (*i == '-') || (*i == '.'))
+                {
+                        continue;
+                }
+
+                return false;
+        }
+
+        return true;
+}
+
 bool Daemon::ValidHost(const std::string& host)
 {
 	if (host.empty() || host.length() > 96)
@@ -318,6 +343,25 @@ void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
         }
         
         user->SendProtocol(brld);
+}
+
+void Dispatcher::CondList(User* user, BRLD_PROTOCOL brld, const std::string& one_api, const std::string& second_api, bool comillas)
+{
+        if (user->agent == DEFAULT_EMERALD)
+        {
+             if (!comillas)
+             {
+                     user->SendProtocol(brld, Daemon::Format("%s %s", one_api.c_str(), second_api.c_str()).c_str());
+	     } 
+	     else
+	     {
+                     user->SendProtocol(brld, Daemon::Format("%s \"%s\"", one_api.c_str(), second_api.c_str()).c_str());
+	     }
+        }
+        else
+        {
+             user->SendProtocol(brld, one_api.c_str(), second_api.c_str());
+        }
 }
 
 void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg)

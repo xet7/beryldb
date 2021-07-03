@@ -79,7 +79,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
         }
         else
         {
-                user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters.");
+                user->SendProtocol(ERR_MISS_PARAMS, name, MIS_ARGS);
         }
 
 	if (Kernel->Sets->AsBool("syntaxhints") && user->registered == REG_OK && syntax.length())

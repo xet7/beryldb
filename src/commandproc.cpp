@@ -141,7 +141,7 @@ COMMAND_RESULT CommandHandler::CallHandler(const std::string& commandname, const
 	return INVALID;
 }
 
-void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel::Params& command_p)
+void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel::Params& cmd_params)
 {
 	if (user->Paused)
 	{
@@ -159,12 +159,12 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 	if (!handler)
 	{
 		ModuleResult MOD_RESULT;
-		UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, command_p, user, false));
+		UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, cmd_params, user, false));
 		
 		if (MOD_RESULT == MOD_RES_STOP)
 		{
-			NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
-			return;
+                         NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                         return;
 		}
 
 		handler = GetBase(command);
@@ -173,7 +173,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		{
 		        /* Reports not found command to monitoring clients. */
 		        
-		        Kernel->Monitor->Push(user->instance, command, MONITOR_DEBUG, command_p);
+		        Kernel->Monitor->Push(user->instance, command, MONITOR_DEBUG, cmd_params);
 		
 			if (user->registered == REG_OK)
 			{
@@ -181,34 +181,34 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 			}
 
 			Kernel->Stats.Unknown++;
-			NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
-			return;
+                        NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                        return;
 		}
 	}
 
-	if (handler->max_params && command_p.size() > handler->max_params)
+	if (handler->max_params && cmd_params.size() > handler->max_params)
 	{
-		const CommandModel::Params::iterator lastbase = command_p.begin() + (handler->max_params - 1);
+		const CommandModel::Params::iterator lastbase = cmd_params.begin() + (handler->max_params - 1);
 		const CommandModel::Params::iterator firstexcess = lastbase + 1;
 
-		for (CommandModel::Params::const_iterator i = firstexcess; i != command_p.end(); ++i)
+		for (CommandModel::Params::const_iterator i = firstexcess; i != cmd_params.end(); ++i)
 		{
 			lastbase->push_back(' ');
 			lastbase->append(*i);
 		}
 		
-		command_p.erase(firstexcess, command_p.end());
+		cmd_params.erase(firstexcess, cmd_params.end());
 	}
 
 	ModuleResult MOD_RESULT;
-	UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, command_p, user, false));
+	UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, cmd_params, user, false));
 	
-	Kernel->Monitor->Push(user->instance, command, MONITOR_DEFAULT, command_p);
+	Kernel->Monitor->Push(user->instance, command, MONITOR_DEFAULT, cmd_params);
 
 	if (MOD_RESULT == MOD_RES_STOP)
 	{
-		NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
-		return;
+                 NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                 return;
 	}
 	
 	/* Touch base is updated, as long as command is not PONG or PUBLISH */
@@ -227,42 +227,42 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		if (!user->CanPerform(handler->requires))
 		{
 			user->SendProtocol(ERR_NO_FLAGS, ACCESS_DENIED);
-			NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
-			return;
+                        NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                        return;
 		}
 	}
 
-	if ((!command_p.empty()) && (command_p.back().empty()) && (!handler->last_empty_ok))
+	if ((!cmd_params.empty()) && (cmd_params.back().empty()) && (!handler->last_empty_ok))
 	{
-		command_p.pop_back();
+		cmd_params.pop_back();
 	}
 
 	/* Verifies whether user provided required parameters. */
 	
-	if (command_p.size() < handler->min_params)
+	if (cmd_params.size() < handler->min_params)
 	{
-		handler->MissingParameters(user, command_p);
-		NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
-		return;
+		handler->MissingParameters(user, cmd_params);
+                NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                return;
 	}
 
 	if ((user->registered != REG_OK) && (!handler->pre_reg_ok))
 	{
-		handler->NotLogged(user, command_p);
-		NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
+		handler->NotLogged(user, cmd_params);
+                NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
 	}
 	else
 	{
-		UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, command_p, user, true));
+		UNTIL_RESULT(OnPreCommand, MOD_RESULT, (command, cmd_params, user, true));
 
 		if (MOD_RESULT == MOD_RES_STOP)
 		{
-			NOTIFY_MODS(OnCommandBlocked, (command, command_p, user));
+			NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
 			return;
 		}
 
-		COMMAND_RESULT result = handler->Handle(user, command_p);
-		NOTIFY_MODS(OnPostCommand, (handler, command_p, user, result, false));
+		COMMAND_RESULT result = handler->Handle(user, cmd_params);
+		NOTIFY_MODS(OnPostCommand, (handler, cmd_params, user, result, false));
 	}
 }
 
@@ -386,14 +386,42 @@ CommandQueue::CommandQueue()
 
 }
 
-void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Params& command_p)
+void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Params& cmd_params)
 {
 	if (!user || user->IsQuitting())
         {
              return;
         }
 
-        PendingCMD adding(user, command_p, command);
+        PendingCMD adding(user, cmd_params, command);
+
+        if (command == "PONG")
+        {       
+                user->PendingList.push_back(adding);
+                return;
+        }
+
+        if (command == "MULTIRESET")
+        {
+		user->PendingMulti.clear();
+		user->MultiRunning = false;
+	}
+	else
+	{        
+	        if (user->Multi && command != "MRUN")
+	        {
+	      		user->PendingMulti.push_back(adding);
+	      		user->SendProtocol(BRLD_QUEUED, "QUEUED");
+	      		return;
+		}
+		
+		if (command == "MRUN" && !user->Multi)
+		{
+			user->SendProtocol(ERR_MULTI, PROCESS_ERROR);
+			return;
+	        }
+	}
+        
         user->PendingList.push_back(adding);
 }
 
@@ -405,7 +433,7 @@ void CommandQueue::Reset()
        {
                   LocalUser* user = *u;
 
-                  if (user == NULL || user->IsQuitting() || user->IsLocked())
+                  if (!user)
                   {
                         continue;
                   }
@@ -420,25 +448,62 @@ void CommandQueue::Flush()
        
        if (!users.size())
        {
-            return;
+               return;
        }
       
        for (ClientManager::LocalList::const_iterator u = users.begin(); u != users.end(); ++u)
        {
-                  LocalUser* user = *u;
+               LocalUser* user = *u;
 
-                  if (user == NULL || user->IsQuitting() || user->IsLocked())
-                  {
+               if (user == NULL || user->IsQuitting())
+               {
                         continue;
-                  }
+               }
+
+               if (!user->PendingList.size())
+               {
+                        continue;
+               }
+               
+               PendingCMD event = user->PendingList.front();
+
+               /* PONGS are allowed when processing queries. */
+
+               if (event.command == "PONG")
+               {
+                       user->PendingList.pop_front();
+                       Kernel->Commander.Execute(user, event.command, event.cmd_params);
+                       return;
+               }
                   
-                  if (!user->PendingList.size())
-                  {
-                        continue;
-                  }
+               if (user->IsLocked())
+               {
+                 	continue; 
+               }
+               
+               if (user->Multi && event.command == "MRUN")
+               {
+	               	user->MultiRunning = true;
+	               	user->Multi = false;
+	       }
+	       
+	       if (user->MultiRunning)
+	       {        
+  		      if (!user->PendingMulti.size())
+                      {
+                          user->MultiRunning = false;
+                          continue;
+                      }
 
-	          PendingCMD event = user->PendingList.front();
-	          user->PendingList.pop_front();
-          	  Kernel->Commander.Execute(user, event.command, event.command_p);
+	       	      PendingCMD m_event = user->PendingMulti.front();
+	       	      Kernel->Commander.Execute(user, m_event.command, m_event.cmd_params);
+	              Kernel->Interval->counter++;
+	              user->PendingMulti.pop_front();
+	              continue;
+	        }
+               
+	       user->PendingList.pop_front();
+               Kernel->Commander.Execute(user, event.command, event.cmd_params);
+               Kernel->Interval->counter++;
         }
 }

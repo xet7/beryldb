@@ -26,15 +26,15 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
         
         UserVector logins = Kernel->Clients->FindLogin(loginid);
 
-        user->SendProtocol(BRLD_LOGINS_BEGIN, "Begin of LOGINS list.");
+        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
 
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
             	User* const login = *i;
-            	user->SendProtocol(BRLD_LOGINS_LIST, Daemon::Format("%s (%s), %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s), %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
         }
 
-    	user->SendProtocol(BRLD_LOGINS_END, Daemon::Format("End of LOGINS list (%li)", logins.size()).c_str());
+        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
 	return SUCCESS;
 }
 
@@ -56,15 +56,16 @@ COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
         
         UserVector logins = ClientManager::FindPrivs(flag);
 
-//        user->SendProtocol(BRLD_LOGINS_BEGIN, "Begin of LOGINS list.");
+        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
 
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
                 User* const login = *i;
-                user->SendProtocol(BRLD_LOGINS_LIST, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->rawflags.c_str()).c_str());
+                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->rawflags.c_str()).c_str());
         }
 
-  //      user->SendProtocol(BRLD_LOGINS_END, Daemon::Format("End of LOGINS list (%li)", logins.size()).c_str());
+        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
+        
         return SUCCESS;
 
 }

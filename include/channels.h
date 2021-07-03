@@ -21,7 +21,7 @@
  * basic functionalities, such as join and part functions.
  */
 
-class Externalize Channel : public Expandable
+class ExportAPI Channel : public Expandable
 {
   friend class ChannelManager;
   friend class User;

@@ -35,7 +35,7 @@ COMMAND_RESULT CommandHSET::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       MapsHelper::Set(user, user->current_db, user->select, kmap, key, value);
+       MapsHelper::Set(user, kmap, key, value);
        return SUCCESS;
 }
 
@@ -50,6 +50,6 @@ COMMAND_RESULT CommandHMove::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& dest   = parameters[2];
 
-       MapsHelper::Move(user, user->current_db, user->select, kmap, key, dest);
+       //MapsHelper::Move(user, user->current_db, user->select, kmap, key, dest);
        return SUCCESS;
 }

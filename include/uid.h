@@ -13,7 +13,7 @@
 
 #pragma once
 
-class Externalize UIDHandler
+class ExportAPI UIDHandler
 {
   private:
 	

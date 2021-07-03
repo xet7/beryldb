@@ -14,7 +14,7 @@
 #pragma once
 
 
-class Externalize Server : public base_class
+class ExportAPI Server : public base_class
 {
 
  protected:

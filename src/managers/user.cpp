@@ -23,7 +23,7 @@
 bool UserHelper::CheckPass(const std::string& user, const std::string& key)
 {
    	/* Wrong password. */
-   	
+   /*	
         signed int cached = Kernel->Logins->InCache(user, key);
         
         if (cached == -1)
@@ -51,14 +51,14 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
         }
 
         /* We may add this login to the cache. */
-        
-        Kernel->Logins->Add(user, provided_pass);
+
+/*        Kernel->Logins->Add(user, provided_pass);*/
         return true;
 }
 
-std::string UserHelper::Find(const std::string& user, const std::string& key)
+/*std::string UserHelper::Find(const std::string& user, const std::string& key)
 {
-        BasicTuple tuple = MapsHelper::Get(TABLE_USERS, user, key);
+        BasicTuple tuple = //MapsHelper::Get(TABLE_USERS, user, key);
         return std::get<1>(tuple);
 }
 
@@ -66,7 +66,7 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 {
         /* Min length is 3 for an user. */
         
-        if (user.length() < 3 || user.length() > 15)
+  /*      if (user.length() < 3 || user.length() > 15)
         {
             return false;
         }
@@ -80,10 +80,12 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 
         std::string hashed_pass = provider->Generate(pass);
             
-        MapsHelper::Set(TABLE_USERS, user, "userlogin", user);
-        MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
-        return MapsHelper::Set(TABLE_USERS, user, "created", convto_string(Kernel->Now()));
+        //MapsHelper::Set(TABLE_USERS, user, "userlogin", user);
+        //MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
+        return //MapsHelper::Set(TABLE_USERS, user, "created", convto_string(Kernel->Now()));
 }
+
+*/
 
 bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
 {
@@ -97,7 +99,7 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
         * not be accepted if an user tries to log-in utilizing same
         * password.
         */
-        
+
         Kernel->Logins->Remove(user); 
 
         HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
@@ -109,68 +111,68 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
 
         std::string hashed_pass = provider->Generate(pass);
        
-        return MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
+   //     return MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
 }
 
 bool UserHelper::AddAdmin(const std::string& user, const std::string& flags)
 {
-        MapsHelper::Set(TABLE_ADMIN, user, "adminlogin", user);
-        return MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
+        //MapsHelper::Set(TABLE_ADMIN, user, "adminlogin", user);
+        //return //MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
 }
 
 bool UserHelper::SetAdmin(const std::string& user, const std::string& flags)
 {
       if (flags.empty() || flags == "")
       {
-            MapsHelper::DeleteAll(TABLE_ADMIN, user);
+            //MapsHelper::DeleteAll(TABLE_ADMIN, user);
       }
       
-      return MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
+//      return MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
 }
 
 bool UserHelper::AdminExists(const std::string& user)
 {
-        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
+/*        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
         const std::string flags = std::get<1>(tuple);
         
         if (flags.empty() || flags == "")
         {
             return false;
         }
-        
+  */      
         return true;
 }
 
 std::string UserHelper::FindAdmin(const std::string& user)
 {
-        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
-        const std::string flags = std::get<1>(tuple);
-        return flags;
+/*        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
+        const std::string flags = std::get<1>(tuple);*/
+        //return flags;
 }
 
 bool UserHelper::RemoveAdmin(const std::string& user)
 {
-        return MapsHelper::DeleteAll(TABLE_ADMIN, user);
+        //return //MapsHelper::DeleteAll(TABLE_ADMIN, user);
 }
 
 bool UserHelper::Remove(const std::string& user)
 {
         Kernel->Logins->Remove(user); 
 
-        MapsHelper::DeleteAll(TABLE_ADMIN, user);
-        return MapsHelper::DeleteAll(TABLE_USERS, user);
+        //MapsHelper::DeleteAll(TABLE_ADMIN, user);
+//        return //MapsHelper::DeleteAll(TABLE_USERS, user);
 }
 
 bool UserHelper::Exists(const std::string& user)
 {
-    std::string created = UserHelper::Find(user, "created");
+/*    std::string created = UserHelper::Find(user, "created");
     
     if (created.empty() || created == "")
     {
              return false;
     }
     
-    return true;
+    return true;*/
 }
 
 

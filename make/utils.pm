@@ -25,7 +25,6 @@ our @EXPORT = qw(create_directory
                  execute
                  get_cpu_count
                  get_version
-                 get_distro_version
                  read_config_file
                  write_config_file);
 
@@ -88,24 +87,28 @@ sub get_version
 	return %version;
 }
 
-sub get_distro_version
-{
-        my $version;
-        chomp($version = `lsb_release --id --short`);
-        return $version;
-}
-
 sub get_cpu_count 
 {
-	my $count = 1;
-	
-	if ($^O eq 'linux') 
-	{
-		$count = `getconf _NPROCESSORS_ONLN 2>/dev/null` || 1;
-	} 
-	
-	chomp($count);
-	return $count;
+        my $count = 1;
+        
+        if ($^O =~ /bsd/) 
+        {
+                $count = `sysctl -n hw.ncpu 2>/dev/null` || 1;
+        } 
+        elsif ($^O eq 'darwin') 
+        {
+                $count = `sysctl -n hw.activecpu 2>/dev/null` || 1;
+        } 
+        elsif ($^O eq 'linux') 
+        {
+                $count = `getconf _NPROCESSORS_ONLN 2>/dev/null` || 1;
+        } elsif ($^O eq 'solaris') 
+        {
+                $count = `psrinfo -p 2>/dev/null` || 1;
+        }
+        
+        chomp($count);
+        return $count;
 }
 
 sub read_config_file($) 

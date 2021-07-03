@@ -32,7 +32,7 @@
 #include "converter.h"
 #include "stdhelpers.h"
 
-Externalize extern std::unique_ptr<Beryl> Kernel;
+ExportAPI extern std::unique_ptr<Beryl> Kernel;
 
 #include "config.h"
 #include "dynref.h"
@@ -69,6 +69,7 @@ Externalize extern std::unique_ptr<Beryl> Kernel;
 #include "settings.h"
 #include "notifier.h"
 #include "brldb/dbmanager.h"
+#include "interval.h"
 
 int main(int argc, char** argv);
 
@@ -78,7 +79,7 @@ int main(int argc, char** argv);
  * such as storage, timers, clients and more.
  */
  
-class Externalize Beryl
+class ExportAPI Beryl
 {
   private:
   	
@@ -162,18 +163,10 @@ class Externalize Beryl
        
   public:
          
-        /* Locked interval */
-        
-        std::atomic<bool> Lock;
-        
         /* Starts Beryl instance. */
        
         void Initialize();
 
-  	/* Time it takes for epoll_wait to read timeouts. */
-  	
-  	unsigned int Interval;
-  	
 	/* Ports where your BerylDB instance is listening to. */
 	
 	std::vector<BindingPort*> binds;
@@ -219,6 +212,8 @@ class Externalize Beryl
 	/* Notification manager. */
 	
 	Notifier Notify;
+	
+	IntervalManager Interval;
 	
 	/* Parses and processes user-provided commands. */
 	

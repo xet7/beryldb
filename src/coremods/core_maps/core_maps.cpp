@@ -19,7 +19,7 @@ class CoreModuleMaps : public Module
     private:
     
         CommandHSET cmdhset;
-        CommandHGET cmdhget;
+        CommandHGet cmdhget;
         CommandHDel cmdhdel;
         CommandHCount cmdhcount;
         CommandHSearch cmdhsearch;

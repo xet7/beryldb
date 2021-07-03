@@ -23,7 +23,7 @@ CommandChangePass::CommandChangePass(Module* parent) : Command(parent, "CHANGEPA
 
 COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
 {
-        if (parameters.size() < 2)
+/*        if (parameters.size() < 2)
         {
                 const std::string& pass = parameters[0];
 
@@ -42,7 +42,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
         
         /* Check if user has root access. */
         
-        if (!user->IsAdmin())
+  /*      if (!user->IsAdmin())
         {
                 user->SendProtocol(ERR_NO_FLAGS, user->login, ACCESS_DENIED);
                 return FAILED;        
@@ -86,7 +86,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
                 user->SendProtocol(ERR_INVALID_PASS, pass, PASS_AT_LEAST);
                 return FAILED;
         }
-
+*/
         return SUCCESS;
 }
 

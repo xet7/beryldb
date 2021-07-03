@@ -37,7 +37,7 @@ class ExpireEntry
 
 typedef std::multimap<time_t, ExpireEntry> ExpireMap;
 
-class Externalize ExpireManager : public safecast<ExpireManager>
+class ExportAPI ExpireManager : public safecast<ExpireManager>
 {
     public:
         
@@ -136,7 +136,7 @@ class Externalize ExpireManager : public safecast<ExpireManager>
         
         /* Select reset */
         
-        static unsigned int SReset(std::shared_ptr<Database> database, const std::string& select);
+        static unsigned int SelectReset(std::shared_ptr<Database> database, const std::string& select);
 
         /* 
          * Counts all expires.

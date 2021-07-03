@@ -40,7 +40,7 @@ struct Event
 
 typedef std::map<User*, NOTIFY_LEVEL> NotifyMap;
 
-class Externalize Notifier : public safecast<Notifier>
+class ExportAPI Notifier : public safecast<Notifier>
 {
    private:
          
@@ -141,4 +141,18 @@ class Externalize Notifier : public safecast<Notifier>
                 this->events.clear();
                 this->NotifyList.clear();
          }
+
+        /* 
+         * Counts pending events.
+         * 
+         * @return:
+ 	 *
+         *         · unsigned int: Events size.
+         */          
+            
+         unsigned int Count()
+         {
+                return this->events.size();
+         }
+         
 };

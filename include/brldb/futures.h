@@ -39,7 +39,7 @@ class FutureEntry
 
 typedef std::multimap<time_t, FutureEntry> FutureMap;
 
-class Externalize FutureManager : public safecast<FutureManager>
+class ExportAPI FutureManager : public safecast<FutureManager>
 {
       public:
 
@@ -135,5 +135,5 @@ class Externalize FutureManager : public safecast<FutureManager>
 
         unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
 
-        static unsigned int SReset(std::shared_ptr<Database> database, const std::string& select);      
+        static unsigned int SelectReset(std::shared_ptr<Database> database, const std::string& select);      
 };

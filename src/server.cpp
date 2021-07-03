@@ -41,7 +41,7 @@
 void Beryl::CommandLine()
 {
 	int do_debug = 0, do_nofork = 0, do_nolog = 0, do_tests = 0;
-	int do_nopid = 0, do_asroot = 0, do_version = 0, do_flushdb = 0;
+	int do_nopid = 0, do_asroot = 0, do_version = 0;
 
 	struct option longopts[] =
 	{
@@ -57,7 +57,6 @@ void Beryl::CommandLine()
 			{ "nopid",     no_argument,       &do_nopid,     1   },
 			{ "asroot",    no_argument,       &do_asroot,    1   },
 			{ "version",   no_argument,       &do_version,   1   },
-			{ "flushdb",   no_argument,       &do_flushdb,   1   },
 			{ 0, 0, 0, 0 }
 	};
 
@@ -83,16 +82,6 @@ void Beryl::CommandLine()
 						this->Exit(EXIT_CODE_ARGV);
 						break;
 			}
-	}
-	
-	if (do_flushdb)
-	{
-		this->Config->usercmd.flushdb = 1;
-		return;
-	}
-	else
-	{
-                this->Config->usercmd.flushdb = 0;
 	}
 	
 	/* Show version and then quit. */
@@ -130,6 +119,12 @@ void Beryl::CommandLine()
 
 void Beryl::Detach()
 {
+	if (!this->Config->usercmd.nofork)
+	{
+	     bprint(DONE, "Detaching to the background.");
+	     std::cout << std::endl;
+	}
+	
 	if (!this->Config->usercmd.nofork)
 	{
 		if (kill(getppid(), SIGTERM) == -1)
@@ -175,6 +170,8 @@ void Beryl::Detach()
 
 void Beryl::SignalManager(int signal)
 {
+	Kernel->Interval->SleepMode(false);
+	
 	if (signal == SIGTERM)
 	{
 		Kernel->Exit(EXIT_CODE_SIGTERM);
@@ -183,6 +180,10 @@ void Beryl::SignalManager(int signal)
 	{
 		Kernel->Exit(EXIT_CODE_SIGINT, true, false, "Exiting.");
 	}
+        else if (signal == SIGHUP)
+        {
+                Kernel->Exit(EXIT_CODE_SIGINT, true, false, "Exiting.");
+        }
 }
 
 std::string Beryl::GetVersion(bool Full)

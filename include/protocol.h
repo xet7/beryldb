@@ -24,7 +24,7 @@ class ProtocolServer
 	virtual void SendMetaData(const std::string& key, const std::string& data) = 0;
 };
 
-class Externalize ProtocolInterface
+class ExportAPI ProtocolInterface
 {
  public:
 	typedef ProtocolServer Server;

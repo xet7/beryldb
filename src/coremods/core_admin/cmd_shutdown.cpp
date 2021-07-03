@@ -30,6 +30,8 @@ COMMAND_RESULT CommandShutdown::Handle(User* user, const Params& parameters)
                 reason = parameters.back();
         }
         
+        user->SendProtocol(BRLD_SHUTTING_DOWN, PROCESS_OK);
+        
         if (!reason.empty())
         {
                 slog("STARTUP", LOG_DEFAULT, Daemon::Format("Shutting down request by %s: %s", user->login.c_str(), reason.c_str()));

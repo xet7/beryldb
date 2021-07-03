@@ -62,9 +62,31 @@ enum OP_TYPE
 
 class HQuery;
 
-class Externalize query_base
+class ExportAPI query_base
 {
     public:
+        
+        bool check;
+        
+        bool write;
+        
+        bool iter;
+        
+        bool remove;
+        
+        DBL_CODE type;
+        
+        bool reverted;
+        
+        bool multi;
+        
+        bool key_required;
+        
+        std::string identified;
+        
+        std::string dest;
+        
+        std::string base_request;
         
         std::shared_ptr<HQuery> hquery;
         
@@ -92,8 +114,6 @@ class Externalize query_base
         
         std::string value;
        
-        std::string int_keys;
-        
         std::string length;
         
         QUERY_TYPE qtype;
@@ -138,8 +158,6 @@ class Externalize query_base
 
         User* user;
         
-        DBL_CODE type;
-        
         DBL_CODE access;
         
         OP_TYPE operation;
@@ -168,10 +186,10 @@ class Externalize query_base
             this->finished  = true;
         }
         
-        query_base(DBL_CODE base) : hquery(nullptr), mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
-                                    subresult(0), partial(false), int_keys(INT_KEYS), qtype(TYPE_NONE), 
+        query_base(const std::string& brequest, bool krequired = false, bool writeq = false) : check(false), write(writeq), iter(false), remove(false), reverted(false), multi(false), key_required(krequired), base_request(brequest), hquery(nullptr), mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
+                                    subresult(0), partial(false), qtype(TYPE_NONE), 
                                     offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), 
-                                    type(base), operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
+                                    operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
         {
         
         }
@@ -183,11 +201,386 @@ class Externalize query_base
         
         bool Check();
         
+        bool CheckKey();
+        
+        void DelExpire();
+        
+        std::string GetRegistry(const std::string& select, const std::string& key);
+        
+        void SetRegistry(const std::string& select, const std::string& base, const std::string& key);
+
+        void RemoveRegistry(const std::string& select, const std::string& base, const std::string& key);
+        
         virtual void Run() = 0;
+        
+        virtual void Process() = 0;
+        
+        virtual ~query_base()
+        {
+        
+        }
+};
+
+class ExportAPI get_query  : public query_base
+{
+    public:
+
+        get_query() : query_base(INT_KEYS, true)
+        {
+        
+        }
+        
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI getset_query  : public query_base
+{
+    public:
+
+        getset_query() : query_base(INT_KEYS, true)
+        {
+
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI rename_query  : public query_base
+{
+    public:
+
+        rename_query() : query_base(INT_KEYS, true)
+        {
+              this->check = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI copy_query  : public query_base
+{
+    public:
+
+        copy_query() : query_base(INT_KEYS, true)
+        {
+              this->check = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI exists_query  : public query_base
+{
+    public:
+
+        exists_query() : query_base(INT_KEYS, true)
+        {
+             this->check = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI strlen_query  : public query_base
+{
+    public:
+
+        strlen_query() : query_base(INT_KEYS, true)
+        {
+            
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI set_query  : public query_base
+{
+    public:
+
+        set_query() : query_base(INT_KEYS, true, true)
+        {
+
+        }
+
+        void Run();
+
+        void Process();
 
 };
 
-class Externalize swapdb_query : public query_base
+class ExportAPI search_query : public query_base
+{
+    public:
+
+        search_query() : query_base(INT_KEYS, true)
+        {
+               this->iter = true;
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+
+class ExportAPI getdel_query  : public query_base
+{
+    public:
+
+        getdel_query() : query_base(INT_KEYS, true)
+        {
+                this->check = true;
+        }
+
+        void Run();
+
+        void Process();
+
+};
+
+class ExportAPI op_query  : public query_base
+{
+    public:
+
+        op_query() : query_base(INT_KEYS, true)
+        {
+                this->type = DBL_TYPE_OP;
+        }
+
+        void Run();
+
+        void Process();
+
+};
+
+class ExportAPI hset_query : public query_base
+{
+    public:
+        
+        hset_query() : query_base(INT_MAP, true, true)
+        {
+        
+        }
+        
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI type_query : public query_base
+{
+    public:
+        
+        type_query() : query_base(INT_REG, true)
+        {
+        
+        }
+        
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI hget_query : public query_base
+{
+    public:
+
+        hget_query() : query_base(INT_MAP, true)
+        {
+
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI del_query : public query_base
+{
+    public:
+
+        del_query() : query_base(INT_KEYS, true)
+        {
+              this->remove = true;
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI hexists_query : public query_base
+{
+    public:
+
+        hexists_query() : query_base(INT_MAP, true)
+        {
+               this->check = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI count_query : public query_base
+{
+    public:
+
+        count_query() : query_base(INT_KEYS, true)
+        {
+               this->iter = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI hdel_query : public query_base
+{
+    public:
+
+        hdel_query() : query_base(INT_MAP, true)
+        {
+              this->remove = true;
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI expire_del_query : public query_base
+{
+    public:
+
+        expire_del_query() : query_base(INT_EXPIRE, true)
+        {
+
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI test_dump_query : public query_base
+{
+    public:
+
+        test_dump_query() : query_base("0", false)
+        {
+
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI expire_query : public query_base
+{
+    public:
+
+        expire_query() : query_base(INT_EXPIRE, true, false)
+        {
+
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI expire_list_query : public query_base
+{
+    public:
+
+        expire_list_query() : query_base(INT_EXPIRE, false, false)
+        {
+             this->iter = true;
+        }
+
+        void Run();
+        
+        void Process();
+};
+
+class ExportAPI expireat_query : public query_base
+{
+    public:
+
+        expireat_query() : query_base(INT_EXPIRE, true, false)
+        {
+
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI find_query : public query_base
+{
+    public:
+
+        find_query() : query_base(INT_KEYS, true)
+        {
+               this->iter = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hkeys_query : public query_base
+{
+    public:
+
+        hkeys_query() : query_base(INT_MAP, true)
+        {
+               this->iter = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI dbsize_query : public query_base
+{
+    public:
+
+        dbsize_query() : query_base("0", true)
+        {
+               this->iter = true;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+
+
+/*
+class ExportAPI swapdb_query : public query_base
 {
     public:
 
@@ -197,22 +590,12 @@ class Externalize swapdb_query : public query_base
         }
 
         void Run();
-};
-
-class Externalize lfind_query : public query_base
-{
-    public:
-
-        lfind_query() : query_base(DBL_TYPE_LFIND)
-        {
-
-        }
-
-        void Run();
+        
 };
 
 
-class Externalize search_query : public query_base
+
+class ExportAPI search_query : public query_base
 {
     public:
 
@@ -224,43 +607,8 @@ class Externalize search_query : public query_base
         void Run();
 };
 
-class Externalize hset_query : public query_base
-{
-    public:
-        
-        hset_query() : query_base(DBL_TYPE_HSET)
-        {
-        
-        }
-        
-        void Run();
-};
 
-class Externalize hdel_query : public query_base
-{
-    public:
-
-        hdel_query() : query_base(DBL_TYPE_HDEL)
-        {
-
-        }
-
-        void Run();
-};
-
-class Externalize hget_query : public query_base
-{
-    public:
-
-        hget_query() : query_base(DBL_TYPE_HGET)
-        {
-
-        }
-
-        void Run();
-};
-
-class Externalize lmove_query : public query_base
+class ExportAPI lmove_query : public query_base
 {
     public:
 
@@ -272,7 +620,7 @@ class Externalize lmove_query : public query_base
         void Run();
 };
 
-class Externalize lpush_query : public query_base
+class ExportAPI lpush_query : public query_base
 {
     public:	
     
@@ -284,7 +632,7 @@ class Externalize lpush_query : public query_base
         void Run();
 };
 
-class Externalize lget_query : public query_base
+class ExportAPI lget_query : public query_base
 {
     public:
 
@@ -296,7 +644,7 @@ class Externalize lget_query : public query_base
         void Run();
 };
 
-class Externalize lpop_query : public query_base
+class ExportAPI lpop_query : public query_base
 {
     public:
 
@@ -308,7 +656,7 @@ class Externalize lpop_query : public query_base
         void Run();
 };
 
-class Externalize  llist_query : public query_base
+class ExportAPI  llist_query : public query_base
 {
     public:
 
@@ -323,39 +671,8 @@ class Externalize  llist_query : public query_base
 };
 
 
-class Externalize get_query  : public query_base
-{
-    public:
 
-        get_query() : query_base(DBL_TYPE_GET)
-        {
-        
-        }
-        
-        void Run();
-};
-
-class Externalize set_query  : public query_base
-{
-    public:
-        
-        std::string response;
-
-        /* Will not return any result */
-
-        bool quiet;
-
-        set_query() : query_base(DBL_TYPE_SET), quiet(false)
-        {
-
-        }
-
-        void Run();
-
-
-};
-
-class Externalize del_query  : public query_base
+class ExportAPI del_query  : public query_base
 {
     public:
 
@@ -367,19 +684,8 @@ class Externalize del_query  : public query_base
         void Run();
 };
 
-class Externalize op_query  : public query_base
-{
-    public:
 
-        op_query() : query_base(DBL_TYPE_OP)
-        {
-
-        }
-
-        void Run();
-};
-
-class Externalize find_query  : public query_base
+class ExportAPI find_query  : public query_base
 {
     public:
 
@@ -391,7 +697,7 @@ class Externalize find_query  : public query_base
         void Run();
 };
 
-class Externalize hsearch_query  : public query_base
+class ExportAPI hsearch_query  : public query_base
 {
     public:
 
@@ -403,7 +709,7 @@ class Externalize hsearch_query  : public query_base
         void Run();
 };
 
-class Externalize geofind_query  : public query_base
+class ExportAPI geofind_query  : public query_base
 {
     public:
 
@@ -416,7 +722,7 @@ class Externalize geofind_query  : public query_base
 };
 
 
-class Externalize move_query  : public query_base
+class ExportAPI move_query  : public query_base
 {
     public:
 
@@ -429,7 +735,7 @@ class Externalize move_query  : public query_base
 };
 
 
-class Externalize hdel_all_query  : public query_base
+class ExportAPI hdel_all_query  : public query_base
 {
     public:
 
@@ -441,7 +747,7 @@ class Externalize hdel_all_query  : public query_base
         void Run();
 };
 
-class Externalize hsearch_hesh_query  : public query_base
+class ExportAPI hsearch_hesh_query  : public query_base
 {
     public:
 
@@ -454,7 +760,7 @@ class Externalize hsearch_hesh_query  : public query_base
 };
 
 
-class Externalize hkeys_query  : public query_base
+class ExportAPI hkeys_query  : public query_base
 {
     public:
 
@@ -466,7 +772,7 @@ class Externalize hkeys_query  : public query_base
         void Run();
 };
 
-class Externalize advget_query  : public query_base
+class ExportAPI advget_query  : public query_base
 {
     public:
 
@@ -478,7 +784,7 @@ class Externalize advget_query  : public query_base
         void Run();
 };
 
-class Externalize dbsize_query  : public query_base
+class ExportAPI dbsize_query  : public query_base
 {
     public:
 
@@ -490,7 +796,7 @@ class Externalize dbsize_query  : public query_base
         void Run();
 };
 
-class Externalize hmove_query  : public query_base
+class ExportAPI hmove_query  : public query_base
 {
     public:
 
@@ -502,7 +808,7 @@ class Externalize hmove_query  : public query_base
         void Run();
 };
 
-class Externalize touch_query  : public query_base
+class ExportAPI touch_query  : public query_base
 {
     public:
 
@@ -515,7 +821,7 @@ class Externalize touch_query  : public query_base
 };
 
 
-class Externalize append_query  : public query_base
+class ExportAPI append_query  : public query_base
 {
     public:
 
@@ -527,7 +833,7 @@ class Externalize append_query  : public query_base
         void Run();
 };
 
-class Externalize lsearch_query  : public query_base
+class ExportAPI lsearch_query  : public query_base
 {
     public:
 
@@ -540,7 +846,7 @@ class Externalize lsearch_query  : public query_base
 };
 
 
-class Externalize hquery_query  : public query_base
+class ExportAPI hquery_query  : public query_base
 {
     public:
 
@@ -553,7 +859,7 @@ class Externalize hquery_query  : public query_base
 };
 
 
-class Externalize sflush_query  : public query_base
+class ExportAPI sflush_query  : public query_base
 {
     public:
 
@@ -565,7 +871,7 @@ class Externalize sflush_query  : public query_base
         void Run();
 };
 
-class Externalize geoadd_query : public query_base
+class ExportAPI geoadd_query : public query_base
 {
     public:
 
@@ -577,7 +883,7 @@ class Externalize geoadd_query : public query_base
         void Run();
 };
 
-class Externalize geoget_query : public query_base
+class ExportAPI geoget_query : public query_base
 {
     public:
 
@@ -589,7 +895,7 @@ class Externalize geoget_query : public query_base
         void Run();
 };
 
-class Externalize geodel_query : public query_base
+class ExportAPI geodel_query : public query_base
 {
     public:
 
@@ -601,7 +907,7 @@ class Externalize geodel_query : public query_base
         void Run();
 };
 
-class Externalize geocalc_query : public query_base
+class ExportAPI geocalc_query : public query_base
 {
     public:
 
@@ -613,7 +919,7 @@ class Externalize geocalc_query : public query_base
         void Run();
 };
 
-class Externalize lremove_query : public query_base
+class ExportAPI lremove_query : public query_base
 {
     public:
 
@@ -625,7 +931,7 @@ class Externalize lremove_query : public query_base
         void Run();
 };
 
-class Externalize geoclose_query : public query_base
+class ExportAPI geoclose_query : public query_base
 {
     public:
 
@@ -637,7 +943,7 @@ class Externalize geoclose_query : public query_base
         void Run();
 };
 
-class Externalize georemove_query : public query_base
+class ExportAPI georemove_query : public query_base
 {
     public:
 
@@ -651,84 +957,4 @@ class Externalize georemove_query : public query_base
 
 
 
-class Flusher
-{
-    public:
-        
-        static void Set(User* user, std::shared_ptr<query_base> query);
-        
-        static void Get(User* user, std::shared_ptr<query_base> query);
-
-        static void Del(User* user, std::shared_ptr<query_base> query);
-
-        static void HSet(User* user, std::shared_ptr<query_base> query);
-
-        static void HGet(User* user, std::shared_ptr<query_base> query);
-
-        static void HDel(User* user, std::shared_ptr<query_base> query);
-        
-        static void HFind(User* user, std::shared_ptr<query_base> query);
-        
-        static void LPush(User* user, std::shared_ptr<query_base> query);
-
-        static void LGet(User* user, std::shared_ptr<query_base> query);
-        
-        static void LPop(User* user, std::shared_ptr<query_base> query);
-        
-        static void Operation(User* user, std::shared_ptr<query_base> query);
-        
-        static void Find(User* user, std::shared_ptr<query_base> query);
-
-        static void HSearch(User* user, std::shared_ptr<query_base> query);
-
-        static void HList(User* user, std::shared_ptr<query_base> query);
-
-        static void Move(User* user, std::shared_ptr<query_base> query);
-
-        static void HDelAll(User* user, std::shared_ptr<query_base> query);
-        
-        static void HSearch_Hesh(User* user, std::shared_ptr<query_base> query);
-        
-        static void HKeys(User* user, std::shared_ptr<query_base> query);
-
-        static void DBSize(User* user, std::shared_ptr<query_base> query);
-
-        static void AdvancedGET(User* user, std::shared_ptr<query_base> query);
-
-        static void HMove(User* user, std::shared_ptr<query_base> query);
-
-        static void Touch(User* user, std::shared_ptr<query_base> query);
-
-        static void Append(User* user, std::shared_ptr<query_base> query);
-
-        static void LMove(User* user, std::shared_ptr<query_base> query);
-
-        static void SFlush(User* user, std::shared_ptr<query_base> query);
-        
-        static void Search(User* user, std::shared_ptr<query_base> query);
-        
-        static void LSearch(User* user, std::shared_ptr<query_base> query);
-
-        static void LFind(User* user, std::shared_ptr<query_base> query);
-
-        static void SwapDB(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoAdd(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoGet(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoDel(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoFind(User* user, std::shared_ptr<query_base> query);
-
-        static void GeoCalc(User* user, std::shared_ptr<query_base> query);
-
-        static void LRemove(User* user, std::shared_ptr<query_base> query);
-
-        static void HQuery(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoClose(User* user, std::shared_ptr<query_base> query);
-        
-        static void GeoRemove(User* user, std::shared_ptr<query_base> query);
-
-};
+*/

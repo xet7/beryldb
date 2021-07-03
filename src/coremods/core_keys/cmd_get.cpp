@@ -33,7 +33,7 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
         * not requesting for a strlen. 
         */
 
-       KeyHelper::Get(user, user->current_db, user->select, key);
+       KeyHelper::Get(user, key);
        return SUCCESS;
 }
 
@@ -48,7 +48,7 @@ COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
        
        /* The 'true' parameter at the end indicates that we are performing an strlen query. */
        
-       KeyHelper::Get(user, user->current_db, user->select, key, TYPE_EXIST);
+       KeyHelper::Exists(user, key);
        return SUCCESS;
 }
 
@@ -63,7 +63,7 @@ COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
        
        /* The 'true' parameter at the end indicates that we are performing an strlen query. */
        
-       KeyHelper::Get(user, user->current_db, user->select, key, TYPE_LENGTH);
+       KeyHelper::Strlen(user, key);
        return SUCCESS;
 }
 
@@ -76,7 +76,7 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       KeyHelper::AdvancedGET(user, user->current_db, user->select, key, TYPE_GETDEL);
+       KeyHelper::GetDel(user, key);
        return SUCCESS;
 }
 
@@ -95,7 +95,7 @@ COMMAND_RESULT CommandGetRange::Handle(User* user, const Params& parameters)
        limit = convto_num<int>(parameters[2]); 
        offset = convto_num<int>(parameters[1]);
 
-       KeyHelper::GetRange(user, user->current_db, user->select, key, offset, limit);
+       //KeyHelper::GetRange(user, user->current_db, user->select, key, offset, limit);
        return SUCCESS;
 }
 

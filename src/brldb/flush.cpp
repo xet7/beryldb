@@ -26,245 +26,35 @@ void DataFlush::EntryExists(User* user, std::shared_ptr<query_base> signal)
 
 void DataFlush::NotFound(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, signal);
+        user->SendProtocol(ERR_QUERY, PROCESS_NULL);
 }
 
 void DataFlush::StatusFailed(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, signal);
+        user->SendProtocol(ERR_QUERY, DB_NULL);
 }
 
 void DataFlush::MissArgs(User* user, std::shared_ptr<query_base> signal)
 {
-        Dispatcher::Smart(user, 0, ERR_QUERY, "Missing arguments.", signal);
+        user->SendProtocol(ERR_QUERY, MIS_ARGS);
 }
 
+void DataFlush::InvalidType(User* user,  std::shared_ptr<query_base> signal)
+{
+       user->SendProtocol(ERR_QUERY, INVALID_TYPE);
+}
+
+void DataFlush::UnableWrite(User* user, std::shared_ptr<query_base> signal)
+{
+     user->SendProtocol(ERR_QUERY, PROCESS_FALSE);
+
+}
 
 void DataFlush::Flush(User* user, std::shared_ptr<query_base> signal)
 {
-        switch (signal->type)
-        {
-                    case DBL_TYPE_SET:
-                    {
-                           Flusher::Set(user, signal);      
-                           break; 
-                    }
-
-                    case DBL_TYPE_SWAPDB:
-                    {
-                           Flusher::SwapDB(user, signal);
-                           break; 
-                    }
-
-                    case DBL_TYPE_GET:
-                    {
-                           Flusher::Get(user, signal);      
-                           break; 
-                    }
-                    
-                    case DBL_TYPE_DEL:
-                    {
-                           Flusher::Del(user, signal);
-                           break;
-                    }
-                    
-                    case DBL_TYPE_HSET:
-                    {
-                           Flusher::HSet(user, signal);      
-                           break; 
-                    }
-
-                    case DBL_TYPE_HGET:
-                    {
-                           Flusher::HGet(user, signal);      
-                           break; 
-                    }
-
-                    case DBL_TYPE_HDEL:
-                    {
-                           Flusher::HDel(user, signal);
-                           break;
-                    }
-
-
-                    case DBL_TYPE_LGET:
-                    {
-                           Flusher::LGet(user, signal);
-                           break;
-                    }
-
-                    case DBL_TYPE_LPUSH:
-                    {
-                           Flusher::LPush(user, signal);
-                           break;
-                    }
-
-                    case DBL_TYPE_LPOP:
-                    {
-                           Flusher::LPop(user, signal);
-                           break;
-                    }
-                    
-                    case DBL_TYPE_OP:
-                    {
-                           Flusher::Operation(user, signal);
-                           break;
-                    }
-                    
-                    case DBL_TYPE_FIND:
-                    {
-                           Flusher::Find(user, signal);
-                           break;
-                    }
-
-                    case DBL_TYPE_SEARCH:
-                    {
-                           Flusher::HSearch(user, signal);
-                           break;
-                    }
-
-                    case DBL_TYPE_MOVE:
-                    {
-                           Flusher::Move(user, signal);
-                           break;
-                    }
-                    
-                    case DBL_TYPE_HDEL_ALL:
-                    {
-                          Flusher::HDelAll(user, signal);
-                          break;
-                    }
-                    
-                    case DBL_TYPE_HSEARCH:
-                    {
-                          Flusher::HSearch_Hesh(user, signal);
-                          break;
-                    }
-                    
-                    case DBL_TYPE_HKEYS:
-                    {
-                         Flusher::HKeys(user, signal);
-                         break;
-                    }
-
-                    case DBL_TYPE_DBSIZE:
-                    {
-                         Flusher::DBSize(user, signal);
-                         break;
-                    }
-
-                    case DBL_TYPE_ADVGET:
-                    {
-                         Flusher::AdvancedGET(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_HMOVE:
-                    {
-                         Flusher::HMove(user, signal);
-                         break;
-                    }
-
-                    case DBL_TYPE_TOUCH:
-                    {
-                         Flusher::Touch(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_APPEND:
-                    {
-                         Flusher::Append(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_LMOVE:
-                    {
-                         Flusher::LMove(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_SFLUSH:
-                    {
-                         Flusher::SFlush(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_KSEARCH:
-                    {
-                         Flusher::Search(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_LSEARCH:
-                    {
-                         Flusher::LSearch(user, signal);
-                         break;
-                    }
-
-                    case DBL_TYPE_LFIND:
-                    {
-                         Flusher::LFind(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOADD:
-                    {
-                         Flusher::GeoAdd(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOGET:
-                    {
-                         Flusher::GeoGet(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEODEL:
-                    {
-                         Flusher::GeoDel(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOFIND:
-                    {
-                         Flusher::GeoFind(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOCALC:
-                    {
-                         Flusher::GeoCalc(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_LREMOVE:
-                    {
-                         Flusher::LRemove(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_HQUERY:
-                    {
-                         Flusher::HQuery(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOCLOSE:
-                    {
-                         Flusher::GeoClose(user, signal);
-                         break;
-                    }
-                    
-                    case DBL_TYPE_GEOREMOVE:
-                    {
-                         Flusher::GeoRemove(user, signal);
-                         break;
-                    }
-        };      
-        
+        signal->Process();
         signal = nullptr;
 }
-
 
 ListHandler::ListHandler()
 {

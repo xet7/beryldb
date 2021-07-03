@@ -65,7 +65,7 @@ class LiveSocket;
 
 /* Used to timeout socket connections. */
 
-class Externalize SocketTimer : public Timer
+class ExportAPI SocketTimer : public Timer
 {
  private:
 	
@@ -81,7 +81,7 @@ class Externalize SocketTimer : public Timer
 };
 
 
-class Externalize StreamSocket : public EventHandler
+class ExportAPI StreamSocket : public EventHandler
 {
  public:
 	
@@ -276,14 +276,14 @@ class Externalize StreamSocket : public EventHandler
 	DiscardResult discard() ;
 
 	
-	IOQueue* GetModHook(Module* mod) const;
+	IOQueue* GetModuleLink(Module* mod) const;
 
 	
 	IOQueue* GetLastHook() const;
 };
 
 
-class Externalize LiveSocket : public StreamSocket
+class ExportAPI LiveSocket : public StreamSocket
 {
  public:
 	

@@ -131,7 +131,7 @@ void FutureManager::Flush(time_t TIME)
               }
               
               FutureEntry entry = it->second;
-              KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
+              //KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
               Kernel->Store->Futures->FutureList.erase(it++);
         }
 }
@@ -182,7 +182,7 @@ bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& 
               return false;
         }
 
-        KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
+        //KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
         FutureManager::Delete(database, key, select);
         return true;
 }
@@ -219,7 +219,7 @@ void FutureManager::Reset()
       Kernel->Store->Futures->FutureList.clear();
 }
 
-unsigned int FutureManager::SReset(std::shared_ptr<Database> database, const std::string& select)
+unsigned int FutureManager::SelectReset(std::shared_ptr<Database> database, const std::string& select)
 {
       /* Keeps track of deleted expires */
 

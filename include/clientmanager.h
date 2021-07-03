@@ -17,7 +17,7 @@
 
 /* Handles users' connections. */
 
-class Externalize ClientManager : public safecast<ClientManager>
+class ExportAPI ClientManager : public safecast<ClientManager>
 {
  public:
 	

@@ -15,7 +15,7 @@
 
 /* Settings to share across all servers. */
  
-class Externalize Settings : public safecast<Settings>
+class ExportAPI Settings : public safecast<Settings>
 {
    private:
           

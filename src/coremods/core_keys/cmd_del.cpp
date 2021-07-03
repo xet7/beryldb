@@ -28,6 +28,6 @@ COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 {  
        const std::string key = parameters[0];
        
-       KeyHelper::Delete(user, user->current_db, user->select, key, false);
+       KeyHelper::Delete(user, key);
        return SUCCESS;
 }

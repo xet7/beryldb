@@ -16,7 +16,7 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
-
+/*
 
 void hquery_query::Run()
 {
@@ -232,3 +232,4 @@ void Flusher::HQuery(User* user, std::shared_ptr<query_base> query)
         }        
 }
 
+*/

@@ -18,10 +18,10 @@ struct PendingCMD
     public:
     
         LocalUser* user;
-        CommandModel::Params command_p;
+        CommandModel::Params cmd_params;
         std::string command;
         
-        PendingCMD(LocalUser* usr, const CommandModel::Params command_params, const std::string& cmd) : user(usr), command_p(command_params), command(cmd)
+        PendingCMD(LocalUser* usr, const CommandModel::Params cmd_paramsarams, const std::string& cmd) : user(usr), cmd_params(cmd_paramsarams), command(cmd)
         {
         
         }
@@ -29,28 +29,45 @@ struct PendingCMD
 
 class CommandQueue : public safecast<CommandQueue>
 {
-
    public:
 
-      CommandQueue();
+         /* Constructor */
+         
+         CommandQueue();
+      
+        /* 
+         * Adds a new command to the pending queue.
+         * 
+         * @parameters:
+	 *
+	 *         · user: User that is requesting this new command.
+	 *         · command: Command requested.
+	 *         · cmd_params: Command's parameters.
+         */          
 
-      void Add(LocalUser* user, std::string& command, CommandModel::Params& command_p);
+        void Add(LocalUser* user, std::string& command, CommandModel::Params& cmd_params);
 
-      void Flush();
+        /* 
+         * Runs pending commands. 
+         * This function is called from mainloop and runs constantly.
+         */    
+	
+	void Flush();
 
-      void Reset();
-
+        /* Resets pending flushes. */
+        
+        void Reset();
 };
 
-class Externalize CommandHandler
-{
-	friend class CommandQueue;
+class ExportAPI CommandHandler
+{ 
+    friend class CommandQueue;
 	
-	public:
+    public:
 
-		typedef STR1::unordered_map<std::string, Command*, engine::insensitive, engine::str_hash_comparison> CommandMap;
+	typedef STR1::unordered_map<std::string, Command*, engine::insensitive, engine::str_hash_comparison> CommandMap;
 
-	private:
+    private:
 
 		void Execute(LocalUser* user, std::string& command, CommandModel::Params& parameters);
 

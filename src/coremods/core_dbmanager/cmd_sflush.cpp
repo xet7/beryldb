@@ -53,7 +53,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
        }
 
        user->SendProtocol(BRLD_SFLUSH, Daemon::Format("Flushing select ID: %s", select.c_str()).c_str());
-       DBHelper::SFlush(user, user->current_db, select);
+//       DBHelper::SFlush(user, user->current_db, select);
        
        return SUCCESS;
 }

@@ -20,7 +20,7 @@ typedef STR1::unordered_multimap<std::string, User*, engine::insensitive, engine
 
 typedef STR1::unordered_map<std::string, User*, engine::insensitive, engine::str_hash_comparison> UserMap;
 typedef STR1::unordered_map<std::string, Channel*, engine::insensitive, engine::str_hash_comparison> ChanMap;
-typedef STR1::unordered_map<std::string, std::shared_ptr<Database>, engine::insensitive, engine::str_hash_comparison> DataMap;
+typedef STR1::unordered_map<std::string, std::shared_ptr<UserDatabase>, engine::insensitive, engine::str_hash_comparison> DataMap;
 
 typedef std::vector<Subscription*> SubscriptionList;
 

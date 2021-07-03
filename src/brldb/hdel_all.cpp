@@ -16,7 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 
-void hdel_all_query::Run()
+/*void hdel_all_query::Run()
 {
     if (!this->Check())
     {
@@ -131,3 +131,4 @@ void Flusher::HDelAll(User* user, std::shared_ptr<query_base> query)
                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
         }
 }
+*/

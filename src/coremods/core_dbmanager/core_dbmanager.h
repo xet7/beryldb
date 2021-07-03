@@ -99,3 +99,66 @@ class CommandSwapDB : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandDB : public Command 
+{
+    public: 
+
+        CommandDB(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandChange : public Command 
+{
+    public: 
+
+        CommandChange(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDBLIST : public Command 
+{
+    public: 
+
+        CommandDBLIST(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDBCreate : public Command 
+{
+    public: 
+
+        CommandDBCreate(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDBDelete : public Command 
+{
+    public: 
+
+        CommandDBDelete(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandType : public Command 
+{
+    public: 
+
+        CommandType(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDBTest : public Command 
+{
+    public: 
+
+        CommandDBTest(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

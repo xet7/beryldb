@@ -19,26 +19,120 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/keys.h"
+#include "helpers.h"
 #include "extras.h"
 
-void KeyHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+void KeyHelper::Copy(User* user, const std::string& entry, const std::string& value)
 {
-       std::shared_ptr<search_query> query = std::make_shared<search_query>();
-       
-              
-       query->database = database;
-       query->user = user;
-       query->limit = limit;
-       query->offset = offset;
-       query->qtype = type;
-       query->select_query = where;
-       query->int_keys = INT_KEYS;
-       query->key = stripe(key);
-
+       std::shared_ptr<copy_query> query = std::make_shared<copy_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = value;
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value)
+void KeyHelper::Rename(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<rename_query> query = std::make_shared<rename_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = value;
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Set(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<set_query> query = std::make_shared<set_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::GetSet(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<getset_query> query = std::make_shared<getset_query>();
+       Helpers::make_query(user, query, entry);
+
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Get(User* user, const std::string& key)
+{
+       std::shared_ptr<get_query> query = std::make_shared<get_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::GetDel(User* user, const std::string& key)
+{
+       std::shared_ptr<getdel_query> query = std::make_shared<getdel_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Strlen(User* user, const std::string& key)
+{
+       std::shared_ptr<strlen_query> query = std::make_shared<strlen_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Count(User* user, const std::string& key)
+{
+       std::shared_ptr<count_query> query = std::make_shared<count_query>();
+       Helpers::make_query(user, query);
+       query->key = key;
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Exists(User* user, const std::string& key)
+{
+       std::shared_ptr<exists_query> query = std::make_shared<exists_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Delete(User* user, const std::string& key)
+{
+       std::shared_ptr<del_query> query = std::make_shared<del_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet)
+{
+       std::shared_ptr<del_query> query = std::make_shared<del_query>();
+
+       query->user = user;
+       query->database = database;
+       query->select_query = where;
+       query->quiet = quiet;
+       query->key = key;
+       query->dest = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
+       
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Search(User* user, const std::string& key, signed int offset, signed int limit)
+{
+       std::shared_ptr<search_query> query = std::make_shared<search_query>();
+       Helpers::make_query(user, query, stripe(key));
+       query->limit = limit;
+       query->offset = offset;
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::Find(User* user, const std::string& key, signed int offset, signed int limit)
+{
+       std::shared_ptr<find_query> query = std::make_shared<find_query>();
+       Helpers::make_query(user, query);
+
+       query->limit = limit;
+       query->offset = offset;
+       query->key = stripe(key);
+       Kernel->Store->Push(query);
+}
+
+/*void //KeyHelper::Append(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value)
 {
        std::shared_ptr<append_query> query = std::make_shared<append_query>();
               
@@ -55,7 +149,7 @@ void KeyHelper::Append(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Touch(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
+void //KeyHelper::Touch(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
 {
        std::shared_ptr<touch_query> query = std::make_shared<touch_query>();
               
@@ -73,7 +167,7 @@ void KeyHelper::Touch(User* user, std::shared_ptr<Database> database, const std:
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::GetRange(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, int from, int to)
+void //KeyHelper::GetRange(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, int from, int to)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
               
@@ -93,7 +187,7 @@ void KeyHelper::GetRange(User* user, std::shared_ptr<Database> database, const s
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
+void //KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
               
@@ -121,7 +215,7 @@ void KeyHelper::AdvSet(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
+void //KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
 {
        std::shared_ptr<advget_query> query = std::make_shared<advget_query>();
               
@@ -138,7 +232,7 @@ void KeyHelper::AdvancedGET(User* user, std::shared_ptr<Database> database, cons
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& new_select)
+void //KeyHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& new_select)
 {
        std::shared_ptr<move_query> query = std::make_shared<move_query>();
               
@@ -154,7 +248,7 @@ void KeyHelper::Move(User* user, std::shared_ptr<Database> database, const std::
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply)
+void //KeyHelper::Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply)
 {
        std::shared_ptr<find_query> query = std::make_shared<find_query>();
               
@@ -176,7 +270,7 @@ void KeyHelper::Count(User* user, std::shared_ptr<Database> database, const std:
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+void //KeyHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<find_query> query = std::make_shared<find_query>();
               
@@ -193,12 +287,12 @@ void KeyHelper::Find(User* user, std::shared_ptr<Database> database, const std::
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type, unsigned int usig, std::string value)
+void //KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type, unsigned int usig, std::string value)
 {
        if (type == TYPE_EXPIREAT)
        {
               /* Epoch time already passed. */
-              
+  /*            
               if (usig < Kernel->Now())
               {
                      return;
@@ -227,7 +321,7 @@ void KeyHelper::Expire(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
+void //KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type)
 {
        std::shared_ptr<get_query> query = std::make_shared<get_query>();
               
@@ -244,25 +338,20 @@ void KeyHelper::Get(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& custom, QUERY_TYPE type, bool quiet)
+void //KeyHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<set_query> query = std::make_shared<set_query>();
-              
-       
        query->database = database;
        query->user = user;
-       query->quiet = quiet;
        query->qtype = type;
        query->select_query = where;
-       query->customreply = custom;
-       query->int_keys = INT_KEYS;
        query->key = entry;
        query->value = stripe(value);
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
+       query->format = query->select_query + ":" + to_bin(query->key);
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Operation(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, OP_TYPE type, const std::string& oper)
+void //KeyHelper::Operation(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, OP_TYPE type, const std::string& oper)
 {
        std::shared_ptr<op_query> query = std::make_shared<op_query>();
               
@@ -288,20 +377,5 @@ void KeyHelper::Operation(User* user, std::shared_ptr<Database> database, const 
        Kernel->Store->Push(query);
 }
 
-void KeyHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet)
-{
-       std::shared_ptr<del_query> query = std::make_shared<del_query>();
-              
 
-       query->database = database;
-       query->select_query = where;
-       query->int_keys = INT_KEYS;
-       query->user = user;
-       query->key = key;
-       query->quiet = quiet;
-
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
-
-       Kernel->Store->Push(query);
-}
-
+*/

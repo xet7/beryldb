@@ -50,7 +50,7 @@ enum UserType
 	CLIENT_TYPE_SERVER = 3
 };
 
-struct Externalize connect_config : public refcountbase
+struct ExportAPI connect_config : public refcountbase
 {
 
 	reference<config_rule> config;
@@ -93,7 +93,7 @@ struct Externalize connect_config : public refcountbase
  * file descriptors, current database and pending queries, etc.
  */
 
-class Externalize User : public Expandable
+class ExportAPI User : public Expandable
 {
    /* 
     * DataFlush needs to access this class in order to
@@ -116,12 +116,14 @@ class Externalize User : public Expandable
 	
         std::atomic<unsigned int> quitting;
         
-        /* Whether this user is processing queries. */
-        
-        bool Locked;
-	
  public:
 
+	bool Locked;
+	
+	bool Multi;
+	
+	bool MultiRunning;
+	
 	class for_each_neighbor_handler
 	{
  	   public:
@@ -213,7 +215,11 @@ class Externalize User : public Expandable
 
 	bool CanPerform(unsigned char flag);
 	
-        std::shared_ptr<Database> current_db;
+        std::shared_ptr<UserDatabase> current_db;
+        
+        void SetDatabase(std::shared_ptr<UserDatabase>& database);
+        
+        std::shared_ptr<UserDatabase> GetDatabase();
 	
         std::deque<std::shared_ptr<query_base>> pending;
 
@@ -389,7 +395,7 @@ class Externalize User : public Expandable
 	bool Serialize(Serializable::Data& data) ;
 };
 
-class Externalize InstanceStream : public StreamSocket
+class ExportAPI InstanceStream : public StreamSocket
 {
  private:
 
@@ -414,7 +420,7 @@ class Externalize InstanceStream : public StreamSocket
 typedef unsigned int sent_id;
 
 
-class Externalize LocalUser : public User, public brld::node_list_node<LocalUser>
+class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 {
   private:
   
@@ -431,6 +437,8 @@ class Externalize LocalUser : public User, public brld::node_list_node<LocalUser
 	LocalUser(int fd, const std::string& uuid, Serializable::Data& data);
 
         std::deque<PendingCMD> PendingList;
+
+        std::deque<PendingCMD> PendingMulti;
 
 	DiscardResult discard();
 
@@ -505,7 +513,7 @@ class RemoteUser : public User
 	}
 };
 
-class Externalize GlobalUser : public User
+class ExportAPI GlobalUser : public User
 {
    public:
 

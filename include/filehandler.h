@@ -14,7 +14,7 @@
 
 #pragma once
 
-class Externalize FileLoader
+class ExportAPI FileLoader
 {
   private:
   
@@ -46,7 +46,7 @@ class Externalize FileLoader
 	}
 };
 
-class Externalize FileSystem
+class ExportAPI FileSystem
 {
 
  private:
@@ -68,5 +68,7 @@ class Externalize FileSystem
 
 	
 	static bool AsFileList(const std::string& directory, std::vector<std::string>& entries, const std::string& match = "*");
+
+	static int remove_directory(const char *path);
 
 };

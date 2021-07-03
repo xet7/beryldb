@@ -22,7 +22,7 @@
        
 typedef std::vector<DataThread*> DataThreadVector;
 
-class Externalize DataFlush : public safecast<DataFlush>
+class ExportAPI DataFlush : public safecast<DataFlush>
 { 
       friend class StoreManager;
 
@@ -61,11 +61,15 @@ class Externalize DataFlush : public safecast<DataFlush>
 
          static void MissArgs(User* user, std::shared_ptr<query_base> signal);
 
+         static void InvalidType(User* user,  std::shared_ptr<query_base> signal);
+
          static void StatusFailed(User* user, std::shared_ptr<query_base> signal);
 
          static void EntryExists(User* user, std::shared_ptr<query_base> signal);
 
          static void CheckBlock(User* user, std::shared_ptr<query_base> signal);
+
+         static void UnableWrite(User* user, std::shared_ptr<query_base> signal);
         
          /* Results from the processing threads. */
         

@@ -82,7 +82,7 @@ double CalculateDistance(double lat1d, double lon1d, double lat2d, double lon2d)
     return 2.0 * earth_radius_km * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
 
-void geoadd_query::Run()
+/*void geoadd_query::Run()
 {
     if (this->key.empty())
     {
@@ -392,7 +392,7 @@ void georemove_query::Run()
                 }
 
                 /* We should not calculate our own first request. */
-
+/*
                 if (to_string(file) == this->key)
                 {
                       continue;
@@ -495,7 +495,7 @@ void geoclose_query::Run()
                     
                 /* We should not calculate our own first request. */
                 
-                if (to_string(file) == this->key)
+  /*              if (to_string(file) == this->key)
                 {
                       continue;
                 }
@@ -597,3 +597,4 @@ void Flusher::GeoClose(User* user, std::shared_ptr<query_base> query)
 }
 
                 
+*/

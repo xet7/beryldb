@@ -99,8 +99,8 @@ COMMAND_RESULT CommandLogout::Handle(User* user, const Params& parameters)
 		this->lastuuid = target->uuid;
 	}
 	
+	user->SendProtocol(BRLD_LOGGED_OUT, PROCESS_OK);
 	Kernel->Clients->Disconnect(target, logout_reason);
-
 	return SUCCESS;
 }
 

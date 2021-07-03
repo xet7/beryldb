@@ -13,7 +13,7 @@
 
 #pragma once
 
-class Externalize extension_item : public ServiceProvider, public usecountbase
+class ExportAPI extension_item : public ServiceProvider, public usecountbase
 {
  
   public:
@@ -72,7 +72,7 @@ class Externalize extension_item : public ServiceProvider, public usecountbase
 };
 
 
-class Externalize Expandable : public base_class, public Serializable
+class ExportAPI Expandable : public base_class, public Serializable
 {
  public:
  
@@ -108,7 +108,7 @@ class Externalize Expandable : public base_class, public Serializable
 	bool Serialize(Serializable::Data& data) ;
 };
 
-class Externalize ExtensionManager
+class ExportAPI ExtensionManager
 {
  public:
 
@@ -172,7 +172,7 @@ class SimpleExtItem : public extension_item
 	}
 };
 
-class Externalize local_string_extension : public SimpleExtItem<std::string>
+class ExportAPI local_string_extension : public SimpleExtItem<std::string>
 {
  public:
 	local_string_extension(const std::string& key, ExpandableType exttype, Module* owner);
@@ -181,7 +181,7 @@ class Externalize local_string_extension : public SimpleExtItem<std::string>
 	void from_internal(Expandable* container, const std::string& value) ;
 };
 
-class Externalize local_int_extension : public extension_item
+class ExportAPI local_int_extension : public extension_item
 {
  public:
 	local_int_extension(const std::string& key, ExpandableType exttype, Module* owner);
@@ -194,7 +194,7 @@ class Externalize local_int_extension : public extension_item
 	void free(Expandable* container, void* item) ;
 };
 
-class Externalize string_extension_item : public extension_item
+class ExportAPI string_extension_item : public extension_item
 {
  public:
 	string_extension_item(const std::string& key, ExpandableType exttype, Module* owner);

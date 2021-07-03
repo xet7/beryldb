@@ -34,7 +34,7 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
            return FAILED;
        }
        
-       ListHelper::Exist(user, Kernel->Store->Default, user->select, key, value);
+       ////ListHelper::Exist(user, Kernel->Store->GetDefault(), user->select, key, value);
        return SUCCESS;  
 }
 
@@ -47,7 +47,7 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       ListHelper::Exist(user, Kernel->Store->Default, user->select, key, "", TYPE_COUNT_RECORDS);
+//       //ListHelper::Exist(user, Kernel->Store->GetDefault(), user->select, key, "", TYPE_COUNT_RECORDS);
        return SUCCESS;  
 }
 
@@ -68,7 +68,7 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
        }
        
        unsigned int n_index = convto_num<unsigned int>(index);
-       ListHelper::Exist(user, Kernel->Store->Default, user->select, key, value, TYPE_LPOS, n_index);
+   //    //ListHelper::Exist(user, Kernel->Store->GetDefault(), user->select, key, value, TYPE_LPOS, n_index);
        return SUCCESS;  
 }
 

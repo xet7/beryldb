@@ -152,7 +152,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
              use = user->select;
         }
 
-        unsigned int counter = FutureManager::SReset(user->current_db, use);
+        unsigned int counter = FutureManager::SelectReset(user->current_db, use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, counter, counter);
 
         return SUCCESS;

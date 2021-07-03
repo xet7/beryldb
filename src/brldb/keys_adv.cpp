@@ -18,19 +18,13 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
-
+/*
 void search_query::Run()
 {
-    if (!this->Check())
-    {
-        this->access_set(DBL_STATUS_BROKEN);
-        return;
-    }
-
     if (this->key.empty())
     {
-            this->access_set(DBL_MISS_ARGS);
-            return;
+                this->access_set(DBL_MISS_ARGS);
+                return;
     }
 
     std::string where_path = this->int_keys + this->select_query;
@@ -46,16 +40,10 @@ void search_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-               if (this->user && this->user->IsQuitting())
-               {
-                    access_set(DBL_NOT_FOUND);
-                    return;
-                }
-
-                if (!Kernel->Store->Flusher->Status())
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
-                    access_set(DBL_INTERRUPT);
-                    return;
+                      this->access_set(DBL_INTERRUPT);
+                      return;
                 }
                 
                 std::string rawstring = it->key().ToString();
@@ -84,7 +72,7 @@ void search_query::Run()
                                     
                                     result.insert(std::make_pair(rawstring, value_str));             
                                     
-                                    if (aux_counter % 200 == 0)
+                                    if (aux_counter % 100 == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<search_query> request = std::make_shared<search_query>();
@@ -108,7 +96,7 @@ void search_query::Run()
                              aux_counter++;
                              result.insert(std::make_pair(rawstring, value_str));
             
-                             if (aux_counter % 200 == 0)
+                             if (aux_counter % 100 == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<search_query> request = std::make_shared<search_query>();
@@ -138,25 +126,26 @@ void Flusher::Search(User* user, std::shared_ptr<query_base> query)
 {
         if (!query->finished)
         {
-                user->SendProtocol(ERR_QUERY, DBL_TYPE_FIND, UNABLE_MAP);
+                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
                 return;
         }
 
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_SEARCH_BEGIN, query->key, "BEGIN of SEARCH list.");
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
         for (DualMMap::iterator i = query->mmap.begin(); i != query->mmap.end(); ++i)
         {
                  std::string key = i->first;
                  std::string value = i->second;
-                 user->SendProtocol(BRLD_SEARCH_ITEM, key, value, Daemon::Format("%s | \"%s\"", key.c_str(), value.c_str()));
+
+                 user->SendProtocol(BRLD_ITEM, key, value, Daemon::Format("%s | \"%s\"", key.c_str(), value.c_str()));
         }
 
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_SEARCH_END, query->key, Daemon::Format("END of SEARCH list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);
         }
 
-}
+}*/

@@ -15,12 +15,16 @@
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
+#include "managers/settings.h"
 #include "managers/user.h"
 
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
-User::User(const std::string& uid, Server* srv, UserType type) : 
-				          Paused(false)
+User::User(const std::string& uid, Server* srv, UserType type) :
+					   Locked(false)	 
+				        ,  Multi(false)
+				        ,  MultiRunning(false)
+				        , Paused(false)
 				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
@@ -50,8 +54,20 @@ User::User(const std::string& uid, Server* srv, UserType type) :
         SetQuit(false);
 	
 	/* Default database assignation. */
+
+/*	const std::string dbuser = STHelper::Get("dbuser", this->login);
 	
-	this->current_db = Kernel->Store->Default;
+	if (dbuser.empty())
+	{
+
+	}
+	else
+	{
+		this->current_db = Kernel->Store->GetDefault();
+	}
+*/
+
+	this->current_db = Kernel->Store->GetDefault();
 
 	/* Any user should be allowed to process queries by default. */
 		
@@ -96,6 +112,16 @@ User::~User()
 	notifications.clear();
 	
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
+}
+
+void User::SetDatabase(std::shared_ptr<UserDatabase>& database)
+{
+
+}
+
+std::shared_ptr<UserDatabase> User::GetDatabase()
+{
+
 }
 
 void User::SetQuit(bool flag)

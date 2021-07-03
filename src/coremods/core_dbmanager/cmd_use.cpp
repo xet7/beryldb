@@ -125,6 +125,6 @@ CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0)
 
 COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)
 {  
-       DBHelper::DBSize(user, user->current_db);
+       DBHelper::DBSize(user);
        return SUCCESS;
 }

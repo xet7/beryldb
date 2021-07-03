@@ -79,7 +79,7 @@ class Events::ModuleEventProvider : public ServiceProvider, private ddl_base_ref
 	virtual void OnUnsubscribe(ModuleEventListener* subscriber) { }
 
 	
-	dynamic_reference_nocheck<ModuleEventProvider> prov;
+	ReferencedFrom_nocheck<ModuleEventProvider> prov;
 
 	
 	SubscriberList subscribers;
@@ -89,7 +89,7 @@ class Events::ModuleEventProvider : public ServiceProvider, private ddl_base_ref
 class Events::ModuleEventListener : private ddl_base_ref::aptureAttach
 {
 	
-	dynamic_reference_nocheck<ModuleEventProvider> prov;
+	ReferencedFrom_nocheck<ModuleEventProvider> prov;
 
 	const unsigned int eventpriority;
 

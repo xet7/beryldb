@@ -25,11 +25,11 @@ class CommandHSET : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHGET : public Command 
+class CommandHGet : public Command 
 {
     public: 
 
-        CommandHGET(Module* Creator);
+        CommandHGet(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

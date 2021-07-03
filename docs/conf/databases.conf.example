@@ -1,0 +1,20 @@
+# Databases ################################################
+#
+# Tags that define how are databases going to function.
+#
+# threads: Threads that Beryl will initialize to process queries.
+#          Default is 2.
+#
+# parallels: Threads used for flush and compaction. Default is 1.
+#
+# yield_usec: The maximum number of microseconds that a write 
+#             operation will allow to await for other write threads before
+#             blocking on a mutex. Default is: 50
+#
+# createim: Create directories if missing, this is recommended.
+#           Default is true.
+
+#<dbconf threads="2" parallels="1" yield_usec="50" createim="true">
+
+# End of databases.conf
+##############################################################

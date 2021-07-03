@@ -48,7 +48,7 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 {
         const LoginHash& users = Kernel->Clients->GetLogins();
 
-        user->SendProtocol(BRLD_FINGER_BEGIN, "Begin of FINGER list.");
+        Dispatcher::JustAPI(user, BRLD_FINGER_BEGIN);
 
         for (LoginHash::const_iterator i = users.begin(); i != users.end(); ++i)
         {
@@ -59,10 +59,10 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
             	        continue;
             	}
             	
-            	user->SendProtocol(BRLD_FINGER_LIST, login->instance, Daemon::Format("%s (%s), %s (%s)| Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_FINGER_LIST, Daemon::Format("%s (%s), %s (%s) | Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
         }
 
-    	user->SendProtocol(BRLD_FINGER_END, Daemon::Format("End of FINGER list (%li)", users.size()).c_str());
+        Dispatcher::JustAPI(user, BRLD_FINGER_END);
 	return SUCCESS;
 }
 

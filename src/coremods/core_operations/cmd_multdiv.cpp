@@ -35,7 +35,7 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_DIV, value);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_DIV, value);
         return SUCCESS;  
 }
 
@@ -55,6 +55,6 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_MULT, value);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_MULT, value);
         return SUCCESS;  
 }

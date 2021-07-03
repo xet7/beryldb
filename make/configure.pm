@@ -35,7 +35,7 @@ our @EXPORT = qw(CONF_CACHEFILE
                  cmd_help
                  cmd_update
                  run_test
-                 test_file
+                 verify_file
                  strict_test
                  test_header
                  module_fullpath
@@ -74,7 +74,7 @@ sub __test_compiler($)
 {
 	my $compiler = shift;
         return 0 unless run_test("`$compiler`", !system "$compiler -v ${\CONFIGURE_ERROR_PIPE}");
-	return 0 unless run_test("`$compiler`", test_file($compiler, 'compiler.cpp', '-std=c++14'), 'compatible');
+	return 0 unless run_test("`$compiler`", verify_file($compiler, 'compiler.cpp', '-std=c++14'), 'compatible');
 	return 1;
 }
 
@@ -224,7 +224,7 @@ sub strict_test($$;$)
         return $result;
 }
 
-sub test_file($$;$) 
+sub verify_file($$;$) 
 {
 	my ($compiler, $file, $args) = @_;
 	my $status = 0;
@@ -292,11 +292,12 @@ sub retrieve_compiler($)
 
 sub locate_compiler 
 {
-	my @compilers = qw(g++ c++);
+	my @compilers = qw(c++ g++ clang++);
 	
 	for my $compiler (shift // @compilers) 
 	{
 		return $compiler if __test_compiler $compiler;
+                return "xcrun $compiler" if $^O eq 'darwin' && __test_compiler "xcrun $compiler";
 	}
 }
 

@@ -39,7 +39,7 @@ COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)
              key = parameters[0];
        }
        
-       KeyHelper::Count(user, user->current_db, user->select, key);
+       KeyHelper::Count(user, key);
        return SUCCESS;
 }
 
@@ -52,7 +52,7 @@ COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NONE);
+       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NONE);
        return SUCCESS;
 }
 
@@ -65,7 +65,7 @@ COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NTOUCH);
+       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NTOUCH);
        return SUCCESS;
 }
 
@@ -78,7 +78,7 @@ COMMAND_RESULT CommandTCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_TCOUNT);
+       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_TCOUNT);
        return SUCCESS;
 }
 
@@ -91,7 +91,7 @@ COMMAND_RESULT CommandConcat::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_CONCAT);
+       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_CONCAT);
        return SUCCESS;
 }
 

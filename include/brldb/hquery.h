@@ -14,7 +14,7 @@
 #pragma once
 
 
-class Externalize HQuery
+class ExportAPI HQuery
 {
     public:
         

@@ -30,6 +30,7 @@ Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
                       GenRandom(&DefaultGenRandom), 
                       ValidLogin(&LoginValidator), 
                       IsAgent(&AgentValidator),
+                      IsDatabase(&DBValidator),
                       PI(&DefaultProtocolInterface)
 {
 
@@ -349,6 +350,7 @@ void Daemon::Signalizers()
         signal(SIGXFSZ, SIG_IGN);
         signal(SIGINT, Beryl::Signalizer);
         signal(SIGTERM, Beryl::Signalizer);
+        signal(SIGHUP, Beryl::Signalizer);
 }
 
 void Daemon::VoidSignalManager(int)

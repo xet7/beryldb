@@ -32,7 +32,7 @@ namespace engine
 {
 	namespace sockets
 	{
-		union Externalize sockaddrs
+		union ExportAPI sockaddrs
 		{
 			struct sockaddr sa;
 			struct sockaddr_in in4;
@@ -52,7 +52,7 @@ namespace engine
 			inline bool operator!=(const sockaddrs& other) const { return !(*this == other); }
 		};
 
-		struct Externalize cidr_mask
+		struct ExportAPI cidr_mask
 		{
 			
 			unsigned char type;
@@ -77,21 +77,21 @@ namespace engine
 		};
 
 		
-		Externalize bool MatchCompactIP(const std::string &address, const std::string &cidr_mask, bool check_agent);
+		ExportAPI bool MatchCompactIP(const std::string &address, const std::string &cidr_mask, bool check_agent);
 
 		
-		Externalize bool aptosa(const std::string& addr, int port, engine::sockets::sockaddrs& sa);
+		ExportAPI bool aptosa(const std::string& addr, int port, engine::sockets::sockaddrs& sa);
 
 		
-		Externalize bool untosa(const std::string& path, engine::sockets::sockaddrs& sa);
+		ExportAPI bool untosa(const std::string& path, engine::sockets::sockaddrs& sa);
 
 		
-		Externalize bool isunix(const std::string& file);
+		ExportAPI bool isunix(const std::string& file);
 	}
 }
 
 
-struct Externalize FailedPort
+struct ExportAPI FailedPort
 {
 	
 	int error;
@@ -115,17 +115,17 @@ typedef std::vector<FailedPort> FailedListenings;
 #include "socketstream.h"
 
 
-class Externalize BindingPort : public EventHandler
+class ExportAPI BindingPort : public EventHandler
 {
  public:
 	reference<config_rule> listen_tag;
 	const engine::sockets::sockaddrs bind_sa;
 
-	class IOQueueProvRef : public dynamic_reference_nocheck<QueueProvider>
+	class IOQueueProvRef : public ReferencedFrom_nocheck<QueueProvider>
 	{
 	 public:
 
-		IOQueueProvRef() : dynamic_reference_nocheck<QueueProvider>(NULL, std::string())
+		IOQueueProvRef() : ReferencedFrom_nocheck<QueueProvider>(NULL, std::string())
 		{
 		
 		}

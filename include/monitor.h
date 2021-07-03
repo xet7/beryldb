@@ -40,7 +40,7 @@ struct CMDBuffer
        }
 };
 
-class Externalize MonitorHandler : public safecast<MonitorHandler>
+class ExportAPI MonitorHandler : public safecast<MonitorHandler>
 {
    private:
         

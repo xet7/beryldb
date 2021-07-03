@@ -42,7 +42,7 @@ class Database;
 class SessionManager;
 class Notifier;
 class CommandQueue;
-class PendingCMD;
+struct PendingCMD;
 
 #ifdef ENABLE_TESTOFFICE
 

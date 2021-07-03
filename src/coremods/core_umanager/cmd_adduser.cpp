@@ -25,7 +25,7 @@ CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2
 
 COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
+/*        const std::string& newlogin = parameters[0];
         const std::string& pass = parameters[1];
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
@@ -56,11 +56,11 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         /* We can now insert the user. */
         
-        if (UserHelper::Add(newlogin, pass))
+  /*      if (UserHelper::Add(newlogin, pass))
         {
                 user->SendProtocol(BRLD_USER_ADD, newlogin, PROCESS_OK);
         }
-
+*/
         return SUCCESS;
 }
 
@@ -72,7 +72,7 @@ CommandDelUser::CommandDelUser(Module* parent) : Command(parent, "DELUSER", 1, 1
 
 COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
+  /*      const std::string& newlogin = parameters[0];
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
@@ -105,7 +105,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_LOGIN_DEL, newlogin, PROCESS_OK);
                 ClientManager::DisconnectAll(newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
         }
-
+*/
         return SUCCESS;
 }
 
@@ -118,7 +118,7 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
         unsigned int counter = 0;
 
-        MMapTuple tpl = MapsHelper::SearchHesh(TABLE_USERS, "userlogin");
+/*        MMapTuple tpl = //MapsHelper::SearchHesh(TABLE_USERS, "userlogin");
         DualMMap users = std::get<1>(tpl);
         
         user->SendProtocol(BRLD_USER_LIST_BEGIN, counter, "BEGIN of LISTUSERS list.");
@@ -131,7 +131,7 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         }
         
         user->SendProtocol(BRLD_USER_LIST_END, counter, Daemon::Format("End of LISTUSERS list (%u)", counter).c_str());
-        
+  */      
         return SUCCESS;
 }
 
@@ -144,7 +144,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
         unsigned int counter = 0;
        
-        MMapTuple tpl = MapsHelper::SearchHesh(TABLE_ADMIN, "flags");
+/*        MMapTuple tpl = //MapsHelper::SearchHesh(TABLE_ADMIN, "flags");
         DualMMap users = std::get<1>(tpl);
         
         user->SendProtocol(BRLD_ADMIN_LIST_BEGIN, counter, "BEGIN of LISTADMINS list.");
@@ -157,7 +157,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         }
         
         user->SendProtocol(BRLD_ADMIN_LIST_END, counter, Daemon::Format("End of LISTADMINS list (%u)", counter).c_str());
-        
+   */     
         return SUCCESS;
 }
 

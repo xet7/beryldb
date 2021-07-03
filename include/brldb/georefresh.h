@@ -13,7 +13,7 @@
 
 #pragma once
 
-class Externalize GeoRefresh : public safecast<GeoRefresh>
+class ExportAPI GeoRefresh : public safecast<GeoRefresh>
 {
       public:
 

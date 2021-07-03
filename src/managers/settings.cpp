@@ -21,25 +21,26 @@
 #include "managers/settings.h"
 #include "managers/maps.h"
 
-bool STHelper::Set(const std::string& type, const std::string& key, const std::string& value)
+/*bool STHelper::Set(const std::string& type, const std::string& key, const std::string& value)
 {
-        MapsHelper::Set(TABLE_SETTINGS, type, key, value);
+        //MapsHelper::Set(TABLE_SETTINGS, type, key, value);
         return true;
 }
 
 std::string STHelper::Get(const std::string& type, const std::string& key)
 {
-        BasicTuple tuple = MapsHelper::Get(TABLE_SETTINGS, type, key);
+        BasicTuple tuple = //MapsHelper::Get(TABLE_SETTINGS, type, key);
         const std::string response = std::get<1>(tuple);
         return response;
 }
 
 void STHelper::Delete(const std::string& type, const std::string& key)
 {
-        MapsHelper::Delete(TABLE_SETTINGS, type, key);
+        //MapsHelper::Delete(TABLE_SETTINGS, type, key);
 }
 
 void STHelper::DeleteAll(const std::string& type)
 {
-        MapsHelper::DeleteAll(TABLE_SETTINGS, type);
+        //MapsHelper::DeleteAll(TABLE_SETTINGS, type);
 }
+*/

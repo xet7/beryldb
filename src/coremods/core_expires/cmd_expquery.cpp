@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
+#include "managers/expires.h"
 #include "brldb/expires.h"
 #include "engine.h"
 #include "converter.h"
@@ -57,14 +58,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  if (ExpireManager::Delete(user->current_db, key, user->select))
-                  {
-                           user->SendProtocol(BRLD_PERSIST, 1, key, PROCESS_OK);
-                  }
-                  else
-                  {
-                           user->SendProtocol(ERR_PERSIST, 0, key, PROCESS_NULL);
-                  }
+                 ExpireHelper::Persist(user, key);
          }
          else
          {
@@ -101,7 +95,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
 
          unsigned int counter = 0;
 
-         user->SendProtocol(BRLD_EXPIRE_BEGIN, "Begin of EXPIRE list.");
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -117,6 +111,8 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        user->SendProtocol(BRLD_EXPIRE_END, Daemon::Format("End of EXPIRE list (%u)", counter).c_str());
+        Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
         return SUCCESS;
 }
+
+         

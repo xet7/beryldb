@@ -15,7 +15,7 @@
 
 #include "brldb/database.h"
 
-class Externalize GeoHelper
+class ExportAPI GeoHelper
 {
     public:
 

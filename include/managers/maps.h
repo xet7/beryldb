@@ -17,9 +17,11 @@
 #include "brldb/database.h"
 #include "brldb/hquery.h"
 
-class Externalize MapsHelper
+class ExportAPI MapsHelper
 {
     public:
+
+       static void Exists(User* user, const std::string& entry, const std::string& hesh);
 
        static void Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest);
 
@@ -31,11 +33,11 @@ class Externalize MapsHelper
 
        static VectorTuple Search(QUERY_TYPE type, const std::string& where, const std::string& key, signed int offset, signed int limit);
        
-       static void Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, QUERY_TYPE type = TYPE_NONE);
+       static void Get(User* user, const std::string& entry, const std::string& hesh);
 
-       static void Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& hesh);
+       static void Set(User* user, const std::string& entry, const std::string& hesh, const std::string& value);
 
-       static void Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value);
+       static void Delete(User* user, const std::string& entry, const std::string& hesh);
 
        static void Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit);
        
@@ -51,6 +53,6 @@ class Externalize MapsHelper
 
        static MMapTuple SearchHesh(const std::string& where, const std::string& hesh, signed int offset = 0, signed int limit = -1);
        
-       static void HKeys(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit);
+       static void HKeys(User* user, const std::string& entry, signed int offset, signed int limit);
 
 };

@@ -49,7 +49,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       GeoHelper::Add(user, user->current_db, user->select, gname, latitude, longitude);
+       //GeoHelper::Add(user, user->current_db, user->select, gname, latitude, longitude);
        return SUCCESS;
 }
 
@@ -62,7 +62,7 @@ COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
        
-       GeoHelper::Get(user, user->current_db, user->select, gname);
+       //GeoHelper::Get(user, user->current_db, user->select, gname);
        return SUCCESS;
 }
 
@@ -75,7 +75,7 @@ COMMAND_RESULT CommandGeoDel::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
        
-       GeoHelper::Del(user, user->current_db, user->select, gname);
+       //GeoHelper::Del(user, user->current_db, user->select, gname);
        return SUCCESS;
 }
 
@@ -119,7 +119,7 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
             offset = 0;
        }
        
-       GeoHelper::Find(user, user->current_db, user->select, key, offset, limit);
+       //GeoHelper::Find(user, user->current_db, user->select, key, offset, limit);
        return SUCCESS;
 }
 
@@ -133,7 +133,7 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
          const std::string& gname = parameters[0];
          const std::string& name2 = parameters[1];
          
-         GeoHelper::Calc(user, user->current_db, user->select, gname, name2);
+         //GeoHelper::Calc(user, user->current_db, user->select, gname, name2);
          return SUCCESS;
 }
 
@@ -178,7 +178,7 @@ COMMAND_RESULT CommandGeoClose::Handle(User* user, const Params& parameters)
             offset = 0;
        }
 
-         GeoHelper::GeoClose(user, user->current_db, user->select, gname, distance, offset, limit);
+         //GeoHelper::GeoClose(user, user->current_db, user->select, gname, distance, offset, limit);
          return SUCCESS;
 }
 
@@ -198,6 +198,6 @@ COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
               arg = "g";
          }
          
-         GeoHelper::Remove(user, user->current_db, user->select, gname, dist, arg);
+         //GeoHelper::Remove(user, user->current_db, user->select, gname, dist, arg);
          return SUCCESS;
 }

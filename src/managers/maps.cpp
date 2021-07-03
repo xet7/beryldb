@@ -19,10 +19,50 @@
 #include "brldb/database.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "helpers.h"
 #include "managers/maps.h"
 
+void MapsHelper::Exists(User* user, const std::string& entry, const std::string& hesh)
+{
+       std::shared_ptr<hexists_query> query = std::make_shared<hexists_query>();
+       Helpers::make_map(user, query, entry, hesh);
+       Kernel->Store->Push(query);
+}
 
-void MapsHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest)
+void MapsHelper::Set(User* user, const std::string& entry, const std::string& hesh, const std::string& value)
+{
+       std::shared_ptr<hset_query> query = std::make_shared<hset_query>();
+       Helpers::make_map(user, query, entry, hesh);
+       query->value = to_bin(stripe(value));
+       Kernel->Store->Push(query);
+}
+
+void MapsHelper::Get(User* user, const std::string& entry, const std::string& hesh)
+{
+       std::shared_ptr<hget_query> query = std::make_shared<hget_query>();
+       Helpers::make_map(user, query, entry, hesh);
+       Kernel->Store->Push(query);
+}
+
+void MapsHelper::Delete(User* user, const std::string& entry, const std::string& hesh)
+{
+       std::shared_ptr<hdel_query> query = std::make_shared<hdel_query>();
+       Helpers::make_map(user, query, entry, hesh);
+       Kernel->Store->Push(query);
+}
+
+void MapsHelper::HKeys(User* user, const std::string& entry, signed int offset, signed int limit)
+{
+       std::shared_ptr<hkeys_query> query = std::make_shared<hkeys_query>();
+       Helpers::make_map(user, query);
+       query->key = entry;
+       query->offset = offset;
+       query->limit = limit;
+       Kernel->Store->Push(query);
+}
+
+
+/*void MapsHelper::Move(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, const std::string& dest)
 {
        std::shared_ptr<hmove_query> query = std::make_shared<hmove_query>();
               
@@ -62,7 +102,7 @@ void MapsHelper::Count(User* user, std::shared_ptr<Database> database, const std
 
 }
 
-void MapsHelper::HKeys(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
+void //MapsHelper::HKeys(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
 {
        std::shared_ptr<hkeys_query> query = std::make_shared<hkeys_query>();
               
@@ -78,7 +118,7 @@ void MapsHelper::HKeys(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::SearchHesh(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& hesh, signed int offset, signed int limit)
+void //MapsHelper::SearchHesh(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& hesh, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_hesh_query> query = std::make_shared<hsearch_hesh_query>();
               
@@ -94,7 +134,7 @@ void MapsHelper::SearchHesh(User* user, std::shared_ptr<Database> database, cons
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
+void //MapsHelper::Search(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_query> query = std::make_shared<hsearch_query>();
               
@@ -110,7 +150,7 @@ void MapsHelper::Search(User* user, std::shared_ptr<Database> database, const st
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, QUERY_TYPE type)
+void //MapsHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& hesh, QUERY_TYPE type)
 {
        std::shared_ptr<hget_query> query = std::make_shared<hget_query>();
               
@@ -128,7 +168,7 @@ void MapsHelper::Get(User* user, std::shared_ptr<Database> database, const std::
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh, const std::string& value)
+void //MapsHelper::Set(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh, const std::string& value)
 {
        std::shared_ptr<hset_query> query = std::make_shared<hset_query>();
               
@@ -146,7 +186,7 @@ void MapsHelper::Set(User* user, std::shared_ptr<Database> database, const std::
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::DeleteAll(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
+void //MapsHelper::DeleteAll(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<hdel_all_query> query = std::make_shared<hdel_all_query>();
               
@@ -162,7 +202,7 @@ void MapsHelper::DeleteAll(User* user, std::shared_ptr<Database> database, const
        Kernel->Store->Push(query);
 }
 
-void MapsHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh)
+void //MapsHelper::Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& hesh)
 {
        std::shared_ptr<hdel_query> query = std::make_shared<hdel_query>();
               
@@ -179,7 +219,7 @@ void MapsHelper::Delete(User* user, std::shared_ptr<Database> database, const st
        Kernel->Store->Push(query);
 }
 
-BasicTuple MapsHelper::Get(const std::string& where, const std::string& key, const std::string& hesh)
+BasicTuple //MapsHelper::Get(const std::string& where, const std::string& key, const std::string& hesh)
 {
        hget_query query;
        
@@ -197,7 +237,7 @@ BasicTuple MapsHelper::Get(const std::string& where, const std::string& key, con
        return std::make_tuple(query.access, query.response);
 }
 
-DBL_CODE MapsHelper::Set(const std::string& where, const std::string& entry, const std::string& hesh, const std::string& value)
+DBL_CODE //MapsHelper::Set(const std::string& where, const std::string& entry, const std::string& hesh, const std::string& value)
 {
        std::shared_ptr<hset_query> query = std::make_shared<hset_query>();
 
@@ -214,7 +254,7 @@ DBL_CODE MapsHelper::Set(const std::string& where, const std::string& entry, con
        return DBL_MANAGER_OK;
 }
 
-DBL_CODE MapsHelper::Delete(const std::string& where, const std::string& entry, const std::string& value)
+DBL_CODE //MapsHelper::Delete(const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<hdel_query> query = std::make_shared<hdel_query>();
 
@@ -230,7 +270,7 @@ DBL_CODE MapsHelper::Delete(const std::string& where, const std::string& entry, 
        return DBL_MANAGER_OK;
 }
 
-DBL_CODE MapsHelper::DeleteAll(const std::string& where, const std::string& entry)
+DBL_CODE //MapsHelper::DeleteAll(const std::string& where, const std::string& entry)
 {
        std::shared_ptr<hdel_all_query> query = std::make_shared<hdel_all_query>();
 
@@ -246,7 +286,7 @@ DBL_CODE MapsHelper::DeleteAll(const std::string& where, const std::string& entr
 }
 
 
-VectorTuple MapsHelper::Search(QUERY_TYPE type, const std::string& where, const std::string& key, signed int offset, signed int limit)
+VectorTuple //MapsHelper::Search(QUERY_TYPE type, const std::string& where, const std::string& key, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_query> query = std::make_shared<hsearch_query>();
 
@@ -263,7 +303,7 @@ VectorTuple MapsHelper::Search(QUERY_TYPE type, const std::string& where, const 
        return std::make_tuple(query->access, query->VecData);
 }
 
-VectorTuple MapsHelper::HKeys(const std::string& where, const std::string& key)
+VectorTuple //MapsHelper::HKeys(const std::string& where, const std::string& key)
 {
        std::shared_ptr<hkeys_query> query = std::make_shared<hkeys_query>();
 
@@ -281,7 +321,7 @@ VectorTuple MapsHelper::HKeys(const std::string& where, const std::string& key)
        return std::make_tuple(query->access, query->VecData);
 }
 
-MMapTuple MapsHelper::SearchHesh(const std::string& where, const std::string& hesh, signed int offset, signed int limit)
+MMapTuple //MapsHelper::SearchHesh(const std::string& where, const std::string& hesh, signed int offset, signed int limit)
 {
        std::shared_ptr<hsearch_hesh_query> query = std::make_shared<hsearch_hesh_query>();
        
@@ -298,3 +338,4 @@ MMapTuple MapsHelper::SearchHesh(const std::string& where, const std::string& he
        
        return std::make_tuple(query->access, query->mlist);
 }
+*/

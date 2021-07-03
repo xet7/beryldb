@@ -18,6 +18,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
+#include "helpers.h"
 
 namespace
 {
@@ -31,7 +32,799 @@ namespace
         }
 }
 
-void append_query::Run()
+void expire_list_query::Run()
+{
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+       
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
+
+                std::string key_as_string;
+                std::string select_as_string;
+                
+                std::string rawstring = it->key().ToString();
+                std::string rawvalue = it->value().ToString();
+                engine::colon_node_stream stream(rawstring);
+                
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+                
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                             break;
+                        }
+                        
+                        switch (strcounter)
+                        {
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                             }
+
+                             break;
+
+                             case 1:
+                             {
+                                  select_as_string = token;    
+                             }
+
+                             break;
+                             
+                             case 2:
+                             {
+                                   if (token != INT_EXPIRE)
+                                   {
+                                           skip = true;
+                                   }
+                             }
+                             
+                             default:
+                             {
+                                      break;
+                             }
+                        }
+                        
+                        strcounter++;
+                }
+                
+                if (skip)
+                {
+                        continue;
+                }
+                
+                Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, select_as_string, true);
+        }
+}
+
+void expire_list_query::Process()
+{
+        return;
+}
+
+void expire_query::Run()
+{
+        const std::string& wherekey = to_bin(this->key) + ":" + this->select_query + ":" + INT_KEYS;
+       
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), wherekey, &dbvalue);
+
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
+       
+       this->database->GetAddress()->Put(rocksdb::WriteOptions(), this->dest, convto_string(this->id));
+       Kernel->Store->Expires->Add(this->database, this->id, this->key, this->select_query, true);          
+
+       this->SetOK();
+}
+
+void expire_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
+}
+
+void expireat_query::Run()
+{
+       const std::string& wherekey = to_bin(this->key) + ":" + this->select_query + ":" + INT_KEYS;
+       
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), wherekey, &dbvalue);
+
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
+       
+       this->database->GetAddress()->Put(rocksdb::WriteOptions(), this->dest, convto_string(this->id));
+       Kernel->Store->Expires->Add(this->database, this->id, this->key, this->select_query, true);          
+
+       this->SetOK();
+}
+
+void expireat_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
+}
+
+void expire_del_query::Run()
+{
+      Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+      rocksdb::Status auxstatus = this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->dest);
+      this->SetOK();
+}
+
+void expire_del_query::Process()
+{
+        if (!this->quiet)
+        {
+                user->SendProtocol(BRLD_PERSIST, this->key, PROCESS_OK);
+        }
+}
+
+void set_query::Run()
+{
+       const std::string& where = this->dest;
+       const std::string& entry_value = to_bin(this->value);
+       rocksdb::Status fstatus2 =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where, entry_value);
+    
+       this->SetOK();
+}
+
+void set_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);    
+}
+
+void get_query::Run()
+{
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = to_string(dbvalue);
+       }
+       else
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       this->SetOK();
+}
+
+void get_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, Helpers::Format(this->response));
+}
+
+void exists_query::Run()
+{
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = "1";
+       }
+       else
+       {
+               this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void exists_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, this->response);
+}
+
+void strlen_query::Run()
+{
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = convto_string(to_string(dbvalue).length());
+       }
+       else
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       this->SetOK();
+}
+
+void strlen_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, this->response);
+}
+
+void count_query::Run()
+{
+       unsigned int total_counter = 0;
+
+       std::string rawstring;
+       std::string rawvalue;
+       
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
+
+                rawstring = it->key().ToString();
+                rawvalue = to_string(it->value().ToString());
+
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+
+                std::string key_as_string;
+
+                if (!Daemon::Match(rawvalue, this->key))
+                {
+                        continue;
+                }
+                
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                            break;
+                        }
+
+                        switch (strcounter)
+                        {
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                             }
+
+                             break;
+
+                             case 1:
+                             {
+                                   if (this->select_query != token)
+                                   {
+                                        skip = true;
+                                   }
+                             }
+
+                             break;
+                             
+                             case 2:
+                             {
+                                  if (token != INT_KEYS)
+                                  {
+                                         skip = true;   
+                                  }
+                             }
+                             
+                             break;
+
+                             default:
+                             {
+                                 break;   
+                             }
+                        }
+
+                        strcounter++;
+                }
+
+                if (skip)
+                {
+                        continue;
+                }
+                
+                total_counter++;
+    }
+        
+    this->counter = total_counter;
+    this->SetOK();
+}
+
+void count_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+}
+
+void del_query::Run()
+{
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->dest, &dbvalue);
+
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
+
+        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->dest);
+        this->DelExpire();
+        this->SetOK();
+}
+
+void del_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
+}
+
+void getdel_query::Run()
+{
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = to_string(dbvalue);
+                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->dest);
+                this->DelExpire();
+                this->RemoveRegistry(this->select_query, this->base_request, this->key);
+                
+       }
+       else
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       this->SetOK();
+}
+
+void getdel_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, Helpers::Format(this->response));
+}
+
+void getset_query::Run()
+{
+        if (this->value.empty())
+        {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+        }
+
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+               this->response = to_string(dbvalue);
+               
+               const std::string& where = this->dest;
+               const std::string& entry_value = to_bin(this->value);
+               this->database->GetAddress()->Put(rocksdb::WriteOptions(), where, entry_value);
+       }
+       else
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       this->SetOK();
+}
+
+void getset_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, Helpers::Format(this->response));
+}
+
+void find_query::Run()
+{
+       std::multimap<std::string, std::string> result;
+
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+
+       std::string rawstring;
+       std::string rawvalue;
+       
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
+
+                rawstring = it->key().ToString();
+                rawvalue = to_string(it->value().ToString());
+                         
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+
+                std::string key_as_string;
+                
+                if (!Daemon::Match(rawvalue, this->key))
+                {
+                        continue;
+                }
+
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                            break;
+                        }
+
+                        switch (strcounter)
+                        {
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                             }
+
+                             break;
+
+                             case 1:
+                             {
+                                   if (this->select_query != token)
+                                   {
+                                        skip = true;
+                                   }
+                             }
+
+                             break;
+                             case 2:
+                             {
+                                  if (token != INT_KEYS)
+                                  {
+                                         skip = true;   
+                                  }
+                             }
+
+                             break;
+
+                             default:
+                             {
+                                 break;   
+                             }
+                        }
+
+                        strcounter++;
+                }
+
+                if (skip)
+                {
+                        continue;
+                }
+
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    
+                                    result.insert(std::make_pair(key_as_string, rawvalue));
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                std::shared_ptr<find_query> request = std::make_shared<find_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->mmap = result;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result.insert(std::make_pair(key_as_string, rawvalue));
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        std::shared_ptr<find_query> request = std::make_shared<find_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->mmap = result;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+    this->subresult = ++tracker;
+    this->partial = false;
+    this->counter = aux_counter;
+    this->mmap = result;
+    this->SetOK();
+}
+
+void find_query::Process()
+{
+        if (this->subresult == 1)
+        {
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
+        }
+
+        for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
+        {
+                 std::string key = i->first;
+                 std::string value = i->second;
+                 
+                 Dispatcher::CondList(user, BRLD_ITEM, key, value, true); 
+        }
+
+        if (!this->partial)
+        {
+                Dispatcher::JustAPI(user, BRLD_END_LIST);
+        }
+}
+
+void search_query::Run()
+{
+       Args result;
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+
+       std::string rawstring;
+       
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+       
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
+                
+                rawstring = it->key().ToString();
+                engine::colon_node_stream stream(rawstring);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+                
+                std::string key_as_string;
+                
+                while (stream.items_extract(token))
+                {       
+                        if (skip)
+                        {
+                            break;
+                        }
+                        
+                        switch (strcounter)
+                        {
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                                
+                                  if (!Daemon::Match(key_as_string, this->key))
+                                  {
+                                       skip = true;
+                                  }
+                             }
+                             
+                             break;
+                             
+                             case 1:
+                             {
+                                   if (this->select_query != token)
+                                   {
+                                        skip = true;
+                                   }
+                             }
+                             
+                             break;
+                             
+                             case 2:
+                             {
+                                  if (token != INT_KEYS)
+                                  {
+                                         skip = true;	
+                                  }
+                             }
+                             
+                             break;
+                             
+                             default:
+                             {
+                                 break;   
+                             }                                     
+                        }
+                        
+                        strcounter++;
+                }
+                
+                if (skip)
+                {
+                        continue;
+                }
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    
+                                    result.push_back(key_as_string);
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                tracker++;
+                                                std::shared_ptr<search_query> request = std::make_shared<search_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = tracker;
+                                                request->VecData = result;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result.push_back(key_as_string);
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        tracker++;
+                                        std::shared_ptr<search_query> request = std::make_shared<search_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = tracker;
+                                        request->VecData = result;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+    this->subresult = ++tracker;
+    this->partial = false;
+    this->counter = aux_counter;
+    this->VecData = result;
+    this->SetOK();
+}
+
+void search_query::Process()
+{
+        if (this->subresult == 1)
+        {
+                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+        }
+        
+        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
+        {            
+                 std::string key = *i;
+                 user->SendProtocol(BRLD_ITEM, key.c_str());
+        }
+
+        if (!this->partial)
+        {
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+        }
+}
+
+void rename_query::Run()
+{
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->dest, &dbvalue);
+
+       if (!fstatus2.ok())
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->base_request;
+       
+       this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, dbvalue);
+
+       this->SetRegistry(this->select_query, this->base_request, this->value);
+       this->RemoveRegistry(this->select_query, this->base_request, this->key);
+       this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->dest);
+       
+       /* Check if original key is expiring, and if so, copy expire settings. */
+       
+        signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
+        
+        if (ttl != -1)
+        {
+                const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + INT_EXPIRE;
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, convto_string(ttl));
+                Kernel->Store->Expires->Add(this->database, this->id, this->value, this->select_query, true);
+                this->DelExpire();
+        }
+}
+
+void rename_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+}
+
+void copy_query::Run()
+{
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->dest, &dbvalue);
+
+       if (!fstatus2.ok())
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->base_request;
+       
+       this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, dbvalue);
+
+       this->SetRegistry(this->select_query, this->base_request, this->value);
+
+       /* Check if original key is expiring, and if so, copy expire settings. */
+       
+        signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
+        
+        if (ttl != -1)
+        {
+                const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + INT_EXPIRE;
+                this->database->GetAddress()->Put(rocksdb::WriteOptions(), newdest, convto_string(ttl));
+                Kernel->Store->Expires->Add(this->database, this->id, this->value, this->select_query, true);
+        }
+
+        this->SetOK();
+}
+
+void copy_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+}
+
+/*void append_query::Run()
 {
         if (this->key.empty())
         {
@@ -667,7 +1460,7 @@ void del_query::Run()
 
         /* Deletes key in case it is expiring. */
         
-        Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+  /*      Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
         rocksdb::Status auxstatus = this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where);
         this->SetOK();
 }
@@ -727,7 +1520,7 @@ void find_query::Run()
                 {
                         /* User only needs to count items. */
                         
-                        if (Daemon::Match(rawstring, key))
+    /*                    if (Daemon::Match(rawstring, key))
                         {
                                 aux_counter++;
                         }
@@ -784,7 +1577,7 @@ void find_query::Run()
                                     
                                     result.push_back(rawstring);
              
-                                    if (aux_counter % 200 == 0)
+                                    if (aux_counter % 100 == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<find_query> request = std::make_shared<find_query>();
@@ -808,7 +1601,7 @@ void find_query::Run()
                              aux_counter++;
                              result.push_back(rawstring);
             
-                             if (aux_counter % 200 == 0)
+                             if (aux_counter % 100 == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<find_query> request = std::make_shared<find_query>();
@@ -831,6 +1624,7 @@ void find_query::Run()
             if (aux_counter == 0)
             {
                     access_set(DBL_NOT_FOUND);
+                    return;
             }
             
             this->counter = aux_counter;
@@ -851,14 +1645,7 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
         {
              if (query->finished)
              {
-                        if (query->counter > 0)
-                        {
-                                Dispatcher::Smart(user, 1, BRLD_ITEM, query->response, query);
-                        }   
-                        else
-                        {
-                                Dispatcher::Smart(user, 0, ERR_QUERY, query->response, query);
-                        }
+                      Dispatcher::Smart(user, 1, BRLD_QUERY_OK, query->response, query);
              }
              else
              {
@@ -897,3 +1684,4 @@ void Flusher::Find(User* user, std::shared_ptr<query_base> query)
         }
 }
 
+*/

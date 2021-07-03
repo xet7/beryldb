@@ -19,8 +19,8 @@ class CoreModuleList : public Module
     private:
     
         CommandLPush cmdlpush;
-        CommandLPOP cmdlpop;
-        CommandL_POP_ALL cmdlpopall;
+        CommandPop cmdlpop;
+        CommandPopAll cmdlpopall;
         CommandLGet cmdlget;
         CommandLExist cmdlexist;
         CommandLCount cmdlcount;

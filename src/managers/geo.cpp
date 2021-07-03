@@ -19,8 +19,8 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/geo.h"
-
-void GeoHelper::Remove(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& arg)
+/*
+void //GeoHelper::Remove(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& arg)
 {
        std::shared_ptr<georemove_query> query = std::make_shared<georemove_query>();
        
@@ -35,7 +35,7 @@ void GeoHelper::Remove(User* user, std::shared_ptr<Database> database, const std
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::GeoClose(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, signed int offset, signed int limit)
+void //GeoHelper::GeoClose(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, signed int offset, signed int limit)
 {
        std::shared_ptr<geoclose_query> query = std::make_shared<geoclose_query>();
        
@@ -52,7 +52,7 @@ void GeoHelper::GeoClose(User* user, std::shared_ptr<Database> database, const s
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
+void //GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
               
@@ -67,7 +67,7 @@ void GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude)
+void //GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude)
 {
        std::shared_ptr<geoadd_query> query = std::make_shared<geoadd_query>();
               
@@ -83,7 +83,7 @@ void GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
+void //GeoHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<geoget_query> query = std::make_shared<geoget_query>();
               
@@ -97,7 +97,7 @@ void GeoHelper::Get(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::Del(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
+void //GeoHelper::Del(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<geodel_query> query = std::make_shared<geodel_query>();
        
@@ -112,7 +112,7 @@ void GeoHelper::Del(User* user, std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void GeoHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, signed int offset, signed int limit)
+void //GeoHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, signed int offset, signed int limit)
 {
        std::shared_ptr<geofind_query> query = std::make_shared<geofind_query>();
        
@@ -128,3 +128,4 @@ void GeoHelper::Find(User* user, std::shared_ptr<Database> database, const std::
        query->key = entry;
        Kernel->Store->Push(query);
 }
+*/

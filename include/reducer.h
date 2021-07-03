@@ -16,7 +16,7 @@
 
 #include <mutex>
 
-class Externalize ReducerHandler  : public safecast<ReducerHandler>
+class ExportAPI ReducerHandler  : public safecast<ReducerHandler>
 {
   private:
 
@@ -33,7 +33,7 @@ class Externalize ReducerHandler  : public safecast<ReducerHandler>
 	void Apply();
 };
 
-class Externalize PromiseAction : public base_class
+class ExportAPI PromiseAction : public base_class
 {
  public:
 
@@ -41,7 +41,7 @@ class Externalize PromiseAction : public base_class
 };
 
 
-class Externalize ActionHandler : public safecast<ActionHandler>
+class ExportAPI ActionHandler : public safecast<ActionHandler>
 {
  private:
  

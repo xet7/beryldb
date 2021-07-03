@@ -15,7 +15,7 @@
 
 #include "brldb/database.h"
 
-class Externalize ListHelper
+class ExportAPI ListHelper
 {
     public:
 

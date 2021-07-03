@@ -58,7 +58,7 @@
 
 /* Exports core to modules. */
 
-#define Externalize __attribute__ ((visibility ("default")))
+#define ExportAPI __attribute__ ((visibility ("default")))
 
 /* bprint is short for "beryl print", which prints out to terminal. */
 
@@ -83,6 +83,8 @@
 /* Calls Daemon::print_newline and prints a newline. */
 
 #define do_newline Daemon::print_newline(1)
+
+#define MAX_32BIT_INT 2147483647
 
 /* safecast allow classes to be accessed using a -> */
 

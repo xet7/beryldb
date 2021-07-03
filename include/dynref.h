@@ -15,7 +15,7 @@
 
 #include "base.h"
 
-class Externalize ddl_base_ref : public interfacebase, public brld::node_list_node<ddl_base_ref>
+class ExportAPI ddl_base_ref : public interfacebase, public brld::node_list_node<ddl_base_ref>
 {
  public:
 	class aptureAttach
@@ -58,10 +58,10 @@ inline void ddl_base_ref::check()
 }
 
 template<typename T>
-class dynamic_reference : public ddl_base_ref
+class ReferencedFrom : public ddl_base_ref
 {
  public:
-	dynamic_reference(Module* Creator, const std::string& Name)
+	ReferencedFrom(Module* Creator, const std::string& Name)
 		: ddl_base_ref(Creator, Name) {}
 
 	inline T* operator->()
@@ -87,10 +87,10 @@ class dynamic_reference : public ddl_base_ref
 };
 
 template<typename T>
-class dynamic_reference_nocheck : public ddl_base_ref
+class ReferencedFrom_nocheck : public ddl_base_ref
 {
  public:
-	dynamic_reference_nocheck(Module* Creator, const std::string& Name)
+	ReferencedFrom_nocheck(Module* Creator, const std::string& Name)
 		: ddl_base_ref(Creator, Name) {}
 
 	T* operator->()

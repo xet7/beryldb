@@ -16,8 +16,9 @@ CXX = @CXX@
 COMPILER = @COMPILER_NAME@
 SYSTEM = @SYSTEM_NAME@
 BUILDPATH ?= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/build/@COMPILER_NAME@-@COMPILER_VERSION@
+ENGINE = @ENGINE@
 CORECXXFLAGS = -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -pipe -Iinclude -Wall -Wextra -Wfatal-errors -Wno-unused-parameter -Wshadow -Wno-switch 
-LDLIBS = -lstdc++ -lrocksdb -lpthread
+LDLIBS = -lstdc++ -lrocksdb 
 CORELDFLAGS = -rdynamic -L.
 PICLDFLAGS = -fPIC -shared -rdynamic
 
@@ -37,7 +38,25 @@ INSTMODE_DIR ?= 0755
 INSTMODE_BIN ?= 0755
 INSTMODE_TXT ?= 0644
 INSTMODE_PRV ?= 0640
-LDLIBS += -ldl -lrt
+
+ifneq ($(SYSTEM), darwin)
+  LDLIBS += -pthread
+endif
+
+ifeq ($(SYSTEM), linux)
+  LDLIBS += -ldl -lrt -lpthread
+endif
+
+ifeq ($(SYSTEM), freebsd)
+  LDLIBS += -lpthread -ldl -lrt -L/usr/local/lib
+  CORECXXFLAGS += -I/usr/local/include
+endif
+
+ifeq ($(SYSTEM), darwin)
+  LDLIBS += -ldl
+  CORELDFLAGS = -dynamic -bind_at_load -L.
+  PICLDFLAGS = -fPIC -shared -twolevel_namespace -undefined dynamic_lookup
+endif
 
 ifndef DEBUG
   DEBUG=0
@@ -91,6 +110,7 @@ export CXX
 export VERBOSE
 export LDLIBS
 export PICLDFLAGS
+export ENGINE
 export SOURCEPATH
 
 TARGET = all

@@ -15,7 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
-#include "managers/keys.h"
+#include "managers/expires.h"
 #include "engine.h"
 #include "converter.h"
 #include "core_expires.h"
@@ -53,7 +53,7 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
           /* We convert expiring time to int. */
           
           unsigned int exp_usig = convto_num<unsigned int>(exp_str);
-          KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_SETEX, exp_usig, value);
+          //KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_SETEX, exp_usig, value);
 
           return SUCCESS;
 }
@@ -84,10 +84,10 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
 
           if ((time_t)exp_usig < Kernel->Now())
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, "Expire already passed.");
+                 user->SendProtocol(ERR_EXPIRE, exp_str, PROCESS_ERROR);
                  return FAILED;
           }
           
-          KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_EXPIREAT, exp_usig, "");
+          ExpireHelper::ExpireAT(user, key, exp_usig);
           return SUCCESS;
 }

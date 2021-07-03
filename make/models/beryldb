@@ -237,21 +237,6 @@ sub cmd_start(@)
 	die "Unable to run the server: $!\n";
 }
 
-sub cmd_flushdb(@)
-{
-        if (getstatus() == 1) 
-        { 
-                show_warning "You must stop BerylDB in order to flush it from terminal."; 
-                exit GENERIC_EXIT_SUCCESS; 
-        }
-
-        print "$binary_path/$executable was not located.\n" and return 0 unless(-e "$binary_path/$executable");
-        print "$binary_path/$executable is not executable\n" and return 0 unless(-f "$binary_path/$executable" && -x "$binary_path/$executable");
-
-        exec "$binary_path/$executable", @_, "--flushdb";
-        die "Unable to run the server: $!\n";
-}
-
 sub dev_debug(@)
 {
 	if (getstatus() == 1) 

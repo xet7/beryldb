@@ -23,7 +23,7 @@ enum log_level
 	LOG_NONE    = 50
 };
 
-class Externalize FileHandler
+class ExportAPI FileHandler
 {
   protected:
 		
@@ -42,7 +42,7 @@ class Externalize FileHandler
 	virtual ~FileHandler();
 };
 
-class Externalize LogStream : public base_class
+class ExportAPI LogStream : public base_class
 {
  protected:
 
@@ -78,7 +78,7 @@ class Externalize LogStream : public base_class
 
 typedef std::map<FileHandler*, int> FileLogMap;
 
-class Externalize LogHandler : public safecast<LogHandler>
+class ExportAPI LogHandler : public safecast<LogHandler>
 {
  private:
 
@@ -167,7 +167,7 @@ class Externalize LogHandler : public safecast<LogHandler>
 	void Log(const std::string &type, log_level loglevel, const char *fmt, ...) BERYL_PRINTF(4, 5);
 };
 
-class Externalize OutStream : public LogStream
+class ExportAPI OutStream : public LogStream
 {
    private:
    

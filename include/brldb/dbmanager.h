@@ -18,17 +18,47 @@
 #include "brldb/futures.h"
 #include "brldb/database.h"
 
-class Externalize CoreManager : public safecast<CoreManager>
+class ExportAPI DBManager : public safecast<DBManager>
+{
+   private:
+     
+      DataMap DBMap;
+
+   public:
+       
+      /* Constructor */
+         
+      DBManager();
+         
+      unsigned int OpenAll();
+
+      std::shared_ptr<UserDatabase> Load(const std::string& name, const std::string& path);
+
+      std::shared_ptr<UserDatabase> Find(const std::string& name);
+
+      void SetDefault(const std::string& name);
+
+      bool Delete(const std::string& name);
+         
+      bool Create(const std::string& name, const std::string& path);
+         
+      DataMap& GetDatabases()
+      {
+               return this->DBMap;
+      }
+};
+
+class ExportAPI CoreManager : public safecast<CoreManager>
 {
     public:
     
+        CoreManager();
+
         std::shared_ptr<CoreDatabase> DB;
         
         /* Opens core database. */
         
         void Open();
-        
-        CoreManager();
         
         void SetDefaults();
         
@@ -39,8 +69,14 @@ class Externalize CoreManager : public safecast<CoreManager>
         void UserDefaults();
 };
 
-class Externalize StoreManager : public safecast<StoreManager>
+class ExportAPI StoreManager : public safecast<StoreManager>
 {
+    friend class DBManager;
+    
+    private:
+    
+         std::shared_ptr<UserDatabase> Default;
+
     public:
 
         rocksdb::Env* env = NULL;
@@ -55,7 +91,7 @@ class Externalize StoreManager : public safecast<StoreManager>
         
         /* Map of active databases. */
         
-        DataMap databases;
+        DBManager DBM;
 
         /* Handles expiring keys. */
         
@@ -77,9 +113,11 @@ class Externalize StoreManager : public safecast<StoreManager>
 
         void OpenAll();
 
-        std::shared_ptr<Database> Create(const std::string& name, const std::string& path);
-
         void Push(std::shared_ptr<query_base> request);
         
-        std::shared_ptr<Database> Default;
+        std::shared_ptr<UserDatabase> GetDefault()
+        {
+              return this->Default;
+        }
+
 };

@@ -107,7 +107,7 @@ sub do_compile
 
 		if ($file =~ m#(?:^|/)((?:m|core)_[^/. ]+)(?:\.cpp|/.*\.cpp)$#) 
 		{
-			$flags .= ' -DMODNAME=\\"'.$1.'\\"';
+			$flags .= ' -DMODULE_NAME=\\"'.$1.'\\"';
 		}
 	}
 

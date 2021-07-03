@@ -18,7 +18,67 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
+#include "helpers.h"
 
+void dbsize_query::Run()
+{
+    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+    std::string rawstring;
+    double size_calc = 0;
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) 
+    {
+            if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+            {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+            }
+    
+            /* We directly count byte size from binary keys/values. */
+            
+            size_calc += it->key().size() + 2;
+            size_calc += it->value().size() + 2;  
+    }
+    
+    float as_mb = size_calc / 1024 / 1024;
+    
+    if (as_mb <= 1)
+    {
+         this->size  = size_calc / 1024;
+         this->response = "KB";
+    }
+    else if (as_mb > 1 && as_mb < 1024)
+    {
+        this->size = as_mb;
+        this->response = "MB";
+    }
+    else if (as_mb > 1024)
+    {
+          this->size = size_calc / 1024 / 1024 / 1024;
+          this->response = "GB";   
+    }
+    
+    this->size = std::trunc(this->size * 10)/10;
+    this->SetOK();
+}
+
+void dbsize_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, Daemon::Format("%s %s", convto_string(this->size).c_str(), this->response.c_str()));
+}
+
+void type_query::Run()
+{
+       this->SetOK();
+}
+
+void type_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, Helpers::TypeString(this->identified));
+}
+
+
+/*
 void op_query::Run()
 {    
     if (this->key.empty())
@@ -44,7 +104,7 @@ void op_query::Run()
     {
           /* dbvalue not found, so we start it at 0 */
 
-          dbvalue = "0";
+  /*        dbvalue = "0";
     }
     else
     {
@@ -153,7 +213,7 @@ void swapdb_query::Run()
 
                 /* By definition, this should never happen. */
 
-                if (rawstring.length() < 2)
+    /*            if (rawstring.length() < 2)
                 {
                     continue;
                 }
@@ -242,58 +302,6 @@ void Flusher::SwapDB(User* user, std::shared_ptr<query_base> query)
        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 
-void dbsize_query::Run()
-{
-    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
-
-    std::string rawstring;
-    
-    double size_calc = 0;
-
-    for (it->SeekToFirst(); it->Valid(); it->Next()) 
-    {
-            if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
-            {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
-            }
-    
-            /* We can count size from binary keys/values. */
-            
-            size_calc += it->key().size() + 2;
-            size_calc += it->value().size() + 2;  
-    }
-    
-    float as_mb = size_calc / 1024 / 1024;
-    
-    if (as_mb <= 1)
-    {
-         this->size  = size_calc / 1024;
-         this->response = "KB";
-    }
-    else if (as_mb > 1 && as_mb < 1024)
-    {
-        this->size = as_mb;
-        this->response = "MB";
-    }
-    else if (as_mb > 1024)
-    {
-          this->size = size_calc / 1024 / 1024 / 1024;
-          this->response = "GB";   
-    }
-    
-    this->size = std::trunc(this->size * 10)/10;
-    this->SetOK();
-    
-}
-
-void Flusher::DBSize(User* user, std::shared_ptr<query_base> query)
-{       
-        if (query->finished)
-        {
-             user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_DBSIZE, query->size, query->response, Daemon::Format("%s %s", convto_string(query->size).c_str(), query->response.c_str()));
-        }
-}
 
 void sflush_query::Run()
 {
@@ -320,7 +328,7 @@ void sflush_query::Run()
                 
                 /* By definition, this should never happen. */
                 
-                if (rawstring.length() < 2)
+        /*        if (rawstring.length() < 2)
                 {
                     continue;
                 }
@@ -387,3 +395,4 @@ void Flusher::SFlush(User* user, std::shared_ptr<query_base> query)
           user->SendProtocol(BRLD_SFLUSHED, query->select_query, convto_string(query->counter).c_str());
     }
 }
+*/

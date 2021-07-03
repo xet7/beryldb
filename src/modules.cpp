@@ -86,9 +86,10 @@ void		Module::OnEveryHalfMinute(time_t) { DetachEvent(I_OnEveryHalfMinute); }
 ModuleResult	Module::OnPreCommand(std::string&, CommandModel::Params&, LocalUser*, bool) { DetachEvent(I_OnPreCommand); return MOD_RES_SKIP; }
 void		Module::OnPostCommand(Command*, const CommandModel::Params&, LocalUser*, COMMAND_RESULT, bool) { DetachEvent(I_OnPostCommand); }
 void		Module::OnCommandBlocked(const std::string&, const CommandModel::Params&, LocalUser*) { DetachEvent(I_OnCommandBlocked); }
+void 		Module::OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<query_base> bquery) { DetachEvent(I_OnQueryFailed); }
 void		Module::OnInstanceInit(LocalUser*) { DetachEvent(I_OnInstanceInit); }
 void		Module::OnInstancePostInit(LocalUser*) { DetachEvent(I_OnInstancePostInit); }
-ModuleResult	Module::OnCheckReady(LocalUser*) { DetachEvent(I_OnCheckReady); return MOD_RES_SKIP; }
+ModuleResult	Module::OnUserReady(LocalUser*) { DetachEvent(I_OnUserReady); return MOD_RES_SKIP; }
 ModuleResult	Module::OnUserRegister(LocalUser*) { DetachEvent(I_OnUserRegister); return MOD_RES_SKIP; }
 ModuleResult	Module::OnPreChangeHost(LocalUser*, const std::string&) { DetachEvent(I_OnPreChangeHost); return MOD_RES_SKIP; }
 ModuleResult	Module::OnPassCompare(Expandable* ex, const std::string &password, const std::string &input, const std::string& hashtype) { DetachEvent(I_OnPassCompare); return MOD_RES_SKIP; }

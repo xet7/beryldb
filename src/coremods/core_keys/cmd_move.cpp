@@ -46,6 +46,6 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
                return FAILED;
        }
 
-       KeyHelper::Move(user, user->current_db, user->select, key, new_select);
+       //KeyHelper::Move(user, user->current_db, user->select, key, new_select);
        return SUCCESS;
 }

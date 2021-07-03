@@ -21,20 +21,39 @@
 #include "engine.h"
 #include "core_dbmanager.h"
 
-CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0)
+CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
 {
-         requires = 'r';
+       requires = 'r';
 }
 
 COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
 {  
-       if (DBHelper::FlushDB())
+       const std::string& dbname = parameters[0];
+       
+       std::shared_ptr<UserDatabase> database;
+       
+       if (parameters.size())
        {
-            user->SendProtocol(BRLD_FLUSHED, PROCESS_OK);
-            return SUCCESS;
+             database = Kernel->Store->DBM->Find(dbname);
+       }
+       else
+       {
+            database = user->current_db;
+       }
+       
+       if (!database)
+       {
+            user->SendProtocol(ERR_DB_NOT_SET, PROCESS_NULL);
+            return FAILED;
+       }
+       
+       if (DBHelper::FlushDB(database, true))
+       {
+             user->SendProtocol(BRLD_FLUSHED, PROCESS_OK);
+             return SUCCESS;
        }
 
-       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", Kernel->Store->Default->GetName().c_str());      
+       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->current_db->GetName().c_str());      
        user->SendProtocol(ERR_UNABLE_FLUSH, PROCESS_FALSE);
        return FAILED;
 }
@@ -87,7 +106,7 @@ COMMAND_RESULT CommandSwapDB::Handle(User* user, const Params& parameters)
 
        sfalert(user, NOTIFY_DEFAULT, "Database swap: %s <=> %s", db1.c_str(), db2.c_str());
        
-       DBHelper::SwapDB(user, user->current_db, db1, db2);
+//       DBHelper::SwapDB(user, user->current_db, db1, db2);
        return SUCCESS;
 }
 

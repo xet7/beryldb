@@ -15,135 +15,23 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
-
-void hget_query::Run()
-{
-    if (this->format.empty())
-    {
-            this->access_set(DBL_MISS_ARGS);
-            return;
-    }
-
-    const std::string inserting = this->format;
-    std::string dbvalue;
-    rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
-
-    if (!fstatus2.ok())
-    {
-          this->access_set(DBL_NOT_FOUND);
-          return;
-    }    
-   
-    this->response = to_string(dbvalue);
-
-    if (this->qtype == TYPE_EXIST)
-    {	
-            if (!this->response.empty())
-            {
-                this->exists = true;
-            }
-    }
-    
-    this->SetOK();
-}
-
-void Flusher::HGet(User* user, std::shared_ptr<query_base> query)
-{
-        if (query->qtype == TYPE_EXIST)
-        {
-               Dispatcher::Smart(user, query->exists, BRLD_QUERY_OK, convto_string(query->exists), query);
-               return;
-        }
-        
-        if (query->finished)
-        {
-              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", query->response.c_str()), query);
-        }
-}
-
-void hmove_query::Run()
-{
-        if (this->format.empty())
-        {
-                this->access_set(DBL_MISS_ARGS);
-                return;
-        }
-
-        std::string dbvalue;
-        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->format, &dbvalue);
-
-        if (!fstatus2.ok())
-        {
-              this->access_set(DBL_NOT_FOUND);
-              return;
-        }    
-
-        const std::string newfmt = this->int_keys + ":" + this->select_query + ":" + to_bin(this->key) + ":" + to_bin(this->value);
-        this->database->GetAddress()->Put(rocksdb::WriteOptions(), newfmt, dbvalue);
-        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), this->format);
-        this->SetOK();
-}
-
-void Flusher::HMove(User* user, std::shared_ptr<query_base> query)
-{
-        if (query->finished)
-        {
-              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
-        }
-}
-
-void hdel_query::Run()
-{
-        if (this->format.empty())
-        {
-                this->access_set(DBL_MISS_ARGS);
-                return;
-        }
-
-        const std::string inserting = this->format;
-        std::string dbvalue;
-        bool dirty = false;
-        
-        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), inserting, &dbvalue);
-
-        if (fstatus2.ok())
-        {
-                dirty = true;
-                this->database->GetAddress()->Delete(rocksdb::WriteOptions(), inserting);
-        }     
-        
-        if (!dirty)
-        {
-               this->access_set(DBL_NOT_FOUND);
-               return;
-        }
-
-        this->SetOK();
-}
-
-void Flusher::HDel(User* user, std::shared_ptr<query_base> query)
-{
-        if (query->finished)
-        {
-              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
-        }
-}
+#include "helpers.h"
 
 void hset_query::Run()
 {
-        if (this->value.empty() || this->format.empty())
+        if (this->value.empty() || this->hesh.empty())
         {
                 this->access_set(DBL_MISS_ARGS);
                 return;
         }
 
-        const std::string& where_to = this->format;
+        const std::string& where_to = this->dest;
         
         rocksdb::Status fstatus2 =  this->database->GetAddress()->Put(rocksdb::WriteOptions(), where_to, this->value);
 
         if (!fstatus2.ok())
         {
-              this->access_set(DBL_NOT_FOUND);
+              this->access_set(DBL_UNABLE_WRITE);
         }
         else
         {
@@ -151,30 +39,106 @@ void hset_query::Run()
         }
 }
 
-void Flusher::HSet(User* user, std::shared_ptr<query_base> query)
+void hset_query::Process()
 {
-        if (query->finished)
+       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
+}
+
+void hexists_query::Run()
+{
+       if (this->hesh.empty())
+       {
+                this->access_set(DBL_MISS_ARGS);
+                return;
+       }
+        
+       const std::string& where_query = this->dest;
+       
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = "1";
+       }
+       else
+       {
+               this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void hexists_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->response);
+}
+
+void hget_query::Run()
+{
+        if (this->hesh.empty())
         {
-              Dispatcher::Smart(user, 1, BRLD_QUERY_OK, PROCESS_OK, query);
+                this->access_set(DBL_MISS_ARGS);
+                return;
         }
+
+       const std::string& where_query = this->dest;
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where_query, &dbvalue);
+
+       if (fstatus2.ok())
+       {
+                this->response = to_string(dbvalue);
+       }
+       else
+       {
+               this->access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       this->SetOK();
+}
+
+void hget_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->key, Helpers::Format(this->response));
+}
+
+void hdel_query::Run()
+{
+        const std::string& where = this->dest;
+
+        std::string dbvalue;
+        rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), where, &dbvalue);
+
+        if (!fstatus2.ok())
+        {
+                this->access_set(DBL_NOT_FOUND);
+                return;
+        }
+
+        /* Deletes key in case it is expiring. */
+        
+        rocksdb::Status auxstatus = this->database->GetAddress()->Delete(rocksdb::WriteOptions(), where);
+        this->SetOK();
+}
+
+void hdel_query::Process()
+{
+        user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
 }
 
 void hkeys_query::Run()
 {
-    rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
-
-    std::string rawstring;
-    
-    unsigned int return_counter = 0;
-    unsigned int total_match = 0;
-    unsigned int aux_counter = 0;
-    unsigned int tracker = 0;
-    
-    Args rlist;
-    Args aux;
-
-    for (it->SeekToFirst(); it->Valid(); it->Next()) 
-    {
+        Args result;
+        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+        std::string rawstring;
+        unsigned int tracker = 0;
+        unsigned int aux_counter = 0;
+        unsigned int total_counter = 0;
+        
+        for (it->SeekToFirst(); it->Valid(); it->Next()) 
+        {
                 if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
                 {
                       this->access_set(DBL_INTERRUPT);
@@ -187,165 +151,143 @@ void hkeys_query::Run()
                 std::string token;
 
                 unsigned int strcounter = 0;
-                bool int_match = false;
-                bool key_match = false;
-                bool select_match = false;
-
-                std::string asstr;
-                std::string ashesh;
+                bool skip = false;
+                
+                std::string key_as_string;
+                std::string hesh_as_string;
                 
                 while (stream.items_extract(token))
                 {
-                        if (strcounter == 3)
+                        if (skip)
                         {
-                             ashesh = to_string(token);
-                        }
-                    
-                        if (strcounter == 2)
-                        {
-                            asstr = to_string(token);
-                        
-                            if (asstr != this->key)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                key_match = true;
-                            }
+                               break;
                         }
                         
-                        if (strcounter == 0)
+                        switch (strcounter)
                         {
-                            if (this->int_keys != token)
-                            {
-                                  break;
-                            }
-                            else
-                            {
-                                  int_match = true;
-                            }
-                        }
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                                  
+                                  if (key_as_string != this->key)
+                                  {
+                                         skip = true;
+                                  }
+                             }
 
-                        if (strcounter == 1)
-                        {
-                            if (this->select_query != token)
-                            {
-                                  break;
-                            }
-                            else
-                            {
-                                select_match = true;
-                            }
+                             break;
+                             
+                             case 1:
+                             {
+                                  if (this->select_query != token)
+                                  {
+                                       skip = true;
+                                  }
+                             }
+                             
+                             break;
+                             
+                             case 2:
+                             {
+                                    if (this->base_request != token)
+                                    {
+                                        skip = true;
+                                    }
+                             }
+                             
+                             break;
+                             
+                             case 3:
+                             {
+                                    hesh_as_string = to_string(token);
+                             }
+                             
+                             break;
+                             
+                             
+                             default:
+                             {
+                                 break;   
+                             }
                         }
                         
                         strcounter++;
                 }
-                
-                if (select_match && int_match && key_match)
-                {	
-                       if (this->core == true)
-                       {
-                                aux.push_back(ashesh);
-                                aux_counter++;
-                                continue;
-                       }
-                       
-                       
-                       if (((signed int)total_match >= offset))
-                       {
-                            if (limit != -1 && ((signed int)aux_counter < limit))
-                            {
-                                aux_counter++;
-                                aux.push_back(ashesh);
-                                
-                                if (return_counter % 100 == 0)
-                                {
-                                    tracker++;
-                                    std::shared_ptr<hkeys_query> request = std::make_shared<hkeys_query>();
-                                    request->user = this->user;
-                                    request->partial = true;
-                                    request->subresult = tracker;
-                                    request->VecData = aux;
-                                    request->counter = aux.size();
-                                    aux.clear();
-                                    request->SetOK();
-                                    DataFlush::AttachResult(request);
-                                }
-
-                                return_counter++;                                   
-                            }
-                            else if (limit == -1)
-                            {
-                                aux.push_back(ashesh);
-                            
-                                if (return_counter % 100 == 0)
-                                {
-                                    tracker++;
-                                    std::shared_ptr<hkeys_query> request = std::make_shared<hkeys_query>();
-                                    request->user = this->user;
-                                    request->partial = true;
-                                    request->subresult = tracker;
-                                    request->VecData = aux;
-                                    request->counter = aux.size();
-                                    aux.clear();
-                                    request->SetOK();
-                                    DataFlush::AttachResult(request);
-                                }
-                                
-                                if (return_counter == (unsigned int)limit)
-                                {
-                                     break;
-                                }
-                            
-                                return_counter++;
-                            }
-                            else
-                            {
-                                  break;
-                            }
-                    }
-
-                     total_match++;  
+                        
+                if (skip)
+                {
+                        continue;
                 }
-    }    
-    
-    this->subresult = ++tracker;
-    this->partial = false;
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    result.push_back(hesh_as_string);
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                std::shared_ptr<hkeys_query> request = std::make_shared<hkeys_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->VecData = result;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result.push_back(hesh_as_string);
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        std::shared_ptr<hkeys_query> request = std::make_shared<hkeys_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->VecData = result;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
 
-    this->counter = return_counter;
-    this->VecData = aux;
-    this->SetOK();
+     this->subresult = ++tracker;
+     this->partial = false;
+     this->counter = aux_counter;
+     this->VecData = result;
+     this->SetOK();
 }
 
-void Flusher::HKeys(User* user, std::shared_ptr<query_base> query)
+void hkeys_query::Process()
 {
-        if (!query->finished)
+        if (this->subresult == 1)
         {
-                Dispatcher::Smart(user, 1, ERR_QUERY, PROCESS_ERROR, query);
-                return;
+               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
         }
 
-        if (!query->partial && !query->counter)
-        {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);
-               Dispatcher::JustAPI(user, BRLD_END_LIST);               
-               return;
-        }
-        
-        if (query->subresult == 1)
-        {
-              Dispatcher::JustAPI(user, BRLD_START_LIST);                 
-        }
-
-        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                std::string key = *i;
-               Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("%s", key.c_str()), query);
+               user->SendProtocol(BRLD_ITEM, key.c_str());
         }
 
-        if (!query->partial)
+        if (!this->partial)
         {
-            Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
+

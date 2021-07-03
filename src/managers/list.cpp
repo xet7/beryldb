@@ -22,7 +22,7 @@
 #include "managers/lists.h"
 #include "managers/maps.h"
 
-VectorTuple ListHelper::Get(const std::string& where, const std::string& key)
+/*VectorTuple //ListHelper::Get(const std::string& where, const std::string& key)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
 
@@ -40,7 +40,7 @@ VectorTuple ListHelper::Get(const std::string& where, const std::string& key)
        return std::make_tuple(query->access, query->VecData);
 }
 
-DBL_CODE ListHelper::Add(const std::string& where, const std::string& entry, const std::string& value)
+DBL_CODE //ListHelper::Add(const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();
        query->database = Kernel->Core->DB;
@@ -50,7 +50,7 @@ DBL_CODE ListHelper::Add(const std::string& where, const std::string& entry, con
        query->value = to_bin(value);
        query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
 
-       BasicTuple tuple = MapsHelper::Get("lcounter", "id", query->format);
+       BasicTuple tuple = //MapsHelper::Get("lcounter", "id", query->format);
        std::string lcounter = std::get<1>(tuple);
 
        unsigned int id_num = 0;
@@ -60,13 +60,13 @@ DBL_CODE ListHelper::Add(const std::string& where, const std::string& entry, con
        query->id = id_num;
        query->Run();
 
-       MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
+       //MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
 
 
        return DBL_MANAGER_OK;
 }
 
-DBL_CODE ListHelper::Delete(const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst)
+DBL_CODE //ListHelper::Delete(const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst)
 {
        std::shared_ptr<lpop_query> query = std::make_shared<lpop_query>();
 
@@ -84,7 +84,7 @@ DBL_CODE ListHelper::Delete(const std::string& where, const std::string& entry, 
        return DBL_MANAGER_OK;
 }
 
-void ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type)
+void //ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
               
@@ -103,7 +103,7 @@ void ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::strin
 }
 
 
-void ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+void //ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lsearch_query> query = std::make_shared<lsearch_query>();
               
@@ -121,8 +121,8 @@ void ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::str
 }
 
 /* User helpers */
-
-void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+/*
+void //ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
               
@@ -140,7 +140,7 @@ void ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string
        Kernel->Store->Push(query);
 }
 
-void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type, unsigned int index)
+void //ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type, unsigned int index)
 {
        std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
               
@@ -159,7 +159,7 @@ void ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::stri
        Kernel->Store->Push(query);
 }
 
-void ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value)
+void //ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();
               
@@ -172,7 +172,7 @@ void ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string
        query->value = to_bin(stripe(value));
        query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
 
-       BasicTuple tuple = MapsHelper::Get("lcounter", "id", query->format);
+       BasicTuple tuple = //MapsHelper::Get("lcounter", "id", query->format);
        std::string lcounter = std::get<1>(tuple);
 
        unsigned int id_num = 0;
@@ -182,10 +182,10 @@ void ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string
        query->id = id_num;
        Kernel->Store->Push(query);
 
-       MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
+       //MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
 }
 
-void ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& select, const std::string& key, const std::string& value)
+void //ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& select, const std::string& key, const std::string& value)
 {
        std::shared_ptr<lmove_query> query = std::make_shared<lmove_query>();
               
@@ -201,7 +201,7 @@ void ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::strin
        Kernel->Store->Push(query);
 }
 
-void ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry,  const std::string& value, bool onlyfirst)
+void //ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry,  const std::string& value, bool onlyfirst)
 {
        std::shared_ptr<lpop_query> query = std::make_shared<lpop_query>();
               
@@ -219,7 +219,7 @@ void ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::str
        Kernel->Store->Push(query);
 }
 
-void ListHelper::LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry)
+void //ListHelper::LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry)
 {
        std::shared_ptr<lremove_query> query = std::make_shared<lremove_query>();
               
@@ -236,3 +236,4 @@ void ListHelper::LRemove(User* user, std::shared_ptr<Database> db, const std::st
 }
 
 
+*/

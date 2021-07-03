@@ -25,7 +25,7 @@ class DiscardResult
 };
 
 
-class Externalize base_class
+class ExportAPI base_class
 {
   public:
   
@@ -41,7 +41,7 @@ class Externalize base_class
 	void operator=(const base_class&);
 };
 
-class Externalize interfacebase
+class ExportAPI interfacebase
 {
   public:
 
@@ -56,7 +56,7 @@ class Externalize interfacebase
 	static void operator delete(void*);
 };
 
-class Externalize refcountbase
+class ExportAPI refcountbase
 {
 	mutable unsigned int refcount;
  public:
@@ -75,7 +75,7 @@ class Externalize refcountbase
 	void operator=(const refcountbase&);
 };
 
-class Externalize usecountbase
+class ExportAPI usecountbase
 {
 
   private:
@@ -146,7 +146,7 @@ template <typename T> class reference
 };
 
 
-class Externalize KernelException : public std::exception
+class ExportAPI KernelException : public std::exception
 {
 	protected:
 		
@@ -183,7 +183,7 @@ class Externalize KernelException : public std::exception
 };
 
 class Module;
-class Externalize ModuleException : public KernelException
+class ExportAPI ModuleException : public KernelException
 {
    public:
 	 
@@ -206,7 +206,7 @@ enum ServiceID
 	SERVICE_CUSTOM
 };
 
-class Externalize ServiceProvider : public base_class
+class ExportAPI ServiceProvider : public base_class
 {
   public:
 

@@ -25,6 +25,7 @@ class Database
     friend class UserDatabase;
     friend class CoreManager;
     friend class StoreManager;
+    friend class DBManager;
     
     private:
     

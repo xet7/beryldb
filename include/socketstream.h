@@ -71,7 +71,7 @@ enum EventMask
 };
 
 
-class Externalize EventHandler : public base_class
+class ExportAPI EventHandler : public base_class
 {
  private:
 	
@@ -126,7 +126,7 @@ class Externalize EventHandler : public base_class
 
 
 
-class Externalize SocketPool
+class ExportAPI SocketPool
 {
 
  private:

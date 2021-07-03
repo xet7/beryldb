@@ -14,7 +14,7 @@
 
 #pragma once
 
-class Externalize DLLHandler : public base_class
+class ExportAPI DLLHandler : public base_class
 {
 	
 	private:

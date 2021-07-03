@@ -215,20 +215,11 @@ int StreamSocket::ProcessRevQueue(std::string& rq)
 		SocketPool::EventSwitch(this, Q_FAST_READ | Q_ADD_TRIAL_READ);
 		rq.append(PendingBuffer, n);
 		
-		if (!Kernel->Lock)
-		{
-			Kernel->Interval = 0;
-		}
 	}
 	else if (n > 0)
 	{
 		SocketPool::EventSwitch(this, Q_FAST_READ);
 		rq.append(PendingBuffer, n);
-
-                if (!Kernel->Lock)
-                {
-                        Kernel->Interval = 0;
-                }
 	}
 	else if (n == 0)
 	{
@@ -535,7 +526,7 @@ void StreamSocket::CheckError(LiveSocketError errcode)
 	}
 }
 
-IOQueue* StreamSocket::GetModHook(Module* mod) const
+IOQueue* StreamSocket::GetModuleLink(Module* mod) const
 {
 	for (IOQueue* curr = GetIOQueue(); curr; curr = GetNextQueue(curr))
 	{

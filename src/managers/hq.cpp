@@ -18,7 +18,7 @@
 #include "brldb/query.h"
 #include "managers/hq.h"
 
-void HQHelper::HSend(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
+/*void HQHelper::HSend(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery)
 {
        std::shared_ptr<hquery_query> query = std::make_shared<hquery_query>();
        
@@ -34,3 +34,4 @@ void HQHelper::HSend(User* user, std::shared_ptr<Database> database, const std::
        
        Kernel->Store->Push(query);
 }
+*/

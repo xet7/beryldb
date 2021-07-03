@@ -35,6 +35,6 @@ COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        KeyHelper::Operation(user, Kernel->Store->Default, user->select, key, OP_AVG, value);
+        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_AVG, value);
         return SUCCESS;  
 }

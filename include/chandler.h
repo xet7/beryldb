@@ -105,7 +105,7 @@ struct RouteParams
  * through this class 
  */
  
-class Externalize CommandModel : public ServiceProvider
+class ExportAPI CommandModel : public ServiceProvider
 {
  public:
 
@@ -168,7 +168,7 @@ class Externalize CommandModel : public ServiceProvider
 	virtual ~CommandModel();
 };
 
-class Externalize Command : public CommandModel
+class ExportAPI Command : public CommandModel
 {
  
  protected:
@@ -222,7 +222,7 @@ class Externalize Command : public CommandModel
 	virtual void NotLogged(LocalUser* user, const Params& parameters);
 };
 
-class Externalize MultiCommand : public Command
+class ExportAPI MultiCommand : public Command
 {
  protected:
 	

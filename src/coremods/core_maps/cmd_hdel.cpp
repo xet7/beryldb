@@ -29,7 +29,7 @@ COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
        const std::string kmap = parameters[0];
        const std::string key = parameters[1];
 
-       MapsHelper::Delete(user, user->current_db, user->select, kmap, key);
+       MapsHelper::Delete(user, kmap, key);
        return SUCCESS;
 }
 
@@ -42,6 +42,6 @@ COMMAND_RESULT CommandHDelAll::Handle(User* user, const Params& parameters)
 {  
        const std::string kmap = parameters[0];
 
-       MapsHelper::DeleteAll(user, user->current_db, user->select, kmap);
+       //MapsHelper::DeleteAll(user, user->current_db, user->select, kmap);
        return SUCCESS;
 }

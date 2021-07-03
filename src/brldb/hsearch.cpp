@@ -16,7 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 
-void hsearch_query::Run()
+/*void hsearch_query::Run()
 {
     
     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
@@ -102,7 +102,7 @@ void hsearch_query::Run()
                 if (select_match && int_match && key_match)
                 {	
                     /* item already present. */
-
+/*
                     if (std::find(rlist.begin(), rlist.end(), asstr) != rlist.end()) 
                     {
                           continue;
@@ -197,7 +197,7 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
 
         if (query->qtype == TYPE_COUNT_RECORDS)
         {   
-               user->SendProtocol(BRLD_COUNT, DBL_TYPE_HSEARCH, query->key, Daemon::Format("%d", query->counter).c_str());
+               user->SendProtocol(BRLD_QUERY_OK, DBL_TYPE_HSEARCH, convto_string(query->counter));
                return;
         }
 
@@ -216,7 +216,7 @@ void Flusher::HSearch(User* user, std::shared_ptr<query_base> query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {           
                std::string key = *i;
-               Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+               Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
         
         if (!query->partial)
@@ -405,19 +405,20 @@ void Flusher::HSearch_Hesh(User* user, std::shared_ptr<query_base> query)
         
         if (query->subresult == 1)
         {
-                user->SendProtocol(BRLD_HSEARCH_BEGIN, "BEGIN of HSEARCH list.");
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
                  
         for (DualMMap::iterator i = query->mlist.begin(); i != query->mlist.end(); ++i)
         {            
                 std::string key = i->first;
                 std::string value = i->second;
-                Dispatcher::Smart(user, 1, BRLD_QUERY_OK, Daemon::Format("\"%s\"", key.c_str()), query);
+                Dispatcher::Smart(user, 1, BRLD_ITEM, Daemon::Format("\"%s\"", key.c_str()), query);
         }
         
         if (!query->partial)
         {
-                user->SendProtocol(BRLD_HSEARCH_END, query->counter, Daemon::Format("END of HSEARCH list (%i).", query->counter).c_str());
+                Dispatcher::JustAPI(user, BRLD_END_LIST);
         }   
                             
 }
+*/

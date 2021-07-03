@@ -28,7 +28,7 @@ $ENV{VERBOSE} = 1;
 execute 'git', 'clean', '-dfx';
 
 my $root = dirname $RealDir;
-my @compilers = $#ARGV >= 0 ? @ARGV : qw(g++ clang);
+my @compilers = $#ARGV >= 0 ? @ARGV : qw(g++ c++ clang++);
 
 for my $compiler (@compilers) 
 {
@@ -49,11 +49,11 @@ for my $compiler (@compilers)
         }
         
         if (execute 'make', '--directory', $root, '--jobs', get_cpu_count() + 1, 'install') 
-        {
+        {	
                 say "Unable to compile using the $compiler compiler.";
                 exit 1;
         }
-        
+
         say "Building using the $compiler compiler.";
         execute 'git', 'clean', '-dfx';
 }

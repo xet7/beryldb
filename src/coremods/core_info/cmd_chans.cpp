@@ -40,6 +40,7 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
            
           if (chans.empty())
           {
+               user->SendProtocol(ERR_NO_CHANS, PROCESS_FALSE);
                return FAILED;
           }
           

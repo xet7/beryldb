@@ -21,7 +21,7 @@ class Module;
  * inherit a Timer class. 
  */
  
-class Externalize Timer
+class ExportAPI Timer
 { 
     private:
 		
@@ -87,7 +87,7 @@ class Externalize Timer
 	}
 };
 
-class Externalize TickManager : public safecast<TickManager>
+class ExportAPI TickManager : public safecast<TickManager>
 {
   private:
   

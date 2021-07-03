@@ -86,7 +86,7 @@ namespace
 	void VerifyModules(LocalUser* user)
 	{
 		ModuleResult res;
-		UNTIL_RESULT(OnCheckReady, res, (user));
+		UNTIL_RESULT(OnUserReady, res, (user));
 
 		if (res == MOD_RES_SKIP)
 		{
