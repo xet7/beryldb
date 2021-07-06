@@ -106,10 +106,10 @@ bool Daemon::MatchCompactIP(const char* str, const char* mask, unsigned const ch
 
 bool Daemon::MatchMask(const std::string& masks, const std::string& hostname, const std::string& ipaddr)
 {
-	engine::space_node_stream masklist(masks);
+	engine::space_node_stream maske_list(masks);
 	std::string mask;
 
-	while (masklist.items_extract(mask))
+	while (maske_list.items_extract(mask))
 	{
 		if (Daemon::Match(hostname, mask, ascii_case_insensitive) || Daemon::MatchCompactIP(ipaddr, mask, ascii_case_insensitive))
 		{

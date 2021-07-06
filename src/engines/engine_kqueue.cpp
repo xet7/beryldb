@@ -23,7 +23,7 @@ namespace
 	int SocketHandler;
 	unsigned int ChangePos = 0;
 
-	std::vector<struct kevent> klist(16);
+	std::vector<struct kevent> ke_list(16);
 
 	std::vector<struct kevent> pendinglist(8);
 
@@ -90,7 +90,7 @@ bool SocketPool::AddDescriptor(EventHandler* ehandler, int req_mask)
 
 	ehandler->SetReqMask(req_mask);
 	OnMaskReq(ehandler, 0, req_mask);
-	ResizeDouble(klist);
+	ResizeDouble(ke_list);
 
 	return true;
 }
@@ -139,7 +139,7 @@ int SocketPool::Events()
 	ts.tv_nsec = 0;
 	ts.tv_sec = 1;
 
-	int i = kevent(SocketHandler, &pendinglist.front(), ChangePos, &klist.front(), klist.size(), &ts);
+	int i = kevent(SocketHandler, &pendinglist.front(), ChangePos, &ke_list.front(), ke_list.size(), &ts);
 	ChangePos = 0;
 	Kernel->Now();
 
@@ -150,7 +150,7 @@ int SocketPool::Events()
 
 	for (int j = 0; j < i; j++)
 	{
-		struct kevent& kev = klist[j];
+		struct kevent& kev = ke_list[j];
 		EventHandler* ehandler = reinterpret_cast<EventHandler*>(kev.udata);
 
 		if (!ehandler)
