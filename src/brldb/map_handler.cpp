@@ -182,3 +182,26 @@ void MapHandler::Erase()
 
 }
 
+void MapHandler::WildRemove(const std::string& key)
+{
+      if (!this->mhandler.size())
+      {
+            return;
+      }
+
+      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      {
+                  std::string item = i->first;
+
+                  if (Daemon::Match(item, key))
+                  {
+                        this->mhandler.erase(i++);
+                        continue;
+                  }
+
+                  i++;
+      }
+
+      this->LastMsg = HANDLER_MSG_OK;
+      return;
+}

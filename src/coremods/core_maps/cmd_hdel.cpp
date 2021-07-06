@@ -45,11 +45,6 @@ COMMAND_RESULT CommandHWDel::Handle(User* user, const Params& parameters)
        const std::string& kmap = parameters[0];
        const std::string& key = parameters[1];
        
-       if (!Daemon::CheckFormat(user, key))
-       {
-            return FAILED;
-       }
-
        MapsHelper::WDelete(user, kmap, key);
        return SUCCESS;
 }

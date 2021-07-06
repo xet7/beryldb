@@ -47,16 +47,9 @@ void MapsHelper::SetNX(User* user, const std::string& entry, const std::string& 
 void MapsHelper::WDelete(User* user, const std::string& key, const std::string& hesh)
 {
        std::shared_ptr<hwdel_query> query = std::make_shared<hwdel_query>();
-
-       query->user = user;
-       query->database = user->GetDatabase();
-       query->select_query = user->select;
-       query->key = key;
-       query->hesh = stripe(hesh);
-
+       Helpers::make_map(user, query, key, hesh);
        Kernel->Store->Push(query);
 }
-
 
 void MapsHelper::Get(User* user, const std::string& entry, const std::string& hesh)
 {

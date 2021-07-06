@@ -18,7 +18,6 @@
 #include "brldb/map_handler.h"
 #include "helpers.h"
 
-
 void hfind_query::Run()
 {
        Args result;
@@ -492,106 +491,24 @@ void hlist_query::Process()
 
 void hwdel_query::Run()
 {
-       unsigned int total_counter = 0;
+       RocksData result = this->Get(this->dest);
 
-       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+       std::shared_ptr<MapHandler> handler = MapHandler::Create(result.value);
+       handler->WildRemove(this->hesh);
 
-       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       if (handler->Count() > 0)
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
-                {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
-                }
-
-                std::string rawstring = it->key().ToString();
-                std::string key_as_string;
-                std::string hesh_as_string;
-                std::string token;
-                bool skip = false;
-                
-                unsigned int strcounter = 0;
-                
-                engine::colon_node_stream stream(rawstring);
-                
-                while (stream.items_extract(token))
-                {
-                        if (skip)
-                        {
-                            break;
-                        }
-
-                        switch (strcounter)
-                        {
-                             case 0:
-                             {
-                                  key_as_string = to_string(token);
-                                  
-                                  if (this->key != key_as_string)
-                                  {
-                                        skip = true;
-                                  }
-                             }
-
-                             break;
-
-                             case 1:
-                             {
-                             
-                                   if (this->select_query != token)
-                                   {
-                                        skip = true;
-                                   }
-                             }
-
-                             break;
-          
-                             case 2:
-                             {
-                                  if (token != INT_MAP)
-                                  {
-                                         skip = true;   
-                                  }
-                             }
-
-                             break;
-                             
-                             case 3:
-                             {
-                                    hesh_as_string = to_string(token);
-
-                                    if (!Daemon::Match(hesh_as_string, this->hesh))
-                                    {
-                                          skip = true;
-                                    }
-                             }
-                             
-                             break;
-
-                             default:
-                             {
-                                 break;   
-                             }
-                        }
-
-                        strcounter++;
-                }
-
-                if (skip)
-                {
-                        continue;
-                }
-
-                this->Delete(rawstring);
-                total_counter++;
+               this->Write(this->dest, handler->as_string());
        }
-       
-       this->counter = total_counter;
+       else
+       {
+               this->Delete(this->dest);
+       } 
+      
        this->SetOK();
 }
 
 void hwdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }

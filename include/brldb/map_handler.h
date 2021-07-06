@@ -117,6 +117,8 @@ class ExportAPI MapHandler
              this->LastMsg = HANDLER_MSG_OK;
              return this->mhandler.size();
         }
+
+        void WildRemove(const std::string& key);
         
         MapMap& GetList()
         {
