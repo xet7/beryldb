@@ -55,7 +55,6 @@ for my $compiler (@compilers)
         }
 
         say "Building using the $compiler compiler.";
-        execute 'git', 'clean', '-dfx';
 }
 
 

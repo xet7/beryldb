@@ -26,8 +26,6 @@ Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 
 Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
 
-![cli](https://docs.beryl.dev/img/render.gif??)
-
 ## Why use it?
 
 Beryl simplifies your system by allowing you to write fewer lines of code to store, retrieve, and manage data in your apps. 
