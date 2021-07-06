@@ -16,6 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
+#include "extras.h"
 #include "helpers.h"
 
 void expire_list_query::Run()
@@ -190,6 +191,18 @@ void get_substr_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response).c_str());
 }
 
+void get_occurs_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+       this->response = to_string(result.value);
+       this->response = convto_string(count_occur(this->response, this->value));
+       this->SetOK();
+}
+
+void get_occurs_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+}
 
 void get_query::Run()
 {

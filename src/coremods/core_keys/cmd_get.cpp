@@ -19,7 +19,26 @@
 #include "engine.h"
 #include "core_keys.h"
 
-CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1)
+CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "GETOCCURS", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters.back(); 
+
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::GetOccurs(user, key, value);
+       return SUCCESS;
+}
+
+CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1, 1)
 {
          syntax = "<key>";
 }

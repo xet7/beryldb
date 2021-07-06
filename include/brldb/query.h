@@ -1235,6 +1235,22 @@ class ExportAPI get_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI get_occurs_query  : public QueryBase
+{
+    public:
+
+        get_occurs_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
 class ExportAPI get_substr_query  : public QueryBase 
 {
     public:

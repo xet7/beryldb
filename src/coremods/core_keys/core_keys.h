@@ -54,6 +54,16 @@ class CommandGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandGetOccurs : public Command 
+{
+    public: 
+
+        CommandGetOccurs(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
 
 class CommandStrlen : public Command 
 {

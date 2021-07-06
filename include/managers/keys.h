@@ -60,4 +60,7 @@ class ExportAPI KeyHelper
         static void Append(User* user, const std::string& key, const std::string& value);
 
         static void SetTX(User* user, const std::string& entry, const std::string& value);
+        
+        static void GetOccurs(User* user, const std::string& key, const std::string& value);
+        
 };

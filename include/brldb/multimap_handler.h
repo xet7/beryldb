@@ -62,9 +62,35 @@ class ExportAPI MultiMapHandler
          */            
          
         unsigned int Repeats(const std::string& key);
-        
+
+        /* 
+         * Determines if a given key exists.
+         * 
+         * @parameters:
+         *
+         *         · word: Word to check.
+         * 
+         * @return:
+         *
+         *         · True: Word is in map.
+         *         · False: Word not in map.
+         */
+
         bool Exists(const std::string& word);
-        
+
+        /* 
+         * Deletes a key.
+         * 
+         * @parameters:
+         *
+         *         · key: Key to delete.
+         * 
+         * @return:
+         *
+         *         · True: Key has been deleted.
+         *         · False: Unable to delete key.
+         */    
+                 
         bool Delete(const std::string& key);
 
         /* 

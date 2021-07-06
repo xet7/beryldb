@@ -71,7 +71,20 @@ class ExportAPI MapHandler
         unsigned int Strlen(const std::string& key);
         
         std::string Get(const std::string& key);
-        
+
+        /* 
+         * Determines if a given key exists.
+         * 
+         * @parameters:
+	 *
+	 *         · word: Word to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Word is in map.
+         *         · False: Word not in map.
+         */            
+         
         bool Exists(const std::string& word);
 
         /* 

@@ -151,6 +151,19 @@ inline bool is_positive_number(const std::string& str)
         return true;
 }
 
+/* 
+ * Checks whether a given number is zero or positive.
+ * 
+ * @parameters:
+ *
+ *         · string str: Number to check.
+ * 
+ * @return:
+ *
+ *         · True: Positive number.
+ *         · False: Not positive.
+ */
+
 inline bool is_zero_or_great(const std::string& str)
 {
        if (!is_number(str))
@@ -165,6 +178,19 @@ inline bool is_zero_or_great(const std::string& str)
        
        return false;
 }
+
+/* 
+ * Checks whether a given number is zero, -1 or a positive one.
+ * 
+ * @parameters:
+ *
+ *         · string str: Number to check.
+ * 
+ * @return:
+ *
+ *         · True: Positive number.
+ *         · False: Not positive.
+ */
 
 inline bool is_zero_or_great_or_mone(const std::string& str)
 {

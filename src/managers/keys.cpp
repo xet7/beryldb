@@ -82,6 +82,14 @@ void KeyHelper::GetDel(User* user, const std::string& key)
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::GetOccurs(User* user, const std::string& key, const std::string& value)
+{
+       std::shared_ptr<get_occurs_query> query = std::make_shared<get_occurs_query>();
+       Helpers::make_query(user, query, key);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
 void KeyHelper::Strlen(User* user, const std::string& key)
 {
        std::shared_ptr<strlen_query> query = std::make_shared<strlen_query>();
