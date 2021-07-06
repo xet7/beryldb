@@ -28,24 +28,16 @@ CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
-       signed int offset;
-       signed int limit;
 
-       if (parameters.size() == 2)
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
        {
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
        MMapsHelper::Get(user, kmap, offset, limit);
        return SUCCESS;
@@ -147,5 +139,19 @@ COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
        }
 
        MMapsHelper::Seek(user, mname, hesh, offset, limit);
+       return SUCCESS;
+}
+
+CommandMRepeats::CommandMRepeats(Module* Creator) : Command(Creator, "MREPEATS", 2, 2)
+{
+         syntax = "<map> <key>";
+}
+
+COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap  = parameters[0];
+       const std::string& key = parameters[1];
+
+       MMapsHelper::Repeats(user, kmap, key);
        return SUCCESS;
 }

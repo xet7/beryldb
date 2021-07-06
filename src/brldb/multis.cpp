@@ -454,3 +454,16 @@ void mget_query::Process()
 
 }
 
+void mrepeats_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::shared_ptr<MultiMapHandler> handler = MultiMapHandler::Create(result.value);
+       this->response = convto_string(handler->Repeats(this->value));
+       this->SetOK();
+}
+
+void mrepeats_query::Process()
+{
+        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+}

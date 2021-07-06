@@ -181,6 +181,13 @@ void MultiMapHandler::Erase()
 
 }
 
+unsigned int MultiMapHandler::Repeats(const std::string& key)
+{
+       unsigned int counter =  this->mhandler.count(key);
+       this->LastMsg = HANDLER_MSG_OK;       
+       return counter;
+}
+
 std::vector<std::string> MultiMapHandler::Find(const std::string& key)
 {
       std::vector<std::string> results;

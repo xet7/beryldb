@@ -56,7 +56,6 @@ void MMapsHelper::Count(User* user, const std::string& entry)
 {
        std::shared_ptr<mget_query> query = std::make_shared<mget_query>();
        Helpers::make_mmap(user, query, entry);
-       
        query->flags = QUERY_FLAGS_COUNT;
        
        Kernel->Store->Push(query);
@@ -78,5 +77,14 @@ void MMapsHelper::Seek(User* user, const std::string& entry, const std::string& 
        query->value = stripe(hesh);
        query->offset = offset;
        query->limit = limit;
+       Kernel->Store->Push(query);
+}
+
+void MMapsHelper::Repeats(User* user, const std::string& key, const std::string& entry)
+{
+       std::shared_ptr<mrepeats_query> query = std::make_shared<mrepeats_query>();
+       Helpers::make_mmap(user, query, key);
+
+       query->value = entry;
        Kernel->Store->Push(query);
 }

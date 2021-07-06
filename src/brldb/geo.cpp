@@ -11,9 +11,6 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include <math.h>
-#include <cmath> 
-
 #include "beryl.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
@@ -29,7 +26,7 @@ void geoadd_query::Run()
 
 void geoadd_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->key, PROCESS_OK);
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()

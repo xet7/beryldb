@@ -68,3 +68,13 @@ class CommandMSeek : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandMRepeats : public Command 
+{
+    public: 
+
+        CommandMRepeats(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

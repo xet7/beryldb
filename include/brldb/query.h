@@ -539,6 +539,21 @@ class ExportAPI sflush_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI mrepeats_query  : public QueryBase
+{
+    public:
+
+        mrepeats_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI mset_query  : public QueryBase
 {
     public:

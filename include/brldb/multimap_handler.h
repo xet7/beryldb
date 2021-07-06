@@ -42,6 +42,20 @@ class ExportAPI MultiMapHandler
         unsigned int Strlen(const std::string& key);
         
         std::string Get(const std::string& key);
+
+        /* 
+         * Counts repeats in a multimap.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to count.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Counter.
+         */            
+         
+        unsigned int Repeats(const std::string& key);
         
         bool Exists(const std::string& word);
         

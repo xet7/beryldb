@@ -33,5 +33,6 @@ class ExportAPI MMapsHelper
        
        static void Seek(User* user, const std::string& entry, const std::string& hesh, signed int offset, signed int limit);
        
+       static void Repeats(User* user, const std::string& key, const std::string& entry);
        
 };

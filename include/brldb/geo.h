@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <math.h>
+
 #define earth_radius_km 6371.0
 
 /* 
