@@ -22,9 +22,8 @@ internal processor. Beryl is written in C++ and is powered by [RocksDB](https://
 Beryl provides lists, maps, keys, and channel subscription for its clients. 
 Beryl is available for GNU/Linux, FreeBSD and MacOS.
 
-Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
-
-Don't forget to follow us on [Twitter](https://twitter.com/beryldb)
+* Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
+* We are on [Twitter](https://twitter.com/beryldb).
 
 ## Why use it?
 

@@ -41,8 +41,6 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-        bprint(INFO, "Loading settings.");
-  
         Args confs = STHelper::HKeys("conf");
         
         for (Args::iterator i = confs.begin(); i != confs.end(); i++)
@@ -50,6 +48,8 @@ void Settings::Load()
              std::string key = *i;
              this->SetMap[key] = STHelper::Get("conf", key);
         }
+        
+        bprint(DONE, "Settings loaded.");
 }
 
 void Settings::Set(const std::string& key, const std::string& value)

@@ -119,6 +119,7 @@ void Beryl::Initialize()
 	}
 	else
 	{
+	        do_newline;
 	        bprint(INFO, "This server will %s detach (--nofork provided).", Daemon::Welcome("NOT").c_str());
         	do_newline;
 	}
@@ -183,14 +184,16 @@ void Beryl::Initialize()
 
         this->Store->DBM->OpenAll();
 	
-	/* If applies, Detach() sends BerylDB to the background. */
-	
-	this->Detach();
-
         /* Loads all modules (both, core and modules will be loaded). */
 
         this->Modules->LoadAll();
+	
+	bprint(DONE, "PID: %u", getpid());
 
+        /* If applies, Detach() sends BerylDB to the background. */
+
+        this->Detach();
+	
         /* server name in bold. */
         
         bprint(DONE, "Beryl is now running as '%s'", Daemon::Welcome(this->Config->ServerName).c_str());

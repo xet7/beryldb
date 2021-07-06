@@ -55,13 +55,38 @@ class ExportAPI MapHandler
         void Remove(const std::string& key);
         
         void Dump();
+        
+        /* 
+         * Calculates the length of a string.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to calculate.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Length.
+         */    
 
         unsigned int Strlen(const std::string& key);
         
         std::string Get(const std::string& key);
         
         bool Exists(const std::string& word);
-        
+
+        /* 
+         * Deletes a key.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to delete.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Key has been deleted.
+         *         · False: Unable to delete key.
+         */            
+         
         bool Delete(const std::string& key);
         
         std::string as_string();

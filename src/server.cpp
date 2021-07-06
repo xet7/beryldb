@@ -104,11 +104,6 @@ void Beryl::CommandLine()
 	this->Config->usercmd.writepid = !do_nopid;
  	this->Config->usercmd.run_tests = !!do_tests;
 
-	if (!this->Config->usercmd.writepid)
-	{
-	       bprint(INFO, "This instance is not writing a PID file.");
-	}
-	 	
 #ifdef ENABLE_TESTOFFICE
         
         /* Enables testoffice.cpp and runs Run() */

@@ -116,11 +116,6 @@ std::string MultiMapHandler::Get(const std::string& key)
       return "";
 }
 
-unsigned int MultiMapHandler::Strlen(const std::string& key)
-{
-      return this->Get(key).length();
-}
-
 void MultiMapHandler::Remove(const std::string& key)
 {
       if (key.empty() || key == "")

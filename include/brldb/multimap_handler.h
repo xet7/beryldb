@@ -34,13 +34,19 @@ class ExportAPI MultiMapHandler
         void Erase();
         
         void Add(const std::string& key, const std::string& value);
-        
+
+        /* 
+         * Removes an item from mhandler.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to be removed.
+         */            
+         
         void Remove(const std::string& key);
         
         void Dump();
 
-        unsigned int Strlen(const std::string& key);
-        
         std::string Get(const std::string& key);
 
         /* 

@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <list>
+
 #define DONE 1
 #define INFO 2
 #define ERROR 3
