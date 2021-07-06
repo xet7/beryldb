@@ -19,30 +19,40 @@ class CoreModuleList : public Module
     private:
     
         CommandLPush cmdlpush;
-        CommandPop cmdlpop;
+        CommandLPopFront cmdlpopfront;
+        CommandLPopBack cmdlpopback;
         CommandPopAll cmdlpopall;
         CommandLGet cmdlget;
         CommandLExist cmdlexist;
         CommandLCount cmdlcount;
         CommandLMove cmdlmove;
         CommandLPos cmdlpos;
-        CommandLSearch cmdlsearch;
+        CommandLKeys cmdlkeys;
         CommandLFind cmdlfind;
-        CommandLRemove cmdlremove;
-
+        CommandLReverse cmdlreverse;
+        CommandLResize cmdlresize;
+        CommandLSort cmdlsort;
+        CommandLDel cmdldel;
+        CommandLRepeats cmdlrepeats;
+        
     public:	
         
         CoreModuleList() : cmdlpush(this),
-                           cmdlpop(this),
+                           cmdlpopfront(this),
+                           cmdlpopback(this),
                            cmdlpopall(this),
                            cmdlget(this),
                            cmdlexist(this),
                            cmdlcount(this),
                            cmdlmove(this),
                            cmdlpos(this),
-                           cmdlsearch(this),
+                           cmdlkeys(this),
                            cmdlfind(this),
-                           cmdlremove(this)
+                           cmdlreverse(this),
+                           cmdlresize(this),
+                           cmdlsort(this),
+                           cmdldel(this),
+                           cmdlrepeats(this)
 
         {
         

@@ -52,7 +52,7 @@ COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NONE);
+       KeyHelper::Touch(user, keys);
        return SUCCESS;
 }
 
@@ -65,33 +65,8 @@ COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
 {  
        const std::string& keys = parameters.back();
 
-       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_NTOUCH);
+       KeyHelper::NTouch(user, keys);
        return SUCCESS;
 }
 
-CommandTCount::CommandTCount(Module* Creator) : Command(Creator, "TCOUNT", 1, 1)
-{
-         syntax = "[keys]";
-}
-
-COMMAND_RESULT CommandTCount::Handle(User* user, const Params& parameters)
-{  
-       const std::string& keys = parameters.back();
-
-       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_TCOUNT);
-       return SUCCESS;
-}
-
-CommandConcat::CommandConcat(Module* Creator) : Command(Creator, "CONCAT", 1, 1)
-{
-         syntax = "[keys]";
-}
-
-COMMAND_RESULT CommandConcat::Handle(User* user, const Params& parameters)
-{  
-       const std::string& keys = parameters.back();
-
-       //KeyHelper::Touch(user, user->current_db, user->select, keys, "", TYPE_CONCAT);
-       return SUCCESS;
-}
 

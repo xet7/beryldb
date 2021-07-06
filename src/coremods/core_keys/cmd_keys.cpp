@@ -19,12 +19,12 @@
 #include "engine.h"
 #include "core_keys.h"
 
-CommandFind::CommandFind(Module* Creator) : Command(Creator, "FIND", 1, 3)
+CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 {
          syntax = "<\%key> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
@@ -64,7 +64,7 @@ COMMAND_RESULT CommandFind::Handle(User* user, const Params& parameters)
             offset = 0;
        }
        
-       KeyHelper::Find(user, key, offset, limit);
+       KeyHelper::Keys(user, key, offset, limit);
        return SUCCESS;
 }
 

@@ -20,6 +20,9 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/dbmanager.h"
 #include "managers/keys.h"
+#include "managers/globals.h"
+
+std::mutex FutureManager::mute;
 
 FutureManager::FutureManager()
 {
@@ -33,20 +36,12 @@ signed int FutureManager::Add(std::shared_ptr<Database> database, signed int sch
                 return -1;
         }
         
-        if (epoch)
-        {
-              /* We cannot add an expiring epoch that has already passed. */
-              
-              if (schedule < Kernel->Now())
-              {
-                    return -1;
-              }
-        }
-
         if (FutureManager::GetTIME(database, key, select) > 0)
         {
               FutureManager::Delete(database, key, select);
         }
+
+        std::lock_guard<std::mutex> lg(FutureManager::mute);
         
         time_t Now = Kernel->Now();
         FutureEntry New;
@@ -64,13 +59,10 @@ signed int FutureManager::Add(std::shared_ptr<Database> database, signed int sch
         
         New.database = database;
         New.key = key;
-        New.value = value;
         New.added = Now;
         New.secs = schedule;
         New.select = select;
-        
         Kernel->Store->Futures->FutureList.insert(std::make_pair(New.schedule, New));
-
         return New.schedule;
 }
 
@@ -84,6 +76,8 @@ bool FutureManager::Delete(std::shared_ptr<Database> database, const std::string
         {
                 return false;
         }
+
+        std::lock_guard<std::mutex> lg(FutureManager::mute);
 
         for (FutureMap::iterator it = all.begin(); it != all.end(); )
         {
@@ -131,8 +125,9 @@ void FutureManager::Flush(time_t TIME)
               }
               
               FutureEntry entry = it->second;
-              //KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
-              Kernel->Store->Futures->FutureList.erase(it++);
+              
+              GlobalHelper::FutureExecute(entry.database, entry.select, entry.key);
+              it++;
         }
 }
 
@@ -190,6 +185,8 @@ bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& 
 signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
         FutureMap& futures = Kernel->Store->Futures->GetFutures();
+        
+        std::lock_guard<std::mutex> lg(FutureManager::mute);
 
         for (FutureMap::iterator it = futures.begin(); it != futures.end(); it++)
         {
@@ -206,11 +203,13 @@ signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std:
 
 signed int FutureManager::GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
       return FutureManager::GetTIME(database, key, select);
 }
 
 FutureMap& FutureManager::GetFutures()
 {
+       std::lock_guard<std::mutex> lg(FutureManager::mute);
        return this->FutureList;
 }
 
@@ -219,13 +218,57 @@ void FutureManager::Reset()
       Kernel->Store->Futures->FutureList.clear();
 }
 
-unsigned int FutureManager::SelectReset(std::shared_ptr<Database> database, const std::string& select)
+unsigned int FutureManager::DatabaseReset(const std::string& dbname)
+{
+      FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+
+      if (!expiring.size())
+      {
+              return 0;
+      }
+
+      unsigned int counter = 0;
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return 0;
+      }
+
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
+      
+      for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+            if (it->second.database == database)
+            {
+                       FutureEntry entry = it->second;
+                       GlobalHelper::FutureExecute(entry.database, entry.select, entry.key);
+                       counter++;
+            }
+
+            it++;
+      }  
+      
+      return counter;
+}
+
+unsigned int FutureManager::SelectReset(const std::string& dbname, const std::string& select)
 {
       /* Keeps track of deleted expires */
 
       unsigned int counter = 0;
 
       FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+            return 0;
+      }
+
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
 
       for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); )
       {

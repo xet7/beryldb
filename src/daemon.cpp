@@ -20,7 +20,7 @@ const char* ExitMap[] =
            "Core error",
            "Config file error",
            "Logfile error",
-           "POSIX fork failed",
+           "Unable to fork",
            "Bad commandline parameters",
            "Unable to write PID file",
            "Problem with SocketPool",
@@ -29,7 +29,8 @@ const char* ExitMap[] =
            "Received SIGTERM",
            "Database error",
            "SIG INT received",
-           "Shutdown command received"
+           "Shutdown command received",
+           "Unable to create threads."
 };
 
 unsigned const char *locale_case_insensitive_map = brld_case_insensitive_map;
@@ -85,6 +86,25 @@ bool Daemon::LoginValidator(const std::string& login)
 	}
 
 	return true;
+}
+
+bool Daemon::KeyValidator(const std::string& key)
+{
+        if (key.empty())
+        {
+                return false;
+        }
+
+        std::string lkey = key;
+        
+        /* * is invalid. */
+        
+        if (lkey.find("*") != std::string::npos || lkey.find(":") != std::string::npos)
+        {
+        	 return false;
+        }
+        
+        return true;
 }
 
 bool Daemon::AgentValidator(const std::string& agent)
@@ -376,42 +396,3 @@ void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, c
         }
 }
 
-void Dispatcher::Smart(User* user, int status, BRLD_PROTOCOL brld, const std::string& msg, std::shared_ptr<query_base> query)	
-{
-	if (user->agent ==  DEFAULT_EMERALD)
-	{
-		if (query->qtype == TYPE_NONE)
-		{
-			if (query->type == DBL_NONE)
-			{
-                                user->SendProtocol(brld, query->type, msg);
-                        }
-                        else
-                        {
-                        	user->SendProtocol(brld, query->qtype, query->type, msg);
-			}
-		}
-		else
-		{
-		        if (query->type == DBL_NONE)
-                        {
-                                user->SendProtocol(brld, query->type, msg);
-                        }
-                        else
-                        {
-                                user->SendProtocol(brld, query->qtype, query->type, msg);
-                        }
-		}
-	}
-	else
-	{
-                if (query->type == DBL_NONE)
-                {
-                                user->SendProtocol(brld, status, query->database->GetName(), query->select_query, query->key);
-                }
-                else
-                {
-                                user->SendProtocol(brld, status, msg);
-                }
-	}
-}

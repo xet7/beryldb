@@ -58,13 +58,13 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
 
        if (!is_number(use))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
                  return FAILED;
        }
 
        if (!is_positive_number(use))
        {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
                 return FAILED;
        }
        
@@ -75,13 +75,12 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        
        if (user->select == use)
        {
-             user->SendProtocol(ERR_USE, use, Daemon::Format("You are already using %s", use.c_str()).c_str());
+             user->SendProtocol(ERR_USE, use, PROCESS_ALREADY);
              return FAILED;
        }
-       
       
        user->select = use;
-       user->SendProtocol(BRLD_NEW_USE, use, Daemon::Format("Selected changed to %s", use.c_str()).c_str());
+       user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
        
        return SUCCESS;
 }
@@ -113,7 +112,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        
        DataFlush::ResetAll();
        
-       user->SendProtocol(BRLD_DB_RESET, PROCESS_OK);
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
        
        return SUCCESS;
 }

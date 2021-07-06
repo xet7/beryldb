@@ -16,14 +16,14 @@
 #include "managers/user.h"
 #include "brldb/database.h"
 
-CommandChangePass::CommandChangePass(Module* parent) : Command(parent, "CHANGEPASS", 1, 2)
+CommandPasswd::CommandPasswd(Module* parent) : Command(parent, "PASSWD", 1, 2)
 {
         syntax = "<password>";
 }
 
-COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 {
-/*        if (parameters.size() < 2)
+        if (parameters.size() < 2)
         {
                 const std::string& pass = parameters[0];
 
@@ -42,7 +42,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
         
         /* Check if user has root access. */
         
-  /*      if (!user->IsAdmin())
+        if (!user->IsAdmin())
         {
                 user->SendProtocol(ERR_NO_FLAGS, user->login, ACCESS_DENIED);
                 return FAILED;        
@@ -69,7 +69,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        std::string exists = UserHelper::Find(newlogin, "created");
+        std::string exists = UserHelper::Find("created", newlogin);
         
         if (exists.empty())
         {
@@ -86,7 +86,7 @@ COMMAND_RESULT CommandChangePass::Handle(User* user, const Params& parameters)
                 user->SendProtocol(ERR_INVALID_PASS, pass, PASS_AT_LEAST);
                 return FAILED;
         }
-*/
+        
         return SUCCESS;
 }
 

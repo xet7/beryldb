@@ -97,6 +97,7 @@ class CoreModUser : public Module
 {
  private:
  
+	CommandILogin cmdilogin;
 	CommandLogin cmdlogin;
 	CommandPing cmdping;
 	CommandPong cmdpong;
@@ -107,7 +108,8 @@ class CoreModUser : public Module
 
  public:
  
-	CoreModUser() : cmdlogin(this)
+	CoreModUser() : cmdilogin(this)
+	                , cmdlogin(this)
 			, cmdping(this)
 			, cmdpong(this)
 			, cmdexit(this)

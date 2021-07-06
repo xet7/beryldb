@@ -415,14 +415,14 @@ unsigned int ClientManager::CountLogin(const std::string& login)
 UserVector ClientManager::FindLogin(const std::string& login, registration_state state)
 {
 	UserVector users;
-	
+
         const LoginHash& AllLogins = Kernel->Clients.GetLogins();
         
         for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
         {
                 User* user = i->second;
-                
-                if (i->first == login || user->registered == state)
+
+                if (i->first == login && user->registered == state)
                 {
  			users.push_back(user);               
                 }
@@ -439,9 +439,9 @@ User* ClientManager::FirstLogin(const std::string& login, registration_state sta
         {
                 User* user = i->second;
 
-                if (i->first == login || user->registered == state)
+                if (i->first == login && user->registered == state)
                 {
-                        return user;;
+                        return user;
                 }
         }
 
@@ -576,14 +576,14 @@ void ClientManager::Join(User* skip, const std::string& login, const std::string
 
            if (user == skip)
            {
-             continue;
+                 continue;
            }
 
            LocalUser* localuser = IS_LOCAL(user);
 
            if (localuser)
            {
-                 Channel::JoinUser(false, localuser, channel, true);
+                  Channel::JoinUser(false, localuser, channel, true);
            }
      }
 }

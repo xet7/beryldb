@@ -13,6 +13,7 @@
 
 #pragma once
 
+class Beryl;
 class LiveSocket;
 class Channel;
 class Command;
@@ -20,7 +21,6 @@ class config_status;
 class config_rule;
 class Expandable;
 class GlobalUser;
-class Beryl;
 class CoreDatabase;
 class Database;
 class QueueProvider;
@@ -42,6 +42,7 @@ class Database;
 class SessionManager;
 class Notifier;
 class CommandQueue;
+
 struct PendingCMD;
 
 #ifdef ENABLE_TESTOFFICE

@@ -16,18 +16,25 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/keys.h"
+#include "managers/globals.h"
 #include "engine.h"
 #include "core_keys.h"
 
-CommandDel::CommandDel(Module* Creator) : Command(Creator, "DEL", 1)
+
+CommandWDel::CommandWDel(Module* Creator) : Command(Creator, "WDEL", 1, 1)
 {
-         syntax = "<key>";
+         syntax = "<%key>";
 }
 
-COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string key = parameters[0];
+       const std::string& key = parameters[0];
+
+       if (!Daemon::CheckFormat(user, key))
+       {
+            return FAILED;
+       }
        
-       KeyHelper::Delete(user, key);
+       KeyHelper::WDelete(user, key);
        return SUCCESS;
 }

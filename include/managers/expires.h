@@ -25,8 +25,17 @@ class ExportAPI ExpireHelper
 
        static void ExpireAT(User* user, const std::string& entry, unsigned int ttl);
 
-       static void Persist(User* user, const std::string& entry);
-
        static void Persist(User* user, const std::string& entry, const std::string& select, std::shared_ptr<Database> db);
+       
+       static void Setex(User* user, unsigned int exp_usig, const std::string& key, const std::string& value);
+
+       static void QuickPersist(User* user, const std::string& key);
+
+       static void Future(User* user, const std::string& entry, unsigned int ttl, const std::string& value);
+
+       static void ListFutures(std::shared_ptr<Database> db);
+       
+       static void FutureAT(User* user, const std::string& entry, unsigned int ttl, const std::string& value);
+       
 
 };

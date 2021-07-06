@@ -13,7 +13,35 @@
 
 #pragma once
 
+/* Entry expires */
+
+const std::string ENTRY_EXPIRES = "ENTRY_EXPIRES";
+
+/* Invalid range. */
+
+const std::string INVALID_RANGE = "INVALID_RANGE";
+
+/* Already using */
+
+const std::string PROCESS_ALREADY = "ALREADY_USING";
+
+/* Database is busy. */
+
+const std::string DATABASE_BUSY = "DATABASE_BUSY";
+
+/* Entry is defined. */
+
+const std::string ENTRY_DEFINED = "ENTRY_DEFINED";
+
+/* Invalid format. */
+
+const std::string INVALID_FORMAT = "INVALID_TYPE";
+
+/* Database is null */
+
 const std::string DB_NULL = "DATABASE_NULL";
+
+/* Missing arguments */
 
 const std::string MIS_ARGS = "MISSING_ARGUMENTS";
 
@@ -40,6 +68,10 @@ const std::string INVALID_MLEVEL = "Invalid monitor level.";
 /* Invalid notification level */
 
 const std::string INVALID_NLEVEL = "Invalid notification level.";
+
+/* Not numeric. */
+
+const std::string PROCESS_NOT_NUM = "NOT_NUMERIC";
 
 /* Item not found. */
 
@@ -141,7 +173,7 @@ const std::string MUST_REAL_MSG = "Must be a real number.";
 
 /* These definitions must go in core_expire. */
 
-const std::string MUST_BE_NUMERIC = "Value provided must be numeric.";
+const std::string MUST_BE_NUMERIC = "MUST_BE_NUMERIC";
 
 /* The user most likely provided a negative number. */
 
@@ -155,9 +187,10 @@ const std::string UNABLE_EXPIRE = "Unable to set expire.";
 
 const std::string INT_REG = "9";
 
+
 /* Keys definition */
 
-const std::string INT_KEYS = "1";
+const std::string INT_KEY = "1";
 
 /* Map definition. */
 
@@ -171,9 +204,21 @@ const std::string INT_LIST = "3";
 
 const std::string INT_GEO = "4";
 
+/* Map definition. */
+
+const std::string INT_MMAP = "5";
+
+/* Vector definition. */
+
+const std::string INT_VECTOR = "6";
+
 /* Expires definition. */
 
 const std::string INT_EXPIRE = "8";
+
+/* Futures */
+
+const std::string INT_FUTURE = "9";
 
 /* Table expires. */
 
@@ -214,5 +259,19 @@ const std::string KEY_REMOVED = "Key removed.";
 /* A problem occured while obtaining key. */
 
 const std::string UNABLE_GET_KEY = "Unable to retrieve key.";
+
+/* Registry types. */
+
+const std::vector<std::string> TypeRegs = 
+{ 
+    INT_LIST, 
+    INT_KEY, 
+    INT_GEO, 
+    INT_MAP, 
+    INT_MMAP, 
+    INT_VECTOR, 
+    INT_EXPIRE, 
+    INT_FUTURE 
+};
 
 %target include/constants.h

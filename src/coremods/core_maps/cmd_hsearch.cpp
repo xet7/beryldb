@@ -16,127 +16,53 @@
 #include "brldb/dbnumeric.h"
 #include "managers/maps.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "engine.h"
 #include "core_maps.h"
 
-CommandHSearch::CommandHSearch(Module* Creator) : Command(Creator, "HSEARCH", 1, 3)
+CommandHFind::CommandHFind(Module* Creator) : Command(Creator, "HFIND", 1, 3)
 {
          syntax = "<map> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandHSearch::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
-       if (parameters.size() == 2)
+       if (lms[0] == 0)
        {
-             if (!is_zero_or_great(parameters[1]))
-             {
-                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                  return FAILED;
-             }
-
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
-             {
-                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                  return FAILED;
-             }
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
-
-       //MapsHelper::Search(user, user->current_db, user->select, key, offset, limit);
+       MapsHelper::Find(user, key, offset, limit);
 
        return SUCCESS;
 }
 
-CommandHSeek::CommandHSeek(Module* Creator) : Command(Creator, "HSEEK", 1, 3)
-{
-         syntax = "<hash> <offset> <limit>";
-}
-
-COMMAND_RESULT CommandHSeek::Handle(User* user, const Params& parameters)
-{  
-       const std::string& hesh = parameters[0];
-
-       signed int offset;
-       signed int limit;
-       
-       if (parameters.size() == 2)
-       {
-             if (!is_zero_or_great(parameters[1]))
-             {
-                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                  return FAILED;
-             }
-
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
-       }
-       else if (parameters.size() == 3)
-       {
-             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
-             {
-                  user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                  return FAILED;
-             }
-
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
-
-       //MapsHelper::SearchHesh(user, user->current_db, user->select, hesh, offset, limit);
-
-       return SUCCESS;
-}
-
-CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)
+CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 {
          syntax = "<map> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHList::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
-       if (parameters.size() == 2)
+       if (lms[0] == 0)
        {
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
-       MapsHelper::HKeys(user, key, offset, limit);
+       MapsHelper::List(user, key, offset, limit);
        return SUCCESS;
 }

@@ -70,20 +70,11 @@ class CommandFResetAll : public Command
 };
 
 
-class CommandFValue : public Command 
+class CommandFutureList : public Command 
 {
     public: 
 
-        CommandFValue(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandFutureCount : public Command 
-{
-    public: 
-
-        CommandFutureCount(Module* parent);
+        CommandFutureList(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

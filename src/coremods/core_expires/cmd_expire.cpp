@@ -32,17 +32,44 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
           
           if (!is_number(exp_str))
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_EXPIRE, MUST_BE_NUMERIC);
                  return FAILED;
           }
           
           if (!is_positive_number(exp_str))
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_POSIT.c_str());
+                 user->SendProtocol(ERR_EXPIRE, MUST_BE_POSIT);
                  return FAILED;
           }
                   
           unsigned int exp_usig = convto_num<unsigned int>(exp_str);
           ExpireHelper::Expire(user, key, exp_usig);
+          return SUCCESS;
+}
+
+CommandDBEReset::CommandDBEReset(Module* Creator) : Command(Creator, "ERESET", 1, 1)
+{
+          syntax = "<database>";
+}
+
+COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters) 
+{       
+          const std::string& dbname = parameters[0];
+    
+          std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+          if (!database)
+          {
+                user->SendProtocol(ERR_DB_NOT_FOUND, PROCESS_NULL);
+                return FAILED;
+          }
+          
+          if (database->IsClosing())
+          {
+                user->SendProtocol(ERR_DB_BUSY, DATABASE_BUSY);
+                return FAILED;
+          }
+
+          Kernel->Store->Expires->DatabaseReset(database->GetName());
           return SUCCESS;
 }

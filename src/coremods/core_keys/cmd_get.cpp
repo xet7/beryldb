@@ -37,20 +37,6 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandExists::CommandExists(Module* Creator) : Command(Creator, "EXISTS", 1)
-{
-         syntax = "<key>";
-}
-
-COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
-{  
-       const std::string& key = parameters[0];
-       
-       /* The 'true' parameter at the end indicates that we are performing an strlen query. */
-       
-       KeyHelper::Exists(user, key);
-       return SUCCESS;
-}
 
 CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1)
 {
@@ -80,22 +66,19 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandGetRange::CommandGetRange(Module* Creator) : Command(Creator, "GETRANGE", 3, 3)
+CommandGetSubstr::CommandGetSubstr(Module* Creator) : Command(Creator, "SUBSTR", 3, 3)
 {
          syntax = "<key> <from> <to>";
 }
 
-COMMAND_RESULT CommandGetRange::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 {
        const std::string& key = parameters[0];
 
-       int offset = 0;
-       int limit = 0;
-       
-       limit = convto_num<int>(parameters[2]); 
-       offset = convto_num<int>(parameters[1]);
+       int limit = convto_num<int>(parameters[2]); 
+       int offset = convto_num<int>(parameters[1]);
 
-       //KeyHelper::GetRange(user, user->current_db, user->select, key, offset, limit);
+       KeyHelper::GetSubstr(user, key, offset, limit);
        return SUCCESS;
 }
 

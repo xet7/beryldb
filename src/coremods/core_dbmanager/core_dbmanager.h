@@ -91,14 +91,6 @@ class CommandUsing : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandSwapDB : public Command 
-{
-    public: 
-
-        CommandSwapDB(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandDB : public Command 
 {
@@ -145,20 +137,39 @@ class CommandDBDelete : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandType : public Command 
-{
-    public: 
-
-        CommandType(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandDBTest : public Command 
 {
     public: 
 
         CommandDBTest(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDefault : public Command 
+{
+    public: 
+
+        CommandDefault(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandDBSetDefault : public Command 
+{
+    public: 
+
+        CommandDBSetDefault(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandFlushAll : public Command 
+{
+    public: 
+
+        CommandFlushAll(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

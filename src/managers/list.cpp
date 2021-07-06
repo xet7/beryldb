@@ -11,8 +11,6 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include <tuple>
-
 #include "beryl.h"
 #include "extras.h"
 #include "brldb/dbmanager.h"
@@ -20,220 +18,126 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/lists.h"
-#include "managers/maps.h"
+#include "helpers.h"
 
-/*VectorTuple //ListHelper::Get(const std::string& where, const std::string& key)
-{
-       std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
-
-       query->database = Kernel->Core->DB;
-       query->offset = 0;
-       query->limit = -1;
-       query->int_keys = INT_LIST;
-       query->select_query = where;
-       query->key = key;
-       query->core = true;
-
-       query->Run();
-       
-
-       return std::make_tuple(query->access, query->VecData);
-}
-
-DBL_CODE //ListHelper::Add(const std::string& where, const std::string& entry, const std::string& value)
+void ListHelper::Push(User* user, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();
-       query->database = Kernel->Core->DB;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = entry;
-       query->value = to_bin(value);
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
-       BasicTuple tuple = //MapsHelper::Get("lcounter", "id", query->format);
-       std::string lcounter = std::get<1>(tuple);
-
-       unsigned int id_num = 0;
-       id_num = convto_num<unsigned int>(lcounter);
-       id_num++;
-
-       query->id = id_num;
-       query->Run();
-
-       //MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
-
-
-       return DBL_MANAGER_OK;
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
 }
 
-DBL_CODE //ListHelper::Delete(const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst)
+void ListHelper::Get(User* user, const std::string& entry, signed int offset, signed int limit)
 {
-       std::shared_ptr<lpop_query> query = std::make_shared<lpop_query>();
-
-       query->database = Kernel->Core->DB;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = to_bin(entry);
-       query->value = to_bin(value);
-       query->all = onlyfirst;
-
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
+       std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
+       Helpers::make_list(user, query, entry);
        
-       query->Run();
+       query->offset = offset;
+       query->limit = limit;
        
-       return DBL_MANAGER_OK;
+       Kernel->Store->Push(query);
 }
 
-void //ListHelper::Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type)
+void ListHelper::PopFront(User* user, const std::string& entry)
+{
+       std::shared_ptr<lpop_front_query> query = std::make_shared<lpop_front_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::PopBack(User* user, const std::string& entry)
+{
+       std::shared_ptr<lpop_back_query> query = std::make_shared<lpop_back_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::Count(User* user, const std::string& entry)
+{
+       std::shared_ptr<lcount_query> query = std::make_shared<lcount_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::PopAll(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<lpopall_query> query = std::make_shared<lpopall_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::Reverse(User* user, const std::string& entry)
+{
+       std::shared_ptr<lreverse_query> query = std::make_shared<lreverse_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::Find(User* user, const std::string& entry, const std::string& value, signed int offset, signed int limit)
 {
        std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
-              
-       
-       query->database = db;
-       query->user = user;
+       Helpers::make_list(user, query, entry);
        query->offset = offset;
        query->limit = limit;
-       query->int_keys = INT_LIST;
-       query->select_query = where;
-       query->key = key;
        query->value = stripe(value);
-       query->qtype = type;
-
        Kernel->Store->Push(query);
 }
 
-
-void //ListHelper::Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+void ListHelper::Keys(User* user, const std::string& entry, signed int offset, signed int limit)
 {
-       std::shared_ptr<lsearch_query> query = std::make_shared<lsearch_query>();
-              
-
-       query->database = db;
-       query->user = user;
+       std::shared_ptr<lkeys_query> query = std::make_shared<lkeys_query>();
+       Helpers::make_list(user, query, entry, true);
        query->offset = offset;
        query->limit = limit;
-       query->int_keys = INT_LIST;
-       query->select_query = where;
-       query->key = key;
-       query->qtype = type;
-
        Kernel->Store->Push(query);
 }
 
-/* User helpers */
-/*
-void //ListHelper::Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type)
+void ListHelper::Resize(User* user, const std::string& entry, const std::string& value)
 {
-       std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->offset = offset;
-       query->limit = limit;
-       query->int_keys = INT_LIST;
-       query->select_query = where;
-       query->key = key;
-       query->qtype = type;
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
+       std::shared_ptr<lresize_query> query = std::make_shared<lresize_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = value;
        Kernel->Store->Push(query);
 }
 
-void //ListHelper::Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type, unsigned int index)
+void ListHelper::Sort(User* user, const std::string& entry)
 {
-       std::shared_ptr<lget_query> query = std::make_shared<lget_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->value = to_bin(stripe(value));
-       query->int_keys = INT_LIST;
-       query->id = index;
-       query->select_query = where;
-       query->key = key;
-       query->qtype = type;
-
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
+       std::shared_ptr<lsort_query> query = std::make_shared<lsort_query>();
+       Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
 
-void //ListHelper::Add(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value)
+void ListHelper::Index(User* user, const std::string& key, const std::string& entry)
 {
-       std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = entry;
-       query->value = to_bin(stripe(value));
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
-       BasicTuple tuple = //MapsHelper::Get("lcounter", "id", query->format);
-       std::string lcounter = std::get<1>(tuple);
-
-       unsigned int id_num = 0;
-       id_num = convto_num<unsigned int>(lcounter);
-       id_num++;
-
-       query->id = id_num;
+       std::shared_ptr<lpos_query> query = std::make_shared<lpos_query>();
+       Helpers::make_list(user, query, key);
+       query->value = entry;
        Kernel->Store->Push(query);
-
-       //MapsHelper::Set("lcounter", "id", query->format, convto_string(id_num));
 }
 
-void //ListHelper::Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& select, const std::string& key, const std::string& value)
+void ListHelper::Exist(User* user, const std::string& entry, const std::string& value)
 {
-       std::shared_ptr<lmove_query> query = std::make_shared<lmove_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = to_bin(key);
-       query->value = to_bin(stripe(value));
-       query->hesh = select;
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
+       std::shared_ptr<lexist_query> query = std::make_shared<lexist_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
        Kernel->Store->Push(query);
 }
 
-void //ListHelper::Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry,  const std::string& value, bool onlyfirst)
+void ListHelper::Del(User* user, const std::string& entry, const std::string& value)
 {
-       std::shared_ptr<lpop_query> query = std::make_shared<lpop_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = to_bin(entry);
-       query->value = to_bin(stripe(value));
-       query->all = onlyfirst;
-
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
+       std::shared_ptr<ldel_query> query = std::make_shared<ldel_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
        Kernel->Store->Push(query);
 }
 
-void //ListHelper::LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry)
+void ListHelper::Repeats(User* user, const std::string& entry, const std::string& value)
 {
-       std::shared_ptr<lremove_query> query = std::make_shared<lremove_query>();
-              
-
-       query->database = db;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_LIST;
-       query->key = to_bin(entry);
-
-       query->format = query->int_keys + ":" + query->select_query + ":" + to_bin(query->key);
-
+       std::shared_ptr<lrepeats_query> query = std::make_shared<lrepeats_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
        Kernel->Store->Push(query);
 }
 
-
-*/

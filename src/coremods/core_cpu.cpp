@@ -34,6 +34,11 @@ class ModuleCoreCPU : public Module
 
         }
         
+        void Initialize()
+        {
+                      Kernel->Interval->SleepMode(false);   
+        }
+        
         void Update()
         {
               rusage R;
@@ -69,20 +74,31 @@ class ModuleCoreCPU : public Module
         {
               if (!Kernel->Clients->GetLocals().size())
               {
-                   Kernel->Interval->SleepMode(true);
-                   return;
+                    Kernel->Interval->SleepMode(true);
+                    return;
               }
               
               this->Update();
               
-              if (this->usage > 1)
+              if (this->usage > 10)
               {
-                   usleep(10);
+                   usleep(100000);
               }
-              else if (this->usage > 2)
+              
+              if (this->usage > 5)
               {
-                    usleep(100);
+                   Kernel->Interval->SleepMode(true);
+                   return;
               }
+              
+              if (this->usage > 3)
+              {
+                    Kernel->Interval->SleepMode(true);
+                    return;
+              }
+              
+              Kernel->Interval->SleepMode(false);
+              
         }
 
         Version GetDescription() 

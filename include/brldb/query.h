@@ -14,38 +14,37 @@
 #pragma once
 
 #include "dbnumeric.h"
-
-enum MANAGER_TYPE
-{
-    MANAGER_TYPE_NONE  = 0,
-    MANAGER_TYPE_LIST = 1,
-    MANAGER_TYPE_SINGLE = 2
-};
+#include "brldb/database.h"
+#include "cstruct.h"
 
 enum QUERY_TYPE
 {
-    TYPE_NONE = 0,
-    TYPE_COUNT_RECORDS = 1,
-    TYPE_FIND = 2,
-    TYPE_EXIST  = 3,
-    TYPE_LENGTH = 4,
-    TYPE_EXPIRE = 5,
-    TYPE_SETEX	= 6,
-    TYPE_GETDEL = 7,
-    TYPE_GETSET = 8,
-    TYPE_GETRANGE  = 9,
-    TYPE_RENAME = 10,
-    TYPE_COPY = 11,
-    TYPE_RAKEY = 12,
-    TYPE_EXPIREAT = 13,
-    TYPE_NTOUCH = 14,
-    TYPE_TCOUNT = 15,
-    TYPE_CONCAT =  16,
-    TYPE_SETNX	= 18,
-    TYPE_SETTX = 19,
-    TYPE_LPOS = 20,
-    TYPE_RENAMENX = 21
-    
+       QUERY_TYPE_RENAME = 1,
+       QUERY_TYPE_COPY = 2,
+       QUERY_TYPE_TYPE = 3,
+       QUERY_TYPE_DELETE = 4,
+       QUERY_TYPE_ITER = 5,
+       QUERY_TYPE_WRITE = 6,
+       QUERY_TYPE_TEST = 7,
+       QUERY_TYPE_DBSIZE = 8,
+       QUERY_TYPE_OP  = 10,
+       QUERY_TYPE_READ = 11,
+       QUERY_TYPE_EXPIRE = 12,
+       QUERY_TYPE_EXISTS = 13,
+       QUERY_TYPE_SKIP = 14,
+       QUERY_TYPE_SETEX = 15,
+       QUERY_TYPE_MOVE = 16,
+       QUERY_TYPE_CLONE = 17,
+       QUERY_TYPE_FUTURE = 18,
+       QUERY_TYPE_FUTURE_RUN = 19
+};
+
+enum QUERY_FLAGS
+{
+      QUERY_FLAGS_NONE = 0,
+      QUERY_FLAGS_QUIET = 1,
+      QUERY_FLAGS_CORE = 2,
+      QUERY_FLAGS_COUNT = 9
 };
 
 enum OP_TYPE
@@ -60,27 +59,32 @@ enum OP_TYPE
     OP_MULT	=   7
 };
 
-class HQuery;
-
-class ExportAPI query_base
+class ExportAPI QueryBase
 {
-    public:
+    private:
+
+        /* True if this query has finished. */
+
+        bool finished;
         
-        bool check;
-        
-        bool write;
-        
-        bool iter;
-        
-        bool remove;
-        
-        DBL_CODE type;
-        
-        bool reverted;
-        
-        bool multi;
-        
+        /* Used to indicate wether a key is required or not. */
+
         bool key_required;
+
+        RocksData mapped;
+        
+    public:
+
+        void Required(bool flag)
+        {
+              this->key_required = flag;
+        }
+        
+        QUERY_FLAGS flags;
+        
+        QUERY_TYPE type;
+        
+        DBL_CODE access;
         
         std::string identified;
         
@@ -88,26 +92,12 @@ class ExportAPI query_base
         
         std::string base_request;
         
-        std::shared_ptr<HQuery> hquery;
-        
-        MANAGER_TYPE mtype;
-        
-        std::atomic<bool> Lock;
-        
-        time_t started;
-        
-        bool core;
-        
         unsigned int subresult;
         
         bool partial;
         
-        std::string customreply;
-
         std::string hesh;
             
-        std::string format;
-        
         std::string newkey;
         
         std::string key;
@@ -116,8 +106,6 @@ class ExportAPI query_base
        
         std::string length;
         
-        QUERY_TYPE qtype;
-             
         signed int offset;
         
         signed int limit;
@@ -128,14 +116,6 @@ class ExportAPI query_base
         
         unsigned int id;
 
-        /* Will not return any result */
-
-        bool quiet;
-
-        /* True if this query has finished. */
-        
-        bool finished;
-        
         /* Only first element */
         
         bool onlyfirst;
@@ -146,8 +126,6 @@ class ExportAPI query_base
         
         bool all;
 
-        Args q_args;
-        
         Args VecData;
         
         std::multimap<std::string, std::string> mmap;
@@ -158,20 +136,14 @@ class ExportAPI query_base
 
         User* user;
         
-        DBL_CODE access;
-        
         OP_TYPE operation;
         
         unsigned int counter;
-        
-        unsigned int counter2;
         
         signed int data;
         
         double size;
 
-        bool exists;
-        
         int from;
         
         int to;
@@ -181,780 +153,1430 @@ class ExportAPI query_base
             this->access = status;
         }
         
+        /* Query finished OK */
+        
         void SetOK()
         {
             this->finished  = true;
         }
         
-        query_base(const std::string& brequest, bool krequired = false, bool writeq = false) : check(false), write(writeq), iter(false), remove(false), reverted(false), multi(false), key_required(krequired), base_request(brequest), hquery(nullptr), mtype(MANAGER_TYPE_NONE), Lock(false), started(0), core(false), 
-                                    subresult(0), partial(false), qtype(TYPE_NONE), 
-                                    offset(0), limit(0), quiet(false), finished(false), onlyfirst(false), user(NULL), 
-                                    operation(OP_NONE), counter(0), counter2(0), data(0), size(0.0), exists(false), from(0), to(0)
-        {
+        /* Returns this->finished */
         
+        bool GetStatus()
+        {
+             return this->finished;
         }
         
-        query_base()
+        QueryBase() :  finished(false), key_required(false), flags(QUERY_FLAGS_NONE), access(DBL_NONE),  
+                        subresult(0), partial(false), offset(0), limit(0), user(NULL), 
+                        operation(OP_NONE), counter(0), data(0), size(0.0), from(0), to(0)
         {
-        
+              
         }
         
         bool Check();
         
         bool CheckKey();
-        
-        void DelExpire();
-        
-        std::string GetRegistry(const std::string& select, const std::string& key);
-        
-        void SetRegistry(const std::string& select, const std::string& base, const std::string& key);
 
-        void RemoveRegistry(const std::string& select, const std::string& base, const std::string& key);
+        void DelFuture();
+        
+        void DelExpire();	
+
+        /* 
+         * Checks whether a given key is expiring.
+         * 
+         * @return:
+ 	 *
+         *         · uint: Seconds.
+         */    
+         
+        unsigned int IsExpiring();
+
+        /* 
+         * Writes and adds an expire to the database.
+         * 
+         * @parameters:
+	 *
+	 *         · Expire information, including expiring time.
+         */    
+                 
+        void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl);
+        
+        void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);
+
+        bool Prepare();
+        
+        bool GetRegistry(const std::string& select, const std::string& regkey, bool do_load = false);
+        
+        void SetDest(const std::string& regkey, const std::string& regselect, const std::string& regtype);
+        
+        int CheckDest(const std::string& select, const std::string& regkey,  const std::string& ltype);
+
+        RocksData Get(const std::string& where);
+        
+        /* 
+         * Writes an entry to the database.
+         * 
+         * @parameters:
+	 *
+	 *         · dest: identifier.
+	 *         · value: Value to store.
+         */          
+           
+        void Write(const std::string& wdest, const std::string& lvalue);        
+        
+        void Delete(const std::string& wdest);
         
         virtual void Run() = 0;
         
         virtual void Process() = 0;
         
-        virtual ~query_base()
+        virtual ~QueryBase()
         {
         
         }
 };
 
-class ExportAPI get_query  : public query_base
+class ExportAPI routed_query : public QueryBase
 {
-    public:
-
-        get_query() : query_base(INT_KEYS, true)
+   public:
+   
+        routed_query(QUERY_TYPE ttype) : QueryBase()
         {
+                 this->type = ttype;
+                 
+        }
+
+        virtual void Keys() = 0;
         
-        }
+        virtual void Maps() = 0;
         
-        void Run();
+        virtual void Geos() = 0;
         
-        void Process();
+        virtual void Multis() = 0;
+
 };
 
-class ExportAPI getset_query  : public query_base
+class ExportAPI rename_query : public routed_query
 {
-    public:
+   public:
 
-        getset_query() : query_base(INT_KEYS, true)
+        rename_query() : routed_query(QUERY_TYPE_RENAME)
         {
 
         }
 
-        void Run();
+        void Keys();
 
-        void Process();
-};
+        void Maps();
 
-class ExportAPI rename_query  : public query_base
-{
-    public:
-
-        rename_query() : query_base(INT_KEYS, true)
-        {
-              this->check = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI copy_query  : public query_base
-{
-    public:
-
-        copy_query() : query_base(INT_KEYS, true)
-        {
-              this->check = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI exists_query  : public query_base
-{
-    public:
-
-        exists_query() : query_base(INT_KEYS, true)
-        {
-             this->check = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI strlen_query  : public query_base
-{
-    public:
-
-        strlen_query() : query_base(INT_KEYS, true)
-        {
-            
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI set_query  : public query_base
-{
-    public:
-
-        set_query() : query_base(INT_KEYS, true, true)
-        {
-
-        }
-
-        void Run();
-
-        void Process();
-
-};
-
-class ExportAPI search_query : public query_base
-{
-    public:
-
-        search_query() : query_base(INT_KEYS, true)
-        {
-               this->iter = true;
-        }
-
-        void Run();
+        void Geos();
         
-        void Process();
-};
-
-
-class ExportAPI getdel_query  : public query_base
-{
-    public:
-
-        getdel_query() : query_base(INT_KEYS, true)
-        {
-                this->check = true;
-        }
-
-        void Run();
-
-        void Process();
-
-};
-
-class ExportAPI op_query  : public query_base
-{
-    public:
-
-        op_query() : query_base(INT_KEYS, true)
-        {
-                this->type = DBL_TYPE_OP;
-        }
-
-        void Run();
-
-        void Process();
-
-};
-
-class ExportAPI hset_query : public query_base
-{
-    public:
+        void Multis();
         
-        hset_query() : query_base(INT_MAP, true, true)
-        {
-        
-        }
+        void Lists();
         
         void Run();
         
         void Process();
 };
 
-class ExportAPI type_query : public query_base
+class ExportAPI del_query : public routed_query
 {
     public:
-        
-        type_query() : query_base(INT_REG, true)
+
+        del_query() : routed_query(QUERY_TYPE_DELETE)
         {
         
         }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
         
+        void Lists();
+
         void Run();
+
+        void Process();
+};
+
+class ExportAPI move_query : public routed_query
+{
+    public:
+
+        move_query() : routed_query(QUERY_TYPE_MOVE)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
+        void Lists();
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI clone_query : public routed_query
+{
+   public:
+
+        clone_query() : routed_query(QUERY_TYPE_CLONE)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
+        void Lists();
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI copy_query : public routed_query
+{
+   public:
+
+        copy_query() : routed_query(QUERY_TYPE_COPY)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
+        void Lists();
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI exists_query : public routed_query
+{
+   public:
+
+        exists_query() : routed_query(QUERY_TYPE_EXISTS)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
         
+        void Lists();
+
+        void Run();
+
         void Process();
 };
 
-class ExportAPI hget_query : public query_base
+
+class ExportAPI hstrlen_query  : public QueryBase
 {
     public:
 
-        hget_query() : query_base(INT_MAP, true)
+        hstrlen_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MAP;
         }
 
         void Run();
+
+        void Process();
+};
+
+
+class ExportAPI type_query  : public QueryBase
+{
+    public:
+
+        type_query() 
+        {
+                this->type = QUERY_TYPE_TYPE;
+        }
         
-        void Process();
-};
-
-class ExportAPI del_query : public query_base
-{
-    public:
-
-        del_query() : query_base(INT_KEYS, true)
-        {
-              this->remove = true;
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI hexists_query : public query_base
-{
-    public:
-
-        hexists_query() : query_base(INT_MAP, true)
-        {
-               this->check = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI count_query : public query_base
-{
-    public:
-
-        count_query() : query_base(INT_KEYS, true)
-        {
-               this->iter = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-
-class ExportAPI hdel_query : public query_base
-{
-    public:
-
-        hdel_query() : query_base(INT_MAP, true)
-        {
-              this->remove = true;
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI expire_del_query : public query_base
-{
-    public:
-
-        expire_del_query() : query_base(INT_EXPIRE, true)
-        {
-
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI test_dump_query : public query_base
-{
-    public:
-
-        test_dump_query() : query_base("0", false)
-        {
-
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI expire_query : public query_base
-{
-    public:
-
-        expire_query() : query_base(INT_EXPIRE, true, false)
-        {
-
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI expire_list_query : public query_base
-{
-    public:
-
-        expire_list_query() : query_base(INT_EXPIRE, false, false)
-        {
-             this->iter = true;
-        }
-
-        void Run();
-        
-        void Process();
-};
-
-class ExportAPI expireat_query : public query_base
-{
-    public:
-
-        expireat_query() : query_base(INT_EXPIRE, true, false)
-        {
-
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI find_query : public query_base
-{
-    public:
-
-        find_query() : query_base(INT_KEYS, true)
-        {
-               this->iter = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI hkeys_query : public query_base
-{
-    public:
-
-        hkeys_query() : query_base(INT_MAP, true)
-        {
-               this->iter = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI dbsize_query : public query_base
-{
-    public:
-
-        dbsize_query() : query_base("0", true)
-        {
-               this->iter = true;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-
-
-
-/*
-class ExportAPI swapdb_query : public query_base
-{
-    public:
-
-        swapdb_query() : query_base(DBL_TYPE_SWAPDB)
-        {
-
-        }
-
         void Run();
         
+        void Process();
 };
 
 
-
-class ExportAPI search_query : public query_base
+class ExportAPI test_dump_query  : public QueryBase
 {
     public:
 
-        search_query() : query_base(DBL_TYPE_KSEARCH)
+        test_dump_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI lmove_query : public query_base
+class ExportAPI getdel_query  : public QueryBase
 {
     public:
 
-        lmove_query() : query_base(DBL_TYPE_LMOVE)
+        getdel_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI lpush_query : public query_base
-{
-    public:	
-    
-        lpush_query() : query_base(DBL_TYPE_LPUSH)
-        {
 
-        }
-
-        void Run();
-};
-
-class ExportAPI lget_query : public query_base
+class ExportAPI getset_query  : public QueryBase
 {
     public:
 
-        lget_query() : query_base(DBL_TYPE_LGET)
+        getset_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI lpop_query : public query_base
+class ExportAPI touch_query  : public QueryBase
 {
     public:
 
-        lpop_query() : query_base(DBL_TYPE_LPOP)
+        touch_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI  llist_query : public query_base
+class ExportAPI ntouch_query  : public QueryBase
 {
     public:
 
-        DualMap dmap;
-
-        llist_query() : query_base(DBL_TYPE_LLIST)
+        ntouch_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-
-class ExportAPI del_query  : public query_base
+class ExportAPI count_query  : public QueryBase
 {
     public:
 
-        del_query() : query_base(DBL_TYPE_DEL)
+        count_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI find_query  : public query_base
+class ExportAPI sflush_query  : public QueryBase
 {
     public:
 
-        find_query() : query_base(DBL_TYPE_FIND)
+        sflush_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI hsearch_query  : public query_base
+class ExportAPI mset_query  : public QueryBase
 {
     public:
 
-        hsearch_query() : query_base(DBL_TYPE_SEARCH)
+        mset_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_MMAP;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geofind_query  : public query_base
+class ExportAPI hsetnx_query  : public QueryBase
 {
     public:
 
-        geofind_query() : query_base(DBL_TYPE_GEOFIND)
+        hsetnx_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_MAP;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI move_query  : public query_base
+class ExportAPI hset_query  : public QueryBase
 {
     public:
 
-        move_query() : query_base(DBL_TYPE_MOVE)
+        hset_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_MAP;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI hdel_all_query  : public query_base
+class ExportAPI georem_query  : public QueryBase
 {
     public:
 
-        hdel_all_query() : query_base(DBL_TYPE_HDEL_ALL)
+        georem_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_GEO;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI hsearch_hesh_query  : public query_base
+class ExportAPI geocalc_query  : public QueryBase
 {
     public:
 
-        hsearch_hesh_query() : query_base(DBL_TYPE_HSEARCH)
+        geocalc_query() 
         {
-
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_GEO;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI hkeys_query  : public query_base
+class ExportAPI geoadd_query  : public QueryBase
 {
     public:
 
-        hkeys_query() : query_base(DBL_TYPE_HKEYS)
+        geoadd_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_GEO;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI advget_query  : public query_base
+class ExportAPI geoget_query  : public QueryBase
 {
     public:
 
-        advget_query() : query_base(DBL_TYPE_ADVGET)
+        geoget_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_GEO;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI dbsize_query  : public query_base
+
+class ExportAPI lpush_query  : public QueryBase
 {
     public:
 
-        dbsize_query() : query_base(DBL_TYPE_DBSIZE)
+        lpush_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI hmove_query  : public query_base
+class ExportAPI vpush_query  : public QueryBase
 {
     public:
 
-        hmove_query() : query_base(DBL_TYPE_HMOVE)
+        vpush_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI touch_query  : public query_base
+class ExportAPI vget_query  : public QueryBase
 {
     public:
 
-        touch_query() : query_base(DBL_TYPE_TOUCH)
+        vget_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI append_query  : public query_base
+class ExportAPI vresize_query  : public QueryBase
 {
     public:
 
-        append_query() : query_base(DBL_TYPE_APPEND)
+        vresize_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI lsearch_query  : public query_base
+class ExportAPI lexist_query  : public QueryBase
 {
     public:
 
-        lsearch_query() : query_base(DBL_TYPE_LSEARCH)
+        lexist_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI hquery_query  : public query_base
+class ExportAPI vexist_query  : public QueryBase
 {
     public:
 
-        hquery_query() : query_base(DBL_TYPE_HQUERY)
+        vexist_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-
-class ExportAPI sflush_query  : public query_base
+class ExportAPI vrepeats_query  : public QueryBase
 {
     public:
 
-        sflush_query() : query_base(DBL_TYPE_SFLUSH)
+        vrepeats_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geoadd_query : public query_base
+
+class ExportAPI lrepeats_query  : public QueryBase
 {
     public:
 
-        geoadd_query() : query_base(DBL_TYPE_GEOADD)
+        lrepeats_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geoget_query : public query_base
+
+class ExportAPI lresize_query  : public QueryBase
 {
     public:
 
-        geoget_query() : query_base(DBL_TYPE_GEOGET)
+        lresize_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geodel_query : public query_base
+class ExportAPI vcount_query  : public QueryBase
 {
     public:
 
-        geodel_query() : query_base(DBL_TYPE_GEODEL)
+        vcount_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geocalc_query : public query_base
+class ExportAPI lcount_query  : public QueryBase
 {
     public:
 
-        geocalc_query() : query_base(DBL_TYPE_GEOCALC)
+        lcount_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI lremove_query : public query_base
+class ExportAPI lget_query  : public QueryBase
 {
     public:
 
-        lremove_query() : query_base(DBL_TYPE_LREMOVE)
+        lget_query() 
         {
-
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI geoclose_query : public query_base
+class ExportAPI setnx_query  : public QueryBase
 {
     public:
 
-        geoclose_query() : query_base(DBL_TYPE_GEOCLOSE)
+        setnx_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
-class ExportAPI georemove_query : public query_base
+class ExportAPI settx_query  : public QueryBase
 {
     public:
 
-        georemove_query() : query_base(DBL_TYPE_GEOREMOVE)
+        settx_query() 
         {
-
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
         }
 
         void Run();
+
+        void Process();
 };
 
 
+class ExportAPI set_query  : public QueryBase
+{
+    public:
 
-*/
+        set_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lpop_front_query  : public QueryBase
+{
+    public:
+
+        lpop_front_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lpop_back_query  : public QueryBase
+{
+    public:
+
+        lpop_back_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vpop_front_query  : public QueryBase
+{
+    public:
+
+        vpop_front_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vpop_back_query  : public QueryBase
+{
+    public:
+
+        vpop_back_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI verase_from_query  : public QueryBase
+{
+    public:
+
+        verase_from_query() 
+        {
+                this->type = QUERY_TYPE_DELETE;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lsort_query  : public QueryBase
+{
+    public:
+
+        lsort_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vpos_query  : public QueryBase
+{
+    public:
+
+        vpos_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI lpos_query  : public QueryBase
+{
+    public:
+
+        lpos_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vreverse_query  : public QueryBase
+{
+    public:
+
+        vreverse_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lreverse_query  : public QueryBase
+{
+    public:
+
+        lreverse_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vkeys_query  : public QueryBase
+{
+    public:
+
+        vkeys_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lkeys_query  : public QueryBase
+{
+    public:
+
+        lkeys_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lfind_query  : public QueryBase
+{
+    public:
+
+        lfind_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lpopall_query  : public QueryBase
+{
+    public:
+
+        lpopall_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI mdel_query  : public QueryBase
+{
+    public:
+
+        mdel_query() 
+        {
+                this->type = QUERY_TYPE_DELETE;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI ldel_query  : public QueryBase
+{
+    public:
+
+        ldel_query() 
+        {
+                this->type = QUERY_TYPE_DELETE;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vdel_query  : public QueryBase
+{
+    public:
+
+        vdel_query() 
+        {
+                this->type = QUERY_TYPE_DELETE;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI hdel_query  : public QueryBase
+{
+    public:
+
+        hdel_query() 
+        {
+                this->type = QUERY_TYPE_DELETE;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI mget_query  : public QueryBase
+{
+    public:
+
+        mget_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI op_query  : public QueryBase
+{
+    public:
+
+        op_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI mseek_query  : public QueryBase
+{
+    public:
+
+        mseek_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hget_query  : public QueryBase
+{
+    public:
+
+        hget_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI get_query  : public QueryBase
+{
+    public:
+
+        get_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI get_substr_query  : public QueryBase 
+{
+    public:
+
+        get_substr_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI strlen_query  : public QueryBase
+{
+    public:
+
+        strlen_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI append_query  : public QueryBase
+{
+    public:
+
+        append_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI hexists_query  : public QueryBase
+{
+    public:
+
+        hexists_query() 
+        {
+                this->type = QUERY_TYPE_EXISTS;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI geodistance_query : public QueryBase
+{
+    public:
+
+        geodistance_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI future_list_query  : public QueryBase
+{
+    public:
+
+        future_list_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
+class ExportAPI expire_list_query  : public QueryBase
+{
+    public:
+
+        expire_list_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI setex_query  : public QueryBase
+{
+    public:
+
+        setex_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI future_del_query  : public QueryBase
+{
+    public:
+
+        future_del_query() 
+        {
+                this->type = QUERY_TYPE_FUTURE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI future_query  : public QueryBase
+{
+    public:
+
+        future_query() 
+        {
+                this->type = QUERY_TYPE_FUTURE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI expire_query  : public QueryBase
+{
+    public:
+
+        expire_query() 
+        {
+                this->type = QUERY_TYPE_EXPIRE;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI expireat_query  : public QueryBase
+{
+    public:
+
+        expireat_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI future_exec_query  : public QueryBase
+{
+    public:
+
+        future_exec_query() 
+        {
+                this->type = QUERY_TYPE_FUTURE_RUN;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI expire_del_query  : public QueryBase
+{
+    public:
+
+        expire_del_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hlist_query  : public QueryBase
+{
+    public:
+
+        hlist_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI mexists_query  : public QueryBase
+{
+    public:
+
+        mexists_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI mkeys_query  : public QueryBase
+{
+    public:
+
+        mkeys_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hwdel_query  : public QueryBase
+{
+    public:
+
+        hwdel_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI wdel_query  : public QueryBase
+{
+    public:
+
+        wdel_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI search_query  : public QueryBase
+{
+    public:
+
+        search_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
+                
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI gkeys_query  : public QueryBase
+{
+    public:
+
+        gkeys_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hfind_query  : public QueryBase
+{
+    public:
+
+        hfind_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI keys_query  : public QueryBase
+{
+    public:
+
+        keys_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI dbsize_query  : public QueryBase
+{
+    public:
+
+        dbsize_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->Required(false);
+        }
+
+        void Run();
+
+        void Process();
+};

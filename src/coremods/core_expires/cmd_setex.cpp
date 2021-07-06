@@ -53,8 +53,7 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
           /* We convert expiring time to int. */
           
           unsigned int exp_usig = convto_num<unsigned int>(exp_str);
-          //KeyHelper::Expire(user, user->current_db, user->select, key, TYPE_SETEX, exp_usig, value);
-
+          ExpireHelper::Setex(user, exp_usig, key, value);
           return SUCCESS;
 }
 

@@ -54,14 +54,6 @@ class CommandGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandDel : public Command 
-{
-    public: 
-
-        CommandDel(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandStrlen : public Command 
 {
@@ -72,11 +64,11 @@ class CommandStrlen : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandFind : public Command 
+class CommandKeys : public Command 
 {
     public: 
 
-        CommandFind(Module* Creator);
+        CommandKeys(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -90,25 +82,6 @@ class CommandCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMove : public Command 
-{
-    public: 
-
-        CommandMove(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-/* Checks if a given key exists. */
-
-class CommandExists : public Command 
-{
-    public: 
-
-        CommandExists(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class  CommandGetDel : public Command 
 {
@@ -129,39 +102,11 @@ class  CommandGetSet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class  CommandGetRange : public Command 
+class CommandGetSubstr : public Command 
 {
     public: 
 
-         CommandGetRange(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandRename : public Command 
-{
-    public: 
-
-         CommandRename(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandRenameNX : public Command 
-{
-    public: 
-
-        CommandRenameNX(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
-class CommandCopy : public Command 
-{
-    public: 
-
-         CommandCopy(Module* Creator);
+        CommandGetSubstr(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -195,23 +140,6 @@ class CommandNTouch : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandTCount : public Command 
-{
-    public: 
-
-        CommandTCount(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandConcat : public Command 
-{
-    public: 
-
-        CommandConcat(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 
 class CommandAppend : public Command 
@@ -232,3 +160,12 @@ class CommandSearch : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
+class CommandWDel : public Command 
+{
+    public: 
+
+        CommandWDel(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

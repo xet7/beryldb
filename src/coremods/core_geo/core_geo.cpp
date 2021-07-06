@@ -20,15 +20,14 @@ class CoreModuleGeo : public Module
     
         CommandGeoAdd cmdgeoadd;
         CommandGeoGet cmdgeoget;
-        CommandGeoDel cmdgeodel;
         CommandGFind cmdgfind;
         CommandGeoCalc cmdgcalc;
-        CommandGeoClose cmdgeoclose;
+        CommandGeoDistance cmdgeoclose;
         CommandGeoRemove cmdgeoremove;
 
     public:     
         
-        CoreModuleGeo() : cmdgeoadd(this), cmdgeoget(this), cmdgeodel(this),
+        CoreModuleGeo() : cmdgeoadd(this), cmdgeoget(this), 
                           cmdgfind(this), cmdgcalc(this), cmdgeoclose(this),
                           cmdgeoremove(this)
         {

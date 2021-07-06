@@ -43,6 +43,8 @@ void LogHandler::OpenLogs()
 	std::map<std::string, FileHandler*> logmap;
 	MultiTag tags = Kernel->Config->GetTags("log");
 	
+	unsigned int counter = 0;
+	
 	for (config_iterator i = tags.first; i != tags.second; ++i)
 	{
 		config_rule* tag = i->second;
@@ -84,7 +86,7 @@ void LogHandler::OpenLogs()
 		}
 		
 		FileHandler* fw;
-		std::string target = Kernel->Config->Paths.PrependLog(tag->as_string("target"));
+		std::string target = Kernel->Config->Paths.SetWDLog(tag->as_string("target"));
 		std::map<std::string, FileHandler*>::iterator fwi = logmap.find(target);
 		
 		if (fwi == logmap.end())
@@ -105,6 +107,13 @@ void LogHandler::OpenLogs()
 		OutStream* fls = new OutStream(loglevel, fw);
 		fls->WriteLog(LOG_MISC, "INIT", LogStream::StreamHead);
 		AttachTypes(type, fls, true);
+		
+		counter++;
+	}
+	
+	if (counter > 0)
+	{
+		iprint(counter, "Log stream%s initialized.", counter > 1 ? "s" : "");
 	}
 }
 

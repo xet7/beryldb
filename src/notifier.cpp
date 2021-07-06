@@ -47,7 +47,7 @@ void Notifier::Remove(User* user)
         this->NotifyList.erase(user);
 }
 
-void Notifier::SPush(User* skip, NOTIFY_LEVEL level, const std::string& buff)
+void Notifier::SkipPush(User* skip, NOTIFY_LEVEL level, const std::string& buff)
 {
         if (!this->NotifyList.size() || buff.empty() || !skip || skip->IsQuitting())
         {
@@ -58,11 +58,11 @@ void Notifier::SPush(User* skip, NOTIFY_LEVEL level, const std::string& buff)
         this->events.push_back(adding);
 }
 
-void Notifier::SPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) 
+void Notifier::SkipPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) 
 {
        std::string buff;
        SCHEME(buff, fmt, fmt);
-       this->SPush(skip, level, buff);
+       this->SkipPush(skip, level, buff);
 }
 
 void Notifier::Push(NOTIFY_LEVEL level, const std::string& buff)
@@ -131,6 +131,10 @@ void Notifier::Flush()
        this->events.pop_front();
 }
 
-
+void Notifier::Reset()
+{
+       this->events.clear();
+       this->NotifyList.clear();
+}
 
 

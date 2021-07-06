@@ -18,6 +18,8 @@
 #include "managers/settings.h"
 #include "managers/user.h"
 
+std::mutex User::db_mute;
+
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) :
@@ -28,11 +30,9 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 				        , age(Kernel->Now())
 					, connected(0)
 					, logged(0)
-					, hquery(nullptr)
 					, uuid(uid)
 					, server(srv)
 					, session(nullptr)
-					, current_db(nullptr)
 					, select("1")
 					, registered(REG_NONE)
                                         , usertype(type)
@@ -49,26 +49,12 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 		}
 	}
 	
+	SetNullDB();
+	
 	/* By default, usersr are not quitting. */
 	
         SetQuit(false);
 	
-	/* Default database assignation. */
-
-/*	const std::string dbuser = STHelper::Get("dbuser", this->login);
-	
-	if (dbuser.empty())
-	{
-
-	}
-	else
-	{
-		this->current_db = Kernel->Store->GetDefault();
-	}
-*/
-
-	this->current_db = Kernel->Store->GetDefault();
-
 	/* Any user should be allowed to process queries by default. */
 		
 	this->SetLock(false);
@@ -114,14 +100,22 @@ User::~User()
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
 
-void User::SetDatabase(std::shared_ptr<UserDatabase>& database)
+void User::SetNullDB()
 {
+        std::lock_guard<std::mutex> lg(User::db_mute);
+        this->current_db = nullptr;
+}
 
+void User::SetDatabase(const std::shared_ptr<UserDatabase>& database)
+{
+        std::lock_guard<std::mutex> lg(User::db_mute);
+	this->current_db = database;
 }
 
 std::shared_ptr<UserDatabase> User::GetDatabase()
 {
-
+        std::lock_guard<std::mutex> lg(User::db_mute);
+	return this->current_db;
 }
 
 void User::SetQuit(bool flag)
@@ -400,7 +394,7 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 		Kernel->Clients->Disconnect(this, "Wrong password.");
 		return false;  	
 	}
-
+	
 	std::string newlogin = "I-" + this->login + "-" + this->uuid;
 	User* const InUse = Kernel->Clients->FindInstanceOnly(userlogin);
 	

@@ -34,6 +34,8 @@ struct CMDBuffer
 
        CommandModel::Params params;
        
+       /* Constructor, define data */
+       
        CMDBuffer(const std::string& dest, const std::string& cmd, MONITOR_LEVEL lvl, const CommandModel::Params& parameters) : instance(dest), command(cmd), level(lvl), params(parameters)
        {
        
@@ -147,9 +149,5 @@ class ExportAPI MonitorHandler : public safecast<MonitorHandler>
         
         /* Clears all monitoring users */
         
-        void Reset()
-        {
-              this->MonitorList.clear();
-              this->buffer.clear();
-        }
+        void Reset();
 };

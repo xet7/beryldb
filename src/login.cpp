@@ -15,6 +15,18 @@
 #include "login.h"
 #include "modules/encrypt.h"
 
+SessionManager::SessionManager()
+{
+
+}
+
+Session::Session() : can_admin(false)
+                   , can_execute(false)
+                   , can_manage(false)
+{
+
+}
+
 std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags)
 {
        /* Session has no flags by default. */
@@ -42,18 +54,6 @@ std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::strin
       }
      
       return New;
-}
-
-SessionManager::SessionManager()
-{
-
-}
-
-Session::Session() : can_admin(false)
-                   , can_execute(false)
-                   , can_manage(false)
-{
-
 }
 
 void SessionManager::DetermineLifetime(const std::string& login)
@@ -101,6 +101,7 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
 
 void SessionManager::AttachExternal(const std::string& login, const std::string& flags)
 {
+     
      UserVector logins = Kernel->Clients->FindLogin(login);
 
      for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
@@ -112,7 +113,7 @@ void SessionManager::AttachExternal(const std::string& login, const std::string&
 
 void SessionManager::Attach(User* user, const std::string& login, const std::string& flags)
 {
-     std::shared_ptr<Session> attach = this->Find(login);
+      std::shared_ptr<Session> attach = this->Find(login);
       
       if (attach == nullptr)
       {

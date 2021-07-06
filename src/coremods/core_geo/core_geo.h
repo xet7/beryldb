@@ -33,14 +33,6 @@ class CommandGeoGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandGeoDel : public Command 
-{
-    public: 
-
-        CommandGeoDel(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
 
 class CommandGFind : public Command 
 {
@@ -61,11 +53,11 @@ class CommandGeoCalc : public Command
 };
 
 
-class CommandGeoClose : public Command 
+class CommandGeoDistance : public Command 
 {
     public: 
 
-        CommandGeoClose(Module* parent);
+        CommandGeoDistance(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

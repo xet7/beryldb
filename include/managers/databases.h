@@ -13,11 +13,15 @@
 
 #pragma once
 
+#include "cstruct.h"
+
 class ExportAPI DBHelper
 {
     public:
 
-       static void Type(User* user, const std::string& key);
+        static void Type(User* user, const std::string& key);
+
+        static MapData CType(const std::string& key);
     
         /* Creates a new map hash */
         
@@ -41,6 +45,7 @@ class ExportAPI DBHelper
         
         static void SFlush(User* user, std::shared_ptr<Database> database, const std::string& select);
         
-        static void SwapDB(User* user, std::shared_ptr<Database> database, const std::string& db1, const std::string& db2);
+        
+        static void SFlush(User* user, const std::string& key);
     
 };

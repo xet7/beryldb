@@ -26,9 +26,9 @@ CommandIncr::CommandIncr(Module* Creator) : Command(Creator, "INCR", 1)
 
 COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
+        const std::string& key = parameters[0];
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_INCR);
+        KeyHelper::Operation(user, key, OP_INCR);
         return SUCCESS;  
 }
 
@@ -44,10 +44,10 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_BE_NUMERIC.c_str()));
+                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_ADD, value);
+        KeyHelper::Operation(user, key, OP_ADD, value);
         return SUCCESS;  
 }

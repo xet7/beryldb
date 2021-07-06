@@ -72,7 +72,10 @@
 # define BERYL_OPENSSL_OPAQUE_BIO
 #endif
 
-enum issl_status { ISSL_NONE, IS_SSL_CONNECTING, ISSL_OPEN };
+enum issl_status 
+{ 
+	ISSL_NONE, IS_SSL_CONNECTING, ISSL_OPEN 
+};
 
 static bool SelfSigned = false;
 static int exdataindex;
@@ -358,13 +361,13 @@ namespace OpenSSL
 				return; 
 			}
 
-			long final = context.SetRawContextOptions(setoptions, clearoptions);
 		}
 
 	 public:
+	 
 		Profile(const std::string& profilename, config_rule* tag)
 			: name(profilename)
-			, dh(Kernel->Config->Paths.PrependConfig(tag->as_string("dhfile", "dhparams.pem", 1)))
+			, dh(Kernel->Config->Paths.SetWDConfig(tag->as_string("dhfile", "dhparams.pem", 1)))
 			, ctx(SSL_CTX_new(SSLv23_server_method()))
 			, clictx(SSL_CTX_new(SSLv23_client_method()))
 			, allowrenego(tag->as_bool("renegotiation")) 
@@ -396,14 +399,17 @@ namespace OpenSSL
 
 #ifndef OPENSSL_NO_ECDH
 			const std::string curvename = tag->as_string("ecdhcurve", "prime256v1", 1);
+			
 			if (!curvename.empty())
+			{
 				ctx.SetECDH(curvename);
+			}
 #endif
 
 			SetContextOptions("server", tag, ctx);
 			SetContextOptions("client", tag, clictx);
 
-			std::string filename = Kernel->Config->Paths.PrependConfig(tag->as_string("certfile", "cert.pem", 1));
+			std::string filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("certfile", "cert.pem", 1));
 			
 			if ((!ctx.SetCerts(filename)) || (!clictx.SetCerts(filename)))
 			{
@@ -411,7 +417,7 @@ namespace OpenSSL
 				throw Exception("Can't read certificate file: " + lasterr);
 			}
 
-			filename = Kernel->Config->Paths.PrependConfig(tag->as_string("keyfile", "key.pem", 1));
+			filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("keyfile", "key.pem", 1));
 			
 			if ((!ctx.SetPrivateKey(filename)) || (!clictx.SetPrivateKey(filename)))
 			{
@@ -419,7 +425,7 @@ namespace OpenSSL
 				throw Exception("Can't read key file: " + lasterr);
 			}
 
-			filename = Kernel->Config->Paths.PrependConfig(tag->as_string("cafile", "ca.pem", 1));
+			filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("cafile", "ca.pem", 1));
 			
 			if ((!ctx.SetCA(filename)) || (!clictx.SetCA(filename)))
 			{
@@ -497,6 +503,7 @@ namespace OpenSSL
 		static int write(BIO* bio, const char* buf, int len);
 
 #ifdef BERYL_OPENSSL_OPAQUE_BIO
+
 		static BIO_METHOD* alloc()
 		{
 			BIO_METHOD* meth = BIO_meth_new(100 | BIO_TYPE_SOURCE_SINK, "inspircd");
@@ -1030,7 +1037,7 @@ class ModuleOpenSSL : public Module
 				}
 				catch (KernelException& ex)
 				{
-					throw ModuleException("Error while initializing TLS (SSL) profile \"" + name + "\" at " + tag->get_tag_location() + " - " + ex.get_reason());
+					throw ModuleException("Error while running TLS (SSL) profile \"" + name + "\" at " + tag->get_tag_location() + " - " + ex.get_reason());
 				}
 
 				newprofiles.push_back(prov);

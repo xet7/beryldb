@@ -119,12 +119,15 @@ void CommandStatus::DispatchData(Status::Context& status)
 		
 		case 'u':
 		{
-			unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
-			status.AppendLine(BRLD_UPTIME, Daemon::Uptime("Uptime:", up));
+			status.AppendLine(BRLD_UPTIME, Daemon::Uptime("Uptime:", Kernel->GetUptime()));
 		}
 		
 		break;
-		
+
+		case 's':
+		{
+                        status.AppendLine(BRLD_UPTIME, Kernel->GetUptime());
+		}
 
 		default:
 		break;

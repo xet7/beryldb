@@ -63,9 +63,14 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         user->SendProtocol(BRLD_START_UNQ_LIST, Daemon::Format("Version: %s", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
         user->SendProtocol(BRLD_VIEW_INFO, Daemon::Format("Current select in use: %s", user->select.c_str()));
         
+        if (user->current_db)
+        {
+             user->SendProtocol(BRLD_DB_NAME, Daemon::Format("Database name: %s", user->current_db->GetName().c_str()));
+        }
+        
         /* Returns admin flags to requesting user, if any. */
         
-        std::string exists = UserHelper::FindAdmin(user->login);
+        std::string exists = UserHelper::CheckFlags(user->login);
         
         if (!exists.empty())
         {

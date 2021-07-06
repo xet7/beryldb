@@ -13,26 +13,28 @@
 
 #pragma once
 
-class Serverstats
+class Serverstats : public safecast<Serverstats>
 {
-	public:
+   public:
 			
-		unsigned long Accept;
+      /* Accepted connections */
+      
+      unsigned long Accept;
 		
-		unsigned long Refused;
+      unsigned long Refused;
 		
-		unsigned long Unknown;
+      unsigned long Unknown;
 				
-		unsigned long Collisions;
+      unsigned long Collisions;
 
-		unsigned long Connects;
+      unsigned long Connects;
+      
+      timeval LastCPU;
 
-		timeval LastCPU;
+      timespec LastSampled;
 
-		timespec LastSampled;
-
-		Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0)
-		{
+      Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0)
+      {
 		
-		}
+      }
 };

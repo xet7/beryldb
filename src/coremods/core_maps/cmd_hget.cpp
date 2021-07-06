@@ -33,7 +33,6 @@ COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-
 CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1)
 {
          syntax = "<map>";
@@ -43,10 +42,9 @@ COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
 
-       //MapsHelper::Count(user, user->current_db, user->select, kmap);
+       MapsHelper::Count(user, kmap);
        return SUCCESS;
 }
-
 
 CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2, 2)
 {
@@ -55,10 +53,23 @@ CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2,
 
 COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
 {  
-       const std::string kmap = parameters[0];
-       const std::string key = parameters[1];
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
 
        MapsHelper::Exists(user, kmap, key);
        return SUCCESS;
 }
 
+CommandHStrlen::CommandHStrlen(Module* Creator) : Command(Creator, "HSTRLEN", 2, 2)
+{
+         syntax = "<map> <key>";
+}
+
+COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
+
+       MapsHelper::Strlen(user, kmap, key);
+       return SUCCESS;
+}

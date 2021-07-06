@@ -11,52 +11,60 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#pragma once
-
 #include "beryl.h"
-#include "modules/message.h"
+#include "brldb/dbmanager.h"
+#include "engine.h"
 
-class CommandHQuery : public Command
+class CommandMCount : public Command 
 {
- public:
-        
-        CommandHQuery(Module* parent);
-        
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
+    public: 
 
-class CommandHSend : public Command
-{
- public:
-        
-        CommandHSend(Module* parent);
-        
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandHLimits : public Command
-{
- public:
-        
-        CommandHLimits(Module* parent);
-        
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandHReset : public Command
-{
- public:
-
-        CommandHReset(Module* parent);
+        CommandMCount(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHParam : public Command
+class CommandMSet : public Command 
 {
- public:
+    public: 
 
-        CommandHParam(Module* parent);
+        CommandMSet(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandMGet : public Command 
+{
+    public: 
+
+        CommandMGet(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandMIter : public Command 
+{
+    public: 
+
+        CommandMIter(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandMDel : public Command 
+{
+    public: 
+
+        CommandMDel(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandMSeek : public Command 
+{
+    public: 
+
+        CommandMSeek(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

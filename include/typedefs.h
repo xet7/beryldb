@@ -56,21 +56,23 @@ typedef std::multimap<std::string, std::string> DualMMap;
 
 typedef std::vector<std::string> Args;
 
-/* A tuple of a DBL_CODE and a response string. */
+/* List handler */
 
-typedef std::tuple<DBL_CODE, std::string> BasicTuple;
+typedef std::list<std::string> ListMap;
 
-/* A tuple of a DBL_CODE and a response vector. */
+typedef std::map<std::string, std::string> MapMap;
 
-typedef std::tuple<DBL_CODE, std::vector<std::string>> VectorTuple;
+typedef std::multimap<std::string, std::string> MultiMap;
 
-/* A tuple of a DBL_CODE and a response dual multimap. */
+/* Handling messages */
 
-typedef std::tuple<DBL_CODE, DualMMap> MMapTuple;
+enum HANDLER_MSG
+{
+     HANDLER_MSG_NOT_FOUND = 1,
+     HANDLER_MSG_OK = 2,
+     HANDLER_MSG_INVALID = 3
+};
 
-/* A tuple of a DBL_CODE and a response dual map. */
-
-typedef std::tuple<DBL_CODE, DualMap> DMapTuple;
 
 #include "nodes.h"
 #include "base.h"

@@ -64,6 +64,8 @@
 
 #define bprint Kernel->Engine->printb
 
+#define iprint Kernel->Engine->iprintb
+
 /* slog is short for "server log", or simple log. */
 
 #define slog Kernel->Logs->Log
@@ -74,7 +76,9 @@
 
 /* Skip alerts */
 
-#define sfalert Kernel->Notify->SPush
+#define sfalert Kernel->Notify->SkipPush
+
+#define Deliver User::SendProtocol
 
 /* Allow modularization */
 

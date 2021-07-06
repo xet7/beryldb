@@ -34,7 +34,7 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        //ListHelper::Add(user, Kernel->Store->GetDefault(), user->select, key, value);
+        ListHelper::Push(user, key, value);
         return SUCCESS;  
 }
 
@@ -55,19 +55,6 @@ COMMAND_RESULT CommandLMove::Handle(User* user, const Params& parameters)
         }
         
         //ListHelper::Move(user, Kernel->Store->GetDefault(), user->select, select, key, back);
-        return SUCCESS;  
-}
-
-CommandLRemove::CommandLRemove(Module* Creator) : Command(Creator, "LREMOVE", 1, 1)
-{
-         syntax = "<key>";
-}
-
-COMMAND_RESULT CommandLRemove::Handle(User* user, const Params& parameters)
-{  
-        const std::string& key = parameters[0];
-
-        //ListHelper::LRemove(user, Kernel->Store->GetDefault(), user->select, key);
         return SUCCESS;  
 }
 

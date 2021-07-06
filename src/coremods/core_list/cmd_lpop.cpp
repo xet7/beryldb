@@ -19,22 +19,29 @@
 #include "engine.h"
 #include "core_list.h"
 
-CommandPop::CommandPop(Module* Creator) : Command(Creator, "LPOP", 2, 2)
+CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK", 1, 1)
 {
-         syntax = "<key> <value>";
+         syntax = "<key>";
 }
 
-COMMAND_RESULT CommandPop::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
-        const std::string value = parameters.back();
         
-        if (!Daemon::CheckFormat(user, value))
-        {
-            return FAILED;
-        }
+        ListHelper::PopBack(user, key);
+        return SUCCESS;  
+}
+
+CommandLPopFront::CommandLPopFront(Module* Creator) : Command(Creator, "LPOPFRONT", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
         
-        //ListHelper::Delete(user, Kernel->Store->GetDefault(), user->select, key, value, true);
+        ListHelper::PopFront(user, key);
         return SUCCESS;  
 }
 
@@ -45,15 +52,59 @@ CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2
 
 COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
-        const std::string value = parameters.back();
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
 
         if (!Daemon::CheckFormat(user, value))
         {
-           return FAILED;
+             return FAILED;
         }
 
-        //ListHelper::Delete(user, Kernel->Store->GetDefault(), user->select, key, value, false);
+        ListHelper::PopAll(user, key, value);
+        return SUCCESS;  
+}
 
+CommandLReverse::CommandLReverse(Module* Creator) : Command(Creator, "LREVERSE", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+
+        ListHelper::Reverse(user, key);
+        return SUCCESS;  
+}
+
+CommandLSort::CommandLSort(Module* Creator) : Command(Creator, "LSORT", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+
+        ListHelper::Sort(user, key);
+        return SUCCESS;  
+}
+
+CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
+        
+        if (!Daemon::CheckFormat(user, value))
+        {
+             return FAILED;
+        }
+
+        ListHelper::Del(user, key, value);
         return SUCCESS;  
 }

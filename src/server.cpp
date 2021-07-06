@@ -31,8 +31,13 @@
 			if (this->Config->usercmd.run_tests)
 			{
 					std::unique_ptr<TestOffice> Suite = std::make_unique<TestOffice>();
+					Daemon::print_newline(2);
+		                        bprint(INFO, "%s", Daemon::Welcome("Test suite start :").c_str());
+		                        std::cout << "===========================" << std::endl;
+		                        do_newline;
 					Suite->Run();
-					this->Exit(EXIT_CODE_OK);
+					
+					this->Exit(EXIT_CODE_OK, true, true);
 			}
 	}
 	
@@ -171,10 +176,13 @@ void Beryl::Detach()
 void Beryl::SignalManager(int signal)
 {
 	Kernel->Interval->SleepMode(false);
-	
+
+	falert(NOTIFY_DEBUG, "Signal received: %s.", convto_string(signal).c_str());
+
 	if (signal == SIGTERM)
 	{
-		Kernel->Exit(EXIT_CODE_SIGTERM);
+	        falert(NOTIFY_DEBUG, "Processing SIGTERM.");
+		Kernel->Exit(EXIT_CODE_SIGTERM, true, false, "Exiting");
 	}
 	else if (signal == SIGINT)
 	{

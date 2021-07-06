@@ -16,6 +16,7 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
+#include "settings.h"
 #include "managers/maps.h"
 #include "managers/user.h"
 #include "modules/encrypt.h"
@@ -23,7 +24,7 @@
 bool UserHelper::CheckPass(const std::string& user, const std::string& key)
 {
    	/* Wrong password. */
-   /*	
+   	
         signed int cached = Kernel->Logins->InCache(user, key);
         
         if (cached == -1)
@@ -35,9 +36,8 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
                 return true;
         }
 
-        BasicTuple tuple = MapsHelper::Get(TABLE_USERS, user, "pass");
+        const std::string passwd = CMapsHelper::Get("pass", user).response;
         
-        const std::string provided_pass = std::get<1>(tuple);
         HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
 
         if (!provider)
@@ -45,28 +45,27 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
                return false;
         }
 
-        if (!provider->Compare(key, provided_pass))
+        if (!provider->Compare(key, passwd))
         {
              return false;
         }
 
         /* We may add this login to the cache. */
 
-/*        Kernel->Logins->Add(user, provided_pass);*/
+        Kernel->Logins->Add(user, passwd);
         return true;
 }
 
-/*std::string UserHelper::Find(const std::string& user, const std::string& key)
+std::string UserHelper::Find(const std::string& key, const std::string& value)
 {
-        BasicTuple tuple = //MapsHelper::Get(TABLE_USERS, user, key);
-        return std::get<1>(tuple);
+        return CMapsHelper::Get(key, value).response;
 }
 
 bool UserHelper::Add(const std::string& user, const std::string& pass)
 {
         /* Min length is 3 for an user. */
         
-  /*      if (user.length() < 3 || user.length() > 15)
+        if (user.length() < 3 || user.length() > 15)
         {
             return false;
         }
@@ -80,12 +79,11 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 
         std::string hashed_pass = provider->Generate(pass);
             
-        //MapsHelper::Set(TABLE_USERS, user, "userlogin", user);
-        //MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
-        return //MapsHelper::Set(TABLE_USERS, user, "created", convto_string(Kernel->Now()));
+        CMapsHelper::Set("userlogin", user, user);
+        CMapsHelper::Set("pass", user, hashed_pass);
+        CMapsHelper::Set("created", user, convto_string(Kernel->Now()));
+        return true;
 }
-
-*/
 
 bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
 {
@@ -110,69 +108,61 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
         }
 
         std::string hashed_pass = provider->Generate(pass);
-       
-   //     return MapsHelper::Set(TABLE_USERS, user, "pass", hashed_pass);
+        CMapsHelper::Set("pass", user, hashed_pass);
+        return true;
 }
 
-bool UserHelper::AddAdmin(const std::string& user, const std::string& flags)
+bool UserHelper::SetFlags(const std::string& user, const std::string& flags)
 {
-        //MapsHelper::Set(TABLE_ADMIN, user, "adminlogin", user);
-        //return //MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
+        CMapsHelper::Set("flags", user, flags);
+        return true;
 }
 
-bool UserHelper::SetAdmin(const std::string& user, const std::string& flags)
+bool UserHelper::HasFlags(const std::string& user)
 {
-      if (flags.empty() || flags == "")
-      {
-            //MapsHelper::DeleteAll(TABLE_ADMIN, user);
-      }
-      
-//      return MapsHelper::Set(TABLE_ADMIN, user, "flags", flags);
-}
-
-bool UserHelper::AdminExists(const std::string& user)
-{
-/*        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
-        const std::string flags = std::get<1>(tuple);
+        const std::string flags = CMapsHelper::Get("flags", user).response;
         
         if (flags.empty() || flags == "")
         {
             return false;
         }
-  */      
+
         return true;
 }
 
-std::string UserHelper::FindAdmin(const std::string& user)
+std::string UserHelper::CheckFlags(const std::string& user)
 {
-/*        BasicTuple tuple = MapsHelper::Get(TABLE_ADMIN, user, "flags");
-        const std::string flags = std::get<1>(tuple);*/
-        //return flags;
+        return CMapsHelper::Get("flags", user).response;
 }
 
-bool UserHelper::RemoveAdmin(const std::string& user)
+bool UserHelper::DeleteFlags(const std::string& user)
 {
-        //return //MapsHelper::DeleteAll(TABLE_ADMIN, user);
+        CMapsHelper::Del("flags", user);
+        return true;
 }
 
 bool UserHelper::Remove(const std::string& user)
 {
         Kernel->Logins->Remove(user); 
-
-        //MapsHelper::DeleteAll(TABLE_ADMIN, user);
-//        return //MapsHelper::DeleteAll(TABLE_USERS, user);
+        
+        CMapsHelper::Del("pass", user);
+        CMapsHelper::Del("created", user);
+        CMapsHelper::Del("flags", user);
+        CMapsHelper::Del("userlogin", user);        
+        
+        return true;
 }
 
 bool UserHelper::Exists(const std::string& user)
 {
-/*    std::string created = UserHelper::Find(user, "created");
+    std::string created = UserHelper::Find("created", user);
     
     if (created.empty() || created == "")
     {
              return false;
     }
     
-    return true;*/
+    return true;
 }
 
 

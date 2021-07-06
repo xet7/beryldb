@@ -293,7 +293,7 @@ void CommandHandler::ProcessBuffer(LocalUser* user, const std::string& buffer)
         this->Queue->Add(user, command, parameters);
 }
 
-bool CommandHandler::add_command(Command *cmd)
+bool CommandHandler::AddCommand(Command *cmd)
 {
 	if (this->CommandList.find(cmd->name) == this->CommandList.end())
 	{
@@ -467,12 +467,12 @@ void CommandQueue::Flush()
                
                PendingCMD event = user->PendingList.front();
 
-               /* PONGS are allowed when processing queries. */
+               /* PONGS are allowed at any time when processing queries, even when locked. */
 
                if (event.command == "PONG")
                {
                        user->PendingList.pop_front();
-                       Kernel->Commander.Execute(user, event.command, event.cmd_params);
+                       Kernel->Commander->Execute(user, event.command, event.cmd_params);
                        return;
                }
                   
@@ -496,7 +496,7 @@ void CommandQueue::Flush()
                       }
 
 	       	      PendingCMD m_event = user->PendingMulti.front();
-	       	      Kernel->Commander.Execute(user, m_event.command, m_event.cmd_params);
+	       	      Kernel->Commander->Execute(user, m_event.command, m_event.cmd_params);
 	              Kernel->Interval->counter++;
 	              user->PendingMulti.pop_front();
 	              continue;

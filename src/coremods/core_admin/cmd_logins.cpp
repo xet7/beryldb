@@ -39,7 +39,7 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 }
 
 
-CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "LISTFLAGS", 0, 1)
+CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 0, 1)
 {
         requires = 'e';
         syntax = "<flag>";

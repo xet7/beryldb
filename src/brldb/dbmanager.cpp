@@ -16,26 +16,42 @@
 #include "managers/lists.h"
 #include "managers/settings.h"
 
-DBManager::DBManager()
+DBManager::DBManager() 
 {
 
 }
 
-std::shared_ptr<UserDatabase> DBManager::Load(const std::string& name, const std::string& path)
+void DBManager::CloseAll()
 {
-        if (name.empty() || path.empty())
+        for (DataMap::iterator i = DBMap.begin(); i != DBMap.end(); ++i)
         {
-            return nullptr;
+                 std::shared_ptr<UserDatabase> db = i->second;
+                 db->SetClosing(true);
+                 db->Close();
         }
+}
+
+void DBManager::Load(const std::string& name, bool dbdefault)
+{
+        if (name.empty())
+        {
+             return;
+        }
+
+        std::string path = STHelper::Get("databases", name);
 
         std::shared_ptr<UserDatabase> New = nullptr;
         New = std::make_shared<UserDatabase>(name, path);
 
         New->created = Kernel->Now();
         this->DBMap.insert(std::make_pair(name, std::shared_ptr<UserDatabase>(New)));
-        bprint(DONE, "Adding database: %s", name.c_str());
         New->Open();
-        return New;
+        bprint(DONE, "Initializing database: %s", name.c_str());
+        
+        if (dbdefault)
+        {
+              Kernel->Store->SetDefault(New);
+        }
 }
 
 bool DBManager::Delete(const std::string& name)
@@ -50,7 +66,7 @@ bool DBManager::Delete(const std::string& name)
       }
       
       userdb->Close();
-//      STHelper::Delete("databases", name);
+      STHelper::Delete("databases", name);
       this->DBMap.erase(name);
       return true;
 }
@@ -61,61 +77,58 @@ bool DBManager::Create(const std::string& name, const std::string& path)
       
       if (this->Find(name))
       {
-          return false;
+           return false;
       }
       
       if (!Kernel->Engine->IsDatabase(name))
       {
            return false;
       }
-      
-//      std::string realpath = path + ".db";
-      //ListHelper::Add("databases", "databases", name);
-//      STHelper::Set("databases", name, realpath);
+            
+      std::string realpath = path + ".db";
+      STHelper::Set("databases", name, realpath);
       return true;
 }
 
 void DBManager::SetDefault(const std::string& name)
 {
-  //     STHelper::Set("databases", "dbdefault", name);
+       STHelper::Set("dbconf", "dbdefault", name);
 }
 
 unsigned int DBManager::OpenAll()
 {
-       //this->Create("default", "default");
-       Kernel->Store->Default = this->Load("default", "default");
-       return 1;
-       
-/*       VectorTuple listvector = ListHelper::Get("databases", "databases");
-       Args dblist = std::get<1>(listvector);
-       
        unsigned int counter = 0;
+       
+       Args dblist = STHelper::HKeys("databases");
 
-       std::string dbdefault = STHelper::Get("databases", "dbdefault");
+       std::string dbdefault = STHelper::Get("dbconf", "dbdefault");
 
        for (Args::iterator i = dblist.begin(); i != dblist.end(); i++)
        {
-             std::string database = *i;
-             std::string path = STHelper::Get("databases", database.c_str());
+             std::string name = *i;
 
-             if (dbdefault == database)
+             if (dbdefault == name)
              {
-                   Kernel->Store->GetDefault() = this->Load(database, path);
+                   bprint(INFO, "Default database: %s", name.c_str());
+                   this->Load(name, true);
              }
              else
              {
-                   this->Load(database, path);
+                   this->Load(name);
              }
              
              counter++;
        }
-       
-       return counter;*/
+
+       return counter;
 }
 
 std::shared_ptr<UserDatabase> DBManager::Find(const std::string& name)
 {
-        DataMap::iterator it = this->DBMap.find(name);
+        std::string dbname = name;
+        std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
+
+        DataMap::iterator it = this->DBMap.find(dbname);
 
         if (it == this->DBMap.end())
         {

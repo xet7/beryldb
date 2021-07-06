@@ -13,13 +13,11 @@
 
 #pragma once
 
-#include <unordered_map>
-
 class ExportAPI Session : public safecast<Session>
 {
     public:
         
-        /* Constrcutor. */
+        /* Constructor. */
         
         Session();
         

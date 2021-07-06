@@ -16,6 +16,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/maps.h"
+#include "managers/globals.h"
 #include "engine.h"
 #include "core_maps.h"
 
@@ -33,15 +34,22 @@ COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandHDelAll::CommandHDelAll(Module* Creator) : Command(Creator, "HDELALL", 1, 1)
+
+CommandHWDel::CommandHWDel(Module* Creator) : Command(Creator, "HWDEL", 2, 2)
 {
-         syntax = "<map>";
+         syntax = "<map> <key>";
 }
 
-COMMAND_RESULT CommandHDelAll::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHWDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string kmap = parameters[0];
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
+       
+       if (!Daemon::CheckFormat(user, key))
+       {
+            return FAILED;
+       }
 
-       //MapsHelper::DeleteAll(user, user->current_db, user->select, kmap);
+       MapsHelper::WDelete(user, kmap, key);
        return SUCCESS;
 }

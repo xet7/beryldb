@@ -86,7 +86,7 @@ void		Module::OnEveryHalfMinute(time_t) { DetachEvent(I_OnEveryHalfMinute); }
 ModuleResult	Module::OnPreCommand(std::string&, CommandModel::Params&, LocalUser*, bool) { DetachEvent(I_OnPreCommand); return MOD_RES_SKIP; }
 void		Module::OnPostCommand(Command*, const CommandModel::Params&, LocalUser*, COMMAND_RESULT, bool) { DetachEvent(I_OnPostCommand); }
 void		Module::OnCommandBlocked(const std::string&, const CommandModel::Params&, LocalUser*) { DetachEvent(I_OnCommandBlocked); }
-void 		Module::OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<query_base> bquery) { DetachEvent(I_OnQueryFailed); }
+void 		Module::OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<QueryBase> bquery) { DetachEvent(I_OnQueryFailed); }
 void		Module::OnInstanceInit(LocalUser*) { DetachEvent(I_OnInstanceInit); }
 void		Module::OnInstancePostInit(LocalUser*) { DetachEvent(I_OnInstancePostInit); }
 ModuleResult	Module::OnUserReady(LocalUser*) { DetachEvent(I_OnUserReady); return MOD_RES_SKIP; }
@@ -113,6 +113,8 @@ void		Module::OnServiceAdd(ServiceProvider&) { DetachEvent(I_OnServiceAdd); }
 void		Module::OnServiceDel(ServiceProvider&) { DetachEvent(I_OnServiceDel); }
 ModuleResult	Module::OnConnectionFail(LocalUser*, LiveSocketError) { DetachEvent(I_OnConnectionFail); return MOD_RES_SKIP; }
 void		Module::OnHalt(const std::string& reason) { DetachEvent(I_OnHalt); }
+void 		Module::OnExpireAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select, unsigned int seconds) { DetachEvent(I_OnExpireAdd); }
+void 	        Module::OnExpireDel(User* user, const std::string& dbname, const std::string& key, const std::string& select) { DetachEvent(I_OnExpireDel); } 
 
 ServiceProvider::ServiceProvider(Module* Creator, const std::string& Name, ServiceID Type) : creator(Creator), name(Name), service(Type)
 {
@@ -451,6 +453,8 @@ void ModuleHandler::LoadAll()
 	std::map<std::string, ServiceList> ServiceMap;
 	LoadCore(ServiceMap);
 
+	unsigned int counter = 0;
+	
 	MultiTag tags = Kernel->Config->GetTags("module");
 	
 	for (config_iterator i = tags.first; i != tags.second; ++i)
@@ -480,7 +484,9 @@ void ModuleHandler::LoadAll()
 		}
 
 		this->new_services = &ServiceMap[name];
-	 	bprint(DONE, "Loading module: %s", shortname.c_str()); 
+	 	bprint(DONE, "Loading module: %s", Daemon::Welcome(shortname).c_str()); 
+	 	
+	 	counter++;
 	 	
 		if (!this->Load(name, true))
 		{
@@ -488,6 +494,11 @@ void ModuleHandler::LoadAll()
 			bprint(ERROR, "Unable to load module: %s", this->LastError().c_str());
 			Kernel->Exit(EXIT_CODE_MODULE);
 		}
+	}
+
+        if (counter > 0)
+        {
+		iprint(counter, "Modules loaded."); 
 	}
 
 	for (ModuleMap::const_iterator i = Modules.begin(); i != Modules.end(); ++i)
@@ -534,6 +545,7 @@ void ModuleHandler::LoadAll()
 		Kernel->Exit(EXIT_CODE_MODULE);
 	}
 }
+
 
 std::string& ModuleHandler::LastError()
 {

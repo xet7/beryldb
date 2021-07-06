@@ -97,7 +97,7 @@ class ModuleCoreModule : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides SUBS command.", VF_BERYLDB|VF_CORE);
+                return Version("Provides Load and Unload module commands.", VF_BERYLDB|VF_CORE);
         }
 
 };

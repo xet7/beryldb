@@ -41,22 +41,21 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-//        bprint(INFO, "Loading settings.");
+        bprint(INFO, "Loading settings.");
   
- /*       VectorTuple tpl = //MapsHelper::HKeys(TABLE_SETTINGS, "conf");
-        Args confs = std::get<1>(tpl);
+        Args confs = STHelper::HKeys("conf");
         
         for (Args::iterator i = confs.begin(); i != confs.end(); i++)
         {
              std::string key = *i;
              this->SetMap[key] = STHelper::Get("conf", key);
-        }*/
+        }
 }
 
 void Settings::Set(const std::string& key, const std::string& value)
 {
       this->SetMap[key] = value;
-//      STHelper::Set("conf", key, value);
+      STHelper::Set("conf", key, value);
 }
 
 std::string Settings::Get(const std::string& key)
@@ -115,47 +114,173 @@ std::string Helpers::Format(const std::string& fmt)
     return Daemon::Format("\"%s\"", fmt.c_str());
 }
 
-void Helpers::make_query(User* user, std::shared_ptr<query_base> base, const std::string& key)     
+void Helpers::make_query(User* user, std::shared_ptr<QueryBase> base, const std::string& key, bool allow)     
 {
       base->user = user;
-      base->database = user->current_db;
+      base->database = user->GetDatabase();
       base->select_query = user->select;
       
       if (!key.empty())
       {
             base->key = key;
-            base->format = key + base->select_query; 
-            base->dest = to_bin(key) + ":" + base->select_query + ":" + base->base_request;
+            
+            if (!allow)
+            {
+                  if (!Kernel->Engine->ValidKey(key))
+                  {
+                      base->access_set(DBL_INVALID_FORMAT);
+                  }
+            }
       }
 }
 
-void Helpers::make_map(User* user, std::shared_ptr<query_base> base, const std::string& key, const std::string& hesh)
+void Helpers::make_geo_query(User* user, std::shared_ptr<QueryBase> base, const std::string& key)
+{
+      base->user = user;
+      base->database = user->GetDatabase();
+      base->select_query = user->select;
+
+      if (!key.empty())
+      {
+            base->key = key;
+      }
+}
+
+void Helpers::make_map(User* user, std::shared_ptr<QueryBase> base, const std::string& key, const std::string& hesh, bool allow)
 {
      base->user = user;
-     base->database = user->current_db;
+     base->database = user->GetDatabase();
      base->select_query = user->select;
-      
+     
      if (!key.empty() && !hesh.empty())
      {
             base->key = key;
             base->hesh = hesh;
-            base->format = key + base->select_query; 
-            base->dest = to_bin(base->key) + ":" + base->select_query + ":" + base->base_request + ":" + to_bin(base->hesh);
+
+            if (!allow)
+            {
+                  if (!Kernel->Engine->ValidKey(key))
+                  {
+                      base->access_set(DBL_INVALID_FORMAT);
+                  }
+            }
+
      }
 }
 
+void Helpers::make_cmap(std::shared_ptr<QueryBase> base, const std::string& key, const std::string& hesh)
+{
+       base->database = Kernel->Core->DB;
+       base->select_query = "1";
+       base->flags = QUERY_FLAGS_CORE;
+     
+       if (!key.empty() && !hesh.empty())
+       {
+            base->key = key;
+            base->hesh = hesh;
+
+            if (!Kernel->Engine->ValidKey(key))
+            {
+                  base->access_set(DBL_INVALID_FORMAT);
+            }
+       }
+}
+
+void Helpers::make_cquery(std::shared_ptr<QueryBase> base, const std::string& key)
+{
+      base->database = Kernel->Core->DB;
+      base->select_query = "1";
+      base->flags = QUERY_FLAGS_CORE;
+      
+      if (!key.empty())
+      {
+            base->key = key;
+            
+            if (!Kernel->Engine->ValidKey(key))
+            {
+                  base->access_set(DBL_INVALID_FORMAT);
+            }
+      }
+}
+
+void Helpers::make_mmap(User* user, std::shared_ptr<QueryBase> base, const std::string& key, bool allow)
+{
+     base->user = user;
+     base->database = user->GetDatabase();
+     base->select_query = user->select;
+     
+     if (!key.empty())
+     {
+            base->key = key;
+
+            if (!allow)
+            {
+                  if (!Kernel->Engine->ValidKey(key))
+                  {
+                      base->access_set(DBL_INVALID_FORMAT);
+                  }
+            }
+     }
+}
+
+void Helpers::make_list(User* user, std::shared_ptr<QueryBase> base, const std::string& key, bool allow)     
+{
+      base->user = user;
+      base->database = user->GetDatabase();
+      base->select_query = user->select;
+      
+      if (!key.empty())
+      {
+            base->key = key;
+
+            if (!allow)
+            {
+                  if (!Kernel->Engine->ValidKey(key))
+                  {
+                      base->access_set(DBL_INVALID_FORMAT);
+                  }
+            }
+      }
+}
 
 std::string Helpers::TypeString(const std::string& type)
 {
-     if (type == "1")
+     if (type.empty() || type == PROCESS_NULL)
      {
-          return "KEY";
+          return PROCESS_NULL;
      }
      
-     if (type == "2")
+     if (type == INT_KEY)
      {
-         return "MAP";
+           return "KEY";
      }
+     
+     if (type == INT_GEO)
+     {
+          return "GEO";
+     }
+     
+     if (type == INT_LIST)
+     {
+          return "LIST";
+     }
+     
+     if (type == INT_MAP)
+     {
+          return "MAP";
+     }
+     
+     if (type == INT_VECTOR)
+     {
+          return "VECTOR";
+     }
+     
+     if (type == INT_MMAP)
+     {
+          return "MULTIMAP";
+     }
+     
+     return "UNKNOWN";
 }
 
 

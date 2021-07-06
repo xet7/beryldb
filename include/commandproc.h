@@ -21,13 +21,15 @@ struct PendingCMD
         CommandModel::Params cmd_params;
         std::string command;
         
+        /* Constructor, sets variables. */
+        
         PendingCMD(LocalUser* usr, const CommandModel::Params cmd_paramsarams, const std::string& cmd) : user(usr), cmd_params(cmd_paramsarams), command(cmd)
         {
         
         }
 };
 
-class CommandQueue : public safecast<CommandQueue>
+class ExportAPI CommandQueue : public safecast<CommandQueue>
 {
    public:
 
@@ -59,45 +61,68 @@ class CommandQueue : public safecast<CommandQueue>
         void Reset();
 };
 
-class ExportAPI CommandHandler
+class ExportAPI CommandHandler : public safecast<CommandHandler>
 { 
     friend class CommandQueue;
 	
     public:
 
-	typedef STR1::unordered_map<std::string, Command*, engine::insensitive, engine::str_hash_comparison> CommandMap;
+	 typedef STR1::unordered_map<std::string, Command*, engine::insensitive, engine::str_hash_comparison> CommandMap;
 
     private:
 
-		void Execute(LocalUser* user, std::string& command, CommandModel::Params& parameters);
+	 void Execute(LocalUser* user, std::string& command, CommandModel::Params& parameters);
 
-		CommandMap CommandList;
+	 CommandMap CommandList;
 
-	public:
+    public:
 
-		CommandQueue Queue;
+	 CommandQueue Queue;
 		
-		CommandHandler();
+	 /* Constructor */
+	 
+	 CommandHandler();
 
-		const CommandMap& GetCommands() const 
-		{ 
-			return CommandList; 
-		}
+	 const CommandMap& GetCommands() const 
+	 { 
+		return CommandList; 
+	 }
 
-		COMMAND_RESULT CallHandler(const std::string& commandname, const CommandModel::Params& parameters, User* user, Command** cmd = NULL);
+	 COMMAND_RESULT CallHandler(const std::string& commandname, const CommandModel::Params& parameters, User* user, Command** cmd = NULL);
 
-		Command* GetBase(const std::string &commandname);
+ 	 Command* GetBase(const std::string &commandname);
 
-		static bool HasLoop(User* user, Command* handler, const CommandModel::Params& parameters, unsigned int splithere, int extra = -1, bool usemax = true);
+	 static bool HasLoop(User* user, Command* handler, const CommandModel::Params& parameters, unsigned int splithere, int extra = -1, bool usemax = true);
 
-		void ProcessBuffer(LocalUser* user, const std::string& buffer);
+	 void ProcessBuffer(LocalUser* user, const std::string& buffer);
 
-		bool add_command(Command *cmd);
+        /* 
+         * Adds a command to the command handler.
+         * 
+         * @parameters:
+	 *
+	 *         · Command: Command to add.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Command added.
+         *         · False: Unable to add command.
+         */    
+         
+	 bool AddCommand(Command *cmd);
 
-		void Remove(Command* x);
+        /* 
+         * Removes a command.
+         * 
+         * @parameters:
+	 *
+	 *         · Command: Command class to remove.
+         */    
+         
+	 void Remove(Command* x);
 
-		static void TranslateSingleParam(InterpretationType to, const std::string& item, std::string& dest, CommandModel* custom_translator = NULL, unsigned int paramnumber = 0);
+	 static void TranslateSingleParam(InterpretationType to, const std::string& item, std::string& dest, CommandModel* custom_translator = NULL, unsigned int paramnumber = 0);
 
-		static std::string TranslateUIDs(const std::vector<InterpretationType>& to, const CommandModel::Params& source, bool prefix_final = false, CommandModel* custom_translator = NULL);
+	 static std::string TranslateUIDs(const std::vector<InterpretationType>& to, const CommandModel::Params& source, bool prefix_final = false, CommandModel* custom_translator = NULL);
 };
 

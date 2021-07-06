@@ -66,8 +66,14 @@ class ExportAPI LogStream : public base_class
 	
 	}
 
-	/* Changes log level. */
-	
+        /* 
+         * Changes log level without closing the stream.
+         * 
+         * @parameters:
+	 *
+	 *         · lvl: new level.
+         */    	
+         
 	void ChangeLevel(log_level lvl) 
 	{ 
 		this->loglvl = lvl; 
@@ -181,5 +187,4 @@ class ExportAPI OutStream : public LogStream
 
         void WriteLog(log_level loglevel, const std::string& type, const std::string& msg);
 };
-
 

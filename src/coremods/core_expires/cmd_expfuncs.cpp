@@ -36,9 +36,9 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
           * r: Raw format date.
           */
          
-         if (arg != "h" && arg != "r")
+         if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INVALID_PARAM, arg, "Invalid parameter.");
+                  user->SendProtocol(ERR_INVALID_PARAM, INVALID_TYPE);
                   return FAILED;
          }
          
@@ -52,15 +52,25 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
                
+               if (entry.database != user->current_db)
+               {
+                     continue;
+               }
+               
+               if (entry.select != user->select)
+               {
+                    continue;
+               }
+               
                std::string schedule;
                
-               if (arg == "h")
+               if (parameters.size() && arg == "h")
                {
-                    schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+                      schedule = convto_string(entry.schedule);
                }
                else 
                {
-                    schedule = convto_string(entry.schedule);
+                      schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
@@ -124,8 +134,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 
         /* Clears all expires pending. */
 
-        unsigned int counter = ExpireManager::SelectReset(user->current_db, use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, Daemon::Format("Deleting: %u", counter).c_str());
+        unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
         
         sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);

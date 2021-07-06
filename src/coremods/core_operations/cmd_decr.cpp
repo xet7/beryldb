@@ -28,7 +28,7 @@ COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_DECR);
+        KeyHelper::Operation(user, key, OP_DECR);
         return SUCCESS;  
 }
 
@@ -44,10 +44,10 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_BE_NUMERIC.c_str()));
+                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_MIN, value);
+        KeyHelper::Operation(user, key, OP_MIN, value);
         return SUCCESS;  
 }

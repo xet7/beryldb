@@ -54,7 +54,14 @@ class ExportAPI ClientManager : public safecast<ClientManager>
 	UserMap clientlist;
 
 	UserMap uuid_list;
-	
+
+        /* 
+         * Forces pending users to exit.
+         * Sometimes, Beryl is unable to remove users 
+         * as requested, so these are added to a queue instead.
+         * ForceExits() flushes this queue.
+         */    	
+         
 	void ForceExits();
 
 	/* 

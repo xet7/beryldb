@@ -26,21 +26,25 @@ class CoreModDBManager : public Module
         CommandDBReset cmddbreset;
         CommandSFlush cmdsflush;
         CommandUsing cmdusing;
-        CommandSwapDB cmdswapdb;
-        CommandType cmdtype;
         CommandDB cmddb;
         CommandChange cmdchange;
         CommandDBLIST dblist;
         CommandDBCreate cmddbcreate;
         CommandDBDelete cmddbdelete;
+        CommandDefault cmdefault;
         CommandDBTest cmddbtest;
-        
+        CommandDBSetDefault cmdsdfault;
+        CommandFlushAll cmdflushall;
+
     public:     
         
         CoreModDBManager() : cmduse(this), cmdcurrent(this), cmdflushdb(this), cmdpwd(this),
-                             cmddbsize(this), cmddbreset(this), cmdsflush(this), cmdusing(this),
-                             cmdswapdb(this), cmdtype(this), cmddb(this), cmdchange(this),
-                             dblist(this), cmddbcreate(this), cmddbdelete(this), cmddbtest(this)
+                             cmddbsize(this), 
+                             cmddbreset(this), cmdsflush(this), cmdusing(this),
+                             cmddb(this), cmdchange(this),
+                             dblist(this), cmddbcreate(this), cmddbdelete(this), 
+                             cmdefault(this), cmddbtest(this), cmdsdfault(this),
+                             cmdflushall(this)
         {
         
         }

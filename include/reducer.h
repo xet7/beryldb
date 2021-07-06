@@ -1,4 +1,3 @@
-
 /*
  * BerylDB - A lightweight database.
  * http://www.beryldb.com

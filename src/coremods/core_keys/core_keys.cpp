@@ -20,53 +20,39 @@ class CoreModKeys : public Module
     
         CommandSet cmdset;
         CommandGet cmdget;
-        CommandDel cmddel;
         CommandStrlen cmdstrlen;
-        CommandFind cmdfind;
+        CommandKeys cmdkeys;
         CommandCount cmdcount;
-        CommandMove cmdmove;
-        CommandExists cmdexists;
         CommandGetDel cmdgetdel;
         CommandGetSet cmdgetset;
-        CommandGetRange cmdgetrange;
-        CommandRename cmdrename;
-        CommandRenameNX cmdrenamenx;
-        CommandCopy cmdcopy;
+        CommandGetSubstr cmdsubstr;
         CommandRKey cmdrkey;
         CommandTouch cmdtouch;
         CommandNTouch cmdntouch;
-        CommandTCount cmdtcount;
-        CommandConcat cmdconcat;
         CommandAppend cmdappend;
         CommandSetNX cmdsetnx;
         CommandSetTX cmdsettx;
         CommandSearch cmdsearch;
+        CommandWDel cmdwdel;
         
     public:	
         
         CoreModKeys() : cmdset(this), 
                         cmdget(this),	
-                        cmddel(this),
                         cmdstrlen(this),
-                        cmdfind(this),
+                        cmdkeys(this),
                         cmdcount(this),
-                        cmdmove(this),
-                        cmdexists(this),
                         cmdgetdel(this),
                         cmdgetset(this),
-                        cmdgetrange(this),
-                        cmdrename(this),
-                        cmdrenamenx(this),
-                        cmdcopy(this),
+                        cmdsubstr(this),
                         cmdrkey(this),
                         cmdtouch(this),
                         cmdntouch(this),
-                        cmdtcount(this),
-                        cmdconcat(this),
                         cmdappend(this),
                         cmdsetnx(this),
                         cmdsettx(this),
-                        cmdsearch(this)
+                        cmdsearch(this),
+                        cmdwdel(this)
 
         {
         

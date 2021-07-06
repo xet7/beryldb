@@ -38,11 +38,18 @@ bool DBHelper::FlushDB(std::shared_ptr<Database> database, bool notify)
 void DBHelper::Type(User* user, const std::string& key)
 {
        std::shared_ptr<type_query> query = std::make_shared<type_query>();
-       Helpers::make_query(user, query);
-
-       query->key = key;
-       query->format = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
+       Helpers::make_query(user, query, key);
+       query->type = QUERY_TYPE_TYPE;
        Kernel->Store->Push(query);
+}
+
+MapData DBHelper::CType(const std::string& key)
+{
+       std::shared_ptr<type_query> query = std::make_shared<type_query>();
+       Helpers::make_cquery(query, key);
+       query->Prepare();
+       query->Run();
+       return MapData(query->access, Helpers::TypeString(query->identified));
 }
 
 void DBHelper::DBSize(User* user)
@@ -52,45 +59,10 @@ void DBHelper::DBSize(User* user)
        Kernel->Store->Push(query);
 }
 
-/*
-
-void DBHelper::SwapDB(User* user, std::shared_ptr<Database> database, const std::string& db1, const std::string& db2)
-{
-       std::shared_ptr<swapdb_query> query = std::make_shared<swapdb_query>();
-
-       query->database = database;
-       query->user = user;
-       
-       query->key = db1;
-       query->value = db2;
-
-       Kernel->Store->Push(query);
-}
-
-void DBHelper::SFlush(User* user, std::shared_ptr<Database> database, const std::string& select)
+void DBHelper::SFlush(User* user, const std::string& key)
 {
        std::shared_ptr<sflush_query> query = std::make_shared<sflush_query>();
-
-       query->database = database;
-       query->user = user;
-       query->value = select;
-       
+       Helpers::make_query(user, query, key);
        Kernel->Store->Push(query);
 }
 
-bool DBHelper::Add(const std::string& name, const std::string& path)
-{
-        /* default database add */
- 
-        //MapsHelper::Set(TABLE_DBS, name, "name", name);
-        //MapsHelper::Set(TABLE_DBS, name, "path", path);
-  /*      return //MapsHelper::Set(TABLE_DBS, name, "created", convto_string(Kernel->Now()));
-}
-
-std::string DBHelper::Find(const std::string& name, const std::string& key)
-{
-        BasicTuple tuple = //MapsHelper::Get(TABLE_DBS, name, key);
-        std::string lst = std::get<1>(tuple);
-        return lst;
-}
-*/

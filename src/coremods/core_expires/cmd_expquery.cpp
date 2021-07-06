@@ -33,13 +33,13 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_TTL, key, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_TTL, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_EXPIRE, key, PROCESS_NULL);
+                  user->SendProtocol(ERR_NOT_EXPIRE, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -58,7 +58,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                 ExpireHelper::Persist(user, key);
+                 ExpireHelper::QuickPersist(user, key);
          }
          else
          {
@@ -91,10 +91,6 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          
          ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
 
-         /* Counts expires. */
-
-         unsigned int counter = 0;
-
          Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
@@ -111,8 +107,8 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
-        return SUCCESS;
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
+         return SUCCESS;
 }
 
          

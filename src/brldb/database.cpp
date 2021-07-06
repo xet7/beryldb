@@ -23,30 +23,40 @@
 #include "managers/settings.h"
 #include "managers/maps.h"
 
+void Database::SetClosing(bool flag)
+{
+        this->Closing = flag;
+}
 
-Database::Database(time_t dbcreated, const std::string& dbname, const std::string& dbpath) : created(dbcreated), name(dbname), path(Kernel->Config->Paths.PrependDB(dbpath))
+bool Database::IsClosing()
+{
+        return this->Closing;
+}
+
+Database::Database(const std::string& dbname, const std::string& dbpath) : created(Kernel->Now()), name(dbname), path(Kernel->Config->Paths.SetWDDB(dbpath))
+{
+        this->SetClosing(false);
+}
+
+CoreDatabase::CoreDatabase() : Database("core", "core.db")
 {
 
 }
 
-CoreDatabase::CoreDatabase() : Database(Kernel->Now(), "core", "core.db")
-{
-
-}
-
-UserDatabase::UserDatabase(const std::string& dbname, const std::string& dbpath) : Database(Kernel->Now(), dbname, dbpath)
+UserDatabase::UserDatabase(const std::string& dbname, const std::string& dbpath) : Database(dbname, dbpath)
 {
 
 }
 
 void Database::Close()
 {
-        slog("DATABASE", LOG_DEFAULT, "Closing database: %s.", this->path.c_str());
-
         if (!this->db)
         {
             return;
         }
+
+        slog("DATABASE", LOG_DEFAULT, "Closing database: %s.", this->GetName().c_str());
+        bprint(INFO, "Closing database: %s.", this->GetName().c_str());
 
         delete this->db;
 }
@@ -63,18 +73,16 @@ bool Database::Open()
         options.OptimizeLevelStyleCompaction();
         options.enable_thread_tracking = true;
         options.enable_pipelined_write = Kernel->Config->DB.pipeline;
-        options.max_background_flushes = 1;
-        options.max_background_compactions = 1;
 
         slog("DATABASE", LOG_VERBOSE, "Database opened: %s", this->path.c_str());
         
         this->status = rocksdb::DB::Open(options, this->path, &this->db);
-        
+
         if (!this->status.ok()) 
         {
                 bprint(ERROR, "Error while opening database: %s, %s", this->path.c_str(), this->status.ToString().c_str());
                 slog("DATABASE", LOG_DEFAULT, "Error while opening database: %s, %s", this->path.c_str(), this->status.ToString().c_str()); 
-                Kernel->Exit(EXIT_CODE_DATABASE);
+                Kernel->Exit(EXIT_CODE_DATABASE, true, true);
         }
         else
         {
@@ -86,27 +94,31 @@ bool Database::Open()
 
 bool Database::FlushDB()
 {
-    if (!this->db)
-    {
-            return false;
-    }
+        if (!this->db)
+        {
+                return false;
+        }
+        
+        this->SetClosing(true);
 
-    bprint(INFO, "flushdb requested for: %s.", this->name.c_str());
-    slog("DATABASE", LOG_DEFAULT, "flushdb requested for: %s.", this->name.c_str());
-    
-    /* We must close our database before flushing it. */
-    
-    this->Close();
-    
-    rocksdb::Options d_options;
-    rocksdb::DestroyDB(this->path, d_options);
-    
-    ExpireManager::Reset();
-    FutureManager::Reset();
-    
-    /* We report the opening bool. */
-    
-    return this->Open();
+        bprint(INFO, "Processing Flushdb: %s.", this->name.c_str());
+        slog("DATABASE", LOG_DEFAULT, "Processing Flushdb: %s.", this->name.c_str());
+        
+        /* We must close our database before flushing it. */
+        
+        this->Close();
+        
+        rocksdb::Options d_options;
+        rocksdb::DestroyDB(this->path, d_options);
+        
+        Kernel->Store->Expires->DatabaseReset(this->GetName());
+        Kernel->Store->Futures->DatabaseReset(this->GetName());
+        
+        this->SetClosing(false);
+        
+        /* Open the database again. */
+        
+        return this->Open();
 }
 
 CoreManager::CoreManager()
@@ -116,50 +128,55 @@ CoreManager::CoreManager()
 
 void CoreManager::Open()
 {
-       std::shared_ptr<CoreDatabase> New;
-       New = std::make_shared<CoreDatabase>();
-       New->created = Kernel->Now();
-       bprint(DONE, "Core database opened.");
+       std::shared_ptr<CoreDatabase> New = std::make_shared<CoreDatabase>();
        New->Open();
+       
+       if (!New->db)
+       {
+             bprint(ERROR, "Error while creating core database.");
+             Kernel->Exit(EXIT_CODE_DATABASE);
+       }
+       
        this->DB = New;
 }
 
 void CoreManager::UserDefaults()
 {
-     if (!Kernel->Store->First)
-     {
-         return;
-     }
+       if (!Kernel->Store->First)
+       {
+            return;
+       }
      
-     /* We add our default user. */
+       /* We add our default user. */
   
-//     UserHelper::Add("root", "default");
-  //   UserHelper::AddAdmin("root", "r");
+       UserHelper::Add("root", "default");
+       UserHelper::SetFlags("root", "r");
 }
 
 void CoreManager::CheckDefaults()
 {
-/*       std::string result = STHelper::Get("instance", "first_ran");
+       std::string result = STHelper::Get("instance", "first_ran");
        
        /* Creating instance, unless otherwise specified. */
        
-  /*     time_t instance = Kernel->Now();
+       time_t instance = Kernel->Now();
 
        /* No entry set. */
        
-    /*   if (result.empty() || result == "")
+       if (result.empty() || result == "")
        {
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
                  bprint(DONE, "Welcome to Beryl.");
-                 bprint(INFO, "Creating defaults.");
+                 bprint(INFO, "Setting configuration.");
 
-                 Kernel->Sets->SetDefaults();
                  Kernel->Store->DBM->Create("default", "default");
+                 Kernel->Store->DBM->SetDefault("default");
+                 Kernel->Sets->SetDefaults();
                  
                  /* Default settings. */
                  
-      /*           Kernel->Store->First = true;
+                 Kernel->Store->First = true;
        }
        else
        {		
@@ -168,7 +185,7 @@ void CoreManager::CheckDefaults()
                Kernel->Store->First = false;
        }
        
-       Kernel->Store->instance = instance;*/
+       Kernel->Store->instance = instance;
 }
 
 StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
@@ -188,13 +205,18 @@ void StoreManager::OpenAll()
              Kernel->Store->Flusher->threadslist.push_back(New);
              counter++;
        }
-       
-       bprint(DONE, "Threads created: %u", counter);
-       slog("DATABASE", LOG_VERBOSE, "Threads created: %u", counter);
-}
- 
 
-void StoreManager::Push(std::shared_ptr<query_base> request)
+       if (!counter)
+       {
+              bprint(ERROR, "Threads must be greater than 0.");
+              Kernel->Exit(EXIT_CODE_THREADS);
+       }
+
+       iprint(counter, "Thread%s initialized.", counter > 1 ? "s" : "");
+       slog("DATABASE", LOG_VERBOSE, "Thread%s initialized.", counter > 1 ? "s" : "");
+}
+
+void StoreManager::Push(std::shared_ptr<QueryBase> request)
 {
       User* user = request->user;
 

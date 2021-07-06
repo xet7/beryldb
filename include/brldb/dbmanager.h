@@ -31,12 +31,14 @@ class ExportAPI DBManager : public safecast<DBManager>
       DBManager();
          
       unsigned int OpenAll();
-
-      std::shared_ptr<UserDatabase> Load(const std::string& name, const std::string& path);
+      
+      void CloseAll();
+      
+      void Load(const std::string& name, bool defaultdb = false);
 
       std::shared_ptr<UserDatabase> Find(const std::string& name);
 
-      void SetDefault(const std::string& name);
+      static void SetDefault(const std::string& name);
 
       bool Delete(const std::string& name);
          
@@ -113,7 +115,12 @@ class ExportAPI StoreManager : public safecast<StoreManager>
 
         void OpenAll();
 
-        void Push(std::shared_ptr<query_base> request);
+        void Push(std::shared_ptr<QueryBase> request);
+        
+        void SetDefault(const std::shared_ptr<UserDatabase>& db)
+        {
+              this->Default = db;
+        }
         
         std::shared_ptr<UserDatabase> GetDefault()
         {

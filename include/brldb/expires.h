@@ -136,7 +136,9 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
         
         /* Select reset */
         
-        static unsigned int SelectReset(std::shared_ptr<Database> database, const std::string& select);
+        static unsigned int SelectReset(const std::string& dbname, const std::string& select);
+
+        static unsigned int DatabaseReset(const std::string& dbname);
 
         /* 
          * Counts all expires.
@@ -163,7 +165,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · unsigned int: Counter of all items found.
          */
                      
-        unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
+        unsigned int Count(const std::string& database, const std::string& select);
 };
 
 

@@ -29,13 +29,13 @@ enum THR_CMD
 
 struct ThreadMsg
 {
-      ThreadMsg(THR_CMD i, std::shared_ptr<query_base> m) : msg(m)
+      ThreadMsg(THR_CMD i, std::shared_ptr<QueryBase> m) : msg(m)
       { 
             id = i; 
       }
 
       THR_CMD id;
-      std::shared_ptr<query_base> msg;
+      std::shared_ptr<QueryBase> msg;
 };
 
 class DataThread
@@ -109,7 +109,7 @@ class DataThread
 	 *         · query: Thread to process.
          */            
         
-        void Post(std::shared_ptr<query_base> query);
+        void Post(std::shared_ptr<QueryBase> query);
 
         /* Removes all items in this->queue */
         

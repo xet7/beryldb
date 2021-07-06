@@ -18,7 +18,7 @@ SYSTEM = @SYSTEM_NAME@
 BUILDPATH ?= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/build/@COMPILER_NAME@-@COMPILER_VERSION@
 ENGINE = @ENGINE@
 CORECXXFLAGS = -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -pipe -Iinclude -Wall -Wextra -Wfatal-errors -Wno-unused-parameter -Wshadow -Wno-switch 
-LDLIBS = -lstdc++ -lrocksdb 
+LDLIBS = -lstdc++ -lrocksdb
 CORELDFLAGS = -rdynamic -L.
 PICLDFLAGS = -fPIC -shared -rdynamic
 
@@ -50,6 +50,10 @@ endif
 ifeq ($(SYSTEM), freebsd)
   LDLIBS += -lpthread -ldl -lrt -L/usr/local/lib
   CORECXXFLAGS += -I/usr/local/include
+endif
+
+ifeq ($(SYSTEM), openbsd)
+  LDLIBS += -lpthread
 endif
 
 ifeq ($(SYSTEM), darwin)
@@ -148,8 +152,7 @@ std-header:
 
 finishmessage: target
 	@echo " "
-	@echo "* BerylDB compiled."
-	@echo "* To install BerylDB, type: 'make install'"
+	@echo "* BerylDB is now compiled."
 
 install: target
 	@-$(INSTALL) -d -g @GID@ -o @UID@ -m $(INSTMODE_DIR) $(BINPATH)
@@ -166,8 +169,6 @@ install: target
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_TXT) @CONFIGURE_DIRECTORY@/beryldb.1 $(MANPATH) 2>/dev/null
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_TXT) docs/conf/*.example $(EXAPATH)
 	@echo ""
-	@echo "· BerylDB is now installed."
-	@echo ""
 	@echo '· Paths:'
 	@echo ' '
 	@echo '    Configuration:' $(CONPATH)
@@ -175,6 +176,8 @@ install: target
 	@echo '    Modules:' $(MODPATH)
 	@echo '    DB:' $(DBPATH)
 	@echo '    Data:' $(DATPATH)
+	@echo ""
+	@echo "· BerylDB is now installed."
 	@echo ""
 	@echo 'You need to create a configuration file:' $(CONPATH)/beryldb.conf
 	@echo 'Feel free to check our config examples:' $(EXAPATH)

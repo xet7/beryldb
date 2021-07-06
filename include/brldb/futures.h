@@ -43,6 +43,8 @@ class ExportAPI FutureManager : public safecast<FutureManager>
 {
       public:
 
+        static std::mutex mute;
+
         /* Constructor */
 
         FutureManager();
@@ -135,5 +137,8 @@ class ExportAPI FutureManager : public safecast<FutureManager>
 
         unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
 
-        static unsigned int SelectReset(std::shared_ptr<Database> database, const std::string& select);      
+        static unsigned int SelectReset(const std::string& dbname, const std::string& select);      
+        
+        unsigned int DatabaseReset(const std::string& dbname);
+        
 };

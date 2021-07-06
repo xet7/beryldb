@@ -16,6 +16,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/keys.h"
+#include "managers/globals.h"
 #include "engine.h"
 #include "core_keys.h"
 
@@ -53,7 +54,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       //KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETNX);
+       KeyHelper::SetNX(user, key, value);
        return SUCCESS;
 }
 
@@ -72,7 +73,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       //KeyHelper::Set(user, user->current_db, user->select, key, value, "", TYPE_SETTX);
+       KeyHelper::SetTX(user, key, value);
        return SUCCESS;
 }
 
@@ -95,47 +96,6 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
-{
-         syntax = "<key> <new key>";
-}
-
-COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
-{  
-       const std::string& key = parameters[0];
-       const std::string& newkey = parameters[1];
-
-       KeyHelper::Rename(user, key, newkey);
-       return SUCCESS;
-}
-
-CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX", 2, 2)
-{
-         syntax = "<key> <new key>";
-}
-
-COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
-{  
-       const std::string& key = parameters[0];
-       const std::string& newkey = parameters[1];
-
-       //KeyHelper::AdvSet(user, user->current_db, user->select, key, newkey, TYPE_RENAMENX);
-       return SUCCESS;
-}
-
-CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
-{
-         syntax = "<key> <dest key>";
-}
-
-COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
-{  
-       const std::string& key = parameters[0];
-       const std::string& destkey = parameters[1];
-
-       KeyHelper::Copy(user, key, destkey);
-       return SUCCESS;
-}
 
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
@@ -147,6 +107,11 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       //KeyHelper::Append(user, user->current_db, user->select, key, value);
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Append(user, key, value);
        return SUCCESS;
 }

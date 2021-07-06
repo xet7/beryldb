@@ -96,3 +96,11 @@ class CommandSelectCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandDBEReset : public Command 
+{
+    public: 
+
+        CommandDBEReset(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

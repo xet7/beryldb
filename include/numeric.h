@@ -22,20 +22,18 @@ namespace Numeric
 
 class Numeric::Numeric
 {
-	
+  private:
+  
 	unsigned int numeric;
-
 	
 	CommandModel::Params params;
 
 	
 	Server* sourceserver;
 
- public:
+  public:
 	
-	Numeric(unsigned int num)
-		: numeric(num)
-		, sourceserver(NULL)
+	Numeric(unsigned int num) : numeric(num), sourceserver(NULL)
 	{
 
 	}
@@ -67,5 +65,8 @@ class Numeric::Numeric
 		return params; 
 	}
 
-	CommandModel::Params& GetParams() { return params; }
+	CommandModel::Params& GetParams() 
+	{ 
+		return params; 
+	}
 };

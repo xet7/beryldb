@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-#
 # BerylDB - A modular database.
 # http://www.beryldb.com
 #
@@ -49,11 +48,11 @@ sub run()
 	open MAKE, '>real.mk' or die "Unable to write pre parser: $!";
 	chdir "${\SOURCEPATH}/src";
 
-	run_dynamic();
+	include_modules();
 	close MAKE;
 }
 
-sub run_dynamic() 
+sub include_modules() 
 {
 	print MAKE <<END;
 VPATH = \$(SOURCEPATH)/src

@@ -97,7 +97,7 @@ class ExportAPI Notifier : public safecast<Notifier>
          void Remove(User* user);
 
         /* 
-         * Adds an user to the Skipping event list.
+         * Adds an user to the 'Skipping event list'.
          * 
          * @parameters:
 	 *
@@ -106,9 +106,9 @@ class ExportAPI Notifier : public safecast<Notifier>
 	 *         · buff: Message.
          */    
          
-         void SPush(User* skip, NOTIFY_LEVEL level, const std::string& buff);
+         void SkipPush(User* skip, NOTIFY_LEVEL level, const std::string& buff);
 
-         void SPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(4, 5);
+         void SkipPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) BERYL_PRINTF(4, 5);
 
         /* 
          * Adds an event to the event queue.
@@ -136,11 +136,7 @@ class ExportAPI Notifier : public safecast<Notifier>
          * This function should be called before exiting Beryl.
          */    
                    
-         void Reset()
-         {
-                this->events.clear();
-                this->NotifyList.clear();
-         }
+         void Reset();
 
         /* 
          * Counts pending events.

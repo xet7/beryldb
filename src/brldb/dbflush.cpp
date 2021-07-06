@@ -18,9 +18,9 @@
 #include "brldb/dbflush.h"
 #include "algo.h"
 
-std::mutex DataFlush::mute;
+std::mutex DataFlush::query_mute;
 
-std::mutex DataFlush::wlock;
+std::mutex DataFlush::mute;
 
 void DataFlush::Pause()
 {
@@ -37,45 +37,15 @@ bool DataFlush::Status()
       return this->running;
 }
 
-DataFlush::DataFlush() : running(false), flushmute(false), opmute(false)
+DataFlush::DataFlush() : running(false), flushmute(false)
 {
 
 }
 
-void DataFlush::AttachResult(std::shared_ptr<query_base> signal)
+void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
 {
       std::lock_guard<std::mutex> lg(DataFlush::mute);
       signal->user->notifications.push_back(signal);
-}
-
-void DataFlush::Lock(const std::string& format)
-{
-      std::lock_guard<std::mutex> lg(DataFlush::wlock);
-      this->locks.push_back(format);
-}
-
-void DataFlush::Unlock(const std::string& format)
-{
-      std::lock_guard<std::mutex> lg(DataFlush::wlock);
-      std::vector<std::string>::iterator it = std::find(this->locks.begin(), this->locks.end(), format);
-      
-      if (it != this->locks.end())
-      {
-            this->locks.erase(it);
-      }
-}
-
-bool DataFlush::IsLocked(const std::string& format)
-{
-      std::lock_guard<std::mutex> lg(DataFlush::wlock);
-      std::vector<std::string>::iterator it = std::find(this->locks.begin(), this->locks.end(), format);
-      
-      if (it != this->locks.end())
-      {
-            return true;
-      }
-      
-      return false;
 }
 
 void DataFlush::GetResults()
@@ -86,38 +56,29 @@ void DataFlush::GetResults()
       {
             return;
       }
+
+      DataFlush::mute.lock();
       
       for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
       {
                   User* user = u->second;
 
-                  if (user == NULL || user->IsQuitting())
+                  if (user == NULL || user->IsQuitting() || !user->notifications.size())
                   {
                         continue;
                   }
-
-                  DataFlush::mute.lock();
                   
                   /* Nothing to iterate if user has no pending notifications. */
 
                   if (user->notifications.size())
                   {
-                        std::shared_ptr<query_base> signal = user->notifications.front();
-                        
-                        if (signal->Lock)
-                        {
-                                continue;
-                        }
+                        std::shared_ptr<QueryBase> signal = user->notifications.front();
                         
                         /* Removes signal from queue. */
                         
                         user->notifications.pop_front();
                         
-                        /* Releases dataflush mute. */
-                        
-                        DataFlush::mute.unlock();
-                        
-                        if (!signal->finished)
+                        if (!signal->GetStatus())
                         {
                              LocalUser* localuser = IS_LOCAL(user);
                              NOTIFY_MODS(OnQueryFailed, (signal->access, localuser, signal));
@@ -129,6 +90,18 @@ void DataFlush::GetResults()
                              
                                  DataFlush::NotFound(user, signal);
 
+                             break;
+                             
+                             case DBL_INVALID_RANGE:
+                                
+                                DataFlush::InvalidRange(user, signal);
+                             
+                             break;
+                             
+                             case DBL_INVALID_FORMAT:
+                             
+                                  DataFlush::InvalidFormat(user, signal);
+                                  
                              break;
                              
                              case DBL_MISS_ARGS:
@@ -160,28 +133,32 @@ void DataFlush::GetResults()
                                     
                             break;
                             
+                            case DBL_ENTRY_EXPIRES:
+
+                                    DataFlush::EntryExpires(user, signal);
+
+                            break;                            
+                            
+                            case DBL_NOT_NUM:
+                                   
+                                   DataFlush::NotNumeric(user, signal);
+                                   
+                            break;
+                            
                             default:
                              
                                DataFlush::Flush(user, signal);
                         }
-                        
-                        if (user)
-                        {
-                                user->SetLock(false);
-                        }
 
-                        signal.reset();
-                  }
-                  else
-                  {
-                        DataFlush::mute.unlock();
-                  }
+                        user->SetLock(false);
+                }
       }
+          
+      DataFlush::mute.unlock();
 }
 
-void DataFlush::DispatchAll()
+void DataFlush::Process()
 {
-
       /* We should not dispatch anything if we are paused. */
       
       if (!Kernel->Store->Flusher->Status())  
@@ -221,6 +198,7 @@ void DataFlush::GetPending()
                     continue;
                }
                
+               user->SetLock(true);
                Process(user, user->pending.front());
       }
 }
@@ -235,25 +213,13 @@ bool DataThread::IsBusy()
       return this->busy;
 }
 
-void DataFlush::Process(User* user, std::shared_ptr<query_base> signal)
+void DataFlush::Process(User* user, std::shared_ptr<QueryBase> signal)
 {
       if (!signal || !Kernel->Store->Flusher->Status())
       {
             return;
       }
 
-      /* Only one operation at a time. */
-      
-      if (signal->type == DBL_TYPE_OP)
-      {
-            if (Kernel->Store->Flusher->opmute)
-            {
-                    return;
-            }
-            
-            Kernel->Store->Flusher->opmute = true;
-      }
-  
       DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
       
       /* Thread to use. */
@@ -307,13 +273,15 @@ void DataFlush::ResetAll()
 
       if (Kernel->Clients->Global)
       {
-          Kernel->Clients->Global->pending.clear();
-          Kernel->Clients->Global->notifications.clear();
+           Kernel->Clients->Global->pending.clear();
+           Kernel->Clients->Global->notifications.clear();
       }
       
       /* Clear up pending notifications. */
 
       const UserMap& users = Kernel->Clients->GetInstances();
+      
+      DataFlush::mute.lock();
       
       for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
       {           
@@ -324,11 +292,11 @@ void DataFlush::ResetAll()
                      continue;
               }
 
-              DataFlush::mute.lock();
               user->notifications.clear();
               user->pending.clear();
-              DataFlush::mute.unlock();
       }
+
+      DataFlush::mute.unlock();
 
       Kernel->Store->Expires->Reset();
       Kernel->Store->Flusher->Resume();
@@ -357,15 +325,20 @@ void DataThread::Exit()
       m_thread = nullptr;
 }
 
-void DataThread::Post(std::shared_ptr<query_base> query)
+void DataThread::Post(std::shared_ptr<QueryBase> query)
 {	
       if (!m_thread)
       {
             return;
       }
-      
-      query->user->SetLock(true);
-      
+
+      if (!query || !query->database || query->database->IsClosing())
+      {
+              query->user->SendProtocol(ERR_QUERY, DB_NULL);
+              query->user->SetLock(false);
+              return;
+      }
+           
       std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_SIGNAL, query));
       std::unique_lock<std::mutex> lk(m_mutex);
       queue.push(Input);
@@ -422,7 +395,7 @@ void DataThread::Process()
                     
                     case PROC_SIGNAL:
                     {
-                          std::shared_ptr<query_base> request = signal->msg;
+                          std::shared_ptr<QueryBase> request = signal->msg;
                           
                           /* Let's release the locked user. */
 
@@ -448,101 +421,22 @@ void DataThread::Process()
                                continue;
                           }
                           
-                          if (!request->format.empty())
-                          {
-                                while (Kernel->Store->Flusher->IsLocked(request->format))
-                                {
-                                       usleep(5);
-                                }
-                                
-                                queue.pop();
-                                signal = nullptr;
-                                
-                                /* Locks this format. */
-
-                                Kernel->Store->Flusher->Lock(request->format);
-                          }
-                          else
-                          {
-                                queue.pop();
-                          }
+                          queue.pop();
                           
-                          request->Lock = true;
+                          DataFlush::query_mute.lock();
                           
-                          bool pre_check = false;
-                          
-                          if (request->Check() || request->CheckKey())
+                          if (request->access != DBL_INVALID_FORMAT)
                           {
-                                pre_check = true;
-                          }
-                          
-                          bool ok_to_go = false;
-                          
-                          if (request->base_request == "0")
-                          {
-                                ok_to_go = true;
-                                pre_check  = true;
-                          }
-                          
-                          if (request->remove)
-                          {
-                                 request->RemoveRegistry(request->select_query, request->base_request, request->key);
-                                 ok_to_go = true;
-                          }
-                          else if (request->iter || request->check)
-                          {
-                               ok_to_go = true;
-                          }
-                          else
-                          {
-                              if (request->base_request != "0" && pre_check)
-                              {
-                                    const std::string reg = request->GetRegistry(request->select_query, request->key);
-                                    request->identified = reg;
-
-                                    if (reg.empty())
-                                    {
-                                          request->identified = PROCESS_NULL;
-                                          
-                                          if (request->write)
-                                          {
-                                                request->SetRegistry(request->select_query, request->base_request, request->key);
-                                                ok_to_go = true;
-                                          }
-                                          else
-                                          {
-                                                request->access_set(DBL_NOT_FOUND);
-                                          }
-                                    }
-                                    else
-                                    { 
-                                          
-                                          if (reg != request->base_request && request->base_request != INT_REG && request->base_request != INT_EXPIRE)
-                                          {
-                                                request->access_set(DBL_INVALID_TYPE);
-                                          }
-                                          else
-                                          {
-                                                ok_to_go = true;
-                                          }
-                                    }                     
-                               }
+                                request->Prepare();
                           }
 
-                          if (ok_to_go && pre_check)
-                          {
-                              request->Run();
-                          }
-                        
-                          request->Lock = false;
- 
-                          if (!request->format.empty())
-                          {
-                               /* Unlocker. */
+                          DataFlush::query_mute.unlock();
 
-                               Kernel->Store->Flusher->Unlock(request->format);
+                          if (request->flags == QUERY_FLAGS_QUIET)
+                          {
+                                break;
                           }
-                        
+                          
                           if (request->access != DBL_INTERRUPT)
                           {
                                 /* Adds result to the pending notification list. */
@@ -580,10 +474,11 @@ void DataFlush::CloseThreads()
       {
              DataThread* thread = *iter;
              thread->Exit();
+             thread = NULL;
              counter++;
       }     
       
       Kernel->Store->Flusher->EraseAll();
-      bprint(INFO, "Threads closed: %u", counter);
-      slog("DATABASE", LOG_VERBOSE, "Threads closed: %u", counter);
+      iprint(counter, "Thread%s closed.", counter > 1 ? "s" : "");
+      slog("DATABASE", LOG_VERBOSE, "Thread%s closed.", counter > 1 ? "s" : "");
 }

@@ -39,3 +39,35 @@ COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameter
 	return SUCCESS;
 }
 
+
+CommandILogin::CommandILogin(Module* parent) : Command(parent, "ILOGIN", 3, 3)
+{
+	pre_reg_ok = true;
+	syntax = "<agent> <auth> <login>";
+}
+
+COMMAND_RESULT CommandILogin::Handle(User* user, const Params& parameters)
+{
+        const std::string& agent = parameters[0];
+        const std::string& auth = parameters[1];
+        const std::string& login = parameters[2];
+        
+        std::string AGENT_CMD = "AGENT";
+        std::string AUTH_CMD = "AUTH";
+        std::string LOGIN_CMD = "LOGIN";
+        
+	CommandModel::Params params;
+        CommandModel::Params params2;
+        CommandModel::Params params3;
+	
+	params.push_back(agent);
+        params2.push_back(auth);
+        params3.push_back(login);
+
+	LocalUser* luser = IS_LOCAL(user);
+	
+        Kernel->Commander->Queue->Add(luser, AGENT_CMD, params);
+        Kernel->Commander->Queue->Add(luser, AUTH_CMD, params2);
+        Kernel->Commander->Queue->Add(luser, LOGIN_CMD, params3);
+        return SUCCESS;
+}

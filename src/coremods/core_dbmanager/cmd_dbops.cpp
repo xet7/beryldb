@@ -21,6 +21,25 @@
 #include "engine.h"
 #include "core_dbmanager.h"
 
+CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 1)
+{
+       requires = 'r';
+}
+
+COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
+{  
+     DataMap dbs = Kernel->Store->DBM->GetDatabases();
+
+     for (DataMap::iterator i = dbs.begin(); i != dbs.end(); ++i)
+     {
+               std::shared_ptr<UserDatabase> db = i->second;
+               db->FlushDB();
+     }
+                
+     user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);                
+     return SUCCESS;
+}
+
 CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
 {
        requires = 'r';
@@ -56,57 +75,5 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->current_db->GetName().c_str());      
        user->SendProtocol(ERR_UNABLE_FLUSH, PROCESS_FALSE);
        return FAILED;
-}
-
-CommandSwapDB::CommandSwapDB(Module* Creator) : Command(Creator, "SWAPDB", 2, 2)
-{
-         requires = 'r';
-         syntax = "<select1> <select2>";
-}
-
-COMMAND_RESULT CommandSwapDB::Handle(User* user, const Params& parameters)
-{  
-
-       const std::string& db1 = parameters[0];
-       const std::string& db2 = parameters[1];
-       
-       if (!is_number(db1))
-       {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
-       }
-
-       if (!is_positive_number(db1))
-       {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                return FAILED;
-       }
-
-       if (!Daemon::CheckRange(user, db1, "Must be a value between 1 and 100", 1, 100))
-       {
-               return FAILED;
-       }
-       
-       if (!is_number(db2))
-       {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
-       }
-
-       if (!is_positive_number(db2))
-       {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                return FAILED;
-       }
-
-       if (!Daemon::CheckRange(user, db2, "Must be a value between 1 and 100", 1, 100))
-       {
-               return FAILED;
-       }
-
-       sfalert(user, NOTIFY_DEFAULT, "Database swap: %s <=> %s", db1.c_str(), db2.c_str());
-       
-//       DBHelper::SwapDB(user, user->current_db, db1, db2);
-       return SUCCESS;
 }
 

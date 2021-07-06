@@ -17,6 +17,7 @@
 
 #include <csignal>
 #include <map>
+#include <list>
 #include <string>
 #include <vector>
 #include <memory>
@@ -135,7 +136,7 @@ class ExportAPI Beryl
 	
 	/* Runs every one second. Function meant to dispatch timers. */
 	
-	void RunTimed(time_t current);
+	void Timed(time_t current);
 	
 	/* This function is called during every cycle. */
 	
@@ -155,12 +156,23 @@ class ExportAPI Beryl
 
         /* CommandLine arguments reader. */
 
-       void CommandLine();
+        void CommandLine();
 
         /* Refreshes TIME, this function is called in every loop. */
 
         void Refresh();
-       
+ 
+        static void Signalizers();
+
+        static void VoidSignalManager(int);
+
+        /* 
+         * Sends Beryl to the background.
+         * This function should be called only once, during startup.
+         */    
+
+        void DaemonFork();
+      
   public:
          
         /* Starts Beryl instance. */
@@ -212,6 +224,8 @@ class ExportAPI Beryl
 	/* Notification manager. */
 	
 	Notifier Notify;
+	
+	/* Handles intervals */
 	
 	IntervalManager Interval;
 	
@@ -343,6 +357,19 @@ class ExportAPI Beryl
 	ProtocolTrigger::BRLDEvents& GetBRLDEvents() 
 	{ 
 		return brldevents; 
+	}
+
+        /* 
+         * Returns current uptime, as expressed in seconds.
+	 * 
+         * @return:
+ 	 *
+         *         · unsigned int: Uptime in seconds.
+         */    
+         	
+	unsigned int GetUptime()
+	{
+		return static_cast<unsigned int>(this->Now() - this->GetStartup());		
 	}
 };
 

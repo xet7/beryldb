@@ -33,7 +33,7 @@ const std::string LINUX_DISTRO = "@LINUX_DISTRO@";
 
 /* Time to wait before starting accepting requests. */
 
-const int PRELOOP_WAIT = 1000000;
+const int PRELOOP_WAIT = 200000;
 
 /* Max client target for a loop command. */
 

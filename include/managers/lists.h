@@ -19,26 +19,34 @@ class ExportAPI ListHelper
 {
     public:
 
-    static VectorTuple Get(const std::string& where, const std::string& key);
-
-    static DBL_CODE Add(const std::string& where, const std::string& entry, const std::string& val);
+        static void Push(User* user, const std::string& entry, const std::string& hesh);
         
-    static DBL_CODE Delete(const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst = false);
+        static void Get(User* user, const std::string& entry, signed int offset, signed int limit);
+
+        static void PopFront(User* user, const std::string& entry);
         
-    static void Get(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+        static void PopBack(User* user, const std::string& entry);
 
-    static void Add(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& val);
+        static void Count(User* user, const std::string& entry);
         
-    static void Delete(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value, bool onlyfirst = false);
+        static void PopAll(User* user, const std::string& entry, const std::string& value);
+        
+        static void Reverse(User* user, const std::string& entry);
+        
+        static void Find(User* user, const std::string& entry, const std::string& value, signed int offset, signed int limit);
+        
+        static void Keys(User* user, const std::string& entry, signed int offset, signed int limit);
 
-    static void Exist(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, QUERY_TYPE type = TYPE_EXIST, unsigned int index = 0);
+        static void Resize(User* user, const std::string& entry, const std::string& value);
+        
+        static void Sort(User* user, const std::string& entry);
 
-    static void Move(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry, const std::string& value, const std::string& back);
-    
-    static void Search(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
+        static void Index(User* user, const std::string& key, const std::string& entry);
+        
+        static void Exist(User* user, const std::string& entry, const std::string& value);
+        
+        static void Del(User* user, const std::string& entry, const std::string& value);
 
-    static void Find(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& key, const std::string& value, signed int offset, signed int limit, QUERY_TYPE type = TYPE_NONE);
-
-    static void LRemove(User* user, std::shared_ptr<Database> db, const std::string& where, const std::string& entry);
-    
+        static void Repeats(User* user, const std::string& entry, const std::string& value);
+        
 };

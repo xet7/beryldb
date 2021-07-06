@@ -63,14 +63,23 @@ class ModuleAutoFlush : public Module
                 {
                         return;
                 }
+
+                DataMap dbs = Kernel->Store->DBM->GetDatabases();
                 
-                if (DBHelper::FlushDB())
+                for (DataMap::iterator i = dbs.begin(); i != dbs.end(); ++i)
                 {
-                        falert(NOTIFY_DEFAULT, "Database flushed.");
-                        return;
+                        std::shared_ptr<UserDatabase> db = i->second;
+                        
+                        if (db->FlushDB())
+                        {
+                                falert(NOTIFY_DEFAULT, "Database flushed.");
+                                return;
+                        }
+                        else
+                        {
+                                falert(NOTIFY_DEFAULT, "Unable to flush database.");
+                        }
                 }
-                
-                falert(NOTIFY_DEFAULT, "Unable to flush database.");
         }
         
         ModuleAutoFlush() : cmd(this)

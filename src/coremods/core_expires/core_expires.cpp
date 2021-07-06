@@ -25,14 +25,15 @@ class CoreModuleExpires : public Module
         CommandExpireLIST cmdexplist;
         CommandReset       cmdreset;
         CommandExpireAT    cmdexpireat;
-        CommandSelectReset	   cmdsreset;
+        CommandSelectReset cmdsreset;
         CommandSelectCount cmdselectcount;
+        CommandDBEReset cmddbreset;
         
     public:     
         
         CoreModuleExpires() : cmdexpire(this), cmdttl(this), cmdsetex(this), cmdpersist(this),
                            cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
-                           cmdselectcount(this)
+                           cmdselectcount(this), cmddbreset(this)
         {
         
         }

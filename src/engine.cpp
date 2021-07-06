@@ -28,6 +28,7 @@
 Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
                       ValidChannel(&ChannelValidator), 
                       GenRandom(&DefaultGenRandom), 
+                      ValidKey(&KeyValidator), 
                       ValidLogin(&LoginValidator), 
                       IsAgent(&AgentValidator),
                       IsDatabase(&DBValidator),
@@ -118,7 +119,7 @@ bool Daemon::ChannelValidator(const std::string& chname)
 void Daemon::DeletePID()
 {
      const std::string rawfile = Kernel->Config->PID;
-     std::string FileName = Kernel->Config->Paths.PrependRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
+     std::string FileName = Kernel->Config->Paths.SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
      std::remove(FileName.c_str());
 }
 
@@ -131,7 +132,7 @@ void Daemon::SavePID(bool exitonfail)
         }
 
         const std::string rawfile = Kernel->Config->PID;
-        std::string FileName = Kernel->Config->Paths.PrependRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
+        std::string FileName = Kernel->Config->Paths.SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
         std::ofstream outfile(FileName.c_str());
 
         if (outfile.is_open())
@@ -292,9 +293,28 @@ bool Daemon::ConfigFileExists(std::string& path)
         return false;
 }
 
-void Daemon::DaemonFork()
+
+void Beryl::Signalizers()
 {
-        signal(SIGTERM, Daemon::VoidSignalManager);
+        signal(SIGALRM, SIG_IGN);
+        signal(SIGCHLD, SIG_IGN);
+        signal(SIGPIPE, SIG_IGN);
+        signal(SIGXFSZ, SIG_IGN);
+        signal(SIGUSR1, SIG_IGN);
+        signal(SIGUSR2, SIG_IGN);
+
+        signal(SIGINT, Beryl::Signalizer);
+        signal(SIGTERM, Beryl::Signalizer);
+}
+
+void Beryl::VoidSignalManager(int)
+{
+        exit(EXIT_CODE_OK);
+}
+
+void Beryl::DaemonFork()
+{
+        signal(SIGTERM, Beryl::VoidSignalManager);
 
         errno = 0;
         int childpid = fork();
@@ -340,22 +360,6 @@ void Daemon::SetCoreLimits()
         {
                 bprint(ERROR, "Unable to increase dump size: %s", strerror(errno));
         }
-}
-
-void Daemon::Signalizers()
-{
-        signal(SIGALRM, SIG_IGN);
-        signal(SIGCHLD, SIG_IGN);
-        signal(SIGPIPE, SIG_IGN);
-        signal(SIGXFSZ, SIG_IGN);
-        signal(SIGINT, Beryl::Signalizer);
-        signal(SIGTERM, Beryl::Signalizer);
-        signal(SIGHUP, Beryl::Signalizer);
-}
-
-void Daemon::VoidSignalManager(int)
-{
-        exit(EXIT_CODE_OK);
 }
 
 std::string Daemon::HumanEpochTime(time_t curtime, const char* format, bool utc)
@@ -410,6 +414,24 @@ bool Daemon::TimingSafeCompare(const std::string& one, const std::string& two)
 
 	return (diff == 0);
 }
+
+void Daemon::iprintb(int number, const char *fmt, ...)
+{
+       std::string buff;
+       SCHEME(buff, fmt, fmt);
+       this->iprintb(number, buff);
+}
+
+void Daemon::iprintb(int number, const std::string& buff)
+{
+       if (!Kernel->Config->printbdebug)
+       {
+               return;
+       }
+
+       std::cout << "[ " << engine::color::green << number << engine::color::reset << " ] " << buff << engine::color::reset << "\r\t" << std::endl;
+}
+
 
 
 void Daemon::printb(const int type, const char *fmt, ...)

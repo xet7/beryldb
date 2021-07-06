@@ -19,63 +19,65 @@
 #include "converter.h"
 #include "core_futures.h"
 
-CommandFutureCount::CommandFutureCount(Module* Creator) : Command(Creator, "FCOUNT", 0, 1)
+CommandFutureList::CommandFutureList(Module* Creator) : Command(Creator, "FTLIST", 0, 1)
 {
          last_empty_ok = true;
          syntax = "<*argument>";
 }
 
-COMMAND_RESULT CommandFutureCount::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
 {
          const std::string& arg = parameters[0];
-         std::string opt;
          
-         if (!parameters.size() || arg.length() > 1)
-         {
-                  unsigned int count = Kernel->Store->Futures->Count(user->current_db, user->select);
-                  user->SendProtocol(BRLD_EXP_COUNT, convto_string(count), count);
-                  return SUCCESS;
-         }
+         /* 
+          * These two arguments are valid.  Arguments valid are:
+          *
+          * h: Human readable format.
+          * r: Raw format date.
+          */
          
-         if (arg != "h" && arg != "r")
+         if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INVALID_PARAM, arg, "Invalid parameter.");
+                  user->SendProtocol(ERR_INVALID_PARAM, INVALID_TYPE);
                   return FAILED;
          }
-          
-         FutureMap& expiring = Kernel->Store->Futures->GetFutures();
          
-         unsigned int counter = 0;
+         /* User has requested all expires with expiration date. */
+         
+         FutureMap& futures = Kernel->Store->Futures->GetFutures();
+         
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
 
-         user->SendProtocol(BRLD_FUTURE_BEGIN, "Begin of FUTURE list.");
-
-         for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         for (FutureMap::iterator it = futures.begin(); it != futures.end(); ++it)
          {
                FutureEntry entry = it->second;
                
-               if (opt.empty() || opt != "a")
+               if (entry.database != user->current_db)
                {
-                     if (entry.select != user->select)
-                     {  
-                         continue;
-                     }
+                     continue;
+               }
+               
+               if (entry.select != user->select)
+               {
+                    continue;
                }
                
                std::string schedule;
                
-               if (arg == "h")
+               if (parameters.size() && arg == "h")
                {
-                    schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+                      schedule = convto_string(entry.schedule);
                }
                else 
                {
-                    schedule = convto_string(entry.schedule);
+                      schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
                user->SendProtocol(BRLD_FUTURE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
          }
          
-        user->SendProtocol(BRLD_FUTURE_END, Daemon::Format("End of FUTURE list (%u)", counter).c_str());
-        return SUCCESS;
+         Dispatcher::JustAPI(user, BRLD_FUTURE_END);
+         return SUCCESS;
+
 }
 

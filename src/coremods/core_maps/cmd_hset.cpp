@@ -19,16 +19,16 @@
 #include "engine.h"
 #include "core_maps.h"
 
-CommandHSET::CommandHSET(Module* Creator) : Command(Creator, "HSET", 3, 3)
+CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 {
          syntax = "<map> <key> <value>";
 }
 
-COMMAND_RESULT CommandHSET::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
 {  
-       const std::string kmap  = parameters[0];
-       const std::string key   = parameters[1];
-       const std::string value = parameters.back();
+       const std::string& kmap  = parameters[0];
+       const std::string& key   = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!Daemon::CheckFormat(user, value))
        {
@@ -39,17 +39,23 @@ COMMAND_RESULT CommandHSET::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandHMove::CommandHMove(Module* Creator) : Command(Creator, "HMOVE", 3, 3)
+CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 {
-         syntax = "<map> <hash> <dest>";
+         syntax = "<map> <key> <value>";
 }
 
-COMMAND_RESULT CommandHMove::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap  = parameters[0];
        const std::string& key   = parameters[1];
-       const std::string& dest   = parameters[2];
+       const std::string& value = parameters.back();
 
-       //MapsHelper::Move(user, user->current_db, user->select, kmap, key, dest);
+       if (!Daemon::CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       MapsHelper::SetNX(user, kmap, key, value);
        return SUCCESS;
 }
+

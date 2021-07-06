@@ -79,6 +79,7 @@ struct DBOptions
         bool createim;
         
         bool pipeline;
+        
 };
 
 /* Stores user-cmd line arguments. */
@@ -134,13 +135,13 @@ class ExportAPI Configuration
 
 		ServerPaths(config_rule* tag);
 
-		std::string PrependDB(const std::string& fn) const { return FileSystem::get_real_path(DB, fn); }
+		std::string SetWDDB(const std::string& fn) const { return FileSystem::get_real_path(DB, fn); }
 
-		std::string PrependConfig(const std::string& fn) const { return FileSystem::get_real_path(Config, fn); }
-		std::string PrependData(const std::string& fn) const { return FileSystem::get_real_path(Data, fn); }
-		std::string PrependLog(const std::string& fn) const { return FileSystem::get_real_path(Log, fn); }
-		std::string PrependModule(const std::string& fn) const { return FileSystem::get_real_path(Module, fn); }
-		std::string PrependRuntime(const std::string& fn) const { return FileSystem::get_real_path(Runtime, fn); }
+		std::string SetWDConfig(const std::string& fn) const { return FileSystem::get_real_path(Config, fn); }
+		std::string SetWDData(const std::string& fn) const { return FileSystem::get_real_path(Data, fn); }
+		std::string SetWDLog(const std::string& fn) const { return FileSystem::get_real_path(Log, fn); }
+		std::string SetWDModule(const std::string& fn) const { return FileSystem::get_real_path(Module, fn); }
+		std::string SetWDRuntime(const std::string& fn) const { return FileSystem::get_real_path(Runtime, fn); }
 	};
 
 	

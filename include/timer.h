@@ -52,7 +52,6 @@ class ExportAPI Timer
 		return this->schedule;
 	}
 
-
 	void SetSchedule(time_t nextschedule)
 	{
 		schedule = nextschedule;
@@ -136,8 +135,13 @@ class ExportAPI TickManager : public safecast<TickManager>
          	
 	unsigned int Count()
 	{
-		  return this->Timers.size();
+		return this->Timers.size();
 	}
 	
+	/* Reset al timers. */
 	
+	void Reset()
+	{
+		this->Timers.clear();
+	}
 };

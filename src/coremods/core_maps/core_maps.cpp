@@ -18,16 +18,16 @@ class CoreModuleMaps : public Module
 {
     private:
     
-        CommandHSET cmdhset;
+        CommandHSet cmdhset;
         CommandHGet cmdhget;
         CommandHDel cmdhdel;
         CommandHCount cmdhcount;
-        CommandHSearch cmdhsearch;
-        CommandHDelAll cmdhdelall;
-        CommandHSeek cmdhseek;
-        CommandHKeys cmdhkeys;
+        CommandHFind cmdhfind;
+        CommandHList cmdhlist;
         CommandHExists cmdhexists;
-        CommandHMove cmdhmove;
+        CommandHStrlen cmdhstrlen;
+        CommandHSetNX cmdhsetnx;
+        CommandHWDel cmdhwdel;
         
     public:	
         
@@ -35,12 +35,13 @@ class CoreModuleMaps : public Module
                            cmdhget(this),
                            cmdhdel(this),
                            cmdhcount(this),
-                           cmdhsearch(this),
-                           cmdhdelall(this),
-                           cmdhseek(this),
-                           cmdhkeys(this),
+                           cmdhfind(this),
+                           cmdhlist(this),
                            cmdhexists(this),
-                           cmdhmove(this)
+                           cmdhstrlen(this),
+                           cmdhsetnx(this),
+                           cmdhwdel(this)
+                           
                            
         {
         

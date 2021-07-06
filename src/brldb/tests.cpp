@@ -27,7 +27,8 @@ void test_dump_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;

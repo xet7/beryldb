@@ -14,9 +14,9 @@
 #include "beryl.h"
 
 CommandModel::CommandModel(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : ServiceProvider(mod, cmd, SERVICE_COMMAND)
-		, min_params(minpara)
-		, max_params(maxpara)
-		, last_empty_ok(true)
+								, min_params(minpara)
+								, max_params(maxpara)
+								, last_empty_ok(true)
 {
 
 }
@@ -54,7 +54,7 @@ Command::~Command()
 
 void Command::RegisterService()
 {
-	if (!Kernel->Commander.add_command(this))
+	if (!Kernel->Commander.AddCommand(this))
 	{
 		throw ModuleException("Command already exists: " + name);
 	}

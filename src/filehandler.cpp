@@ -31,7 +31,7 @@ void FileLoader::Load(const std::string& filename)
 	}
 	else
 	{
-		const std::string real_name = Kernel->Config->Paths.PrependConfig(filename);
+		const std::string real_name = Kernel->Config->Paths.SetWDConfig(filename);
 		lines.clear();
 
 		std::ifstream stream(real_name.c_str());

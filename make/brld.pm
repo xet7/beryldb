@@ -190,7 +190,7 @@ sub execute_command(@)
 	elsif (!$commands{$command}) 
 	{
 		show_error "Unable to find module: <|BOLD $command|>",
-			"Try <|BOLD $0 help|> to check a list of full commands.";
+			"Try <|BOLD $0 help|> to see a list of full commands.";
 	} 
 	else 
 	{

@@ -59,4 +59,12 @@ class CommandAgent : public MultiCommand
 	static COMMAND_RESULT CheckRegister(LocalUser* user);
 };
 
+class CommandILogin : public Command
+{
+ public:
+        
+        CommandILogin(Module* parent);
 
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+
+};

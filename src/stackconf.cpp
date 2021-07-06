@@ -491,7 +491,7 @@ void parse_stack::include_file(config_rule* tag, int flags)
 			flags |= OPTION_NO_ENV;
 		}
 
-		if (!process_conf_buffer(Kernel->Config->Paths.PrependConfig(name), flags, must_have_tag))
+		if (!process_conf_buffer(Kernel->Config->Paths.SetWDConfig(name), flags, must_have_tag))
 		{
 			throw KernelException("Included");
 		}
@@ -513,7 +513,7 @@ void parse_stack::include_file(config_rule* tag, int flags)
 			flags |= OPTION_NO_ENV;
 		}
 
-		const std::string includedir = Kernel->Config->Paths.PrependConfig(name);
+		const std::string includedir = Kernel->Config->Paths.SetWDConfig(name);
 		std::vector<std::string> files;
 	
 		if (!FileSystem::AsFileList(includedir, files, "*.conf"))
@@ -574,7 +574,7 @@ void parse_stack::load_file_tobuff(const std::string& key, const std::string& na
 		throw KernelException("Invalid <execfiles> tag in file included with noexec=\"yes\"");
 	}
 
-	std::string path = Kernel->Config->Paths.PrependConfig(name);
+	std::string path = Kernel->Config->Paths.SetWDConfig(name);
 	FileStream file(exec ? popen(name.c_str(), "r") : fopen(path.c_str(), "r"), exec);
 
 	if (!file)

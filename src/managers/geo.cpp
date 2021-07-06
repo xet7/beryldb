@@ -19,113 +19,60 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "managers/geo.h"
-/*
-void //GeoHelper::Remove(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, const std::string& arg)
-{
-       std::shared_ptr<georemove_query> query = std::make_shared<georemove_query>();
-       
-       query->database = database;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->hesh = arg;
-       query->key = entry;
-       query->value = value;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
-       Kernel->Store->Push(query);
-}
+#include "helpers.h"
 
-void //GeoHelper::GeoClose(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value, signed int offset, signed int limit)
-{
-       std::shared_ptr<geoclose_query> query = std::make_shared<geoclose_query>();
-       
-       query->database = database;
-       query->user = user;
-       query->limit = limit;
-       query->offset = offset;
-
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
-       query->value = value;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
-       Kernel->Store->Push(query);
-}
-
-void //GeoHelper::Calc(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& value)
-{
-       std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
-              
-       
-       query->database = database;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
-       query->value = value;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
-       Kernel->Store->Push(query);
-}
-
-void //GeoHelper::Add(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, const std::string& latitude, const std::string& longitude)
+void GeoHelper::Add(User* user, const std::string& key, const std::string& latitude, const std::string& longitude)
 {
        std::shared_ptr<geoadd_query> query = std::make_shared<geoadd_query>();
-              
-       
-       query->database = database;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
+       Helpers::make_geo_query(user, query, key);
        query->value = latitude;
        query->hesh = longitude;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
        Kernel->Store->Push(query);
 }
 
-void //GeoHelper::Get(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
+void GeoHelper::Get(User* user, const std::string& key)
 {
        std::shared_ptr<geoget_query> query = std::make_shared<geoget_query>();
-              
-       
-       query->database = database;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
+       Helpers::make_geo_query(user, query, key);
        Kernel->Store->Push(query);
 }
 
-void //GeoHelper::Del(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry)
+void GeoHelper::Find(User* user, const std::string& key, signed int offset, signed int limit)
 {
-       std::shared_ptr<geodel_query> query = std::make_shared<geodel_query>();
+       std::shared_ptr<gkeys_query> query = std::make_shared<gkeys_query>();
+       Helpers::make_geo_query(user, query, key);
        
-              
-       
-       query->database = database;
-       query->user = user;
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
-       query->format = query->int_keys + query->select_query + ":" + to_bin(query->key);
-       Kernel->Store->Push(query);
-}
-
-void //GeoHelper::Find(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& entry, signed int offset, signed int limit)
-{
-       std::shared_ptr<geofind_query> query = std::make_shared<geofind_query>();
-       
-              
-       
-       query->database = database;
-       query->user = user;
-       query->limit = limit;
        query->offset = offset;
-       
-       query->select_query = where;
-       query->int_keys = INT_GEO;
-       query->key = entry;
+       query->limit = limit;
        Kernel->Store->Push(query);
 }
-*/
+
+void GeoHelper::Calc(User* user, const std::string& key, const std::string& key2)
+{
+       std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
+       Helpers::make_geo_query(user, query, key);
+       
+       query->value = key2;
+       Kernel->Store->Push(query);
+}
+
+void GeoHelper::Remove(User* user, const std::string& key, const std::string& key2)
+{
+       std::shared_ptr<georem_query> query = std::make_shared<georem_query>();
+       Helpers::make_geo_query(user, query, key);
+
+       query->value = key2;
+       Kernel->Store->Push(query);
+}
+
+void GeoHelper::Distance(User* user, const std::string& key, const std::string& key2, signed int offset, signed int limit)
+{
+       std::shared_ptr<geodistance_query> query = std::make_shared<geodistance_query>();
+       Helpers::make_geo_query(user, query, key);
+       
+       query->value = key2;
+       query->offset = offset;
+       query->limit = limit;
+       
+       Kernel->Store->Push(query);
+}

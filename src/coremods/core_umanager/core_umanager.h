@@ -15,11 +15,11 @@
 
 #include "beryl.h"
 
-class CommandFlags : public Command
+class CommandGetFlags : public Command
 {
  public:
 
-        CommandFlags(Module* parent);
+        CommandGetFlags(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
@@ -42,11 +42,11 @@ class CommandDelUser : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-class CommandSetFlags : public Command
+class CommandAddFlag : public Command
 {
  public:
 
-        CommandSetFlags(Module* parent);
+        CommandAddFlag(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
@@ -73,11 +73,11 @@ class CommandListUsers : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-class CommandChangePass : public Command
+class CommandPasswd : public Command
 {
  public:
 
-        CommandChangePass(Module* parent);
+        CommandPasswd(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
@@ -109,6 +109,15 @@ class CommandResetCache : public Command
  public:
 
         CommandResetCache(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
+
+class CommandListFlags : public Command
+{
+ public:
+
+        CommandListFlags(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };

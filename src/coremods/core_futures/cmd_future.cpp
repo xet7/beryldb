@@ -15,6 +15,8 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
+#include "managers/expires.h"
+#include "managers/globals.h"
 #include "engine.h"
 #include "converter.h"
 #include "core_futures.h"
@@ -28,17 +30,17 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
 {       
           const std::string& seconds = parameters[0];
           const std::string& key = parameters[1];
-          const std::string& value = parameters[2];
+          const std::string& value = parameters.back();
           
           if (!is_number(seconds))
           {
-                 user->SendProtocol(ERR_FUTURE, seconds, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_FUTURE, MUST_BE_NUMERIC);
                  return FAILED;
           }
 
           if (!is_positive_number(seconds))
           {
-                 user->SendProtocol(ERR_FUTURE, seconds, MUST_BE_POSIT.c_str());
+                 user->SendProtocol(ERR_FUTURE, MUST_BE_POSIT);
                  return FAILED;
           }
   
@@ -48,8 +50,7 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
           }   
 
           unsigned int exp_usig = convto_num<unsigned int>(seconds);
-          Kernel->Store->Futures->Add(user->current_db, exp_usig, key, value, user->select, false);
-          user->SendProtocol(BRLD_FUTURE_ADD, key, value, PROCESS_OK);
+          ExpireHelper::Future(user, key, exp_usig, value);
           return SUCCESS;
 }
 
@@ -66,13 +67,13 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_TTE, key, user->select, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_TTE, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_NOT_FUTURE, key, user->select, PROCESS_NULL);
+                  user->SendProtocol(ERR_NOT_FUTURE, PROCESS_NULL);
                   return FAILED;
          }
          
@@ -110,8 +111,6 @@ CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETAL
 
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
-         user->SendProtocol(BRLD_INFO_FUT_DEL, Kernel->Store->Futures->CountAll(),  Daemon::Format("Deleting: %d", Kernel->Store->Futures->CountAll()));
-
          FutureManager::Reset();
          user->SendProtocol(BRLD_FUTURE_DELETED, PROCESS_OK);
          return SUCCESS;
@@ -152,7 +151,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
              use = user->select;
         }
 
-        unsigned int counter = FutureManager::SelectReset(user->current_db, use);
+        unsigned int counter = FutureManager::SelectReset(user->current_db->GetName(), use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, counter, counter);
 
         return SUCCESS;
@@ -167,43 +166,10 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
 {
         const std::string& key = parameters[0];
         
-        if (FutureManager::Delete(user->current_db, key, user->select))
-        {
-              user->SendProtocol(BRLD_FUTURE_DEL, key, user->select, PROCESS_OK);
-        }
-        else
-        {
-              user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, PROCESS_NULL);
-              return FAILED;
-        }
+        GlobalHelper::FutureCancel(user, key);
         
         return SUCCESS;
 }
-
-
-CommandFValue::CommandFValue(Module* Creator) : Command(Creator, "FVALUE", 1, 1)
-{
-         syntax = "<key>";
-}
-
-COMMAND_RESULT CommandFValue::Handle(User* user, const Params& parameters) 
-{
-        const std::string& key = parameters[0];
-        
-        std::tuple<int, std::string> response = FutureManager::GetVal(user->current_db, key, user->select);
-        
-        if (std::get<0>(response))
-        {
-               user->SendProtocol(BRLD_FUTURE_VALUE, key, user->select, std::get<1>(response));
-        }
-        else
-        {
-               user->SendProtocol(ERR_FUTURE_NOT_FOUND, key, user->select, 0, "0");
-               return FAILED;
-        }
-        
-        return SUCCESS;
-}        
 
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT", 3, 3)
@@ -213,31 +179,29 @@ CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT",
 
 COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
 {    
-          const std::string& exp_str = parameters[0];
+          const std::string& seconds = parameters[0];
           const std::string& key = parameters[1];
           const std::string& value = parameters[1];
           
-          if (!is_number(exp_str))
+          if (!is_number(seconds))
           {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_FUTURE, MUST_BE_NUMERIC);
                  return FAILED;
           }
+
+          if (!is_positive_number(seconds))
+          {
+                 user->SendProtocol(ERR_FUTURE, MUST_BE_POSIT);
+                 return FAILED;
+          }
+
+          if (!Daemon::CheckFormat(user, value))
+          {
+               return FAILED;
+          }   
           
-          if (!is_positive_number(exp_str))
-          {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, MUST_BE_POSIT.c_str());
-                 return FAILED;
-          }
-                  
-          unsigned int exp_usig = convto_num<unsigned int>(exp_str);
+          unsigned int exp_usig = convto_num<unsigned int>(seconds);
+          ExpireHelper::FutureAT(user, key, exp_usig, value);
 
-          if ((time_t)exp_usig < Kernel->Now())
-          {
-                 user->SendProtocol(ERR_EXPIRE, exp_str, "Expire already passed.");
-                 return FAILED;
-          }
-
-          Kernel->Store->Futures->Add(user->current_db, exp_usig, key, value, user->select, true);
-          user->SendProtocol(BRLD_FUTURE_ADD, key, value, PROCESS_OK);
           return SUCCESS;
 }

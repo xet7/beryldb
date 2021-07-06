@@ -20,6 +20,7 @@
 #include "brldb/dbmanager.h"
 #include "managers/keys.h"
 #include "managers/maps.h"
+#include "managers/globals.h"
 #include "managers/settings.h"
 #include "managers/expires.h"
 
@@ -34,14 +35,14 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
 {
         ExpireMap& all = Kernel->Store->Expires->GetExpires();
 
-        std::lock_guard<std::mutex> lg(ExpireManager::mute);
-
         /* Nothing to delete, at all. */
         
         if (!all.size())
         {
                 return false;
         }
+
+        std::lock_guard<std::mutex> lg(ExpireManager::mute);
 
         for (ExpireMap::iterator it = all.begin(); it != all.end(); )
         {
@@ -63,7 +64,7 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
                        continue;
                 }
 
-                Kernel->Store->Expires->ExpireList.erase(it++);
+                Kernel->Store->Expires->ExpireList.erase(it);
                 return true;
         }
 
@@ -105,7 +106,7 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
               ExpireManager::Delete(database, key, select);
         }
         
-        ExpireManager::mute.lock();
+        std::lock_guard<std::mutex> lg(ExpireManager::mute);
         
         time_t Now = Kernel->Now();
         ExpireEntry New;
@@ -128,16 +129,13 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
         New.select = select;
         
         Kernel->Store->Expires->ExpireList.insert(std::make_pair(New.schedule, New));
-        ExpireManager::mute.unlock();
         
-        bprint(DONE, "Adding expire: %s", key.c_str());
+//        bprint(DONE, "Adding expire: %s", key.c_str());
         return New.schedule;
 }
 
 ExpireEntry ExpireManager::Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
 {
-        std::lock_guard<std::mutex> lg(ExpireManager::mute);
-
         ExpireMap& current = Kernel->Store->Expires->GetExpires();
 
         for (ExpireMap::iterator it = current.begin(); it != current.end(); it++)
@@ -162,8 +160,8 @@ ExpireMap& ExpireManager::GetExpires()
 void ExpireManager::Flush(time_t TIME)
 {
         /* 
-         * Considering that Flush is an static function, this is the only valid to get expiring
-         * entries. 
+         * Considering that Flush is an static function, this is the only 
+         * valid to get expiring entries. 
          */
            
         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
@@ -173,8 +171,6 @@ void ExpireManager::Flush(time_t TIME)
               return;
         }
         
-        ExpireManager::mute.lock();
-
         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
         {
               if (it->first >= TIME)
@@ -183,14 +179,10 @@ void ExpireManager::Flush(time_t TIME)
               }
               
               ExpireEntry entry = it->second;
-              KeyHelper::Delete(Kernel->Clients->Global, entry.database, entry.select, entry.key, true);
+              GlobalHelper::ExpireDelete(entry.database, entry.select, entry.key);
               
-              /* Now we remove the entry from the ExpireList Map. */
-              
-              Kernel->Store->Expires->ExpireList.erase(it++);
+              it++;
         }  
-        
-        ExpireManager::mute.unlock();
 }
 
 signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
@@ -199,7 +191,42 @@ signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::
       return ExpireManager::GetTIME(database, key, select);
 }
 
-unsigned int ExpireManager::SelectReset(std::shared_ptr<Database> database, const std::string& select)
+unsigned int ExpireManager::DatabaseReset(const std::string& dbname)
+{
+      ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+      if (!expiring.size())
+      {
+              return 0;
+      }
+
+      unsigned int counter = 0;
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return 0;
+      }
+
+      std::lock_guard<std::mutex> lg(ExpireManager::mute);
+      
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+            if (it->second.database == database)
+            {
+                       ExpireEntry entry = it->second;
+                       ExpireHelper::Persist(Kernel->Clients->Global, entry.key, entry.select, entry.database);
+                       counter++;
+            }
+
+            it++;
+      }  
+      
+      return counter;
+}
+
+unsigned int ExpireManager::SelectReset(const std::string& dbname, const std::string& select)
 {
       /* Keeps track of deleted expires */
       
@@ -212,26 +239,25 @@ unsigned int ExpireManager::SelectReset(std::shared_ptr<Database> database, cons
               return 0;
       }
 
-      ExpireManager::mute.lock();
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
 
-      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      if (!database)
+      {
+            return 0;
+      }
+
+      std::lock_guard<std::mutex> lg(ExpireManager::mute);
+
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); it++)
       {
             if (it->second.select == select && it->second.database == database)
             {
                        ExpireEntry entry = it->second;
                        ExpireHelper::Persist(Kernel->Clients->Global, entry.key, entry.select, entry.database);
-
-                       Kernel->Store->Expires->ExpireList.erase(it++);
                        counter++;
-            }
-            else
-            {
-                       it++;
             }
       }  
 
-      ExpireManager::mute.unlock();
-      
       return counter;
 }
 
@@ -244,25 +270,27 @@ void ExpireManager::Reset()
               return;
       }
 
-      ExpireManager::mute.lock();
+      std::lock_guard<std::mutex> lg(ExpireManager::mute);
 
-      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); it++)
       {
               ExpireEntry entry = it->second;
               ExpireHelper::Persist(Kernel->Clients->Global, entry.key, entry.select, entry.database);
-
-              /* Now we remove the entry from the ExpireList Map. */
-
-              Kernel->Store->Expires->ExpireList.erase(it++);
       }  
-
-      ExpireManager::mute.unlock();
 }
 
-unsigned int ExpireManager::Count(std::shared_ptr<Database> database, const std::string& select)
+unsigned int ExpireManager::Count(const std::string& dbname, const std::string& select)
 {
         ExpireMap& expires = Kernel->Store->Expires->GetExpires();
-        std::lock_guard<std::mutex> lg(ExpireManager::mute);
+        
+        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+        if (!database)
+        {
+              return 0;
+        }
+
+       std::lock_guard<std::mutex> lg(ExpireManager::mute);
         
         unsigned int counter = 0;
 

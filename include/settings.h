@@ -70,6 +70,8 @@ class ExportAPI Settings : public safecast<Settings>
 
         void SetDefaults();
         
+        /* Load data */
+        
         void Load();
 };
 

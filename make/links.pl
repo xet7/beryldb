@@ -1,6 +1,4 @@
 #!/usr/bin/env perl
-
-#
 # BerylDB - A modular database.
 # http://www.beryldb.com
 #
@@ -84,11 +82,15 @@ sub do_core_link
 	exec $execstr;
 }
 
-sub do_link_dir {
+sub do_link_dir 
+{
 	my ($dir, $link_flags) = (shift, '');
-	for my $file (<$dir/*.cpp>) {
+
+	for my $file (<$dir/*.cpp>) 
+	{
 		$link_flags .= rpath(get_environment($file, 'LinkerFlags', '')) . ' ';
 	}
+	
 	my $execstr = "$ENV{CXX} -o $out $ENV{PICLDFLAGS} @_ $link_flags";
 	message 'LINK', $out, $execstr;
 	exec $execstr;

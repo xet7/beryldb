@@ -15,7 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
-#include "managers/lists.h"
+#include "managers/maps.h"
 #include "managers/user.h"
 #include "managers/settings.h"
 #include "managers/expires.h"
@@ -29,9 +29,9 @@ namespace
      
      void Autojoin(User* user)
      {
-/*              VectorTuple listvector = ListHelper::Get(TABLE_AUTOJOIN, user->login);
-              Args chans = std::get<1>(listvector);
-
+              const std::string& userchans = user->login + "/chans";
+              Args chans = STHelper::HKeys(userchans);
+              
               LocalUser* localuser = IS_LOCAL(user);
 
               for (Args::iterator i = chans.begin(); i != chans.end(); i++)
@@ -46,12 +46,12 @@ namespace
                        }
 
                        Channel::JoinUser(true, localuser, channel, true);
-              }*/
+              }
      }
      
      void LoadNotify(User* user)
      {
-/*             const std::string level = STHelper::Get("notify", user->login);
+             const std::string level = STHelper::Get("notify", user->login);
              
              if (level.empty())
              {
@@ -76,11 +76,11 @@ namespace
              {
                     /* Unable to detexct notify level. */
                     
-  /*                  return;*/
+                    return;
              }
 
-  //           Kernel->Notify->Add(monitor, user);
-//     }
+             Kernel->Notify->Add(monitor, user);
+     }
 }
 
 class ModuleCoreDB : public Module
@@ -104,24 +104,26 @@ class ModuleCoreDB : public Module
                  
                  /* Will only insert chans to the table if AutoJoin is enabled. */
                     
-/*                 if (!Kernel->Sets->AsBool("autojoin"))
+                 if (!Kernel->Sets->AsBool("autojoin"))
                  {
-                     return;
+                      return;
                  }
-*/
+
                  /* Users joins channels based on the TABLE_AUTOJOIN */
                  
-                 //ListHelper::Add(TABLE_AUTOJOIN, memb->user->login, memb->chan->name);
+                 const std::string userchans = memb->user->login + "/chans";
+                 CMapsHelper::Set(userchans, memb->chan->name, convto_string(Kernel->Now()));
         }
 
         void OnUserPart(Subscription* memb, DiscardList& excepts)
         {		
-  /*               if (!Kernel->Sets->AsBool("autojoin"))
+                 if (!Kernel->Sets->AsBool("autojoin"))
                  {
                       return;
-                 }*/
+                 }
 
-                 //ListHelper::Delete(TABLE_AUTOJOIN, memb->user->login, memb->chan->name);
+                 const std::string userchans = memb->user->login + "/chans";
+                 CMapsHelper::Del(userchans, memb->chan->name);
         }
 
         /*
@@ -138,43 +140,48 @@ class ModuleCoreDB : public Module
               
               std::shared_ptr<Session> session = Kernel->Logins->Sessions->Find(user->login);
               
-              user->SendProtocol(BRLD_YOUR_FLAGS, user->login, "a");
-              
               if (session)
               {
                     Kernel->Logins->Sessions->Attach(user, user->login, session->rawflags);
-                    user->SendProtocol(BRLD_YOUR_FLAGS, user->login, session->rawflags.c_str());
-                    //LoadNotify(user);
+                    LoadNotify(user);
                     return;
               }
               
-/*              const std::string& flags = UserHelper::FindAdmin(user->login);    
+              const std::string& flags = UserHelper::CheckFlags(user->login);    
+              
               Kernel->Logins->Sessions->Attach(user, user->login, flags);
               LoadNotify(user);
               
-              /* All users should be notified about their flags. */
-  /*            
-              user->SendProtocol(BRLD_YOUR_FLAGS, user->login, flags.c_str());
-              
               /* User will not join chans */
               
-    /*          if (!Kernel->Sets->AsBool("autojoin"))
+              if (!Kernel->Sets->AsBool("autojoin"))
               {
                     return;
               }
               
               /* Iterates over the user's channels. */
               
-      /*        Autojoin(user);*/
+              Autojoin(user);
         }
         
         /* Loads configuration from core database. */
         
         void Initialize()
         {
-//               Kernel->Sets->Load();
-                 ExpireHelper::List(Kernel->Store->GetDefault());
-
+                 Kernel->Sets->Load();
+                 Args dblist = STHelper::HKeys("databases");
+                 
+                 for (Args::iterator i = dblist.begin(); i != dblist.end(); i++)
+                 {
+                       std::string name = *i;
+                       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(name);
+                      
+                       if (database)
+                       {
+                            ExpireHelper::List(database);
+                            ExpireHelper::ListFutures(database);
+                       }
+                 }
         }
 
         Version GetDescription() 

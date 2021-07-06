@@ -157,3 +157,9 @@ void MonitorHandler::Flush()
                
         this->buffer.pop_front();
 }
+
+void MonitorHandler::Reset()
+{
+        this->MonitorList.clear();
+        this->buffer.clear();
+}

@@ -23,7 +23,7 @@ Configuration::ServerPaths::ServerPaths(config_rule* tag)
 	, Log(tag->as_string("logdir", LOG_PATH, 1))
 	, DB(tag->as_string("dbdir", DB_PATH, 1))
 	, Module(tag->as_string("moduledir", MODULE_PATH, 1))
-	, Runtime(tag->as_string("runtimedir", RUNTIME_PATH, 1))
+	, Runtime(tag->as_string("Timedir", RUNTIME_PATH, 1))
 {
 
 }

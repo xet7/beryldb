@@ -20,27 +20,30 @@
 #include "managers/lists.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
+#include "cstruct.h"
 
-/*bool STHelper::Set(const std::string& type, const std::string& key, const std::string& value)
+bool STHelper::Set(const std::string& type, const std::string& key, const std::string& value)
 {
-        //MapsHelper::Set(TABLE_SETTINGS, type, key, value);
+        CMapsHelper::Set(type, key, value);
         return true;
 }
 
 std::string STHelper::Get(const std::string& type, const std::string& key)
 {
-        BasicTuple tuple = //MapsHelper::Get(TABLE_SETTINGS, type, key);
-        const std::string response = std::get<1>(tuple);
-        return response;
+        return CMapsHelper::Get(type, key).response;
+}
+
+Args STHelper::HKeys(const std::string& key)
+{
+       return CMapsHelper::HKeys(key).list;
 }
 
 void STHelper::Delete(const std::string& type, const std::string& key)
 {
-        //MapsHelper::Delete(TABLE_SETTINGS, type, key);
+        CMapsHelper::Del(type, key);
 }
 
-void STHelper::DeleteAll(const std::string& type)
+void STHelper::Erase(const std::string& type)
 {
-        //MapsHelper::DeleteAll(TABLE_SETTINGS, type);
+        CMapsHelper::Erase(type);
 }
-*/

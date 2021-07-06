@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "core_user.h"
+#include "managers/settings.h"
 
 CommandLogin::CommandLogin(Module* parent) : MultiCommand(parent, "LOGIN", 1, 1)
 {
@@ -50,11 +51,33 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 		return FAILED;
 	}
 
-	if (user->registered < REG_LOGINUSER)
-	{
-		user->registered = (user->registered | REG_LOGIN);
-		return CommandAgent::CheckRegister(user);
-	}
+        /* Default database assignation. */
+
+        const std::string dbuser = STHelper::Get("dbuser", newlogin);
+        
+        if (!dbuser.empty())
+        {
+                std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbuser);
+
+                if (!database)
+                {
+	                user->SetDatabase(Kernel->Store->GetDefault());
+                }
+                else
+                {
+	                user->SetDatabase(database);
+                }
+        }
+        else
+        {
+                user->SetDatabase(Kernel->Store->GetDefault());
+        }
+
+        if (user->registered < REG_LOGINUSER)
+        {
+                user->registered = (user->registered | REG_LOGIN);
+                return CommandAgent::CheckRegister(user);
+        }
 
 	return SUCCESS;
 }

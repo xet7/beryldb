@@ -102,7 +102,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         }
         
         MonitorMap all = Kernel->Monitor->GetList(arg);
-        user->SendProtocol(BRLD_MONITOR_LIST, arg, Daemon::Format("BEGIN of MONITOR list.").c_str());
+        Dispatcher::JustAPI(user, BRLD_MONITOR_LIST);
         
         unsigned int counter = 0;
 
@@ -122,10 +122,10 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
                     strlevel = "DEBUG";
                }
                
-               user->SendProtocol(BRLD_MONITOR_USER, arg, umonitor->instance, Daemon::Format("%s : %s ", umonitor->instance.c_str(), strlevel.c_str()).c_str());
+               user->SendProtocol(BRLD_MONITOR_USER, Daemon::Format("%s: %s ", umonitor->instance.c_str(), strlevel.c_str()).c_str());
                counter++;
         }
         
-        user->SendProtocol(BRLD_MONITOR_LIST, arg, Daemon::Format("BEGIN of MONITOR list (%u)", counter).c_str());
+        Dispatcher::JustAPI(user, BRLD_END_MONITOR_LIST);
         return SUCCESS;
 }

@@ -11,12 +11,8 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include <signal.h>
-
 #include "beryl.h"
 #include "exit.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbflush.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 
@@ -250,7 +246,7 @@ void Beryl::Dispatcher()
 			
 		    	/* Run functions that are meant to run every 1 second. */
 		    	
-			this->RunTimed(this->TIME.tv_sec);
+			this->Timed(this->TIME.tv_sec);
 		}
 
 	        /* Delivers pending data to clients. */
@@ -310,7 +306,7 @@ void Beryl::Loop()
         this->Atomics->Run();
 }
 
-void Beryl::RunTimed(time_t current)
+void Beryl::Timed(time_t current)
 {
  	/* We call all pending timers to be delivered. */
 
@@ -529,15 +525,11 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
          
         this->Core->DB->Close();
 
-	/* Calculate uptime before exiting. */
-	
-	unsigned int up = static_cast<unsigned int>(Kernel->Now() - Kernel->GetStartup());
-	
 	/* Exit msg */
 	
-	if (up > 1)
+	if (this->GetUptime() > 1)
 	{
-		std::string exit = Daemon::Uptime("Exiting after uptime:", up);
+		std::string exit = Daemon::Uptime("Exiting after uptime:", this->GetUptime());
 	
 		/* Log uptime. */
 		
@@ -557,6 +549,16 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	/* Cleans up config file. */
 	
         this->ConfigFile.clear();
+
+        this->Config = nullptr;
+        
+        /* Reset memory assignations. */
+        
+        memset(&this->TIME, 0, sizeof(timespec));        
+        
+        memset(&this->startup, 0, sizeof(time_t));        
+        
+        memset(&this->PendingBuffer, BUFFERSIZE, sizeof(char));
         
         /* The END. */
         

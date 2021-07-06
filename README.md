@@ -1,7 +1,9 @@
+# BerylDB
 
 <a target="_blank" href="https://twitter.com/beryldb"><img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldb"></a>
-<a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/Linux%20build/badge.svg?4"></a>
-<a target="_blank" href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb?5" /></a>
+<a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/Linux%20build/badge.svg"></a>
+<a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/MacOS%20Build/badge.svg"></a>
+<a target="_blank" href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb" /></a>
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 <br>
 
@@ -49,17 +51,16 @@ sudo apt-get install librocksdb-dev build-essential
 Download latest version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/tags/0.5.2.tar.gz
-tar -xvzf 0.5.2.tar.gz
-cd beryldb-0.5.2/
+https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
+unzip 1.0.zip
+cd beryldb-1.0/
 ```
 
 You may now configure BerylDB following these quick steps: 
 
 ```
 ./configure
-make -j4 
-make install
+make -j4 install
 ```
 
 Beryl is compiled in verbose level by default. If you prefer to build with minimal
@@ -105,12 +106,18 @@ Inside the root directory, you will find:
 * `etc`: Libraries developed by 3rd party organizations.
 * `make`: Contains several Perl-based functions to compile BerylDB.
 
+NOTE: Beryl has changed a bit. Some functions and file names may have
+changed. Hence, Beryl's documentation may be closer to the ``stable`` branch.
+Nonetheless, the core structure is the same, and it has been intensively
+tested.
+
 ## Contributing
 
 We are always welcoming new members. If you wish to start contributing code to the 
 Beryl project in any form, such as in the form of pull requests via Github, 
 a code snippet or a patch, you will need to agree to release your work under the terms of the
 BSD license.
+
 
 ## External Links
 

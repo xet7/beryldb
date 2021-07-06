@@ -15,9 +15,36 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/lists.h"
 #include "engine.h"
 #include "core_list.h"
+
+CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+       
+       if (!is_number(value))
+       {
+                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!is_positive_number(value))
+       {
+                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
+                return FAILED;
+       }
+       
+       ListHelper::Resize(user, key, value);
+       return SUCCESS;  
+}
 
 CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 {
@@ -28,61 +55,41 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
        const std::string key = parameters[0];
         
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
-       if (parameters.size() == 2)
+       if (lms[0] == 0)
        {
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
-        
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
-        //ListHelper::Get(user, Kernel->Store->GetDefault(), user->select, key, offset, limit);
-        return SUCCESS;  
+       ListHelper::Get(user, key, offset, limit);
+       return SUCCESS;  
 }
 
-CommandLSearch::CommandLSearch(Module* Creator) : Command(Creator, "LSEARCH", 1, 3)
+CommandLKeys::CommandLKeys(Module* Creator) : Command(Creator, "LKEYS", 1, 3)
 {
          syntax = "<%key> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandLSearch::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
         
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
-       if (parameters.size() == 2)
+       if (lms[0] == 0)
        {
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
-
-        //ListHelper::Search(user, Kernel->Store->GetDefault(), user->select, key, offset, limit);
-        return SUCCESS;  
+       ListHelper::Keys(user, key, offset, limit);
+       return SUCCESS;  
 }
 
 CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
@@ -94,43 +101,63 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
-
-       signed int offset;
-       signed int limit;
-
-       if (parameters.size() == 3)
-       {
-             if (!is_zero_or_great_or_mone(parameters[2]))
-             {
-                 user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                 return FAILED;
-             }
+        
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = 0;
-       }
-       else if (parameters.size() == 4)
+       if (lms[0] == 0)
        {
-             if (!is_zero_or_great_or_mone(parameters[3]) || !is_zero_or_great(parameters[2]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-       
-             limit = convto_num<signed int>(parameters[3]); 
-             offset = convto_num<signed int>(parameters[2]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
+            return FAILED; 
        }
        
-       if (!Daemon::CheckFormat(user, value))
-       {
-            return FAILED;
-       }
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
-       //ListHelper::Find(user, Kernel->Store->GetDefault(), user->select, key, value, offset, limit);
+       ListHelper::Find(user, key, value, offset, limit);
        return SUCCESS;  
 }
+
+CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       if (!is_number(value))
+       {
+                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!is_positive_number(value))
+       {
+                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
+                return FAILED;
+       }
+       
+       ListHelper::Index(user, key, value);
+       return SUCCESS;  
+}
+
+CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+        if (!Daemon::CheckFormat(user, value))
+        {
+            return FAILED;
+        }
+
+        ListHelper::Repeats(user, key, value);
+        return SUCCESS;  
+}
+

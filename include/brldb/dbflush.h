@@ -42,7 +42,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 
         /* Flush processor */
         
-        static void Flush(User* user, std::shared_ptr<query_base> signal);
+        static void Flush(User* user, std::shared_ptr<QueryBase> signal);
 
         /* 
          * NotFound is called when a database was not found when processing
@@ -52,24 +52,102 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 	 *
 	 *         · User: User to process.
 	 * 
-         * @return:
+         * @print:
  	 *
-         *         · signal: Original requesting signal.
+         *         · Original requesting signal was not found.
          */    
          
-         static void NotFound(User* user, std::shared_ptr<query_base> signal);
+         static void NotFound(User* user, std::shared_ptr<QueryBase> signal);
 
-         static void MissArgs(User* user, std::shared_ptr<query_base> signal);
+        /* 
+         * Format is not valid.
+         * 
+         * @print:
+         *     
+         *        · INVALID_FORMAT
+         */
+             
+         static void InvalidFormat(User* user, std::shared_ptr<QueryBase> signal);
 
-         static void InvalidType(User* user,  std::shared_ptr<query_base> signal);
+        /* 
+         * Missing arguments.
+         * 
+         * @print:
+         *     
+         *        · MIS_ARGS
+         */
 
-         static void StatusFailed(User* user, std::shared_ptr<query_base> signal);
+         static void MissArgs(User* user, std::shared_ptr<QueryBase> signal);
+         
+        /* 
+         * Unable to modify destination key.
+         * 
+         * @print:
+         *     
+         *        · INVALID_FORMAT (DATA_TYPE).
+         */
 
-         static void EntryExists(User* user, std::shared_ptr<query_base> signal);
+         static void InvalidType(User* user,  std::shared_ptr<QueryBase> signal);
 
-         static void CheckBlock(User* user, std::shared_ptr<query_base> signal);
+        /* 
+         * Request has failed, due to a database failure.
+         * 
+         * @print:
+         *     
+         *        · DB_NULL.
+         */
 
-         static void UnableWrite(User* user, std::shared_ptr<query_base> signal);
+         static void StatusFailed(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Entry already is defined.
+         * 
+         * @print:
+         *     
+         *        · ENTRY_DEFINED
+         */
+
+         static void EntryExists(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Unable to write data.
+         * 
+         * @print:
+         *     
+         *        · PROCESS_FALSE
+         */
+
+         static void UnableWrite(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Entry tried to be modify is not numeric.
+         * 
+         * @print:
+         *     
+         *        · PROCESS_NOT_NUM
+         */
+
+         static void NotNumeric(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Range is invalid.
+         * 
+         * @print:
+         *     
+         *        · INVALID_RANGE
+         */
+
+         static void InvalidRange(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Entry is expiring.
+         * 
+         * @print:
+         *     
+         *        · ENTRY_EXPIRES
+         */
+
+         static void EntryExpires(User* user, std::shared_ptr<QueryBase> signal);
         
          /* Results from the processing threads. */
         
@@ -83,37 +161,15 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 
          std::atomic<bool> flushmute;
 
-         /* Format locker. */
-        
-         static std::mutex wlock;
-        
-         /* Locked words. */
-        
-         std::vector<std::string> locks;
-   
-   public:
-           
-         /* Lock for operations. */
-        
-         std::atomic<bool> opmute;
-
-         /* Locks a entry. */
-        
-         void Lock(const std::string& format);
-
-         /* Unlocks an entry. */
-        
-         void Unlock(const std::string& format);
-        
-         /* Checks if an entry is locked. */
-
-         bool IsLocked(const std::string& format);
+    public:
+    
+         static std::mutex query_mute;
 
          /* Flush constructor, should should be set to OK after this. */
         
          DataFlush();
 
-         static void Process(User* user, std::shared_ptr<query_base> signal);
+         static void Process(User* user, std::shared_ptr<QueryBase> signal);
         
          /* Pauses this->running */
         
@@ -133,11 +189,11 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 
          /* Adds a new notification */
 
-         static void AttachResult(std::shared_ptr<query_base> result);
+         static void AttachResult(std::shared_ptr<QueryBase> result);
 
          /* Called in the mainloop, used to dispatch notifications and pending queries. */
         
-         static void DispatchAll();
+         static void Process();
 
          /* Close all threads */
         
@@ -162,6 +218,8 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          {
                 return this->threadslist.size();
          }
+         
+         /* Removes all threads. */
          
          void EraseAll()
          { 

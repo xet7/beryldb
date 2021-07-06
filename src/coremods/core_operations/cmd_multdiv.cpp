@@ -31,12 +31,12 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG.c_str()));
+                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_DIV, value);
-        return SUCCESS;  
+        KeyHelper::Operation(user, key, OP_DIV, value);
+        return SUCCESS; 
 }
 
 CommandMult::CommandMult(Module* Creator) : Command(Creator, "MULT", 2, 2)
@@ -51,10 +51,10 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_MUST_BE_DOUBLE, Daemon::Format("%s", MUST_REAL_MSG.c_str()));
+                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
-        //KeyHelper::Operation(user, Kernel->Store->GetDefault(), user->select, key, OP_MULT, value);
-        return SUCCESS;  
+        KeyHelper::Operation(user, key, OP_MULT, value);
+        return SUCCESS; 
 }

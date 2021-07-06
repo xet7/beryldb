@@ -19,6 +19,12 @@ class ExportAPI KeyHelper
 {
     public:
 
+        static void WDelete(User* user, const std::string& key);
+
+        static void Touch(User* user, const std::string& entry);
+
+        static void NTouch(User* user, const std::string& entry);
+
         static void Rename(User* user, const std::string& entry, const std::string& value);
 
         static void Copy(User* user, const std::string& entry, const std::string& value);
@@ -35,20 +41,23 @@ class ExportAPI KeyHelper
 
         static void Search(User* user, const std::string& key, signed int offset, signed int limit);
 
-        static void Find(User* user, const std::string& key, signed int offset, signed int limit);
+        static void Keys(User* user, const std::string& key, signed int offset, signed int limit);
 
         static void Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply = "");
 
-        static void Expire(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, QUERY_TYPE type, unsigned int usig, std::string value = "");
-
         static void Get(User* user, const std::string& key);
 
-        static void Operation(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, OP_TYPE type,  const std::string& oper = "");
-
+        static void Operation(User* user, const std::string& key, OP_TYPE type, const std::string& oper = "");
+    
         static void Delete(User* user, const std::string& key);
 
-        static void Delete(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, bool quiet = false);
-        
         static void Set(User* user, const std::string& entry, const std::string& value);
 
+        static void SetNX(User* user, const std::string& entry, const std::string& value);
+
+        static void GetSubstr(User* user, const std::string& key, signed int offset, signed int limit);
+        
+        static void Append(User* user, const std::string& key, const std::string& value);
+
+        static void SetTX(User* user, const std::string& entry, const std::string& value);
 };

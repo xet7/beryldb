@@ -34,14 +34,24 @@ class CommandLGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandPop : public Command 
+class CommandLPopFront : public Command 
 {
     public: 
 
-        CommandPop(Module* Creator);
+        CommandLPopFront(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandLPopBack : public Command 
+{
+    public: 
+
+        CommandLPopBack(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 
 class CommandPopAll : public Command 
 {
@@ -80,21 +90,21 @@ class CommandLMove : public Command
 };
 
 
-class CommandLPos : public Command 
+class CommandLResize : public Command 
 {
     public: 
 
-        CommandLPos(Module* Creator);
+        CommandLResize(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 
-class CommandLSearch : public Command 
+class CommandLKeys : public Command 
 {
     public: 
 
-        CommandLSearch(Module* Creator);
+        CommandLKeys(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -108,11 +118,47 @@ class CommandLFind : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandLRemove : public Command 
+class CommandLReverse : public Command 
 {
     public: 
 
-        CommandLRemove(Module* Creator);
+        CommandLReverse(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLSort : public Command 
+{
+    public: 
+
+        CommandLSort(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLPos : public Command 
+{
+    public: 
+
+        CommandLPos(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLDel : public Command 
+{
+    public: 
+
+        CommandLDel(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLRepeats : public Command 
+{
+    public: 
+
+        CommandLRepeats(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

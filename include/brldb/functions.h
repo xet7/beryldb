@@ -13,12 +13,11 @@
 
 #pragma once
 
-#include "brldb/database.h"
-
-class ExportAPI HQHelper
+/* Thread safe random int. */
+        
+unsigned int IntRand(const int & min, const int & max) 
 {
-    public:
-    
-        static void HSend(User* user, std::shared_ptr<Database> database, const std::string& where, std::shared_ptr<HQuery> hquery);
-
-};
+             static thread_local std::mt19937 generator;
+             std::uniform_int_distribution<unsigned int> distribution(min,max);
+             return distribution(generator);
+}

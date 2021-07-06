@@ -16,6 +16,7 @@
 #include "managers/user.h"
 #include "brldb/database.h"
 #include "managers/maps.h"
+#include "managers/settings.h"
 
 CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2)
 {
@@ -25,7 +26,7 @@ CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2
 
 COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 {
-/*        const std::string& newlogin = parameters[0];
+        const std::string& newlogin = parameters[0];
         const std::string& pass = parameters[1];
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
@@ -46,21 +47,21 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        const std::string exists = UserHelper::Find(newlogin, "created");
+        const std::string exists = UserHelper::Find("created", newlogin);
         
         if (!exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, exists, Daemon::Format("Login %s is in the system already.", newlogin.c_str()).c_str());
+                user->SendProtocol(ERR_LOGIN_EXISTS, ENTRY_DEFINED);
                 return FAILED;
         }
         
         /* We can now insert the user. */
         
-  /*      if (UserHelper::Add(newlogin, pass))
+        if (UserHelper::Add(newlogin, pass))
         {
                 user->SendProtocol(BRLD_USER_ADD, newlogin, PROCESS_OK);
         }
-*/
+
         return SUCCESS;
 }
 
@@ -72,7 +73,7 @@ CommandDelUser::CommandDelUser(Module* parent) : Command(parent, "DELUSER", 1, 1
 
 COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
 {
-  /*      const std::string& newlogin = parameters[0];
+        const std::string& newlogin = parameters[0];
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
@@ -82,7 +83,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_PROTECTED_LOGIN, "You cannot remove root.");
+                user->SendProtocol(ERR_PROTECTED_LOGIN, PROCESS_ERROR);
                 return FAILED;
         }
         
@@ -92,20 +93,20 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        std::string exists = UserHelper::Find(newlogin, "created");
+        std::string exists = UserHelper::Find("created", newlogin);
         
-        if (exists == "")
+        if (exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, INVALID_UNAME, newlogin, Daemon::Format("User %s does not exists.", newlogin.c_str()).c_str());
+                user->SendProtocol(ERR_LOGIN_NOT_EXISTS, PROCESS_FALSE);
                 return FAILED;
         }
         
         if (UserHelper::Remove(newlogin))
         {
-                user->SendProtocol(BRLD_LOGIN_DEL, newlogin, PROCESS_OK);
-                ClientManager::DisconnectAll(newlogin, Daemon::Format("User %s removed.", newlogin.c_str()).c_str());
+                user->SendProtocol(BRLD_LOGIN_DEL, PROCESS_OK);
+                ClientManager::DisconnectAll(newlogin, PROCESS_OK);
         }
-*/
+
         return SUCCESS;
 }
 
@@ -116,22 +117,17 @@ CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS"
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
-        unsigned int counter = 0;
-
-/*        MMapTuple tpl = //MapsHelper::SearchHesh(TABLE_USERS, "userlogin");
-        DualMMap users = std::get<1>(tpl);
+        Args users = STHelper::HKeys("userlogin");
         
-        user->SendProtocol(BRLD_USER_LIST_BEGIN, counter, "BEGIN of LISTUSERS list.");
+        Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
         
-        for (DualMMap::iterator i = users.begin(); i != users.end(); i++)
+        for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
-                counter++;
-                std::string entry = i->first;
-                user->SendProtocol(BRLD_USER_LIST, counter, entry, Daemon::Format("%i: %s", counter, entry.c_str()).c_str());
-        }
+                const std::string item = *i;
+                user->SendProtocol(BRLD_USER_ITEM, item.c_str());
+        }        
         
-        user->SendProtocol(BRLD_USER_LIST_END, counter, Daemon::Format("End of LISTUSERS list (%u)", counter).c_str());
-  */      
+        Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
         return SUCCESS;
 }
 
@@ -142,22 +138,24 @@ CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMI
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
-        unsigned int counter = 0;
-       
-/*        MMapTuple tpl = //MapsHelper::SearchHesh(TABLE_ADMIN, "flags");
-        DualMMap users = std::get<1>(tpl);
-        
-        user->SendProtocol(BRLD_ADMIN_LIST_BEGIN, counter, "BEGIN of LISTADMINS list.");
+        Args users = STHelper::HKeys("userlogin");
 
-        for (DualMMap::iterator i = users.begin(); i != users.end(); i++)
+        Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
+
+        for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
-                counter++;
-                std::string entry = i->first;
-                user->SendProtocol(BRLD_USER_LIST, counter, entry, Daemon::Format("%i: %s", counter, entry.c_str()).c_str());
+                const std::string item = *i;
+                std::string flags = UserHelper::CheckFlags(item);
+                
+                if (flags.empty())
+                {
+                      continue;
+                }
+                
+                Dispatcher::CondList(user, BRLD_USER_ITEM, item, flags);                
         }
-        
-        user->SendProtocol(BRLD_ADMIN_LIST_END, counter, Daemon::Format("End of LISTADMINS list (%u)", counter).c_str());
-   */     
+
+        Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
         return SUCCESS;
 }
 

@@ -24,7 +24,7 @@ use constant
     STATUS_EXIT_NOT_RUNNING => 3,
     STATUS_EXIT_UNKNOWN => 4,
 
-    GENERIC_EXIT_SUCCESS => 0,
+    EXIT_SUCCESS => 0,
     GENERIC_EXIT_UNSPECIFIED => 1,
     GENERIC_EXIT_INVALID_ARGUMENTS => 2,
     GENERIC_EXIT_UNIMPLEMENTED => 3,
@@ -38,7 +38,6 @@ my %BRLD_COLOR = (
         DEFAULT   => "\e[0m",
         BOLD      => "\e[1m",
         UNDERLINE => "\e[4m",
-
         RED    => "\e[1;31m",
         GREEN  => "\e[1;32m",
         YELLOW => "\e[1;33m",
@@ -101,7 +100,7 @@ sub print_ok
 my $scriptpath = "@SCRIPT_DIR@";
 my $conf_path	=	"@CONFIG_DIR@";
 my $binary_path	=	"@BINARY_DIR@";
-my $runtimedir = "@RUNTIME_DIR@";
+my $Timedir = "@RUNTIME_DIR@";
 my $valgrindlogpath = "@LOG_DIR@/valgrind";
 my $executable	=	"beryldb";
 my $version	=	"@VERSION_FULL@";
@@ -148,9 +147,10 @@ if (!(grep { $_ eq '--asroot' } @ARGV) && ($< == 0 || $> == 0))
 	}
 }
 
-our($pid,$pidfile);
+our($pid, $pidfile);
 my $arg = shift(@ARGV);
 my $conf;
+
 for my $a (@ARGV)
 {
 	if ($a =~ m/^--config=(.*)$/)
@@ -191,14 +191,14 @@ sub cmd_help()
 	$_ =~ s/_/-/g for (@cmds, @devs);
 	print STDERR "Usage: ./beryldb (" . join("|", @cmds) . ")\n";
 	print STDERR "Developer mode: (" . join("|", @devs) . ")\n";
-	exit GENERIC_EXIT_SUCCESS;
+	exit EXIT_SUCCESS;
 }
 
 sub cmd_status()
 {
 	if (getstatus() == 1) 
 	{
-		my $pid = getprocessid();
+		my $pid = read_process_id();
 		print_ok "BerylDB is running (PID: $pid)";
 		exit STATUS_EXIT_SUCCESS;
 	} 
@@ -212,7 +212,7 @@ sub cmd_status()
 sub cmd_version()
 {
 	print_ok "BerylDB version: $version";
-	exit GENERIC_EXIT_SUCCESS;
+	exit EXIT_SUCCESS;
 }
 
 sub cmd_restart(@)
@@ -227,7 +227,7 @@ sub cmd_start(@)
 	if (getstatus() == 1) 
 	{ 
 		show_warning "BerylDB is already running."; 
-		exit GENERIC_EXIT_SUCCESS; 
+		exit EXIT_SUCCESS; 
 	}
 
 	print "$binary_path/$executable was not located.\n" and return 0 unless(-e "$binary_path/$executable");
@@ -277,11 +277,11 @@ sub cmd_stop()
 	if (getstatus() == 0) 
 	{ 
 		show_warning "BerylDB is not running. "; 
-		return GENERIC_EXIT_SUCCESS; 
+		return EXIT_SUCCESS; 
 	}
 
 
-	my $pid = getprocessid();
+	my $pid = read_process_id();
 	print_ok "Stopping BerylDB (PID: $pid)";
 	my $maxwait = (`ps -o command $pid 2>/dev/null` =~ /valgrind/i) ? 90 : 15;
 	kill TERM => $pid or die "Cannot terminate BerylDB: $!\n";
@@ -293,13 +293,13 @@ sub cmd_stop()
 		if (getstatus() == 0) 
 		{
                         print_ok "BerylDB stopped.";
-                        return GENERIC_EXIT_SUCCESS;
+                        return EXIT_SUCCESS;
                 }
         }
 
 	print "Forcing stopping on BerylDB.\n";
 	kill KILL => $pid;
-	return GENERIC_EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 my %filesparsed;
@@ -330,7 +330,7 @@ sub getpidfile
 		
 		if (($i =~ /<pid file=\"(\S+)\">/i) && ($i !~ /^#/))
 		{
-			$pidfile = fragmentize $runtimedir, $1;
+			$pidfile = fragmentize $Timedir, $1;
 			return;
 		}
 	}
@@ -346,24 +346,23 @@ sub getpidfile
 	
 			if ($pidfile ne "") 
 		        {
-				# Yes, Return.
 				return;
 			}
 		}
 	}
 
-	$pidfile = $runtimedir . "/beryldb.pid";
+	$pidfile = $Timedir . "/beryldb.pid";
 }
 
 sub getstatus 
 {
-	my $pid = getprocessid();
+	my $pid = read_process_id();
 	return 0 if $pid == 0;
 	return kill 0, $pid;
 }
 
 
-sub getprocessid 
+sub read_process_id 
 {
 	my $pid = 0;
 	open PIDFILE, '<', $pidfile or return 0;

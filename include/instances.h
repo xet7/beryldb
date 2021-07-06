@@ -23,7 +23,6 @@
 #include "login.h"
 #include "commandproc.h"
 #include "brldb/query.h"
-#include "brldb/hquery.h"
 
 /* Connect class flags. */
 
@@ -118,6 +117,8 @@ class ExportAPI User : public Expandable
         
  public:
 
+	static std::mutex db_mute;
+	
 	bool Locked;
 	
 	bool Multi;
@@ -153,11 +154,11 @@ class ExportAPI User : public Expandable
 
 	time_t logged;
 	
-	std::shared_ptr<HQuery> hquery;
-	
 	engine::sockets::sockaddrs client_sa;
 
 	std::string instance;
+	
+	void SetNullDB();
 	
         /* 
          * Sets quit flag to true or false.
@@ -217,13 +218,13 @@ class ExportAPI User : public Expandable
 	
         std::shared_ptr<UserDatabase> current_db;
         
-        void SetDatabase(std::shared_ptr<UserDatabase>& database);
+        void SetDatabase(const std::shared_ptr<UserDatabase>& database);
         
         std::shared_ptr<UserDatabase> GetDatabase();
 	
-        std::deque<std::shared_ptr<query_base>> pending;
+        std::deque<std::shared_ptr<QueryBase>> pending;
 
-        std::deque<std::shared_ptr<query_base>> notifications;
+        std::deque<std::shared_ptr<QueryBase>> notifications;
 
         std::string select;
         
@@ -234,7 +235,6 @@ class ExportAPI User : public Expandable
 	
 	
 	const std::string& GetReadableIP();
-
 
 	
 	const std::string& GetRealHost() const;
@@ -422,6 +422,8 @@ typedef unsigned int sent_id;
 
 class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 {
+  friend class CommandQueue;
+  
   private:
   
 	void Write(const ProtocolTrigger::SerializedMessage& serialized);
@@ -430,15 +432,15 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 	
 	static ProtocolTrigger::MessageList SendMsgList;
 
+        std::deque<PendingCMD> PendingList;
+
+        std::deque<PendingCMD> PendingMulti;
+
  public:
 
 	LocalUser(int fd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
 
 	LocalUser(int fd, const std::string& uuid, Serializable::Data& data);
-
-        std::deque<PendingCMD> PendingList;
-
-        std::deque<PendingCMD> PendingMulti;
 
 	DiscardResult discard();
 
@@ -449,7 +451,10 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 	reference<connect_config> assigned_class;
 
 	
-	connect_config* GetClass() const { return assigned_class; }
+	connect_config* GetClass() const 
+	{ 
+		return assigned_class; 
+	}
 
 	
 	void check_con_conf(bool clone_count = true);
@@ -486,21 +491,26 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 	bool set_client_ip(const std::string& address) ;
 
 	void set_client_ip(const engine::sockets::sockaddrs& sa) ;
-
 	
 	void WriteRemoteNotice(const std::string& text) ;
-
 	
 	void Send(ProtocolTrigger::Event& protoev);
-
 	
 	void Send(ProtocolTrigger::EventProvider& protoevprov, ProtocolTrigger::Message& msg);
-
 	
 	bool Deserialize(Data& data) ;
-
 	
-	bool Serialize(Serializable::Data& data) ;
+	bool Serialize(Serializable::Data& data);
+	
+	std::deque<PendingCMD> GetPending()
+	{
+		 return this->PendingList;
+	}
+	
+	std::deque<PendingCMD> GetMulti()
+	{
+		return this->PendingMulti;
+	}
 };
 
 class RemoteUser : public User

@@ -23,7 +23,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 	}
 
 	const std::string filename = FullModName(name);
-	const std::string ModuleFile = Kernel->Config->Paths.PrependModule(filename);
+	const std::string ModuleFile = Kernel->Config->Paths.SetWDModule(filename);
 
 	if (!FileSystem::Exists(ModuleFile))
 	{
@@ -32,6 +32,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 		return false;
 	}
 
+	
 	if (Modules.find(filename) != Modules.end())
 	{
 		last_known_error = "Module " + filename + " already loaded.";
@@ -130,7 +131,7 @@ void ModuleHandler::LoadCore(std::map<std::string, ServiceList>& ServiceMap)
 		counter++;
 		const std::string& name = *i;
 		this->new_services = &ServiceMap[name];
-		
+
 		if (!Load(name, true))
 		{
 			bprint(ERROR, "%s", this->LastError().c_str());
@@ -142,5 +143,5 @@ void ModuleHandler::LoadCore(std::map<std::string, ServiceList>& ServiceMap)
 		}
 	}
 	
-        bprint(DONE, "Core modules loaded: %s", convto_string(counter).c_str()); 
+        iprint(counter, "Core modules loaded."); 
 }

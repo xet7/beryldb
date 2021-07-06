@@ -23,9 +23,9 @@ namespace
 	int SocketHandler;
 	unsigned int ChangePos = 0;
 
-	std::vector<struct kevent> ke_list(16);
+	std::vector<struct kevent> klist(16);
 
-	std::vector<struct kevent> changelist(8);
+	std::vector<struct kevent> pendinglist(8);
 
 #if defined __NetBSD__ && __NetBSD_Version__ <= 999001400
 	inline intptr_t udata_cast(EventHandler* ehandler)
@@ -63,12 +63,12 @@ void SocketPool::CloseAll()
 
 static struct kevent* ReqChangeKE()
 {
-	if (ChangePos >= changelist.size())
+	if (ChangePos >= pendinglist.size())
 	{
-		changelist.resize(changelist.size() * 2);
+		pendinglist.resize(pendinglist.size() * 2);
 	}
 	
-	return &changelist[ChangePos++];
+	return &pendinglist[ChangePos++];
 }
 
 bool SocketPool::AddDescriptor(EventHandler* ehandler, int req_mask)
@@ -90,7 +90,7 @@ bool SocketPool::AddDescriptor(EventHandler* ehandler, int req_mask)
 
 	ehandler->SetReqMask(req_mask);
 	OnMaskReq(ehandler, 0, req_mask);
-	ResizeDouble(ke_list);
+	ResizeDouble(klist);
 
 	return true;
 }
@@ -139,7 +139,7 @@ int SocketPool::Events()
 	ts.tv_nsec = 0;
 	ts.tv_sec = 1;
 
-	int i = kevent(SocketHandler, &changelist.front(), ChangePos, &ke_list.front(), ke_list.size(), &ts);
+	int i = kevent(SocketHandler, &pendinglist.front(), ChangePos, &klist.front(), klist.size(), &ts);
 	ChangePos = 0;
 	Kernel->Now();
 
@@ -150,7 +150,7 @@ int SocketPool::Events()
 
 	for (int j = 0; j < i; j++)
 	{
-		struct kevent& kev = ke_list[j];
+		struct kevent& kev = klist[j];
 		EventHandler* ehandler = reinterpret_cast<EventHandler*>(kev.udata);
 
 		if (!ehandler)

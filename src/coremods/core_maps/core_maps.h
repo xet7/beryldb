@@ -15,12 +15,11 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
-class CommandHSET : public Command 
+class CommandHSet : public Command 
 {
-
     public: 
 
-        CommandHSET(Module* parent);
+        CommandHSet(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -54,40 +53,20 @@ class CommandHCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHSearch : public Command 
+class CommandHFind : public Command 
 {
     public: 
 
-        CommandHSearch(Module* Creator);
+        CommandHFind(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHDelAll : public Command 
+class CommandHList : public Command 
 {
     public: 
 
-        CommandHDelAll(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
-class CommandHSeek : public Command 
-{
-    public: 
-
-        CommandHSeek(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
-class CommandHKeys : public Command 
-{
-    public: 
-
-        CommandHKeys(Module* Creator);
+        CommandHList(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -101,11 +80,40 @@ class CommandHExists : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHMove : public Command
+class CommandHStrlen : public Command
 {
     public: 
 
-        CommandHMove(Module* Creator);
+        CommandHStrlen(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+
+};
+
+class CommandHSetNX : public Command
+{
+    public: 
+
+        CommandHSetNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandHClone : public Command
+{
+    public: 
+
+        CommandHClone(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+
+};
+
+class CommandHWDel : public Command
+{
+    public: 
+
+        CommandHWDel(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 

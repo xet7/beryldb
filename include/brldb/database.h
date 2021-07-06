@@ -19,7 +19,7 @@
 #include <rocksdb/options.h>
 #include <rocksdb/env.h>
 
-class Database
+class ExportAPI Database
 {
     friend class CoreDatabase;
     friend class UserDatabase;
@@ -28,6 +28,10 @@ class Database
     friend class DBManager;
     
     private:
+
+        /* Determines whether a database is busy. */
+
+        std::atomic<bool> Closing;
     
         /* Pointer to the rocksdb instance. */
         
@@ -57,8 +61,12 @@ class Database
 
         /* Constructor. */
         
-        Database(time_t dbcreated, const std::string& dbname, const std::string& dbpath);
+        Database(const std::string& dbname, const std::string& dbpath);
 
+        void SetClosing(bool flag);
+        
+        bool IsClosing();
+        
         /* 
          * GetAddress(): Processing database to rocksdb.
 	 * 
@@ -103,14 +111,24 @@ class Database
         /* Closes database. */
         
         void Close();
+        
+        /* 
+         * Checks whether this database is currently in use.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Busy.
+         *         · False: Not busy.
+         */        
+             
+        bool IsLocked();
 };
 
-
-class UserDatabase : public Database
+class ExportAPI UserDatabase : public Database
 {
 
   public:
-
+      
        UserDatabase(const std::string& dbname, const std::string& dbpath);
 };
 

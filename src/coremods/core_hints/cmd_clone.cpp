@@ -17,14 +17,15 @@
 #include "brldb/query.h"
 #include "managers/keys.h"
 #include "engine.h"
-#include "core_keys.h"
+#include "core_hints.h"
+#include "managers/globals.h"
 
-CommandMove::CommandMove(Module* Creator) : Command(Creator, "MOVE", 2, 2)
+CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 {
          syntax = "<key> <select>";
 }
 
-COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& new_select = parameters[1];
@@ -46,6 +47,6 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
                return FAILED;
        }
 
-       //KeyHelper::Move(user, user->current_db, user->select, key, new_select);
+       GlobalHelper::Clone(user, key, new_select);
        return SUCCESS;
 }

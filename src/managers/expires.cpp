@@ -22,6 +22,16 @@
 #include "helpers.h"
 #include "extras.h"
 
+void ExpireHelper::ListFutures(std::shared_ptr<Database> db)
+{
+       std::shared_ptr<future_list_query> query = std::make_shared<future_list_query>();
+       
+       query->database = db;
+       query->user = Kernel->Clients->Global;
+       Kernel->Store->Push(query);
+}
+
+
 void ExpireHelper::List(std::shared_ptr<Database> db)
 {
        std::shared_ptr<expire_list_query> query = std::make_shared<expire_list_query>();
@@ -29,8 +39,26 @@ void ExpireHelper::List(std::shared_ptr<Database> db)
        query->database = db;
        query->user = Kernel->Clients->Global;
        Kernel->Store->Push(query);
-       
-       bprint(DONE, "Loading expires: %s", db->GetName().c_str());
+}
+
+void ExpireHelper::Future(User* user, const std::string& entry, unsigned int ttl, const std::string& value)
+{
+       std::shared_ptr<future_query> query = std::make_shared<future_query>();
+       Helpers::make_query(user, query, entry);
+
+       query->value = stripe(value);
+       query->id = Kernel->Now() + ttl;
+       Kernel->Store->Push(query);
+}
+
+void ExpireHelper::FutureAT(User* user, const std::string& entry, unsigned int ttl, const std::string& value)
+{
+       std::shared_ptr<future_query> query = std::make_shared<future_query>();
+       Helpers::make_query(user, query, entry);
+
+       query->value = stripe(value);
+       query->id = ttl;
+       Kernel->Store->Push(query);
 }
 
 void ExpireHelper::Expire(User* user, const std::string& entry, unsigned int ttl)
@@ -38,9 +66,17 @@ void ExpireHelper::Expire(User* user, const std::string& entry, unsigned int ttl
        std::shared_ptr<expire_query> query = std::make_shared<expire_query>();
        Helpers::make_query(user, query, entry);
 
-       query->dest = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
-
        query->id = Kernel->Now() + ttl;
+       Kernel->Store->Push(query);
+}
+
+void ExpireHelper::Setex(User* user, unsigned int exp_usig, const std::string& key, const std::string& value)
+{
+       std::shared_ptr<setex_query> query = std::make_shared<setex_query>();
+       Helpers::make_query(user, query, key);
+
+       query->value = stripe(value);
+       query->id = Kernel->Now() + exp_usig;
        Kernel->Store->Push(query);
 }
 
@@ -50,17 +86,6 @@ void ExpireHelper::ExpireAT(User* user, const std::string& entry, unsigned int t
        Helpers::make_query(user, query, entry);
 
        query->id = ttl;
-       query->dest = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
-
-       Kernel->Store->Push(query);
-}
-
-void ExpireHelper::Persist(User* user, const std::string& entry)
-{
-       std::shared_ptr<expire_del_query> query = std::make_shared<expire_del_query>();
-       Helpers::make_query(user, query, entry);
-
-       query->dest = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
        Kernel->Store->Push(query);
 }
 
@@ -69,11 +94,18 @@ void ExpireHelper::Persist(User* user, const std::string& entry, const std::stri
        std::shared_ptr<expire_del_query> query = std::make_shared<expire_del_query>();
        
        query->database = db;
-       query->quiet = true;
+       query->flags = QUERY_FLAGS_QUIET;
        query->select_query = select;
        query->user = user;
        query->key = entry;
-       query->dest = to_bin(query->key) + ":" + query->select_query + ":" + query->base_request;
+
+       Kernel->Store->Push(query);
+}
+
+void ExpireHelper::QuickPersist(User* user, const std::string& key)
+{
+       std::shared_ptr<expire_del_query> query = std::make_shared<expire_del_query>();
+       Helpers::make_query(user, query, key);
 
        Kernel->Store->Push(query);
 }

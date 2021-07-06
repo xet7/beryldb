@@ -33,27 +33,30 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
        
        if (parameters.size() > 0)
        {
-            select = parameters[0];
+             select = parameters[0];
        }
        else
        {
-           select = user->select;
+            select = user->select;
        }
        
        if (!is_number(select))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
                  return FAILED;
        }
 
        if (!is_positive_number(select))
        {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
+                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
                 return FAILED;
        }
-
-       user->SendProtocol(BRLD_SFLUSH, Daemon::Format("Flushing select ID: %s", select.c_str()).c_str());
-//       DBHelper::SFlush(user, user->current_db, select);
        
+       if (!Daemon::CheckRange(user, select, "Must be a value between 1 and 100", 1, 100))
+       {
+               return FAILED;
+       }
+
+       DBHelper::SFlush(user, select);
        return SUCCESS;
 }

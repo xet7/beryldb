@@ -202,6 +202,8 @@ enum Priority
 
 enum Application
 {
+	I_OnExpireAdd,
+	I_OnExpireDel,
 	I_OnInstaceReady,
 	I_OnAcceptConnection,
 	I_OnAddLine,
@@ -298,6 +300,14 @@ class ExportAPI Module : public base_class, public usecountbase
 	
 	}
 
+        /* 
+         * Called the module manager invokes a module to load 
+         * a configuration file.
+         *
+         * @parameters:
+	 *
+	 *         · config_status: Current configuration status.
+         */    
 	
 	virtual void ConfigReading(config_status& status);
 
@@ -354,18 +364,14 @@ class ExportAPI Module : public base_class, public usecountbase
 	
 	virtual void OnPostJoin(Subscription* memb);
 
-	
 	virtual void OnUserPart(Subscription* memb, DiscardList& except_list);
-
 
 	virtual ModuleResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname);
 
 	virtual void OnAdmin(User* user, const std::string &flags);
 
-	
 	virtual ModuleResult OnInstancePrePublish(User* user, const MessageTarget& target, MessageLoad& details);
 
-	
 	virtual void OnNeighborBuild(User* source, SubscriptionList& include_c, std::map<User*, bool>& exceptions);
 
 	virtual ModuleResult OnUserPreLogin(LocalUser* user, const std::string& newlogin);
@@ -388,8 +394,34 @@ class ExportAPI Module : public base_class, public usecountbase
 	
 	virtual void OnSetHost(User* user, const std::string& newhost);
 
+        /* 
+         * Called every time a new expire is added.
+         * 
+         * @parameters:
+	 *
+	 *         · Expire information.
+         */    
+         
+	virtual void OnExpireAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select, unsigned int seconds);
 
-	
+        /* 
+         * Called every time an expire is removed.
+         * 
+         * @parameters:
+	 *
+	 *         · Information about timer removed.
+         */    	
+         
+        virtual void OnExpireDel(User* user, const std::string& dbname, const std::string& key, const std::string& select);
+
+        /* 
+         * Called as a new user registers its user agent.
+         * 
+         * @parameters:
+	 *
+	 *         · agent: Agent setting to user.
+         */    
+         
 	virtual void OnSetAgent(User* user, const std::string &agent);
 
 
@@ -419,7 +451,16 @@ class ExportAPI Module : public base_class, public usecountbase
 
 	virtual void OnCommandBlocked(const std::string& command, const CommandModel::Params& parameters, LocalUser* user);
 	
-	virtual void OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<query_base> bquery);
+        /* 
+         * Called as a query failed.
+         * 
+         * @parameters:
+	 *
+	 *         · DBL_CODE: Failing code. 
+	 *         · bquery: Original query.
+         */    
+         	
+	virtual void OnQueryFailed(DBL_CODE code, LocalUser* luser, std::shared_ptr<QueryBase> bquery);
 	
 	virtual void OnInstanceInit(LocalUser* user);
 

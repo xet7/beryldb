@@ -19,7 +19,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 /*
-void search_query::Run()
+void keys_query::Run()
 {
     if (this->key.empty())
     {
@@ -27,7 +27,7 @@ void search_query::Run()
                 return;
     }
 
-    std::string where_path = this->int_keys + this->select_query;
+    std::string where_path = this->INT_KEY + this->select_query;
     
     std::multimap<std::string, std::string> result;
     
@@ -40,7 +40,8 @@ void search_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status())
+                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
@@ -75,7 +76,7 @@ void search_query::Run()
                                     if (aux_counter % 100 == 0)
                                     {
                                                 tracker++;
-                                                std::shared_ptr<search_query> request = std::make_shared<search_query>();
+                                                std::shared_ptr<keys_query> request = std::make_shared<keys_query>();
                                                 request->user = this->user;
                                                 request->partial = true;                                  
                                                 request->subresult = tracker;
@@ -99,7 +100,7 @@ void search_query::Run()
                              if (aux_counter % 100 == 0)
                              {
                                         tracker++;
-                                        std::shared_ptr<search_query> request = std::make_shared<search_query>();
+                                        std::shared_ptr<keys_query> request = std::make_shared<keys_query>();
                                         request->user = this->user;
                                         request->partial = true;
                                         request->subresult = tracker;
@@ -122,7 +123,7 @@ void search_query::Run()
     this->SetOK();
 }
 
-void Flusher::Search(User* user, std::shared_ptr<query_base> query)
+void Flusher::Search(User* user, std::shared_ptr<QueryBase> query)
 {
         if (!query->finished)
         {

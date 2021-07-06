@@ -14,9 +14,11 @@
 #include "beryl.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
-#include "extras.h"
 #include "brldb/query.h"
 #include "managers/geo.h"
+#include "managers/globals.h"
+#include "maker.h"
+#include "extras.h"
 #include "engine.h"
 #include "core_geo.h"
 
@@ -49,7 +51,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       //GeoHelper::Add(user, user->current_db, user->select, gname, latitude, longitude);
+       GeoHelper::Add(user, gname, latitude, longitude);
        return SUCCESS;
 }
 
@@ -62,24 +64,12 @@ COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
        
-       //GeoHelper::Get(user, user->current_db, user->select, gname);
+       GeoHelper::Get(user, gname);
        return SUCCESS;
 }
 
-CommandGeoDel::CommandGeoDel(Module* Creator) : Command(Creator, "GEODEL", 1, 1)
-{
-         syntax = "<name>";
-}
 
-COMMAND_RESULT CommandGeoDel::Handle(User* user, const Params& parameters)
-{
-       const std::string& gname = parameters[0];
-       
-       //GeoHelper::Del(user, user->current_db, user->select, gname);
-       return SUCCESS;
-}
-
-CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GFIND", 1, 3)
+CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GKEYS", 1, 3)
 {
          syntax = "<\%name> <offset> <limit>";
 }
@@ -88,38 +78,17 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
-       if (parameters.size() == 2)
+       if (lms[0] == 0)
        {
-             if (!is_zero_or_great(parameters[1]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
+            return FAILED; 
+       }
 
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
-       }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-
-             if (!is_zero_or_great(parameters[1]) || !is_zero_or_great(parameters[2]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+       signed int offset = lms[1];
+       signed int limit = lms[2];
        
-       //GeoHelper::Find(user, user->current_db, user->select, key, offset, limit);
+       GeoHelper::Find(user, key, offset, limit);
        return SUCCESS;
 }
 
@@ -131,73 +100,46 @@ CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2
 COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
 {  
          const std::string& gname = parameters[0];
-         const std::string& name2 = parameters[1];
+         const std::string& gname2 = parameters[1];
          
-         //GeoHelper::Calc(user, user->current_db, user->select, gname, name2);
+         GeoHelper::Calc(user, gname, gname2);
          return SUCCESS;
 }
 
-CommandGeoClose::CommandGeoClose(Module* Creator) : Command(Creator, "GEOCLOSE", 2, 4)
+CommandGeoDistance::CommandGeoDistance(Module* Creator) : Command(Creator, "GDIST", 2, 4)
 {
          syntax = "<name> <max distance> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandGeoClose::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 {  
        const std::string& gname = parameters[0];
        const std::string& distance = parameters[1];
 
-       signed int offset;
-       signed int limit;
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
-       if (parameters.size() == 3)
+       if (lms[0] == 0)
        {
-             if (!is_zero_or_great(parameters[2]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = 0;
-       }
-       else if (parameters.size() == 4)
-       {
-             limit = convto_num<signed int>(parameters[3]); 
-             offset = convto_num<signed int>(parameters[2]);
-
-             if (!is_zero_or_great(parameters[2]) || !is_zero_or_great(parameters[3]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
+            return FAILED; 
        }
 
-         //GeoHelper::GeoClose(user, user->current_db, user->select, gname, distance, offset, limit);
-         return SUCCESS;
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       GeoHelper::Distance(user, gname, distance, offset, limit);
+       return SUCCESS;
 }
 
-CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2, 3)
+CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2, 2)
 {
-         syntax = "<name> <dist> <g/l>";
+         syntax = "<name> <dist>";
 }
 
 COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
 {  
          const std::string& gname = parameters[0];
          const std::string& dist = parameters[1];
-         std::string arg = parameters[2];
          
-         if (arg.empty())
-         {
-              arg = "g";
-         }
-         
-         //GeoHelper::Remove(user, user->current_db, user->select, gname, dist, arg);
+         GeoHelper::Remove(user, gname, dist);
          return SUCCESS;
 }
