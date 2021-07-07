@@ -82,16 +82,16 @@ class ModuleCoreCPU : public Module
               
               if (this->usage > 10)
               {
-                   usleep(100000);
+                   usleep(10000);
               }
               
-              if (this->usage > 5)
+              if (this->usage > 6)
               {
                    Kernel->Interval->SleepMode(true);
                    return;
               }
               
-              if (this->usage > 3)
+              if (this->usage > 4)
               {
                     Kernel->Interval->SleepMode(true);
                     return;

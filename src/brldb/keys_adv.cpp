@@ -47,19 +47,19 @@ void keys_query::Run()
                       return;
                 }
                 
-                std::string rawstring = it->key().ToString();
+                std::string rawmap = it->key().ToString();
 
-                size_t found =  rawstring.find_first_of(":");
-                std::string path = rawstring.substr(0,found);
-                std::string file = rawstring.substr(found+1);
+                size_t found =  rawmap.find_first_of(":");
+                std::string path = rawmap.substr(0,found);
+                std::string file = rawmap.substr(found+1);
 
                 if (path != where_path)
                 {
                     continue;
                 }
                 
-                rawstring = rawstring.erase(0, path.length() + 1);
-                rawstring = to_string(rawstring);
+                rawmap = rawmap.erase(0, path.length() + 1);
+                rawmap = to_string(rawmap);
                 
                 std::string value_str = to_string(it->value().ToString());
                 
@@ -71,7 +71,7 @@ void keys_query::Run()
                              {
                                     aux_counter++;
                                     
-                                    result.insert(std::make_pair(rawstring, value_str));             
+                                    result.insert(std::make_pair(rawmap, value_str));             
                                     
                                     if (aux_counter % 100 == 0)
                                     {
@@ -95,7 +95,7 @@ void keys_query::Run()
                         else if (limit == -1)
                         {
                              aux_counter++;
-                             result.insert(std::make_pair(rawstring, value_str));
+                             result.insert(std::make_pair(rawmap, value_str));
             
                              if (aux_counter % 100 == 0)
                              {

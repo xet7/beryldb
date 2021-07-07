@@ -24,7 +24,7 @@
 void dbsize_query::Run()
 {
     rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
-    std::string rawstring;
+    std::string rawmap;
     double size_calc = 0;
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
@@ -185,9 +185,9 @@ void sflush_query::Run()
                       return;
                 }
                 
-                std::string rawstring = it->key().ToString();
+                std::string rawmap = it->key().ToString();
                 
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
 
                 unsigned int strcounter = 0;
@@ -240,7 +240,7 @@ void sflush_query::Run()
                         continue;
                 }
                 
-                this->Delete(rawstring);
+                this->Delete(rawmap);
     }    
      
     this->SetOK();	

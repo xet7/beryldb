@@ -5,6 +5,7 @@
  * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
  * 
  * This file is part of BerylDB. BerylDB is free software: you can
+
  * redistribute it and/or modify it under the terms of the BSD License
  * version 3.
  *
@@ -13,9 +14,11 @@
 
 #pragma once
 
+#include <random>
+
 /* Thread safe random int. */
         
-unsigned int IntRand(const int & min, const int & max) 
+inline unsigned int IntRand(const int & min, const int & max)
 {
              static thread_local std::mt19937 generator;
              std::uniform_int_distribution<unsigned int> distribution(min,max);

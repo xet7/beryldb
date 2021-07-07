@@ -35,11 +35,11 @@ void IntervalManager::Flush()
             usleep(900);
       }
       
-      if (this->counter >= 10)
+      if (this->counter >= 25)
       {
             /* Activates throttling */
             
-            usleep(10);
+            usleep(1);
             return;
       }
       

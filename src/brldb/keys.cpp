@@ -16,6 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
+#include "brldb/functions.h"
 #include "extras.h"
 #include "helpers.h"
 
@@ -36,8 +37,8 @@ void expire_list_query::Run()
                 std::string key_as_string;
                 std::string select_as_string;
                 std::string db_name;
-                std::string rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                std::string rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 
                 std::string token;
                 unsigned int strcounter = 0;
@@ -245,9 +246,9 @@ void count_query::Run()
                       return;
                 }
 
-                std::string rawstring = it->key().ToString();
+                std::string rawmap = it->key().ToString();
 
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 unsigned int strcounter = 0;
                 bool skip = false;
@@ -352,7 +353,7 @@ void wdel_query::Run()
 {
        unsigned int total_counter = 0;
 
-       std::string rawstring;
+       std::string rawmap;
        
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
@@ -365,14 +366,14 @@ void wdel_query::Run()
                       return;
                 }
 
-                rawstring = it->key().ToString();
+                rawmap = it->key().ToString();
                 std::string key_as_string;
                 std::string token;
                 bool skip = false;
                 
                 unsigned int strcounter = 0;
                 
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 
                 while (stream.items_extract(token))
                 {
@@ -429,7 +430,7 @@ void wdel_query::Run()
                         continue;
                 }
 
-                this->Delete(rawstring);
+                this->Delete(rawmap);
                 Kernel->Store->Expires->Delete(this->database, key_as_string, this->select_query);
                 this->DelExpire();
                 total_counter++;
@@ -490,24 +491,20 @@ void search_query::Run()
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
 
-       std::string rawstring;
-       std::string rawvalue;
-       
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
                 }
 
-                rawstring = it->key().ToString();
-                rawvalue = to_string(it->value().ToString());
+                std::string rawmap = it->key().ToString();
+                std::string rawvalue = to_string(it->value().ToString());
                          
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 unsigned int strcounter = 0;
                 bool skip = false;
@@ -650,7 +647,7 @@ void keys_query::Run()
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
 
-       std::string rawstring;
+       std::string rawmap;
        
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
        
@@ -663,8 +660,8 @@ void keys_query::Run()
                       return;
                 }
                 
-                rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 unsigned int strcounter = 0;
                 bool skip = false;
@@ -814,3 +811,101 @@ void append_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response).c_str());
 }
 
+void random_query::Run()
+{
+       unsigned int total_counter = 0;
+       
+       std::string foundkey;
+
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                std::string rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+
+                std::string key_as_string;
+          
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                            break;
+                        }
+
+                        switch (strcounter)
+                        {
+                             case 0:
+                             {
+                                  key_as_string = to_string(token);
+                             }
+
+                             break;
+
+                             case 1:
+                             {
+                                   if (this->select_query != token)
+                                   {
+                                        skip = true;
+                                   }
+                             }
+
+                             break;
+                             
+                             case 2:
+                             {
+                                  if (token != INT_KEY)
+                                  {
+                                         skip = true;   
+                                  }
+                             }
+
+                             break;
+
+                             default:
+                             {
+                                 break;   
+                             }
+                        }
+
+                        strcounter++;
+                }
+
+                if (skip)
+                {
+                        continue;
+                }
+                
+                total_counter++;
+                
+                if (foundkey.empty())
+                {
+                     foundkey = key_as_string;
+                     continue;
+                }
+                
+                unsigned int rvalue = IntRand(0, 1);
+                
+                if (rvalue == 0)
+                {
+                      foundkey = key_as_string;
+                }	
+      }
+      
+      if (total_counter == 0 && foundkey.empty())
+      {
+            access_set(DBL_NOT_FOUND);
+            return;
+      }
+       
+      this->response = foundkey;
+      this->SetOK();
+}
+
+void random_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+}

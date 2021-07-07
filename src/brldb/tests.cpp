@@ -21,7 +21,7 @@
 
 void test_dump_query::Run()
 {
-       std::string rawstring;
+       std::string rawmap;
 
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
@@ -34,9 +34,9 @@ void test_dump_query::Run()
                       return;
                 }
 
-                rawstring = it->key().ToString();
+                rawmap = it->key().ToString();
                 
-                std::cout << rawstring << std::endl;
+                std::cout << rawmap << std::endl;
         }
 }
 

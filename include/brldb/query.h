@@ -978,6 +978,21 @@ class ExportAPI lsort_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI random_query  : public QueryBase
+{
+    public:
+
+        random_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vpos_query  : public QueryBase
 {
     public:

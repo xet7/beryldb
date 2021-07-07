@@ -18,6 +18,7 @@
 #include "managers/keys.h"
 #include "engine.h"
 #include "core_keys.h"
+#include "maker.h"
 
 CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 {
@@ -28,41 +29,20 @@ COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       signed int offset;
-       signed int limit;
-
        if (!Daemon::CheckFormat(user, key))
        {
             return FAILED;
        }
 
-       if (parameters.size() == 2)
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       
+       if (lms[0] == 0)
        {
-             if (!is_zero_or_great_or_mone(parameters[1]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-             
-             if (!is_zero_or_great_or_mone(parameters[1]) || !is_zero_or_great_or_mone(parameters[2]))
-             {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
-                   return FAILED;
-             }
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
        
        KeyHelper::Keys(user, key, offset, limit);
        return SUCCESS;
@@ -82,24 +62,15 @@ COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       signed int offset;
-       signed int limit;
-
-       if (parameters.size() == 2)
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       
+       if (lms[0] == 0)
        {
-             limit = convto_num<signed int>(parameters[1]); 
-             offset = 0;
+            return FAILED; 
        }
-       else if (parameters.size() == 3)
-       {
-             limit = convto_num<signed int>(parameters[2]); 
-             offset = convto_num<signed int>(parameters[1]);
-       }
-       else
-       {
-            limit = -1;
-            offset = 0;
-       }
+       
+       signed int offset = lms[1];
+       signed int limit = lms[2];
 
        KeyHelper::Search(user, key, offset, limit);
        return SUCCESS;
@@ -112,6 +83,6 @@ CommandRKey::CommandRKey(Module* Creator) : Command(Creator, "RKEY", 0, 0)
 
 COMMAND_RESULT CommandRKey::Handle(User* user, const Params& parameters)
 {
-       //KeyHelper::Find(user, user->current_db, user->select, "", 0, 0, TYPE_RAKEY);
+       KeyHelper::Random(user);
        return SUCCESS;
 }

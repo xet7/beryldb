@@ -25,7 +25,7 @@ void hfind_query::Run()
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
 
-       std::string rawstring;
+       std::string rawmap;
        
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
        
@@ -37,8 +37,8 @@ void hfind_query::Run()
                       return;
                 }
                 
-                rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 unsigned int strcounter = 0;
                 bool skip = false;

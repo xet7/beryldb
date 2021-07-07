@@ -29,7 +29,7 @@ CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 
 COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
-       if (user->GetDatabase())
+       if (!BASE_PATH.empty())
        {
             const std::string path = BASE_PATH.c_str();
             user->SendProtocol(BRLD_CURRENT_DIR, path, Daemon::Format("%s", path.c_str()).c_str());

@@ -38,7 +38,7 @@ void lkeys_query::Run()
                       return;
                 }
                 
-                std::string rawstring = it->key().ToString();
+                std::string rawmap = it->key().ToString();
                 std::string rawvalue = it->value().ToString();
                 
                 if (rawvalue != INT_LIST)
@@ -46,7 +46,7 @@ void lkeys_query::Run()
                      continue;
                 }
                 
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 unsigned int strcounter = 0;
                 bool skip = false;

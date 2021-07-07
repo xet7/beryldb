@@ -35,8 +35,8 @@ void future_list_query::Run()
                 std::string key_as_string;
                 std::string select_as_string;
                 std::string db_name;
-                std::string rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                std::string rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 
                 std::string token;
                 unsigned int strcounter = 0;

@@ -167,3 +167,9 @@ void KeyHelper::Append(User* user, const std::string& key, const std::string& va
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::Random(User* user)
+{
+       std::shared_ptr<random_query> query = std::make_shared<random_query>();
+       Helpers::make_query(user, query);
+       Kernel->Store->Push(query);
+}

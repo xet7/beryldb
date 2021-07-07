@@ -54,7 +54,7 @@ void gkeys_query::Run()
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
 
-       std::string rawstring;
+       std::string rawmap;
        
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
@@ -66,8 +66,8 @@ void gkeys_query::Run()
                       return;
                 }
                 
-                rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 std::string key_as_string;
                 
@@ -254,7 +254,7 @@ void geodistance_query::Run()
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
     unsigned int tracker = 0;
-    std::string rawstring;
+    std::string rawmap;
     std::string dbvalue;
     rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), first, &dbvalue);
 
@@ -278,8 +278,8 @@ void geodistance_query::Run()
                       return;
                 }
                 
-                rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 std::string key_as_string;
 
@@ -460,8 +460,8 @@ void georem_query::Run()
                       return;
                 }
                 
-                std::string rawstring = it->key().ToString();
-                engine::colon_node_stream stream(rawstring);
+                std::string rawmap = it->key().ToString();
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
                 std::string key_as_string;
 
@@ -537,7 +537,7 @@ void georem_query::Run()
                       continue;
                 }
 
-                this->Delete(rawstring);
+                this->Delete(rawmap);
                 total_counter++;
     }
 

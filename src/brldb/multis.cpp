@@ -184,7 +184,7 @@ void mkeys_query::Run()
        Args result;
 
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
-       std::string rawstring;
+       std::string rawmap;
        
        unsigned int aux_counter = 0;
        unsigned int total_counter = 0;
@@ -199,9 +199,9 @@ void mkeys_query::Run()
                       return;
                 }
 
-                rawstring = it->key().ToString();
+                rawmap = it->key().ToString();
                 
-                engine::colon_node_stream stream(rawstring);
+                engine::colon_node_stream stream(rawmap);
                 std::string token;
 
                 unsigned int strcounter = 0;
