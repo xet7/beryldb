@@ -27,9 +27,15 @@ class ExportAPI MapHandler
 
         MapHandler();
 
+        /* Destructor */
+        
+        ~MapHandler();
+        
         /* Static constructor. */
 
         static std::shared_ptr<MapHandler> Create(const std::string& load);
+        
+        /* Remove all elements in map. */
         
         void Erase();
 
@@ -122,12 +128,12 @@ class ExportAPI MapHandler
         
         MapMap& GetList()
         {
-             return this->mhandler;
+              return this->mhandler;
         }
         
         HANDLER_MSG GetLast()
         {
-             return this->LastMsg;
+              return this->LastMsg;
         }
 };
         

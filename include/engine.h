@@ -1,4 +1,3 @@
-
 /*
  * BerylDB - A lightweight database.
  * http://www.beryldb.com
@@ -219,22 +218,27 @@ class ExportAPI Daemon : public safecast<Daemon>
         
         static std::string Format(va_list& vaList, const char* TempString) BERYL_PRINTF(2, 0);
 
-        
-
+        /* 
+         * Converts a given time_t timestamp into human-readable time.
+         * 
+         * @parameters:
+	 *
+	 *         · time_t: Time to convert.
+	 *         · format: Optional format to use.
+	 *         · utc: Whether using utc or not.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Formated string.
+         */    
+         
         static std::string HumanEpochTime(time_t curtime, const char* format = NULL, bool utc = false);
 
-
-        
-        
         static bool TimingSafeCompare(const std::string& one, const std::string& two);
 
-        
-
         ProtocolInterface DefaultProtocolInterface;
-
         
         ProtocolInterface* PI = NULL;
-
 
         /* 
          * Matches an string with a given mask.
@@ -253,23 +257,18 @@ class ExportAPI Daemon : public safecast<Daemon>
         static bool Match(const std::string& str, const std::string& mask, unsigned const char* map = NULL);
         
         static bool Match(const char* str, const char* mask, unsigned const char* map = NULL);
-
         
         static bool MatchCompactIP(const std::string& str, const std::string& mask, unsigned const char* map = NULL);
-        static bool MatchCompactIP(const char* str, const char* mask, unsigned const char* map = NULL);
 
+        static bool MatchCompactIP(const char* str, const char* mask, unsigned const char* map = NULL);
         
         static bool MatchMask(const std::string& masks, const std::string& hostname, const std::string& ipaddr);
-
         
         static unsigned long Duration(const std::string& str);
-
         
         static bool Duration(const std::string& str, unsigned long& duration);
-
         
         static bool IsValidDuration(const std::string& str);
-
         
         static std::string duration_as_string(time_t duration);
 
@@ -319,7 +318,6 @@ class ExportAPI Daemon : public safecast<Daemon>
 
          void iprintb(int number, const char *fmt, ...) BERYL_PRINTF(3, 4);
         
- 
         /* 
          * Formats uptime into a string.
          * 

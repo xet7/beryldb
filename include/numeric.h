@@ -27,7 +27,6 @@ class Numeric::Numeric
 	unsigned int numeric;
 	
 	CommandModel::Params params;
-
 	
 	Server* sourceserver;
 

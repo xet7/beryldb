@@ -19,6 +19,11 @@ MapHandler::MapHandler()
 
 }
 
+MapHandler::~MapHandler()
+{
+     this->Erase();
+}
+
 bool MapHandler::Exists(const std::string& word)
 {
       if (!this->mhandler.size())

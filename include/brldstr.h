@@ -30,6 +30,7 @@
 ExportAPI std::string bin_to_hex(const void* raw, size_t rawsize);
 
 ExportAPI std::string bin_to_base64(const std::string& data, const char* table = NULL, char pad = 0);
+
 ExportAPI std::string base_64_to_bin(const std::string& data, const char* table = NULL);
 
 inline std::string bin_to_hex(const std::string& data)

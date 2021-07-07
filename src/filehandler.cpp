@@ -152,8 +152,8 @@ int FileSystem::remove_directory(const char *path)
 
           if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, ".."))
           {
-             continue;
-            }
+               continue;
+          }
 
           len = path_len + strlen(p->d_name) + 2; 
           buf = (char*)malloc(len);

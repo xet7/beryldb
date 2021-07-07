@@ -26,6 +26,10 @@ class ExportAPI MultiMapHandler
         /* Constructor */
 
         MultiMapHandler();
+        
+        /* Destructor, deletes mhandler. */
+        
+        ~MultiMapHandler();
 
         /* Static constructor. */
 
@@ -47,6 +51,18 @@ class ExportAPI MultiMapHandler
         
         void Dump();
 
+        /* 
+         * Obtains a key from mhandler.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to get.
+	 * 
+         * @return:
+ 	 *
+         *         · string: value.
+         */    
+         
         std::string Get(const std::string& key);
 
         /* 

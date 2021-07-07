@@ -389,7 +389,7 @@ void DataThread::Process()
               {
                     case PROC_EXIT_THREAD:
                     {
-                          this->clear();
+                          this->Clear();
                           return;
                     }
                     
@@ -464,6 +464,12 @@ DataThread::~DataThread()
 
 }
 
+void DataThread::Clear()
+{
+       std::queue<std::shared_ptr<ThreadMsg>> empty;
+       std::swap(this->queue, empty);
+}
+
 void DataFlush::CloseThreads()
 {
       DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
@@ -482,3 +488,4 @@ void DataFlush::CloseThreads()
       iprint(counter, "Thread%s closed.", counter > 1 ? "s" : "");
       slog("DATABASE", LOG_VERBOSE, "Thread%s closed.", counter > 1 ? "s" : "");
 }
+

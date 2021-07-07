@@ -19,6 +19,11 @@ MultiMapHandler::MultiMapHandler()
 
 }
 
+MultiMapHandler::~MultiMapHandler()
+{
+     this->Erase();
+}
+
 bool MultiMapHandler::Exists(const std::string& word)
 {
       if (!this->mhandler.size())

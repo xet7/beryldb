@@ -113,9 +113,5 @@ class DataThread
 
         /* Removes all items in this->queue */
         
-        void clear()
-        {
-              std::queue<std::shared_ptr<ThreadMsg>> empty;
-              std::swap(this->queue, empty);
-        }        
+        void Clear();
 };
