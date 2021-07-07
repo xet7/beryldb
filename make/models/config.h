@@ -23,10 +23,6 @@ const std::string DEFAULT_EMERALD = "emerald";
 
 const unsigned int INPUT_LIMIT = 65530;
 
-/* Linux distro */
-
-const std::string LINUX_DISTRO = "@LINUX_DISTRO@";
-
 /* Enables testsuite. */
 
 #define ENABLE_TESTOFFICE
@@ -70,6 +66,10 @@ const std::string BRANCH = "BerylDB-@VERSION_MAJOR@";
 /* The default location that config files are stored in. */
 
 const std::string CONFIG_PATH = "@CONFIG_DIR@";
+
+/* Base path */
+
+const std::string BASE_PATH = "@CORE_DIR@";
 
 /* The default location that data files are stored in. */
 

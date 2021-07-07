@@ -15,8 +15,6 @@
 
 class ExportAPI IntervalManager : public safecast<IntervalManager>
 {
-     friend class CommandQueue;
-     
      private:
              
         unsigned int counter;
@@ -28,6 +26,15 @@ class ExportAPI IntervalManager : public safecast<IntervalManager>
         /* Constructor */
         
         IntervalManager();
+        
+        ~IntervalManager();
+        
+        /* Increments counter by one */
+        
+        void Incr()
+        {
+             this->counter++;
+        }
         
         /* 
          * Runs in everyloop awaiting for sleeping requests.

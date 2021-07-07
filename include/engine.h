@@ -56,6 +56,16 @@ class ExportAPI Daemon : public safecast<Daemon>
         /* Constructor */
         
         Daemon();  
+        
+        /* Destructor */
+        
+        ~Daemon();
+
+        ProtocolInterface DefaultProtocolInterface;
+        
+        /* Protocol interface. */
+        
+        ProtocolInterface* PI = NULL;
 
         /* Prints a new line */
                 
@@ -184,7 +194,6 @@ class ExportAPI Daemon : public safecast<Daemon>
         static bool Valid_SID(const std::string& sid);
         
         std::string generate_random_str(unsigned int length, bool printable = true);
-
         
         unsigned long generate_random_int(unsigned long max);
 
@@ -197,7 +206,6 @@ class ExportAPI Daemon : public safecast<Daemon>
          *         --asoot argument was provided.
          */
 
-        
         void CheckRoot();
 
         std::string get_real_path(const char* path);
@@ -235,10 +243,6 @@ class ExportAPI Daemon : public safecast<Daemon>
         static std::string HumanEpochTime(time_t curtime, const char* format = NULL, bool utc = false);
 
         static bool TimingSafeCompare(const std::string& one, const std::string& two);
-
-        ProtocolInterface DefaultProtocolInterface;
-        
-        ProtocolInterface* PI = NULL;
 
         /* 
          * Matches an string with a given mask.

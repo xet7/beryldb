@@ -31,7 +31,7 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
        if (user->GetDatabase())
        {
-            const std::string path = user->current_db->GetPath().c_str();
+            const std::string path = BASE_PATH.c_str();
             user->SendProtocol(BRLD_CURRENT_DIR, path, Daemon::Format("%s", path.c_str()).c_str());
             return SUCCESS;
        }

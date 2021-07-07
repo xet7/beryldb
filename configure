@@ -220,6 +220,8 @@ if (!$config{ROCKS_OK})
 print "\n";
 print_ok "Dependency test passed. BerylDB is now ready to be configured.\n";
 
+$config{CORE_DIR} = getcwd();
+
 if (defined $set_portable) 
 {
 	show_error '--portable and --system have a conflict and should be ran together.' if defined $set_system;
@@ -480,6 +482,8 @@ else
 {
 	print_ok "No extra modules added.";
 }
+
+
 
 my @arguments;
 push @arguments, "-C${\abs2rel $RealDir}" unless getcwd eq $RealDir;

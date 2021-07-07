@@ -295,3 +295,7 @@ void Beryl::StartListening()
 	}
 }
 
+Beryl::~Beryl()
+{
+	
+}

@@ -491,19 +491,19 @@ void CommandQueue::Flush()
 	       {        
   		      if (!user->PendingMulti.size())
                       {
-                          user->MultiRunning = false;
-                          continue;
+                           user->MultiRunning = false;
+                           continue;
                       }
 
 	       	      PendingCMD m_event = user->PendingMulti.front();
 	       	      Kernel->Commander->Execute(user, m_event.command, m_event.cmd_params);
-	              Kernel->Interval->counter++;
+	              Kernel->Interval->Incr();
 	              user->PendingMulti.pop_front();
 	              continue;
 	        }
                
 	       user->PendingList.pop_front();
                Kernel->Commander.Execute(user, event.command, event.cmd_params);
-               Kernel->Interval->counter++;
+               Kernel->Interval->Incr();
         }
 }

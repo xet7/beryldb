@@ -26,15 +26,20 @@
 #include "exit.h"
 
 Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
+                      PI(&DefaultProtocolInterface),
                       ValidChannel(&ChannelValidator), 
                       GenRandom(&DefaultGenRandom), 
                       ValidKey(&KeyValidator), 
                       ValidLogin(&LoginValidator), 
                       IsAgent(&AgentValidator),
-                      IsDatabase(&DBValidator),
-                      PI(&DefaultProtocolInterface)
+                      IsDatabase(&DBValidator)
 {
 
+}
+
+Daemon::~Daemon()
+{
+      this->PI = NULL;
 }
 
 void Daemon::print_newline(unsigned int loops)

@@ -14,7 +14,6 @@
 #pragma once
 
 #include <iostream>
-
 #include <csignal>
 #include <map>
 #include <string>
@@ -276,6 +275,10 @@ class ExportAPI Beryl
          */    
 
 	Beryl(int argc, char** argv);
+	
+	/* Destructor: it does not perform any task. */
+	
+	~Beryl();
 
 	/*
 	 * This function contains Beryl's mainloop. The mainloop runs

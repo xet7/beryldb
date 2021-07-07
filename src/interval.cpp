@@ -45,3 +45,8 @@ void IntervalManager::Flush()
       
       this->counter = 0;
 }
+
+IntervalManager::~IntervalManager()
+{
+
+}
