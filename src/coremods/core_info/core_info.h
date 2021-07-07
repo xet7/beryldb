@@ -146,3 +146,13 @@ class CommandFirstOf : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
+
+class CommandList : public Command
+{
+ public:
+
+        CommandList(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};
+

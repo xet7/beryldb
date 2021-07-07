@@ -280,6 +280,16 @@ std::string Helpers::TypeString(const std::string& type)
           return "MULTIMAP";
      }
      
+     if (type == INT_FUTURE)
+     {
+          return "FUTURES";
+     }
+     
+     if (type == INT_EXPIRE)
+     {
+          return "EXPIRES";
+     }
+     
      return "UNKNOWN";
 }
 

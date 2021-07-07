@@ -15,6 +15,7 @@
 #include "core_info.h"
 #include "managers/keys.h"
 #include "managers/user.h"
+#include "managers/databases.h"
 #include "brldb/dbmanager.h"
 
 CommandTime::CommandTime(Module* parent) : ServerTargetCommand(parent, "TIME")
@@ -144,4 +145,15 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
          }
          
          return SUCCESS;
+}
+
+CommandList::CommandList(Module* parent) : Command(parent, "LIST", 0)
+{
+
+}
+
+COMMAND_RESULT CommandList::Handle(User* user, const Params& parameters)
+{
+      DBHelper::List(user);
+      return SUCCESS;
 }

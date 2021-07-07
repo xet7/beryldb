@@ -115,7 +115,7 @@ class ExportAPI QueryBase
         DualMMap mlist;
         
         std::string select_query;
-        
+
         unsigned int id;
 
         /* Only first element */
@@ -131,6 +131,8 @@ class ExportAPI QueryBase
         Args VecData;
         
         std::multimap<std::string, std::string>  mmap;
+        
+        std::map<std::string, unsigned int> nmap;
         
         std::shared_ptr<Database> database;
         
@@ -436,6 +438,19 @@ class ExportAPI type_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI list_query  : public QueryBase
+{
+    public:
+
+        list_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
 
 class ExportAPI test_dump_query  : public QueryBase
 {

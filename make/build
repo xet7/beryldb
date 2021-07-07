@@ -53,8 +53,6 @@ for my $compiler (@compilers)
                 say "Unable to compile using the $compiler compiler.";
                 exit 1;
         }
-
-        say "Building using the $compiler compiler.";
 }
 
 

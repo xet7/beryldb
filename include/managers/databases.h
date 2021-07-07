@@ -44,5 +44,8 @@ class ExportAPI DBHelper
         static void DBSize(User* user);
         
         static void SFlush(User* user, const std::string& key);
+        
+        static void List(User* user);
+        
     
 };

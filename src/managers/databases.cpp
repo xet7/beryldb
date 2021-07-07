@@ -66,3 +66,10 @@ void DBHelper::SFlush(User* user, const std::string& key)
        Kernel->Store->Push(query);
 }
 
+void DBHelper::List(User* user)
+{
+       std::shared_ptr<list_query> query = std::make_shared<list_query>();
+       Helpers::make_query(user, query);
+       Kernel->Store->Push(query);
+}
+
