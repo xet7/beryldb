@@ -31,8 +31,7 @@ void vkeys_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
@@ -40,11 +39,6 @@ void vkeys_query::Run()
 
                 std::string rawmap = it->key().ToString();
                 std::string rawvalue = it->value().ToString();
-
-                if (rawvalue != INT_LIST)
-                {
-                     continue;
-                }
 
                 engine::colon_node_stream stream(rawmap);
                 std::string token;
@@ -64,7 +58,7 @@ void vkeys_query::Run()
                         {
                              case 0:
                              {
-                                  key_as_string = token;
+                                  key_as_string = to_string(token);
                                 
                                   if (!Daemon::Match(key_as_string, this->key))
                                   {
@@ -86,7 +80,7 @@ void vkeys_query::Run()
                              
                              case 2:
                              {
-                                  if (token != INT_REG)
+                                  if (token != INT_VECTOR)
                                   {
                                          skip = true;   
                                   }
