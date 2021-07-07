@@ -155,3 +155,27 @@ COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
        MMapsHelper::Repeats(user, kmap, key);
        return SUCCESS;
 }
+
+CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
+{
+         syntax = "<map> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       MMapsHelper::Vals(user, kmap, offset, limit);
+       return SUCCESS;
+}
+

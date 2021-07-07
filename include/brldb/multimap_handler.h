@@ -124,7 +124,17 @@ class ExportAPI MultiMapHandler
         std::vector<std::string> Find(const std::string& key);
         
         std::string as_string();
-        
+
+        /* 
+         * Obtain values from a map.
+         * 
+         * @return:
+ 	 *
+         *         · vector: List of vectors.
+         */            
+         
+        std::vector<std::string> GetValues();
+
         unsigned int Count()
         {
              this->LastMsg = HANDLER_MSG_OK;

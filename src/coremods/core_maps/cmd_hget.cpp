@@ -98,3 +98,25 @@ COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1, 3)
+{
+         syntax = "<map> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       MapsHelper::GetAll(user, kmap, offset, limit);
+       return SUCCESS;
+}

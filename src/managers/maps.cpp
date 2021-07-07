@@ -114,3 +114,16 @@ void MapsHelper::Vals(User* user, const std::string& entry, signed int offset, s
        Kernel->Store->Push(query);
 }
 
+void MapsHelper::GetAll(User* user, const std::string& entry, signed int offset, signed int limit)
+{
+       std::shared_ptr<hgetall_query> query = std::make_shared<hgetall_query>();
+       Helpers::make_map(user, query, entry);
+       
+       query->key = entry;
+       query->offset = offset;
+       query->limit = limit;
+       
+       Kernel->Store->Push(query);
+}
+
+

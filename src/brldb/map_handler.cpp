@@ -212,6 +212,22 @@ void MapHandler::WildRemove(const std::string& key)
       return;
 }
 
+DualMap MapHandler::GetAll()
+{
+      DualMap result;
+
+      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+                  std::string key = i->first;
+                  std::string value = i->second;
+                  
+                  result.insert(std::make_pair(key, value));
+      }
+      
+      this->LastMsg = HANDLER_MSG_OK;
+      return result;
+}
+
 std::vector<std::string> MapHandler::GetValues()
 {
       Args result;

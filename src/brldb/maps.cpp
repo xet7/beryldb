@@ -595,3 +595,98 @@ void hvals_query::Process()
         }
 }
 
+void hgetall_query::Run()
+{
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+       
+       RocksData query_result = this->Get(this->dest);
+       
+       std::shared_ptr<MapHandler> handler = MapHandler::Create(query_result.value);
+       
+       DualMap result = handler->GetAll();
+
+       std::multimap<std::string, std::string> result_return;
+       
+       for (DualMap::iterator i = result.begin(); i != result.end(); ++i)
+       {
+                std::string vkey = i->first;
+                std::string vvalue = i->second;
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    result_return.insert(std::make_pair(vkey, vvalue));
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->mmap = result_return;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result_return.insert(std::make_pair(vkey, vvalue));
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->mmap = result_return;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+     this->subresult = ++tracker;
+     this->partial = false;
+     this->counter = total_counter;
+     this->mmap = result_return;
+     this->SetOK();
+}
+
+void hgetall_query::Process()
+{
+        if (this->subresult == 1)
+        {
+               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+        }
+
+        for (DualMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
+        {            
+               std::string litem = i->first;
+               std::string lvalue = i->second;
+
+               user->SendProtocol(BRLD_ITEM, litem.c_str());
+               user->SendProtocol(BRLD_ITEM, Helpers::Format(lvalue).c_str());
+        }
+
+        if (!this->partial)
+        {
+               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+        }
+}
+
+

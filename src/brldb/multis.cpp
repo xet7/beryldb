@@ -467,3 +467,95 @@ void mrepeats_query::Process()
 {
         user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
 }
+
+
+void mvals_query::Run()
+{
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+       
+       RocksData query_result = this->Get(this->dest);
+       
+       std::shared_ptr<MultiMapHandler> handler = MultiMapHandler::Create(query_result.value);
+       
+       Args result = handler->GetValues();
+
+       Args result_return;
+       
+       for (Args::iterator i = result.begin(); i != result.end(); ++i)
+       {
+                std::string hesh_as_string = (*i);
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    result_return.push_back(hesh_as_string);
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->VecData = result_return;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result_return.push_back(hesh_as_string);
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->VecData = result_return;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+     this->subresult = ++tracker;
+     this->partial = false;
+     this->counter = total_counter;
+     this->VecData = result_return;
+     this->SetOK();
+}
+
+void mvals_query::Process()
+{
+        if (this->subresult == 1)
+        {
+               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+        }
+
+        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
+        {            
+               std::string item = *i;
+               user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+        }
+
+        if (!this->partial)
+        {
+               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+        }
+}
+

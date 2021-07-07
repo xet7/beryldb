@@ -119,7 +119,19 @@ class ExportAPI MapHandler
          */            
          
         bool Delete(const std::string& key);
-        
+
+        /* 
+         * Obtains all values in a map.
+	 * 
+         * @return:
+ 	 *
+         *         · DualMap: A key-value map.
+         */    
+         
+        DualMap GetAll();
+
+        /* Returns map as string. */
+                
         std::string as_string();
 
         /* 

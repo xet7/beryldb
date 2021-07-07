@@ -78,3 +78,12 @@ class CommandMRepeats : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandMVals : public Command 
+{
+    public: 
+
+        CommandMVals(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

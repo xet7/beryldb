@@ -29,6 +29,7 @@ class CoreModuleMaps : public Module
         CommandHSetNX cmdhsetnx;
         CommandHWDel cmdhwdel;
         CommandHVals cmdhvals;
+        CommandHGetAll cmdhgetall;
         
     public:	
         
@@ -42,7 +43,8 @@ class CoreModuleMaps : public Module
                            cmdhstrlen(this),
                            cmdhsetnx(this),
                            cmdhwdel(this),
-                           cmdhvals(this)
+                           cmdhvals(this),
+                           cmdhgetall(this)
                            
                            
         {

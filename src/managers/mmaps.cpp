@@ -88,3 +88,15 @@ void MMapsHelper::Repeats(User* user, const std::string& key, const std::string&
        query->value = entry;
        Kernel->Store->Push(query);
 }
+
+void MMapsHelper::Vals(User* user, const std::string& entry, signed int offset, signed int limit)
+{
+       std::shared_ptr<mvals_query> query = std::make_shared<mvals_query>();
+       Helpers::make_map(user, query, entry);
+       
+       query->key = entry;
+       query->offset = offset;
+       query->limit = limit;
+       
+       Kernel->Store->Push(query);
+}

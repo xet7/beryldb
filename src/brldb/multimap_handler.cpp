@@ -31,7 +31,7 @@ bool MultiMapHandler::Exists(const std::string& word)
             return 0;
       }
 
-      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
                   std::string item = i->first;
 
@@ -53,7 +53,7 @@ bool MultiMapHandler::Delete(const std::string& key)
             return 0;
       }
 
-      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
       {
                   std::string item = i->first;
 
@@ -103,7 +103,7 @@ void MultiMapHandler::Add(const std::string& key, const std::string& value)
 
 std::string MultiMapHandler::Get(const std::string& key)
 {
-      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
       {
                   std::string item = i->first;
                   std::string val = i->second;
@@ -148,7 +148,7 @@ std::string MultiMapHandler::as_string()
         
         unsigned int counter = 0;
         
-        for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
+        for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
         {
                   std::string key = i->first;
                   std::string value = i->second;
@@ -192,7 +192,7 @@ std::vector<std::string> MultiMapHandler::Find(const std::string& key)
 {
       std::vector<std::string> results;
 
-      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
       {
                   std::string item = i->first;
                   std::string val = i->second;
@@ -209,3 +209,18 @@ std::vector<std::string> MultiMapHandler::Find(const std::string& key)
       
       return results;
 }
+
+std::vector<std::string> MultiMapHandler::GetValues()
+{
+      Args result;
+
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+                  std::string val = i->second;
+                  result.push_back(val);
+      }
+
+      this->LastMsg = HANDLER_MSG_OK;
+      return result;
+}
+

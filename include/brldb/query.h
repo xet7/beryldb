@@ -130,7 +130,7 @@ class ExportAPI QueryBase
 
         Args VecData;
         
-        std::multimap<std::string, std::string> mmap;
+        std::multimap<std::string, std::string>  mmap;
         
         std::shared_ptr<Database> database;
         
@@ -1478,11 +1478,42 @@ class ExportAPI expire_del_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI mvals_query  : public QueryBase
+{
+    public:
+
+        mvals_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
 class ExportAPI hvals_query  : public QueryBase
 {
     public:
 
         hvals_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hgetall_query  : public QueryBase
+{
+    public:
+
+        hgetall_query() 
         {
                 this->type = QUERY_TYPE_READ;
                 this->base_request = INT_MAP;
