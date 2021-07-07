@@ -28,6 +28,7 @@ bool MapHandler::Exists(const std::string& word)
 {
       if (!this->mhandler.size())
       {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
             return false;
       }
 
@@ -35,7 +36,7 @@ bool MapHandler::Exists(const std::string& word)
       {
                   std::string item = i->first;
 
-                  if (item == word)
+                  if (word == item)
                   {
                        this->LastMsg = HANDLER_MSG_OK;
                        return true;
@@ -209,4 +210,18 @@ void MapHandler::WildRemove(const std::string& key)
 
       this->LastMsg = HANDLER_MSG_OK;
       return;
+}
+
+std::vector<std::string> MapHandler::GetValues()
+{
+      Args result;
+
+      for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+                  std::string val = i->second;
+                  result.push_back(val);
+      }
+      
+      this->LastMsg = HANDLER_MSG_OK;
+      return result;
 }

@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/maps.h"
 #include "engine.h"
 #include "core_maps.h"
@@ -73,3 +74,27 @@ COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
        MapsHelper::Strlen(user, kmap, key);
        return SUCCESS;
 }
+
+CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
+{
+         syntax = "<map> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       MapsHelper::Vals(user, kmap, offset, limit);
+       return SUCCESS;
+}
+

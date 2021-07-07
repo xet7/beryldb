@@ -17,10 +17,12 @@
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "managers/tests.h"
+#include "managers/databases.h"
 #include "converter.h"
 #include "engine.h"
 #include "managers/settings.h"
 #include "core_dbmanager.h"
+
 
 CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 {

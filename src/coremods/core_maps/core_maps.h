@@ -118,3 +118,13 @@ class CommandHWDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 
 };
+
+class CommandHVals : public Command
+{
+    public: 
+
+        CommandHVals(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+
+};

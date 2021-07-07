@@ -36,7 +36,9 @@ enum QUERY_TYPE
        QUERY_TYPE_MOVE = 16,
        QUERY_TYPE_CLONE = 17,
        QUERY_TYPE_FUTURE = 18,
-       QUERY_TYPE_FUTURE_RUN = 19
+       QUERY_TYPE_FUTURE_RUN = 19,
+       QUERY_TYPE_READ_ALLOW = 20
+       
 };
 
 enum QUERY_FLAGS
@@ -575,7 +577,7 @@ class ExportAPI hsetnx_query  : public QueryBase
 
         hsetnx_query() 
         {
-                this->type = QUERY_TYPE_WRITE;
+                this->type = QUERY_TYPE_READ_ALLOW;
                 this->base_request = INT_MAP;
         }
 
@@ -1469,6 +1471,21 @@ class ExportAPI expire_del_query  : public QueryBase
         {
                 this->type = QUERY_TYPE_READ;
                 this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI hvals_query  : public QueryBase
+{
+    public:
+
+        hvals_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MAP;
         }
 
         void Run();

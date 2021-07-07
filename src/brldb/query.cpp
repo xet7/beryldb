@@ -248,6 +248,36 @@ bool QueryBase::Prepare()
                             this->access_set(DBL_NOT_FOUND);
                      }  
                  }
+            
+           }
+           
+           break;
+
+           case QUERY_TYPE_READ_ALLOW:
+           {
+                 if (this->GetRegistry(this->select_query, this->key, true))
+                 {
+                     if (this->identified == this->base_request)
+                     {
+                            this->Run();
+                            break;
+                     }   
+                     else
+                     {  
+                            this->access_set(DBL_INVALID_TYPE);
+                            this->response = this->identified;
+                      }
+                     
+                 }
+                 else
+                 {
+                     if (this->identified == PROCESS_NULL)
+                     {
+                            this->Run();
+                            break;
+                     }  
+                 }
+            
            }
            
            break;

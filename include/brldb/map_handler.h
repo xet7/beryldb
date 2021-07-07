@@ -75,7 +75,19 @@ class ExportAPI MapHandler
          */    
 
         unsigned int Strlen(const std::string& key);
-        
+
+        /* 
+         * Obtains a value associated with a key.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to find.
+	 * 
+         * @return:
+ 	 *
+         *         · std::string: value.
+         */            
+         
         std::string Get(const std::string& key);
 
         /* 
@@ -125,6 +137,16 @@ class ExportAPI MapHandler
         }
 
         void WildRemove(const std::string& key);
+
+        /* 
+         * Get values from a map.
+	 * 
+         * @return:
+ 	 *
+         *         · std::vector: Vector of strings.
+         */    
+         
+        std::vector<std::string> GetValues();
         
         MapMap& GetList()
         {

@@ -102,3 +102,15 @@ void MapsHelper::Count(User* user, const std::string& entry)
        Kernel->Store->Push(query);
 }
 
+void MapsHelper::Vals(User* user, const std::string& entry, signed int offset, signed int limit)
+{
+       std::shared_ptr<hvals_query> query = std::make_shared<hvals_query>();
+       Helpers::make_map(user, query, entry);
+       
+       query->key = entry;
+       query->offset = offset;
+       query->limit = limit;
+       
+       Kernel->Store->Push(query);
+}
+

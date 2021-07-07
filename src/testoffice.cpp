@@ -45,7 +45,7 @@ TestOffice::~TestOffice()
 void TestOffice::Run()
 {
    
-       std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
+/*       std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
        
        handler3->Add("key", "value");
        handler3->Add("key", "value3");
@@ -56,12 +56,17 @@ void TestOffice::Run()
        handler3->Dump();
        
        return;
+*/
 
-       std::shared_ptr<MapHandler> handler4 = MapHandler::Create(handler3->as_string());
-//       handler4->DeleteAll("key");
-	   std::cout << "exists: " << handler4->Get("key2") << std::endl;
+
+       std::shared_ptr<MapHandler> handler4 = std::make_shared<MapHandler>();
+       handler4->Add("key", "value");
+       handler4->Add("key", "value3");
+       handler4->Add("key3", "value33");
        
-       handler4->Dump();
+       std::cout << "exists: " << handler4->Exists("key") << std::endl;
+       
+//       handler4->Dump();
        
        return;
    

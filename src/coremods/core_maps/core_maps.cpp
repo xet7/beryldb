@@ -28,6 +28,7 @@ class CoreModuleMaps : public Module
         CommandHStrlen cmdhstrlen;
         CommandHSetNX cmdhsetnx;
         CommandHWDel cmdhwdel;
+        CommandHVals cmdhvals;
         
     public:	
         
@@ -40,7 +41,8 @@ class CoreModuleMaps : public Module
                            cmdhexists(this),
                            cmdhstrlen(this),
                            cmdhsetnx(this),
-                           cmdhwdel(this)
+                           cmdhwdel(this),
+                           cmdhvals(this)
                            
                            
         {

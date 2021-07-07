@@ -173,3 +173,4 @@ class CommandFlushAll : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+

@@ -220,32 +220,24 @@ void hset_query::Process()
 
 void hsetnx_query::Run()
 {
-       if (this->hesh.empty())
-       {
-                this->access_set(DBL_MISS_ARGS);
-                return;
-       }
-
        RocksData resultq = this->Get(this->dest);
+
+       std::shared_ptr<MapHandler> handler = MapHandler::Create(resultq.value);
 
        if (resultq.status.ok())
        {
-              std::shared_ptr<MapHandler> handler = MapHandler::Create(resultq.value);
-
                if (handler->Exists(this->hesh))
                {
                     access_set(DBL_ENTRY_EXISTS);
                     return;
                }
-               else
-               {
-                      handler->Add(this->hesh, this->value);
+       }
+       
+       handler->Add(this->hesh, this->value);
 
-                     if (handler->GetLast() == HANDLER_MSG_OK)
-                     {  
-                           this->Write(this->dest, handler->as_string());
-                     }
-               }
+       if (handler->GetLast() == HANDLER_MSG_OK)
+       {  
+                 this->Write(this->dest, handler->as_string());
        }
 
        this->SetOK();
@@ -512,3 +504,94 @@ void hwdel_query::Process()
 {
        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
+
+void hvals_query::Run()
+{
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+       
+       RocksData query_result = this->Get(this->dest);
+       
+       std::shared_ptr<MapHandler> handler = MapHandler::Create(query_result.value);
+       
+       Args result = handler->GetValues();
+
+       Args result_return;
+       
+       for (Args::iterator i = result.begin(); i != result.end(); ++i)
+       {
+                std::string hesh_as_string = (*i);
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    result_return.push_back(hesh_as_string);
+             
+                                    if (aux_counter % 100 == 0)
+                                    {
+                                                std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->VecData = result_return;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result_return.push_back(hesh_as_string);
+            
+                             if (aux_counter % 100 == 0)
+                             {
+                                        std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->VecData = result_return;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+     this->subresult = ++tracker;
+     this->partial = false;
+     this->counter = total_counter;
+     this->VecData = result_return;
+     this->SetOK();
+}
+
+void hvals_query::Process()
+{
+        if (this->subresult == 1)
+        {
+               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+        }
+
+        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
+        {            
+               std::string item = *i;
+               user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+        }
+
+        if (!this->partial)
+        {
+               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+        }
+}
+

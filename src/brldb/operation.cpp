@@ -178,8 +178,7 @@ void sflush_query::Run()
 
      for (it->SeekToFirst(); it->Valid(); it->Next()) 
      {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
@@ -202,26 +201,12 @@ void sflush_query::Run()
                      
                         switch (strcounter)
                         {
-                             case 0:
-                             {
-
-                             }
-                             
-                             break;
-                             
                              case 1:
                              {
                                    if (this->key != token)
                                    {
                                           skip = true;
                                    }
-                             }
-                             
-                             break;
-                             
-                             case 2:
-                             {
-                             
                              }
                              
                              break;

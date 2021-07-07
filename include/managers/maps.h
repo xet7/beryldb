@@ -51,6 +51,8 @@ class ExportAPI MapsHelper
 
        static void Find(User* user, const std::string& entry, signed int offset, signed int limit);
 
+       static void Vals(User* user, const std::string& entry, signed int offset, signed int limit);
+
 };
 
 class ExportAPI CMapsHelper
