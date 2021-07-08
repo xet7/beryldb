@@ -40,7 +40,9 @@ class ExportAPI GlobalHelper
       
       static void FutureExecute(std::shared_ptr<Database> database, const std::string& where, const std::string& key);
 
+      static void UserFutureExecute(User* user, const std::string& key);
+
       static void FutureCancel(User* user, const std::string& key);
-      
+
       
 };

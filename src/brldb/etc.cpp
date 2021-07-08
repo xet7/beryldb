@@ -164,13 +164,12 @@ void future_exec_query::Run()
        }
        
        this->DelFuture();
-       access_set(DBL_UNABLE_WRITE);
-
+       access_set(DBL_NOT_FOUND);
 }
 
 void future_exec_query::Process()
 {
-
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 
 void future_del_query::Run()

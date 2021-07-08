@@ -80,7 +80,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
-CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1)
+CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 {
          syntax = "<key>";
 }
@@ -88,19 +88,7 @@ CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1)
 COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 {
          const std::string& key = parameters[0];
-         
-         bool result = FutureManager::Exec(user->current_db, key, user->select);
-         
-         if (result)
-         {
-               user->SendProtocol(BRLD_FUTURE_EXEC, key, user->select, PROCESS_OK); 
-         }
-         else
-         {      
-               user->SendProtocol(ERR_NOT_FUTURE, key, user->select, PROCESS_NULL);
-               return FAILED;
-         }
-
+         GlobalHelper::UserFutureExecute(user, key);
          return SUCCESS;
 }
 

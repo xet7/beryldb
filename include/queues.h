@@ -33,7 +33,10 @@ class QueueProvider : public refcountbase, public ServiceProvider
 
 	
 	QueueProvider(Module* mod, const std::string& Name, Type attachtype = IOH_UNKNOWN, bool middle = false)
-		: ServiceProvider(mod, Name, SERVICE_QUEUE), middleattach(middle), type(attachtype) { }
+		: ServiceProvider(mod, Name, SERVICE_QUEUE), middleattach(middle), type(attachtype) 
+	{ 
+	
+	}
 
 	
 	bool IsMiddle() const 
@@ -53,7 +56,6 @@ class IOQueue : public base_class
  public:
 	
 	reference<QueueProvider> prov;
-
 	
 	IOQueue(QueueProvider* provider): prov(provider) 
 	{

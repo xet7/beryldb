@@ -73,7 +73,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
+               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
