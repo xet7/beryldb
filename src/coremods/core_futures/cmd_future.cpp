@@ -139,7 +139,13 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
              use = user->select;
         }
 
-        FutureManager::SelectReset(user->current_db->GetName(), use);
+        if (user->current_db && user->current_db->IsClosing())
+        {
+              user->SendProtocol(ERR_DB_BUSY, DATABASE_BUSY);
+              return FAILED;
+        }
+
+        Kernel->Store->Futures->SelectReset(user->current_db->GetName(), use);
         user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
         return SUCCESS;
 }
