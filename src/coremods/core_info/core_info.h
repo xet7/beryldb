@@ -28,7 +28,6 @@ class ServerTargetCommand : public Command
 };
 
 
-
 class CommandCommands : public Command
 {
  public:
@@ -147,11 +146,11 @@ class CommandFirstOf : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-class CommandList : public Command
+class CommandID : public Command
 {
  public:
 
-        CommandList(Module* parent);
+        CommandID(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };

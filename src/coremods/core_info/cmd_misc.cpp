@@ -149,12 +149,12 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
-CommandList::CommandList(Module* parent) : Command(parent, "LIST", 0)
+CommandID::CommandID(Module* parent) : Command(parent, "ID", 0)
 {
 
 }
 
-COMMAND_RESULT CommandList::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandID::Handle(User* user, const Params& parameters)
 {
       DBHelper::List(user);
       return SUCCESS;
