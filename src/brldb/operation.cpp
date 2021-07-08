@@ -431,6 +431,11 @@ void total_query::Run()
                         strcounter++;
                 }
                 
+                if (skip)
+                {
+                     continue;
+                }
+                
                 total_counter++;
     }
                 

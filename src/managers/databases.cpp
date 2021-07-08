@@ -77,6 +77,7 @@ void DBHelper::Total(User* user)
 {
        std::shared_ptr<total_query> query = std::make_shared<total_query>();
        Helpers::make_query(user, query);
+       
        Kernel->Store->Push(query);
 }
 
