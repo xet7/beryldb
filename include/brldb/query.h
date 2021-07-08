@@ -194,7 +194,7 @@ class ExportAPI QueryBase
          *         · uint: Seconds.
          */    
          
-        unsigned int IsExpiring();
+        signed int IsExpiring();
 
         /* 
          * Writes and adds an expire to the database.

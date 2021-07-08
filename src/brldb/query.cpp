@@ -46,7 +46,7 @@ void QueryBase::DelFuture()
         this->Delete(lookup);
 }
 
-unsigned int QueryBase::IsExpiring()
+signed int QueryBase::IsExpiring()
 {
       signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
       
@@ -55,7 +55,7 @@ unsigned int QueryBase::IsExpiring()
              return ttl;
       }
       
-      return 0;
+      return -1;
 }
 
 void QueryBase::DelExpire()

@@ -436,7 +436,7 @@ void DataThread::Process()
                           {
                                 break;
                           }
-                          
+
                           if (request->access != DBL_INTERRUPT)
                           {
                                 /* Adds result to the pending notification list. */

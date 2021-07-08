@@ -105,7 +105,6 @@ void expire_list_query::Run()
                 }
 
                 std::string rawvalue = it->value().ToString();
-                
                 std::string valid_key = key_as_bin + ":" + select_as_string + ":" + INT_KEY;
                 
                 std::string dbvalue;
@@ -175,8 +174,6 @@ void expire_del_query::Process()
         {
                 user->SendProtocol(BRLD_PERSIST, this->key, PROCESS_OK);
         }
-        
-        NOTIFY_MODS(OnExpireDel, (this->user, this->database->GetName(), this->key, this->select_query));
 }
 
 void set_query::Run()
@@ -560,6 +557,7 @@ void search_query::Run()
                              }
 
                              break;
+
                              case 2:
                              {
                                   if (token != INT_KEY)

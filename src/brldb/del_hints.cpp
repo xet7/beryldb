@@ -20,7 +20,10 @@
 
 void del_query::Keys()
 {
-     this->DelExpire();
+     if (this->IsExpiring() > 0)
+     {
+            this->DelExpire();
+     }
 }
 
 void del_query::Lists()
