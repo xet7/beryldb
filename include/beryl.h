@@ -262,8 +262,8 @@ class ExportAPI Beryl
 	Daemon Engine;
 
 	/*
-	 * Beryl's main. This function will initialize most of the beryl's core system
-	 * and will read the config file.
+	 * Beryl's main. This function will initialize most of the Beryl's core system
+	 * and read all configuration files.
          * 
          * @parameters:
 	 *

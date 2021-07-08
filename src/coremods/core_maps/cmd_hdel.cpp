@@ -27,8 +27,8 @@ CommandHDel::CommandHDel(Module* Creator) : Command(Creator, "HDEL", 2, 2)
 
 COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string kmap = parameters[0];
-       const std::string key = parameters[1];
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
 
        MapsHelper::Delete(user, kmap, key);
        return SUCCESS;

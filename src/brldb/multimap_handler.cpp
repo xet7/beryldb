@@ -199,7 +199,7 @@ std::vector<std::string> MultiMapHandler::Find(const std::string& key)
 
                   if (Daemon::Match(val, key))
                   {
-                         results.push_back(val);
+                         results.push_back(item);
                   }
 
                   i++;
@@ -238,4 +238,25 @@ DualMMap MultiMapHandler::GetAll()
 
       this->LastMsg = HANDLER_MSG_OK;
       return result;
+}
+
+std::vector<std::string> MultiMapHandler::GetVals(const std::string& key)
+{
+      std::vector<std::string> results;
+
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      {
+                  std::string item = i->first;
+                  std::string val = i->second;
+
+                  if (key == item)
+                  {
+                      results.push_back(val);
+                  }
+
+                  i++;
+      }
+
+      this->LastMsg = HANDLER_MSG_OK;
+      return results;
 }

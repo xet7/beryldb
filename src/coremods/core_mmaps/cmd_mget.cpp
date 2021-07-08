@@ -77,12 +77,12 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
 }
 
 
-CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
+CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
          syntax = "<map> <limit> <offset>";
 }
 
-COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
@@ -95,7 +95,7 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
        signed int offset = lms[1];
        signed int limit = lms[2];
 
-       MMapsHelper::Iter(user, kmap, offset, limit);
+       MMapsHelper::Keys(user, kmap, offset, limit);
        return SUCCESS;
 }
 
@@ -200,5 +200,29 @@ COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
        signed int limit = lms[2];
 
        MMapsHelper::GetAll(user, kmap, offset, limit);
+       return SUCCESS;
+}
+
+CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
+{
+         syntax = "<map> <val> <limit> <offset>";
+}
+
+COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
+       
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       MMapsHelper::ITER(user, kmap, key, offset, limit);
        return SUCCESS;
 }

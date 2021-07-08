@@ -42,11 +42,11 @@ class CommandMGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMIter : public Command 
+class CommandMKeys : public Command 
 {
     public: 
 
-        CommandMIter(Module* parent);
+        CommandMKeys(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
@@ -95,3 +95,15 @@ class CommandMGetAll : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+
+class CommandMIter : public Command 
+{
+    public: 
+
+        CommandMIter(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+

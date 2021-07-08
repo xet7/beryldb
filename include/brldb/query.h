@@ -1539,6 +1539,20 @@ class ExportAPI mgetall_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI miter_query  : public QueryBase
+{
+    public:
+
+        miter_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
 
 class ExportAPI hgetall_query  : public QueryBase
 {

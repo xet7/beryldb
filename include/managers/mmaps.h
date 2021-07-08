@@ -23,7 +23,7 @@ class ExportAPI MMapsHelper
 
        static void Get(User* user, const std::string& entry, signed int offset, signed int limit);
        
-       static void Iter(User* user, const std::string& entry,  signed int offset, signed int limit);
+       static void Keys(User* user, const std::string& entry,  signed int offset, signed int limit);
        
        static void Count(User* user, const std::string& entry);
 
@@ -38,4 +38,7 @@ class ExportAPI MMapsHelper
        static void Vals(User* user, const std::string& entry, signed int offset, signed int limit);
   
        static void GetAll(User* user, const std::string& entry, signed int offset, signed int limit);
+       
+       static void ITER(User* user, const std::string& key, const std::string& entry, signed int offset, signed int limit);
+       
 };

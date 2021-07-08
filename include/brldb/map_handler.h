@@ -60,6 +60,8 @@ class ExportAPI MapHandler
                  
         void Remove(const std::string& key);
         
+        /* Removes all items */
+        
         void Dump();
         
         /* 

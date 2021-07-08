@@ -41,7 +41,7 @@ void MMapsHelper::Get(User* user, const std::string& entry, signed int offset, s
        Kernel->Store->Push(query);
 }
 
-void MMapsHelper::Iter(User* user, const std::string& entry, signed int offset, signed int limit)
+void MMapsHelper::Keys(User* user, const std::string& entry, signed int offset, signed int limit)
 {
        std::shared_ptr<mkeys_query> query = std::make_shared<mkeys_query>();
        Helpers::make_mmap(user, query, entry, true);
@@ -113,4 +113,14 @@ void MMapsHelper::GetAll(User* user, const std::string& entry, signed int offset
        Kernel->Store->Push(query);
 }
 
+void MMapsHelper::ITER(User* user, const std::string& key, const std::string& entry, signed int offset, signed int limit)
+{
+       std::shared_ptr<miter_query> query = std::make_shared<miter_query>();
+       Helpers::make_mmap(user, query, key);
+       query->offset = offset;
+       query->limit = limit;
 
+
+       query->value = entry;
+       Kernel->Store->Push(query);
+}

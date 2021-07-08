@@ -72,7 +72,7 @@ COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 }
 
 
-CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MLIST", 0, 1)
+CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MONITORLIST", 0, 1)
 {
         requires = 'm';
         syntax = "<*argument>";
@@ -96,7 +96,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         {
              if (arg != "DEFAULT" || arg != "DEBUG")
              {
-                  user->SendProtocol(ERR_INVALID_MONITORLVL, arg, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), arg.c_str()));
+                  user->SendProtocol(ERR_INVALID_MONITORLVL, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), arg.c_str()));
                   return FAILED;
              }
         }

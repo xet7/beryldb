@@ -35,8 +35,19 @@ class ExportAPI MultiMapHandler
 
         static std::shared_ptr<MultiMapHandler> Create(const std::string& load);
         
+        /* Removes all items in this->mhandler */
+        
         void Erase();
         
+        /* 
+         * Adds a new item to the mhandler.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to add.
+	 *         · value: Value to add.
+         */            
+         
         void Add(const std::string& key, const std::string& value);
 
         /* 
@@ -49,6 +60,8 @@ class ExportAPI MultiMapHandler
          
         void Remove(const std::string& key);
         
+        /* Dumps data. */
+                
         void Dump();
 
         /* 
@@ -137,6 +150,16 @@ class ExportAPI MultiMapHandler
 
         DualMMap GetAll();
 
+        std::vector<std::string> GetVals(const std::string& key);
+
+        /* 
+         * Counts items in multimap.
+         * 
+         * @return:
+ 	 *
+         *         · uint: Counter.
+         */    
+         
         unsigned int Count()
         {
              this->LastMsg = HANDLER_MSG_OK;

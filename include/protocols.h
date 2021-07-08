@@ -226,6 +226,7 @@ enum BRLD_PROTOCOL
 	
 	BRLD_EXPIRES			=		306,
 	BRLD_FUTURES			=		307,	
+	BRLD_LOGIN			=		308,
 	
 	/* Error protocol codes. */
 	
