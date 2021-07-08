@@ -120,3 +120,4 @@ COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
        MapsHelper::GetAll(user, kmap, offset, limit);
        return SUCCESS;
 }
+

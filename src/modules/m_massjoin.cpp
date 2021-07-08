@@ -49,8 +49,8 @@ class CommandMassJoin : public Command
                         
                         if (chan)
                         {
-                              localuser->SendProtocol(BRLD_MASS_JOIN, channel, "Mass join to " + channel);
-                              total++;
+                               localuser->SendProtocol(BRLD_MASS_JOIN, "Mass join to " + channel);
+                               total++;
                         }
                   }
              }

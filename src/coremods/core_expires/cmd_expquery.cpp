@@ -69,7 +69,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 
 }
 
-CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 1, 1)
+CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 0, 1)
 {
          syntax = "<select>";
 }
@@ -97,14 +97,13 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
 
-               if (entry.select != select)
+               if (entry.select != select || entry.database != user->current_db)
                {  
                          continue;
                }
                
                std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
-               
-               user->SendProtocol(BRLD_EXPIRE_ITEM, entry.key, Daemon::Format("%s | %s", entry.key.c_str(), schedule.c_str()));
+               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_EXPIRE_END);

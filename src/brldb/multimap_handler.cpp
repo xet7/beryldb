@@ -224,3 +224,18 @@ std::vector<std::string> MultiMapHandler::GetValues()
       return result;
 }
 
+DualMMap MultiMapHandler::GetAll()
+{
+      DualMMap result;
+
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+                  std::string key = i->first;
+                  std::string value = i->second;
+
+                  result.insert(std::make_pair(key, value));
+      }
+
+      this->LastMsg = HANDLER_MSG_OK;
+      return result;
+}

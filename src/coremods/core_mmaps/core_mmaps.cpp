@@ -26,12 +26,14 @@ class CoreModuleMMaps : public Module
          CommandMSeek cmdmseek;
          CommandMRepeats cmdmrepeats;
          CommandMVals cmdmvals;
-    
+         CommandMGetAll cmdgetalls;
+         
     public:     
 
         CoreModuleMMaps() : cmdmset(this), cmdmget(this), cmdmcount(this), 
                             cmditer(this), cmdmdel(this), cmdmseek(this),
-                            cmdmrepeats(this), cmdmvals(this)
+                            cmdmrepeats(this), cmdmvals(this),
+                            cmdgetalls(this)
         {
         
         }

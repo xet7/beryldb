@@ -1524,6 +1524,22 @@ class ExportAPI hvals_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI mgetall_query  : public QueryBase
+{
+    public:
+
+        mgetall_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_MMAP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
 class ExportAPI hgetall_query  : public QueryBase
 {
     public:

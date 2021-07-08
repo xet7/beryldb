@@ -87,3 +87,11 @@ class CommandMVals : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandMGetAll : public Command 
+{
+    public: 
+
+        CommandMGetAll(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

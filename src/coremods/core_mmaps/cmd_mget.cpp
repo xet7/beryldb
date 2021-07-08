@@ -179,3 +179,26 @@ COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+
+CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1, 3)
+{
+         syntax = "<map> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap = parameters[0];
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       MMapsHelper::GetAll(user, kmap, offset, limit);
+       return SUCCESS;
+}

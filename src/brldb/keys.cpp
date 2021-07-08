@@ -892,6 +892,13 @@ void random_query::Run()
                 {
                       foundkey = key_as_string;
                 }	
+                
+                unsigned int stopvalue = IntRand(2, 1000);
+                
+                if (stopvalue == total_counter)
+                {
+                     break;
+                }
       }
       
       if (total_counter == 0 && foundkey.empty())

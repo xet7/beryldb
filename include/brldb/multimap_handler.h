@@ -135,6 +135,8 @@ class ExportAPI MultiMapHandler
          
         std::vector<std::string> GetValues();
 
+        DualMMap GetAll();
+
         unsigned int Count()
         {
              this->LastMsg = HANDLER_MSG_OK;
