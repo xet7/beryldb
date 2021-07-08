@@ -61,7 +61,7 @@ COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
                 User* const login = *i;
-                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->rawflags.c_str()).c_str());
+                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str()).c_str());
         }
 
         Dispatcher::JustAPI(user, BRLD_LOGINS_END);

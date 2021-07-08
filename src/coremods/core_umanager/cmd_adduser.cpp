@@ -59,7 +59,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Add(newlogin, pass))
         {
-                user->SendProtocol(BRLD_USER_ADD, newlogin, PROCESS_OK);
+                user->SendProtocol(BRLD_USER_ADD, PROCESS_OK);
         }
 
         return SUCCESS;
@@ -152,7 +152,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
                       continue;
                 }
                 
-                Dispatcher::CondList(user, BRLD_USER_ITEM, item, flags);                
+                user->SendProtocol(BRLD_USER_ITEM, Daemon::Format("%-10s | %5s ", item.c_str(), flags.c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);

@@ -142,7 +142,7 @@ class ModuleCoreDB : public Module
               
               if (session)
               {
-                    Kernel->Logins->Sessions->Attach(user, user->login, session->rawflags);
+                    Kernel->Logins->Sessions->Attach(user, user->login, session->GetFlags());
                     LoadNotify(user);
                     return;
               }

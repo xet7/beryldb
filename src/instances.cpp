@@ -158,17 +158,17 @@ bool User::CanPerform(unsigned char flag)
 		return false;
 	}
 	
-	if (session->can_admin)
+	if (session->CanAdmin())
 	{
 		return true;
 	}
 
-        if (flag == 'e' && session->can_execute)
+        if (flag == 'e' && session->CanExecute())
         {
         	 return true;
         }
         
-        if (flag == 'm' && session->can_manage)
+        if (flag == 'm' && session->CanManage())
         {
         	return true;
         }
@@ -185,7 +185,7 @@ bool User::IsAdmin()
                 return false;
         }
 
-	if (session->can_admin)
+	if (session->CanAdmin())
 	{
 		return true;
 	}
@@ -202,17 +202,17 @@ int User::GetFirstFlag()
                 return 0;
         }
 
-        if (session->can_admin)
+        if (session->CanAdmin())
         {
                 return 3;
         }
         
-        if (session->can_execute)
+        if (session->CanExecute())
         {
         	return 2;
         }	
         
-        if (session->can_manage)
+        if (session->CanManage())
         {
         	return 1;
         }

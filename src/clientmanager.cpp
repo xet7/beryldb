@@ -467,7 +467,7 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
 		
 		if (all)
 		{
-			if (user->session->can_admin || user->session->can_execute || user->session->can_manage)
+			if (user->session->CanAdmin() || user->session->CanExecute() || user->session->CanManage())
 			{
 				UserList.push_back(user);
 			}
@@ -477,7 +477,7 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
 		
 		if (flag[0] == 'r')
 		{
-			if (user->session->can_admin)
+			if (user->session->CanAdmin())
 			{
 				UserList.push_back(user);
 			}
@@ -487,7 +487,7 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
 		
 		if (flag[0] == 'e')
 		{
-			if (user->session->can_execute)
+			if (user->session->CanExecute())
 			{
 				UserList.push_back(user);
 			}
@@ -497,7 +497,7 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
 		
 		if (flag[0] == 'a')
 		{
-			if (user->session->can_manage)
+			if (user->session->CanManage())
 			{
 				UserList.push_back(user);
 			}

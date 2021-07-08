@@ -231,7 +231,7 @@ class CommandMessage : public Command
 			return HandleChannelTarget(user, parameters, target);
 		}
 		
-		if (!user->session->can_execute && !user->IsAdmin())
+		if (!user->session->CanExecute() && !user->IsAdmin())
 		{
                         user->SendProtocol(ERR_NO_FLAGS, "You are not allowed to send messages.");
                         return FAILED;
@@ -329,7 +329,7 @@ class ModuleCoreMessage : public Module
 
 		Channel* chan = target.Get<Channel>();
 		
-		if (!user->session->can_execute && !user->IsAdmin() && !chan->IsSubscribed(user))
+		if (!user->session->CanExecute() && !user->IsAdmin() && !chan->IsSubscribed(user))
 		{
 			user->SendProtocol(ERR_CANNOTSENDTOCHAN, "External messages are not allowed.");
 			return MOD_RES_STOP;

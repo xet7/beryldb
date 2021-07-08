@@ -15,12 +15,8 @@
 
 class ExportAPI Session : public safecast<Session>
 {
-    public:
-        
-        /* Constructor. */
-        
-        Session();
-        
+    private:
+
         /* Raw flags */
         
         std::string rawflags;
@@ -40,6 +36,37 @@ class ExportAPI Session : public safecast<Session>
         /* Basic management flags. */
 
         bool can_manage;
+  
+  public:
+          
+        /* Constructor. */
+
+        Session();
+        
+        static std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags);
+        
+        void SetRaw(const std::string& flags);
+        
+        bool CanExecute()
+        {
+              return this->can_execute;
+        }
+        
+        bool CanAdmin()
+        {
+             return this->can_admin;
+        }
+        
+        bool CanManage()
+        {
+            return this->can_manage;
+        }
+        
+        std::string GetFlags()
+        {
+              return this->rawflags;
+        }
+        
 };
 
 class ExportAPI SessionManager : public safecast<SessionManager>

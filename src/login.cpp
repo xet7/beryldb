@@ -27,7 +27,7 @@ Session::Session() : can_admin(false)
 
 }
 
-std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags)
+std::shared_ptr<Session> Session::SetFlags(std::shared_ptr<Session> New, const std::string& flags)
 {
        /* Session has no flags by default. */
       
@@ -54,6 +54,11 @@ std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::strin
       }
      
       return New;
+}
+
+void Session::SetRaw(const std::string& flags)
+{
+      this->rawflags = flags;
 }
 
 void SessionManager::DetermineLifetime(const std::string& login)
@@ -89,19 +94,17 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
     {
          return nullptr;
     } 
-    
+
     std::shared_ptr<Session> New = std::make_shared<Session>();
-    
-    SetFlags(New, flags);
-    New->rawflags = flags;
-    
+    New = Session::SetFlags(New, flags);
+    New->SetRaw(flags);
+
     this->sessions.insert(std::make_pair(login, New));
     return New;
 }
 
 void SessionManager::AttachExternal(const std::string& login, const std::string& flags)
 {
-     
      UserVector logins = Kernel->Clients->FindLogin(login);
 
      for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
@@ -121,7 +124,7 @@ void SessionManager::Attach(User* user, const std::string& login, const std::str
       }
       else
       {
-            attach = SetFlags(attach, flags);
+            attach = Session::SetFlags(attach, flags);
       }
             
       if (user != NULL)
