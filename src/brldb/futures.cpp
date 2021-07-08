@@ -177,7 +177,6 @@ bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& 
               return false;
         }
 
-        //KeyHelper::Set(Kernel->Clients->Global, entry.database, entry.select, entry.key, entry.value, "", TYPE_NONE, true);  
         FutureManager::Delete(database, key, select);
         return true;
 }
@@ -215,7 +214,20 @@ FutureMap& FutureManager::GetFutures()
 
 void FutureManager::Reset()
 {
-      Kernel->Store->Futures->FutureList.clear();
+      FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+
+      if (!expiring.size())
+      {
+              return;
+      }
+
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
+
+      for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); it++)
+      {
+              FutureEntry entry = it->second;
+              GlobalHelper::FutureGlobalCancel(entry.database, entry.select, entry.key);
+      }  
 }
 
 unsigned int FutureManager::DatabaseReset(const std::string& dbname)
@@ -243,7 +255,7 @@ unsigned int FutureManager::DatabaseReset(const std::string& dbname)
             if (it->second.database == database)
             {
                        FutureEntry entry = it->second;
-                       GlobalHelper::FutureExecute(entry.database, entry.select, entry.key);
+                       GlobalHelper::FutureGlobalCancel(entry.database, entry.select, entry.key);
                        counter++;
             }
 
@@ -259,7 +271,7 @@ unsigned int FutureManager::SelectReset(const std::string& dbname, const std::st
 
       unsigned int counter = 0;
 
-      FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+      FutureMap& futures = Kernel->Store->Futures->GetFutures();
 
       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
 
@@ -270,17 +282,16 @@ unsigned int FutureManager::SelectReset(const std::string& dbname, const std::st
 
       std::lock_guard<std::mutex> lg(FutureManager::mute);
 
-      for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); )
+      for (FutureMap::iterator it = futures.begin(); it != futures.end(); )
       {
             if (it->second.select == select && it->second.database == database)
             {
-                       Kernel->Store->Futures->FutureList.erase(it++);
-                       counter++;
+                    FutureEntry entry = it->second;
+                    GlobalHelper::FutureGlobalCancel(entry.database, entry.select, entry.key);
+                    counter++;
             }
-            else
-            {
-                       it++;
-            }
+
+            it++;
       }
 
       return counter;

@@ -112,3 +112,15 @@ void GlobalHelper::FutureCancel(User* user, const std::string& key)
        Kernel->Store->Push(query);
 }
 
+void GlobalHelper::FutureGlobalCancel(std::shared_ptr<Database> database, const std::string& where, const std::string& key)
+{
+       std::shared_ptr<future_del_query> query = std::make_shared<future_del_query>();
+
+       query->user = Kernel->Clients->Global;
+       query->database = database;
+       query->select_query = where;
+       query->flags = QUERY_FLAGS_QUIET;
+       query->key = key;
+
+       Kernel->Store->Push(query);
+}

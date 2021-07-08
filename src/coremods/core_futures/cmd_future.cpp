@@ -139,9 +139,8 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
              use = user->select;
         }
 
-        unsigned int counter = FutureManager::SelectReset(user->current_db->GetName(), use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, counter, counter);
-
+        FutureManager::SelectReset(user->current_db->GetName(), use);
+        user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -155,10 +154,8 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         
         GlobalHelper::FutureCancel(user, key);
-        
         return SUCCESS;
 }
-
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT", 3, 3)
 {
@@ -190,6 +187,5 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
           
           unsigned int exp_usig = convto_num<unsigned int>(seconds);
           ExpireHelper::FutureAT(user, key, exp_usig, value);
-
           return SUCCESS;
 }
