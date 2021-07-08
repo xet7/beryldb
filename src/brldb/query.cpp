@@ -44,7 +44,6 @@ void QueryBase::DelFuture()
         Kernel->Store->Futures->Delete(this->database, this->key, this->select_query);
         std::string lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_FUTURE + ":" + this->database->GetName();
         this->Delete(lookup);
-        
 }
 
 unsigned int QueryBase::IsExpiring()

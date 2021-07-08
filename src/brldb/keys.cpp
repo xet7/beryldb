@@ -23,7 +23,8 @@
 void expire_list_query::Run()
 {
        unsigned int total_counter = 0;
-       
+       unsigned int broken_keys = 0;
+
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
        
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
@@ -35,6 +36,7 @@ void expire_list_query::Run()
                 }
 
                 std::string key_as_string;
+                std::string key_as_bin;
                 std::string select_as_string;
                 std::string db_name;
                 std::string rawmap = it->key().ToString();
@@ -56,6 +58,7 @@ void expire_list_query::Run()
                              case 0:
                              {
                                   key_as_string = to_string(token);
+                                  key_as_bin = token;
                              }
 
                              break;
@@ -100,12 +103,29 @@ void expire_list_query::Run()
                 {
                         continue;
                 }
-                
-                std::string rawvalue = it->value().ToString();
 
+                std::string rawvalue = it->value().ToString();
+                
+                std::string valid_key = key_as_bin + ":" + select_as_string + ":" + INT_KEY;
+                
+                std::string dbvalue;
+                this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
+                
+                if (dbvalue.empty())
+                {
+                     this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawmap);
+                     broken_keys++;
+                     continue;
+                }
+                
                 Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, select_as_string, true);
                 total_counter++;
         }
+        
+        if (broken_keys > 0)
+        {
+               iprint((int)broken_keys, "Broken expires found: Now fixed.");
+        }	
         
         if (total_counter > 0)
         {
