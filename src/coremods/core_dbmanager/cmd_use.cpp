@@ -68,7 +68,7 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
                 return FAILED;
        }
        
-       if (!Daemon::CheckRange(user, use, "Must be a value between 1 and 100", 1, 100))
+       if (!Daemon::CheckRange(user, use, INVALID_RANGE, 1, 100))
        {
                return FAILED;
        }

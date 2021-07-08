@@ -82,6 +82,9 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
         CMapsHelper::Set("userlogin", user, user);
         CMapsHelper::Set("pass", user, hashed_pass);
         CMapsHelper::Set("created", user, convto_string(Kernel->Now()));
+        
+//        NOTIFY_MODS(OnUserAdd, (key, value));
+        
         return true;
 }
 

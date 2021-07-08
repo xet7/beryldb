@@ -128,7 +128,7 @@ void future_query::Run()
 
 void future_query::Process()
 {
-       //NOTIFY_MODS(OnFutureAdd, (this->user, this->database->GetName(), this->key, this->select_query, this->id));
+       NOTIFY_MODS(OnFutureAdd, (this->user, this->database->GetName(), this->key, this->select_query));
        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 

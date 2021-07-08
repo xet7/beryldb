@@ -364,6 +364,8 @@ void list_query::Run()
 
 void list_query::Process()
 {
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        
         for (std::map<std::string, unsigned int>::iterator i = this->nmap.begin(); i != this->nmap.end(); ++i)
         {
                  std::string ikey = Helpers::TypeString(i->first);
@@ -371,4 +373,82 @@ void list_query::Process()
 
                  user->SendProtocol(BRLD_ITEM, Daemon::Format("%-9s | %2s ", ikey.c_str(), convto_string(item).c_str()));
         }
+        
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 }
+
+
+void total_query::Run()
+{
+       unsigned int total_counter = 0;
+       
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
+
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
+
+                std::string rawmap = it->key().ToString();
+                std::string rawvalue = to_string(it->value().ToString());
+                         
+                engine::colon_node_stream stream(rawmap);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
+
+                std::string key_as_string;
+                
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                            break;
+                        }
+
+                        switch (strcounter)
+                        {
+
+                             case 1:
+                             {
+                                   if (this->select_query != token)
+                                   {
+                                        skip = true;
+                                   }
+                             }
+
+                             break;
+                             
+                             default:
+                             {
+                                 break;   
+                             }
+                        }
+
+                        strcounter++;
+                }
+                
+                total_counter++;
+    }
+                
+    this->counter = total_counter;
+    this->SetOK();
+                
+}
+
+void total_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter).c_str());
+}
+
+
+
+
+
+
+
+
+

@@ -155,3 +155,11 @@ class CommandID : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
+class CommandTotal : public Command
+{
+ public:
+
+        CommandTotal(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+};

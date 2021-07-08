@@ -159,3 +159,14 @@ COMMAND_RESULT CommandID::Handle(User* user, const Params& parameters)
       DBHelper::List(user);
       return SUCCESS;
 }
+
+CommandTotal::CommandTotal(Module* parent) : Command(parent, "TOTAL", 0)
+{
+         requires = 'm';
+}
+
+COMMAND_RESULT CommandTotal::Handle(User* user, const Params& parameters)
+{
+         DBHelper::Total(user);
+         return SUCCESS;
+}

@@ -438,6 +438,20 @@ class ExportAPI type_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI total_query  : public QueryBase
+{
+    public:
+
+        total_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI list_query  : public QueryBase
 {
     public:

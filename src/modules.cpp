@@ -114,7 +114,7 @@ void		Module::OnServiceDel(ServiceProvider&) { DetachEvent(I_OnServiceDel); }
 ModuleResult	Module::OnConnectionFail(LocalUser*, LiveSocketError) { DetachEvent(I_OnConnectionFail); return MOD_RES_SKIP; }
 void		Module::OnHalt(const std::string& reason) { DetachEvent(I_OnHalt); }
 void 		Module::OnExpireAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select, unsigned int seconds) { DetachEvent(I_OnExpireAdd); }
-void 	        Module::OnExpireDel(User* user, const std::string& dbname, const std::string& key, const std::string& select) { DetachEvent(I_OnExpireDel); } 
+void 	        Module::OnFutureAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select) { DetachEvent(I_OnFutureAdd); } 
 
 ServiceProvider::ServiceProvider(Module* Creator, const std::string& Name, ServiceID Type) : creator(Creator), name(Name), service(Type)
 {

@@ -52,7 +52,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
                 return FAILED;
        }
        
-       if (!Daemon::CheckRange(user, select, "Must be a value between 1 and 100", 1, 100))
+       if (!Daemon::CheckRange(user, select, INVALID_RANGE, 1, 100))
        {
                return FAILED;
        }

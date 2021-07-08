@@ -97,7 +97,7 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
                 return FAILED;
        }
 
-       if (!Daemon::CheckRange(user, new_select, "Must be a value between 1 and 100", 1, 100))
+       if (!Daemon::CheckRange(user, new_select, INVALID_RANGE, 1, 100))
        {
                return FAILED;
        }

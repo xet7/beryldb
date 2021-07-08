@@ -202,8 +202,9 @@ enum Priority
 
 enum Application
 {
+	I_OnUserAdd,
 	I_OnExpireAdd,
-	I_OnExpireDel,
+	I_OnFutureAdd,
 	I_OnInstaceReady,
 	I_OnAcceptConnection,
 	I_OnAddLine,
@@ -393,6 +394,8 @@ class ExportAPI Module : public base_class, public usecountbase
 
 	
 	virtual void OnSetHost(User* user, const std::string& newhost);
+	
+//2	virtual void OnUserAdd(
 
         /* 
          * Called every time a new expire is added.
@@ -405,14 +408,14 @@ class ExportAPI Module : public base_class, public usecountbase
 	virtual void OnExpireAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select, unsigned int seconds);
 
         /* 
-         * Called every time an expire is removed.
+         * Called every time an future is added.
          * 
          * @parameters:
 	 *
-	 *         · Information about timer removed.
+	 *         · Information about future.
          */    	
          
-        virtual void OnExpireDel(User* user, const std::string& dbname, const std::string& key, const std::string& select);
+        virtual void OnFutureAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select);
 
         /* 
          * Called as a new user registers its user agent.
