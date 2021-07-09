@@ -146,11 +146,11 @@ class CommandFirstOf : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };
 
-class CommandID : public Command
+class CommandLS : public Command
 {
  public:
 
-        CommandID(Module* parent);
+        CommandLS(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters) ;
 };

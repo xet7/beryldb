@@ -41,7 +41,7 @@ class CoreModInfo : public Module
 	CommandAgent cmdagent;
 	CommandEpoch cmdepoch;
 	CommandFirstOf cmdfirstof;
-	CommandID cmdid;
+	CommandLS cmdls;
 	CommandTotal cmdtotal;
 	
   public:
@@ -50,7 +50,7 @@ class CoreModInfo : public Module
 			cmdversion(this), cmdl(this), cmdsyntax(this),
 			cmdmychans(this), cmdchans(this), cmdwhoami(this),
 			cmdagent(this), cmdepoch(this), cmdfirstof(this),
-			cmdid(this), cmdtotal(this)
+			cmdls(this), cmdtotal(this)
 	{
 
 	}

@@ -75,12 +75,12 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        
        if (user->select == use)
        {
-             user->SendProtocol(ERR_USE, use, PROCESS_ALREADY);
+             user->SendProtocol(ERR_USE, PROCESS_ALREADY);
              return FAILED;
        }
       
        user->select = use;
-       user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
+       user->SendProtocol(BRLD_NEW_USE, PROCESS_OK);
        
        return SUCCESS;
 }

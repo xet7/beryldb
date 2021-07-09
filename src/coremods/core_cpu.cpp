@@ -15,7 +15,6 @@
 
 class ModuleCoreCPU : public Module
 {
-
   private:
          
          float sample_sincelast;

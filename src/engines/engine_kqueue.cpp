@@ -136,7 +136,7 @@ void SocketPool::OnMaskReq(EventHandler* ehandler, int old_mask, int new_mask)
 int SocketPool::Events()
 {
 	struct timespec ts;
-	ts.tv_nsec = 50000000;
+	ts.tv_nsec = 30000000;
 	ts.tv_sec = 0;
 
 	int i = kevent(SocketHandler, &pendinglist.front(), ChangePos, &ke_list.front(), ke_list.size(), &ts);

@@ -29,11 +29,11 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
                 if (UserHelper::ChangePass(user->login, pass))
                 {
-                        user->SendProtocol(BRLD_LOGIN_CHPASS, user->login, PROCESS_OK);
+                        user->SendProtocol(BRLD_LOGIN_CHPASS, PROCESS_OK);
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INVALID_PASS, pass, PASS_AT_LEAST);
+                        user->SendProtocol(ERR_INVALID_PASS, PASS_AT_LEAST);
                         return FAILED;
                 }
 
@@ -44,7 +44,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (!user->IsAdmin())
         {
-                user->SendProtocol(ERR_NO_FLAGS, user->login, ACCESS_DENIED);
+                user->SendProtocol(ERR_NO_FLAGS, ACCESS_DENIED);
                 return FAILED;        
         }
                 
@@ -59,7 +59,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, newlogin, INVALID_UNAME);
+                user->SendProtocol(ERR_INVALID_LOGIN, INVALID_UNAME);
                 return FAILED;
         }
         
@@ -69,7 +69,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        std::string exists = UserHelper::Find("created", newlogin);
+        std::string exists = UserHelper::Find(newlogin, "created");
         
         if (exists.empty())
         {
@@ -79,11 +79,11 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (UserHelper::ChangePass(newlogin, pass))
         {
-                user->SendProtocol(BRLD_LOGIN_CHPASS, newlogin, PROCESS_OK);
+                user->SendProtocol(BRLD_LOGIN_CHPASS, PROCESS_OK);
         }
         else
         {
-                user->SendProtocol(ERR_INVALID_PASS, pass, PASS_AT_LEAST);
+                user->SendProtocol(ERR_INVALID_PASS, PASS_AT_LEAST);
                 return FAILED;
         }
         

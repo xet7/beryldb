@@ -61,12 +61,12 @@ CommandL::CommandL(Module* parent) : Command(parent, "L", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-        user->SendProtocol(BRLD_START_UNQ_LIST, Daemon::Format("%-10s : %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendProtocol(BRLD_VIEW_INFO, Daemon::Format("%-10s : %s", "Select", user->select.c_str()));
+        user->SendProtocol(BRLD_START_UNQ_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
+        user->SendProtocol(BRLD_VIEW_INFO, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
         
         if (user->current_db)
         {
-             user->SendProtocol(BRLD_DB_NAME, Daemon::Format("%-10s : %s", "Database", user->current_db->GetName().c_str()));
+             user->SendProtocol(BRLD_DB_NAME, Daemon::Format("%-9s | %s", "Database", user->current_db->GetName().c_str()));
         }
         
         /* Returns admin flags to requesting user, if any. */
@@ -75,14 +75,14 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         
         if (!exists.empty())
         {
-                user->SendProtocol(BRLD_FLAG_INFO, Daemon::Format("%-10s : %s", "Flags", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_INSTANCE, Daemon::Format("%-10s : %s", "Created", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
+                user->SendProtocol(BRLD_FLAG_INFO, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
+                user->SendProtocol(BRLD_INSTANCE, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
         }
         
         /* Requesting user login. */
 
-        user->SendProtocol(BRLD_INSTANCE, Daemon::Format("%-10s : %s", "Instance", user->instance.c_str()));	
-        user->SendProtocol(BRLD_LOGIN, Daemon::Format("%-10s : %s", "Login", user->login.c_str())); 
+        user->SendProtocol(BRLD_INSTANCE, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
+        user->SendProtocol(BRLD_LOGIN, Daemon::Format("%-9s | %s", "Login", user->login.c_str())); 
         
 	return SUCCESS;
 }
@@ -149,12 +149,12 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
-CommandID::CommandID(Module* parent) : Command(parent, "ID", 0)
+CommandLS::CommandLS(Module* parent) : Command(parent, "LS", 0)
 {
 
 }
 
-COMMAND_RESULT CommandID::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandLS::Handle(User* user, const Params& parameters)
 {
       DBHelper::List(user);
       return SUCCESS;
