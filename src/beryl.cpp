@@ -278,7 +278,7 @@ void Beryl::Loop()
         Kernel->Commander->Queue->Flush();
 
         /*
-         * Calls our socket pool to wait on all active file descriptors.
+         * Invokes our socket pool to wait on all active file descriptors.
          * This pool handles all socket-related writes,
          * from modules to clients.
          * In other words, these two functions below will read and/or write

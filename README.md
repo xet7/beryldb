@@ -48,7 +48,7 @@ sudo apt-get install librocksdb-dev build-essential
 Download latest version:
 
 ```
-https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
+wget https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
 unzip 1.0.zip
 cd beryldb-1.0/
 ```
