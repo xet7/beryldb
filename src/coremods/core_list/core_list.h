@@ -80,16 +80,6 @@ class CommandLCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandLMove : public Command 
-{
-    public: 
-
-        CommandLMove(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
 class CommandLResize : public Command 
 {
     public: 
@@ -159,6 +149,15 @@ class CommandLRepeats : public Command
     public: 
 
         CommandLRepeats(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLRop : public Command 
+{
+    public: 
+
+        CommandLRop(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

@@ -49,4 +49,7 @@ class ExportAPI ListHelper
 
         static void Repeats(User* user, const std::string& entry, const std::string& value);
         
+        static void Rop(User* user, const std::string& entry);
+        
+        
 };

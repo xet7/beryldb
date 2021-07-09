@@ -639,7 +639,7 @@ void lget_query::Process()
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {
                std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, item.c_str());
+               user->SendProtocol(BRLD_ITEM, Helpers::Format(item.c_str()));
         }
 
         if (!this->partial)
@@ -725,4 +725,40 @@ void lrepeats_query::Run()
 void lrepeats_query::Process()
 {
        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+}
+
+void lrop_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
+       
+       this->response = handler->RPOP();
+       
+       if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
+       {
+             access_set(DBL_NOT_FOUND);
+       }
+
+       if (handler->Count() > 0)
+       {
+               this->Write(this->dest, handler->as_string());
+       }
+       else
+       {
+               this->Delete(this->dest);
+       } 
+       
+       this->SetOK();
+}
+
+void lrop_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
 }

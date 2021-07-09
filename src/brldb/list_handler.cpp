@@ -242,3 +242,17 @@ std::vector<std::string> ListHandler::Find(const std::string& key)
         this->LastMsg = HANDLER_MSG_OK;
         return items;
 }
+
+std::string ListHandler::RPOP()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      std::string item = this->mhandler.back();
+      this->mhandler.pop_back();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
+}

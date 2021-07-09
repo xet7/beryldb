@@ -161,3 +161,16 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandLRop::CommandLRop(Module* Creator) : Command(Creator, "LROP", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLRop::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       
+       ListHelper::Rop(user, key);
+       return SUCCESS;  
+}
+

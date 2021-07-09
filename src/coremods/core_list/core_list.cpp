@@ -25,7 +25,6 @@ class CoreModuleList : public Module
         CommandLGet cmdlget;
         CommandLExist cmdlexist;
         CommandLCount cmdlcount;
-        CommandLMove cmdlmove;
         CommandLPos cmdlpos;
         CommandLKeys cmdlkeys;
         CommandLFind cmdlfind;
@@ -34,6 +33,7 @@ class CoreModuleList : public Module
         CommandLSort cmdlsort;
         CommandLDel cmdldel;
         CommandLRepeats cmdlrepeats;
+        CommandLRop cmdlrop;
         
     public:	
         
@@ -44,7 +44,6 @@ class CoreModuleList : public Module
                            cmdlget(this),
                            cmdlexist(this),
                            cmdlcount(this),
-                           cmdlmove(this),
                            cmdlpos(this),
                            cmdlkeys(this),
                            cmdlfind(this),
@@ -52,7 +51,8 @@ class CoreModuleList : public Module
                            cmdlresize(this),
                            cmdlsort(this),
                            cmdldel(this),
-                           cmdlrepeats(this)
+                           cmdlrepeats(this),
+                           cmdlrop(this)
 
         {
         

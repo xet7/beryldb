@@ -139,6 +139,16 @@ class ExportAPI ListHandler
          */              
          
         std::vector<std::string> Find(const std::string& key);
+
+        /* 
+         * Returns last item in listen, and then removes it.
+	 * 
+         * @return:
+ 	 *
+         *         · string: last item.
+         */    
+         
+        std::string RPOP();
          
         /* 
          * Returns a copy of this->mhandler.

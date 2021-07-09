@@ -383,7 +383,7 @@ void vget_query::Process()
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {
                std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, item.c_str());
+               user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
         }
 
         if (!this->partial)

@@ -141,3 +141,13 @@ void ListHelper::Repeats(User* user, const std::string& entry, const std::string
        Kernel->Store->Push(query);
 }
 
+
+void ListHelper::Rop(User* user, const std::string& entry)
+{
+       std::shared_ptr<lrop_query> query = std::make_shared<lrop_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+
+
