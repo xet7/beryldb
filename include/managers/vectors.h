@@ -45,5 +45,7 @@ class ExportAPI VectorHelper
        
        static void Repeats(User* user, const std::string& entry, const std::string& value);
        
+       static void Sort(User* user, const std::string& entry);
+       
 
 };

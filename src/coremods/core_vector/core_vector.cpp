@@ -31,6 +31,7 @@ class CoreModuleVector : public Module
         CommandVEraseFrom cmdverasefrom;
         CommandVReverse cmdvreverse;
         CommandVRepeats cmdvrepeats;
+        CommandVSort cmdvsort;
         
     public:	
         
@@ -46,7 +47,8 @@ class CoreModuleVector : public Module
                              cmdvdel(this),
                              cmdverasefrom(this),
                              cmdvreverse(this),
-                             cmdvrepeats(this)
+                             cmdvrepeats(this),
+                             cmdvsort(this)
                              
 
         {

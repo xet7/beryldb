@@ -226,4 +226,15 @@ COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandVSort::CommandVSort(Module* Creator) : Command(Creator, "VSORT", 1, 1)
+{
+         syntax = "<key>";
+}
 
+COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+
+        VectorHelper::Sort(user, key);
+        return SUCCESS;  
+}

@@ -994,6 +994,21 @@ class ExportAPI verase_from_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vsort_query  : public QueryBase
+{
+    public:
+
+        vsort_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI lsort_query  : public QueryBase
 {
     public:

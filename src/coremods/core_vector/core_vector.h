@@ -132,3 +132,13 @@ class CommandVRepeats : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandVSort : public Command 
+{
+    public: 
+
+        CommandVSort(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

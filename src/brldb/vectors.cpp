@@ -20,6 +20,27 @@
 #include "managers/maps.h"
 #include "cstruct.h"
 
+void vsort_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+}
+
+void vsort_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
+       handler->Sort();
+       this->Write(this->dest, handler->as_string());
+       this->SetOK();
+}
+
 void vkeys_query::Run()
 {
        Args result;
