@@ -70,8 +70,8 @@ bool Database::Open()
         options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
         options.keep_log_file_num = 1;
         options.write_thread_max_yield_usec = Kernel->Config->DB.yieldusec;
-        options.OptimizeLevelStyleCompaction();
-        options.enable_thread_tracking = true;
+        options.OptimizeLevelStyleCompaction(2);
+        options.enable_thread_tracking = false;
         options.enable_pipelined_write = Kernel->Config->DB.pipeline;
 
         slog("DATABASE", LOG_VERBOSE, "Database opened: %s", this->path.c_str());
@@ -191,7 +191,7 @@ void CoreManager::CheckDefaults()
 StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
 {
        env->SetBackgroundThreads(2, rocksdb::Env::LOW);
-       env->SetBackgroundThreads(1, rocksdb::Env::HIGH);
+       env->SetBackgroundThreads(3, rocksdb::Env::HIGH);
 }
 
 void StoreManager::OpenAll()

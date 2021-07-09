@@ -29,7 +29,7 @@ const unsigned int INPUT_LIMIT = 65530;
 
 /* Time to wait before starting accepting requests. */
 
-const int PRELOOP_WAIT = 200000;
+const int PRELOOP_WAIT = 1000000;
 
 /* Max client target for a loop command. */
 
