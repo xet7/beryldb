@@ -229,7 +229,7 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         {
                 if (*it == flag[0])
                 {
-                        user->SendProtocol(BRLD_ADD_FLAGS, newlogin, Daemon::Format("User %s already has flag: %s", newlogin.c_str(), flag.c_str()));
+                        user->SendProtocol(BRLD_ADD_FLAGS, Daemon::Format("User %s already has flag: %s", newlogin.c_str(), flag.c_str()));
                         return FAILED;
                 }
                 

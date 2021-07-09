@@ -523,7 +523,7 @@ unsigned int ClientManager::DisconnectAll(const std::string& login, const std::s
              {
 		   continue;
              }
-       		      
+       		
              Kernel->Clients->Disconnect(user, msg);
              counter++;
        }

@@ -36,7 +36,7 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
                 return true;
         }
 
-        const std::string passwd = CMapsHelper::Get("pass", user).response;
+        const std::string passwd = CMapsHelper::Get(user, "pass").response;
         
         HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
 
@@ -79,9 +79,11 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 
         std::string hashed_pass = provider->Generate(pass);
             
-        CMapsHelper::Set("userlogin", user, user);
-        CMapsHelper::Set("pass", user, hashed_pass);
-        CMapsHelper::Set("created", user, convto_string(Kernel->Now()));
+        CMapsHelper::Set(user, "userlogin", user);
+        CMapsHelper::Set(user, "pass", hashed_pass);
+        CMapsHelper::Set(user, "created", convto_string(Kernel->Now()));
+
+        CMapsHelper::Set("userlist", user, "login");
         
 //        NOTIFY_MODS(OnUserAdd, (key, value));
         
@@ -111,19 +113,19 @@ bool UserHelper::ChangePass(const std::string& user, const std::string& pass)
         }
 
         std::string hashed_pass = provider->Generate(pass);
-        CMapsHelper::Set("pass", user, hashed_pass);
+        CMapsHelper::Set(user, "pass", hashed_pass);
         return true;
 }
 
 bool UserHelper::SetFlags(const std::string& user, const std::string& flags)
 {
-        CMapsHelper::Set("flags", user, flags);
+        CMapsHelper::Set(user, "flags", flags);
         return true;
 }
 
 bool UserHelper::HasFlags(const std::string& user)
 {
-        const std::string flags = CMapsHelper::Get("flags", user).response;
+        const std::string flags = CMapsHelper::Get(user, "flags").response;
         
         if (flags.empty() || flags == "")
         {
@@ -135,12 +137,12 @@ bool UserHelper::HasFlags(const std::string& user)
 
 std::string UserHelper::CheckFlags(const std::string& user)
 {
-        return CMapsHelper::Get("flags", user).response;
+        return CMapsHelper::Get(user, "flags").response;
 }
 
 bool UserHelper::DeleteFlags(const std::string& user)
 {
-        CMapsHelper::Del("flags", user);
+        CMapsHelper::Del(user, "flags");
         return true;
 }
 
@@ -148,17 +150,20 @@ bool UserHelper::Remove(const std::string& user)
 {
         Kernel->Logins->Remove(user); 
         
-        CMapsHelper::Del("pass", user);
-        CMapsHelper::Del("created", user);
-        CMapsHelper::Del("flags", user);
-        CMapsHelper::Del("userlogin", user);        
+        CMapsHelper::Del(user, "pass");
+        CMapsHelper::Del(user, "created");
+        CMapsHelper::Del(user, "flags");
+        CMapsHelper::Del(user, "userlogin");      
+        
+        CMapsHelper::Del("userlist", user);
+          
         
         return true;
 }
 
 bool UserHelper::Exists(const std::string& user)
 {
-    std::string created = UserHelper::Find("created", user);
+    std::string created = UserHelper::Find(user, "created");
     
     if (created.empty() || created == "")
     {

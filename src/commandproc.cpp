@@ -455,14 +455,19 @@ void CommandQueue::Flush()
        {
                LocalUser* user = *u;
 
-               if (user == NULL || user->IsQuitting())
+               if (user == NULL)
                {
-                        continue;
+                     continue;
                }
 
+               if (user->IsQuitting())
+               {
+               	     user->PendingList.clear();
+               }
+               
                if (!user->PendingList.size())
                {
-                        continue;
+                     continue;
                }
                
                PendingCMD event = user->PendingList.front();

@@ -1000,7 +1000,7 @@ class ExportAPI lsort_query  : public QueryBase
 
         lsort_query() 
         {
-                this->type = QUERY_TYPE_ITER;
+                this->type = QUERY_TYPE_READ;
                 this->base_request = INT_LIST;
         }
 

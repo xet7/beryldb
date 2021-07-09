@@ -47,7 +47,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        const std::string exists = UserHelper::Find("created", newlogin);
+        const std::string exists = UserHelper::Find(newlogin, "created");
         
         if (!exists.empty())
         {
@@ -77,7 +77,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, newlogin, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
         
@@ -89,11 +89,11 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, newlogin, INVALID_UNAME);
+                user->SendProtocol(ERR_LOGIN_EXISTS, INVALID_UNAME);
                 return FAILED;
         }
 
-        std::string exists = UserHelper::Find("created", newlogin);
+        std::string exists = UserHelper::Find(newlogin, "created");
         
         if (exists.empty())
         {
@@ -117,7 +117,7 @@ CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS"
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
-        Args users = STHelper::HKeys("userlogin");
+        Args users = STHelper::HKeys("userlist");
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
         
@@ -138,7 +138,7 @@ CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMI
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
-        Args users = STHelper::HKeys("userlogin");
+        Args users = STHelper::HKeys("userlist");
 
         Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
 
