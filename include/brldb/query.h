@@ -873,6 +873,21 @@ class ExportAPI lrop_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI lrfront_query  : public QueryBase
+{
+    public:
+
+        lrfront_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI lget_query  : public QueryBase
 {
     public:

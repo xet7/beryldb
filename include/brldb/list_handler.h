@@ -149,6 +149,8 @@ class ExportAPI ListHandler
          */    
          
         std::string RPOP();
+
+        std::string FPOP();
          
         /* 
          * Returns a copy of this->mhandler.

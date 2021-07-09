@@ -162,3 +162,12 @@ class CommandLRop : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandFRop : public Command 
+{
+    public: 
+
+        CommandFRop(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
