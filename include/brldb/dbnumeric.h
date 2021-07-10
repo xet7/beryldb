@@ -16,12 +16,10 @@
 enum DBL_CODE
 {
         DBL_NONE			=		0,
-        DBL_TYPE_HSET 			=		1,
         DBL_STATUS_FAILED		=		2,
         DBL_STATUS_OK			=		3,
         DBL_MISS_ARGS			=		4,
         DBL_NOT_FOUND			=		5,
-        DBL_TYPE_HGET			=		6,
         DBL_ENTRY_EXISTS		=		7,
         DBL_MANAGER_OK			=		8,
         DBL_STATUS_BROKEN		=		16,

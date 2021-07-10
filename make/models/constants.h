@@ -13,6 +13,19 @@
 
 #pragma once
 
+
+/* No login provided */
+
+const std::string NO_LOG_PROV = "NO_LOG_PROVIDED";
+
+/* Wrong login */
+
+const std::string ERRON_LOGIN = "ERROR_LOGIN";
+
+/* User is already logged. */
+
+const std::string ALREADY_LOGGED = "ALREADY_LOGGED";
+
 /* Entry expires */
 
 const std::string ENTRY_EXPIRES = "ENTRY_EXPIRES";

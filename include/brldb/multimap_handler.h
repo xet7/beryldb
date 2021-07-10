@@ -148,6 +148,14 @@ class ExportAPI MultiMapHandler
          
         std::vector<std::string> GetValues();
 
+        /* 
+         * Obtain all values in mhandler.
+         * 
+         * @return:
+ 	 *
+         *         · multimap: All values.
+         */    
+         
         DualMMap GetAll();
 
         std::vector<std::string> GetVals(const std::string& key);

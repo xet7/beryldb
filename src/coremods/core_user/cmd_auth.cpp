@@ -48,6 +48,12 @@ CommandILogin::CommandILogin(Module* parent) : Command(parent, "ILOGIN", 3, 3)
 
 COMMAND_RESULT CommandILogin::Handle(User* user, const Params& parameters)
 {
+	if (user->logged)
+	{
+		user->SendProtocol(ERR_ALREADY_LOGGED, ALREADY_LOGGED);
+		return FAILED;
+	}
+	
         const std::string& agent = parameters[0];
         const std::string& auth = parameters[1];
         const std::string& login = parameters[2];

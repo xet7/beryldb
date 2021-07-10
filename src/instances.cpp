@@ -23,9 +23,9 @@ std::mutex User::db_mute;
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) :
-					   Locked(false)	 
-				        ,  Multi(false)
-				        ,  MultiRunning(false)
+					  Locked(false)	 
+				        , Multi(false)
+				        , MultiRunning(false)
 				        , Paused(false)
 				        , age(Kernel->Now())
 					, connected(0)
@@ -376,7 +376,7 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 {
 	if (this->logged)
 	{       
-		this->SendProtocol(ERR_ALREADY_LOGGED, "Already logged.");
+		this->SendProtocol(ERR_ALREADY_LOGGED, ALREADY_LOGGED);
 		return false;
 	}
 

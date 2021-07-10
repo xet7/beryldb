@@ -73,6 +73,5 @@ enum HANDLER_MSG
      HANDLER_MSG_INVALID = 3
 };
 
-
 #include "nodes.h"
 #include "base.h"
