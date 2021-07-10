@@ -163,6 +163,9 @@ class ExportAPI Configuration
 	
 	bool Ready;
 
+	std::atomic<bool> KeepExpires;
+	
+	std::atomic<bool> KeepFutures;
 	
 	bool WildcardIPv6;
 
@@ -243,9 +246,6 @@ class ExportAPI Configuration
 	void Fill();
 	
 	void CheckDatabases();
-
-	
-	
 
 	
 	static std::string Escape(const std::string& str, bool xml = true);

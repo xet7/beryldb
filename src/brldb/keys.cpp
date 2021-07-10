@@ -117,8 +117,16 @@ void expire_list_query::Run()
                      continue;
                 }
                 
-                Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, select_as_string, true);
-                total_counter++;
+                if (Kernel->Config->KeepExpires)
+                {
+                     Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, select_as_string, true);
+                     total_counter++;
+                }
+                else
+                {
+                     this->Delete(rawmap);
+                }
+                
         }
         
         if (broken_keys > 0)
@@ -126,7 +134,7 @@ void expire_list_query::Run()
                iprint((int)broken_keys, "Broken expires found: Now fixed.");
         }	
         
-        if (total_counter > 0)
+        if (Kernel->Config->KeepExpires && total_counter > 0)
         {
              iprint((int)total_counter, "Expires loaded from %s.", this->database->GetName().c_str());
         }

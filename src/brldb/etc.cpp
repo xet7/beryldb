@@ -104,12 +104,19 @@ void future_list_query::Run()
                 size_t found2 =  rawvalue.find_first_of(":");
                 std::string path2 = rawvalue.substr(0,found2);
                 std::string file2 = rawvalue.substr(found2+1);
-
-                Kernel->Store->Futures->Add(this->database, convto_num<signed int>(path2), key_as_string, file2, select_as_string, true);
-                total_counter++;
+                
+                if (Kernel->Config->KeepFutures)
+                {
+                     Kernel->Store->Futures->Add(this->database, convto_num<signed int>(path2), key_as_string, file2, select_as_string, true);
+                     total_counter++;
+                }
+                else
+                {
+                     this->Delete(rawmap);
+                }
         }
         
-        if (total_counter > 0)
+        if (Kernel->Config->KeepFutures && total_counter > 0)
         {
              iprint((int)total_counter, "Futures loaded from %s.", this->database->GetName().c_str());
         }

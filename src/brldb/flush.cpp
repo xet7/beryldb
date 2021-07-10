@@ -25,7 +25,6 @@ void DataFlush::InvalidRange(User* user, std::shared_ptr<QueryBase> signal)
       user->SendProtocol(ERR_QUERY, INVALID_RANGE);
 }
 
-
 void DataFlush::InvalidFormat(User* user, std::shared_ptr<QueryBase> signal)
 {
       user->SendProtocol(ERR_QUERY, INVALID_FORMAT);
@@ -58,8 +57,8 @@ void DataFlush::MissArgs(User* user, std::shared_ptr<QueryBase> signal)
 
 void DataFlush::InvalidType(User* user,  std::shared_ptr<QueryBase> signal)
 {
-       std::string reply = "(" + Helpers::TypeString(signal->response)  + ")";
-       Dispatcher::CondList(user, ERR_QUERY, INVALID_FORMAT, reply);
+       std::string reply = INVALID_FORMAT + ":" + Helpers::TypeString(signal->response);
+       user->SendProtocol(ERR_QUERY, reply);
 }
 
 void DataFlush::UnableWrite(User* user, std::shared_ptr<QueryBase> signal)

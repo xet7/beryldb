@@ -221,6 +221,13 @@ void Configuration::Fill()
 		}
 	}
 	
+	
+        config_rule* ttls = GetConf("ttls");
+	
+	KeepFutures =  ttls->as_bool("futures", true);
+        KeepExpires =  ttls->as_bool("expires", true);
+        
+	
 	MaxClients = settings->as_uint("maxclients", 1500);
 	
 	Network = server->as_string("network", "Network", 1);
