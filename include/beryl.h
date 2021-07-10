@@ -19,7 +19,7 @@
 #include <vector>
 #include <memory>
 
-//#include "devel.h"
+#include "devel.h"
 #include "constants.h"
 #include "ilist.h"
 #include "flat_map.h"
