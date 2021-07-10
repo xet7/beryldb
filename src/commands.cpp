@@ -90,7 +90,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
 
 void Command::NotLogged(LocalUser* user, const Params& parameters)
 {
-	user->SendProtocol(ERR_NO_AUTH, name, "You have not logged in.");
+	user->SendProtocol(ERR_NO_AUTH, NO_AUTH);
 }
 
 MultiCommand::MultiCommand(Module* me, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : Command(me, cmd, minpara, maxpara)

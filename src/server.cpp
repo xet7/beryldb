@@ -12,19 +12,20 @@
  */
 
 #include <signal.h>
-#include <iostream>
 #include <getopt.h>
 
+#include "devel.h"
+#include "testoffice.h"
 #include "beryl.h"
 #include "engine.h"
 #include "exit.h"
 
+void Beryl::CheckOffice()
+{
+
 #ifdef ENABLE_TESTOFFICE
 
 	#include "testoffice.h"
-
-	void Beryl::CheckOffice()
-	{
 
 			/* Checks if run_tests is enabled. This scenario would prevent entering mainloop. */
 
@@ -39,9 +40,10 @@
 					
 					this->Exit(EXIT_CODE_OK, true, true);
 			}
-	}
 	
 #endif  
+
+}
 
 void Beryl::CommandLine()
 {
@@ -54,11 +56,7 @@ void Beryl::CommandLine()
                         { "debug",     no_argument,       &do_debug,     1   },
 			{ "nofork",    no_argument,       &do_nofork,    1   },
 			{ "nolog",     no_argument,       &do_nolog,     1   },
-#ifdef ENABLE_TESTOFFICE
-
                         { "testsuite",  no_argument,      &do_tests,     1   },
-
-#endif
 			{ "nopid",     no_argument,       &do_nopid,     1   },
 			{ "asroot",    no_argument,       &do_asroot,    1   },
 			{ "version",   no_argument,       &do_version,   1   },
@@ -104,8 +102,6 @@ void Beryl::CommandLine()
 	this->Config->usercmd.writepid = !do_nopid;
  	this->Config->usercmd.run_tests = !!do_tests;
 
-#ifdef ENABLE_TESTOFFICE
-        
         /* Enables testoffice.cpp and runs Run() */
         
         if (do_tests)
@@ -113,8 +109,6 @@ void Beryl::CommandLine()
                this->Config->usercmd.run_tests = 1;
                this->Config->usercmd.nofork = this->Config->usercmd.forcedebug = true;
         }
-#endif
-	
 }
 
 void Beryl::Detach()

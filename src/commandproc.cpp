@@ -408,16 +408,22 @@ void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Para
 	}
 	else
 	{        
+	        if (user->Multi && command == "MULTI")
+	        {
+                	user->SendProtocol(ERR_INPUT2, ERR_MULTI, PROCESS_ERROR);
+                	return;
+		}
+
 	        if (user->Multi && command != "MRUN")
 	        {
 	      		user->PendingMulti.push_back(adding);
-	      		user->SendProtocol(BRLD_QUEUED, "QUEUED");
+	      		user->SendProtocol(BRLD_INPUT, "QUEUED");
 	      		return;
 		}
 		
 		if (command == "MRUN" && !user->Multi)
 		{
-			user->SendProtocol(ERR_MULTI, PROCESS_ERROR);
+			user->SendProtocol(ERR_INPUT2, ERR_MULTI, PROCESS_ERROR);
 			return;
 	        }
 	}

@@ -23,10 +23,6 @@ const std::string DEFAULT_EMERALD = "emerald";
 
 const unsigned int INPUT_LIMIT = 65530;
 
-/* Enables testsuite. */
-
-#define ENABLE_TESTOFFICE
-
 /* Time to wait before starting accepting requests. */
 
 const int PRELOOP_WAIT = 1000000;

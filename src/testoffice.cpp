@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "devel.h"
 #include "extras.h"
 
 #ifdef ENABLE_TESTOFFICE

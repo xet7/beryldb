@@ -11,6 +11,8 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
+#include <iostream>
+
 #include "beryl.h"
 #include "brldb/list_handler.h"
 

@@ -468,6 +468,7 @@ void DataThread::Clear()
 {
        std::queue<std::shared_ptr<ThreadMsg>> empty;
        std::swap(this->queue, empty);
+       this->SetStatus(false);
 }
 
 void DataFlush::CloseThreads()

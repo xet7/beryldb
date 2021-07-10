@@ -13,6 +13,12 @@
 
 #pragma once
 
+/* Not logged. */
+
+const std::string NO_AUTH = "NOT_LOGGED";
+
+/* not found. */
+
 const std::string NOT_FOUND = "NOT_FOUND";
 
 /* No login provided */

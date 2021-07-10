@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "devel.h"
+
 #ifdef ENABLE_TESTOFFICE
 
 /*

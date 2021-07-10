@@ -25,7 +25,7 @@ Timer::Timer(unsigned int add_secs, bool repeating) : schedule(Kernel->Now() + a
 						    , secs(add_secs)
 						    , repeat(repeating)
 {
-	
+std::cout << "check" << std::endl;
 }
 
 Timer::~Timer()
