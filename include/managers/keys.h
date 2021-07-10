@@ -64,5 +64,7 @@ class ExportAPI KeyHelper
         static void GetOccurs(User* user, const std::string& key, const std::string& value);
 
         static void Random(User* user);
+
+        static void GetExp(User* user, const std::string& entry, const std::string& seconds);
         
 };

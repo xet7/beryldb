@@ -101,3 +101,28 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
+{
+         syntax = "<key> <seconds>";
+}
+
+COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
+{  
+       const std::string& seconds = parameters[0];
+       const std::string& key = parameters[1];
+
+       if (!is_number(seconds))
+       {
+                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!is_positive_number(seconds))
+       {
+                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
+                return FAILED;
+       }
+       
+       KeyHelper::GetExp(user, key, seconds);
+       return SUCCESS;
+}

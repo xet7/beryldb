@@ -933,3 +933,16 @@ void random_query::Process()
 {
        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
 }
+
+void getexp_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+       this->response = to_string(result.value);
+       this->WriteExpire(this->key, this->select_query, this->id);
+       this->SetOK();
+}
+
+void getexp_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+}

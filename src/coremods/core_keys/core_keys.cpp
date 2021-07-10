@@ -35,6 +35,7 @@ class CoreModKeys : public Module
         CommandSearch cmdsearch;
         CommandWDel cmdwdel;
         CommandGetOccurs cmdgetoccurs;
+        CommandGetExp cmdgetexp;
         
     public:	
         
@@ -54,8 +55,8 @@ class CoreModKeys : public Module
                         cmdsettx(this),
                         cmdsearch(this),
                         cmdwdel(this),
-                        cmdgetoccurs(this)
-
+                        cmdgetoccurs(this),
+                        cmdgetexp(this)
         {
         
         }

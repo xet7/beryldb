@@ -179,3 +179,13 @@ class CommandWDel : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGetExp : public Command 
+{
+    public: 
+
+        CommandGetExp(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

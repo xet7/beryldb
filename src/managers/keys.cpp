@@ -173,3 +173,11 @@ void KeyHelper::Random(User* user)
        Helpers::make_query(user, query);
        Kernel->Store->Push(query);
 }
+
+void KeyHelper::GetExp(User* user, const std::string& entry, const std::string& seconds)
+{
+       std::shared_ptr<getexp_query> query = std::make_shared<getexp_query>();
+       Helpers::make_query(user, query, entry);
+       query->id = Kernel->Now() + convto_num<unsigned int>(seconds);      
+       Kernel->Store->Push(query);
+}
