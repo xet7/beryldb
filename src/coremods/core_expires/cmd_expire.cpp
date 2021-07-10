@@ -17,6 +17,7 @@
 #include "brldb/expires.h"
 #include "managers/expires.h"
 #include "engine.h"
+#include "maker.h"
 #include "converter.h"
 #include "core_expires.h"
 
@@ -28,22 +29,14 @@ CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters) 
 {       
           const std::string& key = parameters[0];
-          const std::string& exp_str = parameters[1];
+          const std::string& seconds = parameters[1];
           
-          if (!is_number(exp_str))
+          if (!CheckValidPos(user, seconds))
           {
-                 user->SendProtocol(ERR_EXPIRE, MUST_BE_NUMERIC);
-                 return FAILED;
-          }
-          
-          if (!is_positive_number(exp_str))
-          {
-                 user->SendProtocol(ERR_EXPIRE, MUST_BE_POSIT);
-                 return FAILED;
+                return FAILED;
           }
                   
-          unsigned int exp_usig = convto_num<unsigned int>(exp_str);
-          ExpireHelper::Expire(user, key, exp_usig);
+          ExpireHelper::Expire(user, key, convto_num<unsigned int>(seconds));
           return SUCCESS;
 }
 
@@ -60,13 +53,13 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 
           if (!database)
           {
-                user->SendProtocol(ERR_DB_NOT_FOUND, PROCESS_NULL);
+                user->SendProtocol(ERR_INPUT, ERR_DB_NOT_FOUND, PROCESS_NULL);
                 return FAILED;
           }
           
           if (database->IsClosing())
           {
-                user->SendProtocol(ERR_DB_BUSY, DATABASE_BUSY);
+                user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
                 return FAILED;
           }
 

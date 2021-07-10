@@ -28,13 +28,13 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 
 	if (newlogin.empty())
 	{
-		user->SendProtocol(ERR_NO_LOG_PROV, NO_LOG_PROV);
+		user->SendProtocol(ERR_INPUT2, ERR_NO_LOG_PROV, NO_LOG_PROV);
 		return FAILED;
 	}
 
 	if (!Kernel->Engine->ValidLogin(newlogin))
 	{
-		user->SendProtocol(ERR_INVALID_LOGIN, ERRON_LOGIN);
+		user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, ERRON_LOGIN);
 		return FAILED;
 	}
 

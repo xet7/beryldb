@@ -13,6 +13,7 @@
 
 #pragma once
 
+const std::string NOT_FOUND = "NOT_FOUND";
 
 /* No login provided */
 

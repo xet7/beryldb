@@ -18,6 +18,7 @@
 #include "managers/keys.h"
 #include "managers/globals.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_keys.h"
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
@@ -30,7 +31,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
        
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -49,7 +50,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -68,7 +69,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -87,7 +88,7 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -107,7 +108,7 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }

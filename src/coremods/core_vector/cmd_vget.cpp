@@ -30,7 +30,7 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
            return FAILED;
        }
@@ -160,7 +160,7 @@ COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
         
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
              return FAILED;
         }
@@ -179,7 +179,7 @@ COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
 
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
              return FAILED;
         }
@@ -217,7 +217,7 @@ COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
             return FAILED;
         }

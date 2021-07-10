@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/keys.h"
 #include "engine.h"
 #include "core_hints.h"
@@ -28,25 +29,18 @@ CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& new_select = parameters[1];
+       const std::string& value = parameters[1];
 
-       if (!is_number(new_select))
+       if (!CheckValidPos(user, value))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
+              return FAILED;
        }
 
-       if (!is_positive_number(new_select))
-       {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                return FAILED;
-       }
-
-       if (!Daemon::CheckRange(user, new_select, INVALID_RANGE, 1, 100))
+       if (!Daemon::CheckRange(user, value, INVALID_RANGE, 1, 100))
        {
                return FAILED;
        }
 
-       GlobalHelper::Clone(user, key, new_select);
+       GlobalHelper::Clone(user, key, value);
        return SUCCESS;
 }

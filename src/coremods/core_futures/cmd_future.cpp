@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "maker.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 #include "brldb/expires.h"
@@ -32,19 +33,12 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
           const std::string& key = parameters[1];
           const std::string& value = parameters.back();
           
-          if (!is_number(seconds))
+          if (!CheckValidPos(user, seconds))
           {
-                 user->SendProtocol(ERR_FUTURE, MUST_BE_NUMERIC);
-                 return FAILED;
-          }
-
-          if (!is_positive_number(seconds))
-          {
-                 user->SendProtocol(ERR_FUTURE, MUST_BE_POSIT);
-                 return FAILED;
+              return FAILED;
           }
   
-          if (!Daemon::CheckFormat(user, value))
+          if (!CheckFormat(user, value))
           {
                return FAILED;
           }   
@@ -117,16 +111,9 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
         { 
             use = parameters[0];
 
-            if (!is_number(use))
+            if (!CheckValid(user, use))
             {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
                  return FAILED;
-            }
-
-            if (!is_positive_number(use))
-            {
-                  user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                  return FAILED;
             }
 
             if (!Daemon::CheckRange(user, use, INVALID_RANGE, 1, 100))
@@ -174,24 +161,24 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
           const std::string& key = parameters[1];
           const std::string& value = parameters[1];
           
-          if (!is_number(seconds))
+          if (!CheckValid(user, seconds))
           {
-                 user->SendProtocol(ERR_FUTURE, MUST_BE_NUMERIC);
-                 return FAILED;
+              return FAILED;
           }
 
-          if (!is_positive_number(seconds))
-          {
-                 user->SendProtocol(ERR_FUTURE, MUST_BE_POSIT);
-                 return FAILED;
-          }
-
-          if (!Daemon::CheckFormat(user, value))
+          if (!CheckFormat(user, value))
           {
                return FAILED;
           }   
-          
+
           unsigned int exp_usig = convto_num<unsigned int>(seconds);
+
+          if ((time_t)exp_usig < Kernel->Now())
+          {
+                 user->SendProtocol(ERR_FUTURE, PROCESS_ERROR);
+                 return FAILED;
+          }
+          
           ExpireHelper::FutureAT(user, key, exp_usig, value);
           return SUCCESS;
 }

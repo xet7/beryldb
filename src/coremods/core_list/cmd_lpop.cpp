@@ -17,6 +17,7 @@
 #include "brldb/query.h"
 #include "managers/lists.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_list.h"
 
 CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK", 1, 1)
@@ -55,7 +56,7 @@ COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
 
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
              return FAILED;
         }
@@ -100,7 +101,7 @@ COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
         
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
              return FAILED;
         }

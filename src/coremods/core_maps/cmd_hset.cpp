@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/maps.h"
 #include "engine.h"
 #include "core_maps.h"
@@ -30,7 +31,7 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -50,7 +51,7 @@ COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }

@@ -276,22 +276,6 @@ class ExportAPI Daemon : public safecast<Daemon>
         
         static std::string duration_as_string(time_t duration);
 
-        /* 
-         * Checks the format of a string (ie "string query").
-         * 
-         * @parameters:
-	 *
-	 *         · value: String to check.
-	 *         · notify: Whether this function notifies to the requesting user.
-         *
-         * @return:
- 	 *
-         *         · True: Valid query.
-         *         · False: Invalid query.
-         */    
-         
-        static bool CheckFormat(User* user, const std::string& value, bool notify = true);
-        
         static bool CheckRange(User* user, const std::string& value, const std::string& reason, int min, int max);
         
         bool PassCompare(Expandable* ex, const std::string& data, const std::string& input, const std::string& hashtype);

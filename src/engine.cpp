@@ -548,40 +548,6 @@ void Daemon::printb(const int type, const std::string& buff)
        }
 }
 
-bool Daemon::CheckFormat(User* user, const std::string& value, bool notify)
-{	
-        if (value.size() == 0)
-        {
-            if (notify)
-            {
-                 user->SendProtocol(ERR_WRONG_SYNTAX, value, Daemon::Format("Invalid entry, you may use quotes: \" \""));
-            }
-            
-            return false;
-        }
-        
-        if (value.size() == 1)
-        {
-             return true;
-        }
-        
-        if (is_number(value, true))
-        {
-             return true;
-        }
-        
-        if (is_correct(value))
-        {
-             return true;
-        }
-        
-        if (notify)
-        {
-                user->SendProtocol(ERR_WRONG_SYNTAX, value, Daemon::Format("Incorrect format, please use quotes: \"%s\"", value.c_str()));
-        }
-        
-        return false;
-}
 
 bool Daemon::CheckRange(User* user, const std::string& value, const std::string& reason, int min, int max)
 {

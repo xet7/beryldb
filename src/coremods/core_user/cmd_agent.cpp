@@ -35,7 +35,7 @@ COMMAND_RESULT CommandAgent::HandleLocal(LocalUser* user, const Params& paramete
 
 		if (!Kernel->Engine->IsAgent(agent))
 		{
-			user->SendProtocol(ERR_BAD_AGENT, agent, WRONG_AGENT);
+			user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, WRONG_AGENT);
 			return FAILED;
 		}
 		else
@@ -46,7 +46,7 @@ COMMAND_RESULT CommandAgent::HandleLocal(LocalUser* user, const Params& paramete
 	}
 	else
 	{
-		user->SendProtocol(ERR_AGENT_IS_SET, "You cannot set your agent twice.");
+		user->SendProtocol(ERR_INPUT2, ERR_AGENT_IS_SET, PROCESS_ALREADY);
 		return FAILED;
 	}
 

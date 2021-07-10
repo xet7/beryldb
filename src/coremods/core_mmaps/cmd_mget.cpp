@@ -67,7 +67,7 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -133,7 +133,7 @@ COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
        signed int offset = lms[1];
        signed int limit = lms[2];
 
-       if (!Daemon::CheckFormat(user, hesh))
+       if (!CheckFormat(user, hesh))
        {
             return FAILED;
        }

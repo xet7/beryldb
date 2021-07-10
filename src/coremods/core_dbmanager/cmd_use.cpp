@@ -17,6 +17,7 @@
 #include "brldb/query.h"
 #include "managers/databases.h"
 #include "converter.h"
+#include "maker.h"
 #include "engine.h"
 #include "core_dbmanager.h"
 
@@ -34,7 +35,7 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
        
        if (!found)
        {
-              user->SendProtocol(ERR_NO_INSTANCE, "Instance not found.");
+              user->SendProtocol(ERR_NO_INSTANCE, NOT_FOUND);
               return FAILED;
        }
        
@@ -56,16 +57,9 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
 {  
        const std::string& use = parameters[0];
 
-       if (!is_number(use))
+       if (!CheckValidPos(user, use))
        {
-                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
-                 return FAILED;
-       }
-
-       if (!is_positive_number(use))
-       {
-                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        if (!Daemon::CheckRange(user, use, INVALID_RANGE, 1, 100))
@@ -75,12 +69,12 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        
        if (user->select == use)
        {
-             user->SendProtocol(ERR_USE, PROCESS_ALREADY);
+             user->SendProtocol(ERR_INPUT2, ERR_USE, PROCESS_ALREADY);
              return FAILED;
        }
       
        user->select = use;
-       user->SendProtocol(BRLD_NEW_USE, PROCESS_OK);
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
        
        return SUCCESS;
 }

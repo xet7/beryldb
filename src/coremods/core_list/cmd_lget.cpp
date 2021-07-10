@@ -30,16 +30,9 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
        
-       if (!is_number(value))
+       if (!CheckValidPos(user, value))
        {
-                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
-                 return FAILED;
-       }
-
-       if (!is_positive_number(value))
-       {
-                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        ListHelper::Resize(user, key, value);
@@ -126,16 +119,9 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-       if (!is_number(value))
+       if (!CheckValidPos(user, value))
        {
-                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
-                 return FAILED;
-       }
-
-       if (!is_positive_number(value))
-       {
-                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        ListHelper::Index(user, key, value);
@@ -152,7 +138,7 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
             return FAILED;
         }
@@ -186,3 +172,23 @@ COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
        ListHelper::FRop(user, key);
        return SUCCESS;  
 }
+
+CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
+{
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
+        const std::string value = parameters.back();
+        
+        if (!CheckFormat(user, value))
+        {
+            return FAILED;
+        }
+
+        ListHelper::Push(user, key, value);
+        return SUCCESS;  
+}
+

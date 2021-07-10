@@ -29,7 +29,7 @@ COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       if (!Daemon::CheckFormat(user, key))
+       if (!CheckFormat(user, key))
        {
             return FAILED;
        }
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!Daemon::CheckFormat(user, key))
+       if (!CheckFormat(user, key))
        {
             return FAILED;
        }

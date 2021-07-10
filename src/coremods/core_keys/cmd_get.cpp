@@ -17,6 +17,7 @@
 #include "brldb/query.h"
 #include "managers/keys.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_keys.h"
 
 CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "GETOCCURS", 2, 2)
@@ -29,7 +30,7 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters.back(); 
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }
@@ -103,24 +104,17 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
-         syntax = "<key> <seconds>";
+         syntax = "<seconds> <key>";
 }
 
 COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 {  
        const std::string& seconds = parameters[0];
        const std::string& key = parameters[1];
-
-       if (!is_number(seconds))
+       
+       if (!CheckValidPos(user, parameters[0]))
        {
-                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
-                 return FAILED;
-       }
-
-       if (!is_positive_number(seconds))
-       {
-                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        KeyHelper::GetExp(user, key, seconds);

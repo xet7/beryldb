@@ -17,6 +17,7 @@
 #include "brldb/query.h"
 #include "managers/vectors.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_vector.h"
 
 CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
@@ -29,7 +30,7 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
         const std::string key = parameters[0];
         const std::string value = parameters.back();
         
-        if (!Daemon::CheckFormat(user, value))
+        if (!CheckFormat(user, value))
         {
             return FAILED;
         }

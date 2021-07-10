@@ -17,6 +17,7 @@
 #include "managers/expires.h"
 #include "engine.h"
 #include "converter.h"
+#include "maker.h"
 #include "core_expires.h"
 
 CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIST", 0, 1)
@@ -110,15 +111,8 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
         { 
             use = parameters[0];
         
-            if (!is_number(use))
+            if (!CheckValidPos(user, use))
             {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
-            }
-
-            if (!is_positive_number(use))
-            {
-                  user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
                   return FAILED;
             }
             
@@ -135,7 +129,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
         /* Clears all expires pending. */
 
         unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
-        user->SendProtocol(BRLD_INFO_EXP_DEL, PROCESS_OK);
+        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
         
         sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);
         return SUCCESS;

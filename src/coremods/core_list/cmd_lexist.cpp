@@ -17,6 +17,7 @@
 #include "brldb/query.h"
 #include "managers/lists.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_list.h"
 
 CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
@@ -29,7 +30,7 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-       if (!Daemon::CheckFormat(user, value))
+       if (!CheckFormat(user, value))
        {
            return FAILED;
        }

@@ -15,11 +15,11 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/keys.h"
 #include "managers/globals.h"
 #include "engine.h"
 #include "core_keys.h"
-
 
 CommandWDel::CommandWDel(Module* Creator) : Command(Creator, "WDEL", 1, 1)
 {
@@ -30,7 +30,7 @@ COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!Daemon::CheckFormat(user, key))
+       if (!CheckFormat(user, key))
        {
             return FAILED;
        }

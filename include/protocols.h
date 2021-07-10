@@ -227,6 +227,7 @@ enum BRLD_PROTOCOL
 	BRLD_EXPIRES			=		306,
 	BRLD_FUTURES			=		307,	
 	BRLD_LOGIN			=		308,
+	BRLD_INPUT			=		309,
 	
 	/* Error protocol codes. */
 	
@@ -312,5 +313,8 @@ enum BRLD_PROTOCOL
 	ERR_NO_DEFAULT			=		582,
 	ERR_LOGIN_NOT_EXISTS		=		583,
 	ERR_DB_BUSY			=		584,
-	ERR_NO_LOG_PROV			=		585
+	ERR_NO_LOG_PROV			=		585,
+	ERR_INPUT			=		586,
+	ERR_INPUT2			=		587,
+	ERR_INPUT3			=		588	
 };
