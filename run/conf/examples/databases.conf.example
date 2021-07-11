@@ -17,14 +17,20 @@
 
 #<dbconf threads="2" parallels="1" yield_usec="50" createim="true">
 
-# End of databases.conf
-
 # Futures/Expires ###########################################
 #
-# futures (true/false): Keep futures active after restarting Beryl.
+# futures (true/false): Keep futures active after restarting Beryl
+#		        True by default.
 #
 # expires (true/false): Keep expires active after restarting Beryl.
+#	                True by default.
 
-#<ttls futures="false" expires="false">
+#<ttls futures="false" expires="true">
 
+# End of databases.conf
 ##############################################################
+
+
+
+
+

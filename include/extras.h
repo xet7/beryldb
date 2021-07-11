@@ -187,21 +187,18 @@ inline int count_occur(const std::string & str, const std::string & substr, int 
 
 inline bool isalpha(const std::string & str)
 {
-        std::string::size_type len = str.size(), i;
-        
-        if (len == 0) 
+        if (str.size() == 0) 
         {	
             return false;
         }
         
-        if (len == 1)
-        {
-            return ::isalpha( (int) str[0] );
-         }
-
-        for (i = 0; i < len; ++i)
-        {
-            if (!::isalpha( (int) str[i] )) return false;
+        for (int i = 0; str[i] != '\0'; i++)
+        {	
+              if (!isalnum(str[i]))                
+              {
+                  return false;
+              }
         }
+        
         return true;
 }

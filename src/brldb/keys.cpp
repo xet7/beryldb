@@ -230,6 +230,28 @@ void get_occurs_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
 }
 
+void alpha_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (isalpha(to_string(result.value)))
+       {
+             this->response = "1";
+       }
+       else
+       {
+            this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void alpha_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->response);
+}
+
+
 void get_query::Run()
 {
        RocksData result = this->Get(this->dest);

@@ -675,6 +675,21 @@ class ExportAPI geoadd_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI alpha_query  : public QueryBase
+{
+    public:
+
+        alpha_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI geoget_query  : public QueryBase
 {
     public:

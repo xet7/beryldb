@@ -161,7 +161,6 @@ class ExportAPI SocketPool
    public:
 
 	typedef iovec IOVector;
-
 	
 	static void Start();
 

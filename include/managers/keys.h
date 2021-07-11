@@ -66,5 +66,7 @@ class ExportAPI KeyHelper
         static void Random(User* user);
 
         static void GetExp(User* user, const std::string& entry, const std::string& seconds);
+
+        static void Alpha(User* user, const std::string& entry);
         
 };

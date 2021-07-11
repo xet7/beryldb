@@ -181,3 +181,11 @@ void KeyHelper::GetExp(User* user, const std::string& entry, const std::string& 
        query->id = Kernel->Now() + convto_num<unsigned int>(seconds);      
        Kernel->Store->Push(query);
 }
+
+void KeyHelper::Alpha(User* user, const std::string& entry)
+{
+       std::shared_ptr<alpha_query> query = std::make_shared<alpha_query>();
+       Helpers::make_query(user, query, entry);
+       Kernel->Store->Push(query);
+}
+

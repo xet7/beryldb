@@ -84,13 +84,13 @@ class ModuleCoreCPU : public Module
                    usleep(10000);
               }
               
-              if (this->usage > 6)
+              if (this->usage > 8)
               {
                    Kernel->Interval->SleepMode(true);
                    return;
               }
               
-              if (this->usage > 4)
+              if (this->usage > 6)
               {
                     Kernel->Interval->SleepMode(true);
                     return;

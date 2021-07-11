@@ -172,7 +172,7 @@ class ExportAPI Beryl
         void DaemonFork();
       
   public:
-         
+  
         /* Starts Beryl instance. */
        
         void Initialize();

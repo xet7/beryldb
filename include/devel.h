@@ -15,5 +15,5 @@
 
 #include <iostream>
 
-#define ENABLE_TESTOFFICE
+#define ENABLE_TESTOFFICE 1
 

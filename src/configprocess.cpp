@@ -283,8 +283,8 @@ void Configuration::CheckDatabases()
 {
         config_rule* databases = GetConf("dbconf");
         DB.datathread = databases->as_uint("threads", 2, 1, CORE_COUNT, true);
-        DB.increaseparal = databases->as_uint("parallels", 1, 1, 5, true);        
-        DB.yieldusec = databases->as_uint("yield_usec", 50, 0, 100000, true);        
+        DB.increaseparal = databases->as_uint("parallels", 2, 1, 5, true);        
+        DB.yieldusec = databases->as_uint("yield_usec", 20, 0, 100000, true);        
         DB.createim = databases->as_bool("createim", true);        
         DB.pipeline = databases->as_bool("pipeline", true);        
 }

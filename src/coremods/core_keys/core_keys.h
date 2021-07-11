@@ -189,3 +189,13 @@ class CommandGetExp : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
+class CommandIsAlpha : public Command 
+{
+    public: 
+
+        CommandIsAlpha(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

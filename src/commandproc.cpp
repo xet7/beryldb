@@ -264,6 +264,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		COMMAND_RESULT result = handler->Handle(user, cmd_params);
 		NOTIFY_MODS(OnPostCommand, (handler, cmd_params, user, result, false));
 	}
+	
 }
 
 void CommandHandler::Remove(Command* x)

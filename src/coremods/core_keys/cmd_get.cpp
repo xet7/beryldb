@@ -120,3 +120,15 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
        KeyHelper::GetExp(user, key, seconds);
        return SUCCESS;
 }
+
+CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       KeyHelper::Alpha(user, key);
+       return SUCCESS;
+}
