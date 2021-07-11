@@ -241,8 +241,19 @@ class ExportAPI ClientManager : public safecast<ClientManager>
 
 	sent_id next_sentid();
 
-	/* Finds an instance. */
-	
+        /* 
+         * Finds an instance in clientlist.
+         * 
+         * @parameters:
+	 *
+	 *         · instance: Intance to lookup.
+	 * 
+         * @return:
+ 	 *
+         *         · User: Pointer to user found, if any. Returns NULL
+         *                 if no user is found.
+         */    	
+         
 	User* FindInstance(const std::string &instance);
 
 	User* FindInstanceOnly(const std::string &instance);
