@@ -37,8 +37,7 @@ class Numeric::Numeric
 
 	}
 	
-	template <typename T>
-	Numeric& push(const T& x)
+	template <typename T> Numeric& push(const T& x)
 	{
 		params.push_back(convto_string(x));
 		return *this;

@@ -518,7 +518,6 @@ class ExportAPI touch_query  : public QueryBase
         touch_query() 
         {
                 this->type = QUERY_TYPE_SKIP;
-                this->base_request = INT_KEY;
         }
 
         void Run();
@@ -533,7 +532,6 @@ class ExportAPI ntouch_query  : public QueryBase
         ntouch_query() 
         {
                 this->type = QUERY_TYPE_SKIP;
-                this->base_request = INT_KEY;
         }
 
         void Run();

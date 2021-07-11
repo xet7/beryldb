@@ -273,7 +273,7 @@ void ntouch_query::Run()
         {    
                 unsigned int result =  this->CheckDest(this->select_query, token, this->base_request);
                 
-                if (result == 1)
+                if (result != 0)
                 {
                         continue;
                 }
