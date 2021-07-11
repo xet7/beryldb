@@ -132,3 +132,15 @@ COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
        KeyHelper::Alpha(user, key);
        return SUCCESS;
 }
+
+CommandIsNum::CommandIsNum(Module* Creator) : Command(Creator, "ISNUM", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       KeyHelper::IsNum(user, key);
+       return SUCCESS;
+}

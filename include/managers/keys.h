@@ -69,4 +69,7 @@ class ExportAPI KeyHelper
 
         static void Alpha(User* user, const std::string& entry);
         
+        static void IsNum(User* user, const std::string& entry);
+        
+        
 };

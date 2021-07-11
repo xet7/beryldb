@@ -515,7 +515,7 @@ void CommandQueue::Flush()
 	        }
                
 	       user->PendingList.pop_front();
-               Kernel->Commander.Execute(user, event.command, event.cmd_params);
+               Kernel->Commander->Execute(user, event.command, event.cmd_params);
                Kernel->Interval->Incr();
         }
 }

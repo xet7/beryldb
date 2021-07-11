@@ -37,6 +37,7 @@ class CoreModKeys : public Module
         CommandGetOccurs cmdgetoccurs;
         CommandGetExp cmdgetexp;
         CommandIsAlpha cmdisalpha;
+        CommandIsNum cmdisnum;
         
     public:	
         
@@ -58,7 +59,8 @@ class CoreModKeys : public Module
                         cmdwdel(this),
                         cmdgetoccurs(this),
                         cmdgetexp(this),
-                        cmdisalpha(this)
+                        cmdisalpha(this),
+                        cmdisnum(this)
         {
         
         }

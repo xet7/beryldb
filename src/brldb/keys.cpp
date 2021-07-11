@@ -251,6 +251,27 @@ void alpha_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, this->response);
 }
 
+void isnum_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (is_number(to_string(result.value), true))
+       {
+             this->response = "1";
+       }
+       else
+       {
+            this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void isnum_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, this->response);
+}
+
 
 void get_query::Run()
 {

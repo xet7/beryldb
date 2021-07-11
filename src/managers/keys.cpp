@@ -189,3 +189,9 @@ void KeyHelper::Alpha(User* user, const std::string& entry)
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::IsNum(User* user, const std::string& entry)
+{
+       std::shared_ptr<isnum_query> query = std::make_shared<isnum_query>();
+       Helpers::make_query(user, query, entry);
+       Kernel->Store->Push(query);
+}

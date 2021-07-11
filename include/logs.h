@@ -128,18 +128,18 @@ class ExportAPI LogHandler : public safecast<LogHandler>
 
 	void RemoveLogReference(FileHandler* fw)
 	{
-			FileLogMap::iterator i = FileLogs.find(fw);
+		FileLogMap::iterator i = FileLogs.find(fw);
 
-			if (i == FileLogs.end()) 
-			{
-				return;
-			} 
+		if (i == FileLogs.end()) 
+		{
+			return;
+		} 
 			
-			if (--i->second < 1)
-			{
-				delete i->first;
-				FileLogs.erase(i);
-			}
+		if (--i->second < 1)
+		{
+			delete i->first;
+			FileLogs.erase(i);
+		}
 	}
 
 	/* Opens log files from configuration file */
@@ -150,7 +150,7 @@ class ExportAPI LogHandler : public safecast<LogHandler>
 	
 	void CloseLogs();
 
-	void AttachTypes(const std::string &type, LogStream *l, bool autoclose);
+ 	void AttachTypes(const std::string &type, LogStream *l, bool autoclose);
 
 	bool AttachType(const std::string &type, LogStream *l, bool autoclose);
 
