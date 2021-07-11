@@ -11,11 +11,11 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
+#include <dlfcn.h>
+
 #include "beryl.h"
  
-#include <dlfcn.h>
- 
-#define DYNAMIC_EXTENSION ".so"
+#define DYNAMIC_EXTENSION ".dll"
 
 DLLHandler::DLLHandler(const std::string& name) : lib(NULL), libname(name)
 {

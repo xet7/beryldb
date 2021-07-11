@@ -76,7 +76,7 @@
 # dbdir: Default database directory. This is where Beryl writes keys to.
 # datadir: Default data dir, which includes files such as pid.
 # logdir: Log directory, this is where *.logs are written into.
-# module: Where to load .so modules from.
+# module: Where to load .dll modules from.
 # configdir: Where to load configuration files from.
 
 #<path dbdir="run/db" datadir="run/data" logdir="run/logs" module="run/modules" configdir="run/conf">

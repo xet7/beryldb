@@ -120,7 +120,7 @@ void ModuleHandler::LoadCore(std::map<std::string, ServiceList>& ServiceMap)
 
 	std::vector<std::string> files;
 	
-	if (!FileSystem::AsFileList(Kernel->Config->Paths.Module, files, "core_*.so"))
+	if (!FileSystem::AsFileList(Kernel->Config->Paths.Module, files, "core_*.dll"))
 	{
 		bprint(ERROR, "Failed to retrieve core modules list.");
 		Kernel->Exit(EXIT_CODE_MODULE);

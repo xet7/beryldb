@@ -640,11 +640,11 @@ std::string ModuleHandler::FullModName(const std::string& name)
 	
 	FullModule.append(name);
 	
-	/* Appends ".so" to module name. */
+	/* Appends ".dll" to module name. */
 	
-	if (name.length() < 3 || name.compare(name.size() - 3, 3, ".so") != 0)
+	if (name.length() < 4 || name.compare(name.size() - 4, 4, ".dll") != 0)
 	{
-		FullModule.append(".so");
+		FullModule.append(".dll");
 	}
 	
 	return FullModule;
