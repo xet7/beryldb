@@ -216,7 +216,7 @@ void Beryl::Initialize()
 	
 	/* We may now begin processing queries. */
 	
-	this->Store->Flusher.Resume();
+	this->Store->Flusher->Resume();
 
 	/* Start mainloop */
 

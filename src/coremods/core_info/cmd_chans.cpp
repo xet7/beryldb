@@ -40,11 +40,11 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
            
           if (chans.empty())
           {
-               user->SendProtocol(ERR_NO_CHANS, PROCESS_FALSE);
+               user->SendProtocol(ERR_INPUT2, ERR_NO_CHANS, PROCESS_FALSE);
                return FAILED;
           }
           
-          user->SendProtocol(BRLD_MY_CHANS, chans, chans.c_str());
+          user->SendProtocol(BRLD_INPUT2, BRLD_MY_CHANS, chans.c_str());
           return SUCCESS;
 }
 
@@ -61,7 +61,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
            
            if (!found)
            {
-                  user->SendProtocol(ERR_NO_INSTANCE, dest, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT2, ERR_NO_INSTANCE, PROCESS_NULL);
                   return FAILED;
            }
            
@@ -86,7 +86,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
                return FAILED;
           }
 
-          user->SendProtocol(BRLD_CHANS, chans, chans.c_str());
+          user->SendProtocol(BRLD_INPUT2, BRLD_CHANS, chans.c_str());
           return SUCCESS;
 }
 

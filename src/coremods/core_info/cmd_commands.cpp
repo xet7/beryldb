@@ -27,7 +27,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 	
 	if (!Found)
 	{
-		user->SendProtocol(ERR_CMD_NOFND, cmd, CMD_NOT_FOUND.c_str());
+		user->SendProtocol(ERR_INPUT, CMD_NOT_FOUND);
 		return FAILED;
 	}
 	

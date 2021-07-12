@@ -98,7 +98,7 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 	{
 		if (!user->IsAdmin())
 		{
-			user->SendProtocol(BRLD_ALERT, "Access denied.");
+			user->SendProtocol(BRLD_ALERT, ACCESS_DENIED);
 			return FAILED;
 		}
 

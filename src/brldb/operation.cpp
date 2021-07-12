@@ -151,6 +151,7 @@ void op_query::Run()
             
                 real_value -= real_oper;
         break;
+        
     }
     
     std::string inserting = convto_string(real_value);        

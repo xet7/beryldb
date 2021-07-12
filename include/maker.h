@@ -15,6 +15,20 @@
 
 #include "beryl.h"
 
+/* 
+ * Checks whether a given number is valid and, positive.
+ * 
+ * @parameters:
+ *
+ *         · string: String to check.
+ *
+ * @return:
+ *
+ *         · True: Valid number.
+ *         · False: Invalid number.
+ */
+
+
 inline bool CheckValidPos(User* user, const std::string& number)
 {
        if (!is_number(number))
