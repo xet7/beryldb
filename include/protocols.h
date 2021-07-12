@@ -173,8 +173,8 @@ enum BRLD_PROTOCOL
 	BRLD_FUTURE_DELETED		=		256,
 	BRLD_MY_CHANS			=		257,
 	BRLD_CHANS			=		258,
-	BRLD_USING			=		259,
 	BRLD_WHOAMI			=		260,
+	
 	BRLD_PAUSED			=		261,
 	BRLD_RESUMED			=		262,
 	BRLD_IDLE			=		263,
@@ -194,6 +194,7 @@ enum BRLD_PROTOCOL
 	BRLD_NOTIFICATION		=		277,
 	BRLD_RESET_NRESET		=		278,
 	BRLD_NOW_NOTIFYING		=		279,
+	
 	BRLD_STOP_NOTIFY		=		280,
 	BRLD_NRESET			=		281,
 	BRLD_START_LIST			=		282,
@@ -202,9 +203,9 @@ enum BRLD_PROTOCOL
         BRLD_END_UNQ_LIST               =               285,
         BRLD_CORES			=		286,
         BRLD_FIRSTOF			=		287,	
-        BRLD_FLUSHED			=		288,
         BRLD_RESTART_OK			=		289,
         BRLD_COMMAND_ITEM		=		290,
+        
         BRLD_LOGGED_OUT			=		291,
         BRLD_SHUTTING_DOWN		=		292,
         BRLD_DB_CHANGED			=		293,

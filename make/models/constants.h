@@ -13,9 +13,15 @@
 
 #pragma once
 
+/* Already paused */
+
+const std::string ALREADY_PAUSED = "ENTRY_PAUSED";
+
 /* Entry does not expires */
 
 const std::string ENTRY_NOT_EXPIRING =  "ENTRY_NOT_EXPIRING";
+
+/* No chans */
 
 const std::string NO_CHANS = "NO_CHANS";
 

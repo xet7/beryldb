@@ -16,6 +16,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
 #include "brldb/database.h"
+#include "maker.h"
 #include "managers/databases.h"
 #include "converter.h"
 #include "engine.h"
@@ -40,21 +41,14 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
             select = user->select;
        }
        
-       if (!is_number(select))
+       if (CheckValidPos(user, select))
        {
-                 user->SendProtocol(ERR_USE, MUST_BE_NUMERIC);
-                 return FAILED;
-       }
-
-       if (!is_positive_number(select))
-       {
-                user->SendProtocol(ERR_USE, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        if (!Daemon::CheckRange(user, select, INVALID_RANGE, 1, 100))
        {
-               return FAILED;
+              return FAILED;
        }
 
        DBHelper::SFlush(user, select);

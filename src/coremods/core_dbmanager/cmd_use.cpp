@@ -35,11 +35,11 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
        
        if (!found)
        {
-              user->SendProtocol(ERR_NO_INSTANCE, NOT_FOUND);
+              user->SendProtocol(ERR_INPUT2, ERR_NO_INSTANCE, NOT_FOUND);
               return FAILED;
        }
        
-       user->SendProtocol(BRLD_USING, found->select, found->select.c_str());
+       user->SendProtocol(BRLD_INPUT, found->select.c_str());
        return SUCCESS;
 }
 
@@ -74,7 +74,8 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        }
       
        user->select = use;
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+       
+       user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
        
        return SUCCESS;
 }
@@ -100,7 +101,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
 {  
        if (!Kernel->Store->Flusher->Status())
        {
-              user->SendProtocol(ERR_UNABLE_DBRESET, "Already paused.");
+              user->SendProtocol(ERR_QUERY, ALREADY_PAUSED);
               return FAILED;
        }
        

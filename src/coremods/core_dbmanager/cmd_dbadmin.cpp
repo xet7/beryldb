@@ -34,11 +34,11 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
        if (!BASE_PATH.empty())
        {
             const std::string path = BASE_PATH.c_str();
-            user->SendProtocol(BRLD_CURRENT_DIR, path, Daemon::Format("%s", path.c_str()).c_str());
+            user->SendProtocol(BRLD_INPUT, path);
             return SUCCESS;
        }
 
-       user->SendProtocol(ERR_DB_NOT_SET, PROCESS_NULL);
+       user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
        return FAILED;
 }
 
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       user->SendProtocol(BRLD_DB_DEFAULT, dbname);
+       user->SendProtocol(BRLD_INPUT, dbname);
        return SUCCESS;
 }
 
@@ -75,7 +75,7 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
              return SUCCESS;	
        }
        
-       user->SendProtocol(ERR_DB_NOT_SET, PROCESS_NULL);
+       user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
        return FAILED;
 }
 
@@ -91,13 +91,13 @@ COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 
        if (!database)
        {
-             user->SendProtocol(ERR_DB_NOT_FOUND, DB_NULL);
+             user->SendProtocol(ERR_INPUT, DB_NULL);
              return FAILED;
        }
 
        user->SetDatabase(database);
        STHelper::Set("dbuser", user->login, dbname);
-       user->SendProtocol(BRLD_DB_CHANGED, PROCESS_OK);
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -140,7 +140,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
       
       if (dbname == "dbdefault" || dbname == "core")
       {
-             user->SendProtocol(ERR_DB_EXISTS, PROCESS_FALSE);
+             user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
              return FAILED;
       }
       
@@ -166,7 +166,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              return SUCCESS;
       }
       
-      user->SendProtocol(ERR_DB_EXISTS, PROCESS_FALSE);
+      user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
       return FAILED;
 }
 
@@ -184,7 +184,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 
       if (!database)
       {
-             user->SendProtocol(ERR_DB_NOT_FOUND, PROCESS_NULL);
+             user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
              return FAILED;
       }
       
@@ -214,7 +214,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
             return SUCCESS;
       }
       
-      user->SendProtocol(ERR_DB_NOT_EXISTS, PROCESS_FALSE);
+      user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_EXISTS, PROCESS_FALSE);
       return FAILED;
 }
 
@@ -244,13 +244,13 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
       if (!database)
       {
-             user->SendProtocol(ERR_DB_NOT_FOUND, PROCESS_NULL);
+             user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
              return FAILED;
       }
 
       sfalert(user, NOTIFY_DEFAULT, "Setting default database to: %s", database->GetName().c_str());
 
       DBManager::SetDefault(dbname);
-      user->SendProtocol(BRLD_DEFAULT_CHANGED, PROCESS_OK);
+      user->SendProtocol(BRLD_INPUT, PROCESS_OK);
       return SUCCESS;
 }
