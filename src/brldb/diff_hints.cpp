@@ -498,6 +498,26 @@ static void ProcessList(QueryBase* query)
         }
 }
 
+static void ProcessMaps(QueryBase* query)
+{
+        if (query->subresult == 1)
+        {
+               Dispatcher::JustAPI(query->user, BRLD_START_LIST);
+        }
+
+        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        {
+               std::string item = *i;
+               query->user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+        }
+
+        if (!query->partial)
+        {
+               Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+        }
+}
+
+
 
 static void ProcessKey(QueryBase* query)
 {
@@ -518,7 +538,7 @@ void diff_query::Process()
     }
     else if (this->identified == INT_MMAP || this->identified == INT_MAP)
     {
-         ProcessList(this);
+         ProcessMaps(this);
     }
     else if (this->identified == INT_KEY || this->identified == INT_GEO)
     {
