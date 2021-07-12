@@ -88,3 +88,13 @@ class CommandFutureAT : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
+class CommandSelectCount : public Command 
+{
+    public: 
+
+        CommandSelectCount(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

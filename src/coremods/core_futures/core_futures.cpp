@@ -26,12 +26,13 @@ class CoreModuleFutures : public Module
         CommandFResetAll cmdfresetall;
         CommandFutureList cmdflist;
         CommandFutureAT cmdfutureat;
+        CommandSelectCount cmdftselect;
         
     public:
     
         CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
                               cmdcancel(this), cmdfresetall(this),
-                              cmdflist(this), cmdfutureat(this)
+                              cmdflist(this), cmdfutureat(this), cmdftselect(this)
         {
         
         }

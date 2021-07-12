@@ -38,7 +38,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INVALID_PARAM, INVALID_TYPE);
+                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, INVALID_TYPE);
                   return FAILED;
          }
          
@@ -52,16 +52,6 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          {
                FutureEntry entry = it->second;
                
-               if (entry.database != user->current_db)
-               {
-                     continue;
-               }
-               
-               if (entry.select != user->select)
-               {
-                    continue;
-               }
-               
                std::string schedule;
                
                if (parameters.size() && arg == "h")
@@ -73,11 +63,52 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               user->SendProtocol(BRLD_FUTURE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
+               user->SendProtocol(BRLD_FUTURE_ITEM, Daemon::Format("%-29s | %5s | %3s | %5s ", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_FUTURE_END);
          return SUCCESS;
 
+}
+
+CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "FTSELECT", 0, 1)
+{
+         syntax = "<select>";
+}
+
+COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters) 
+{
+         std::string select;
+         
+         /* No argument provided, we simply count expire items. */
+         
+         if (!parameters.size())
+         {
+                  select = user->select;
+         }
+         else
+         {
+                  select  = parameters[0];
+         }
+         
+         FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+
+         Dispatcher::JustAPI(user, BRLD_FUTURE_BEGIN);
+
+         for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         {
+               FutureEntry entry = it->second;
+
+               if (entry.select != select || entry.database != user->current_db)
+               {  
+                         continue;
+               }
+               
+               std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+               user->SendProtocol(BRLD_FUTURE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
+         }
+         
+         Dispatcher::JustAPI(user, BRLD_FUTURE_END);
+         return SUCCESS;
 }
 
