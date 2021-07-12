@@ -53,7 +53,7 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 
           if (!database)
           {
-                user->SendProtocol(ERR_INPUT, ERR_DB_NOT_FOUND, PROCESS_NULL);
+                user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
                 return FAILED;
           }
           

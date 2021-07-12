@@ -13,6 +13,10 @@
 
 #pragma once
 
+/* Entry does not expires */
+
+const std::string ENTRY_NOT_EXPIRING =  "ENTRY_NOT_EXPIRING";
+
 const std::string NO_CHANS = "NO_CHANS";
 
 /* Not logged. */

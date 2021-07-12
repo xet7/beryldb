@@ -28,12 +28,13 @@ class CoreModuleExpires : public Module
         CommandSelectReset cmdsreset;
         CommandSelectCount cmdselectcount;
         CommandDBEReset cmddbreset;
-        
+        CommandTTLAT cmdttlat;
+   
     public:     
         
         CoreModuleExpires() : cmdexpire(this), cmdttl(this), cmdsetex(this), cmdpersist(this),
-                           cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
-                           cmdselectcount(this), cmddbreset(this)
+                              cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
+                              cmdselectcount(this), cmddbreset(this), cmdttlat(this)
         {
         
         }

@@ -30,5 +30,6 @@ enum DBL_CODE
         DBL_UNABLE_WRITE		=		57,
         DBL_INVALID_FORMAT		=		58,
         DBL_INVALID_RANGE		=		59,
-        DBL_ENTRY_EXPIRES               =               60
+        DBL_ENTRY_EXPIRES               =               60,
+        DBL_NOT_EXPIRING        	=		61	
 };

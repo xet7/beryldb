@@ -39,7 +39,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          
          if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INVALID_PARAM, INVALID_TYPE);
+                  user->SendProtocol(ERR_INPUT2,ERR_INVALID_PARAM, INVALID_TYPE);
                   return FAILED;
          }
          
@@ -93,7 +93,7 @@ COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
          /* Clears all expires pending. */
          
          ExpireManager::Reset();
-         user->SendProtocol(BRLD_EXP_DELETED, counter, PROCESS_OK);
+         user->SendProtocol(BRLD_INPUT, PROCESS_OK);
          sfalert(user, NOTIFY_DEFAULT, "All expires have been removed: %u", counter);
          return SUCCESS;
 }

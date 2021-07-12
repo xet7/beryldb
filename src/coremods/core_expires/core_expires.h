@@ -33,6 +33,16 @@ class CommandTTL : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandTTLAT : public Command 
+{
+    public: 
+
+        CommandTTLAT(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
 class CommandSetex : public Command 
 {
     public: 

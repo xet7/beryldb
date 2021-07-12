@@ -195,3 +195,11 @@ void KeyHelper::IsNum(User* user, const std::string& entry)
        Helpers::make_query(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void KeyHelper::GetPersist(User* user, const std::string& key)
+{
+       std::shared_ptr<getpersist_query> query = std::make_shared<getpersist_query>();
+       Helpers::make_query(user, query, key);
+       Kernel->Store->Push(query);
+}
+

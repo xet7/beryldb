@@ -144,3 +144,16 @@ COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
        KeyHelper::IsNum(user, key);
        return SUCCESS;
 }
+
+CommandGetPersist::CommandGetPersist(Module* Creator) : Command(Creator, "GETPERSIST", 1, 1)
+{
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       KeyHelper::GetPersist(user, key);
+       return SUCCESS;
+}
+

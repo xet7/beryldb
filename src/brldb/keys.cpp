@@ -272,6 +272,19 @@ void isnum_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, this->response);
 }
 
+void getpersist_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+       this->response = to_string(result.value);
+       
+       this->DelExpire();
+       this->SetOK();
+}
+
+void getpersist_query::Process()
+{
+       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+}
 
 void get_query::Run()
 {

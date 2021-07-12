@@ -25,14 +25,13 @@ class CoreModuleMulti : public Module
     public:     
         
         CoreModuleMulti() : cmdmulti(this), cmdmrun(this), cmdmultireset(this)
-
         {
 
         }
 
         Version GetDescription() 
         {
-                return Version("", VF_BERYLDB|VF_CORE);
+                return Version("Provides MULTI support.", VF_BERYLDB|VF_CORE);
         }
 };
 

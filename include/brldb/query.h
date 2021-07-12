@@ -551,6 +551,23 @@ class ExportAPI test_dump_query  : public QueryBase
         void Process();
 };
 
+
+class ExportAPI getpersist_query  : public QueryBase
+{
+    public:
+
+        getpersist_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
 class ExportAPI getdel_query  : public QueryBase
 {
     public:

@@ -71,5 +71,7 @@ class ExportAPI KeyHelper
         
         static void IsNum(User* user, const std::string& entry);
         
+        static void GetPersist(User* user, const std::string& key);
+
         
 };

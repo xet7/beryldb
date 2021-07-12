@@ -207,3 +207,12 @@ class CommandIsNum : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandGetPersist : public Command 
+{
+    public: 
+
+        CommandGetPersist(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

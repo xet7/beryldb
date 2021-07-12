@@ -38,6 +38,7 @@ class CoreModKeys : public Module
         CommandGetExp cmdgetexp;
         CommandIsAlpha cmdisalpha;
         CommandIsNum cmdisnum;
+        CommandGetPersist cmdgetpersist;
         
     public:	
         
@@ -60,7 +61,8 @@ class CoreModKeys : public Module
                         cmdgetoccurs(this),
                         cmdgetexp(this),
                         cmdisalpha(this),
-                        cmdisnum(this)
+                        cmdisnum(this),
+                        cmdgetpersist(this)
         {
         
         }

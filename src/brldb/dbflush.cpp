@@ -138,6 +138,14 @@ void DataFlush::GetResults()
                                     DataFlush::EntryExpires(user, signal);
 
                             break;                            
+
+                            case DBL_NOT_EXPIRING:
+
+                                    DataFlush::EntryNOExpires(user, signal);
+
+                            break;
+
+                            
                             
                             case DBL_NOT_NUM:
                                    

@@ -53,6 +53,18 @@ class ExportAPI DiffHandler
          
          static Args CompareMultiMap(const MultiMap list, const MultiMap list2);
 
+        /* 
+         * Compares a map.
+         * 
+         * @parameters:
+	 *
+	 *         · list: First map to compare.
+	 *         · list2: Second map to compare.
+	 * 
+         * @return:
+ 	 *
+         *         · Args: Compared list.
+         */    
+         
          static Args CompareMap(const MapMap list, const MapMap list2);
-          
 };

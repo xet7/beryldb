@@ -35,6 +35,11 @@ void DataFlush::EntryExists(User* user, std::shared_ptr<QueryBase> signal)
        user->SendProtocol(ERR_QUERY, ENTRY_DEFINED);
 }
 
+void DataFlush::EntryNOExpires(User* user, std::shared_ptr<QueryBase> signal)
+{
+       user->SendProtocol(ERR_QUERY, ENTRY_NOT_EXPIRING);
+}
+
 void DataFlush::NotFound(User* user, std::shared_ptr<QueryBase> signal)
 {
         user->SendProtocol(ERR_QUERY, PROCESS_NULL);

@@ -148,6 +148,16 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          */
 
          static void EntryExpires(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
+         * Entry is not expiring.
+ 	 *
+ 	 * @print:
+ 	 *
+         *         · ENTRY_NOT_EXPIRING
+         */    
+         
+         static void EntryNOExpires(User* user, std::shared_ptr<QueryBase> signal);
         
          /* Results from the processing threads. */
         
