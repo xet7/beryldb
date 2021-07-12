@@ -112,16 +112,6 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
                
-               if (entry.database != user->current_db)
-               {
-                     continue;
-               }
-               
-               if (entry.select != user->select)
-               {
-                    continue;
-               }
-               
                std::string schedule;
                
                if (parameters.size() && arg == "h")
@@ -133,7 +123,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
+               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s | %3s | %5s ", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
