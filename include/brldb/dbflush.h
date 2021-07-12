@@ -167,10 +167,6 @@ class ExportAPI DataFlush : public safecast<DataFlush>
  
          static void GetPending();
 
-         /* mute that keep track of flushing status. */
-
-         std::atomic<bool> flushmute;
-
     public:
     
          static std::mutex query_mute;
@@ -179,6 +175,15 @@ class ExportAPI DataFlush : public safecast<DataFlush>
         
          DataFlush();
 
+        /* 
+         * Process a new query. When this function is called, 'signal'
+         * query will be posted to the thread processor.
+         *
+         * @parameters:
+	 *
+	 *         · signal: Signal to process.
+         */             
+         
          static void Process(User* user, std::shared_ptr<QueryBase> signal);
         
          /* Pauses this->running */
@@ -197,8 +202,14 @@ class ExportAPI DataFlush : public safecast<DataFlush>
         
          static void ResetAll();
 
-         /* Adds a new notification */
-
+        /* 
+         * Adds a new notification to the notification vector.
+         * 
+         * @parameters:
+	 *
+	 *         · result: Resulting query.
+         */    
+         
          static void AttachResult(std::shared_ptr<QueryBase> result);
 
          /* Called in the mainloop, used to dispatch notifications and pending queries. */
@@ -229,7 +240,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
                 return this->threadslist.size();
          }
          
-         /* Removes all threads. */
+         /* Cleans up threadslist. */
          
          void EraseAll()
          { 

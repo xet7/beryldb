@@ -66,7 +66,7 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 2)]))
              {
-                 user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                 user->SendProtocol(ERR_INPUT2, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO);
                  return { 0 };
              }
        
@@ -77,7 +77,7 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 1)]) || !is_zero_or_great(parameters[(max - 2)]))
              {
-                   user->SendProtocol(ERR_USE, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO.c_str());
+                   user->SendProtocol(ERR_INPUT2, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO);
                    return { 0 };
              }
        

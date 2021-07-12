@@ -37,7 +37,7 @@ bool DataFlush::Status()
       return this->running;
 }
 
-DataFlush::DataFlush() : running(false), flushmute(false)
+DataFlush::DataFlush() : running(false)
 {
 
 }

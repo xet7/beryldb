@@ -422,6 +422,7 @@ typedef unsigned int sent_id;
 
 class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 {
+ 
   friend class CommandQueue;
   
   private:
@@ -436,7 +437,7 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
         std::deque<PendingCMD> PendingMulti;
 
- public:
+  public:
 
 	LocalUser(int fd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* server);
 

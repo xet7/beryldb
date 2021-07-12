@@ -47,20 +47,20 @@ COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
              }
              else
              {
-                    user->SendProtocol(ERR_INVALID_NOTLVL, level, Daemon::Format("%s: %s", INVALID_NLEVEL.c_str(), level.c_str())); 
+                    user->SendProtocol(ERR_INPUT2, ERR_INVALID_NOTLVL, Daemon::Format("%s:%s", INVALID_NLEVEL.c_str(), level.c_str())); 
                     return FAILED;
              }
        
              STHelper::Set("notify", user->login, level);
 
              Kernel->Notify->Add(monitor, user);
-             user->SendProtocol(BRLD_NOW_NOTIFYING, level, Daemon::Format("OK: %s", level.c_str()));       
+             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
              return SUCCESS;  
        }
 
        STHelper::Set("notify", user->login, "DEFAULT");
        Kernel->Notify->Add(NOTIFY_DEFAULT, user);
-       user->SendProtocol(BRLD_NOW_NOTIFYING, "DEFAULT", "OK: DEFAULT");          
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);          
        return SUCCESS;
 }
 
@@ -71,10 +71,9 @@ CommandNotifyReset::CommandNotifyReset(Module* Creator) : Command(Creator, "NRES
 
 COMMAND_RESULT CommandNotifyReset::Handle(User* user, const Params& parameters)
 {
-       unsigned int count = Kernel->Monitor->Count();
        Kernel->Notify->Reset();
        STHelper::Erase("notify");
-       user->SendProtocol(BRLD_NRESET, count, PROCESS_OK);
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -93,7 +92,7 @@ COMMAND_RESULT CommandStopNotify::Handle(User* user, const Params& parameters)
        
        STHelper::Delete("notify", user->login);       
        Kernel->Notify->Remove(user);
-       user->SendProtocol(BRLD_STOP_NOTIFY, PROCESS_OK);          
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);          
        return SUCCESS;
 }
 
