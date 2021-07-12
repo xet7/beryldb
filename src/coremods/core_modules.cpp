@@ -31,12 +31,12 @@ COMMAND_RESULT CommandLoadmodule::Handle(User* user, const Params& parameters)
         if (Kernel->Modules->Load(parameters[0]))
         {
                 sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
-                user->SendProtocol(BRLD_MOD_LOADED, parameters[0], Daemon::Format("Module %s loaded.", parameters[0].c_str()).c_str());
+                user->SendProtocol(BRLD_INPUT, PROCESS_OK);
                 return SUCCESS;
         }
         else
         {
-              user->SendProtocol(ERR_UNLOAD_MOD, parameters[0], Kernel->Modules->LastError());
+              user->SendProtocol(ERR_INPUT2, ERR_UNLOAD_MOD, Kernel->Modules->LastError());
               return FAILED;
         }
 }
@@ -58,25 +58,25 @@ COMMAND_RESULT CommandUnloadmodule::Handle(User* user, const Params& parameters)
 {
        if (Daemon::Match(parameters[0], "core_*", ascii_case_insensitive))
        {
-             user->SendProtocol(ERR_UNLOAD_MOD, parameters[0], "Warning: You are unloading a core module.");
+             sfalert(user, NOTIFY_DEFAULT, "Warning: Unloading core module %s.", parameters[0].c_str());
        }
        
        Module* InUse = Kernel->Modules->Find(parameters[0]);
        
        if (InUse == creator)
        {
-             user->SendProtocol(ERR_UNLOAD_MOD, parameters[0], "You cannot unload this module.");
+             user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
        }
        
        if (InUse && Kernel->Modules->Unload(InUse))
        {
               sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
-              user->SendProtocol(BRLD_MOD_UNLOAD, parameters[0], Daemon::Format("Module %s unloaded.", parameters[0].c_str()).c_str());          
+              user->SendProtocol(BRLD_INPUT, PROCESS_OK);          
        }
        else
        {
-              user->SendProtocol(ERR_UNLOAD_MOD, parameters[0], (InUse ? Kernel->Modules->LastError() : "Module not found."));
+              user->SendProtocol(ERR_INPUT2, ERR_UNLOAD_MOD, (InUse ? Kernel->Modules->LastError() : NOT_FOUND));
               return FAILED;
        }
        
@@ -85,10 +85,12 @@ COMMAND_RESULT CommandUnloadmodule::Handle(User* user, const Params& parameters)
 
 class ModuleCoreModule : public Module
 {
+  private:
+  
         CommandLoadmodule cmdloadmod;
         CommandUnloadmodule cmdunloadmod;
 
- public:
+  public:
 
         ModuleCoreModule() : cmdloadmod(this), cmdunloadmod(this)
         {

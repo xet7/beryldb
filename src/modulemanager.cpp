@@ -27,7 +27,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 
 	if (!FileSystem::Exists(ModuleFile))
 	{
-		last_known_error = "Module file could not be found: " + filename;
+		last_known_error = NOT_FOUND + ": " + filename;
                 bprint(ERROR, "%s", last_known_error.c_str());
 		return false;
 	}
