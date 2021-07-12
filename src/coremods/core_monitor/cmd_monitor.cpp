@@ -44,17 +44,17 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
              }
              else
              {
-                    user->SendProtocol(ERR_INVALID_MONITORLVL, level, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), level.c_str())); 
+                    user->SendProtocol(ERR_INPUT2, ERR_INVALID_MONITORLVL, level, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), level.c_str())); 
                     return FAILED;
              }
        
              Kernel->Monitor->Add(user, monitor);
-             user->SendProtocol(BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
+             user->SendProtocol(BRLD_INPUT, BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
              return SUCCESS;  
        }
        
        Kernel->Monitor->Add(user, MONITOR_DEFAULT);
-       user->SendProtocol(BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
+       user->SendProtocol(BRLD_INPUT, BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
        return SUCCESS;
 }
 
@@ -67,7 +67,7 @@ COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
        unsigned int count = Kernel->Monitor->Count();
        Kernel->Monitor->Reset();
-       user->SendProtocol(BRLD_RESET_MONITOR, count, PROCESS_OK);
+       user->SendProtocol(BRLD_INPUT, BRLD_RESET_MONITOR, count, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -96,7 +96,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         {
              if (arg != "DEFAULT" || arg != "DEBUG")
              {
-                  user->SendProtocol(ERR_INVALID_MONITORLVL, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), arg.c_str()));
+                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_MONITORLVL, INVALID_MLEVEL);
                   return FAILED;
              }
         }

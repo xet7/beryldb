@@ -15,6 +15,16 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
+class CommandExpireFIND : public Command 
+{
+    public: 
+
+        CommandExpireFIND(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+
 class CommandExpire : public Command 
 {
     public: 

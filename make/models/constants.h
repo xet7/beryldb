@@ -95,7 +95,7 @@ const std::string PROCESS_FALSE = "FALSE";
 
 /* Invalid monitor level */
 
-const std::string INVALID_MLEVEL = "Invalid monitor level.";
+const std::string INVALID_MLEVEL = "INVALID_MONITOR";
 
 /* Invalid notification level */
 

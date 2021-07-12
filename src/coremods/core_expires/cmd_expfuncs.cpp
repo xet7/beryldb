@@ -20,6 +20,65 @@
 #include "maker.h"
 #include "core_expires.h"
 
+CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)
+{
+         last_empty_ok = true;
+         syntax = "<key> <argument>";
+}
+
+COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
+{
+         const std::string& key = parameters[0];
+         const std::string& arg = parameters[1];
+         
+         if (parameters.size() == 2 && arg != "h" && arg != "r")
+         {
+                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, INVALID_TYPE);
+                  return FAILED;
+         }
+         
+         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
+
+         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         {
+               ExpireEntry entry = it->second;
+
+               if (entry.database != user->current_db)
+               {
+                     continue;
+               }
+
+               if (entry.select != user->select)
+               {
+                    continue;
+               }
+               
+               if (!Daemon::Match(entry.key, key))
+               {
+                      continue;
+               }
+               
+               std::string schedule;
+
+               if (parameters.size() == 2 && arg == "h")
+               {
+                      schedule = convto_string(entry.schedule);
+               }
+               else 
+               {
+                      schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+               }
+               
+
+               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
+         }
+
+         Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
+         return SUCCESS;
+}
+
 CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIST", 0, 1)
 {
          last_empty_ok = true;
@@ -39,7 +98,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          
          if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INPUT2,ERR_INVALID_PARAM, INVALID_TYPE);
+                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, INVALID_TYPE);
                   return FAILED;
          }
          

@@ -29,12 +29,13 @@ class CoreModuleExpires : public Module
         CommandSelectCount cmdselectcount;
         CommandDBEReset cmddbreset;
         CommandTTLAT cmdttlat;
+        CommandExpireFIND cmdexpfind;
    
     public:     
         
         CoreModuleExpires() : cmdexpire(this), cmdttl(this), cmdsetex(this), cmdpersist(this),
                               cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
-                              cmdselectcount(this), cmddbreset(this), cmdttlat(this)
+                              cmdselectcount(this), cmddbreset(this), cmdttlat(this), cmdexpfind(this)
         {
         
         }
