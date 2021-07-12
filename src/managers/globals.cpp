@@ -101,7 +101,6 @@ void GlobalHelper::FutureExecute(std::shared_ptr<Database> database, const std::
        query->select_query = where;
        query->flags = QUERY_FLAGS_QUIET;
        query->key = key;
-
        Kernel->Store->Push(query);
 }
 
@@ -109,7 +108,6 @@ void GlobalHelper::UserFutureExecute(User* user, const std::string& key)
 {
        std::shared_ptr<future_exec_query> query = std::make_shared<future_exec_query>();
        Helpers::make_query(user, query, key);
-       
        Kernel->Store->Push(query);
 }
 
@@ -117,7 +115,6 @@ void GlobalHelper::FutureCancel(User* user, const std::string& key)
 {
        std::shared_ptr<future_del_query> query = std::make_shared<future_del_query>();
        Helpers::make_query(user, query, key);
-       
        Kernel->Store->Push(query);
 }
 
@@ -130,6 +127,16 @@ void GlobalHelper::FutureGlobalCancel(std::shared_ptr<Database> database, const 
        query->select_query = where;
        query->flags = QUERY_FLAGS_QUIET;
        query->key = key;
-
        Kernel->Store->Push(query);
 }
+
+void GlobalHelper::Diff(User* user, const std::string& key, const std::string& value, signed int offset, signed int limit)
+{
+       std::shared_ptr<diff_query> query = std::make_shared<diff_query>();
+       Helpers::make_query(user, query, key);
+       query->value = value;
+       query->limit = limit;
+       query->offset = offset;
+       Kernel->Store->Push(query);
+}
+

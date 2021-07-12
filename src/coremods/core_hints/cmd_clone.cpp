@@ -44,3 +44,27 @@ COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
        GlobalHelper::Clone(user, key, value);
        return SUCCESS;
 }
+
+CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
+{
+         syntax = "<key> <select> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       GlobalHelper::Diff(user, key, value, offset, limit);
+       return SUCCESS;
+}

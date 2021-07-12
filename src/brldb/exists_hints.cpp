@@ -43,6 +43,11 @@ void exists_query::Maps()
 
 }
 
+void exists_query::Vectors()
+{
+
+}
+
 void exists_query::Run()
 {
     if (this->identified.empty() || this->identified == PROCESS_NULL)

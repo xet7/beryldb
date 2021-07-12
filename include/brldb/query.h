@@ -19,47 +19,47 @@
 
 enum QUERY_TYPE
 {
-       QUERY_TYPE_RENAME = 1,
-       QUERY_TYPE_COPY = 2,
-       QUERY_TYPE_TYPE = 3,
-       QUERY_TYPE_DELETE = 4,
-       QUERY_TYPE_ITER = 5,
-       QUERY_TYPE_WRITE = 6,
-       QUERY_TYPE_TEST = 7,
-       QUERY_TYPE_DBSIZE = 8,
-       QUERY_TYPE_OP  = 10,
-       QUERY_TYPE_READ = 11,
-       QUERY_TYPE_EXPIRE = 12,
-       QUERY_TYPE_EXISTS = 13,
-       QUERY_TYPE_SKIP = 14,
-       QUERY_TYPE_SETEX = 15,
-       QUERY_TYPE_MOVE = 16,
-       QUERY_TYPE_CLONE = 17,
-       QUERY_TYPE_FUTURE = 18,
-       QUERY_TYPE_FUTURE_RUN = 19,
-       QUERY_TYPE_READ_ALLOW = 20,
-       QUERY_TYPE_RENAMENX = 21
-       
+       QUERY_TYPE_RENAME         = 	1,
+       QUERY_TYPE_COPY 	         = 	2,
+       QUERY_TYPE_TYPE           = 	3,
+       QUERY_TYPE_DELETE         = 	4,
+       QUERY_TYPE_ITER           = 	5,
+       QUERY_TYPE_WRITE          = 	6,
+       QUERY_TYPE_TEST           = 	7,
+       QUERY_TYPE_DBSIZE         = 	8,
+       QUERY_TYPE_OP             = 	10,
+       QUERY_TYPE_READ           = 	11,
+       QUERY_TYPE_EXPIRE         = 	12,
+       QUERY_TYPE_EXISTS         = 	13,
+       QUERY_TYPE_SKIP 		 = 	14,
+       QUERY_TYPE_SETEX 	 = 	15,
+       QUERY_TYPE_MOVE 		 = 	16,
+       QUERY_TYPE_CLONE          = 	17,
+       QUERY_TYPE_FUTURE         = 	18,
+       QUERY_TYPE_FUTURE_RUN     = 	19,
+       QUERY_TYPE_READ_ALLOW     = 	20,
+       QUERY_TYPE_RENAMENX       = 	21,
+       QUERY_TYPE_DIFF           = 	22
 };
 
 enum QUERY_FLAGS
 {
-      QUERY_FLAGS_NONE = 0,
-      QUERY_FLAGS_QUIET = 1,
-      QUERY_FLAGS_CORE = 2,
-      QUERY_FLAGS_COUNT = 9
+       QUERY_FLAGS_NONE 		 = 	0,
+       QUERY_FLAGS_QUIET 	 = 	1,
+       QUERY_FLAGS_CORE 		 = 	2,
+       QUERY_FLAGS_COUNT 	 = 	9
 };
 
 enum OP_TYPE
 {
-    OP_NONE 	=   0,
-    OP_INCR	=   1,
-    OP_DECR	=   2,
-    OP_ADD	=   3,
-    OP_MIN	=   4,
-    OP_AVG	=   5,
-    OP_DIV	=   6,
-    OP_MULT	=   7
+       OP_NONE 	=   0,
+       OP_INCR	=   1,
+       OP_DECR	=   2,
+       OP_ADD	=   3,
+       OP_MIN	=   4,
+       OP_AVG	=   5,
+       OP_DIV	=   6,
+       OP_MULT	=   7
 };
 
 class ExportAPI QueryBase
@@ -149,9 +149,9 @@ class ExportAPI QueryBase
         
         double size;
 
-        int from;
+//        int from;
         
-        int to;
+  //      int to;
         
         void access_set(DBL_CODE status)
         {
@@ -174,7 +174,8 @@ class ExportAPI QueryBase
         
         QueryBase() :  finished(false), key_required(false), flags(QUERY_FLAGS_NONE), access(DBL_NONE),  
                         subresult(0), partial(false), offset(0), limit(0), user(NULL), 
-                        operation(OP_NONE), counter(0), data(0), size(0.0), from(0), to(0)
+                        operation(OP_NONE), counter(0), data(0), size(0.0)
+                        //, from(0), to(0)
         {
               
         }
@@ -259,6 +260,9 @@ class ExportAPI routed_query : public QueryBase
         virtual void Geos() = 0;
         
         virtual void Multis() = 0;
+        
+        virtual void Vectors() = 0;
+
 
 };
 
@@ -280,6 +284,8 @@ class ExportAPI rename_query : public routed_query
         void Multis();
         
         void Lists();
+        
+        void Vectors();
         
         void Run();
         
@@ -305,10 +311,39 @@ class ExportAPI renamenx_query : public routed_query
         
         void Lists();
 
+        void Vectors();
+
         void Run();
 
         void Process();
 };
+
+class ExportAPI diff_query : public routed_query
+{
+   public:
+
+        diff_query() : routed_query(QUERY_TYPE_DIFF)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
+        void Lists();
+
+        void Vectors();
+
+        void Run();
+
+        void Process();
+};
+
 
 
 class ExportAPI del_query : public routed_query
@@ -329,6 +364,8 @@ class ExportAPI del_query : public routed_query
         void Multis();
         
         void Lists();
+
+        void Vectors();
 
         void Run();
 
@@ -353,6 +390,8 @@ class ExportAPI move_query : public routed_query
         void Multis();
 
         void Lists();
+
+        void Vectors();
 
         void Run();
 
@@ -379,6 +418,8 @@ class ExportAPI clone_query : public routed_query
 
         void Lists();
 
+        void Vectors();
+
         void Run();
 
         void Process();
@@ -404,6 +445,8 @@ class ExportAPI copy_query : public routed_query
 
         void Lists();
 
+        void Vectors();
+
         void Run();
 
         void Process();
@@ -427,6 +470,8 @@ class ExportAPI exists_query : public routed_query
         void Multis();
         
         void Lists();
+
+        void Vectors();
 
         void Run();
 

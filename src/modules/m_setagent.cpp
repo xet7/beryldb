@@ -40,20 +40,20 @@ class CommandSetAgent : public Command
                 
                 if (agent.empty() || agent.length() < 3 || agent.length() > 15)
                 {
-                        user->SendProtocol(ERR_BAD_AGENT, agent, VALID_AGENT);
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, VALID_AGENT);
                         return FAILED;
                 }
 
                 if (!Kernel->Engine->IsAgent(agent))
                 {
-                        user->SendProtocol(ERR_BAD_AGENT, agent, WRONG_AGENT);
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, WRONG_AGENT);
                         return FAILED;
                 }
                 
                 if (IS_LOCAL(target))
                 {
                         target->SetAgent(parameters[1]);
-                        user->SendProtocol(BRLD_AGENT_SET, agent, instance, Daemon::Format("Agent for %s changed.", instance.c_str()).c_str());
+                        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
                 }                
                 
                 return SUCCESS;

@@ -48,6 +48,10 @@ void copy_query::Lists()
 
 }
 
+void copy_query::Vectors()
+{
+
+}
 
 void copy_query::Run()
 {
@@ -71,6 +75,10 @@ void copy_query::Run()
     {
           this->Lists();
     }
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
 
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;

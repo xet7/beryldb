@@ -72,7 +72,7 @@ CommandVGet::CommandVGet(Module* Creator) : Command(Creator, "VGET", 1, 3)
 
 COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string key = parameters[0];
+       const std::string& key = parameters[0];
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        

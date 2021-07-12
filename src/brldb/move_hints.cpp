@@ -50,6 +50,11 @@ void move_query::Lists()
 
 }
 
+void move_query::Vectors()
+{
+
+}
+
 void move_query::Run()
 {
     if (this->identified == INT_KEY)
@@ -72,6 +77,10 @@ void move_query::Run()
     {
           this->Lists();
     }
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
     
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;

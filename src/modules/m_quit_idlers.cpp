@@ -37,7 +37,7 @@ class ModuleQuitIdlers : public Module
                         
 			if (GetIdle(usr) >= limit)
 			{
-			      Kernel->Clients->Disconnect(usr, "You are idling.");
+			      Kernel->Clients->Disconnect(usr, "IDLE_REACHED");
 			}		  
 		}        
         }

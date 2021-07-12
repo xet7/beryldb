@@ -26,6 +26,7 @@
 #include "managers/keys.h"
 #include "managers/maps.h"
 #include "extras.h"
+#include "brldb/diff.h"
 #include "brldb/database.h"
 #include "managers/user.h"
 #include "brldb/list_handler.h"

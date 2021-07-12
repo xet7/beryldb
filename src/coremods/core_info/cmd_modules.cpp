@@ -73,11 +73,11 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
                               continue;
                         }
 
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_INPUT, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_INPUT, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	
@@ -98,7 +98,7 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 	{
 		if (!user->IsAdmin())
 		{
-			user->SendProtocol(BRLD_ALERT, ACCESS_DENIED);
+			user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
 			return FAILED;
 		}
 
@@ -144,11 +144,11 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 			      continue;
 			}
 			
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_INPUT, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%s | %s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_INPUT, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	

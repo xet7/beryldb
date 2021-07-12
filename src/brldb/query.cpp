@@ -101,10 +101,14 @@ int QueryBase::CheckDest(const std::string& select, const std::string& regkey, c
               {
                    if (found_type == ltype)
                    {
+                        /* Ltype found */
+                        
                         return 1;
                    }
                    else 
                    {
+                        /* Different ltype */
+                        
                         return 2;
                    }
               }
@@ -277,6 +281,46 @@ bool QueryBase::Prepare()
                      }  
                  }
             
+           }
+           
+           break;
+           
+           case QUERY_TYPE_DIFF:
+           {
+                   GetRegistry(this->select_query, this->key, true);
+                   
+                   if (this->identified == PROCESS_NULL)
+                   {
+                         this->access_set(DBL_NOT_FOUND);
+                         this->response = this->identified;
+                         return false;
+                   }
+                   
+                   int result = this->CheckDest(this->select_query, this->value, this->identified); 
+                  
+                   if (result == 1)
+                   {
+                         if (this->identified == PROCESS_NULL)
+                         {
+                              this->access_set(DBL_NOT_FOUND);
+                              this->response = this->identified;
+                              return false;
+                         }
+                         
+                         this->Run();
+                         return true;
+                   }
+                   else if (result == 2)
+                   {
+                         this->access_set(DBL_INVALID_TYPE);
+                         this->response = this->identified;
+                   }
+                   
+                   else
+                   {
+                         this->access_set(DBL_NOT_FOUND);
+                         this->response = this->identified;
+                   }
            }
            
            break;

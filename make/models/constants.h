@@ -13,6 +13,8 @@
 
 #pragma once
 
+const std::string NO_CHANS = "NO_CHANS";
+
 /* Not logged. */
 
 const std::string NO_AUTH = "NOT_LOGGED";
@@ -123,7 +125,7 @@ const std::string WRONG_AGENT = "Your agent is not valid.";
 
 /* Valid agent. */
 
-const std::string VALID_AGENT = "Agent must be in the 3 to 15 length range.";
+const std::string VALID_AGENT = "INVALID_AGENT";
 
 /* Default ping interval. */
 

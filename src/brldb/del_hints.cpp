@@ -46,6 +46,11 @@ void del_query::Geos()
 
 }
 
+void del_query::Vectors()
+{
+
+}
+
 void del_query::Run()
 {
     this->Delete(this->dest);
@@ -70,6 +75,11 @@ void del_query::Run()
     {
          this->Lists();
     }
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
+
 }
 
 void del_query::Process()

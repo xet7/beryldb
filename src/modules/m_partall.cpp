@@ -26,11 +26,11 @@ class CommandPartAll : public Command
         {
                if (!user->chans.size())
                {
-                     user->SendProtocol(ERR_PARTALL, "You are not subscribed to any channel.");
-                     return FAILED;
+                      user->SendProtocol(ERR_INPUT2, ERR_PARTALL, NO_CHANS); 
+                      return FAILED;
                }
                
-               user->SendProtocol(BRLD_PARTALL, Daemon::Format("Leaving %lu subscriptions.", user->chans.size()).c_str());
+               user->SendProtocol(BRLD_INPUT, BRLD_PARTALL, PROCESS_OK);
 
 	       for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
 	       {

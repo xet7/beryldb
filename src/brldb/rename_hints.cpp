@@ -18,6 +18,12 @@
 #include "brldb/expires.h"
 #include "helpers.h"
 
+void rename_query::Vectors()
+{
+
+}
+
+
 void rename_query::Lists()
 {
 
@@ -71,7 +77,11 @@ void rename_query::Run()
     {
           this->Lists();
     }
-
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
+    
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
     this->Write(newdest, result.value);

@@ -18,6 +18,11 @@
 #include "brldb/expires.h"
 #include "helpers.h"
 
+void renamenx_query::Vectors()
+{
+
+}
+
 void renamenx_query::Lists()
 {
 
@@ -71,6 +76,10 @@ void renamenx_query::Run()
     {
           this->Lists();
     }
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
 
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;

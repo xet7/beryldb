@@ -48,6 +48,11 @@ void clone_query::Maps()
 
 }
 
+void clone_query::Vectors()
+{
+
+}
+
 void clone_query::Run()
 {
     if (this->identified == INT_KEY)
@@ -70,6 +75,10 @@ void clone_query::Run()
     {
           this->Lists();
     }
+    else if (this->identified == INT_VECTOR)
+    {    
+          this->Vectors();
+    }   
 
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
