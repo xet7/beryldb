@@ -55,6 +55,15 @@ void GlobalHelper::Rename(User* user, const std::string& entry, const std::strin
        Kernel->Store->Push(query);
 }
 
+void GlobalHelper::RenameNX(User* user, const std::string& entry, const std::string& dest)
+{
+       std::shared_ptr<renamenx_query> query = std::make_shared<renamenx_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = dest;
+       Kernel->Store->Push(query);
+}
+
+
 void GlobalHelper::Move(User* user, const std::string& entry, const std::string& dest)
 {
        std::shared_ptr<move_query> query = std::make_shared<move_query>();

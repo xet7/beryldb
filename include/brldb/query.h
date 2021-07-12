@@ -37,7 +37,8 @@ enum QUERY_TYPE
        QUERY_TYPE_CLONE = 17,
        QUERY_TYPE_FUTURE = 18,
        QUERY_TYPE_FUTURE_RUN = 19,
-       QUERY_TYPE_READ_ALLOW = 20
+       QUERY_TYPE_READ_ALLOW = 20,
+       QUERY_TYPE_RENAMENX = 21
        
 };
 
@@ -284,6 +285,31 @@ class ExportAPI rename_query : public routed_query
         
         void Process();
 };
+
+class ExportAPI renamenx_query : public routed_query
+{
+   public:
+
+        renamenx_query() : routed_query(QUERY_TYPE_RENAMENX)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+        
+        void Multis();
+        
+        void Lists();
+
+        void Run();
+
+        void Process();
+};
+
 
 class ExportAPI del_query : public routed_query
 {

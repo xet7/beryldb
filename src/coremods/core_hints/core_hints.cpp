@@ -25,6 +25,7 @@ class CoreModHints : public Module
         CommandCopy cmdcopy;
         CommandClone cmdclone;
         CommandType cmdtype;
+        CommandRenameNX cmdrenamenx;
 
     public:
     
@@ -34,7 +35,8 @@ class CoreModHints : public Module
                          cmddel(this),
                          cmdcopy(this),
                          cmdclone(this),
-                         cmdtype(this)
+                         cmdtype(this),
+                         cmdrenamenx(this)
                          
         {
         

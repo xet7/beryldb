@@ -308,6 +308,24 @@ bool QueryBase::Prepare()
            
            break;
            
+           case QUERY_TYPE_RENAMENX:
+           {
+                   GetRegistry(this->select_query, this->key, true);
+                   int result = this->CheckDest(this->select_query, this->value, this->identified); 
+                   
+                   if (result == 0)
+                   {
+                         this->Run();
+                         return true;
+                   }
+                   else 
+                   {
+                         this->access_set(DBL_ENTRY_EXISTS);
+                   }
+           }
+           
+           break;
+           
            case QUERY_TYPE_CLONE:
            {
                    GetRegistry(this->select_query, this->key, true);

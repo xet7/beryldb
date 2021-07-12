@@ -45,5 +45,7 @@ class ExportAPI GlobalHelper
       static void FutureCancel(User* user, const std::string& key);
 
       static void FutureGlobalCancel(std::shared_ptr<Database> database, const std::string& where, const std::string& key);
+
+      static void RenameNX(User* user, const std::string& entry, const std::string& dest);
       
 };

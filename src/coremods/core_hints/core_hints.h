@@ -81,3 +81,12 @@ class CommandType : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandRenameNX : public Command 
+{
+    public: 
+
+        CommandRenameNX(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

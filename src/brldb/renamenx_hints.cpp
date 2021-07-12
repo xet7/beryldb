@@ -18,37 +18,38 @@
 #include "brldb/expires.h"
 #include "helpers.h"
 
-void clone_query::Keys()
+void renamenx_query::Lists()
+{
+
+}
+
+void renamenx_query::Keys()
 {
      unsigned int ttl = this->IsExpiring();
      
      if (ttl > 0)
      {
-          this->WriteExpire(this->key, this->value, ttl);
+          this->DelExpire();
+          this->WriteExpire(this->value, this->select_query, ttl);
      }
 }
 
-void clone_query::Lists()
+void renamenx_query::Multis()
 {
 
 }
 
-void clone_query::Multis()
+void renamenx_query::Maps()
 {
 
 }
 
-void clone_query::Geos()
+void renamenx_query::Geos()
 {
 
 }
 
-void clone_query::Maps()
-{
-
-}
-
-void clone_query::Run()
+void renamenx_query::Run()
 {
     if (this->identified == INT_KEY)
     {
@@ -72,12 +73,13 @@ void clone_query::Run()
     }
 
     RocksData result = this->Get(this->dest);
-    const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
+    const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
     this->Write(newdest, result.value);
-
+    this->Delete(this->dest);
+    
 }
 
-void clone_query::Process()
+void renamenx_query::Process()
 {
        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }

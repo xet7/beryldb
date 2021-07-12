@@ -117,3 +117,17 @@ COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
        DBHelper::Type(user, key);
        return SUCCESS;
 }
+
+CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX", 2, 2)
+{
+         syntax = "<key> <new key>";
+}
+
+COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& newkey = parameters[1];
+
+       GlobalHelper::RenameNX(user, key, newkey);
+       return SUCCESS;
+}
