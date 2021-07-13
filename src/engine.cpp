@@ -568,15 +568,15 @@ std::string Daemon::Uptime(const std::string& msg, unsigned int up)
       
       if (up > 172800)
       {
-           format = Daemon::Format("%s %u days, %.2u:%.2u:%.2u", msg.c_str(), up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
+           format = Daemon::Format("%s%u days, %.2u:%.2u:%.2u", msg.c_str(), up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
       }
       else if (up > 86400)
       {
-           format = Daemon::Format("%s %u day, %.2u:%.2u:%.2u", msg.c_str(), up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
+           format = Daemon::Format("%s%u day, %.2u:%.2u:%.2u", msg.c_str(), up / 86400, (up / 3600) % 24, (up / 60) % 60, up % 60);
       }
       else
       {
-           format = Daemon::Format("%s %.2u:%.2u:%.2u", msg.c_str(), (up / 3600) % 24, (up / 60) % 60, up % 60);
+           format = Daemon::Format("%s%.2u:%.2u:%.2u", msg.c_str(), (up / 3600) % 24, (up / 60) % 60, up % 60);
       }
       
       return format;

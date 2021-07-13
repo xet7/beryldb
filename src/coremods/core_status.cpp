@@ -119,7 +119,7 @@ void CommandStatus::DispatchData(Status::Context& status)
 		
 		case 'u':
 		{
-			status.AppendLine(BRLD_UPTIME, Daemon::Uptime("Uptime:", Kernel->GetUptime()));
+			status.AppendLine(BRLD_UPTIME, Daemon::Uptime("", Kernel->GetUptime()));
 		}
 		
 		break;

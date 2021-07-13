@@ -81,7 +81,7 @@ class ModuleCoreCPU : public Module
               
               if (this->usage > 10)
               {
-                   usleep(10000);
+                   usleep(1000);
               }
               
               if (this->usage > 8)

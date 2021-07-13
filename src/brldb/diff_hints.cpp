@@ -40,11 +40,11 @@ void diff_query::Keys()
     
     if (query_result.value == dbvalue)
     {
-          this->response = "1";
+          this->response = "0";
     }
     else
     {
-          this->response = "0";
+          this->response = "1";
     }
 
 }

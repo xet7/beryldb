@@ -24,13 +24,13 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
 {
         if (!parameters.size() || parameters.size() < 2)
         {
-             user->SendRemoteProtocol(ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
+             user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
              return FAILED;
         }
 
         if (parameters.size() > 3)
         {
-              user->SendRemoteProtocol(ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
+              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
               return FAILED;
         }
         
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
                 
         Kernel->Sets->Set(key, value);
         
-        user->SendRemoteProtocol(BRLD_CONF_OK, Kernel->Config->GetServerName(), PROCESS_OK);
+        user->SendRemoteProtocol(BRLD_INPUT2, Kernel->Config->GetServerName(), PROCESS_OK);
         return SUCCESS;
 }
 
@@ -70,13 +70,13 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
 {
         if (!parameters.size())
         {
-              user->SendRemoteProtocol(ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
+              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
               return FAILED;
         }
         
         if (parameters.size() > 2)
         {
-              user->SendRemoteProtocol(ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
+              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
               return FAILED;
         }
         
@@ -102,10 +102,10 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
         
         if (value.empty())
         {
-             user->SendRemoteProtocol(ERR_CONFIG_NOT_FOUND, Kernel->Config->GetServerName(), PROCESS_NULL);
+             user->SendRemoteProtocol(ERR_INPUT2, Kernel->Config->GetServerName(), PROCESS_NULL);
              return FAILED;
         }
         
-        user->SendRemoteProtocol(BRLD_CONF_VALUE, Kernel->Config->GetServerName(), value);
+        user->SendRemoteProtocol(BRLD_INPUT2, Kernel->Config->GetServerName(), value);
         return SUCCESS;
 }

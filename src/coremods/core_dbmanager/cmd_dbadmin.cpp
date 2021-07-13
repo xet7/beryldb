@@ -192,7 +192,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
       
       if (database->IsClosing())
       {
-             user->SendProtocol(ERR_DB_BUSY, DATABASE_BUSY);
+             user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
              return FAILED;
       }
       
