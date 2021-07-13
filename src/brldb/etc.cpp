@@ -200,3 +200,33 @@ void future_del_query::Process()
        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
 }
 
+void dbreset_query::Run()
+{
+      database->SetClosing(true);
+
+      ExpireManager::PreDBClose(this->key);
+      FutureManager::PreDBClose(this->key);
+}
+
+void dbreset_query::Process()
+{
+      std::shared_ptr<UserDatabase> userdb = Kernel->Store->DBM->Find(this->key);
+ 
+      if (!userdb)
+      {
+            user->SendProtocol(ERR_QUERY, PROCESS_NULL);
+      }
+      else
+      {
+            if (userdb == user->GetDatabase())
+            {
+                  user->SetNullDB();
+            }
+  
+            sfalert(user, NOTIFY_DEFAULT, "Removed database: %s", userdb->GetName().c_str());
+            FileSystem::remove_directory(userdb->GetPath().c_str());
+         
+            Kernel->Store->DBM->Delete(this->key);  
+            user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+      }
+}

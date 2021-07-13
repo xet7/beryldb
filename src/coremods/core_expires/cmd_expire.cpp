@@ -53,16 +53,16 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 
           if (!database)
           {
-                user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
+                user->SendProtocol(ERR_QUERY, PROCESS_NULL);
                 return FAILED;
           }
           
           if (database->IsClosing())
           {
-                user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
+                user->SendProtocol(ERR_QUERY, DATABASE_BUSY);
                 return FAILED;
           }
-
+        
           Kernel->Store->Expires->DatabaseReset(database->GetName());
           return SUCCESS;
 }

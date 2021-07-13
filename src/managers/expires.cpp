@@ -109,4 +109,3 @@ void ExpireHelper::QuickPersist(User* user, const std::string& key)
 
        Kernel->Store->Push(query);
 }
-

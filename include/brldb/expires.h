@@ -166,6 +166,18 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          */
                      
         unsigned int Count(const std::string& database, const std::string& select);
+
+        /* 
+         * This function should be called before a database is closing.
+         * The main purpose of this function is to remove pending expires from the
+         * flusher manager.
+         * 
+         * @parameters:
+	 *
+	 *         · dbname: Closing database.
+         */            
+         
+        static void PreDBClose(const std::string& dbname);
 };
 
 

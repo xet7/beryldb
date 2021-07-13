@@ -297,6 +297,36 @@ unsigned int FutureManager::SelectReset(const std::string& dbname, const std::st
       return counter;
 }
 
+void FutureManager::PreDBClose(const std::string& dbname)
+{
+      FutureMap& futures = Kernel->Store->Futures->GetFutures();
+
+      if (!futures.size())
+      {
+              return;
+      }
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
+
+      for (FutureMap::iterator it = futures.begin(); it != futures.end(); )
+      {
+                if (it->second.database != database)
+                {
+                       it++;
+                       continue;
+                }
+
+                Kernel->Store->Futures->FutureList.erase(it++);
+      }
+}
+
 unsigned int FutureManager::Count(std::shared_ptr<Database> database, const std::string& select)
 {
         FutureMap& expires = Kernel->Store->Futures->GetFutures();

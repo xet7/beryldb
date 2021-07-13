@@ -65,9 +65,6 @@ bool DBManager::Delete(const std::string& name)
             return false;
       }
       
-      Kernel->Store->Expires->DatabaseReset(name);      
-      Kernel->Store->Futures->DatabaseReset(name);      
-      
       userdb->Close();
       STHelper::Delete("databases", name);
       this->DBMap.erase(name);

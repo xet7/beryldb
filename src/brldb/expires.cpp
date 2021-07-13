@@ -191,6 +191,36 @@ signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::
       return ExpireManager::GetTIME(database, key, select);
 }
 
+void ExpireManager::PreDBClose(const std::string& dbname)
+{
+      ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+      if (!expiring.size())
+      {
+              return;
+      }
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(ExpireManager::mute);
+
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+                if (it->second.database != database)
+                {
+                       it++;
+                       continue;
+                }
+
+                Kernel->Store->Expires->ExpireList.erase(it++);
+      }
+}
+
 unsigned int ExpireManager::DatabaseReset(const std::string& dbname)
 {
       ExpireMap& expiring = Kernel->Store->Expires->GetExpires();

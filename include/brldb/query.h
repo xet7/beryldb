@@ -1607,6 +1607,20 @@ class ExportAPI future_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI dbreset_query  : public QueryBase
+{
+    public:
+
+        dbreset_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI expire_query  : public QueryBase
 {
     public:

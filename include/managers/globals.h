@@ -49,5 +49,7 @@ class ExportAPI GlobalHelper
       static void RenameNX(User* user, const std::string& entry, const std::string& dest);
 
       static void Diff(User* user, const std::string& key, const std::string& value, signed int offset, signed int limit);
+
+      static void DatabaseReset(User* user, const std::string& dbname);
       
 };

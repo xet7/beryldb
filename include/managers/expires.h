@@ -37,5 +37,4 @@ class ExportAPI ExpireHelper
        
        static void FutureAT(User* user, const std::string& entry, unsigned int ttl, const std::string& value);
        
-
 };

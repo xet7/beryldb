@@ -67,6 +67,16 @@ class ExportAPI FutureManager : public safecast<FutureManager>
 
         static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
+        /* 
+         * Deletes a given future.
+         * 
+	 * 
+         * @return:
+ 	 *
+         *         · True: Future removed.
+         *         · False: Not found or unable to remove.
+         */    
+         
         static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
 
         static void Reset();
@@ -121,6 +131,14 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          
         static std::tuple<int, std::string> GetVal(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
             
+        /* 
+         * Obtain all futures in the FutureList.
+         * 
+         * @return:
+ 	 *
+         *         · FutureMap: Map of futures.
+         */                
+         
         FutureMap& GetFutures();        
 
         /* 
@@ -138,7 +156,30 @@ class ExportAPI FutureManager : public safecast<FutureManager>
         unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
 
         unsigned int SelectReset(const std::string& dbname, const std::string& select);      
-        
+
+        /* 
+         * Removes all entries from a given database.
+         * 
+         * @parameters:
+	 *
+	 *         · dbname: Database name to remove entries from.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Removed elements.
+         */            
+         
         unsigned int DatabaseReset(const std::string& dbname);
+
+        /* 
+         * This function should be called before a database is closing.
+         * The main purpose of this function is to remove pending futures from the
+         * flusher manager.
+         * 
+         * @parameters:
+         *
+         *         · dbname: Closing database.
+         */
         
+        static void PreDBClose(const std::string& dbname);
 };

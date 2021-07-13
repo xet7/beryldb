@@ -140,3 +140,14 @@ void GlobalHelper::Diff(User* user, const std::string& key, const std::string& v
        Kernel->Store->Push(query);
 }
 
+void GlobalHelper::DatabaseReset(User* user, const std::string& dbname)
+{
+       std::shared_ptr<dbreset_query> query = std::make_shared<dbreset_query>();
+       query->user = user;
+       query->database = Kernel->Store->DBM->Find(dbname);
+       query->key = dbname;
+       Kernel->Store->Push(query);
+}
+
+
+

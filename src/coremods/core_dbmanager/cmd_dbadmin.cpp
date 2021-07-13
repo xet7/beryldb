@@ -18,6 +18,7 @@
 #include "brldb/query.h"
 #include "managers/tests.h"
 #include "managers/databases.h"
+#include "managers/globals.h"
 #include "converter.h"
 #include "engine.h"
 #include "managers/settings.h"
@@ -184,7 +185,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 
       if (!database)
       {
-             user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
+             user->SendProtocol(ERR_QUERY, PROCESS_NULL);
              return FAILED;
       }
       
@@ -192,30 +193,12 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
       
       if (database->IsClosing())
       {
-             user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
+             user->SendProtocol(ERR_QUERY, DATABASE_BUSY);
              return FAILED;
       }
       
-      database->SetClosing(true);
-
-      const std::string& dbpath = database->GetPath();
-      
-      if (Kernel->Store->DBM->Delete(dbname))
-      {                 
-            if (database == user->GetDatabase())
-            {
-                  user->SetNullDB();
-            }
-            
-            FileSystem::remove_directory(dbpath.c_str());
-            user->SendProtocol(BRLD_DB_DELETED, PROCESS_OK);
-            sfalert(user, NOTIFY_DEFAULT, "Removed database: %s", dbname.c_str());
-            
-            return SUCCESS;
-      }
-      
-      user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_EXISTS, PROCESS_FALSE);
-      return FAILED;
+      GlobalHelper::DatabaseReset(user, database->GetName());
+      return SUCCESS;
 }
 
 CommandDBTest::CommandDBTest(Module* Creator) : Command(Creator, "TEST", 0, 0)
