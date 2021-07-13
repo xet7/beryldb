@@ -228,7 +228,11 @@ enum BRLD_PROTOCOL
 	BRLD_LOGIN			=		308,
 	BRLD_INPUT			=		309,
 	BRLD_INPUT2			=		310,
-	
+	BRLD_USERS_INFO			=		311,
+	BRLD_CHAN_INFO			=		312,
+	BRLD_COMMANDS			=		313,
+	BRLD_SSL			=		314,
+		
 	/* Error protocol codes. */
 	
 	ERR_NO_INSTANCE               	= 		500,
