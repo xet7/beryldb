@@ -19,6 +19,7 @@
 #include "managers/globals.h"
 #include "managers/databases.h"
 #include "engine.h"
+#include "maker.h"
 #include "core_hints.h"
 
 CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
@@ -85,17 +86,11 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& new_select = parameters[1];
 
-       if (!is_number(new_select))
+       if (!CheckValidPos(user, new_select))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
+              return FAILED;
        }
 
-       if (!is_positive_number(new_select))
-       {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                return FAILED;
-       }
 
        if (!Daemon::CheckRange(user, new_select, INVALID_RANGE, 1, 100))
        {

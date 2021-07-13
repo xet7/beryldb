@@ -31,7 +31,7 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
             	User* const login = *i;
-            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s), %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) | %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_LOGINS_END);
@@ -61,7 +61,7 @@ COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
                 User* const login = *i;
-                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) %s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str()).c_str());
+                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%-10s (%s) | %-10s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str()).c_str());
         }
 
         Dispatcher::JustAPI(user, BRLD_LOGINS_END);

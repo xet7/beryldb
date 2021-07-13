@@ -558,7 +558,7 @@ bool Daemon::CheckRange(User* user, const std::string& value, const std::string&
              return true;
      }
      
-     user->SendProtocol(ERR_INVALID_RANGE, value, reason.c_str());
+     user->SendProtocol(ERR_INPUT2, ERR_INVALID_RANGE, reason.c_str());
      return false;
 }
 

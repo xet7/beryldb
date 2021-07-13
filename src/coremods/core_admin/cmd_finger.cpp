@@ -59,7 +59,7 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
             	        continue;
             	}
             	
-            	user->SendProtocol(BRLD_FINGER_LIST, Daemon::Format("%s (%s), %s (%s) | Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_FINGER_LIST, Daemon::Format("%-15s (%s) | %s (%s) | Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_FINGER_END);
@@ -90,7 +90,7 @@ COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
              new AutoResume(target, convto_num<unsigned int>(parameters[1]));
         }
         
-        user->SendProtocol(BRLD_PAUSED, target->instance, PROCESS_OK);
+        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -112,7 +112,7 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 
         target->Paused = false;
 
-        user->SendProtocol(BRLD_RESUMED, target->instance, PROCESS_OK);
+        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -137,7 +137,7 @@ COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
         if (luser)
         {
                 time_t idle = Kernel->Now() - luser->touchbase;
-                user->SendProtocol(BRLD_IDLE, target->instance, idle);
+                user->SendProtocol(BRLD_INPUT, idle);
                 return SUCCESS;
         }
         
