@@ -28,11 +28,37 @@ class ExportAPI GroupManager : public safecast<GroupManager>
          /* Destructor */
                   
          ~GroupManager();
+
+        /* 
+         * Adds a new group to GroupList.
+         * 
+         * @parameters:
+	 *
+	 *         · name: Group name.
+	 *         · flags: Flags this group contains.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Group added successfuly.
+         */             
          
          bool Add(const std::string& name, const std::string& flags);
          
          std::shared_ptr<Group> Find(const std::string& name);
 
+        /* 
+         * Removes a group from the GroupList.
+         * 
+         * @parameters:
+	 *
+	 *         · name: Name to add.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Group removed.
+         *         · False: Unable to remove.
+         */    
+         
          bool Delete(const std::string& name);
 
         /* 
@@ -54,6 +80,8 @@ class ExportAPI GroupManager : public safecast<GroupManager>
          {
               return this->GroupList;
          }
+         
+         void Reset();
          
 };
 

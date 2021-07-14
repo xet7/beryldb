@@ -70,7 +70,6 @@ struct ExportAPI connect_config : public refcountbase
 	
 	connect_config(config_rule* tag, char type, const std::string& mask, const connect_config& parent);
 
-	
 	void Update(const connect_config* newSettings);
 
 	const std::string& GetName() 
@@ -232,7 +231,19 @@ class ExportAPI User : public Expandable
          */    
          
 	bool HasGroup(std::shared_ptr<Group> group);
-	
+
+        /* 
+         * Checks whether user is in a given group.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in group.
+         */    	
+         
 	bool InGroup(unsigned char flag);
 	
 	bool CanPerform(unsigned char flag);

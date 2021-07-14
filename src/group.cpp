@@ -343,3 +343,13 @@ bool Group::CanDo(unsigned char flag)
       return false;
 }
 
+void GroupManager::Reset()
+{
+      for (GroupMap::iterator i = GroupList.begin(); i != GroupList.end(); i++)
+      {
+                  std::shared_ptr<Group> InUse = i->second;
+                  InUse = nullptr;
+      }
+
+      this->GroupList.clear();
+}
