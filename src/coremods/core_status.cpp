@@ -27,7 +27,7 @@ class CommandStatus : public Command
 	{
 		last_empty_ok = false;
 		syntax = "<symbol> [<servername>]";
-		requires = 'e';
+		group = 'w';
 	}
 
 	COMMAND_RESULT Handle(User* user, const Params& parameters) ;

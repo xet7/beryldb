@@ -213,16 +213,16 @@ bool User::CanPerform(unsigned char flag)
 		return true;
 	}
 
-        if (flag == 'e' && session->CanExecute())
+        if (flag == 'm' && session->CanManage())
+        {
+                return true;
+        }
+
+        if (flag == 'e' && (session->CanExecute() || session->CanManage()))
         {
         	 return true;
         }
         
-        if (flag == 'm' && session->CanManage())
-        {
-        	return true;
-        }
-
 	return false;
 }
 

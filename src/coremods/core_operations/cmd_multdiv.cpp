@@ -21,6 +21,7 @@
 
 CommandDiv::CommandDiv(Module* Creator) : Command(Creator, "DIV", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 
@@ -41,6 +42,7 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
 
 CommandMult::CommandMult(Module* Creator) : Command(Creator, "MULT", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 

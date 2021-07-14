@@ -164,7 +164,8 @@ bool GroupManager::ResetFlags(const std::string& name)
       
       /* Reset flags. */
       
-      group->UpdateFlags("");
+      group->Init();
+      group->rawflags = "";
       STHelper::Set("groups", name, "");
       return true;
 }
@@ -318,6 +319,22 @@ bool Group::CanDo(unsigned char flag)
       if (flag == 'c')
       {
             if (can_publish_clients)
+            {
+                 return true;
+            }
+      }
+
+      if (flag == 'h')
+      {
+            if (can_hints)
+            {
+                 return true;
+            }
+      }
+
+      if (flag == 'w')
+      {
+            if (can_dual_exec)
             {
                  return true;
             }

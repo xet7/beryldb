@@ -23,6 +23,7 @@
 
 CommandSetex::CommandSetex(Module* Creator) : Command(Creator, "SETEX", 3, 3)
 {
+          group = 'e';
           syntax = "<seconds> <key> <value>";
 }
 
@@ -52,6 +53,7 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
 
 CommandExpireAT::CommandExpireAT(Module* Creator) : Command(Creator, "EXPIREAT", 2, 2)
 {
+          group = 'e';
           syntax = "<key> <epoch time>";
 }
 

@@ -24,7 +24,8 @@
 
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 {
-          syntax = "<seconds> <key> <value>";
+         group = 'f';
+         syntax = "<seconds> <key> <value>";
 }
 
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
@@ -50,6 +51,7 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
 
 CommandTTE::CommandTTE(Module* Creator) : Command(Creator, "TTE", 1)
 {
+         group = 'f';
          syntax = "<key>";
 }
 
@@ -76,6 +78,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 
 CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 {
+         group = 'f';
          syntax = "<key>";
 }
 
@@ -88,18 +91,19 @@ COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 
 CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETALL", 0, 0)
 {
-
+       requires = 'e';
 }
 
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
-         FutureManager::Reset();
-         user->SendProtocol(BRLD_INPUT2, BRLD_FUTURE_DELETED, PROCESS_OK);
-         return SUCCESS;
+       FutureManager::Reset();
+       user->SendProtocol(BRLD_INPUT2, BRLD_FUTURE_DELETED, PROCESS_OK);
+       return SUCCESS;
 }
 
 CommandFReset::CommandFReset(Module* Creator) : Command(Creator, "FRESET", 0, 1)
 {
+        group = 'f';        
         syntax = "<*select>";
 }
 
@@ -139,6 +143,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
 
 CommandCancel::CommandCancel(Module* Creator) : Command(Creator, "CANCEL", 1, 1)
 {
+         group = 'f';
          syntax = "<key>";
 }
 
@@ -152,6 +157,7 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT", 3, 3)
 {
+          group = 'f';
           syntax = "<epoch time> <key> <value>";
 }
 

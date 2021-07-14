@@ -21,6 +21,7 @@
 
 CommandAvg::CommandAvg(Module* Creator) : Command(Creator, "AVG", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 

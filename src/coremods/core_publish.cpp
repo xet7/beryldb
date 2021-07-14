@@ -96,7 +96,7 @@ class CommandMessage : public Command
 	{
 		if (!source->IsAdmin())
 		{
-			source->SendProtocol(ERR_NO_FLAGS, ACCESS_DENIED);
+			source->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
 			return FAILED;
 		}
 
@@ -209,7 +209,7 @@ class CommandMessage : public Command
 
 		if (parameters[1].empty())
 		{
-			user->SendProtocol(ERR_PUB_NOT_PROVIDED, "No text to send");
+			user->SendProtocol(ERR_INPUT2, ERR_PUB_NOT_PROVIDED, NOT_DEFINED);
 			return FAILED;
 		}
 
@@ -231,11 +231,10 @@ class CommandMessage : public Command
 			return HandleChannelTarget(user, parameters, target);
 		}
 		
-		if (!user->session->CanExecute() && !user->IsAdmin())
+		if (!user->InGroup('c') && !user->IsAdmin())
 		{
                         user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                         return FAILED;
-			
 		}
 
 		return HandleUserTarget(user, parameters);
@@ -267,7 +266,7 @@ class CommandSQuery : public MultiCommand
 	{
 		if (parameters[1].empty())
 		{
-			user->SendProtocol(ERR_PUB_NOT_PROVIDED, "No text to send");
+			user->SendProtocol(ERR_INPUT2, ERR_PUB_NOT_PROVIDED, NOT_DEFINED);
 			return FAILED;
 		}
 		
@@ -290,7 +289,7 @@ class CommandSQuery : public MultiCommand
 
 		if (!target || target->registered != REG_OK)
 		{
-			user->SendProtocol(ERR_NOSUCHSERVICE, parameters[0], "No such service");
+			user->SendProtocol(ERR_INPUT2, ERR_NOSUCHSERVICE, parameters[0], NOT_DEFINED);
 			return FAILED;
 		}
 		

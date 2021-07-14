@@ -22,6 +22,7 @@
 
 CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -41,6 +42,7 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
 
 CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRONT", 1, 1)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -54,6 +56,7 @@ COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 
 CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK", 1, 1)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
