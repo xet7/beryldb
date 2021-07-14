@@ -31,9 +31,9 @@ std::shared_ptr<Session> Session::SetFlags(std::shared_ptr<Session> New, const s
 {
        /* Session has no flags by default. */
       
-       New->can_admin = false;
-       New->can_execute = false;
-       New->can_manage = false;
+       New->can_admin 		= false;
+       New->can_execute 	= false;
+       New->can_manage 		= false;
        
        for (auto it = flags.cbegin() ; it != flags.cend(); ++it) 
        {

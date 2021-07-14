@@ -46,7 +46,7 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
 
-               if (entry.database != user->current_db)
+               if (entry.database != user->GetDatabase())
                {
                      continue;
                }

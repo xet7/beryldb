@@ -30,7 +30,7 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -56,7 +56,7 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -82,7 +82,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
           
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -126,7 +126,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
 
-               if (entry.select != select || entry.database != user->current_db)
+               if (entry.select != select || entry.database != user->GetDatabase())
                {  
                          continue;
                }

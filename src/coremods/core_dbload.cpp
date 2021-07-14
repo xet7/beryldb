@@ -31,7 +31,7 @@ namespace
              
              if (InUse && InUse != user)
              {
-                   user->Groups = InUse->Groups;
+                   user->SetGroups(InUse->GetGroups());
                    return;
              }
              
@@ -47,7 +47,7 @@ namespace
                        
                        if (group)
                        {
-                            user->Groups.push_back(group);
+                            user->PushGroup(group);
                        }
              }
      }

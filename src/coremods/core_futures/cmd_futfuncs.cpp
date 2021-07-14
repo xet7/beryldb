@@ -99,7 +99,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          {
                FutureEntry entry = it->second;
 
-               if (entry.select != select || entry.database != user->current_db)
+               if (entry.select != select || entry.database != user->GetDatabase())
                {  
                          continue;
                }

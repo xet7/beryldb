@@ -218,7 +218,9 @@ COMMAND_RESULT CommandMyGroups::Handle(User* user, const Params& parameters)
 {
         Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
 
-        for (std::vector<std::shared_ptr<Group>>::iterator i = user->Groups.begin(); i != user->Groups.end(); ++i)
+        GroupVector ugroups = user->GetGroups();
+        
+        for (GroupVector::iterator i = ugroups.begin(); i != ugroups.end(); ++i)
         {
                 std::shared_ptr<Group> item = (*i);
                 user->SendProtocol(BRLD_GROUP, item->GetName().c_str());
@@ -280,10 +282,10 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         
         UserVector logins = Kernel->Clients->FindLogin(dest);
 
-        for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+        for (UserVector::iterator usr = logins.begin(); usr != logins.end(); ++usr)
         {
-             User* user_iter = *o;
-             user_iter->Groups.push_back(Found);
+             User* user_iter = *usr;
+             user_iter->PushGroup(Found);
         }
 
         CMapsHelper::Set(usergrups, gname, convto_string(Kernel->Now()));

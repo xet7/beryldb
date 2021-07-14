@@ -101,6 +101,17 @@ User::~User()
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
 
+bool User::PushGroup(std::shared_ptr<Group> grp)
+{
+	if (!HasGroup(grp))
+	{
+	      this->Groups.push_back(grp);	
+    	      return true;
+	}
+	
+	return false;
+}
+
 void User::SetNullDB()
 {
         std::lock_guard<std::mutex> lg(User::db_mute);

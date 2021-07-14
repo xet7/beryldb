@@ -67,9 +67,9 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
         user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
         
-        if (user->current_db)
+        if (user->GetDatabase())
         {
-             user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Database", user->current_db->GetName().c_str()));
+             user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
         }
         
         /* Returns admin flags to requesting user, if any. */
@@ -156,7 +156,7 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
 
 CommandLS::CommandLS(Module* parent) : Command(parent, "LS", 0)
 {
-
+         group = 'w';
 }
 
 COMMAND_RESULT CommandLS::Handle(User* user, const Params& parameters)
@@ -167,7 +167,7 @@ COMMAND_RESULT CommandLS::Handle(User* user, const Params& parameters)
 
 CommandTotal::CommandTotal(Module* parent) : Command(parent, "TOTAL", 0)
 {
-         requires = 'm';
+         group = 'w';
 }
 
 COMMAND_RESULT CommandTotal::Handle(User* user, const Params& parameters)

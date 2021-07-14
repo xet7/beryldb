@@ -113,6 +113,12 @@ class ExportAPI User : public Expandable
 	/* Atomic uint for quitting status. */
 	
         std::atomic<unsigned int> quitting;
+
+        std::shared_ptr<UserDatabase> current_db;
+        
+        /* Groups' this user belongs to. */
+        
+        GroupVector Groups;
         
  public:
 
@@ -157,6 +163,8 @@ class ExportAPI User : public Expandable
 
 	std::string instance;
 	
+	/* Sets current_db to nullptr. */
+		
 	void SetNullDB();
 	
         /* 
@@ -213,8 +221,14 @@ class ExportAPI User : public Expandable
 	
 	int GetFirstFlag();
 
-	std::vector<std::shared_ptr<Group>> Groups;
-	
+        /* 
+         * Removes group from Groups
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to remove.
+         */    	
+         
 	void RemoveGroup(std::shared_ptr<Group> group);
 	
         /* 
@@ -245,13 +259,32 @@ class ExportAPI User : public Expandable
          */    	
          
 	bool InGroup(unsigned char flag);
-	
+
+        /* 
+         * Checks whether user has required flags to
+         * run a command.
+         *
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Command can be executed.
+         *         · False: No required flags.
+         */    	
+         
 	bool CanPerform(unsigned char flag);
-	
-        std::shared_ptr<UserDatabase> current_db;
         
+        /* 
+         * Changes current db for this user.
+         * 
+         * @parameters:
+	 *
+	 *         · database: New database to use.
+         */    
+         
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
-        
         
         std::shared_ptr<UserDatabase> GetDatabase();
 	
@@ -289,7 +322,42 @@ class ExportAPI User : public Expandable
 	
 	void ResetCache();
 
+        /* 
+         * Returns list of groups.
+         * 
+         * @return:
+ 	 *
+         *         · GroupVector: A vector of containing groups.
+         */    
+         
+	GroupVector& GetGroups()
+	{
+	      return this->Groups;
+	}
+
+        /*  
+         * Replaces this->groups with a provided GroupVector.
+         * 
+         * @parameters:
+	 *
+	 *         · vgroup: Groups to replace.
+         */    	
+         
+	void SetGroups(const GroupVector& vgroup)
+	{
+	 	this->Groups = vgroup;
+	}
 	
+        /* 
+         * Adds a new group to the user's vector.
+         * 
+         * @parameters:
+	 *
+	 *         · grp: Group to add.
+         */    	
+         
+	bool PushGroup(std::shared_ptr<Group> grp);
+		
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
 	template <typename T1>
