@@ -69,6 +69,7 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "notifier.h"
 #include "brldb/dbmanager.h"
 #include "interval.h"
+#include "group.h"
 
 int main(int argc, char** argv);
 
@@ -222,6 +223,10 @@ class ExportAPI Beryl
 	/* Notification manager. */
 	
 	Notifier Notify;
+	
+	/* Handles groups */
+	
+	GroupManager Groups;
 	
 	/* Handles intervals */
 	

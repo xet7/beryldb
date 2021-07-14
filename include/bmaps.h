@@ -16,10 +16,14 @@
 
 #include "forwards.h"
 
+typedef STR1::unordered_map<std::string, std::shared_ptr<Group>, engine::insensitive, engine::str_hash_comparison> GroupMap;
+
 typedef STR1::unordered_multimap<std::string, User*, engine::insensitive, engine::str_hash_comparison> LoginHash;
 
 typedef STR1::unordered_map<std::string, User*, engine::insensitive, engine::str_hash_comparison> UserMap;
+
 typedef STR1::unordered_map<std::string, Channel*, engine::insensitive, engine::str_hash_comparison> ChanMap;
+
 typedef STR1::unordered_map<std::string, std::shared_ptr<UserDatabase>, engine::insensitive, engine::str_hash_comparison> DataMap;
 
 typedef std::vector<Subscription*> SubscriptionList;
@@ -39,8 +43,6 @@ typedef std::pair<config_iterator, config_iterator> MultiTag;
 typedef std::map<std::string, file_cache> cached_config;
 
 typedef std::set<User*> DiscardList;
-
-typedef std::pair<std::string, std::string> IdentHostPair;
 
 namespace Status
 {

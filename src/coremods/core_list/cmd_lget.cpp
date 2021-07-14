@@ -22,6 +22,7 @@
 
 CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 
@@ -41,6 +42,7 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
 
 CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -64,6 +66,7 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 
 CommandLKeys::CommandLKeys(Module* Creator) : Command(Creator, "LKEYS", 1, 3)
 {
+         group = 'l';
          syntax = "<%key> <offset> <limit>";
 }
 
@@ -87,6 +90,7 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 
 CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
 {
+         group = 'l';
          syntax = "<key> <%value> <offset> <limit>";
 }
 
@@ -111,6 +115,7 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 
 CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 
@@ -130,6 +135,7 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 
 CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 
@@ -149,6 +155,7 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
 
 CommandLRop::CommandLRop(Module* Creator) : Command(Creator, "LRPOP", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -162,6 +169,7 @@ COMMAND_RESULT CommandLRop::Handle(User* user, const Params& parameters)
 
 CommandFRop::CommandFRop(Module* Creator) : Command(Creator, "LFPOP", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -175,6 +183,7 @@ COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
 
 CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 

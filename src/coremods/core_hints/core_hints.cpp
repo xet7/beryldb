@@ -27,6 +27,8 @@ class CoreModHints : public Module
         CommandType cmdtype;
         CommandRenameNX cmdrenamenx;
         CommandDiff cmddiff;
+        CommandTouch cmdtouch;
+        CommandNTouch cmdntouch;
 
     public:
     
@@ -38,8 +40,9 @@ class CoreModHints : public Module
                          cmdclone(this),
                          cmdtype(this),
                          cmdrenamenx(this),
-                         cmddiff(this)
-                         
+                         cmddiff(this),
+                         cmdtouch(this),
+                         cmdntouch(this)
         {
         
         }

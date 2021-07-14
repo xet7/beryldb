@@ -22,6 +22,7 @@
 
 CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 {
+         group = 'm';
          syntax = "<map> <key> <value>";
 }
 
@@ -42,6 +43,7 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
 
 CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 {
+         group = 'm';
          syntax = "<map> <key> <value>";
 }
 

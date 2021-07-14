@@ -39,7 +39,7 @@ namespace
 
 		if (msgdetails.text.empty())
 		{
-			source->SendProtocol(ERR_PUB_NOT_PROVIDED, "Publish not defined.");
+			source->SendProtocol(ERR_INPUT2, ERR_PUB_NOT_PROVIDED, NOT_DEFINED);
 			return false;
 		}
 
@@ -222,7 +222,7 @@ class CommandMessage : public Command
 
 		if (!target[0])
 		{
-			user->SendProtocol(ERR_NORECIPIENT, "No recipient given");
+			user->SendProtocol(ERR_INPUT2, ERR_NORECIPIENT, PROCESS_NULL);
 			return FAILED;
 		}
 
@@ -233,7 +233,7 @@ class CommandMessage : public Command
 		
 		if (!user->session->CanExecute() && !user->IsAdmin())
 		{
-                        user->SendProtocol(ERR_NO_FLAGS, "You are not allowed to send messages.");
+                        user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                         return FAILED;
 			
 		}
@@ -329,9 +329,9 @@ class ModuleCoreMessage : public Module
 
 		Channel* chan = target.Get<Channel>();
 		
-		if (!user->session->CanExecute() && !user->IsAdmin() && !chan->IsSubscribed(user))
+		if (!user->InGroup('p') && !user->IsAdmin() && !chan->IsSubscribed(user))
 		{
-			user->SendProtocol(ERR_CANNOTSENDTOCHAN, "External messages are not allowed.");
+			user->SendProtocol(ERR_INPUT2, ERR_CANNOTSENDTOCHAN, NO_EXTERNAL);
 			return MOD_RES_STOP;
 		}
 		

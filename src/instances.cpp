@@ -96,6 +96,7 @@ User::~User()
         
 	pending.clear();
 	notifications.clear();
+	Groups.clear();
 	
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
@@ -147,6 +148,55 @@ const std::string& User::GetHostFormat()
 
 	this->cached_user_real_host = instance + "!" + agent + "@" + GetRealHost();
 	return this->cached_user_real_host;
+}
+
+bool User::HasGroup(std::shared_ptr<Group> group)
+{
+	std::vector<std::shared_ptr<Group>>::iterator it = std::find(this->Groups.begin(), this->Groups.end(), group);
+	
+	if (it != this->Groups.end())
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+void User::RemoveGroup(std::shared_ptr<Group> group)
+{
+        for (std::vector<std::shared_ptr<Group>>::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+        {
+                std::shared_ptr<Group> found = (*i);
+                
+                if (found && group == found)
+                {
+                	this->Groups.erase(i);
+                	return;
+                }
+	}
+}
+
+bool User::InGroup(unsigned char flag)
+{
+	if (!this->Groups.size())
+	{
+		return false;
+	}	
+	
+        for (std::vector<std::shared_ptr<Group>>::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+        {
+        	std::shared_ptr<Group> group = (*i);
+        	
+        	if (group)
+        	{
+        	      if (group->CanDo(flag))
+        	      {
+        	       	    return true;
+        	      }
+        	}
+        }
+        
+        return false;
 }
 
 bool User::CanPerform(unsigned char flag)
@@ -376,7 +426,7 @@ bool User::SetLogin(const std::string& userlogin, time_t newts)
 {
 	if (this->logged)
 	{       
-		this->SendProtocol(ERR_ALREADY_LOGGED, ALREADY_LOGGED);
+		this->SendProtocol(ERR_INPUT, ALREADY_LOGGED);
 		return false;
 	}
 

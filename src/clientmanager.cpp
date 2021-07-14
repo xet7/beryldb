@@ -412,23 +412,36 @@ unsigned int ClientManager::CountLogin(const std::string& login)
      return counter;
 }
 
-UserVector ClientManager::FindLogin(const std::string& login, registration_state state)
+void ClientManager::RemoveGroup(std::shared_ptr<Group> group)
 {
-	UserVector users;
+        UserVector users;
 
         const LoginHash& AllLogins = Kernel->Clients.GetLogins();
-        
+
+        for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
+        {
+                User* user = i->second;
+                user->RemoveGroup(group);
+        }
+}
+
+UserVector ClientManager::FindGroup(std::shared_ptr<Group> group)
+{
+        UserVector users;
+
+        const LoginHash& AllLogins = Kernel->Clients.GetLogins();
+
         for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
         {
                 User* user = i->second;
 
-                if (i->first == login && user->registered == state)
+                if (user->HasGroup(group))
                 {
- 			users.push_back(user);               
+                        users.push_back(user);
                 }
-	}
-	
-	return users;
+        }
+
+        return users;
 }
 
 User* ClientManager::FirstLogin(const std::string& login, registration_state state)
@@ -564,6 +577,25 @@ void ClientManager::Part(User* skip, const std::string& login, const std::string
 
            chan->PartUser(user);
      }
+}
+
+UserVector ClientManager::FindLogin(const std::string& login, registration_state state)
+{
+        UserVector users;
+
+        const LoginHash& AllLogins = Kernel->Clients.GetLogins();
+        
+        for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
+        {
+                User* user = i->second;
+
+                if (i->first == login && user->registered == state)
+                {
+                        users.push_back(user);
+                }
+        }
+
+        return users;
 }
 
 void ClientManager::Join(User* skip, const std::string& login, const std::string& channel)

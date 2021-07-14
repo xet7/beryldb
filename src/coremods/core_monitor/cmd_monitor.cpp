@@ -65,9 +65,8 @@ CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MR
 
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
-       unsigned int count = Kernel->Monitor->Count();
        Kernel->Monitor->Reset();
-       user->SendProtocol(BRLD_INPUT, BRLD_RESET_MONITOR, count, PROCESS_OK);
+       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
        return SUCCESS;
 }
 

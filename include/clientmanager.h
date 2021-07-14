@@ -297,4 +297,9 @@ class ExportAPI ClientManager : public safecast<ClientManager>
          */    	
 	
 	User* FirstLogin(const std::string& login, registration_state state = REG_OK);
+	
+	UserVector FindGroup(std::shared_ptr<Group> group);
+	
+	void RemoveGroup(std::shared_ptr<Group> group);
+	
 };

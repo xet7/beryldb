@@ -222,16 +222,55 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 
 	/* Verifies whether command requires special flags. */
 	
+	bool is_manager = false;
+	
 	if (handler->requires)
 	{
 		if (!user->CanPerform(handler->requires))
 		{
-			user->SendProtocol(ERR_NO_FLAGS, ACCESS_DENIED);
+			user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                         NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
                         return;
 		}
+		else
+		{
+			is_manager = true;
+		}
 	}
-
+	
+	bool skip = false;
+	
+	if (!is_manager && handler->group)
+	{
+		if (!user->InGroup(handler->group))
+		{
+			bprint(INFO, "Flag not found: %u", handler->group);
+                        user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
+                        NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                        return;
+		}
+		else
+		{
+			skip = true;
+		}	
+	}
+	
+	if (!is_manager && !skip && handler->groups.size() > 0)
+	{
+		for (std::vector<unsigned char>::iterator i = handler->groups.begin(); i != handler->groups.end(); ++i)
+		{
+			unsigned char item = *i;
+			
+			if (!user->InGroup(handler->group))			
+			{
+        	                bprint(INFO, "Flag not found: %u", item);
+        	                user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
+	                        NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
+                	        return;
+			}
+		}
+	}
+	
 	if ((!cmd_params.empty()) && (cmd_params.back().empty()) && (!handler->last_empty_ok))
 	{
 		cmd_params.pop_back();

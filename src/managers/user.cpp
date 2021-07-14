@@ -85,6 +85,10 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
 
         CMapsHelper::Set("userlist", user, "login");
         
+        const std::string& usergrups = user + "/groups";
+        
+        CMapsHelper::Set(usergrups, "default", convto_string(Kernel->Now()));
+        
 //        NOTIFY_MODS(OnUserAdd, (key, value));
         
         return true;
@@ -154,10 +158,10 @@ bool UserHelper::Remove(const std::string& user)
         CMapsHelper::Del(user, "created");
         CMapsHelper::Del(user, "flags");
         CMapsHelper::Del(user, "userlogin");      
-        
         CMapsHelper::Del("userlist", user);
-          
-        
+
+        std::string usergrups = user + "/groups";
+        CMapsHelper::Erase(usergrups);
         return true;
 }
 

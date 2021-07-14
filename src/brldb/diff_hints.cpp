@@ -489,7 +489,7 @@ static void ProcessList(QueryBase* query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {
                std::string item = *i;
-               query->user->SendProtocol(BRLD_ITEM, item.c_str());
+               query->user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
         }
 
         if (!query->partial)
@@ -508,7 +508,7 @@ static void ProcessMaps(QueryBase* query)
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {
                std::string item = *i;
-               query->user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+               query->user->SendProtocol(BRLD_ITEM, item.c_str());
         }
 
         if (!query->partial)
@@ -516,8 +516,6 @@ static void ProcessMaps(QueryBase* query)
                Dispatcher::JustAPI(query->user, BRLD_END_LIST);
         }
 }
-
-
 
 static void ProcessKey(QueryBase* query)
 {

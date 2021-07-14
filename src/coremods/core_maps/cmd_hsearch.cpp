@@ -22,6 +22,7 @@
 
 CommandHFind::CommandHFind(Module* Creator) : Command(Creator, "HFIND", 1, 3)
 {
+         group = 'm';
          syntax = "<map> <offset> <limit>";
 }
 
@@ -46,6 +47,7 @@ COMMAND_RESULT CommandHFind::Handle(User* user, const Params& parameters)
 
 CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 {
+         group = 'm';
          syntax = "<map> <offset> <limit>";
 }
 

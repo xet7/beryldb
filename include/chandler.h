@@ -185,6 +185,10 @@ class ExportAPI Command : public CommandModel
 	
 	unsigned char requires;
 	
+	unsigned char group;
+	
+	std::vector<unsigned char> groups;
+	
 	bool force_manual_route;
 
 	/* This command's correct syntax. */

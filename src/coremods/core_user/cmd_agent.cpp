@@ -29,13 +29,13 @@ COMMAND_RESULT CommandAgent::HandleLocal(LocalUser* user, const Params& paramete
 	{
 	        if (agent.empty() || agent.length() < 3 || agent.length() > 15)
 	        {
-                        user->SendProtocol(ERR_BAD_AGENT, agent, VALID_AGENT);
+                        user->SendProtocol(ERR_BAD_FORMAT, agent, VALID_AGENT);
                         return FAILED;
 	        }
 
 		if (!Kernel->Engine->IsAgent(agent))
 		{
-                        user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, WRONG_AGENT);
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, WRONG_AGENT);
                         return FAILED;
 		}
 		else

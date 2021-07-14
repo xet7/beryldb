@@ -25,6 +25,34 @@
 
 namespace
 {
+     void LoadGroups(User* user)
+     {		
+             User* InUse = Kernel->Clients->FirstLogin(user->login);
+             
+             if (InUse && InUse != user)
+             {
+                   user->Groups = InUse->Groups;
+                   return;
+             }
+             
+             const std::string& usergrups = user->login + "/groups";
+
+             Args groups = STHelper::HKeys(usergrups);
+             
+             for (Args::iterator i = groups.begin(); i != groups.end(); i++)
+             {
+                       std::string channel = *i;
+                       
+                       std::shared_ptr<Group> group = Kernel->Groups->Find(channel);
+                       
+                       if (group)
+                       {
+                            user->Groups.push_back(group);
+                       }
+             }
+     }
+     
+     
      /* Loads auto join channels from TABLE_AUTOJOIN. */
      
      void Autojoin(User* user)
@@ -134,6 +162,7 @@ class ModuleCoreDB : public Module
          
         void OnPostConnect(User* user)
         {       
+              LoadGroups(user);
               user->SendProtocol(BRLD_CONNECTED, Daemon::Format("%s %s", Kernel->GetVersion(false).c_str(), convto_string(Kernel->Now()).c_str()));
               
               /* Verify if user has a identical loggin logged. */
@@ -169,6 +198,16 @@ class ModuleCoreDB : public Module
         void Initialize()
         {
                  Kernel->Sets->Load();
+                 
+                 Args grlist = STHelper::HKeys("groups");
+
+                 for (Args::iterator i = grlist.begin(); i != grlist.end(); i++)
+                 {
+                        std::string name = *i;
+                        std::string flags = STHelper::Get("groups", name);
+                        Kernel->Groups->Add(name, flags);
+                 }
+                 
                  Args dblist = STHelper::HKeys("databases");
                  
                  for (Args::iterator i = dblist.begin(); i != dblist.end(); i++)
@@ -182,6 +221,8 @@ class ModuleCoreDB : public Module
                             ExpireHelper::ListFutures(database);
                        }
                  }
+                 
+                 
         }
 
         Version GetDescription() 

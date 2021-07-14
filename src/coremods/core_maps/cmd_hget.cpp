@@ -22,6 +22,7 @@
 
 CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)
 {
+         group = 'm';
          syntax = "<map> <key>";
 }
 
@@ -36,6 +37,7 @@ COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
 
 CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1)
 {
+         group = 'm';
          syntax = "<map>";
 }
 
@@ -49,6 +51,7 @@ COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
 
 CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2, 2)
 {
+         group = 'm';
          syntax = "<map> <key>";
 }
 
@@ -63,6 +66,7 @@ COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
 
 CommandHStrlen::CommandHStrlen(Module* Creator) : Command(Creator, "HSTRLEN", 2, 2)
 {
+         group = 'm';
          syntax = "<map> <key>";
 }
 
@@ -77,6 +81,7 @@ COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
 
 CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
 {
+         group = 'm';
          syntax = "<map> <offset> <limit>";
 }
 
@@ -100,6 +105,7 @@ COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
 
 CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1, 3)
 {
+         group = 'm';
          syntax = "<map> <offset> <limit>";
 }
 

@@ -20,22 +20,6 @@
 #include "helpers.h"
 #include "extras.h"
 
-void KeyHelper::Touch(User* user, const std::string& entry)
-{
-       std::shared_ptr<touch_query> query = std::make_shared<touch_query>();
-       Helpers::make_query(user, query, entry);
-       query->value = entry;      
-       Kernel->Store->Push(query);
-}
-
-void KeyHelper::NTouch(User* user, const std::string& entry)
-{
-       std::shared_ptr<ntouch_query> query = std::make_shared<ntouch_query>();
-       Helpers::make_query(user, query, entry);
-       query->value = entry;      
-       Kernel->Store->Push(query);
-}
-
 void KeyHelper::Set(User* user, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<set_query> query = std::make_shared<set_query>();
