@@ -342,7 +342,7 @@ void DataThread::Post(std::shared_ptr<QueryBase> query)
 
       if (!query || !query->database || query->database->IsClosing())
       {
-              query->user->SendProtocol(ERR_QUERY, DB_NULL);
+              query->user->SendProtocol(ERR_INPUT, DB_NULL);
               query->user->SetLock(false);
               return;
       }

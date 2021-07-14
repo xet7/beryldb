@@ -22,53 +22,53 @@
 
 void DataFlush::InvalidRange(User* user, std::shared_ptr<QueryBase> signal)
 {
-      user->SendProtocol(ERR_QUERY, INVALID_RANGE);
+      user->SendProtocol(ERR_INPUT, INVALID_RANGE);
 }
 
 void DataFlush::InvalidFormat(User* user, std::shared_ptr<QueryBase> signal)
 {
-      user->SendProtocol(ERR_QUERY, INVALID_FORMAT);
+      user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
 }
 
 void DataFlush::EntryExists(User* user, std::shared_ptr<QueryBase> signal)
 {
-       user->SendProtocol(ERR_QUERY, ENTRY_DEFINED);
+       user->SendProtocol(ERR_INPUT, ENTRY_DEFINED);
 }
 
 void DataFlush::EntryNOExpires(User* user, std::shared_ptr<QueryBase> signal)
 {
-       user->SendProtocol(ERR_QUERY, ENTRY_NOT_EXPIRING);
+       user->SendProtocol(ERR_INPUT, ENTRY_NOT_EXPIRING);
 }
 
 void DataFlush::NotFound(User* user, std::shared_ptr<QueryBase> signal)
 {
-        user->SendProtocol(ERR_QUERY, PROCESS_NULL);
+        user->SendProtocol(ERR_INPUT, PROCESS_NULL);
 }
 
 void DataFlush::EntryExpires(User* user, std::shared_ptr<QueryBase> signal)
 {
-        user->SendProtocol(ERR_QUERY, ENTRY_EXPIRES);
+        user->SendProtocol(ERR_INPUT, ENTRY_EXPIRES);
 }
 
 void DataFlush::StatusFailed(User* user, std::shared_ptr<QueryBase> signal)
 {
-        user->SendProtocol(ERR_QUERY, DB_NULL);
+        user->SendProtocol(ERR_INPUT, DB_NULL);
 }
 
 void DataFlush::MissArgs(User* user, std::shared_ptr<QueryBase> signal)
 {
-        user->SendProtocol(ERR_QUERY, MIS_ARGS);
+        user->SendProtocol(ERR_INPUT, MIS_ARGS);
 }
 
 void DataFlush::InvalidType(User* user,  std::shared_ptr<QueryBase> signal)
 {
        std::string reply = INVALID_FORMAT + ":" + Helpers::TypeString(signal->response);
-       user->SendProtocol(ERR_QUERY, reply);
+       user->SendProtocol(ERR_INPUT, reply);
 }
 
 void DataFlush::UnableWrite(User* user, std::shared_ptr<QueryBase> signal)
 {
-     user->SendProtocol(ERR_QUERY, PROCESS_FALSE);
+     user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
 }
 
 void DataFlush::Flush(User* user, std::shared_ptr<QueryBase> signal)
@@ -79,5 +79,5 @@ void DataFlush::Flush(User* user, std::shared_ptr<QueryBase> signal)
 
 void DataFlush::NotNumeric(User* user, std::shared_ptr<QueryBase> signal)
 {
-     user->SendProtocol(ERR_QUERY, PROCESS_NOT_NUM);
+     user->SendProtocol(ERR_INPUT, PROCESS_NOT_NUM);
 }

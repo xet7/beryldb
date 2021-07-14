@@ -32,7 +32,7 @@ COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
         }
 

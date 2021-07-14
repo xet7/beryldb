@@ -53,13 +53,13 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 
        if (!is_number(value))
        {
-                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                  return FAILED;
        }
 
        if (!is_positive_number(value))
        {
-                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
+                user->SendProtocol(ERR_INPUT, MUST_BE_POSIT);
                 return FAILED;
        }
        
@@ -193,7 +193,7 @@ COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
