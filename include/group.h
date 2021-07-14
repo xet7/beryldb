@@ -80,7 +80,18 @@ class ExportAPI Group
          
          void Init();
 
-         void SetFlags(const std::string& flags);
+        /* 
+         * Checks whether a given flag can be run.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Can be executed.
+         *         · False: Unable to execute.
+         */    
          
          bool CanDo(unsigned char flag);
           

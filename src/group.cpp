@@ -235,10 +235,6 @@ Group::~Group()
 
 }
 
-void Group::SetFlags(const std::string& flags)
-{
-     this->rawflags = rawflags;
-}
 
 bool Group::CanDo(unsigned char flag)
 {
