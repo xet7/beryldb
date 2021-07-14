@@ -15,107 +15,101 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
-class CommandDel : public Command 
+class CommandGroupAdd : public Command 
 {
     public: 
 
-        CommandDel(Module* Creator);
+        CommandGroupAdd(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMove : public Command 
+class CommandGroups : public Command 
 {
     public: 
 
-        CommandMove(Module* Creator);
+        CommandGroups(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
-class CommandRename : public Command 
+class CommandDelGroup : public Command 
 {
     public: 
 
-         CommandRename(Module* Creator);
+        CommandDelGroup(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandCopy : public Command 
+class CommandGFlags : public Command 
 {
     public: 
 
-         CommandCopy(Module* Creator);
+        CommandGFlags(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
-/* Checks if a given key exists. */
-
-class CommandExists : public Command 
+class CommandMyGroups : public Command 
 {
     public: 
 
-        CommandExists(Module* Creator);
+        CommandMyGroups(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandClone : public Command 
+class CommandAssign : public Command 
 {
     public: 
 
-        CommandClone(Module* Creator);
+        CommandAssign(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandType : public Command 
+class CommandGList : public Command 
 {
     public: 
 
-        CommandType(Module* parent);
+        CommandGList(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandRenameNX : public Command 
+class CommandGReset : public Command 
 {
     public: 
 
-        CommandRenameNX(Module* parent);
+        CommandGReset(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
-class CommandDiff : public Command 
+class CommandUnAssign : public Command 
 {
     public: 
 
-        CommandDiff(Module* parent);
+        CommandUnAssign(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandTouch : public Command 
+class CommandGShow : public Command 
 {
     public: 
 
-        CommandTouch(Module* Creator);
+        CommandGShow(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
-class CommandNTouch : public Command 
+class CommandFlagUpdate : public Command 
 {
     public: 
 
-        CommandNTouch(Module* Creator);
+        CommandFlagUpdate(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

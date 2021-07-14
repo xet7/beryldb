@@ -24,6 +24,11 @@ class ExportAPI GlobalHelper
 {
     public:
 
+
+      static void Touch(User* user, const std::string& entry);
+
+      static void NTouch(User* user, const std::string& entry);
+
       static void Clone(User* user, const std::string& entry, const std::string& dest);
 
       static void Copy(User* user, const std::string& entry, const std::string& dest);

@@ -23,6 +23,7 @@
 
 CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 {
+         group = 'h';
          syntax = "<key> <select>";
 }
 
@@ -47,6 +48,7 @@ COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 
 CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
 {
+         group = 'h';
          syntax = "<key> <select> <offset> <limit>";
 }
 

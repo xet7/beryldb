@@ -83,7 +83,7 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 		this->Modules->AttachServices(provs, sizeof(provs)/sizeof(provs[0]));
 	}
 
-	/* Let's verify if provided configuration file exists. */
+	/* Let's verify whether provided configuration file exists. */
 	
 	if (!Daemon::ConfigFileExists(this->ConfigFile))
 	{
@@ -100,7 +100,7 @@ void Beryl::Initialize()
 
         Signalizers();
 
-	/* Checks whether we are allowed to be running as root. */
+	/* Checks whether we are allowed start the server as root. */
 	
 	if (!this->Config->usercmd.asroot)
 	{
@@ -540,6 +540,10 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 		bprint(INFO, exit);
 	}
 
+	/* Reset groups */
+	
+	this->Groups->Reset();
+	
         /* Beryl should stop logging at this point. */
         
         this->Logs->CloseLogs();

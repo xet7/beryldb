@@ -24,6 +24,7 @@
 
 CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
 {
+         group = 'h';
          syntax = "<key> <new key>";
 }
 
@@ -51,6 +52,7 @@ COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 
 CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
 {
+         group = 'h';
          syntax = "<key> <dest key>";
 }
 
@@ -65,6 +67,7 @@ COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
 
 CommandExists::CommandExists(Module* Creator) : Command(Creator, "EXISTS", 1, 1)
 {
+         group = 'h';
          syntax = "<key>";
 }
 
@@ -78,6 +81,7 @@ COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
 
 CommandMove::CommandMove(Module* Creator) : Command(Creator, "MOVE", 2, 2)
 {
+         group = 'h';
          syntax = "<key> <select>";
 }
 
@@ -115,6 +119,7 @@ COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
 
 CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX", 2, 2)
 {
+         group = 'h';
          syntax = "<key> <new key>";
 }
 
@@ -126,3 +131,32 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
        GlobalHelper::RenameNX(user, key, newkey);
        return SUCCESS;
 }
+
+CommandTouch::CommandTouch(Module* Creator) : Command(Creator, "TOUCH", 1, 1)
+{
+         syntax = "[keys]";
+         group = 'h';
+}
+
+COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
+{  
+       const std::string& keys = parameters.back();
+
+       GlobalHelper::Touch(user, keys);
+       return SUCCESS;
+}
+
+CommandNTouch::CommandNTouch(Module* Creator) : Command(Creator, "NTOUCH", 1, 1)
+{
+         syntax = "[keys]";
+         group = 'h';
+}
+
+COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
+{  
+       const std::string& keys = parameters.back();
+
+       GlobalHelper::NTouch(user, keys);
+       return SUCCESS;
+}
+

@@ -127,7 +127,7 @@ void Flusher::Search(User* user, std::shared_ptr<QueryBase> query)
 {
         if (!query->finished)
         {
-                Dispatcher::Smart(user, 0, ERR_QUERY, PROCESS_NULL, query);
+                Dispatcher::Smart(user, 0, ERR_INPUT, PROCESS_NULL, query);
                 return;
         }
 

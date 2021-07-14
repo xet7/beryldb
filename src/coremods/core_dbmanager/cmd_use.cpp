@@ -101,7 +101,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
 {  
        if (!Kernel->Store->Flusher->Status())
        {
-              user->SendProtocol(ERR_QUERY, ALREADY_PAUSED);
+              user->SendProtocol(ERR_INPUT, ALREADY_PAUSED);
               return FAILED;
        }
        

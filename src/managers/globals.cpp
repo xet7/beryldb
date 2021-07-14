@@ -23,6 +23,22 @@
 #include "helpers.h"
 #include "extras.h"
 
+void GlobalHelper::Touch(User* user, const std::string& entry)
+{
+       std::shared_ptr<touch_query> query = std::make_shared<touch_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = entry;      
+       Kernel->Store->Push(query);
+}
+
+void GlobalHelper::NTouch(User* user, const std::string& entry)
+{
+       std::shared_ptr<ntouch_query> query = std::make_shared<ntouch_query>();
+       Helpers::make_query(user, query, entry);
+       query->value = entry;      
+       Kernel->Store->Push(query);
+}
+
 void GlobalHelper::Clone(User* user, const std::string& entry, const std::string& dest)
 {
        std::shared_ptr<clone_query> query = std::make_shared<clone_query>();

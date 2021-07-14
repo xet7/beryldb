@@ -27,8 +27,6 @@ class CoreModKeys : public Module
         CommandGetSet cmdgetset;
         CommandGetSubstr cmdsubstr;
         CommandRKey cmdrkey;
-        CommandTouch cmdtouch;
-        CommandNTouch cmdntouch;
         CommandAppend cmdappend;
         CommandSetNX cmdsetnx;
         CommandSetTX cmdsettx;
@@ -51,8 +49,6 @@ class CoreModKeys : public Module
                         cmdgetset(this),
                         cmdsubstr(this),
                         cmdrkey(this),
-                        cmdtouch(this),
-                        cmdntouch(this),
                         cmdappend(this),
                         cmdsetnx(this),
                         cmdsettx(this),

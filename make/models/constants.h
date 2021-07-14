@@ -13,6 +13,26 @@
 
 #pragma once
 
+/* Target not defined */
+
+const std::string NOT_DEFINED = "NOT_DEFINED";
+
+/* External messages not allowed. */
+
+const std::string NO_EXTERNAL = "NO_EXTERNAL";
+
+/* Empty result */
+
+const std::string PROCESS_EMPTY = "EMPTY";
+
+/* Default group flags */
+
+const std::string DEFAULT_GFLAGS = "kzlgvefmxpchw";
+
+/* Entry is protected */
+
+const std::string ENTRY_PROTECTED = "ENTRY_PROTECTED";
+
 /* Already paused */
 
 const std::string ALREADY_PAUSED = "ENTRY_PAUSED";
@@ -131,7 +151,7 @@ const std::string UNKNOWN_ISSUE	= "A problem has occured while performing this o
 
 /* Incorrect agent format. */
 
-const std::string WRONG_AGENT = "Your agent is not valid.";
+const std::string WRONG_AGENT = "INVALID_INPUT";
 
 /* Valid agent. */
 
@@ -186,7 +206,7 @@ const std::string INVALID_PARAM = "Invalid parameters.";
  * run a command when he/she has no required flags.
  */
  
-const std::string ACCESS_DENIED = "Access Denied.";
+const std::string ACCESS_DENIED = "DENIED";
 
 /* 
  * Unable to find a map. Usually called when trying to

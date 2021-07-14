@@ -22,6 +22,7 @@
 
 CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 {
+         group = 'x';
          syntax = "<map> <limit> <offset>";
 }
 
@@ -45,6 +46,7 @@ COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 
 CommandMCount::CommandMCount(Module* Creator) : Command(Creator, "MCOUNT", 1, 1)
 {
+         group = 'x';
          syntax = "<map>";
 }
 
@@ -58,6 +60,7 @@ COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
 
 CommandMSet::CommandMSet(Module* Creator) : Command(Creator, "MSET", 3, 3)
 {
+         group = 'x';
          syntax = "<map> <key> <value>";
 }
 
@@ -79,6 +82,7 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
 
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
+         group = 'x';
          syntax = "<map> <limit> <offset>";
 }
 
@@ -101,6 +105,7 @@ COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 
 CommandMDel::CommandMDel(Module* Creator) : Command(Creator, "MDEL", 2, 2)
 {
+         group = 'x';
          syntax = "<map> <key>";
 }
 
@@ -115,6 +120,7 @@ COMMAND_RESULT CommandMDel::Handle(User* user, const Params& parameters)
 
 CommandMSeek::CommandMSeek(Module* Creator) : Command(Creator, "MSEEK", 2, 4)
 {
+         group = 'x';
          syntax = "<map> <hash> <offset> <limit>";
 }
 
@@ -144,6 +150,7 @@ COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
 
 CommandMRepeats::CommandMRepeats(Module* Creator) : Command(Creator, "MREPEATS", 2, 2)
 {
+         group = 'x';
          syntax = "<map> <key>";
 }
 
@@ -158,6 +165,7 @@ COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
 
 CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 {
+         group = 'x';
          syntax = "<map> <offset> <limit>";
 }
 
@@ -182,6 +190,7 @@ COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
 
 CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1, 3)
 {
+         group = 'x';
          syntax = "<map> <offset> <limit>";
 }
 
@@ -205,6 +214,7 @@ COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
 
 CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 {
+         group = 'x';
          syntax = "<map> <val> <limit> <offset>";
 }
 

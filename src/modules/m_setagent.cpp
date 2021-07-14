@@ -40,13 +40,13 @@ class CommandSetAgent : public Command
                 
                 if (agent.empty() || agent.length() < 3 || agent.length() > 15)
                 {
-                        user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, VALID_AGENT);
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, VALID_AGENT);
                         return FAILED;
                 }
 
                 if (!Kernel->Engine->IsAgent(agent))
                 {
-                        user->SendProtocol(ERR_INPUT2, ERR_BAD_AGENT, WRONG_AGENT);
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, WRONG_AGENT);
                         return FAILED;
                 }
                 

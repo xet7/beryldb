@@ -188,6 +188,10 @@ class ExportAPI Daemon : public safecast<Daemon>
         static bool DBValidator(const std::string& name);
 
         STR1::function<bool(const std::string&)> IsDatabase;
+
+        static bool GroupValidator(const std::string& name);
+
+        STR1::function<bool(const std::string&)> IsGroup;
         
         static bool ValidHost(const std::string& host);
         

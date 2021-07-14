@@ -24,7 +24,6 @@
 #include "managers/settings.h"
 #include "core_dbmanager.h"
 
-
 CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 {
 
@@ -54,7 +53,7 @@ COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
        
        if (dbname.empty())
        {
-             user->SendProtocol(ERR_NO_DEFAULT, dbname);
+             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
              return FAILED;
        }
        
@@ -72,11 +71,11 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
        if (user->GetDatabase())
        {
              std::string dbname = user->GetDatabase()->GetName();                                  
-             user->SendProtocol(BRLD_DB_NAME, dbname);
+             user->SendProtocol(BRLD_QUERY_OK, dbname);
              return SUCCESS;	
        }
        
-       user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
+       user->SendProtocol(ERR_INPUT, PROCESS_NULL);
        return FAILED;
 }
 
@@ -185,7 +184,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 
       if (!database)
       {
-             user->SendProtocol(ERR_QUERY, PROCESS_NULL);
+             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
              return FAILED;
       }
       
@@ -193,7 +192,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
       
       if (database->IsClosing())
       {
-             user->SendProtocol(ERR_QUERY, DATABASE_BUSY);
+             user->SendProtocol(ERR_INPUT, DATABASE_BUSY);
              return FAILED;
       }
       

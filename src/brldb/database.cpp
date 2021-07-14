@@ -174,6 +174,8 @@ void CoreManager::CheckDefaults()
                  Kernel->Store->DBM->SetDefault("default");
                  Kernel->Sets->SetDefaults();
                  
+                 Kernel->Groups->Add("default", DEFAULT_GFLAGS);
+                 
                  /* Default settings. */
                  
                  Kernel->Store->First = true;

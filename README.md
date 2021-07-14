@@ -85,6 +85,9 @@ forking, you can run the server using nofork:
 Great! You may now run your very first BerylDB command using
 [Beryl-cli](https://github.com/beryldb/beryldb-cli).
 
+Keep in mind that BerylDB uses port **6378** by default, so be sure to
+maintain that port unused before running the server.
+
 ## Discussions
 
 In order to maintain a documentation that is easy to follow, we try to maintain 
@@ -118,7 +121,6 @@ BSD license.
 
 ## External Links
 
-* **IRC**: irc.libera.chat - #beryl
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
 * [Support/Discord](https://discord.gg/sqsXVYuGrX)

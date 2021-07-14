@@ -23,7 +23,8 @@
 
 CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 {
-          syntax = "<key> <seconds>";
+         group = 'e';
+         syntax = "<key> <seconds>";
 }
 
 COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters) 
@@ -42,6 +43,7 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
 
 CommandDBEReset::CommandDBEReset(Module* Creator) : Command(Creator, "ERESET", 1, 1)
 {
+          group = 'e';
           syntax = "<database>";
 }
 
@@ -53,13 +55,13 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 
           if (!database)
           {
-                user->SendProtocol(ERR_QUERY, PROCESS_NULL);
+                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                 return FAILED;
           }
           
           if (database->IsClosing())
           {
-                user->SendProtocol(ERR_QUERY, DATABASE_BUSY);
+                user->SendProtocol(ERR_INPUT, DATABASE_BUSY);
                 return FAILED;
           }
         

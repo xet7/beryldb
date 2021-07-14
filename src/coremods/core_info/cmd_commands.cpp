@@ -37,7 +37,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 
 CommandCommands::CommandCommands(Module* parent) : Command(parent, "COMMANDS", 0, 0)
 {
-
+         group = 'w';
 }
 
 COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)

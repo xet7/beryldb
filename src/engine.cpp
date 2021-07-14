@@ -24,6 +24,7 @@
 #include "beryl.h"
 #include "engine.h"
 #include "exit.h"
+#include "extras.h"
 
 Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
                       PI(&DefaultProtocolInterface),
@@ -32,7 +33,8 @@ Daemon::Daemon() :    main_threadid(std::this_thread::get_id()),
                       ValidKey(&KeyValidator), 
                       ValidLogin(&LoginValidator), 
                       IsAgent(&AgentValidator),
-                      IsDatabase(&DBValidator)
+                      IsDatabase(&DBValidator),
+                      IsGroup(&GroupValidator)
 {
 
 }
@@ -105,6 +107,32 @@ bool Daemon::ChannelValidator(const std::string& chname)
         if (chname[0] != '#' || chname == "#")
         {
                 return false;
+        }
+
+        for (std::string::const_iterator i = chname.begin()+1; i != chname.end(); ++i)
+        {
+                switch (*i)
+                {
+                        case ' ':
+                        case ',':
+                        case 7:
+                                return false;
+                }
+        }
+
+        return true;
+}
+
+bool Daemon::GroupValidator(const std::string& chname)
+{
+        if (chname.empty() || chname.length() > 15)
+        {
+                return false;
+        }
+        
+        if (!isalpha(chname))
+        {
+               return false;
         }
 
         for (std::string::const_iterator i = chname.begin()+1; i != chname.end(); ++i)

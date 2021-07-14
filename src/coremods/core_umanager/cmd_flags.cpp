@@ -76,7 +76,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INVALID_PARAM, newlogin, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, ERR_INVALID_PARAM, PROCESS_FALSE);
                 return FAILED;
         }
         
@@ -91,7 +91,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
         }
         else 
         {
-                user->SendProtocol(ERR_LOGIN_NO_FLAGS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_FLAGS, PROCESS_FALSE);
         }
         
         return FAILED;       

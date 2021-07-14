@@ -131,26 +131,6 @@ class CommandRKey : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandTouch : public Command 
-{
-    public: 
-
-        CommandTouch(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
-class CommandNTouch : public Command 
-{
-    public: 
-
-        CommandNTouch(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
 
 class CommandAppend : public Command 
 {

@@ -24,6 +24,7 @@
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
          syntax = "<key> <value>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
@@ -43,6 +44,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 {
          syntax = "<key> <value>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
@@ -62,6 +64,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 {
          syntax = "<key> <value>";
+         groups = { 'e', 'k' };
 }
 
 COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
@@ -81,6 +84,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
          syntax = "<key> <value>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
@@ -101,6 +105,7 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
          syntax = "<key> <value>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
@@ -116,3 +121,29 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
        KeyHelper::Append(user, key, value);
        return SUCCESS;
 }
+
+CommandCount::CommandCount(Module* Creator) : Command(Creator, "COUNT", 0, 1)
+{
+         syntax = "<\%key>";
+         group = 'k';
+}
+
+COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)
+{  
+       std::string key;
+
+       /* We use a wildcardcard if no key is provided. */
+       
+       if (!parameters.size())
+       {
+            key = "*";
+       }
+       else
+       {
+             key = parameters[0];
+       }
+       
+       KeyHelper::Count(user, key);
+       return SUCCESS;
+}
+

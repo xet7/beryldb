@@ -22,6 +22,7 @@
 
 CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 {
+         group = 'k';
          syntax = "<\%key> <offset> <limit>";
 }
 

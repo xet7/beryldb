@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "exit.h"
 
 CommandModel::CommandModel(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : ServiceProvider(mod, cmd, SERVICE_COMMAND)
 								, min_params(minpara)
@@ -39,6 +40,7 @@ RouteParams CommandModel::GetRouting(User* user, const Params& parameters)
 Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara)
 	: CommandModel(mod, cmd, minpara, maxpara)
 	, requires(0)
+	, group(0)
 	, force_manual_route(false)
         , syntax("No syntax required.")
 	, pre_reg_ok(false)
@@ -54,6 +56,12 @@ Command::~Command()
 
 void Command::RegisterService()
 {
+	if (this->group != 0 && this->groups.size() > 0)
+	{
+		bprint(ERROR, "A command may not have group and groups defined.");
+		Kernel->Exit(EXIT_CODE_CONFIG, true, true);
+	}
+	
 	if (!Kernel->Commander.AddCommand(this))
 	{
 		throw ModuleException("Command already exists: " + name);

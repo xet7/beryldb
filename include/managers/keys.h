@@ -21,10 +21,6 @@ class ExportAPI KeyHelper
 
         static void WDelete(User* user, const std::string& key);
 
-        static void Touch(User* user, const std::string& entry);
-
-        static void NTouch(User* user, const std::string& entry);
-
         static void Rename(User* user, const std::string& entry, const std::string& value);
 
         static void Copy(User* user, const std::string& entry, const std::string& value);

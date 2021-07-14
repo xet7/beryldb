@@ -24,6 +24,7 @@
 
 CommandGeoAdd::CommandGeoAdd(Module* Creator) : Command(Creator, "GEOADD", 3, 3)
 {
+         group = 'g';
          syntax = "<name> <longitude> <latitude>";
 }
 
@@ -57,6 +58,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
 
 CommandGeoGet::CommandGeoGet(Module* Creator) : Command(Creator, "GEOGET", 1, 1)
 {
+         group = 'g';
          syntax = "<name>";
 }
 
@@ -71,6 +73,7 @@ COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 
 CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GKEYS", 1, 3)
 {
+         group = 'g';
          syntax = "<\%name> <offset> <limit>";
 }
 
@@ -94,6 +97,7 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
 
 CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2)
 {
+         group = 'g';
          syntax = "<name> <name2>";
 }
 
@@ -108,6 +112,7 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
 
 CommandGeoDistance::CommandGeoDistance(Module* Creator) : Command(Creator, "GDIST", 2, 4)
 {
+         group = 'g';
          syntax = "<name> <max distance> <offset> <limit>";
 }
 
@@ -132,6 +137,7 @@ COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 
 CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2, 2)
 {
+         group = 'g';
          syntax = "<name> <dist>";
 }
 

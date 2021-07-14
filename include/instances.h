@@ -70,7 +70,6 @@ struct ExportAPI connect_config : public refcountbase
 	
 	connect_config(config_rule* tag, char type, const std::string& mask, const connect_config& parent);
 
-	
 	void Update(const connect_config* newSettings);
 
 	const std::string& GetName() 
@@ -214,11 +213,45 @@ class ExportAPI User : public Expandable
 	
 	int GetFirstFlag();
 
+	std::vector<std::shared_ptr<Group>> Groups;
+	
+	void RemoveGroup(std::shared_ptr<Group> group);
+	
+        /* 
+         * Checks if given user is in group.
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in group.
+         *         · False: Unable to find user.
+         */    
+         
+	bool HasGroup(std::shared_ptr<Group> group);
+
+        /* 
+         * Checks whether user is in a given group.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in group.
+         */    	
+         
+	bool InGroup(unsigned char flag);
+	
 	bool CanPerform(unsigned char flag);
 	
         std::shared_ptr<UserDatabase> current_db;
         
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
+        
         
         std::shared_ptr<UserDatabase> GetDatabase();
 	

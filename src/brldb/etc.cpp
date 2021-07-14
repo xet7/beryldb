@@ -214,7 +214,7 @@ void dbreset_query::Process()
  
       if (!userdb)
       {
-            user->SendProtocol(ERR_QUERY, PROCESS_NULL);
+            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
       }
       else
       {

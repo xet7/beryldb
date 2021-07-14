@@ -22,6 +22,7 @@
 
 CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -35,6 +36,7 @@ COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
 
 CommandLPopFront::CommandLPopFront(Module* Creator) : Command(Creator, "LPOPFRONT", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -48,6 +50,7 @@ COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 
 CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 
@@ -67,6 +70,7 @@ COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 
 CommandLReverse::CommandLReverse(Module* Creator) : Command(Creator, "LREVERSE", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -80,6 +84,7 @@ COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
 
 CommandLSort::CommandLSort(Module* Creator) : Command(Creator, "LSORT", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
@@ -93,6 +98,7 @@ COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 
 CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 

@@ -21,6 +21,7 @@
 
 CommandDecr::CommandDecr(Module* Creator) : Command(Creator, "DECR", 1)
 {
+         group = 'k';
          syntax = "<key>";
 }
 
@@ -34,6 +35,7 @@ COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
 
 CommandDecrBy::CommandDecrBy(Module* Creator) : Command(Creator, "DECRBY", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 
@@ -44,7 +46,7 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
         }
 

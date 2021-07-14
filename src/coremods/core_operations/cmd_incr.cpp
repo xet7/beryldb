@@ -21,6 +21,7 @@
 
 CommandIncr::CommandIncr(Module* Creator) : Command(Creator, "INCR", 1)
 {
+         group = 'k';
          syntax = "<key>";
 }
 
@@ -34,6 +35,7 @@ COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 
 CommandIncrBy::CommandIncrBy(Module* Creator) : Command(Creator, "INCRBY", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 
@@ -44,7 +46,7 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
         }
 

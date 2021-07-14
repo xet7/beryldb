@@ -22,6 +22,7 @@
 
 CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -41,6 +42,7 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
 
 CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -51,13 +53,13 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 
        if (!is_number(value))
        {
-                 user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                  return FAILED;
        }
 
        if (!is_positive_number(value))
        {
-                user->SendProtocol(ERR_QUERY, MUST_BE_POSIT);
+                user->SendProtocol(ERR_INPUT, MUST_BE_POSIT);
                 return FAILED;
        }
        
@@ -67,6 +69,7 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 
 CommandVGet::CommandVGet(Module* Creator) : Command(Creator, "VGET", 1, 3)
 {
+         group = 'v';
          syntax = "<key> <offset> <limit>";
 }
 
@@ -90,6 +93,7 @@ COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 
 CommandVCount::CommandVCount(Module* Creator) : Command(Creator, "VCOUNT", 1, 1)
 {
+         group = 'v';
          syntax = "<key>";
 }
 
@@ -129,6 +133,7 @@ COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
 
 CommandVKeys::CommandVKeys(Module* Creator) : Command(Creator, "VKEYS", 1, 3)
 {
+         group = 'v';
          syntax = "<%key> <offset> <limit>";
 }
 
@@ -152,6 +157,7 @@ COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 
 CommandVDel::CommandVDel(Module* Creator) : Command(Creator, "VDEL", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -171,6 +177,7 @@ COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
 
 CommandVEraseFrom::CommandVEraseFrom(Module* Creator) : Command(Creator, "VERASEFROM", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -186,7 +193,7 @@ COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
         
         if (!is_number(value, true))
         {
-                user->SendProtocol(ERR_QUERY, MUST_BE_NUMERIC);
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
         }
 
@@ -196,6 +203,7 @@ COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
 
 CommandVReverse::CommandVReverse(Module* Creator) : Command(Creator, "VREVERSE", 1, 1)
 {
+         group = 'v';
          syntax = "<key>";
 }
 
@@ -209,6 +217,7 @@ COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
 
 CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS", 2, 2)
 {
+         group = 'v';
          syntax = "<key> <value>";
 }
 
@@ -228,6 +237,7 @@ COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
 
 CommandVSort::CommandVSort(Module* Creator) : Command(Creator, "VSORT", 1, 1)
 {
+         group = 'v';
          syntax = "<key>";
 }
 

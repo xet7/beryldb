@@ -42,6 +42,7 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1, 1)
 {
          syntax = "<key>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
@@ -61,6 +62,7 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
 CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1)
 {
          syntax = "<key>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
@@ -76,6 +78,7 @@ COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
 CommandGetDel::CommandGetDel(Module* Creator) : Command(Creator, "GETDEL", 1, 1)
 {
          syntax = "<key>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
@@ -89,6 +92,7 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
 CommandGetSubstr::CommandGetSubstr(Module* Creator) : Command(Creator, "SUBSTR", 3, 3)
 {
          syntax = "<key> <from> <to>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
@@ -105,6 +109,7 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
          syntax = "<seconds> <key>";
+         groups = { 'e', 'k' };
 }
 
 COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
@@ -124,6 +129,7 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
          syntax = "<key>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
@@ -136,6 +142,7 @@ COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
 CommandIsNum::CommandIsNum(Module* Creator) : Command(Creator, "ISNUM", 1, 1)
 {
          syntax = "<key>";
+         group = 'k';
 }
 
 COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
@@ -148,6 +155,7 @@ COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
 CommandGetPersist::CommandGetPersist(Module* Creator) : Command(Creator, "GETPERSIST", 1, 1)
 {
          syntax = "<key>";
+         groups = { 'e', 'k' };
 }
 
 COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
@@ -157,3 +165,21 @@ COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandWDel::CommandWDel(Module* Creator) : Command(Creator, "WDEL", 1, 1)
+{
+         syntax = "<%key>";
+         group = 'k';
+}
+
+COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckFormat(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::WDelete(user, key);
+       return SUCCESS;
+}
