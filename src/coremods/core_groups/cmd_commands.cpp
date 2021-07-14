@@ -52,11 +52,11 @@ CommandGroups::CommandGroups(Module* Creator) : Command(Creator, "GROUPS", 0, 0)
 
 COMMAND_RESULT CommandGroups::Handle(User* user, const Params& parameters) 
 {
-         GroupMap& groups = Kernel->Groups->GetList();
+         GroupMap& l_groups = Kernel->Groups->GetList();
 
          Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
 
-         for (GroupMap::iterator it = groups.begin(); it != groups.end(); ++it)
+         for (GroupMap::iterator it = l_groups.begin(); it != l_groups.end(); ++it)
          {
                std::string gname = it->first;
                user->SendProtocol(BRLD_GROUP_ITEM, gname.c_str());
@@ -257,9 +257,9 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         }
         
         const std::string& usergrups = dest + "/groups";
-        Args groups = STHelper::HKeys(usergrups);
+        Args grouplist = STHelper::HKeys(usergrups);
         
-        for (Args::iterator i = groups.begin(); i != groups.end(); i++)
+        for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
         {
                std::string item = *i;
                
@@ -311,11 +311,11 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
         }
        
        const std::string& usergrups = login + "/groups";
-       Args groups = STHelper::HKeys(usergrups);
+       Args grouplist = STHelper::HKeys(usergrups);
 
        Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
 
-       for (Args::iterator i = groups.begin(); i != groups.end(); i++)
+       for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                 std::string gname = *i;
                 user->SendProtocol(BRLD_GROUP_ITEM, gname.c_str());
@@ -387,11 +387,11 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        }
        
        const std::string& usergrups = dest + "/groups";
-       Args groups = STHelper::HKeys(usergrups);
+       Args grouplist = STHelper::HKeys(usergrups);
 
        bool found = false;
        
-       for (Args::iterator i = groups.begin(); i != groups.end(); i++)
+       for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                std::string item = *i;
 
