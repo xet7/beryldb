@@ -357,7 +357,17 @@ class ExportAPI User : public Expandable
          */    	
          
 	bool PushGroup(std::shared_ptr<Group> grp);
-		
+
+        /*  
+         * Obtains all flags grouped from all groups.
+         * 
+         * @return:
+ 	 *
+         *         · string: All flags.
+         */    		
+         
+	std::string GetAllGroups();
+	
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
 	template <typename T1>

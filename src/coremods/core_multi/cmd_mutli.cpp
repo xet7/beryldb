@@ -20,24 +20,25 @@
 
 CommandMulti::CommandMulti(Module* Creator) : Command(Creator, "MULTI", 0, 0)
 {
-
+      group = 'w';
 }
 
 COMMAND_RESULT CommandMulti::Handle(User* user, const Params& parameters)
 {  
       if (user->MultiRunning)
       {
-            user->SendProtocol(ERR_MULTI, PROCESS_ERROR);
+            user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
             return FAILED;
       }
       
       user->Multi = true;
-      user->SendProtocol(BRLD_MULTI_OK, PROCESS_OK);
+      user->SendProtocol(BRLD_INPUT, PROCESS_OK);
       return SUCCESS;
 }
 
 CommandMultiReset::CommandMultiReset(Module* Creator) : Command(Creator, "MULTIRESET", 0, 0)
 {
+      group = 'w';
 
 }
 
@@ -47,17 +48,17 @@ COMMAND_RESULT CommandMultiReset::Handle(User* user, const Params& parameters)
       {
             user->Multi = false;
             user->MultiRunning = false;
-            user->SendProtocol(BRLD_MULTI_OK, PROCESS_OK);
+            user->SendProtocol(BRLD_INPUT, PROCESS_OK);
             return SUCCESS;
       }
 
-      user->SendProtocol(ERR_MULTI, PROCESS_ERROR);
+      user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
       return FAILED;
 }
 
 CommandMRUN::CommandMRUN(Module* Creator) : Command(Creator, "MRUN", 0, 0)
 {
-
+      group = 'w';
 }
 
 COMMAND_RESULT CommandMRUN::Handle(User* user, const Params& parameters)

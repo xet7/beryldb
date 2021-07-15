@@ -194,7 +194,7 @@ bool User::InGroup(unsigned char flag)
 		return false;
 	}	
 	
-        for (std::vector<std::shared_ptr<Group>>::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+        for (GroupVector::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
         {
         	std::shared_ptr<Group> group = (*i);
         	
@@ -208,6 +208,29 @@ bool User::InGroup(unsigned char flag)
         }
         
         return false;
+}
+
+std::string User::GetAllGroups()
+{
+	std::string flags;
+	
+	unsigned int counter = 0;
+	
+	for (GroupVector::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+	{
+	        std::string gname = (*i)->GetName();
+	        
+		flags += gname;
+		
+		counter++;
+		
+		if (counter != this->Groups.size())
+		{
+			flags += ", ";	
+		}
+	}
+	
+	return flags;
 }
 
 bool User::CanPerform(unsigned char flag)

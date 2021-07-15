@@ -82,6 +82,13 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
                 user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
         }
         
+        const std::string& all_groups = user->GetAllGroups();
+        
+        if (!all_groups.empty())
+        {
+                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Groups", all_groups.c_str()).c_str());
+        }
+        
         /* Requesting user login. */
 
         user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
