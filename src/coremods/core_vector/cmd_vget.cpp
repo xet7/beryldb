@@ -31,6 +31,11 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
        if (!CheckFormat(user, value))
        {
            return FAILED;
@@ -51,16 +56,14 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-       if (!is_number(value))
+       if (!CheckKey(user, key))
        {
-                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
-                 return FAILED;
+            return FAILED;
        }
 
-       if (!is_positive_number(value))
+       if (!CheckValidPos(user, parameters[0]))
        {
-                user->SendProtocol(ERR_INPUT, MUST_BE_POSIT);
-                return FAILED;
+              return FAILED;
        }
        
        VectorHelper::Index(user, key, value);
@@ -76,6 +79,11 @@ CommandVGet::CommandVGet(Module* Creator) : Command(Creator, "VGET", 1, 3)
 COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
@@ -101,13 +109,19 @@ COMMAND_RESULT CommandVCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
        VectorHelper::Count(user, key);
        return SUCCESS;  
 }
 
 CommandVResize::CommandVResize(Module* Creator) : Command(Creator, "VRESIZE", 2, 2)
 {
-         syntax = "<key> <value>";
+       group = 'v';
+       syntax = "<key> <value>";
 }
 
 COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
@@ -115,16 +129,14 @@ COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
        
-       if (!is_number(value))
+       if (!CheckKey(user, key))
        {
-                 user->SendProtocol(ERR_USE, DBL_NOT_NUM, MUST_BE_NUMERIC.c_str());
-                 return FAILED;
+            return FAILED;
        }
 
-       if (!is_positive_number(value))
+       if (!CheckValidPos(user, parameters[0]))
        {
-                user->SendProtocol(ERR_USE, ERR_MUST_BE_POS_INT, MUST_BE_POSIT.c_str());
-                return FAILED;
+              return FAILED;
        }
 
        VectorHelper::Resize(user, key, value);
@@ -186,6 +198,11 @@ COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
 
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
         if (!CheckFormat(user, value))
         {
              return FAILED;
@@ -210,7 +227,12 @@ CommandVReverse::CommandVReverse(Module* Creator) : Command(Creator, "VREVERSE",
 COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-        
+   
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+     
         VectorHelper::Reverse(user, key);
         return SUCCESS;  
 }
@@ -223,12 +245,17 @@ CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS",
 
 COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+        const std::string& key = parameters[0];
+        const std::string& value = parameters[1];
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
 
         if (!CheckFormat(user, value))
         {
-            return FAILED;
+             return FAILED;
         }
 
         VectorHelper::Repeats(user, key, value);
@@ -244,6 +271,11 @@ CommandVSort::CommandVSort(Module* Creator) : Command(Creator, "VSORT", 1, 1)
 COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
 
         VectorHelper::Sort(user, key);
         return SUCCESS;  

@@ -34,13 +34,13 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_EXPIRE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -60,13 +60,13 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl));
          }
          else
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_EXPIRE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -90,7 +90,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          }
          else
          {
-                 user->SendProtocol(ERR_INPUT2, ERR_PERSIST, PROCESS_NULL);
+                 user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;

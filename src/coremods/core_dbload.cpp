@@ -217,8 +217,8 @@ class ModuleCoreDB : public Module
                       
                        if (database)
                        {
-                            ExpireHelper::List(database);
-                            ExpireHelper::ListFutures(database);
+                             ExpireHelper::List(database);
+                             ExpireHelper::ListFutures(database);
                        }
                  }
                  

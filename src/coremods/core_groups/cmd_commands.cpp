@@ -29,7 +29,7 @@ COMMAND_RESULT CommandGroupAdd::Handle(User* user, const Params& parameters)
        
        if (!Kernel->Engine->IsGroup(gname))
        {
-               user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, WRONG_AGENT);
+               user->SendProtocol(ERR_INPUT, WRONG_AGENT);
                return FAILED;
        }
        
@@ -254,7 +254,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
 
         if (!exists)
         {
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
+               user->SendProtocol(ERR_INPUT, NOT_FOUND);
                return FAILED;
         }
         
@@ -267,7 +267,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
                
                if (item == gname)
                {
-                     user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
+                     user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
                      return FAILED;
                } 
         }
@@ -276,7 +276,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         
         if (!Found)
         {
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
+             user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
         }
         
@@ -308,7 +308,7 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
 
         if (!exists)
         {
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
+               user->SendProtocol(ERR_INPUT, NOT_FOUND);
                return FAILED;
         }
        
@@ -347,14 +347,14 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
 
         if (!Found)
         {
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_NULL);
-             return FAILED;
+              user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+              return FAILED;
         }
 
         if (!Kernel->Groups->ResetFlags(gname))
         {
-             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-             return FAILED;
+              user->SendProtocol(ERR_INPUT, NOT_FOUND);
+              return FAILED;
         }
 
         user->SendProtocol(BRLD_OK, PROCESS_OK);
@@ -384,7 +384,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
 
        if (!exists)
        {
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
+               user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                return FAILED;
        }
        
@@ -406,7 +406,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        
        if (!found)
        {
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_NULL);
+             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
              return FAILED;
        }
 
@@ -414,7 +414,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
 
         if (!Found)
         {
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
+             user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
         }
         

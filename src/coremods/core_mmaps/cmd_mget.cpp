@@ -30,6 +30,11 @@ COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
 
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
@@ -54,6 +59,11 @@ COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
 
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        MMapsHelper::Count(user, kmap);
        return SUCCESS;
 }
@@ -70,11 +80,17 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
 
-       if (!CheckFormat(user, value))
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
             return FAILED;
        }
 
+
+       if (!CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+       
        MMapsHelper::Set(user, kmap, key, value);
        return SUCCESS;
 }
@@ -113,6 +129,11 @@ COMMAND_RESULT CommandMDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap  = parameters[0];
        const std::string& key   = parameters[1];
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        MMapsHelper::Del(user, kmap, key);
        return SUCCESS;
@@ -159,6 +180,12 @@ COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
        const std::string& kmap  = parameters[0];
        const std::string& key = parameters[1];
 
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
+
        MMapsHelper::Repeats(user, kmap, key);
        return SUCCESS;
 }
@@ -172,6 +199,11 @@ CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
+
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
@@ -198,6 +230,11 @@ COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
 
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
@@ -222,6 +259,12 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
        const std::string& key = parameters[1];
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 

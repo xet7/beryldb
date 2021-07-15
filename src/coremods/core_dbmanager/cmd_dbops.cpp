@@ -62,7 +62,7 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (!database)
        {
-            user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
+            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
             return FAILED;
        }
        
@@ -73,7 +73,7 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        }
 
        sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
-       user->SendProtocol(ERR_INPUT2, ERR_UNABLE_FLUSH, PROCESS_FALSE);
+       user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
        return FAILED;
 }
 

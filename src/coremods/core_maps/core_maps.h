@@ -62,11 +62,11 @@ class CommandHCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandHFind : public Command 
+class CommandHKeys : public Command 
 {
     public: 
 
-        CommandHFind(Module* Creator);
+        CommandHKeys(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

@@ -35,7 +35,7 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
        
        if (!found)
        {
-              user->SendProtocol(ERR_INPUT2, ERR_NO_INSTANCE, NOT_FOUND);
+              user->SendProtocol(ERR_INPUT, NOT_FOUND);
               return FAILED;
        }
        
@@ -69,7 +69,7 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        
        if (user->select == use)
        {
-             user->SendProtocol(ERR_INPUT2, ERR_USE, PROCESS_ALREADY);
+             user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
        }
       
@@ -87,7 +87,7 @@ CommandCurrent::CommandCurrent(Module* Creator) : Command(Creator, "CURRENT", 0)
 COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 {  
        const std::string use = user->select;
-       user->SendProtocol(BRLD_CURRENT_USE, use, use.c_str());
+       user->SendProtocol(BRLD_OK, use.c_str());
        return SUCCESS;
 }
 
@@ -105,9 +105,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        }
        
        DataFlush::ResetAll();
-       
        user->SendProtocol(BRLD_OK, PROCESS_OK);
-       
        return SUCCESS;
 }
 

@@ -50,7 +50,7 @@ COMMAND_RESULT CommandEpoch::Handle(User* user, const Params& parameters)
                 return SUCCESS;
         }
 
-        user->SendRemoteProtocol(BRLD_LOCAL_EPOCH, Kernel->Config->GetServerName(), convto_string(Kernel->Now()));
+        user->SendRemoteProtocol(BRLD_OK2, Kernel->Config->GetServerName(), convto_string(Kernel->Now()));
         return SUCCESS;
 }
 
@@ -111,7 +111,7 @@ COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
        * with 'e' or higher flags can obtain a full version of this server. 
        */
 	
-      user->SendProtocol(BRLD_VERSION, Kernel->GetVersion(user->CanPerform('e')));
+      user->SendProtocol(BRLD_OK, Kernel->GetVersion(user->CanPerform('e')));
       return SUCCESS;
 }
 
@@ -122,7 +122,7 @@ CommandAgent::CommandAgent(Module* parent) : Command(parent, "MYAGENT", 0, 0)
 
 COMMAND_RESULT CommandAgent::Handle(User* user, const Params& parameters)
 {
-         user->SendProtocol(BRLD_AGENT, user->agent, user->agent.c_str());
+         user->SendProtocol(BRLD_OK, user->agent.c_str());
          return SUCCESS;
 }
 
@@ -134,7 +134,7 @@ CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
 
 COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
 {
-         user->SendProtocol(BRLD_WHOAMI, user->login, user->login.c_str());
+         user->SendProtocol(BRLD_OK, user->login.c_str());
          return SUCCESS;
 }
 
@@ -150,11 +150,11 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
          
          if (found)
          {
-                user->SendProtocol(BRLD_FIRSTOF, found->instance.c_str());
+                user->SendProtocol(BRLD_OK, found->instance.c_str());
          }
          else
          {
-               user->SendProtocol(ERR_NOT_FOUND, parameters[0].c_str());
+               user->SendProtocol(ERR_INPUT, parameters[0].c_str());
                return FAILED;
          }
          

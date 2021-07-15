@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/keys.h"
 #include "engine.h"
 #include "core_operations.h"

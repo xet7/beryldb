@@ -31,13 +31,13 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, newlogin, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, newlogin, INVALID_UNAME);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, INVALID_UNAME);
                 return FAILED;
         }
         
@@ -51,7 +51,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (!exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, ENTRY_DEFINED);
+                user->SendProtocol(ERR_INPUT, ENTRY_DEFINED);
                 return FAILED;
         }
         
@@ -77,19 +77,19 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+                user->SendProtocol(ERR_INPUT2, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
                 return FAILED;
         }
         
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, INVALID_UNAME);
+                user->SendProtocol(ERR_INPUT, INVALID_UNAME);
                 return FAILED;
         }
 
@@ -97,13 +97,13 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_NOT_EXISTS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NOT_EXISTS, PROCESS_FALSE);
                 return FAILED;
         }
         
         if (UserHelper::Remove(newlogin))
         {
-                user->SendProtocol(BRLD_LOGIN_DEL, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
                 ClientManager::DisconnectAll(newlogin, PROCESS_OK);
         }
 

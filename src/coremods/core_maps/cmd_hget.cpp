@@ -28,14 +28,19 @@ CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)
 
 COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string kmap = parameters[0];
-       const std::string key = parameters[1];
+       const std::string& kmap = parameters[0];
+       const std::string& key = parameters[1];
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        MapsHelper::Get(user, kmap, key);
        return SUCCESS;
 }
 
-CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1)
+CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1, 1)
 {
          group = 'm';
          syntax = "<map>";
@@ -44,6 +49,11 @@ CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1)
 COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
+
+        if (!CheckKey(user, kmap))
+        {
+             return FAILED;
+        }
 
        MapsHelper::Count(user, kmap);
        return SUCCESS;
@@ -60,6 +70,11 @@ COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
        const std::string& kmap = parameters[0];
        const std::string& key = parameters[1];
 
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        MapsHelper::Exists(user, kmap, key);
        return SUCCESS;
 }
@@ -75,6 +90,11 @@ COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
        const std::string& kmap = parameters[0];
        const std::string& key = parameters[1];
 
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
        MapsHelper::Strlen(user, kmap, key);
        return SUCCESS;
 }
@@ -88,6 +108,11 @@ CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
 COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
+
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
@@ -112,6 +137,11 @@ CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1,
 COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
+
+       if (!CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 

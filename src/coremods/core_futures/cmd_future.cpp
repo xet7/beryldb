@@ -63,13 +63,13 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_FUTURE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                   return FAILED;
          }
          
@@ -97,7 +97,7 @@ CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETAL
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
        FutureManager::Reset();
-       user->SendProtocol(BRLD_OK2, BRLD_FUTURE_DELETED, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -132,7 +132,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
 
         if (user->GetDatabase() && user->GetDatabase()->IsClosing())
         {
-              user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
+              user->SendProtocol(ERR_INPUT, DATABASE_BUSY);
               return FAILED;
         }
 
@@ -181,7 +181,7 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
 
           if ((time_t)exp_usig < Kernel->Now())
           {
-                 user->SendProtocol(ERR_INPUT2, ERR_FUTURE, PROCESS_ERROR);
+                 user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                  return FAILED;
           }
           

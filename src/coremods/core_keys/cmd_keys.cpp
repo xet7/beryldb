@@ -51,6 +51,7 @@ COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 
 CommandSearch::CommandSearch(Module* Creator) : Command(Creator, "SEARCH", 1, 3)
 {
+         group = 'k';
          syntax = "<\%key> <offset> <limit>";
 }
 
@@ -79,7 +80,7 @@ COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
 
 CommandRKey::CommandRKey(Module* Creator) : Command(Creator, "RKEY", 0, 0)
 {
-
+         group = 'k';
 }
 
 COMMAND_RESULT CommandRKey::Handle(User* user, const Params& parameters)

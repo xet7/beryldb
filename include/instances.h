@@ -139,6 +139,8 @@ class ExportAPI User : public Expandable
 
 	typedef brld::node_list<Subscription> SubsList;
 	
+        /* Indicates whether this used is paused or not. */
+        
         bool Paused;
 	
 	/* Time since logged. */
@@ -149,6 +151,8 @@ class ExportAPI User : public Expandable
 
 	time_t connected;
 
+	/* Password this user used to log in. */
+	
 	std::string auth;
 
 	/* login this user is using to access the server. */
@@ -188,6 +192,15 @@ class ExportAPI User : public Expandable
          	
 	bool IsQuitting();
 	
+        /* 
+         * Locks this user, so we can later recognized it
+         * as being busy.
+         *
+         * @parameters:
+	 *
+	 *         · flag: Either true or false.
+         */    	
+         
 	void SetLock(bool flag);
 
         /* 
@@ -199,6 +212,8 @@ class ExportAPI User : public Expandable
          */    	
          
 	bool IsLocked();
+	
+	/* Unique id */
 	
 	const std::string uuid;
 
@@ -294,6 +309,14 @@ class ExportAPI User : public Expandable
          
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
         
+        /* 
+         * Gets user's database.
+         * 
+         * @parameters:
+	 *
+	 *         · UserDatabase: current_db.
+         */            
+         
         std::shared_ptr<UserDatabase> GetDatabase();
 	
         std::deque<std::shared_ptr<QueryBase>> pending;

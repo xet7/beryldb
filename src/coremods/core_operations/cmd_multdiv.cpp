@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/keys.h"
 #include "engine.h"
 #include "core_operations.h"
@@ -29,6 +30,11 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
         const std::string& value = parameters[1];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
         
         if (!is_number(value, true))
         {
@@ -50,6 +56,11 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
         const std::string& value = parameters[1];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
         
         if (!is_number(value, true))
         {

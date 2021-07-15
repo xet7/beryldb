@@ -29,7 +29,7 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INVALID_PARAM, newlogin, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
 
@@ -41,15 +41,15 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
                 {
                       if (*it == 'e')
                       {
-                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_execute (e)");
+                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_execute");
                       }
                       else if (*it == 'r')
                       {
-                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_root (r)");
+                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_root");
                       }
                       else if (*it == 'm')
                       {  
-                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_manage (m)");
+                           user->SendProtocol(BRLD_LOGIN_FLAGS, "can_manage");
                       }
                 }
 
@@ -76,7 +76,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT, ERR_INVALID_PARAM, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_FALSE);
                 return FAILED;
         }
         
@@ -86,7 +86,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
         
         if (!flags.empty())
         {
-                user->SendProtocol(BRLD_LOGIN_FLAGS, flags);
+                user->SendProtocol(BRLD_OK, flags);
                 return SUCCESS;
         }
         else 
@@ -110,25 +110,25 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
         
         if (flag.empty())
         {
-               user->SendProtocol(ERR_LOGIN_NO_FLAGS, INVALID_TYPE);
+               user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_FLAGS, INVALID_TYPE);
                return FAILED;
         }
 
         if (flag.length() > 1)
         {
-               user->SendProtocol(BRLD_ADD_FLAGS, INVALID_TYPE);
+               user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                return FAILED;        
         }
 
         if (!UserHelper::Exists(newlogin))
         {
-               user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_NULL);
+               user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                return FAILED;             
         }
 
         if (newlogin == "root")
         {
-               user->SendProtocol(ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+               user->SendProtocol(ERR_INPUT, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
                return FAILED;
         }
         
@@ -144,7 +144,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
         {
                 if (*it != 'e' && *it != 'r' && *it != 'm')
                 {
-                        user->SendProtocol(BRLD_ADD_FLAGS, INVALID_TYPE);
+                        user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                         return FAILED;
                 }
         }
@@ -170,12 +170,12 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
              /* We delete the user flags. */
             
              UserHelper::DeleteFlags(newlogin);
-             user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
         else
         {
               UserHelper::SetFlags(newlogin, creating);
-              user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_OK);
+              user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
         
         /* We notify all users connected about the change */
@@ -197,13 +197,13 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+                user->SendProtocol(ERR_INPUT2, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
                 return FAILED;
         }
         
         if (flag.length() > 1)
         {
-                user->SendProtocol(BRLD_ADD_FLAGS, INVALID_TYPE);
+                user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                 return FAILED;        
         }
         
@@ -211,14 +211,14 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         {
                 if (*it != 'e' && *it != 'r' && *it != 'm')
                 {
-                        user->SendProtocol(BRLD_ADD_FLAGS, INVALID_TYPE);
+                        user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                         return FAILED;
                 }
         }
 
         if (!UserHelper::Exists(newlogin))
         {
-                user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_NULL);
+                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                 return FAILED;             
         }
   
@@ -229,7 +229,7 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         {
                 if (*it == flag[0])
                 {
-                        user->SendProtocol(BRLD_ADD_FLAGS, Daemon::Format("User %s already has flag: %s", newlogin.c_str(), flag.c_str()));
+                        user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
                         return FAILED;
                 }
                 
@@ -245,7 +245,7 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         
         Kernel->Logins->Sessions->NotifyFlags(newlogin, adding);
         
-        user->SendProtocol(BRLD_ADD_FLAGS, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 

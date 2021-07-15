@@ -33,6 +33,11 @@ COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& newkey = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
        GlobalHelper::Rename(user, key, newkey);
        return SUCCESS;
 }
@@ -45,6 +50,11 @@ CommandDel::CommandDel(Module* Creator) : Command(Creator, "DEL", 1)
 COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        GlobalHelper::Delete(user, key);
        return SUCCESS;
@@ -61,6 +71,16 @@ COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& destkey = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+             return FAILED;
+       }
+       
+       if (!CheckKey(user, destkey))
+       {
+             return FAILED;
+       }
+
        GlobalHelper::Copy(user, key, destkey);
        return SUCCESS;
 }
@@ -74,6 +94,11 @@ CommandExists::CommandExists(Module* Creator) : Command(Creator, "EXISTS", 1, 1)
 COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        GlobalHelper::Exists(user, key);
        return SUCCESS;
@@ -90,11 +115,15 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& new_select = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
        if (!CheckValidPos(user, new_select))
        {
               return FAILED;
        }
-
 
        if (!Daemon::CheckRange(user, new_select, INVALID_RANGE, 1, 100))
        {
@@ -128,6 +157,16 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& newkey = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       if (!CheckKey(user, newkey))
+       {
+            return FAILED;
+       }
+
        GlobalHelper::RenameNX(user, key, newkey);
        return SUCCESS;
 }
@@ -160,3 +199,63 @@ COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+
+CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
+{
+         group = 'h';
+         syntax = "<key> <select>";
+}
+
+COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       if (!CheckValidPos(user, value))
+       {
+              return FAILED;
+       }
+
+       if (!Daemon::CheckRange(user, value, INVALID_RANGE, 1, 100))
+       {
+               return FAILED;
+       }
+
+       GlobalHelper::Clone(user, key, value);
+       return SUCCESS;
+}
+
+CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
+{
+         group = 'h';
+         syntax = "<key> <select> <offset> <limit>";
+}
+
+COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       GlobalHelper::Diff(user, key, value, offset, limit);
+       return SUCCESS;
+}

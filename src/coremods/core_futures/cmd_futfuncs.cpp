@@ -38,7 +38,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, INVALID_TYPE);
+                  user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                   return FAILED;
          }
          

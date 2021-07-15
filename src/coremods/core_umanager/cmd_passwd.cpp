@@ -29,11 +29,11 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
                 if (UserHelper::ChangePass(user->login, pass))
                 {
-                        user->SendProtocol(BRLD_LOGIN_CHPASS, PROCESS_OK);
+                        user->SendProtocol(BRLD_OK, PROCESS_OK);
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INVALID_PASS, PASS_AT_LEAST);
+                        user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_AT_LEAST);
                         return FAILED;
                 }
 
@@ -44,7 +44,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (!user->IsAdmin())
         {
-                user->SendProtocol(ERR_NO_FLAGS, ACCESS_DENIED);
+                user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                 return FAILED;        
         }
                 
@@ -53,19 +53,19 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_LOGIN_EXISTS, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_EXISTS, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INVALID_LOGIN, INVALID_UNAME);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, INVALID_UNAME);
                 return FAILED;
         }
         
         if (pass.length() < 3 || pass.length() > 30)
         {
-                user->SendProtocol(ERR_INVALID_PASS, PASS_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_MIMMAX_LENGTH);
                 return FAILED; 
         }
         
@@ -73,20 +73,46 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (exists.empty())
         {
-                user->SendProtocol(ERR_LOGIN_NO_EXISTS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_EXISTS, PROCESS_FALSE);
                 return FAILED;
         }
         
         if (UserHelper::ChangePass(newlogin, pass))
         {
-                user->SendProtocol(BRLD_LOGIN_CHPASS, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
         else
         {
-                user->SendProtocol(ERR_INVALID_PASS, PASS_AT_LEAST);
+                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_AT_LEAST);
                 return FAILED;
         }
         
         return SUCCESS;
 }
 
+CommandResetCache::CommandResetCache(Module* parent) : Command(parent, "RESETCACHE", 0)
+{
+         requires = 'r';
+}
+
+COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
+{
+        Kernel->Logins->Reset();
+        
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
+        return SUCCESS;
+}
+
+CommandInCache::CommandInCache(Module* parent) : Command(parent, "INCACHE", 1, 1)
+{
+         requires = 'r';
+         syntax = "<login>";
+}
+
+COMMAND_RESULT CommandInCache::Handle(User* user, const Params& parameters)
+{
+        const std::string& login = parameters[0];
+
+        user->SendProtocol(BRLD_OK, convto_string(Kernel->Logins->InCache(login)));
+        return SUCCESS;
+}

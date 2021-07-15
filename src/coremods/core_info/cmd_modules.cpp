@@ -16,7 +16,6 @@
 
 CommandModules::CommandModules(Module* parent) : ServerTargetCommand(parent, "MODULES")
 {
-	group = 'w';
 	syntax = "[<server>]";
 }
 
@@ -26,9 +25,9 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
 	if ((!for_us) || (!IS_LOCAL(user)))
 	{
-		if (!user->IsAdmin())
+		if (!user->CanPerform('e'))
 		{
-			user->SendProtocol(BRLD_ALERT, "Access denied.");
+			user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
 			return FAILED;
 		}
 
@@ -49,7 +48,7 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
                 bool is_core = false;
 
-		if (IS_LOCAL(user) && user->IsAdmin())
+		if (IS_LOCAL(user) && user->CanPerform('e'))
 		{
 			std::string flags("VCO");
 			size_t pos = 0;
@@ -74,11 +73,11 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
                               continue;
                         }
 
-			user->SendRemoteProtocol(BRLD_OK, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_OK, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	
@@ -88,7 +87,6 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
 CommandCoreModules::CommandCoreModules(Module* parent) : ServerTargetCommand(parent, "COREMODULES")
 {
-	group = 'w';
 	syntax = "[<server>]";
 }
 
@@ -98,11 +96,11 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 
 	if ((!for_us) || (!IS_LOCAL(user)))
 	{
-		if (!user->IsAdmin())
-		{
-			user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
-			return FAILED;
-		}
+                if (!user->CanPerform('e'))
+                {
+                        user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
+                        return FAILED;
+                }
 
 		if (!for_us)
 		{
@@ -121,7 +119,7 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 		
 		bool is_core = false;
 		
-		if (IS_LOCAL(user) && user->IsAdmin())
+		if (IS_LOCAL(user) && user->CanPerform('e'))
 		{
 			std::string flags("VCO");
 			size_t pos = 0;
@@ -146,11 +144,11 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 			      continue;
 			}
 			
-			user->SendRemoteProtocol(BRLD_OK, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_OK, BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	

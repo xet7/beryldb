@@ -30,6 +30,11 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
         const std::string value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
         
         if (!CheckFormat(user, value))
         {
@@ -50,6 +55,11 @@ COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
 
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+
         VectorHelper::PopFront(user, key);
         return SUCCESS;  
 }
@@ -63,6 +73,11 @@ CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK",
 COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
 
         VectorHelper::PopBack(user, key);
         return SUCCESS;  

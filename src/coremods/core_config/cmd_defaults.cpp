@@ -24,7 +24,7 @@ COMMAND_RESULT CommandDefaults::Handle(User* user, const Params& parameters)
 {
         if (parameters.size() > 1)
         {
-              user->SendRemoteProtocol(ERR_INPUT2, INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
+              user->SendRemoteProtocol(ERR_INPUT3, INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
               return FAILED;
         }
         

@@ -22,6 +22,7 @@
 
 CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "GETOCCURS", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
 }
 
@@ -29,6 +30,11 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back(); 
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -41,18 +47,18 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 
 CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1, 1)
 {
-         syntax = "<key>";
          group = 'k';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
 {  
-       std::string key = parameters[0];
+       const std::string& key = parameters[0];
        
-       /* 
-        * The false at the end indicates that we are
-        * not requesting for a strlen. 
-        */
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        KeyHelper::Get(user, key);
        return SUCCESS;
@@ -61,15 +67,18 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
 
 CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1)
 {
-         syntax = "<key>";
          group = 'k';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       /* The 'true' parameter at the end indicates that we are performing an strlen query. */
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        KeyHelper::Strlen(user, key);
        return SUCCESS;
@@ -77,13 +86,18 @@ COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
 
 CommandGetDel::CommandGetDel(Module* Creator) : Command(Creator, "GETDEL", 1, 1)
 {
-         syntax = "<key>";
          group = 'k';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        KeyHelper::GetDel(user, key);
        return SUCCESS;
@@ -91,13 +105,18 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
 
 CommandGetSubstr::CommandGetSubstr(Module* Creator) : Command(Creator, "SUBSTR", 3, 3)
 {
-         syntax = "<key> <from> <to>";
          group = 'k';
+         syntax = "<key> <from> <to>";
 }
 
 COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 {
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        int limit = convto_num<int>(parameters[2]); 
        int offset = convto_num<int>(parameters[1]);
@@ -108,14 +127,19 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
-         syntax = "<seconds> <key>";
          groups = { 'e', 'k' };
+         syntax = "<seconds> <key>";
 }
 
 COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 {  
        const std::string& seconds = parameters[0];
        const std::string& key = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        if (!CheckValidPos(user, parameters[0]))
        {
@@ -128,47 +152,65 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
-         syntax = "<key>";
          group = 'k';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+       
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+       
        KeyHelper::Alpha(user, key);
        return SUCCESS;
 }
 
 CommandIsNum::CommandIsNum(Module* Creator) : Command(Creator, "ISNUM", 1, 1)
 {
-         syntax = "<key>";
          group = 'k';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+       
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+       
        KeyHelper::IsNum(user, key);
        return SUCCESS;
 }
 
 CommandGetPersist::CommandGetPersist(Module* Creator) : Command(Creator, "GETPERSIST", 1, 1)
 {
-         syntax = "<key>";
          groups = { 'e', 'k' };
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+       
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+       
        KeyHelper::GetPersist(user, key);
        return SUCCESS;
 }
 
 CommandWDel::CommandWDel(Module* Creator) : Command(Creator, "WDEL", 1, 1)
 {
-         syntax = "<%key>";
          group = 'k';
+         syntax = "<%key>";
 }
 
 COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)

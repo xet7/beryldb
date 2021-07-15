@@ -67,7 +67,7 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 		}
 	}
 
-	user->SendProtocol(ERR_INVALID_CHAN, parameters[0], "Invalid channel name.");
+	user->SendProtocol(ERR_INPUT2, ERR_INVALID_CHAN, INVALID_CHAN);
 	return FAILED;
 }
 
@@ -93,7 +93,7 @@ COMMAND_RESULT CommandPart::Handle(User* user, const Params& parameters)
 
 	if (!chan->PartUser(user))
 	{
-		user->SendProtocol(ERR_NOT_SUBSCRIBED, chan->name, "You are not subscribed.");
+		user->SendProtocol(ERR_INPUT2, ERR_NOT_SUBSCRIBED, NOT_SUBSCRIBED);
 		return FAILED;
 	}
 	else

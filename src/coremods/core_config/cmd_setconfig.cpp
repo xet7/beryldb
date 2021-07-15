@@ -24,13 +24,13 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
 {
         if (!parameters.size() || parameters.size() < 2)
         {
-             user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
+             user->SendRemoteProtocol(ERR_INPUT3, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
              return FAILED;
         }
 
         if (parameters.size() > 3)
         {
-              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
+              user->SendRemoteProtocol(ERR_INPUT3, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
               return FAILED;
         }
         
@@ -70,13 +70,13 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
 {
         if (!parameters.size())
         {
-              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
+              user->SendRemoteProtocol(ERR_INPUT3, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), this->syntax);
               return FAILED;
         }
         
         if (parameters.size() > 2)
         {
-              user->SendRemoteProtocol(ERR_INPUT2, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
+              user->SendRemoteProtocol(ERR_INPUT3, ERR_INVALID_PARAM, Kernel->Config->GetServerName(), INVALID_PARAM);
               return FAILED;
         }
         
