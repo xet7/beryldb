@@ -407,7 +407,7 @@ DiscardResult GlobalUser::discard()
 
 void LocalUser::check_con_conf(bool clone_count)
 {
-	connect_config* ac = this->assigned_class;
+	ConfigConnect* ac = this->assigned_class;
 
 	if (!ac)
 	{
@@ -818,13 +818,13 @@ bool User::SetAgent(const std::string& newagent)
 
 void LocalUser::set_class(const std::string &classname)
 {
-	connect_config *found = NULL;
+	ConfigConnect *found = NULL;
 
 	if (!classname.empty())
 	{
 		for (Configuration::class_refvec::const_iterator i = Kernel->Config->Classes.begin(); i != Kernel->Config->Classes.end(); ++i)
 		{
-			connect_config* c = *i;
+			ConfigConnect* c = *i;
 
 			if (classname == c->name)
 			{
@@ -836,7 +836,7 @@ void LocalUser::set_class(const std::string &classname)
 	{
 		for (Configuration::class_refvec::const_iterator i = Kernel->Config->Classes.begin(); i != Kernel->Config->Classes.end(); ++i)
 		{
-			connect_config* c = *i;
+			ConfigConnect* c = *i;
 
 			ModuleResult MOD_RESULT;
 			UNTIL_RESULT(OnSetConnectConfig, MOD_RESULT, (this,c));
@@ -905,7 +905,7 @@ const std::string& GlobalUser::GetHostFormat()
 	return server->GetName();
 }
 
-connect_config::connect_config(config_rule* tag, char t, const std::string& mask)
+ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask)
 			: config(tag)
 			, type(t)
 			, name("undefined")
@@ -914,7 +914,7 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 
 }
 
-connect_config::connect_config(config_rule* tag, char t, const std::string& mask, const connect_config& parent)
+ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask, const ConfigConnect& parent)
 {
 	Update(&parent);
 	name = "undefined";
@@ -944,7 +944,7 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 	}
 }
 
-void connect_config::Update(const connect_config* src)
+void ConfigConnect::Update(const ConfigConnect* src)
 {
 		config = src->config;
 		type = src->type;

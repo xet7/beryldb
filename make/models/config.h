@@ -15,6 +15,8 @@
 
 #include <string>
 
+const unsigned int ITER_LIMIT = 50;
+
 /* Default emerald client. */
 
 const std::string DEFAULT_EMERALD = "emerald";

@@ -130,7 +130,7 @@ void vkeys_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<vkeys_query> request = std::make_shared<vkeys_query>();
@@ -154,7 +154,7 @@ void vkeys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<vkeys_query> request = std::make_shared<vkeys_query>();
@@ -321,7 +321,7 @@ void vget_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<vget_query> request = std::make_shared<vget_query>();
                                                 request->user = this->user;
@@ -344,7 +344,7 @@ void vget_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<vget_query> request = std::make_shared<vget_query>();
                                         request->user = this->user;

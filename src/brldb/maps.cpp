@@ -107,7 +107,7 @@ void hfind_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<hfind_query> request = std::make_shared<hfind_query>();
@@ -131,7 +131,7 @@ void hfind_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
 
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<hfind_query> request = std::make_shared<hfind_query>();
@@ -409,7 +409,7 @@ void hlist_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hlist_query> request = std::make_shared<hlist_query>();
                                                 request->user = this->user;
@@ -432,7 +432,7 @@ void hlist_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hlist_query> request = std::make_shared<hlist_query>();
                                         request->user = this->user;
@@ -530,7 +530,7 @@ void hvals_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                                 request->user = this->user;
@@ -553,7 +553,7 @@ void hvals_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                         request->user = this->user;
@@ -621,7 +621,7 @@ void hgetall_query::Run()
                                     aux_counter++;
                                     result_return.insert(std::make_pair(vkey, vvalue));
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
                                                 request->user = this->user;
@@ -644,7 +644,7 @@ void hgetall_query::Run()
                              aux_counter++;
                              result_return.insert(std::make_pair(vkey, vvalue));
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
                                         request->user = this->user;

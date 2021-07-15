@@ -49,7 +49,7 @@ enum UserType
 	CLIENT_TYPE_SERVER = 3
 };
 
-struct ExportAPI connect_config : public refcountbase
+struct ExportAPI ConfigConnect : public refcountbase
 {
 
 	reference<config_rule> config;
@@ -66,11 +66,11 @@ struct ExportAPI connect_config : public refcountbase
 	
 	brld::flat_set<int> ports;
 	
-	connect_config(config_rule* tag, char type, const std::string& mask);
+	ConfigConnect(config_rule* tag, char type, const std::string& mask);
 	
-	connect_config(config_rule* tag, char type, const std::string& mask, const connect_config& parent);
+	ConfigConnect(config_rule* tag, char type, const std::string& mask, const ConfigConnect& parent);
 
-	void Update(const connect_config* newSettings);
+	void Update(const ConfigConnect* newSettings);
 
 	const std::string& GetName() 
 	{ 
@@ -563,10 +563,10 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
 	ProtocolTrigger::Serializer* serializer;
 	
-	reference<connect_config> assigned_class;
+	reference<ConfigConnect> assigned_class;
 
 	
-	connect_config* GetClass() const 
+	ConfigConnect* GetClass() const 
 	{ 
 		return assigned_class; 
 	}

@@ -91,6 +91,8 @@ class ExportAPI Group
      
      private:
  
+         time_t created;
+         
          std::string name;
          std::string rawflags;
          

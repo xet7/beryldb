@@ -73,7 +73,7 @@ void keys_query::Run()
                                     
                                     result.insert(std::make_pair(rawmap, value_str));             
                                     
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<keys_query> request = std::make_shared<keys_query>();
@@ -97,7 +97,7 @@ void keys_query::Run()
                              aux_counter++;
                              result.insert(std::make_pair(rawmap, value_str));
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<keys_query> request = std::make_shared<keys_query>();

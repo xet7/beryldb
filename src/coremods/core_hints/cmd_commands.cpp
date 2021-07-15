@@ -107,7 +107,7 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
 
 CommandType::CommandType(Module* Creator) : Command(Creator, "TYPE", 1, 1)
 {
-
+         group = 'h';
 }
 
 COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
@@ -134,8 +134,8 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
 
 CommandTouch::CommandTouch(Module* Creator) : Command(Creator, "TOUCH", 1, 1)
 {
-         syntax = "[keys]";
          group = 'h';
+         syntax = "[keys]";
 }
 
 COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)

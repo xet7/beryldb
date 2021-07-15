@@ -94,7 +94,7 @@ void diff_query::Maps()
 
                                     result.push_back(key_as_string);
 
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -118,7 +118,7 @@ void diff_query::Maps()
                              aux_counter++;
                              result.push_back(key_as_string);
 
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -187,7 +187,7 @@ void diff_query::Multis()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -211,7 +211,7 @@ void diff_query::Multis()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -307,7 +307,7 @@ void diff_query::Vectors()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -331,7 +331,7 @@ void diff_query::Vectors()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -401,7 +401,7 @@ void diff_query::Lists()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<diff_query> request = std::make_shared<diff_query>();
@@ -425,7 +425,7 @@ void diff_query::Lists()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<diff_query> request = std::make_shared<diff_query>();

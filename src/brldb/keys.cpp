@@ -654,7 +654,7 @@ void search_query::Run()
                                     
                                     result.insert(std::make_pair(key_as_string, rawvalue));
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<search_query> request = std::make_shared<search_query>();
                                                 request->user = this->user;
@@ -677,7 +677,7 @@ void search_query::Run()
                              aux_counter++;
                              result.insert(std::make_pair(key_as_string, rawvalue));
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<search_query> request = std::make_shared<search_query>();
                                         request->user = this->user;
@@ -812,7 +812,7 @@ void keys_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<keys_query> request = std::make_shared<keys_query>();
@@ -836,7 +836,7 @@ void keys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<keys_query> request = std::make_shared<keys_query>();

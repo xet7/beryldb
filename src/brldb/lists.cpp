@@ -110,7 +110,7 @@ void lkeys_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<lkeys_query> request = std::make_shared<lkeys_query>();
@@ -134,7 +134,7 @@ void lkeys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<lkeys_query> request = std::make_shared<lkeys_query>();
@@ -354,7 +354,7 @@ void lfind_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<lfind_query> request = std::make_shared<lfind_query>();
                                                 request->user = this->user;
@@ -377,7 +377,7 @@ void lfind_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<lfind_query> request = std::make_shared<lfind_query>();
                                         request->user = this->user;
@@ -576,7 +576,7 @@ void lget_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
                                                 request->user = this->user;
@@ -599,7 +599,7 @@ void lget_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<lget_query> request = std::make_shared<lget_query>();
                                         request->user = this->user;

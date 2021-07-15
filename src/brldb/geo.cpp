@@ -137,7 +137,7 @@ void gkeys_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<gkeys_query> request = std::make_shared<gkeys_query>();
@@ -161,7 +161,7 @@ void gkeys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<gkeys_query> request = std::make_shared<gkeys_query>();
@@ -362,7 +362,7 @@ void geodistance_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<geodistance_query> request = std::make_shared<geodistance_query>();
@@ -386,7 +386,7 @@ void geodistance_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<geodistance_query> request = std::make_shared<geodistance_query>();

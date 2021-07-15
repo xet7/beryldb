@@ -489,7 +489,7 @@ class ExportAPI Module : public base_class, public usecountbase
 
 	virtual void OnEveryHour(time_t curtime);
 	
-	virtual ModuleResult OnSetConnectConfig(LocalUser* user, connect_config* myclass);
+	virtual ModuleResult OnSetConnectConfig(LocalUser* user, ConfigConnect* myclass);
 	
 	virtual void OnSetUserIP(LocalUser* user);
 
