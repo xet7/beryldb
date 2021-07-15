@@ -32,6 +32,11 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
 
+        if (!CheckKey(user, key) || !CheckKey(user, kmap))
+        {
+            return FAILED;
+        }
+
        if (!CheckFormat(user, value))
        {
             return FAILED;
@@ -52,6 +57,11 @@ COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
        const std::string& kmap  = parameters[0];
        const std::string& key   = parameters[1];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {

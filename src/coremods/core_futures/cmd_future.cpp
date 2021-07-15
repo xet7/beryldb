@@ -59,17 +59,17 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 {
          const std::string& key = parameters[0];
          
-         signed int ttl = FutureManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = FutureManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_FUTURE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                   return FAILED;
          }
          
@@ -97,7 +97,11 @@ CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETAL
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
        FutureManager::Reset();
+<<<<<<< HEAD
        user->SendProtocol(BRLD_INPUT2, BRLD_FUTURE_DELETED, PROCESS_OK);
+=======
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+>>>>>>> unstable
        return SUCCESS;
 }
 
@@ -130,14 +134,14 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
              use = user->select;
         }
 
-        if (user->current_db && user->current_db->IsClosing())
+        if (user->GetDatabase() && user->GetDatabase()->IsClosing())
         {
-              user->SendProtocol(ERR_INPUT2, ERR_DB_BUSY, DATABASE_BUSY);
+              user->SendProtocol(ERR_INPUT, DATABASE_BUSY);
               return FAILED;
         }
 
-        Kernel->Store->Futures->SelectReset(user->current_db->GetName(), use);
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        Kernel->Store->Futures->SelectReset(user->GetDatabase()->GetName(), use);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -181,7 +185,7 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
 
           if ((time_t)exp_usig < Kernel->Now())
           {
-                 user->SendProtocol(ERR_INPUT2, ERR_FUTURE, PROCESS_ERROR);
+                 user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                  return FAILED;
           }
           

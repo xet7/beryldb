@@ -13,6 +13,19 @@
 
 #pragma once
 
+<<<<<<< HEAD
+=======
+const std::string INVALID_CHAN = "INVALID_CHAN";
+
+/* User is not subscribed */
+
+const std::string NOT_SUBSCRIBED = "NOT_SUBSCRIBED";
+
+/* No syntax defined. */
+
+const std::string NO_SYNTAX = "NO_SYNTAX";
+
+>>>>>>> unstable
 /* Target not defined */
 
 const std::string NOT_DEFINED = "NOT_DEFINED";
@@ -88,6 +101,15 @@ const std::string ENTRY_DEFINED = "ENTRY_DEFINED";
 /* Invalid format. */
 
 const std::string INVALID_FORMAT = "INVALID_TYPE";
+
+/* Invalid value */
+
+const std::string INVALID_VALUE = "INVALID_VALUE";
+
+/* Invalid key */
+
+const std::string INVALID_KEY  = "INVALID_KEY";
+
 
 /* Database is null */
 
@@ -179,7 +201,7 @@ const std::string PASS_CHANGED = "Password changed.";
 
 /* Used when an user is changing a pass to one with less than 3 chars */
 
-const std::string PASS_AT_LEAST = "Password must be of at least 3 chars.";
+const std::string PASS_AT_LEAST = "MUST_BE_AT_LEAST_3_LENGTH";
 
 /* Invalid user name. */
 
@@ -187,11 +209,11 @@ const std::string INVALID_UNAME = "Invalid login.";
 
 /* Password indication. */
 
-const std::string PASS_MIMMAX_LENGTH = "Min password length is 3, max is 100.";
+const std::string PASS_MIMMAX_LENGTH = "EXCEED_RANGE";
 
 /* Used when indicating that an user length must be inside this range. */
 
-const std::string USER_MIMMAX_LENGTH = "Min user length is 3, max is 15.";
+const std::string USER_MIMMAX_LENGTH = "EXCEED_RANGE";
 
 /* Setting variable provided has not been found. */
 

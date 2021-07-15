@@ -30,7 +30,8 @@ const char* ExitMap[] =
            "Database error",
            "SIG INT received",
            "Shutdown command received",
-           "Unable to create threads."
+           "Unable to create threads.",
+           "Invalid command."
 };
 
 unsigned const char *locale_case_insensitive_map = brld_case_insensitive_map;
@@ -95,15 +96,14 @@ bool Daemon::KeyValidator(const std::string& key)
                 return false;
         }
 
-        std::string lkey = key;
-        
-        /* * is invalid. */
-        
-        if (lkey.find("*") != std::string::npos || lkey.find(":") != std::string::npos)
+        for (std::string::const_iterator i = key.begin(); i != key.end(); ++i)
         {
-        	 return false;
+		if (*i == '*' || *i == ':')
+		{
+			return false;
+		}	
         }
-        
+
         return true;
 }
 

@@ -16,6 +16,7 @@
 
 CommandSyntax::CommandSyntax(Module* parent) : Command(parent, "SYNTAX", 1, 1)
 {
+	group = 'z';
 	syntax = "<command>";
 }
 
@@ -31,7 +32,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 		return FAILED;
 	}
 	
-	user->SendProtocol(BRLD_SYNTAX, Found->name, Daemon::Format("%s %s", Found->name.c_str(), Found->syntax.c_str()));
+	user->SendProtocol(BRLD_OK, Daemon::Format("%s %s", Found->name.c_str(), Found->syntax.c_str()));
 	return SUCCESS;
 }
 
@@ -59,8 +60,6 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 			}
 			else
 			{
-				/* User does not have required flags. */
-				
 				continue;
 			}
 		}

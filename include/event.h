@@ -100,6 +100,7 @@ class Events::ModuleEventListener : private ddl_base_ref::aptureAttach
 	}
 
  public:
+
 	static const unsigned int DefaultPriority = 100;
 
 	
@@ -138,9 +139,15 @@ inline bool Events::ModuleEventProvider::Comp::operator()(Events::ModuleEventLis
 inline bool Events::ModuleEventProvider::ElementComp::operator()(Events::ModuleEventListener* lhs, Events::ModuleEventListener* rhs) const
 {
 	if (lhs->GetPriority() < rhs->GetPriority())
+	{
 		return true;
+	}
+	
 	if (lhs->GetPriority() > rhs->GetPriority())
+	{
 		return false;
+	}
+	
 	return std::less<ModuleEventListener*>()(lhs, rhs);
 }
 

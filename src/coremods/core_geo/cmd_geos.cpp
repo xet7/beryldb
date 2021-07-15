@@ -36,7 +36,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
-                 user->SendProtocol(ERR_USE, ERR_NOT_NUM, MUST_BE_NUMERIC.c_str());
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                  return FAILED;
        }
        

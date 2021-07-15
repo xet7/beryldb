@@ -66,7 +66,7 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 2)]))
              {
-                 user->SendProtocol(ERR_INPUT2, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO);
+                 user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
                  return { 0 };
              }
        
@@ -77,7 +77,7 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 1)]) || !is_zero_or_great(parameters[(max - 2)]))
              {
-                   user->SendProtocol(ERR_INPUT2, ERR_GREAT_ZERO, MUST_BE_GREAT_ZERO);
+                   user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
                    return { 0 };
              }
        
@@ -114,7 +114,7 @@ inline bool CheckFormat(User* user, const std::string& value, bool notify = true
         {
             if (notify)
             {
-                 user->SendProtocol(ERR_INPUT2, ERR_WRONG_SYNTAX, INVALID_TYPE);
+                 user->SendProtocol(ERR_INPUT, INVALID_TYPE);
             }
 
             return false;
@@ -137,8 +137,33 @@ inline bool CheckFormat(User* user, const std::string& value, bool notify = true
 
         if (notify)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_WRONG_SYNTAX, INVALID_TYPE);
+                user->SendProtocol(ERR_INPUT, INVALID_VALUE);
         }
 
+        return false;
+}
+
+inline bool CheckKey(User* user, const std::string& value, bool notify = true)
+{
+        if (!value.size())
+        {
+             if (notify)
+             {
+                 user->SendProtocol(ERR_INPUT, INVALID_KEY);
+             }
+
+             return false;
+        }
+        
+        if (Kernel->Engine->ValidKey(value))
+        {
+              return true;
+        }
+        
+        if (notify)
+        {
+                user->SendProtocol(ERR_INPUT, INVALID_KEY);
+        }
+        
         return false;
 }

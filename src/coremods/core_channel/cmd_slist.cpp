@@ -26,7 +26,7 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 {
 	if (parameters.empty())
 	{
-		user->SendProtocol(BRLD_SYNTAX, syntax);
+		user->SendProtocol(ERR_INPUT2, BRLD_SYNTAX, syntax);
 		return SUCCESS;
 	}
 
@@ -51,7 +51,7 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 
 void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 {
-	Numeric::Builder<' '> reply(user, BRLD_SLIST_REPLY, false, chan->name.size() + 3);
+	Numeric::Builder<' '> reply(user, BRLD_SLIST_ITEM, false, chan->name.size() + 3);
 	Numeric::Numeric& numeric = reply.GetNumeric();
 
 	numeric.push(std::string(1, '='));
@@ -63,6 +63,8 @@ void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 	std::string instance;
 	
 	const Channel::SubscriptionMap& members = chan->GetInstances();
+
+	Dispatcher::JustAPI(user, BRLD_SLIST_BEGIN);
 
 	for (Channel::SubscriptionMap::const_iterator i = members.begin(); i != members.end(); ++i)
 	{
@@ -81,5 +83,5 @@ void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 	}
 
 	reply.Flush();
-	user->SendProtocol(BRLD_END_OF_SLIST, chan->name, "End of SLIST list.");
+        Dispatcher::JustAPI(user, BRLD_SLIST_END);
 }

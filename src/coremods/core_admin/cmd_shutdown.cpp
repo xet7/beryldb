@@ -30,7 +30,7 @@ COMMAND_RESULT CommandShutdown::Handle(User* user, const Params& parameters)
                 reason = parameters.back();
         }
         
-        user->SendProtocol(BRLD_SHUTTING_DOWN, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         
         if (!reason.empty())
         {

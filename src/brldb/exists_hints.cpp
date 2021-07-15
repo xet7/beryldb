@@ -64,5 +64,5 @@ void exists_query::Run()
 
 void exists_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }

@@ -23,6 +23,7 @@
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
          group = 'k';
 }
@@ -31,6 +32,11 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        if (!CheckFormat(user, value))
        {
@@ -43,6 +49,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 
 CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
          group = 'k';
 }
@@ -51,6 +58,11 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -63,6 +75,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 
 CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 {
+         groups = { 'e', 'k' };
          syntax = "<key> <value>";
          groups = { 'e', 'k' };
 }
@@ -71,6 +84,11 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -83,6 +101,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 
 CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
          group = 'k';
 }
@@ -91,6 +110,11 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -104,6 +128,7 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
+         group = 'k';
          syntax = "<key> <value>";
          group = 'k';
 }
@@ -112,6 +137,11 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -124,8 +154,13 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
 
 CommandCount::CommandCount(Module* Creator) : Command(Creator, "COUNT", 0, 1)
 {
+<<<<<<< HEAD
          syntax = "<\%key>";
          group = 'k';
+=======
+       group = 'k';
+       syntax = "<\%key>";
+>>>>>>> unstable
 }
 
 COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)

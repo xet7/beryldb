@@ -36,7 +36,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
                db->FlushDB();
      }
                 
-     user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);                
+     user->SendProtocol(BRLD_OK, PROCESS_OK);                
      return SUCCESS;
 }
 
@@ -57,23 +57,23 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        }
        else
        {
-            database = user->current_db;
+            database = user->GetDatabase();
        }
        
        if (!database)
        {
-            user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
+            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
             return FAILED;
        }
        
        if (DBHelper::FlushDB(database, true))
        {
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
 
-       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->current_db->GetName().c_str());      
-       user->SendProtocol(ERR_INPUT2, ERR_UNABLE_FLUSH, PROCESS_FALSE);
+       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+       user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
        return FAILED;
 }
 

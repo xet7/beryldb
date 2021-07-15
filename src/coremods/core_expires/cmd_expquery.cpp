@@ -30,17 +30,17 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_EXPIRE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -56,17 +56,17 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
          
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl));
+                  user->SendProtocol(BRLD_OK, static_cast<unsigned int>((int)ttl));
          }
          else
          {      
                   /* Unable to remove this 'key' from ExpireManager. */
                   
-                  user->SendProtocol(ERR_INPUT2, ERR_NOT_EXPIRE, PROCESS_NULL);
+                  user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -82,7 +82,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
           
-         signed int ttl = ExpireManager::GetTIME(user->current_db, key, user->select);
+         signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -90,7 +90,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          }
          else
          {
-                 user->SendProtocol(ERR_INPUT2, ERR_PERSIST, PROCESS_NULL);
+                 user->SendProtocol(ERR_INPUT, PROCESS_NULL);
          }
          
          return SUCCESS;
@@ -126,7 +126,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          {
                ExpireEntry entry = it->second;
 
-               if (entry.select != select || entry.database != user->current_db)
+               if (entry.select != select || entry.database != user->GetDatabase())
                {  
                          continue;
                }

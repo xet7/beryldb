@@ -30,7 +30,7 @@ class CommandPartAll : public Command
                       return FAILED;
                }
                
-               user->SendProtocol(BRLD_INPUT, BRLD_PARTALL, PROCESS_OK);
+               user->SendProtocol(BRLD_OK, BRLD_PARTALL, PROCESS_OK);
 
 	       for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
 	       {

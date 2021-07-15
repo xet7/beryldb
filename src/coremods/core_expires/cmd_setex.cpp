@@ -33,6 +33,11 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
           const std::string& key = parameters[1];
           const std::string& value = parameters[2];
 
+          if (!CheckKey(user, key))
+          {
+              return FAILED;
+          }
+
           /* Similar to a set, setex must have a proper inserting format. */
           
           if (!CheckFormat(user, value))
@@ -61,6 +66,11 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
 {    
           const std::string& key = parameters[0];
           const std::string& seconds = parameters[1];
+
+          if (!CheckKey(user, key))
+          {
+               return FAILED;
+          }
           
           if (!CheckValid(user, seconds))
           {
@@ -76,7 +86,7 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
 
           if ((time_t)exp_usig < Kernel->Now())
           {
-                 user->SendProtocol(ERR_INPUT2, ERR_EXPIRE, PROCESS_ERROR);
+                 user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                  return FAILED;
           }
           

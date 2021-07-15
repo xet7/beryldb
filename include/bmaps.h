@@ -32,6 +32,8 @@ typedef std::vector<std::string> file_cache;
 
 typedef brld::flat_map<std::string, std::string, engine::insensitive_swo> file_config_items;
 
+typedef std::vector<std::shared_ptr<Group>> GroupVector;
+
 /* Keeps copy of the entire config file. */
 
 typedef std::multimap<std::string, reference<config_rule>, engine::insensitive_swo> ConfigMap;

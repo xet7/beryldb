@@ -47,7 +47,7 @@ void mseek_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<mseek_query> request = std::make_shared<mseek_query>();
                                                 request->user = this->user;
@@ -70,7 +70,7 @@ void mseek_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<mseek_query> request = std::make_shared<mseek_query>();
                                         request->user = this->user;
@@ -133,7 +133,7 @@ void mdel_query::Run()
 
 void mdel_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 
@@ -176,7 +176,7 @@ void mset_query::Run()
 
 void mset_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void mkeys_query::Run()
@@ -272,7 +272,7 @@ void mkeys_query::Run()
                                     aux_counter++;
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<mkeys_query> request = std::make_shared<mkeys_query>();
                                                 request->user = this->user;
@@ -295,7 +295,7 @@ void mkeys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<mkeys_query> request = std::make_shared<mkeys_query>();
                                         request->user = this->user;
@@ -382,7 +382,7 @@ void mget_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<mget_query> request = std::make_shared<mget_query>();
                                                 request->user = this->user;
@@ -405,7 +405,7 @@ void mget_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<mget_query> request = std::make_shared<mget_query>();
                                         request->user = this->user;
@@ -432,7 +432,7 @@ void mget_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+               user->SendProtocol(BRLD_OK, convto_string(this->counter));
                return;
         }
 
@@ -465,7 +465,7 @@ void mrepeats_query::Run()
 
 void mrepeats_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+        user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 
@@ -494,7 +494,7 @@ void mvals_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                                 request->user = this->user;
@@ -517,7 +517,7 @@ void mvals_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                         request->user = this->user;
@@ -586,7 +586,7 @@ void mgetall_query::Run()
                                     aux_counter++;
                                     result_return.insert(std::make_pair(vkey, vvalue));
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<mgetall_query> request = std::make_shared<mgetall_query>();
                                                 request->user = this->user;
@@ -609,7 +609,7 @@ void mgetall_query::Run()
                              aux_counter++;
                              result_return.insert(std::make_pair(vkey, vvalue));
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<mgetall_query> request = std::make_shared<mgetall_query>();
                                         request->user = this->user;
@@ -679,7 +679,7 @@ void miter_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
 
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<miter_query> request = std::make_shared<miter_query>();
                                                 request->user = this->user;
@@ -702,7 +702,7 @@ void miter_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
 
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<miter_query> request = std::make_shared<miter_query>();
                                         request->user = this->user;

@@ -22,6 +22,7 @@
 
 CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
 {
+         group = 'l';
          syntax = "<key> <value>";
 }
 
@@ -29,6 +30,11 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        if (!CheckFormat(user, value))
        {
@@ -41,12 +47,18 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
 
 CommandLCount::CommandLCount(Module* Creator) : Command(Creator, "LCOUNT", 1, 1)
 {
+         group = 'l';
          syntax = "<key>";
 }
 
 COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        ListHelper::Count(user, key);
        return SUCCESS;  

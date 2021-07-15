@@ -38,7 +38,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          if (parameters.size() && arg != "h" && arg != "r")
          {
-                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, INVALID_TYPE);
+                  user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                   return FAILED;
          }
          
@@ -99,7 +99,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          {
                FutureEntry entry = it->second;
 
-               if (entry.select != select || entry.database != user->current_db)
+               if (entry.select != select || entry.database != user->GetDatabase())
                {  
                          continue;
                }

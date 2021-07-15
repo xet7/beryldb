@@ -22,7 +22,7 @@ class CoreModuleMaps : public Module
         CommandHGet cmdhget;
         CommandHDel cmdhdel;
         CommandHCount cmdhcount;
-        CommandHFind cmdhfind;
+        CommandHKeys cmdhfind;
         CommandHList cmdhlist;
         CommandHExists cmdhexists;
         CommandHStrlen cmdhstrlen;

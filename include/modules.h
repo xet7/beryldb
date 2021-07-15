@@ -335,11 +335,26 @@ class ExportAPI Module : public base_class, public usecountbase
          */    
 
 	virtual void OnUserExit(User* user, const std::string &message);
-	
-	virtual void OnInstanceDisconnect(LocalUser* local);
-	
-	virtual ModuleResult OnChannelPreDelete(Channel *chan);
 
+        /* 
+         * Called as an user gets disconnected.
+         * 
+         * @parameters:
+	 *
+	 *         · LocalUser: User disconnecting.
+         */    	
+         
+	virtual void OnInstanceDisconnect(LocalUser* local);
+
+        /* 
+         * Called as a channel is about to be disconnected.
+         * 
+         * @parameters:
+	 *
+	 *         · Channel to check.
+         */    	
+         
+	virtual ModuleResult OnChannelPreDelete(Channel *chan);
 
 	virtual void OnChannelDelete(Channel* chan);
 
@@ -489,7 +504,7 @@ class ExportAPI Module : public base_class, public usecountbase
 
 	virtual void OnEveryHour(time_t curtime);
 	
-	virtual ModuleResult OnSetConnectConfig(LocalUser* user, connect_config* myclass);
+	virtual ModuleResult OnSetConnectConfig(LocalUser* user, ConfigConnect* myclass);
 	
 	virtual void OnSetUserIP(LocalUser* user);
 
@@ -569,11 +584,33 @@ class ExportAPI ModuleHandler : public safecast<ModuleHandler>
 
 	std::string& LastError();
 	
+	/* 
+         * Loads a module.
+         * 
+         * @parameters:
+	 *
+	 *         · filename: File to load.
+	 *         · nextloop: Whether to load this module in the next loop.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Module loaded.
+         *         · False: Unable to load module.
+         */    
+         
 	bool Load(const std::string& filename, bool nextloop = false);
 
 	bool Unload(Module* module);
 
+        /* 
+         * Loads all modules. This function should be called right after
+         * booting beryl.
+         */    
+         
 	void LoadAll();
+	
+	/* Unloads all modules. */
+	
 	void UnloadAll();
 	
 	/* Unloads a module in the next loop. */

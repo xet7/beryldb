@@ -105,7 +105,7 @@ ModuleResult	Module::OnChannelPreDelete(Channel*) { DetachEvent(I_OnChannelPreDe
 void		Module::OnChannelDelete(Channel*) { DetachEvent(I_OnChannelDelete); }
 void		Module::OnNeighborBuild(User*, SubscriptionList&, std::map<User*,bool>&) { DetachEvent(I_OnNeighborBuild); }
 void		Module::OnEveryHour(time_t) { DetachEvent(I_OnEveryHour); }
-ModuleResult	Module::OnSetConnectConfig(LocalUser* user, connect_config* myclass) { DetachEvent(I_OnSetConnectConfig); return MOD_RES_SKIP; }
+ModuleResult	Module::OnSetConnectConfig(LocalUser* user, ConfigConnect* myclass) { DetachEvent(I_OnSetConnectConfig); return MOD_RES_SKIP; }
 void 		Module::OnInstancePublish(User*, const MessageTarget&, const MessageLoad&) { DetachEvent(I_OnInstancePublish); }
 ModuleResult    Module::OnAcceptConnection(int, BindingPort*, engine::sockets::sockaddrs*, engine::sockets::sockaddrs*) { DetachEvent(I_OnAcceptConnection); return MOD_RES_SKIP; }
 void		Module::OnSetUserIP(LocalUser*) { DetachEvent(I_OnSetUserIP); }

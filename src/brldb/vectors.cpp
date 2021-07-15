@@ -22,7 +22,7 @@
 
 void vsort_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vsort_query::Run()
@@ -130,7 +130,7 @@ void vkeys_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<vkeys_query> request = std::make_shared<vkeys_query>();
@@ -154,7 +154,7 @@ void vkeys_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<vkeys_query> request = std::make_shared<vkeys_query>();
@@ -225,7 +225,7 @@ void vresize_query::Run()
 
 void vresize_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vpush_query::Run()
@@ -275,7 +275,7 @@ void vpush_query::Run()
 
 void vpush_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vget_query::Run()
@@ -321,7 +321,7 @@ void vget_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<vget_query> request = std::make_shared<vget_query>();
                                                 request->user = this->user;
@@ -344,7 +344,7 @@ void vget_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<vget_query> request = std::make_shared<vget_query>();
                                         request->user = this->user;
@@ -371,7 +371,7 @@ void vget_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+               user->SendProtocol(BRLD_OK, convto_string(this->counter));
                return;
         }
 
@@ -410,7 +410,7 @@ void vcount_query::Run()
 
 void vcount_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter).c_str());
+       user->SendProtocol(BRLD_OK, convto_string(this->counter).c_str());
 }
 
 void vpos_query::Run()
@@ -432,12 +432,12 @@ void vpos_query::Run()
 
 void vpos_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void vexist_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void vexist_query::Run()
@@ -492,7 +492,7 @@ void vpop_front_query::Run()
 
 void vpop_front_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vpop_back_query::Run()
@@ -523,12 +523,12 @@ void vpop_back_query::Run()
 
 void vpop_back_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void vdel_query::Run()
@@ -558,7 +558,7 @@ void vdel_query::Run()
 
 void verase_from_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void verase_from_query::Run()
@@ -604,7 +604,7 @@ void vreverse_query::Run()
 
 void vreverse_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 
@@ -625,6 +625,6 @@ void vrepeats_query::Run()
 
 void vrepeats_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 

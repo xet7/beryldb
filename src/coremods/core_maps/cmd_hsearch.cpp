@@ -20,15 +20,20 @@
 #include "engine.h"
 #include "core_maps.h"
 
-CommandHFind::CommandHFind(Module* Creator) : Command(Creator, "HFIND", 1, 3)
+CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)
 {
          group = 'm';
          syntax = "<map> <offset> <limit>";
 }
 
-COMMAND_RESULT CommandHFind::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
@@ -54,6 +59,11 @@ CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 COMMAND_RESULT CommandHList::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        

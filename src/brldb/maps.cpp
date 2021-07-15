@@ -107,7 +107,7 @@ void hfind_query::Run()
                                     
                                     result.push_back(key_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 tracker++;
                                                 std::shared_ptr<hfind_query> request = std::make_shared<hfind_query>();
@@ -131,7 +131,7 @@ void hfind_query::Run()
                              aux_counter++;
                              result.push_back(key_as_string);
 
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         tracker++;
                                         std::shared_ptr<hfind_query> request = std::make_shared<hfind_query>();
@@ -215,7 +215,7 @@ void hset_query::Run()
 
 void hset_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hsetnx_query::Run()
@@ -245,7 +245,7 @@ void hsetnx_query::Run()
 
 void hsetnx_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hexists_query::Run()
@@ -276,7 +276,7 @@ void hexists_query::Run()
 
 void hexists_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void hstrlen_query::Run()
@@ -310,7 +310,7 @@ void hstrlen_query::Run()
 
 void hstrlen_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void hget_query::Run()
@@ -344,7 +344,7 @@ void hget_query::Run()
 
 void hget_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void hdel_query::Run()
@@ -368,7 +368,7 @@ void hdel_query::Run()
 
 void hdel_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hlist_query::Run()
@@ -409,7 +409,7 @@ void hlist_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hlist_query> request = std::make_shared<hlist_query>();
                                                 request->user = this->user;
@@ -432,7 +432,7 @@ void hlist_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hlist_query> request = std::make_shared<hlist_query>();
                                         request->user = this->user;
@@ -459,7 +459,7 @@ void hlist_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(counter));
+               user->SendProtocol(BRLD_OK, convto_string(counter));
                return;
         }
         
@@ -502,7 +502,7 @@ void hwdel_query::Run()
 
 void hwdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hvals_query::Run()
@@ -530,7 +530,7 @@ void hvals_query::Run()
                                     aux_counter++;
                                     result_return.push_back(hesh_as_string);
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                                 request->user = this->user;
@@ -553,7 +553,7 @@ void hvals_query::Run()
                              aux_counter++;
                              result_return.push_back(hesh_as_string);
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hvals_query> request = std::make_shared<hvals_query>();
                                         request->user = this->user;
@@ -621,7 +621,7 @@ void hgetall_query::Run()
                                     aux_counter++;
                                     result_return.insert(std::make_pair(vkey, vvalue));
              
-                                    if (aux_counter % 100 == 0)
+                                    if (aux_counter % ITER_LIMIT == 0)
                                     {
                                                 std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
                                                 request->user = this->user;
@@ -644,7 +644,7 @@ void hgetall_query::Run()
                              aux_counter++;
                              result_return.insert(std::make_pair(vkey, vvalue));
             
-                             if (aux_counter % 100 == 0)
+                             if (aux_counter % ITER_LIMIT == 0)
                              {
                                         std::shared_ptr<hgetall_query> request = std::make_shared<hgetall_query>();
                                         request->user = this->user;

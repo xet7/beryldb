@@ -50,6 +50,10 @@ bool GroupManager::Add(const std::string& gname, const std::string& flags)
       }
       
       std::shared_ptr<Group> New = std::make_shared<Group>();
+<<<<<<< HEAD
+=======
+      New->created = Kernel->Now();
+>>>>>>> unstable
       New->name = name;
       New->UpdateFlags(flags);
       

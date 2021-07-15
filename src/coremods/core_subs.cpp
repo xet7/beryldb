@@ -48,7 +48,7 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
       
       unsigned int counter = 0;
 
-      user->SendProtocol(BRLD_SUBS_LIST_BEGIN, "BEGIN of SUBSCRIPTION list.");
+      Dispatcher::JustAPI(user, BRLD_SUBS_LIST_BEGIN);
        
       for (ChanMap::const_iterator i = chans.begin(); i != chans.end(); ++i)
       {
@@ -61,11 +61,10 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
                      }
                      
                      counter++;
-                     
-                     user->SendProtocol(BRLD_SUBS_LIST, chan->name, users, Daemon::Format("%s | %li", chan->name.c_str(), users).c_str());                      
+                     Dispatcher::CondList(user, BRLD_SUBS_LIST, chan->name, convto_string(users));
       }
-      
-      user->SendProtocol(BRLD_SUBS_LIST_END, counter, Daemon::Format("End of SUBSCRIPTION list (%i).", counter).c_str());
+
+      Dispatcher::JustAPI(user, BRLD_SUBS_LIST_END);
             
       return SUCCESS;
 };

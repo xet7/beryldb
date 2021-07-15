@@ -53,7 +53,7 @@ class CommandSetAgent : public Command
                 if (IS_LOCAL(target))
                 {
                         target->SetAgent(parameters[1]);
-                        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+                        user->SendProtocol(BRLD_OK, PROCESS_OK);
                 }                
                 
                 return SUCCESS;

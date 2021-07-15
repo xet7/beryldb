@@ -22,6 +22,7 @@
 
 CommandHDel::CommandHDel(Module* Creator) : Command(Creator, "HDEL", 2, 2)
 {
+         group = 'm';
          syntax = "<map> <key>";
 }
 
@@ -34,9 +35,9 @@ COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-
 CommandHWDel::CommandHWDel(Module* Creator) : Command(Creator, "HWDEL", 2, 2)
 {
+         group = 'm';
          syntax = "<map> <key>";
 }
 

@@ -31,7 +31,7 @@ COMMAND_RESULT CommandLoadmodule::Handle(User* user, const Params& parameters)
         if (Kernel->Modules->Load(parameters[0]))
         {
                 sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
-                user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
                 return SUCCESS;
         }
         else
@@ -72,7 +72,7 @@ COMMAND_RESULT CommandUnloadmodule::Handle(User* user, const Params& parameters)
        if (InUse && Kernel->Modules->Unload(InUse))
        {
               sfalert(user, NOTIFY_DEFAULT, "Module %s loaded.", parameters[0].c_str());
-              user->SendProtocol(BRLD_INPUT, PROCESS_OK);          
+              user->SendProtocol(BRLD_OK, PROCESS_OK);          
        }
        else
        {

@@ -51,8 +51,10 @@ enum BRLD_PROTOCOL
         BRLD_MODLIST 			= 		131,
         BRLD_END_OF_MODLIST 		= 		132,
 	BRLD_VERSION                    = 		133,
-	BRLD_SLIST_REPLY                = 		134,
+	BRLD_SLIST_ITEM                 = 		134,
         BRLD_SYNTAX                     = 		135, 
+        BRLD_SLIST_BEGIN		=		136,
+        BRLD_SLIST_END			=		137,
         
         BRLD_FINGER_END                 = 		140,
         BRLD_DBQUERY_OK                 = 		141,
@@ -79,7 +81,7 @@ enum BRLD_PROTOCOL
 	BRLD_NEW_USE			=		161,
 	BRLD_COMMANDS_START 		= 		162,
 	BRLD_COMMANDS_END 		= 		163,
-	BRLD_QUERY_OK			=		164,
+	BRLD_OK			=		164,
 	BRLD_CURRENT_USE		=		165,
 	BRLD_ADD_FLAGS			=		166,
 	BRLD_LOGIN_CHPASS		=		167,
@@ -168,10 +170,8 @@ enum BRLD_PROTOCOL
 	BRLD_MONITOR_USER		=		251,
 	BRLD_FUTURE_EXEC		=		253,
 	BRLD_INFO_FUT_DEL		=		255,
-	BRLD_FUTURE_DELETED		=		256,
 	BRLD_MY_CHANS			=		257,
 	BRLD_CHANS			=		258,
-	BRLD_WHOAMI			=		260,
 	
 	BRLD_PAUSED			=		261,
 	BRLD_RESUMED			=		262,
@@ -183,7 +183,10 @@ enum BRLD_PROTOCOL
 	BRLD_AGENT			=		268,
 	BRLD_LOCAL_EPOCH		=		269,
 	
+<<<<<<< HEAD
 	BRLD_TEST			=		270,
+=======
+>>>>>>> unstable
 	BRLD_GROUP			=		272,
 	BRLD_USER_LIST_BEGIN		=		273,
 	BRLD_ADMIN_LIST_BEGIN		=		274,
@@ -223,9 +226,14 @@ enum BRLD_PROTOCOL
 	BRLD_EXPIRES			=		306,
 	BRLD_FUTURES			=		307,	
 	BRLD_LOGIN			=		308,
+<<<<<<< HEAD
 	BRLD_INPUT			=		309,
 	
 	BRLD_INPUT2			=		310,
+=======
+	
+	BRLD_OK2			=		310,
+>>>>>>> unstable
 	BRLD_USERS_INFO			=		311,
 	BRLD_CHAN_INFO			=		312,
 	BRLD_COMMANDS			=		313,
@@ -277,8 +285,6 @@ enum BRLD_PROTOCOL
 	ERR_INVALID_PASS		=		541,
 	ERR_INVALID_PARAM		=		542,
 	ERR_EXPIRE			=		543,
-	ERR_NOT_EXPIRE			=		544,
-	ERR_PERSIST			=		545,
 	ERR_WRONG_SYNTAX		=		546,
 	ERR_NOT_ACCEPTING_C		=		547,
 	ERR_USE				=		548,
@@ -287,7 +293,6 @@ enum BRLD_PROTOCOL
 	
 	ERR_CONFIG_NOT_FOUND		=		551,
         ERR_MUST_BE_DOUBLE              =               552,
-        ERR_MUST_BE_INT                 =               553,
         ERR_UNABLE_DBRESET		=		554,
         ERR_NO_ORIGIN			=		555,
         ERR_EXCEED_BUFFER        	=		556,
@@ -305,7 +310,6 @@ enum BRLD_PROTOCOL
 	ERR_FUTURE			=		568,
 	ERR_INVALID_MONITORLVL		=		569,
 	
-	ERR_NOT_FUTURE			=		570,
 	ERR_INVALID_NOTLVL		=		572,
 	ERR_NO_NOTIFY			=		573,
 	ERR_NOT_VALID_COORDINATE	=		574,

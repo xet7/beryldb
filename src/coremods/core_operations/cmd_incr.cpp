@@ -15,6 +15,7 @@
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"
+#include "maker.h"
 #include "managers/keys.h"
 #include "engine.h"
 #include "core_operations.h"
@@ -28,6 +29,11 @@ CommandIncr::CommandIncr(Module* Creator) : Command(Creator, "INCR", 1)
 COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
 
         KeyHelper::Operation(user, key, OP_INCR);
         return SUCCESS;  
@@ -44,6 +50,11 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
         const std::string& key = parameters[0];
         const std::string& value = parameters[1];
         
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
         if (!is_number(value, true))
         {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
@@ -54,4 +65,28 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandAvg::CommandAvg(Module* Creator) : Command(Creator, "AVG", 2, 2)
+{
+         group = 'k';
+         syntax = "<key> <value>";
+}
 
+COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters[1];
+        
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
+        if (!is_number(value, true))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+
+        KeyHelper::Operation(user, key, OP_AVG, value);
+        return SUCCESS;  
+}

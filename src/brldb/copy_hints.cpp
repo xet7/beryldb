@@ -87,5 +87,5 @@ void copy_query::Run()
 
 void copy_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }

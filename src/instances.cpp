@@ -101,6 +101,17 @@ User::~User()
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
 
+bool User::PushGroup(std::shared_ptr<Group> grp)
+{
+	if (!HasGroup(grp))
+	{
+	      this->Groups.push_back(grp);	
+    	      return true;
+	}
+	
+	return false;
+}
+
 void User::SetNullDB()
 {
         std::lock_guard<std::mutex> lg(User::db_mute);
@@ -183,7 +194,11 @@ bool User::InGroup(unsigned char flag)
 		return false;
 	}	
 	
+<<<<<<< HEAD
         for (std::vector<std::shared_ptr<Group>>::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+=======
+        for (GroupVector::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+>>>>>>> unstable
         {
         	std::shared_ptr<Group> group = (*i);
         	
@@ -199,6 +214,32 @@ bool User::InGroup(unsigned char flag)
         return false;
 }
 
+<<<<<<< HEAD
+=======
+std::string User::GetAllGroups()
+{
+	std::string flags;
+	
+	unsigned int counter = 0;
+	
+	for (GroupVector::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
+	{
+	        std::string gname = (*i)->GetName();
+	        
+		flags += gname;
+		
+		counter++;
+		
+		if (counter != this->Groups.size())
+		{
+			flags += ", ";	
+		}
+	}
+	
+	return flags;
+}
+
+>>>>>>> unstable
 bool User::CanPerform(unsigned char flag)
 {
 	/* We cannot check privs if no session is present. */
@@ -373,7 +414,7 @@ DiscardResult GlobalUser::discard()
 
 void LocalUser::check_con_conf(bool clone_count)
 {
-	connect_config* ac = this->assigned_class;
+	ConfigConnect* ac = this->assigned_class;
 
 	if (!ac)
 	{
@@ -784,13 +825,13 @@ bool User::SetAgent(const std::string& newagent)
 
 void LocalUser::set_class(const std::string &classname)
 {
-	connect_config *found = NULL;
+	ConfigConnect *found = NULL;
 
 	if (!classname.empty())
 	{
 		for (Configuration::class_refvec::const_iterator i = Kernel->Config->Classes.begin(); i != Kernel->Config->Classes.end(); ++i)
 		{
-			connect_config* c = *i;
+			ConfigConnect* c = *i;
 
 			if (classname == c->name)
 			{
@@ -802,7 +843,7 @@ void LocalUser::set_class(const std::string &classname)
 	{
 		for (Configuration::class_refvec::const_iterator i = Kernel->Config->Classes.begin(); i != Kernel->Config->Classes.end(); ++i)
 		{
-			connect_config* c = *i;
+			ConfigConnect* c = *i;
 
 			ModuleResult MOD_RESULT;
 			UNTIL_RESULT(OnSetConnectConfig, MOD_RESULT, (this,c));
@@ -871,7 +912,7 @@ const std::string& GlobalUser::GetHostFormat()
 	return server->GetName();
 }
 
-connect_config::connect_config(config_rule* tag, char t, const std::string& mask)
+ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask)
 			: config(tag)
 			, type(t)
 			, name("undefined")
@@ -880,7 +921,7 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 
 }
 
-connect_config::connect_config(config_rule* tag, char t, const std::string& mask, const connect_config& parent)
+ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask, const ConfigConnect& parent)
 {
 	Update(&parent);
 	name = "undefined";
@@ -910,7 +951,7 @@ connect_config::connect_config(config_rule* tag, char t, const std::string& mask
 	}
 }
 
-void connect_config::Update(const connect_config* src)
+void ConfigConnect::Update(const ConfigConnect* src)
 {
 		config = src->config;
 		type = src->type;

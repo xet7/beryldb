@@ -29,7 +29,11 @@ COMMAND_RESULT CommandAgent::HandleLocal(LocalUser* user, const Params& paramete
 	{
 	        if (agent.empty() || agent.length() < 3 || agent.length() > 15)
 	        {
+<<<<<<< HEAD
                         user->SendProtocol(ERR_BAD_FORMAT, agent, VALID_AGENT);
+=======
+                        user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, VALID_AGENT);
+>>>>>>> unstable
                         return FAILED;
 	        }
 

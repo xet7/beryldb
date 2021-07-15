@@ -49,7 +49,7 @@ enum UserType
 	CLIENT_TYPE_SERVER = 3
 };
 
-struct ExportAPI connect_config : public refcountbase
+struct ExportAPI ConfigConnect : public refcountbase
 {
 
 	reference<config_rule> config;
@@ -66,11 +66,15 @@ struct ExportAPI connect_config : public refcountbase
 	
 	brld::flat_set<int> ports;
 	
-	connect_config(config_rule* tag, char type, const std::string& mask);
+	ConfigConnect(config_rule* tag, char type, const std::string& mask);
 	
-	connect_config(config_rule* tag, char type, const std::string& mask, const connect_config& parent);
+	ConfigConnect(config_rule* tag, char type, const std::string& mask, const ConfigConnect& parent);
 
+<<<<<<< HEAD
 	void Update(const connect_config* newSettings);
+=======
+	void Update(const ConfigConnect* newSettings);
+>>>>>>> unstable
 
 	const std::string& GetName() 
 	{ 
@@ -113,6 +117,12 @@ class ExportAPI User : public Expandable
 	/* Atomic uint for quitting status. */
 	
         std::atomic<unsigned int> quitting;
+
+        std::shared_ptr<UserDatabase> current_db;
+        
+        /* Groups' this user belongs to. */
+        
+        GroupVector Groups;
         
  public:
 
@@ -133,6 +143,8 @@ class ExportAPI User : public Expandable
 
 	typedef brld::node_list<Subscription> SubsList;
 	
+        /* Indicates whether this used is paused or not. */
+        
         bool Paused;
 	
 	/* Time since logged. */
@@ -143,6 +155,8 @@ class ExportAPI User : public Expandable
 
 	time_t connected;
 
+	/* Password this user used to log in. */
+	
 	std::string auth;
 
 	/* login this user is using to access the server. */
@@ -157,6 +171,8 @@ class ExportAPI User : public Expandable
 
 	std::string instance;
 	
+	/* Sets current_db to nullptr. */
+		
 	void SetNullDB();
 	
         /* 
@@ -180,9 +196,28 @@ class ExportAPI User : public Expandable
          	
 	bool IsQuitting();
 	
+        /* 
+         * Locks this user, so we can later recognized it
+         * as being busy.
+         *
+         * @parameters:
+	 *
+	 *         · flag: Either true or false.
+         */    	
+         
 	void SetLock(bool flag);
-	
+
+        /* 
+         * Checks whether this user has any pending query.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is busy.
+         */    	
+         
 	bool IsLocked();
+	
+	/* Unique id */
 	
 	const std::string uuid;
 
@@ -213,6 +248,7 @@ class ExportAPI User : public Expandable
 	
 	int GetFirstFlag();
 
+<<<<<<< HEAD
 	std::vector<std::shared_ptr<Group>> Groups;
 	
 	void RemoveGroup(std::shared_ptr<Group> group);
@@ -247,12 +283,85 @@ class ExportAPI User : public Expandable
 	bool InGroup(unsigned char flag);
 	
 	bool CanPerform(unsigned char flag);
+=======
+        /* 
+         * Removes group from Groups
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to remove.
+         */    	
+         
+	void RemoveGroup(std::shared_ptr<Group> group);
+>>>>>>> unstable
 	
-        std::shared_ptr<UserDatabase> current_db;
+        /* 
+         * Checks if given user is in group.
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in group.
+         *         · False: Unable to find user.
+         */    
+         
+	bool HasGroup(std::shared_ptr<Group> group);
+
+        /* 
+         * Checks whether user is in a given group.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is in group.
+         */    	
+         
+	bool InGroup(unsigned char flag);
+
+        /* 
+         * Checks whether user has required flags to
+         * run a command.
+         *
+         * @parameters:
+	 *
+	 *         · flag: Flag to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Command can be executed.
+         *         · False: No required flags.
+         */    	
+         
+	bool CanPerform(unsigned char flag);
         
+        /* 
+         * Changes current db for this user.
+         * 
+         * @parameters:
+	 *
+	 *         · database: New database to use.
+         */    
+         
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
         
+<<<<<<< HEAD
         
+=======
+        /* 
+         * Gets user's database.
+         * 
+         * @parameters:
+	 *
+	 *         · UserDatabase: current_db.
+         */            
+         
+>>>>>>> unstable
         std::shared_ptr<UserDatabase> GetDatabase();
 	
         std::deque<std::shared_ptr<QueryBase>> pending;
@@ -263,18 +372,13 @@ class ExportAPI User : public Expandable
         
 	unsigned int registered:3;
 
-
         const unsigned int usertype:2;
-	
 	
 	const std::string& GetReadableIP();
 
-	
 	const std::string& GetRealHost() const;
 
-	
 	engine::sockets::cidr_mask GetCompactIPMask();
-
 	
 	virtual bool set_client_ip(const std::string& address);
 
@@ -289,6 +393,51 @@ class ExportAPI User : public Expandable
 	
 	void ResetCache();
 
+        /* 
+         * Returns list of groups.
+         * 
+         * @return:
+ 	 *
+         *         · GroupVector: A vector of containing groups.
+         */    
+         
+	GroupVector& GetGroups()
+	{
+	      return this->Groups;
+	}
+
+        /*  
+         * Replaces this->groups with a provided GroupVector.
+         * 
+         * @parameters:
+	 *
+	 *         · vgroup: Groups to replace.
+         */    	
+         
+	void SetGroups(const GroupVector& vgroup)
+	{
+	 	this->Groups = vgroup;
+	}
+	
+        /* 
+         * Adds a new group to the user's vector.
+         * 
+         * @parameters:
+	 *
+	 *         · grp: Group to add.
+         */    	
+         
+	bool PushGroup(std::shared_ptr<Group> grp);
+
+        /*  
+         * Obtains all flags grouped from all groups.
+         * 
+         * @return:
+ 	 *
+         *         · string: All flags.
+         */    		
+         
+	std::string GetAllGroups();
 	
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
@@ -482,10 +631,10 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
 	ProtocolTrigger::Serializer* serializer;
 	
-	reference<connect_config> assigned_class;
+	reference<ConfigConnect> assigned_class;
 
 	
-	connect_config* GetClass() const 
+	ConfigConnect* GetClass() const 
 	{ 
 		return assigned_class; 
 	}

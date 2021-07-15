@@ -26,7 +26,7 @@
 
 CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 {
-
+       group = 'w';
 }
 
 COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
@@ -34,11 +34,11 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
        if (!BASE_PATH.empty())
        {
             const std::string path = BASE_PATH.c_str();
-            user->SendProtocol(BRLD_INPUT, path);
+            user->SendProtocol(BRLD_OK, path);
             return SUCCESS;
        }
 
-       user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_SET, PROCESS_NULL);
+       user->SendProtocol(ERR_INPUT, PROCESS_NULL);
        return FAILED;
 }
 
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       user->SendProtocol(BRLD_INPUT, dbname);
+       user->SendProtocol(BRLD_OK, dbname);
        return SUCCESS;
 }
 
@@ -71,7 +71,11 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
        if (user->GetDatabase())
        {
              std::string dbname = user->GetDatabase()->GetName();                                  
+<<<<<<< HEAD
              user->SendProtocol(BRLD_QUERY_OK, dbname);
+=======
+             user->SendProtocol(BRLD_OK, dbname);
+>>>>>>> unstable
              return SUCCESS;	
        }
        
@@ -97,7 +101,7 @@ COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 
        user->SetDatabase(database);
        STHelper::Set("dbuser", user->login, dbname);
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -117,6 +121,7 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
             std::shared_ptr<UserDatabase> udb = it->second;
             const std::string& dbname = udb->GetName();
             const std::string& dbpath = udb->GetPath();
+            
             Dispatcher::CondList(user, BRLD_DB_ITEM, dbname, dbpath);
       }     
       
@@ -149,10 +154,10 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
       if (Kernel->Store->DBM->Create(dbname, dbname))
       {			
              Kernel->Store->DBM->Load(dbname);
-             user->SendProtocol(BRLD_DB_CREATED, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
              sfalert(user, NOTIFY_DEFAULT, "Added database: %s", dbname.c_str());      
              
-             if (user->current_db == nullptr)
+             if (user->GetDatabase() == nullptr)
              {
                   std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
                   
@@ -207,7 +212,7 @@ CommandDBTest::CommandDBTest(Module* Creator) : Command(Creator, "TEST", 0, 0)
 
 COMMAND_RESULT CommandDBTest::Handle(User* user, const Params& parameters)
 {
-      user->SendProtocol(BRLD_TEST, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
       TestHelper::Dump(user);
       return SUCCESS;
 }
@@ -226,13 +231,13 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
       if (!database)
       {
-             user->SendProtocol(ERR_INPUT2, ERR_DB_NOT_FOUND, PROCESS_NULL);
+             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
              return FAILED;
       }
 
       sfalert(user, NOTIFY_DEFAULT, "Setting default database to: %s", database->GetName().c_str());
 
       DBManager::SetDefault(dbname);
-      user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }

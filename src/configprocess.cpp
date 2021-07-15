@@ -80,7 +80,7 @@ void Configuration::CrossCheckConnectBlocks()
 				continue;
 			}
 
-			connect_config* parent = NULL;
+			ConfigConnect* parent = NULL;
 			std::string ParentName = tag->as_string("parent");
 			
 			if (!ParentName.empty())
@@ -143,9 +143,9 @@ void Configuration::CrossCheckConnectBlocks()
 			
 			names[name] = i;
 
-			connect_config* me = parent ?
-				new connect_config(tag, type, mask, *parent) :
-				new connect_config(tag, type, mask);
+			ConfigConnect* me = parent ?
+				new ConfigConnect(tag, type, mask, *parent) :
+				new ConfigConnect(tag, type, mask);
 
 			me->name = name;
 

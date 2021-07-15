@@ -31,7 +31,11 @@ namespace
              
              if (InUse && InUse != user)
              {
+<<<<<<< HEAD
                    user->Groups = InUse->Groups;
+=======
+                   user->SetGroups(InUse->GetGroups());
+>>>>>>> unstable
                    return;
              }
              
@@ -47,7 +51,11 @@ namespace
                        
                        if (group)
                        {
+<<<<<<< HEAD
                             user->Groups.push_back(group);
+=======
+                            user->PushGroup(group);
+>>>>>>> unstable
                        }
              }
      }
@@ -217,8 +225,8 @@ class ModuleCoreDB : public Module
                       
                        if (database)
                        {
-                            ExpireHelper::List(database);
-                            ExpireHelper::ListFutures(database);
+                             ExpireHelper::List(database);
+                             ExpireHelper::ListFutures(database);
                        }
                  }
                  

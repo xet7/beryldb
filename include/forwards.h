@@ -52,5 +52,5 @@ struct PendingCMD;
     
 #endif
 
-struct connect_config;
+struct ConfigConnect;
 

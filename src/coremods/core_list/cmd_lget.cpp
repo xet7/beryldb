@@ -30,6 +30,11 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        if (!CheckValidPos(user, value))
        {
@@ -49,7 +54,12 @@ CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
        const std::string key = parameters[0];
-        
+  
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+      
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
@@ -73,6 +83,11 @@ CommandLKeys::CommandLKeys(Module* Creator) : Command(Creator, "LKEYS", 1, 3)
 COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
         
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
@@ -98,6 +113,11 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
         
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
@@ -124,6 +144,11 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
        if (!CheckValidPos(user, value))
        {
               return FAILED;
@@ -144,13 +169,18 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-        if (!CheckFormat(user, value))
-        {
+       if (!CheckKey(user, key))
+       {
             return FAILED;
-        }
+       }
 
-        ListHelper::Repeats(user, key, value);
-        return SUCCESS;  
+       if (!CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Repeats(user, key, value);
+       return SUCCESS;  
 }
 
 CommandLRop::CommandLRop(Module* Creator) : Command(Creator, "LRPOP", 1, 1)
@@ -176,6 +206,11 @@ CommandFRop::CommandFRop(Module* Creator) : Command(Creator, "LFPOP", 1, 1)
 COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        ListHelper::FRop(user, key);
        return SUCCESS;  
@@ -191,6 +226,11 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
 {  
         const std::string key = parameters[0];
         const std::string value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
         
         if (!CheckFormat(user, value))
         {

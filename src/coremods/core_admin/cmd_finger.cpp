@@ -90,7 +90,7 @@ COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
              new AutoResume(target, convto_num<unsigned int>(parameters[1]));
         }
         
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -112,7 +112,7 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 
         target->Paused = false;
 
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -137,7 +137,7 @@ COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
         if (luser)
         {
                 time_t idle = Kernel->Now() - luser->touchbase;
-                user->SendProtocol(BRLD_INPUT, idle);
+                user->SendProtocol(BRLD_OK, idle);
                 return SUCCESS;
         }
         

@@ -145,7 +145,7 @@ class ExportAPI Configuration
 	};
 
 	
-	typedef std::vector<reference<connect_config> > class_refvec;
+	typedef std::vector<reference<ConfigConnect> > class_refvec;
 
 
 	
