@@ -84,5 +84,5 @@ void del_query::Run()
 
 void del_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }

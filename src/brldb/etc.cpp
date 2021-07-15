@@ -136,7 +136,7 @@ void future_query::Run()
 void future_query::Process()
 {
        NOTIFY_MODS(OnFutureAdd, (this->user, this->database->GetName(), this->key, this->select_query));
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void expire_query::Run()
@@ -148,7 +148,7 @@ void expire_query::Run()
 void expire_query::Process()
 {
        NOTIFY_MODS(OnExpireAdd, (this->user, this->database->GetName(), this->key, this->select_query, this->id));
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void future_exec_query::Run()
@@ -176,7 +176,7 @@ void future_exec_query::Run()
 
 void future_exec_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void future_del_query::Run()
@@ -197,7 +197,7 @@ void future_del_query::Run()
 
 void future_del_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void dbreset_query::Run()
@@ -227,6 +227,6 @@ void dbreset_query::Process()
             FileSystem::remove_directory(userdb->GetPath().c_str());
          
             Kernel->Store->DBM->Delete(this->key);  
-            user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+            user->SendProtocol(BRLD_OK, PROCESS_OK);
       }
 }

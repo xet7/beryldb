@@ -39,7 +39,7 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
               return FAILED;
        }
        
-       user->SendProtocol(BRLD_INPUT, found->select.c_str());
+       user->SendProtocol(BRLD_OK, found->select.c_str());
        return SUCCESS;
 }
 
@@ -74,7 +74,6 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        }
       
        user->select = use;
-       
        user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
        
        return SUCCESS;
@@ -107,7 +106,7 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        
        DataFlush::ResetAll();
        
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        
        return SUCCESS;
 }

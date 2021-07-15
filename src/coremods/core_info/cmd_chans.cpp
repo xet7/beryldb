@@ -44,7 +44,7 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
                return FAILED;
           }
           
-          user->SendProtocol(BRLD_INPUT2, BRLD_MY_CHANS, chans.c_str());
+          user->SendProtocol(BRLD_OK2, BRLD_MY_CHANS, chans.c_str());
           return SUCCESS;
 }
 
@@ -86,7 +86,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
                return FAILED;
           }
 
-          user->SendProtocol(BRLD_INPUT2, BRLD_CHANS, chans.c_str());
+          user->SendProtocol(BRLD_OK2, BRLD_CHANS, chans.c_str());
           return SUCCESS;
 }
 

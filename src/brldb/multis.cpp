@@ -133,7 +133,7 @@ void mdel_query::Run()
 
 void mdel_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 
@@ -176,7 +176,7 @@ void mset_query::Run()
 
 void mset_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void mkeys_query::Run()
@@ -432,7 +432,7 @@ void mget_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+               user->SendProtocol(BRLD_OK, convto_string(this->counter));
                return;
         }
 
@@ -465,7 +465,7 @@ void mrepeats_query::Run()
 
 void mrepeats_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+        user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 

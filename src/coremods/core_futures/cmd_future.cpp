@@ -63,7 +63,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {      
@@ -97,7 +97,7 @@ CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETAL
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
        FutureManager::Reset();
-       user->SendProtocol(BRLD_INPUT2, BRLD_FUTURE_DELETED, PROCESS_OK);
+       user->SendProtocol(BRLD_OK2, BRLD_FUTURE_DELETED, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -137,7 +137,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
         }
 
         Kernel->Store->Futures->SelectReset(user->GetDatabase()->GetName(), use);
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 

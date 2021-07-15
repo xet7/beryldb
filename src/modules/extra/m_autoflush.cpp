@@ -38,7 +38,7 @@ class CommandAutoFlush : public Command
                         status = false;
                 }
                 
-                user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
                 return SUCCESS;
         }
 };

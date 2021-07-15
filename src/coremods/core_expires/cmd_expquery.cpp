@@ -34,7 +34,7 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
+                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl - (int)Kernel->Now()));
          }
          else
          {	
@@ -60,7 +60,7 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
          
          if (ttl != -1)
          {
-                  user->SendProtocol(BRLD_INPUT2, static_cast<unsigned int>((int)ttl));
+                  user->SendProtocol(BRLD_OK2, static_cast<unsigned int>((int)ttl));
          }
          else
          {      

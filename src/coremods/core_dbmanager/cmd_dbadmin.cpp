@@ -34,7 +34,7 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
        if (!BASE_PATH.empty())
        {
             const std::string path = BASE_PATH.c_str();
-            user->SendProtocol(BRLD_INPUT, path);
+            user->SendProtocol(BRLD_OK, path);
             return SUCCESS;
        }
 
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       user->SendProtocol(BRLD_INPUT, dbname);
+       user->SendProtocol(BRLD_OK, dbname);
        return SUCCESS;
 }
 
@@ -71,7 +71,7 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
        if (user->GetDatabase())
        {
              std::string dbname = user->GetDatabase()->GetName();                                  
-             user->SendProtocol(BRLD_QUERY_OK, dbname);
+             user->SendProtocol(BRLD_OK, dbname);
              return SUCCESS;	
        }
        
@@ -97,7 +97,7 @@ COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 
        user->SetDatabase(database);
        STHelper::Set("dbuser", user->login, dbname);
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }
 
@@ -233,6 +233,6 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
       sfalert(user, NOTIFY_DEFAULT, "Setting default database to: %s", database->GetName().c_str());
 
       DBManager::SetDefault(dbname);
-      user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }

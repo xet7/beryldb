@@ -57,7 +57,7 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
                 
         Kernel->Sets->Set(key, value);
         
-        user->SendRemoteProtocol(BRLD_INPUT2, Kernel->Config->GetServerName(), PROCESS_OK);
+        user->SendRemoteProtocol(BRLD_OK2, Kernel->Config->GetServerName(), PROCESS_OK);
         return SUCCESS;
 }
 
@@ -106,6 +106,6 @@ COMMAND_RESULT CommandGetConfig::Handle(User* user, const Params& parameters)
              return FAILED;
         }
         
-        user->SendRemoteProtocol(BRLD_INPUT2, Kernel->Config->GetServerName(), value);
+        user->SendRemoteProtocol(BRLD_OK2, Kernel->Config->GetServerName(), value);
         return SUCCESS;
 }

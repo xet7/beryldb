@@ -42,7 +42,7 @@ CommandRestart::CommandRestart(Module* parent) : Command(parent, "RESTART", 0, 1
 COMMAND_RESULT CommandRestart::Handle(User* user, const Params& parameters)
 {
         slog("STARTUP", LOG_DEFAULT, "Restart request by " + user->login);
-        user->SendProtocol(BRLD_RESTART_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         Kernel->Clients->NotifyAll(BRLD_RESTART, "Restarting server.");
 
         for (int i = getdtablesize(); --i > 2;)

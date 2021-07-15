@@ -37,7 +37,7 @@ COMMAND_RESULT CommandGroupAdd::Handle(User* user, const Params& parameters)
        
        if (Kernel->Groups->Add(gname, DEFAULT_GFLAGS))
        {
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
        
@@ -84,7 +84,7 @@ COMMAND_RESULT CommandDelGroup::Handle(User* user, const Params& parameters)
 
        if (Kernel->Groups->Delete(gname))
        {
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
 
@@ -201,11 +201,11 @@ COMMAND_RESULT CommandGFlags::Handle(User* user, const Params& parameters)
        
        if (a_group->GetFlags().empty() || a_group->GetFlags() == "")
        {
-             user->SendProtocol(BRLD_INPUT, PROCESS_EMPTY);
+             user->SendProtocol(BRLD_OK, PROCESS_EMPTY);
              return SUCCESS;
        }
        
-       user->SendProtocol(BRLD_INPUT, a_group->GetFlags());
+       user->SendProtocol(BRLD_OK, a_group->GetFlags());
        return SUCCESS;
 }
 
@@ -290,7 +290,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
 
         CMapsHelper::Set(usergrups, gname, convto_string(Kernel->Now()));
         
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return FAILED;
 }
 
@@ -357,7 +357,7 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return FAILED;
 }
 
@@ -427,6 +427,6 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
         }
         
         CMapsHelper::Del(usergrups, gname);
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return FAILED;
 }

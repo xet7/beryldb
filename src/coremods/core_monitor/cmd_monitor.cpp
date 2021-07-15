@@ -49,12 +49,12 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
              }
        
              Kernel->Monitor->Add(user, monitor);
-             user->SendProtocol(BRLD_INPUT, BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
+             user->SendProtocol(BRLD_OK, BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
              return SUCCESS;  
        }
        
        Kernel->Monitor->Add(user, MONITOR_DEFAULT);
-       user->SendProtocol(BRLD_INPUT, BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
+       user->SendProtocol(BRLD_OK, BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
        return SUCCESS;
 }
 
@@ -66,7 +66,7 @@ CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MR
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
        Kernel->Monitor->Reset();
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }
 

@@ -144,7 +144,7 @@ COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
          /* Clears all expires pending. */
          
          ExpireManager::Reset();
-         user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+         user->SendProtocol(BRLD_OK, PROCESS_OK);
          sfalert(user, NOTIFY_DEFAULT, "All expires have been removed: %u", counter);
          return SUCCESS;
 }
@@ -180,7 +180,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
         /* Clears all expires pending. */
 
         unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         
         sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);
         return SUCCESS;

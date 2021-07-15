@@ -37,6 +37,6 @@ COMMAND_RESULT CommandFlagUpdate::Handle(User* user, const Params& parameters)
        }
          
        a_group->UpdateFlags(flag);
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }

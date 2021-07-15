@@ -215,7 +215,7 @@ void hset_query::Run()
 
 void hset_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hsetnx_query::Run()
@@ -245,7 +245,7 @@ void hsetnx_query::Run()
 
 void hsetnx_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hexists_query::Run()
@@ -276,7 +276,7 @@ void hexists_query::Run()
 
 void hexists_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void hstrlen_query::Run()
@@ -310,7 +310,7 @@ void hstrlen_query::Run()
 
 void hstrlen_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void hget_query::Run()
@@ -344,7 +344,7 @@ void hget_query::Run()
 
 void hget_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void hdel_query::Run()
@@ -368,7 +368,7 @@ void hdel_query::Run()
 
 void hdel_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hlist_query::Run()
@@ -459,7 +459,7 @@ void hlist_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(counter));
+               user->SendProtocol(BRLD_OK, convto_string(counter));
                return;
         }
         
@@ -502,7 +502,7 @@ void hwdel_query::Run()
 
 void hwdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void hvals_query::Run()

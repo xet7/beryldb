@@ -32,7 +32,7 @@ COMMAND_RESULT CommandMulti::Handle(User* user, const Params& parameters)
       }
       
       user->Multi = true;
-      user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }
 
@@ -48,7 +48,7 @@ COMMAND_RESULT CommandMultiReset::Handle(User* user, const Params& parameters)
       {
             user->Multi = false;
             user->MultiRunning = false;
-            user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+            user->SendProtocol(BRLD_OK, PROCESS_OK);
             return SUCCESS;
       }
 

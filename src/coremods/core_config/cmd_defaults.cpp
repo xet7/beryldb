@@ -37,6 +37,6 @@ COMMAND_RESULT CommandDefaults::Handle(User* user, const Params& parameters)
         
         Kernel->Sets->SetDefaults();
         
-        user->SendRemoteProtocol(BRLD_INPUT2, Kernel->Config->GetServerName(), PROCESS_OK);
+        user->SendRemoteProtocol(BRLD_OK2, Kernel->Config->GetServerName(), PROCESS_OK);
         return SUCCESS;
 }

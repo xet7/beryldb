@@ -64,7 +64,7 @@ void dbsize_query::Run()
 
 void dbsize_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Daemon::Format("%s %s", convto_string(this->size).c_str(), this->response.c_str()));
+       user->SendProtocol(BRLD_OK, Daemon::Format("%s %s", convto_string(this->size).c_str(), this->response.c_str()));
 }
 
 void type_query::Run()
@@ -74,7 +74,7 @@ void type_query::Run()
 
 void type_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::TypeString(this->identified));
+       user->SendProtocol(BRLD_OK, Helpers::TypeString(this->identified));
 }
 
 void op_query::Run()
@@ -166,7 +166,7 @@ void op_query::Process()
 {       
         if (this->GetStatus())
         {
-             user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+             user->SendProtocol(BRLD_OK, this->response.c_str());
              return;
         }
 }
@@ -232,7 +232,7 @@ void sflush_query::Run()
 
 void sflush_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void touch_query::Run()
@@ -260,7 +260,7 @@ void touch_query::Run()
 
 void touch_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+       user->SendProtocol(BRLD_OK, convto_string(this->counter));
 }
 
 void ntouch_query::Run()
@@ -288,7 +288,7 @@ void ntouch_query::Run()
 
 void ntouch_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+       user->SendProtocol(BRLD_OK, convto_string(this->counter));
 }
 
 void list_query::Run()
@@ -447,7 +447,7 @@ void total_query::Run()
 
 void total_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter).c_str());
+       user->SendProtocol(BRLD_OK, convto_string(this->counter).c_str());
 }
 
 

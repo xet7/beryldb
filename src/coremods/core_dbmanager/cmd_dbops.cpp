@@ -36,7 +36,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
                db->FlushDB();
      }
                 
-     user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);                
+     user->SendProtocol(BRLD_OK, PROCESS_OK);                
      return SUCCESS;
 }
 
@@ -68,7 +68,7 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (DBHelper::FlushDB(database, true))
        {
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
 

@@ -26,7 +26,7 @@ void geoadd_query::Run()
 
 void geoadd_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()
@@ -43,7 +43,7 @@ void geoget_query::Run()
 
 void geoget_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void gkeys_query::Run()
@@ -242,7 +242,7 @@ void geocalc_query::Run()
 
 void geocalc_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void geodistance_query::Run()
@@ -547,7 +547,7 @@ void georem_query::Run()
 
 void georem_query::Process()
 {
-        user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+        user->SendProtocol(BRLD_OK, convto_string(this->counter));
 }
 
 

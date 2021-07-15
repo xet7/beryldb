@@ -224,7 +224,7 @@ void lpush_query::Run()
 
 void lpush_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lreverse_query::Run()
@@ -245,7 +245,7 @@ void lreverse_query::Run()
 
 void lsort_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lsort_query::Run()
@@ -283,12 +283,12 @@ void lpos_query::Run()
 
 void lpos_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void lreverse_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lresize_query::Run()
@@ -319,7 +319,7 @@ void lresize_query::Run()
 
 void lresize_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lfind_query::Run()
@@ -447,7 +447,7 @@ void lpop_front_query::Run()
 
 void lpop_front_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lpop_back_query::Run()
@@ -478,7 +478,7 @@ void lpop_back_query::Run()
 
 void lpop_back_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lpopall_query::Run()
@@ -508,7 +508,7 @@ void lpopall_query::Run()
 
 void lpopall_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void lcount_query::Run()
@@ -529,7 +529,7 @@ void lcount_query::Run()
 
 void lcount_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter).c_str());
+       user->SendProtocol(BRLD_OK, convto_string(this->counter).c_str());
 }
 
 void lget_query::Run()
@@ -627,7 +627,7 @@ void lget_query::Process()
 {
         if (this->flags == QUERY_FLAGS_COUNT)
         {
-               user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+               user->SendProtocol(BRLD_OK, convto_string(this->counter));
                return;
         }
 
@@ -650,7 +650,7 @@ void lget_query::Process()
 
 void lexist_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void lexist_query::Run()
@@ -679,7 +679,7 @@ void lexist_query::Run()
 
 void ldel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void ldel_query::Run()
@@ -724,7 +724,7 @@ void lrepeats_query::Run()
 
 void lrepeats_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void lrop_query::Run()
@@ -760,7 +760,7 @@ void lrop_query::Run()
 
 void lrop_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void lrfront_query::Run()
@@ -796,5 +796,5 @@ void lrfront_query::Run()
 
 void lrfront_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }

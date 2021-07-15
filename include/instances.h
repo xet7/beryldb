@@ -189,7 +189,15 @@ class ExportAPI User : public Expandable
 	bool IsQuitting();
 	
 	void SetLock(bool flag);
-	
+
+        /* 
+         * Checks whether this user has any pending query.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User is busy.
+         */    	
+         
 	bool IsLocked();
 	
 	const std::string uuid;
@@ -296,18 +304,13 @@ class ExportAPI User : public Expandable
         
 	unsigned int registered:3;
 
-
         const unsigned int usertype:2;
-	
 	
 	const std::string& GetReadableIP();
 
-	
 	const std::string& GetRealHost() const;
 
-	
 	engine::sockets::cidr_mask GetCompactIPMask();
-
 	
 	virtual bool set_client_ip(const std::string& address);
 

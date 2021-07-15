@@ -155,7 +155,7 @@ void setex_query::Run()
 void setex_query::Process()
 {
        NOTIFY_MODS(OnExpireAdd, (this->user, this->database->GetName(), this->key, this->select_query, this->id));
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void expireat_query::Run()
@@ -167,7 +167,7 @@ void expireat_query::Run()
 void expireat_query::Process()
 {
        NOTIFY_MODS(OnExpireAdd, (this->user, this->database->GetName(), this->key, this->select_query, this->id));
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void expire_del_query::Run()
@@ -192,7 +192,7 @@ void set_query::Run()
 
 void set_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);    
+       user->SendProtocol(BRLD_OK, PROCESS_OK);    
 }
 
 void get_substr_query::Run()
@@ -214,7 +214,7 @@ void get_substr_query::Run()
 
 void get_substr_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response).c_str());
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response).c_str());
 }
 
 void get_occurs_query::Run()
@@ -227,7 +227,7 @@ void get_occurs_query::Run()
 
 void get_occurs_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void alpha_query::Run()
@@ -248,7 +248,7 @@ void alpha_query::Run()
 
 void alpha_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void isnum_query::Run()
@@ -269,7 +269,7 @@ void isnum_query::Run()
 
 void isnum_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response);
+       user->SendProtocol(BRLD_OK, this->response);
 }
 
 void getpersist_query::Run()
@@ -283,7 +283,7 @@ void getpersist_query::Run()
 
 void getpersist_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void get_query::Run()
@@ -295,7 +295,7 @@ void get_query::Run()
 
 void get_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void strlen_query::Run()
@@ -309,7 +309,7 @@ void strlen_query::Run()
 
 void strlen_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void count_query::Run()
@@ -399,7 +399,7 @@ void count_query::Run()
 
 void count_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+       user->SendProtocol(BRLD_OK, convto_string(this->counter));
 }
 
 void getdel_query::Run()
@@ -412,7 +412,7 @@ void getdel_query::Run()
 
 void getdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
 
 void getset_query::Run()
@@ -426,7 +426,7 @@ void getset_query::Run()
 
 void getset_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response.c_str()));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response.c_str()));
 }
 
 void wdel_query::Run()
@@ -522,7 +522,7 @@ void wdel_query::Run()
 
 void wdel_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, convto_string(this->counter));
+       user->SendProtocol(BRLD_OK, convto_string(this->counter));
 }
 
 void setnx_query::Run()
@@ -541,7 +541,7 @@ void setnx_query::Run()
 
 void setnx_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void settx_query::Run()
@@ -560,7 +560,7 @@ void settx_query::Run()
 
 void settx_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void search_query::Run()
@@ -889,7 +889,7 @@ void append_query::Run()
 
 void append_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response).c_str());
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response).c_str());
 }
 
 void random_query::Run()
@@ -995,7 +995,7 @@ void random_query::Run()
 
 void random_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, this->response.c_str());
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }
 
 void getexp_query::Run()
@@ -1008,5 +1008,5 @@ void getexp_query::Run()
 
 void getexp_query::Process()
 {
-       user->SendProtocol(BRLD_QUERY_OK, Helpers::Format(this->response));
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
