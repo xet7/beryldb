@@ -150,6 +150,11 @@ COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
        const std::string& mname = parameters[0];
        const std::string& hesh = parameters[1];
 
+       if (!CheckKey(user, mname))
+       {
+            return FAILED;
+       }
+
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
@@ -184,7 +189,6 @@ COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
        {
             return FAILED;
        }
-
 
        MMapsHelper::Repeats(user, kmap, key);
        return SUCCESS;
