@@ -13,6 +13,10 @@
 
 #pragma once
 
+/* No syntax defined. */
+
+const std::string NO_SYNTAX = "NO_SYNTAX";
+
 /* Target not defined */
 
 const std::string NOT_DEFINED = "NOT_DEFINED";

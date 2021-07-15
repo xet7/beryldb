@@ -30,7 +30,8 @@ const char* ExitMap[] =
            "Database error",
            "SIG INT received",
            "Shutdown command received",
-           "Unable to create threads."
+           "Unable to create threads.",
+           "Invalid command."
 };
 
 unsigned const char *locale_case_insensitive_map = brld_case_insensitive_map;

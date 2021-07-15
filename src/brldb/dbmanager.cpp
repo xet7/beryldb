@@ -109,7 +109,7 @@ unsigned int DBManager::OpenAll()
 
              if (dbdefault == name)
              {
-                   bprint(INFO, "Default database: %s", name.c_str());
+                   bprint(DONE, "Setting default database: %s", name.c_str());
                    this->Load(name, true);
              }
              else

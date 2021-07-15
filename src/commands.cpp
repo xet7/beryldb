@@ -42,7 +42,7 @@ Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsi
 	, requires(0)
 	, group(0)
 	, force_manual_route(false)
-        , syntax("No syntax required.")
+        , syntax(NO_SYNTAX)
 	, pre_reg_ok(false)
 	, no_hint_until_reg(false)
 {
@@ -59,7 +59,7 @@ void Command::RegisterService()
 	if (this->group != 0 && this->groups.size() > 0)
 	{
 		bprint(ERROR, "A command may not have group and groups defined.");
-		Kernel->Exit(EXIT_CODE_CONFIG, true, true);
+		Kernel->Exit(EXIT_CODE_COMMAND, true, true);
 	}
 	
 	if (!Kernel->Commander.AddCommand(this))
