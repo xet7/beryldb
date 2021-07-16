@@ -168,13 +168,14 @@ void CoreManager::CheckDefaults()
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
                  bprint(DONE, "Welcome to Beryl.");
-                 bprint(INFO, "Setting configuration.");
 
                  Kernel->Store->DBM->Create("default", "default");
                  Kernel->Store->DBM->SetDefault("default");
                  Kernel->Sets->SetDefaults();
                  
                  Kernel->Groups->Add("default", DEFAULT_GFLAGS);
+
+                 bprint(DONE, "Default settings created.");
                  
                  /* Default settings. */
                  

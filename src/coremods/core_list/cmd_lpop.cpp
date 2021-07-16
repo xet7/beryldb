@@ -28,8 +28,13 @@ CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK",
 
 COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
+        const std::string& key = parameters[0];
         
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
         ListHelper::PopBack(user, key);
         return SUCCESS;  
 }
@@ -42,8 +47,13 @@ CommandLPopFront::CommandLPopFront(Module* Creator) : Command(Creator, "LPOPFRON
 
 COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
-        
+        const std::string& key = parameters[0];
+   
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+     
         ListHelper::PopFront(user, key);
         return SUCCESS;  
 }
@@ -58,6 +68,11 @@ COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
 
         if (!CheckFormat(user, value))
         {
@@ -78,6 +93,11 @@ COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
 
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
         ListHelper::Reverse(user, key);
         return SUCCESS;  
 }
@@ -91,6 +111,11 @@ CommandLSort::CommandLSort(Module* Creator) : Command(Creator, "LSORT", 1, 1)
 COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
 
         ListHelper::Sort(user, key);
         return SUCCESS;  
@@ -106,7 +131,12 @@ COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
         const std::string& value = parameters.back();
-        
+    
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+    
         if (!CheckFormat(user, value))
         {
              return FAILED;
