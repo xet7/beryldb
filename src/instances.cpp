@@ -97,6 +97,7 @@ User::~User()
 	pending.clear();
 	notifications.clear();
 	Groups.clear();
+	instance.clear();
 	
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }

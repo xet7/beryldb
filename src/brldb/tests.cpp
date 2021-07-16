@@ -18,6 +18,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
+#include "brldb/dbmanager.h"
 #include "helpers.h"
 
 void test_dump_query::Run()

@@ -19,6 +19,7 @@
 #include "helpers.h"
 #include "managers/maps.h"
 #include "cstruct.h"
+#include "brldb/dbmanager.h"
 
 void lkeys_query::Run()
 {

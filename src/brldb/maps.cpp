@@ -17,6 +17,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/map_handler.h"
 #include "helpers.h"
+#include "brldb/dbmanager.h"
 
 void hfind_query::Run()
 {

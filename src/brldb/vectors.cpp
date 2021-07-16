@@ -16,6 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/vector_handler.h"
+#include "brldb/dbmanager.h"
 #include "helpers.h"
 #include "managers/maps.h"
 #include "cstruct.h"

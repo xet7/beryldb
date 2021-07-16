@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "modules/status.h"
+#include "brldb/dbmanager.h"
 
 class CommandStatus : public Command
 {

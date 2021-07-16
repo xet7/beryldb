@@ -42,7 +42,7 @@ struct CMDBuffer
        }
 };
 
-class ExportAPI MonitorHandler : public safecast<MonitorHandler>
+class ExportAPI MonitorHandler 
 {
    private:
         

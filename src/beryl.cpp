@@ -13,6 +13,9 @@
 
 #include "beryl.h"
 #include "exit.h"
+#include "login.h"
+#include "monitor.h"
+#include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 
@@ -55,6 +58,22 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Creates sockets fds */
 	
 	SocketPool::Start();
+
+	/* Monitor initializer */
+	
+        this->Monitor = std::make_unique<MonitorHandler>();
+        
+        /* Login cache initializer */
+        
+        this->Logins = std::make_unique<LoginCache>();
+        
+        /* Core database initializer */
+        
+        this->Core = std::make_unique<CoreManager>();
+
+        /* Store manager initializer */ 
+        
+        this->Store = std::make_unique<StoreManager>();
 
 	/* Configuration class. This class will read and our config file. */
 	
@@ -525,7 +544,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         
         /* Close core db. */
          
-        this->Core->DB->Close();
+        this->Core->GetDatabase()->Close();
 
 	/* Exit msg */
 	
@@ -556,6 +575,14 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
         this->ConfigFile.clear();
 
+        this->Core = nullptr;
+        
+        this->Store = nullptr;
+        
+        this->Monitor = nullptr;
+        
+        this->Logins = nullptr;
+        
         this->Config = nullptr;
         
         /* Reset memory assignations. */

@@ -17,6 +17,7 @@
 #include "managers/user.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
+#include "brldb/dbmanager.h"
 #include "subscription.h"
 
 Settings::Settings() 
@@ -170,7 +171,7 @@ void Helpers::make_map(User* user, std::shared_ptr<QueryBase> base, const std::s
 
 void Helpers::make_cmap(std::shared_ptr<QueryBase> base, const std::string& key, const std::string& hesh)
 {
-       base->database = Kernel->Core->DB;
+       base->database = Kernel->Core->GetDatabase();
        base->select_query = "1";
        base->flags = QUERY_FLAGS_CORE;
      
@@ -188,7 +189,7 @@ void Helpers::make_cmap(std::shared_ptr<QueryBase> base, const std::string& key,
 
 void Helpers::make_cquery(std::shared_ptr<QueryBase> base, const std::string& key)
 {
-      base->database = Kernel->Core->DB;
+      base->database = Kernel->Core->GetDatabase();
       base->select_query = "1";
       base->flags = QUERY_FLAGS_CORE;
       

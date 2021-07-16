@@ -21,6 +21,7 @@
 #include "brldb/functions.h"
 #include "brldb/multimap_handler.h"
 #include "helpers.h"
+#include "brldb/dbmanager.h"
 
 void mseek_query::Run()
 {

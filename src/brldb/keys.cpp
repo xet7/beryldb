@@ -19,6 +19,7 @@
 #include "brldb/functions.h"
 #include "extras.h"
 #include "helpers.h"
+#include "brldb/dbmanager.h"
 
 void expire_list_query::Run()
 {

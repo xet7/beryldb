@@ -16,6 +16,7 @@
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/geo.h"
+#include "brldb/dbmanager.h"
 
 void geoadd_query::Run()
 {

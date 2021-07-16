@@ -67,7 +67,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "monitor.h"
 #include "settings.h"
 #include "notifier.h"
-#include "brldb/dbmanager.h"
 #include "interval.h"
 #include "group.h"
 
@@ -196,7 +195,11 @@ class ExportAPI Beryl
 	
 	/* Handles monitors. */
 	
-	MonitorHandler Monitor;
+	std::unique_ptr<MonitorHandler> Monitor;
+
+        /* Handles Cache and Session information */
+
+        std::unique_ptr<LoginCache> Logins;
 
 	/* Handles class objects that are awaiting to be removed. */
 	
@@ -208,17 +211,13 @@ class ExportAPI Beryl
 
 	ExtensionManager Extensions;
 	
-	/* Handles Cache and Session information */
-	
-	LoginCache Logins;
-	
 	/* Handles core databases. */
 	
-	CoreManager Core;
+        std::unique_ptr<CoreManager> Core;
 	
 	/* Manages databases, both user-related and core ones. */
 	
-	StoreManager Store;
+        std::unique_ptr<StoreManager> Store;
 	
 	/* Notification manager. */
 	
@@ -281,10 +280,6 @@ class ExportAPI Beryl
 
 	Beryl(int argc, char** argv);
 	
-	/* Destructor: it does not perform any task. */
-	
-	~Beryl();
-
 	/*
 	 * This function contains Beryl's mainloop. The mainloop runs
 	 * continuously, unless a signal is received.

@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "core_user.h"
 #include "managers/settings.h"
+#include "brldb/dbmanager.h"
 
 CommandLogin::CommandLogin(Module* parent) : MultiCommand(parent, "LOGIN", 1, 1)
 {

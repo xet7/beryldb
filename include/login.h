@@ -122,7 +122,7 @@ class ExportAPI SessionManager : public safecast<SessionManager>
  * cache removal and adding.
  */
  
-class ExportAPI LoginCache : public safecast<LoginCache>
+class ExportAPI LoginCache 
 {
     private:
     

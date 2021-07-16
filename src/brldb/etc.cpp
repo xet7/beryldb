@@ -17,6 +17,7 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 #include "helpers.h"
+#include "brldb/dbmanager.h"
 
 void future_list_query::Run()
 {

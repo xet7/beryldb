@@ -50,14 +50,20 @@ class ExportAPI DBManager : public safecast<DBManager>
       }
 };
 
-class ExportAPI CoreManager : public safecast<CoreManager>
+class ExportAPI CoreManager 
 {
+    private:
+    
+         /* Core database pointer. This is unique. */
+         
+         std::shared_ptr<CoreDatabase> DB;
+
     public:
     
+        /* Constructor */
+        
         CoreManager();
 
-        std::shared_ptr<CoreDatabase> DB;
-        
         /* Opens core database. */
         
         void Open();
@@ -69,9 +75,22 @@ class ExportAPI CoreManager : public safecast<CoreManager>
         void CheckDefaults();
         
         void UserDefaults();
+
+        /* 
+         * Returns a reference to the core database.
+         * 
+         * @return:
+ 	 *
+         *         · this->DB
+         */            
+         
+        std::shared_ptr<CoreDatabase>& GetDatabase()
+        {
+             return this->DB;
+        }
 };
 
-class ExportAPI StoreManager : public safecast<StoreManager>
+class ExportAPI StoreManager 
 {
     friend class DBManager;
     
