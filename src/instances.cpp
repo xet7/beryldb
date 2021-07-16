@@ -23,19 +23,19 @@ std::mutex User::db_mute;
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) :
-					  Locked(false)	 
-				        , Multi(false)
-				        , MultiRunning(false)
-				        , Paused(false)
-				        , age(Kernel->Now())
-					, connected(0)
-					, logged(0)
-					, uuid(uid)
-					, server(srv)
-					, session(nullptr)
-					, select("1")
-					, registered(REG_NONE)
-                                        , usertype(type)
+                                        	  age(Kernel->Now())
+                                        	, connected(0)
+                                        	, Locked(false)	 
+                                        	, Multi(false)
+                                        	, MultiRunning(false)
+                                        	, Paused(false)
+                                        	, logged(0)
+                                        	, uuid(uid)
+                                        	, server(srv)
+                                        	, session(nullptr)
+                                        	, select("1")
+                                        	, registered(REG_NONE)
+                                        	, usertype(type)
                                         
 					
 {
@@ -452,7 +452,6 @@ void LocalUser::ack_connection()
 void User::ResetCache()
 {
 	user_ip.clear();
-	cached_hostip.clear();
 	cached_user_real_host.clear();
 }
 

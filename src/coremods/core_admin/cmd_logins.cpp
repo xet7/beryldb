@@ -31,7 +31,7 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
             	User* const login = *i;
-            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) | %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) | %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_LOGINS_END);

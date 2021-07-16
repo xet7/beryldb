@@ -99,11 +99,26 @@ class ExportAPI User : public Expandable
     */
     
    friend class DataFlush;
+   friend class LocalUser;
    
    private:
    
-	std::string cached_hostip;
-	
+        /* Time since logged. */
+
+        time_t age;
+
+        /* Time at which this connection was established. */
+
+        time_t connected;
+
+        /* Locks db in use. */
+        
+        static std::mutex db_mute;
+        
+        /* Whether this user is busy. */
+        
+        bool Locked;
+
 	std::string cached_user_real_host;
 	
 	std::string user_ip;
@@ -119,13 +134,9 @@ class ExportAPI User : public Expandable
         /* Groups' this user belongs to. */
         
         GroupVector Groups;
-        
+
  public:
 
-	static std::mutex db_mute;
-	
-	bool Locked;
-	
 	bool Multi;
 	
 	bool MultiRunning;
@@ -142,14 +153,6 @@ class ExportAPI User : public Expandable
         /* Indicates whether this used is paused or not. */
         
         bool Paused;
-	
-	/* Time since logged. */
-	
-	time_t age;
-	
-	/* Time at which this connection was established. */
-
-	time_t connected;
 
 	/* Password this user used to log in. */
 	
@@ -394,6 +397,19 @@ class ExportAPI User : public Expandable
          */    		
          
 	std::string GetAllGroups();
+	
+        /* 
+         * Returns current connected time.
+         * 
+         * @return:
+ 	 *
+         *         · time_t: this->connected.
+         */    	
+         
+	time_t GetConnected()
+	{
+		return this->connected;
+	}
 	
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 

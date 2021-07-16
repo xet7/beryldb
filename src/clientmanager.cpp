@@ -77,7 +77,7 @@ namespace
 
 	void VerifyRegistrationTimeout(LocalUser* user)
 	{
-		if (user->GetClass() && (Kernel->Now() > (user->connected + 10)))
+		if (user->GetClass() && (Kernel->Now() > (user->GetConnected() + 10)))
 		{
 			Kernel->Clients.Disconnect(user, "Registration timeout");
 		}
