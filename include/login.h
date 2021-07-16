@@ -15,8 +15,14 @@
 
 class ExportAPI Session : public safecast<Session>
 {
+    friend class SessionManager;
+    
     private:
 
+        /* Time at which this session was created */
+         
+        time_t created;
+               
         /* Raw flags */
         
         std::string rawflags;

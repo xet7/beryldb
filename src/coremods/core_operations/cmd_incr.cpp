@@ -90,3 +90,38 @@ COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
         KeyHelper::Operation(user, key, OP_AVG, value);
         return SUCCESS;  
 }
+
+CommandDecr::CommandDecr(Module* Creator) : Command(Creator, "DECR", 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
+
+        KeyHelper::Operation(user, key, OP_DECR);
+        return SUCCESS;  
+}
+
+CommandDecrBy::CommandDecrBy(Module* Creator) : Command(Creator, "DECRBY", 2, 2)
+{
+         group = 'k';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters[1];
+
+        if (!is_number(value, true))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+
+        KeyHelper::Operation(user, key, OP_MIN, value);
+        return SUCCESS;  
+}

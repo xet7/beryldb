@@ -51,7 +51,6 @@ enum UserType
 
 struct ExportAPI ConfigConnect : public refcountbase
 {
-
 	reference<config_rule> config;
 
 	char type;

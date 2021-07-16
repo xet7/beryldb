@@ -20,9 +20,7 @@ SessionManager::SessionManager()
 
 }
 
-Session::Session() : can_admin(false)
-                   , can_execute(false)
-                   , can_manage(false)
+Session::Session() : can_admin(false), can_execute(false), can_manage(false)
 {
 
 }
@@ -40,11 +38,13 @@ std::shared_ptr<Session> Session::SetFlags(std::shared_ptr<Session> New, const s
             if (*it == 'r')
             {
                   New->can_admin = true;
+                  continue;
             }
 
             if (*it == 'e')
             {
                   New->can_execute = true;
+                  continue;
             }
 
             if (*it == 'm')
@@ -96,6 +96,7 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
     } 
 
     std::shared_ptr<Session> New = std::make_shared<Session>();
+    New->created = Kernel->Now();
     New = Session::SetFlags(New, flags);
     New->SetRaw(flags);
 
