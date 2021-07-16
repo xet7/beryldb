@@ -64,7 +64,7 @@ Beryl is compiled in verbose level by default. If you prefer to build with minim
 information, you can use:
 
 ```
-make VERBOSE=0
+make -j4 install VERBOSE=0
 ```
 
 ## Running Beryl
@@ -87,6 +87,20 @@ Great! You may now run your very first BerylDB command using
 
 Keep in mind that BerylDB uses port **6378** by default, so be sure to
 maintain that port unused before running the server.
+
+## First queries
+
+You may want to learn more about Beryl and run your first queries using
+Beryl-cli:
+
+```
+beryl> set hello "world"
+OK
+beryl> get hello
+"world"
+beryl> strlen hello
+5
+```
 
 ## Discussions
 
