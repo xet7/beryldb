@@ -13,7 +13,7 @@
 
 #pragma once
 
-class ExportAPI GroupManager : public safecast<GroupManager>
+class ExportAPI GroupManager 
 {
      private:
         

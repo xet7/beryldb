@@ -13,7 +13,6 @@
 
 #include "beryl.h"
 #include "exit.h"
-
 #include "brldb/dbmanager.h"
 #include "brldb/query.h"
 #include "brldb/datathread.h"

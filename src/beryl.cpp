@@ -16,6 +16,7 @@
 #include "login.h"
 #include "monitor.h"
 #include "notifier.h"
+#include "group.h"
 #include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
@@ -79,6 +80,10 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
         /* Store manager initializer */ 
         
         this->Store = std::make_unique<StoreManager>();
+
+        /* Group manager initializer */
+        
+        this->Groups = std::make_unique<GroupManager>();
 
 	/* Configuration class. This class will read and our config file. */
 	
@@ -590,6 +595,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 
         /* Free memory */
         
+        this->Groups	= 	nullptr;
         this->Notify    =       nullptr;
         this->Core      =       nullptr;
         this->Store     =       nullptr;

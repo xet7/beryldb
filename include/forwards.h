@@ -43,6 +43,7 @@ class SessionManager;
 class Notifier;
 class CommandQueue;
 class Group;
+class GroupManager;
 
 struct PendingCMD;
 

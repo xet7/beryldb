@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "group.h"
 #include "managers/settings.h"
 
 GroupManager::GroupManager()

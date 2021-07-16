@@ -45,7 +45,7 @@ class CommandCycle : public MultiCommand
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INPUT2, ERR_NOT_SUBSCRIBED, "NOT_SUBSCRIBED");
+                        user->SendProtocol(ERR_INPUT2, ERR_NOT_SUBSCRIBED, NOT_SUBSCRIBED);
                 }
                 
                 return FAILED;

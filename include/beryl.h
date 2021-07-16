@@ -67,7 +67,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "monitor.h"
 #include "settings.h"
 #include "interval.h"
-#include "group.h"
 
 int main(int argc, char** argv);
 
@@ -184,13 +183,13 @@ class ExportAPI Beryl
 	
 	static sig_atomic_t s_signal;
 
+        /* Handles unique ids. */
+
+        UIDHandler UID;
+
 	/* Handles BerylDB's configuration files. */
 	
 	std::unique_ptr<Configuration> Config;
-	
-	/* Handles unique ids. */
-        
-	UIDHandler UID;
 	
 	/* Handles monitors. */
 	
@@ -224,7 +223,7 @@ class ExportAPI Beryl
 	
 	/* Handles groups */
 	
-	GroupManager Groups;
+	std::unique_ptr<GroupManager> Groups;
 	
 	/* Handles intervals */
 	

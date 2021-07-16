@@ -28,7 +28,7 @@ class ModuleChanRestrict : public Module
                  {
                          if (!user->CanPerform('e'))
                          {
-                                 user->SendProtocol(ERR_NO_FLAGS, "You need flats in order to create a channel.");
+                                 user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                                  return MOD_RES_STOP;
                          }
                  }

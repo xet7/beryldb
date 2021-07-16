@@ -17,6 +17,7 @@
 #include "brldb/expires.h"
 #include "brldb/futures.h"
 #include "brldb/database.h"
+#include "group.h"
 
 class ExportAPI DBManager : public safecast<DBManager>
 {
