@@ -75,7 +75,7 @@ void Beryl::CommandLine()
 
 					case 'c':
 
-						this->ConfigFile = Kernel->Engine->get_real_path(optarg);
+						this->ConfigFile = Kernel->Engine->GetRealPath(optarg);
 						break;
 
 					default:

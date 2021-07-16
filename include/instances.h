@@ -221,6 +221,18 @@ class ExportAPI User : public Expandable
 	
 	std::string agent;
 
+        std::deque<std::shared_ptr<QueryBase>> pending;
+
+        std::deque<std::shared_ptr<QueryBase>> notifications;
+
+        /* Current select: 1 by default */
+        
+        std::string select;
+
+        unsigned int registered:3;
+
+        const unsigned int usertype:2;
+
 	SubsList chans;
 	
 	Server* server;
@@ -319,16 +331,6 @@ class ExportAPI User : public Expandable
          
         std::shared_ptr<UserDatabase> GetDatabase();
 	
-        std::deque<std::shared_ptr<QueryBase>> pending;
-
-        std::deque<std::shared_ptr<QueryBase>> notifications;
-
-        std::string select;
-        
-	unsigned int registered:3;
-
-        const unsigned int usertype:2;
-	
 	const std::string& GetReadableIP();
 
 	const std::string& GetRealHost() const;
@@ -339,9 +341,7 @@ class ExportAPI User : public Expandable
 
 	virtual void set_client_ip(const engine::sockets::sockaddrs& sa);
 
-	
 	User(const std::string& uid, Server* srv, UserType objtype);
-
 	
 	virtual const std::string& GetHostFormat();
 
@@ -521,8 +521,8 @@ class ExportAPI User : public Expandable
 	
 	void CheckEmptyChannels();
 
-	
 	virtual ~User();
+	
 	DiscardResult discard() ;
 
 	
@@ -556,7 +556,6 @@ class ExportAPI InstanceStream : public StreamSocket
 
 typedef unsigned int sent_id;
 
-
 class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 {
  
@@ -588,7 +587,14 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 	
 	reference<ConfigConnect> assigned_class;
 
-	
+        /* 
+         * Obtain this user's class.
+         * 
+         * @return:
+	 *
+	 *         · ConfigConnect: Assigned class.
+         */    	
+         
 	ConfigConnect* GetClass() const 
 	{ 
 		return assigned_class; 
@@ -640,11 +646,27 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 	
 	bool Serialize(Serializable::Data& data);
 	
+        /* 
+         * Get pending list.
+         * 
+         * @return:
+ 	 *
+         *         · Deque of PendingCMD.
+         */    
+         
 	std::deque<PendingCMD> GetPending()
 	{
 		 return this->PendingList;
 	}
 	
+        /* 
+         * Returns Multi commands.
+         * 
+         * @return:
+ 	 *
+         *         · Deque of PendingCMD.
+         */    
+         	
 	std::deque<PendingCMD> GetMulti()
 	{
 		return this->PendingMulti;

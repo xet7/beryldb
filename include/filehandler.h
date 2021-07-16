@@ -58,7 +58,7 @@ class ExportAPI FileSystem
 
  public:
 	
-	static std::string get_real_path(const std::string& base, const std::string& fragment);
+	static std::string GetRealPath(const std::string& base, const std::string& fragment);
 
 	
 	static bool Exists(const std::string& path);

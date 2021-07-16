@@ -17,6 +17,8 @@ class ExportAPI GroupManager : public safecast<GroupManager>
 {
      private:
         
+          /* A map of all groups */
+          
           GroupMap GroupList;
         
      public:
@@ -88,6 +90,14 @@ class ExportAPI GroupManager : public safecast<GroupManager>
          */    
          
          bool ResetFlags(const std::string& name);
+
+        /* 
+         * Returns GroupList.
+         * 
+         * @return:
+ 	 *
+         *         · GroupMap: Groups.
+         */             
          
          GroupMap& GetList()
          {
@@ -95,7 +105,6 @@ class ExportAPI GroupManager : public safecast<GroupManager>
          }
          
          void Reset();
-         
 };
 
 class ExportAPI Group
@@ -111,6 +120,9 @@ class ExportAPI Group
          /* Groups' name. */
          
          std::string name;
+         
+         /* Flags as expressed in a simple string */
+         
          std::string rawflags;
          
      public:
@@ -149,6 +161,18 @@ class ExportAPI Group
     
          ~Group();
 
+        /* 
+         * Updates flag.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Flag to append.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Updated successfuly.
+         */    
+         
          bool UpdateFlags(const std::string& flags);
          
         /* 
@@ -188,6 +212,14 @@ class ExportAPI Group
          {
               return this->rawflags;
          }
+
+        /* 
+         * Returns group's name.
+         * 
+         * @return:
+ 	 *
+         *         · string: Current name.
+         */             
          
          std::string GetName()
          {

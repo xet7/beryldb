@@ -71,7 +71,17 @@ class ExportAPI Daemon : public safecast<Daemon>
                 
         static void print_newline(unsigned int loops);
 
-        /* Prints text in bold */
+        /* 
+         * Returns message in bold.
+         * 
+         * @parameters:
+	 *
+	 *         · msg: Text to turn bold.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Msg in bold.
+         */    
         
         static std::string Welcome(const std::string& msg);
 
@@ -189,16 +199,52 @@ class ExportAPI Daemon : public safecast<Daemon>
 
         STR1::function<bool(const std::string&)> IsDatabase;
 
-        static bool GroupValidator(const std::string& name);
+        /* 
+         * Validates a given group name.
+         *  
+         * @parameters:
+	 *
+	 *         · gname: Name to validate.
+	 *  
+         * @return:
+ 	 *
+         *         · True: Valid name.
+         */    
+         
+        static bool GroupValidator(const std::string& gname);
 
         STR1::function<bool(const std::string&)> IsGroup;
         
+        /* 
+         * Determines whether a host has the proper format, for instance
+         * server1.beryl.dev.
+         * 
+         * @parameters:
+	 *
+	 *         · host: Host to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Valid host.
+         */            
         static bool ValidHost(const std::string& host);
         
         static bool Valid_SID(const std::string& sid);
         
         std::string generate_random_str(unsigned int length, bool printable = true);
         
+        /* 
+         * Generates a random int.
+         * 
+         * @parameters:
+	 *
+	 *         · max: Max number.
+	 * 
+         * @return:
+ 	 *
+         *         · ulong: Random number.
+         */            
+         
         unsigned long generate_random_int(unsigned long max);
 
         /* 
@@ -212,7 +258,19 @@ class ExportAPI Daemon : public safecast<Daemon>
 
         void CheckRoot();
 
-        std::string get_real_path(const char* path);
+        /* 
+         * Returns real path for a given string.
+         * 
+         * @parameters:
+	 *
+	 *         · path: Path to check.
+	 * 
+         * @return:
+ 	 *
+         *         · string: String formatted.
+         */    
+         
+        std::string GetRealPath(const char* path);
 
         /* 
          * Formats an string.
@@ -334,6 +392,15 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
 
         static void SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg);
      
+        /* 
+         * Finds an user and sends a msg.
+         * 
+         * @parameters:
+	 *
+	 *         · who: User to find.
+	 *         · msg: Msg to send.
+         */         
+         
         static void TellThat(std::string& who, const std::string& msg, int rpl);      
      
         /* 
