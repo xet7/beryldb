@@ -245,3 +245,22 @@ COMMAND_RESULT CommandIsBool::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandAsBool::CommandAsBool(Module* Creator) : Command(Creator, "ASBOOL", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandAsBool::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::AsBool(user, key);
+       return SUCCESS;
+}
+

@@ -70,5 +70,7 @@ class ExportAPI KeyHelper
         static void GetPersist(User* user, const std::string& key);
 
         static void IsBool(User* user, const std::string& entry);
+
+        static void AsBool(User* user, const std::string& entry);
         
 };

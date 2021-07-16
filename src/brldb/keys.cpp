@@ -1034,3 +1034,26 @@ void getexp_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
+
+void asbool_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::string as_str = to_string(result.value);
+       
+       if (as_str == "1" || as_str == "true" || as_str == "on")
+       {
+             this->response = "true";
+       }
+       else
+       {
+            this->response = "false";
+       }
+       
+       this->SetOK();
+}
+
+void asbool_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
