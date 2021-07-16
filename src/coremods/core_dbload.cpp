@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "notifier.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"

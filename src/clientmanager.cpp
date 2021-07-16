@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "queues.h"
+#include "notifier.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 

@@ -19,10 +19,11 @@
 #include "managers/tests.h"
 #include "managers/databases.h"
 #include "managers/globals.h"
-#include "converter.h"
-#include "engine.h"
 #include "managers/settings.h"
 #include "core_dbmanager.h"
+#include "notifier.h"
+#include "converter.h"
+#include "engine.h"
 
 CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 {

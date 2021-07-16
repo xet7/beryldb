@@ -15,6 +15,7 @@
 #include "exit.h"
 #include "login.h"
 #include "monitor.h"
+#include "notifier.h"
 #include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
@@ -58,6 +59,10 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Creates sockets fds */
 	
 	SocketPool::Start();
+
+	/* Notification handler */
+	
+        this->Notify = std::make_unique<Notifier>();
 
 	/* Monitor initializer */
 	
@@ -575,16 +580,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
         this->ConfigFile.clear();
 
-        this->Core = nullptr;
-        
-        this->Store = nullptr;
-        
-        this->Monitor = nullptr;
-        
-        this->Logins = nullptr;
-        
-        this->Config = nullptr;
-        
         /* Reset memory assignations. */
         
         memset(&this->TIME, 0, sizeof(timespec));        
@@ -592,8 +587,17 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         memset(&this->startup, 0, sizeof(time_t));        
         
         memset(&this->PendingBuffer, BUFFERSIZE, sizeof(char));
+
+        /* Free memory */
+        
+        this->Notify    =       nullptr;
+        this->Core      =       nullptr;
+        this->Store     =       nullptr;
+        this->Monitor   =       nullptr;
+        this->Logins    =       nullptr;
+        this->Config    =       nullptr;
         
         /* The END. */
-        
+
         Kernel = nullptr;
 }

@@ -225,3 +225,23 @@ COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)
        KeyHelper::WDelete(user, key);
        return SUCCESS;
 }
+
+CommandIsBool::CommandIsBool(Module* Creator) : Command(Creator, "ISBOOL", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandIsBool::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::IsBool(user, key);
+       return SUCCESS;
+}
+

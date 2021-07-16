@@ -273,6 +273,29 @@ void isnum_query::Process()
        user->SendProtocol(BRLD_OK, this->response);
 }
 
+void isbool_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::string as_str = to_string(result.value);
+       
+       if (as_str == "0" || as_str == "1" || as_str == "true" || as_str == "false" || as_str == "on" || as_str == "off")
+       {
+             this->response = "1";
+       }
+       else
+       {
+            this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void isbool_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
+
 void getpersist_query::Run()
 {
        RocksData result = this->Get(this->dest);

@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "notifier.h"
 
 class CommandLoadmodule : public Command
 {

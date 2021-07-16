@@ -20,6 +20,7 @@
 #include "converter.h"
 #include "engine.h"
 #include "core_dbmanager.h"
+#include "notifier.h"
 
 CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 1)
 {

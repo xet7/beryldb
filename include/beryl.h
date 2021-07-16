@@ -1,4 +1,4 @@
-/*
+/*	
  * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
@@ -66,7 +66,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "login.h"
 #include "monitor.h"
 #include "settings.h"
-#include "notifier.h"
 #include "interval.h"
 #include "group.h"
 
@@ -221,7 +220,7 @@ class ExportAPI Beryl
 	
 	/* Notification manager. */
 	
-	Notifier Notify;
+	std::unique_ptr<Notifier> Notify;
 	
 	/* Handles groups */
 	

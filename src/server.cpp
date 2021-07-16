@@ -14,11 +14,12 @@
 #include <signal.h>
 #include <getopt.h>
 
+#include "beryl.h"
 #include "devel.h"
 #include "testoffice.h"
-#include "beryl.h"
 #include "engine.h"
 #include "exit.h"
+#include "notifier.h"
 
 void Beryl::CheckOffice()
 {

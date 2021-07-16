@@ -149,10 +149,6 @@ class ExportAPI QueryBase
         
         double size;
 
-//        int from;
-        
-  //      int to;
-        
         void access_set(DBL_CODE status)
         {
             this->access = status;
@@ -175,7 +171,6 @@ class ExportAPI QueryBase
         QueryBase() :  finished(false), key_required(false), flags(QUERY_FLAGS_NONE), access(DBL_NONE),  
                         subresult(0), partial(false), offset(0), limit(0), user(NULL), 
                         operation(OP_NONE), counter(0), data(0), size(0.0)
-                        //, from(0), to(0)
         {
               
         }
@@ -1922,3 +1917,19 @@ class ExportAPI isnum_query  : public QueryBase
 
         void Process();
 };
+
+class ExportAPI isbool_query  : public QueryBase
+{
+    public:
+
+        isbool_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
