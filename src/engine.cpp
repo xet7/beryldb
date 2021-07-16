@@ -85,7 +85,7 @@ void Daemon::CheckRoot()
 	}
 }
 
-std::string Daemon::get_real_path(const char* path)
+std::string Daemon::GetRealPath(const char* path)
 {
       char configuration_path[PATH_MAX + 1];
 
@@ -123,19 +123,19 @@ bool Daemon::ChannelValidator(const std::string& chname)
         return true;
 }
 
-bool Daemon::GroupValidator(const std::string& chname)
+bool Daemon::GroupValidator(const std::string& gname)
 {
-        if (chname.empty() || chname.length() > 15)
+        if (gname.empty() || gname.length() > 15)
         {
                 return false;
         }
         
-        if (!isalpha(chname))
+        if (!isalpha(gname))
         {
                return false;
         }
 
-        for (std::string::const_iterator i = chname.begin()+1; i != chname.end(); ++i)
+        for (std::string::const_iterator i = gname.begin()+1; i != gname.end(); ++i)
         {
                 switch (*i)
                 {

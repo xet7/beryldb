@@ -135,13 +135,13 @@ class ExportAPI Configuration
 
 		ServerPaths(config_rule* tag);
 
-		std::string SetWDDB(const std::string& fn) const { return FileSystem::get_real_path(DB, fn); }
+		std::string SetWDDB(const std::string& fn) const { return FileSystem::GetRealPath(DB, fn); }
 
-		std::string SetWDConfig(const std::string& fn) const { return FileSystem::get_real_path(Config, fn); }
-		std::string SetWDData(const std::string& fn) const { return FileSystem::get_real_path(Data, fn); }
-		std::string SetWDLog(const std::string& fn) const { return FileSystem::get_real_path(Log, fn); }
-		std::string SetWDModule(const std::string& fn) const { return FileSystem::get_real_path(Module, fn); }
-		std::string SetWDRuntime(const std::string& fn) const { return FileSystem::get_real_path(Runtime, fn); }
+		std::string SetWDConfig(const std::string& fn) const { return FileSystem::GetRealPath(Config, fn); }
+		std::string SetWDData(const std::string& fn) const { return FileSystem::GetRealPath(Data, fn); }
+		std::string SetWDLog(const std::string& fn) const { return FileSystem::GetRealPath(Log, fn); }
+		std::string SetWDModule(const std::string& fn) const { return FileSystem::GetRealPath(Module, fn); }
+		std::string SetWDRuntime(const std::string& fn) const { return FileSystem::GetRealPath(Runtime, fn); }
 	};
 
 	

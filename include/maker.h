@@ -28,7 +28,6 @@
  *         · False: Invalid number.
  */
 
-
 inline bool CheckValidPos(User* user, const std::string& number)
 {
        if (!is_number(number))
@@ -56,6 +55,20 @@ inline bool CheckValid(User* user, const std::string& number)
        
        return true;
 }
+
+/* 
+ * Returns a vector containing limits.
+ * 
+ * @parameters:
+ *
+ *         · max: Max parameters.
+ *         · Params: Parameters as given by the original command.,
+ *
+ * @return:
+ *
+ *         · Vector: Returns { 0 } if invalid.
+ */
+
 
 inline std::vector<signed int> GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
 {
@@ -142,6 +155,18 @@ inline bool CheckFormat(User* user, const std::string& value, bool notify = true
 
         return false;
 }
+
+/* 
+ * Checks whether a given key is valid.
+ * 
+ * @parameters:
+ *
+ *         · string: Key to check.
+ *
+ * @return:
+ *
+ *         · True: Valid key.
+ */
 
 inline bool CheckKey(User* user, const std::string& value, bool notify = true)
 {

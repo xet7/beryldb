@@ -66,7 +66,7 @@ std::string FileLoader::as_string() const
 	return buffer;
 }
 
-std::string FileSystem::get_real_path(const std::string& base, const std::string& fragment)
+std::string FileSystem::GetRealPath(const std::string& base, const std::string& fragment)
 {
 	if (fragment[0] == '/')
 	{

@@ -31,7 +31,8 @@ class ExportAPI ProtocolInterface
 
 	class ServerInfo
 	{
-	 public:
+	  public:
+	 
 		std::string servername;
 		std::string ParentName;
 		std::string description;
