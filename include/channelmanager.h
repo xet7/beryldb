@@ -18,7 +18,7 @@
  * a Find and CheckRemoval functions.
  */
  
-class ExportAPI ChannelManager : public safecast<ChannelManager>
+class ExportAPI ChannelManager 
 {
     public: 
 

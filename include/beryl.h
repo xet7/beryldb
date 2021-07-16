@@ -46,7 +46,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "uid.h"
 #include "server.h"
 #include "instances.h"
-#include "channels.h"
 #include "timer.h"
 #include "nodes.h"
 #include "logs.h"
@@ -225,6 +224,10 @@ class ExportAPI Beryl
 	
 	std::unique_ptr<GroupManager> Groups;
 	
+        /* Handles subscriptions channels. */
+
+        std::unique_ptr<ChannelManager> Channels;
+        
 	/* Handles intervals */
 	
 	IntervalManager Interval;
@@ -241,10 +244,6 @@ class ExportAPI Beryl
 	
 	ModuleHandler Modules;
 
-	/* Handles subscriptions channels. */
-	
-	ChannelManager Channels;
-	
 	/* Internal statistics. */
 	
 	Serverstats Stats;

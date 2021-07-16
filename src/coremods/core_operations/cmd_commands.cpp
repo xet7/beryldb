@@ -125,3 +125,55 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
         KeyHelper::Operation(user, key, OP_MIN, value);
         return SUCCESS;  
 }
+
+CommandDiv::CommandDiv(Module* Creator) : Command(Creator, "DIV", 2, 2)
+{
+         group = 'k';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters[1];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+        
+        if (!is_number(value, true))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+
+        KeyHelper::Operation(user, key, OP_DIV, value);
+        return SUCCESS; 
+}
+
+CommandMult::CommandMult(Module* Creator) : Command(Creator, "MULT", 2, 2)
+{
+         group = 'k';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters[1];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+        
+        if (!is_number(value, true))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+
+        KeyHelper::Operation(user, key, OP_MULT, value);
+        return SUCCESS; 
+}
