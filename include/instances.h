@@ -217,6 +217,14 @@ class ExportAPI User : public Expandable
 	
 	const std::string uuid;
 
+        /* Server this user is connected to */
+
+        Server* server;
+        
+        /* User's session. */
+
+        std::shared_ptr<Session> session;
+
 	/* Agent that identifies this user. */
 	
 	std::string agent;
@@ -235,12 +243,6 @@ class ExportAPI User : public Expandable
 
 	SubsList chans;
 	
-	Server* server;
-	
-	/* User's session. */
-	
-	std::shared_ptr<Session> session;
-
         /* 
          * Checks whether user has 'r' flags (can_admin).
          *
@@ -345,7 +347,6 @@ class ExportAPI User : public Expandable
 	
 	virtual const std::string& GetHostFormat();
 
-	
 	void ResetCache();
 
         /* 
