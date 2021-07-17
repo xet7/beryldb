@@ -64,7 +64,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "engine.h"
 #include "login.h"
 #include "monitor.h"
-#include "settings.h"
 #include "interval.h"
 
 int main(int argc, char** argv);
@@ -224,6 +223,10 @@ class ExportAPI Beryl
 	
 	std::unique_ptr<GroupManager> Groups;
 	
+	/* Handles sets */
+	
+        std::unique_ptr<Settings> Sets;
+	
         /* Handles subscriptions channels. */
 
         std::unique_ptr<ChannelManager> Channels;
@@ -256,8 +259,6 @@ class ExportAPI Beryl
 	
 	ClientManager Clients;
 	
-	Settings Sets;
-
 	/* Utils function to the Beryl class. */
 	
 	Daemon Engine;

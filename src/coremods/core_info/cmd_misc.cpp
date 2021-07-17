@@ -79,7 +79,7 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         if (!exists.empty())
         {
                 user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
+                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         }
         
         const std::string& all_groups = user->GetAllGroups();

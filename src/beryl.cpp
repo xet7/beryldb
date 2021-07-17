@@ -18,6 +18,7 @@
 #include "notifier.h"
 #include "group.h"
 #include "channels.h"
+#include "settings.h"
 #include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
@@ -61,6 +62,8 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Creates sockets fds */
 	
 	SocketPool::Start();
+
+        this->Sets = std::make_unique<Settings>();
 
 	/* Channel initializer */ 
 	
@@ -608,6 +611,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         this->Logins    =       nullptr;
         this->Channels  =       nullptr;
         this->Config    =       nullptr;
+        this->Sets	=	nullptr;
         
         /* The END. */
 

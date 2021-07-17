@@ -17,9 +17,9 @@ class ExportAPI GroupManager
 {
      private:
         
-          /* A map of all groups */
+         /* A map of all groups */
           
-          GroupMap GroupList;
+         GroupMap GroupList;
         
      public:
          
@@ -103,6 +103,8 @@ class ExportAPI GroupManager
          {
               return this->GroupList;
          }
+         
+         /* Resets all groups. */
          
          void Reset();
 };

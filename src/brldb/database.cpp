@@ -141,7 +141,7 @@ void CoreManager::Open()
 
 void CoreManager::UserDefaults()
 {
-       if (!Kernel->Store->First)
+       if (!Kernel->Store->IsFirst())
        {
             return;
        }
@@ -187,13 +187,18 @@ void CoreManager::CheckDefaults()
                Kernel->Store->First = false;
        }
        
-       Kernel->Store->instance = instance;
+       Kernel->Store->created = instance;
 }
 
-StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
+StoreManager::StoreManager() : Default(nullptr), First(false), env(rocksdb::Env::Default())
 {
        env->SetBackgroundThreads(2, rocksdb::Env::LOW);
        env->SetBackgroundThreads(3, rocksdb::Env::HIGH);
+}
+
+StoreManager::~StoreManager() 
+{
+       env = NULL;
 }
 
 void StoreManager::OpenAll()

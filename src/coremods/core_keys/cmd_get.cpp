@@ -20,7 +20,7 @@
 #include "maker.h"
 #include "core_keys.h"
 
-CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "GETOCCURS", 2, 2)
+CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "OCCURS", 2, 2)
 {
          group = 'k';
          syntax = "<key> <value>";
