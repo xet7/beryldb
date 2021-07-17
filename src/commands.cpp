@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "exit.h"
 
 CommandModel::CommandModel(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : ServiceProvider(mod, cmd, SERVICE_COMMAND)

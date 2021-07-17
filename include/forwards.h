@@ -46,6 +46,8 @@ class Group;
 class GroupManager;
 class MonitorHandler;
 class IntervalManager;
+class Daemon;
+
 struct PendingCMD;
 
 #ifdef ENABLE_TESTOFFICE

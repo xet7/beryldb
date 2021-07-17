@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "exit.h"
+#include "engine.h"
 
 bool ModuleHandler::Load(const std::string& name, bool nextloop)
 {

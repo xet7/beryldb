@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "core_info.h"
+#include "engine.h"
 
 CommandSyntax::CommandSyntax(Module* parent) : Command(parent, "SYNTAX", 1, 1)
 {

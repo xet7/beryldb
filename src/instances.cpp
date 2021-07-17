@@ -12,6 +12,8 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
+
 #include "notifier.h"
 #include "monitor.h"
 #include "brldb/dbmanager.h"

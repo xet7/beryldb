@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 
 class CommandForceJoin : public Command
 {

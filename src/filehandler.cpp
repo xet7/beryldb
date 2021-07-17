@@ -11,10 +11,11 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include "beryl.h"
-
 #include <fstream>
 #include <dirent.h>
+
+#include "beryl.h"
+#include "engine.h"
 
 FileLoader::FileLoader(const std::string& filename)
 {

@@ -61,7 +61,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "brldstr.h"
 #include "protocol.h"
 #include "stats.h"
-#include "engine.h"
 
 int main(int argc, char** argv);
 
@@ -231,6 +230,10 @@ class ExportAPI Beryl
 	/* Handles intervals */
 	
 	std::unique_ptr<IntervalManager> Interval;
+
+        /* Utils function to the Beryl class. */
+
+        std::unique_ptr<Daemon> Engine;
 	
 	/* Parses and processes user-provided commands. */
 	
@@ -256,10 +259,6 @@ class ExportAPI Beryl
 	
 	ClientManager Clients;
 	
-	/* Utils function to the Beryl class. */
-	
-	Daemon Engine;
-
 	/*
 	 * Beryl's main. This function will initialize most of the Beryl's core system
 	 * and read all configuration files.

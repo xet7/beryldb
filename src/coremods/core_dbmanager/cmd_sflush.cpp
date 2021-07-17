@@ -12,6 +12,8 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
+
 #include "brldb/dbmanager.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/query.h"

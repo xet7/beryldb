@@ -14,6 +14,8 @@
 #include "beryl.h"
 #include "core_info.h"
 #include "managers/keys.h"
+#include "engine.h"
+
 #include "managers/user.h"
 #include "managers/databases.h"
 #include "brldb/dbmanager.h"

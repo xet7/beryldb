@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "exit.h"
+#include "engine.h"
 
 class ModuleAutojoin : public Module
 { 

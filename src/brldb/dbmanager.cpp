@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/dbmanager.h"
 #include "managers/lists.h"
 #include "managers/settings.h"

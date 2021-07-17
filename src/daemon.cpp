@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "exit.h"
 
 const char* ExitMap[] =

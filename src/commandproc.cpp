@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "group.h"
 #include "monitor.h"
 #include "interval.h"

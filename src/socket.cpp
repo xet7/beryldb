@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 
 bool Beryl::ListenPort(config_rule* tag, const engine::sockets::sockaddrs& sa)
 {

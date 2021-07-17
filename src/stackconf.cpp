@@ -16,6 +16,7 @@
 #include "beryl.h"
 #include "stackconf.h"
 #include "exit.h"
+#include "engine.h"
 
 enum parse_options
 {

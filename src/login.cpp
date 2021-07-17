@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "login.h"
 #include "modules/encrypt.h"
 

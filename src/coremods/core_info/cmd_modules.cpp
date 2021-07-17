@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "core_info.h"
+#include "engine.h"
 
 CommandModules::CommandModules(Module* parent) : ServerTargetCommand(parent, "MODULES")
 {

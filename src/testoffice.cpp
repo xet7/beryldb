@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "devel.h"
 #include "extras.h"
+#include "engine.h"
 
 #ifdef ENABLE_TESTOFFICE
 

@@ -20,6 +20,7 @@
 #include "channels.h"
 #include "settings.h"
 #include "interval.h"
+#include "engine.h"
 #include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
@@ -89,6 +90,10 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
         /* Store manager initializer */ 
         
         this->Store = std::make_unique<StoreManager>();
+
+        /* Daemon initializer */ 
+        
+        this->Engine = std::make_unique<Daemon>();
 
         /* Group manager initializer */
         
@@ -618,6 +623,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         this->Config    =       nullptr;
         this->Sets	=	nullptr;
         this->Interval	= 	nullptr;
+        this->Engine	=	nullptr;
         
         /* The END. */
 

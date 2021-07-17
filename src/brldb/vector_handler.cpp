@@ -15,6 +15,7 @@
 #include <algorithm>
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/vector_handler.h"
 
 VectorHandler::VectorHandler()
