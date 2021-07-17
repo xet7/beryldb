@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "interval.h"
 
 class ModuleCoreCPU : public Module
 {

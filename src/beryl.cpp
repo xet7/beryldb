@@ -19,6 +19,7 @@
 #include "group.h"
 #include "channels.h"
 #include "settings.h"
+#include "interval.h"
 #include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
@@ -92,6 +93,10 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
         /* Group manager initializer */
         
         this->Groups = std::make_unique<GroupManager>();
+
+        /* Manages intervals */
+        
+        this->Interval = std::make_unique<IntervalManager>();
 
 	/* Configuration class. This class will read and our config file. */
 	
@@ -612,6 +617,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         this->Channels  =       nullptr;
         this->Config    =       nullptr;
         this->Sets	=	nullptr;
+        this->Interval	= 	nullptr;
         
         /* The END. */
 

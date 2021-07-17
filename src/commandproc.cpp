@@ -13,6 +13,8 @@
 
 #include "beryl.h"
 #include "group.h"
+#include "monitor.h"
+#include "interval.h"
 
 bool Daemon::PassCompare(Expandable* ex, const std::string& data, const std::string& input, const std::string& hashtype)
 {

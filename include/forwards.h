@@ -44,7 +44,8 @@ class Notifier;
 class CommandQueue;
 class Group;
 class GroupManager;
-
+class MonitorHandler;
+class IntervalManager;
 struct PendingCMD;
 
 #ifdef ENABLE_TESTOFFICE

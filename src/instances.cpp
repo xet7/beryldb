@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "notifier.h"
+#include "monitor.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
@@ -26,11 +27,11 @@ ProtocolTrigger::MessageList LocalUser::SendMsgList;
 User::User(const std::string& uid, Server* srv, UserType type) :
                                         	  age(Kernel->Now())
                                         	, connected(0)
+                                        	, logged(0)
                                         	, Locked(false)	 
                                         	, Multi(false)
                                         	, MultiRunning(false)
                                         	, Paused(false)
-                                        	, logged(0)
                                         	, uuid(uid)
                                         	, server(srv)
                                         	, session(nullptr)

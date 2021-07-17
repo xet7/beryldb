@@ -62,9 +62,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "protocol.h"
 #include "stats.h"
 #include "engine.h"
-#include "login.h"
-#include "monitor.h"
-#include "interval.h"
 
 int main(int argc, char** argv);
 
@@ -233,7 +230,7 @@ class ExportAPI Beryl
         
 	/* Handles intervals */
 	
-	IntervalManager Interval;
+	std::unique_ptr<IntervalManager> Interval;
 	
 	/* Parses and processes user-provided commands. */
 	

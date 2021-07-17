@@ -110,6 +110,10 @@ class ExportAPI User : public Expandable
 
         time_t connected;
 
+        /* Time at which this user was logged. */
+
+        time_t logged;
+
         /* Locks db in use. */
         
         static std::mutex db_mute;
@@ -160,10 +164,6 @@ class ExportAPI User : public Expandable
 	/* login this user is using to access the server. */
 
 	std::string login;
-	
-	/* Time at which this user was logged. */
-
-	time_t logged;
 	
 	engine::sockets::sockaddrs client_sa;
 
@@ -409,7 +409,20 @@ class ExportAPI User : public Expandable
 	{
 		return this->connected;
 	}
-	
+
+        /* 
+         * Time at which this user logged in.
+	 * 
+         * @return:
+ 	 *
+         *         · time_t: Logging time.
+         */    
+         
+	time_t GetLogged()
+	{
+		return this->logged;
+	}
+		
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
 	template <typename T1>

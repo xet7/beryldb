@@ -23,6 +23,7 @@
 #include "helpers.h"
 #include "subscription.h"
 #include "settings.h"
+#include "interval.h"
 
 namespace
 {

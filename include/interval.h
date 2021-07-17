@@ -13,7 +13,7 @@
 
 #pragma once
 
-class ExportAPI IntervalManager : public safecast<IntervalManager>
+class ExportAPI IntervalManager 
 {
      private:
              
