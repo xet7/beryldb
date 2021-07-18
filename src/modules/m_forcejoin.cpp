@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "engine.h"
+#include "channelmanager.h"
 
 class CommandForceJoin : public Command
 {

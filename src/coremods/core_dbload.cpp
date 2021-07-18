@@ -20,6 +20,7 @@
 #include "managers/maps.h"
 #include "managers/user.h"
 #include "managers/settings.h"
+#include "channelmanager.h"
 #include "managers/expires.h"
 #include "helpers.h"
 #include "subscription.h"

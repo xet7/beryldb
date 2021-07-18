@@ -17,6 +17,7 @@
 #include "monitor.h"
 #include "notifier.h"
 #include "group.h"
+#include "channelmanager.h"
 #include "channels.h"
 #include "settings.h"
 #include "filehandler.h"

@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "core_channel.h"
 #include "engine.h"
+#include "channelmanager.h"
 #include "modules/slist.h"
 
 CommandSlist::CommandSlist(Module* parent) : MultiCommand(parent, "SLIST", 0, 0), namesevprov(parent, "event/slist")

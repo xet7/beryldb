@@ -15,6 +15,7 @@
 #include "engine.h"
 #include "queues.h"
 #include "notifier.h"
+#include "channelmanager.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 

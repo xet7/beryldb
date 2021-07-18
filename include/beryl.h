@@ -49,7 +49,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "nodes.h"
 #include "logs.h"
 #include "clientmanager.h"
-#include "channelmanager.h"
 #include "socket.h"
 #include "commandproc.h"
 #include "socketstream.h"

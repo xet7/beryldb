@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "channelmanager.h"
 
 class CommandCycle : public MultiCommand
 {
