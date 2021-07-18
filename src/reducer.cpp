@@ -15,13 +15,13 @@
 
 void ReducerHandler::Apply()
 {
-	std::set<base_class*> gone;
-	std::vector<base_class*> queue;
+	std::set<Discarder*> gone;
+	std::vector<Discarder*> queue;
 	queue.reserve(list.size() + 32);
 
 	for (unsigned int i = 0; i < list.size(); i++)
 	{
-		base_class* c = list[i];
+		Discarder* c = list[i];
 
 		if (gone.insert(c).second)
 		{
@@ -34,7 +34,7 @@ void ReducerHandler::Apply()
 	
 	for (unsigned int i = 0; i < queue.size(); i++)
 	{
-		base_class* c = queue[i];
+		Discarder* c = queue[i];
 		delete c;
 	}
 

@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "interval.h"
 
 void Timer::SetNextTick(unsigned int tick)
 {
@@ -83,3 +84,42 @@ void TickManager::Add(Timer* timer)
 {
 	this->Timers.insert(std::make_pair(timer->GetSchedule(), timer));
 }
+
+IntervalManager::IntervalManager() : counter(0)
+{
+
+}
+
+IntervalManager::~IntervalManager()
+{
+
+}
+
+bool IntervalManager::RestingStatus()
+{
+      return this->Sleep;
+}
+
+void IntervalManager::SleepMode(bool flag)
+{
+       this->Sleep = flag;
+}
+
+void IntervalManager::Flush()
+{
+      if (this->Sleep)
+      {
+            usleep(900);
+      }
+      
+      if (this->counter >= 25)
+      {
+            /* Activates throttling */
+            
+            usleep(1);
+            return;
+      }
+      
+      this->counter = 0;
+}
+

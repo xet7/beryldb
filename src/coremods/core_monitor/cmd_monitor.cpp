@@ -49,12 +49,12 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
              }
        
              Kernel->Monitor->Add(user, monitor);
-             user->SendProtocol(BRLD_OK, BRLD_NOW_MONITORING, level, Daemon::Format("OK: %s", level.c_str()));       
+             user->SendProtocol(BRLD_OK, PROCESS_OK);       
              return SUCCESS;  
        }
        
        Kernel->Monitor->Add(user, MONITOR_DEFAULT);
-       user->SendProtocol(BRLD_OK, BRLD_NOW_MONITORING, "DEFAULT", "OK: DEFAULT");          
+       user->SendProtocol(BRLD_OK, PROCESS_OK);          
        return SUCCESS;
 }
 
@@ -121,7 +121,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
                     strlevel = "DEBUG";
                }
                
-               user->SendProtocol(BRLD_MONITOR_USER, Daemon::Format("%s: %s ", umonitor->instance.c_str(), strlevel.c_str()).c_str());
+               Dispatcher::CondList(user, BRLD_MONITOR_USER, umonitor->instance.c_str(), strlevel.c_str());
                counter++;
         }
         

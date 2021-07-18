@@ -14,7 +14,7 @@
 #pragma once
 
 
-class ExportAPI Server : public base_class
+class ExportAPI Server : public Discarder
 {
 
  protected:

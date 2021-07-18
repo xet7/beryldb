@@ -21,24 +21,24 @@
 class DiscardResult
 {
 	DiscardResult();
-	friend class base_class;
+	friend class Discarder;
 };
 
 
-class ExportAPI base_class
+class ExportAPI Discarder
 {
   public:
   
-	base_class();
+	Discarder();
 
 	
 	virtual DiscardResult discard();
-	virtual ~base_class();
+	virtual ~Discarder();
   
   private:
 
-	base_class(const base_class&);
-	void operator=(const base_class&);
+	Discarder(const Discarder&);
+	void operator=(const Discarder&);
 };
 
 class ExportAPI interfacebase
@@ -206,7 +206,7 @@ enum ServiceID
 	SERVICE_CUSTOM
 };
 
-class ExportAPI ServiceProvider : public base_class
+class ExportAPI ServiceProvider : public Discarder
 {
   public:
 

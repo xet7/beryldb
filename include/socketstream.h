@@ -71,7 +71,7 @@ enum EventMask
 };
 
 
-class ExportAPI EventHandler : public base_class
+class ExportAPI EventHandler : public Discarder
 {
  private:
 	

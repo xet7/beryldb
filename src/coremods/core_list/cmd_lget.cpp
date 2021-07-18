@@ -84,11 +84,6 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-        
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
@@ -241,3 +236,46 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
+{
+         group = 'l';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       if (!CheckFormat(user, value))
+       {
+           return FAILED;
+       }
+       
+       ListHelper::Exist(user, key, value);
+       return SUCCESS;  
+}
+
+CommandLCount::CommandLCount(Module* Creator) : Command(Creator, "LCOUNT", 1, 1)
+{
+         group = 'l';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+       
+       ListHelper::Count(user, key);
+       return SUCCESS;  
+}

@@ -53,7 +53,7 @@ DiscardResult Module::discard()
 		Kernel->Reducer.Add(this->DLL);
 	}
 	
-	return base_class::discard();
+	return Discarder::discard();
 }
 
 Module::~Module()

@@ -72,7 +72,7 @@ class ExportAPI extension_item : public ServiceProvider, public usecountbase
 };
 
 
-class ExportAPI Expandable : public base_class, public Serializable
+class ExportAPI Expandable : public Discarder, public Serializable
 {
  public:
  

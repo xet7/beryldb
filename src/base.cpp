@@ -16,17 +16,17 @@
 #include "beryl.h"
 #include "base.h"
 
-base_class::base_class()
+Discarder::Discarder()
 {
 
 }
 
-DiscardResult base_class::discard()
+DiscardResult Discarder::discard()
 {
 	return DiscardResult();
 }
 
-base_class::~base_class()
+Discarder::~Discarder()
 {
 
 }
@@ -201,7 +201,7 @@ DiscardResult Expandable::discard()
 {
 	free_all_items();
 	culled = true;
-	return base_class::discard();
+	return Discarder::discard();
 }
 
 void Expandable::free_all_items()

@@ -14,7 +14,7 @@
 
 #pragma once
 
-class ExportAPI DLLHandler : public base_class
+class ExportAPI DLLHandler : public Discarder
 {
 	
 	private:

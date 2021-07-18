@@ -24,6 +24,8 @@ class ExportAPI Settings
         std::map<std::string, std::string> SetMap;
         
    public:
+   
+        /* Constructor */
         
         Settings();    
 

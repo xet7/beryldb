@@ -42,7 +42,7 @@ class ExportAPI FileHandler
 	virtual ~FileHandler();
 };
 
-class ExportAPI LogStream : public base_class
+class ExportAPI LogStream : public Discarder
 {
  protected:
 
