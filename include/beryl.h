@@ -39,7 +39,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "reducer.h"
 #include "serialize.h"
 #include "expandable.h"
-#include "filehandler.h"
 #include "chandler.h"
 #include "protocols.h"
 #include "numeric.h"

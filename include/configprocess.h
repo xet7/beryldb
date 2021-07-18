@@ -22,6 +22,7 @@
 
 #include "beryl.h"
 #include "modules.h"
+#include "filehandler.h"
 #include "socketstream.h"
 #include "socket.h"
 #include "settings.h"

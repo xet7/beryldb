@@ -102,6 +102,8 @@ beryl> strlen hello
 5
 ```
 
+Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).
+
 ## Discussions
 
 In order to maintain a documentation that is easy to follow, we try to maintain 

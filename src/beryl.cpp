@@ -19,6 +19,7 @@
 #include "group.h"
 #include "channels.h"
 #include "settings.h"
+#include "filehandler.h"
 #include "interval.h"
 #include "engine.h"
 #include "brldb/dbmanager.h"
