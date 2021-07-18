@@ -65,7 +65,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 }
 
 LocalUser::LocalUser(int myfd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* servaddr)
-	: User(Kernel->UID.GetUID(), Kernel->Clients->Global->server, CLIENT_TYPE_LOCAL)
+	: User(Kernel->UID->GetUID(), Kernel->Clients->Global->server, CLIENT_TYPE_LOCAL)
 	, usercon(this)
 	, serializer(NULL)
 	, lastping(true)

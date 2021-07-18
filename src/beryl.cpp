@@ -204,7 +204,7 @@ void Beryl::Initialize()
 
 	/* Sets up the very first unique ID for future clients. */
 
-	this->UID.Initialize();
+	this->UID->Initialize();
 
 	/* User that acts as a server. */
 	
