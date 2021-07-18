@@ -16,6 +16,7 @@
 #include <csignal>
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "devel.h"
 #include "constants.h"
