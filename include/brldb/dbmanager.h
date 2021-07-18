@@ -30,6 +30,14 @@ class ExportAPI DBManager : public safecast<DBManager>
         /* Constructor */
          
         DBManager();
+
+        /* 
+         * Opens all databases.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Counter of opened databases.
+         */             
          
         unsigned int OpenAll();
       
@@ -66,6 +74,18 @@ class ExportAPI DBManager : public safecast<DBManager>
          */    
          
         bool Delete(const std::string& name);
+        
+        /* 
+         * Creates a new database.
+         * 
+         * @parameters:
+	 *
+	 *         · name: Name of database.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Database opened.
+         */             
          
         bool Create(const std::string& name, const std::string& path);
         
@@ -129,8 +149,12 @@ class ExportAPI StoreManager
     friend class CoreManager;
     
     private:
+
+        rocksdb::Env* env = NULL;
     
-         std::shared_ptr<UserDatabase> Default;
+        /* Default database to use */
+        
+        std::shared_ptr<UserDatabase> Default;
 
         /* Time this instance was created. */
 
@@ -150,8 +174,6 @@ class ExportAPI StoreManager
         
         ~StoreManager();
 
-        rocksdb::Env* env = NULL;
-            
         /* Map of active databases. */
         
         DBManager DBM;
@@ -208,6 +230,19 @@ class ExportAPI StoreManager
         std::shared_ptr<UserDatabase> GetDefault()
         {
               return this->Default;
+        }
+
+        /* 
+         * Returns current environment variable.
+         * 
+         * @return:
+ 	 *
+         *         · rocksdb::Env*: env var.
+         */            
+         
+        rocksdb::Env* GetEnv()
+        {
+              return this->env;
         }
 
 };

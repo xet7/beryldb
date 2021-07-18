@@ -65,7 +65,7 @@ bool Database::Open()
 {	
         this->db = NULL;
         
-        options.env = Kernel->Store->env;
+        options.env = Kernel->Store->GetEnv();
         options.create_if_missing = Kernel->Config->DB.createim;
         options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
         options.keep_log_file_num = 1;
@@ -191,7 +191,7 @@ void CoreManager::CheckDefaults()
        Kernel->Store->created = instance;
 }
 
-StoreManager::StoreManager() : Default(nullptr), First(false), env(rocksdb::Env::Default())
+StoreManager::StoreManager() : env(rocksdb::Env::Default()), Default(nullptr), First(false)
 {
        env->SetBackgroundThreads(2, rocksdb::Env::LOW);
        env->SetBackgroundThreads(3, rocksdb::Env::HIGH);

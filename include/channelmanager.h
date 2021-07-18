@@ -20,11 +20,15 @@
  
 class ExportAPI ChannelManager 
 {
-    public: 
-
+    friend class Channel;
+    
+    private:
+    
         /* Map containing all channels. */
-        
+
         ChanMap ChannelList;
+
+    public: 
 
         /* Constructor. */
         
