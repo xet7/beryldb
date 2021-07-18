@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <vector>
+#include <map>
 #include "brldb/dbnumeric.h"
 
 namespace ProtocolTrigger

@@ -15,6 +15,7 @@
 #include <getopt.h>
 
 #include "beryl.h"
+#include "colors.h"
 #include "devel.h"
 #include "testoffice.h"
 #include "interval.h"

@@ -15,6 +15,8 @@
 
 #include <list>
 
+#include "instances.h"
+
 /* Handles users' connections. */
 
 class ExportAPI ClientManager : public safecast<ClientManager>

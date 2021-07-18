@@ -14,9 +14,7 @@
 #pragma once
 
 #include <csignal>
-#include <map>
 #include <string>
-#include <vector>
 #include <memory>
 
 #include "devel.h"
@@ -28,14 +26,11 @@
 #include "forwards.h"
 #include "typedefs.h"
 #include "bmaps.h"
-#include "converter.h"
-#include "stdhelpers.h"
 
 ExportAPI extern std::unique_ptr<Beryl> Kernel;
 
 #include "config.h"
 #include "dynref.h"
-#include "colors.h"
 #include "reducer.h"
 #include "serialize.h"
 #include "expandable.h"
@@ -44,7 +39,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "numeric.h"
 #include "uid.h"
 #include "server.h"
-#include "instances.h"
 #include "timer.h"
 #include "nodes.h"
 #include "logs.h"
