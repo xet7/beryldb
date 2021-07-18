@@ -19,12 +19,12 @@ class ExportAPI ReducerHandler  : public safecast<ReducerHandler>
 {
   private:
 
-	std::vector<base_class*> list;
+	std::vector<Discarder*> list;
 	std::vector<LocalUser*> SQlist;
 
   public:
 
-	void Add(base_class* item) 
+	void Add(Discarder* item) 
 	{ 
 		this->list.push_back(item); 
 	}
@@ -32,7 +32,7 @@ class ExportAPI ReducerHandler  : public safecast<ReducerHandler>
 	void Apply();
 };
 
-class ExportAPI PromiseAction : public base_class
+class ExportAPI PromiseAction : public Discarder
 {
  public:
 

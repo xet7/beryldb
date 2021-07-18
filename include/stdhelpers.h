@@ -115,7 +115,7 @@ namespace stdhelpers
 	
 	struct discardrun
 	{
-		void operator()(base_class* item);
+		void operator()(Discarder* item);
 	};
 
 	

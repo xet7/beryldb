@@ -1,3 +1,16 @@
+/*      
+ * BerylDB - A lightweight database.
+ * http://www.beryldb.com
+ *
+ * Copyright (C) 2021 - Carlos F. Ferry <cferry@beryldb.com>
+ * 
+ * This file is part of BerylDB. BerylDB is free software: you can
+ * redistribute it and/or modify it under the terms of the BSD License
+ * version 3.
+ *
+ * More information about our licensing can be found at https://docs.beryl.dev
+ */
+
 #pragma once
 
 #include <iterator>
@@ -5,7 +18,10 @@
 namespace brld
 {
 
-struct node_list_def_tag { };
+struct node_list_def_tag 
+{ 
+
+};
 
 template <typename T, typename Tag = node_list_def_tag> class node_list;
 template <typename T, typename Tag = node_list_def_tag> class node_list_tail;
@@ -21,9 +37,15 @@ class node_list_node
 	void unlink()
 	{
 		if (ptr_next)
+		{
 			ptr_next->node_list_node<T, Tag>::ptr_prev = this->ptr_prev;
+		}
+		
 		if (ptr_prev)
+		{
 			ptr_prev->node_list_node<T, Tag>::ptr_next = this->ptr_next;
+		}
+		
 		ptr_next = ptr_prev = NULL;
 	}
 

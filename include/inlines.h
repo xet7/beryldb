@@ -13,7 +13,7 @@
 
 #pragma once
 
-inline void stdhelpers::discardrun::operator()(base_class* item)
+inline void stdhelpers::discardrun::operator()(Discarder* item)
 {
         if (item)
         {

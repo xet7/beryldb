@@ -153,11 +153,6 @@ COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)

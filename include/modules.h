@@ -257,7 +257,7 @@ enum Application
 	I_END
 };
 
-class ExportAPI Module : public base_class, public usecountbase
+class ExportAPI Module : public Discarder, public usecountbase
 {
   private:
  

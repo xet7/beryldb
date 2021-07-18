@@ -51,7 +51,7 @@ class QueueProvider : public refcountbase, public ServiceProvider
 	virtual void OnConnect(StreamSocket* sock) = 0;
 };
 
-class IOQueue : public base_class
+class IOQueue : public Discarder
 {
  public:
 	
