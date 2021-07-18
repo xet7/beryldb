@@ -13,7 +13,7 @@
 
 #pragma once
 
-class ExportAPI UIDHandler
+class ExportAPI UIDHandler : public safecast<UIDHandler>
 {
   private:
 	

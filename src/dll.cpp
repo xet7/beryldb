@@ -14,6 +14,7 @@
 #include <dlfcn.h>
 
 #include "beryl.h"
+#include "engine.h"
  
 #define DYNAMIC_EXTENSION ".dll"
 

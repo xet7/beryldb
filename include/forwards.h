@@ -16,6 +16,7 @@
 class Beryl;
 class LiveSocket;
 class Channel;
+class ChannelManager;
 class Command;
 class config_status;
 class config_rule;
@@ -43,6 +44,10 @@ class SessionManager;
 class Notifier;
 class CommandQueue;
 class Group;
+class GroupManager;
+class MonitorHandler;
+class IntervalManager;
+class Daemon;
 
 struct PendingCMD;
 

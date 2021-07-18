@@ -13,10 +13,10 @@
 
 #include "beryl.h"
 #include "core_info.h"
+#include "engine.h"
 
 CommandModules::CommandModules(Module* parent) : ServerTargetCommand(parent, "MODULES")
 {
-	group = 'w';
 	syntax = "[<server>]";
 }
 
@@ -88,7 +88,6 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
 CommandCoreModules::CommandCoreModules(Module* parent) : ServerTargetCommand(parent, "COREMODULES")
 {
-	group = 'w';
 	syntax = "[<server>]";
 }
 

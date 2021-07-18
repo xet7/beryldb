@@ -12,16 +12,20 @@
  */
 
 #include "beryl.h"
+#include "notifier.h"
+#include "engine.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "managers/maps.h"
 #include "managers/user.h"
 #include "managers/settings.h"
+#include "channelmanager.h"
 #include "managers/expires.h"
 #include "helpers.h"
 #include "subscription.h"
 #include "settings.h"
+#include "interval.h"
 
 namespace
 {
@@ -31,11 +35,7 @@ namespace
              
              if (InUse && InUse != user)
              {
-<<<<<<< HEAD
-                   user->Groups = InUse->Groups;
-=======
                    user->SetGroups(InUse->GetGroups());
->>>>>>> unstable
                    return;
              }
              
@@ -51,11 +51,7 @@ namespace
                        
                        if (group)
                        {
-<<<<<<< HEAD
-                            user->Groups.push_back(group);
-=======
                             user->PushGroup(group);
->>>>>>> unstable
                        }
              }
      }

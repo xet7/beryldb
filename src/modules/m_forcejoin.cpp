@@ -12,6 +12,8 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
+#include "channelmanager.h"
 
 class CommandForceJoin : public Command
 {
@@ -43,7 +45,7 @@ class CommandForceJoin : public Command
 		{
 			if (IS_LOCAL(user) && !Kernel->Engine->ValidChannel(channel))
 			{
-				user->SendProtocol(BRLD_ALERT, "Invalid channel.");
+				user->SendProtocol(ERR_INPUT, INVALID_CHAN);
 				return FAILED;
 			}
 
@@ -51,7 +53,7 @@ class CommandForceJoin : public Command
 			
 			if ((chan) && (chan->IsSubscribed(dest)))
 			{
-				user->SendRemoteProtocol(BRLD_ALERT, dest->instance + " is already subscribed to " + channel);
+				user->SendRemoteProtocol(ERR_INPUT2, PROCESS_ALREADY);
 				return FAILED;
 			}
 
@@ -67,7 +69,7 @@ class CommandForceJoin : public Command
 				}
 				else
 				{
-					user->SendProtocol(BRLD_ALERT, "Unable to join " + dest->instance + " to "+channel);
+					user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
 					return FAILED;
 				}
 			}
@@ -78,7 +80,7 @@ class CommandForceJoin : public Command
 		}
 		else
 		{
-			user->SendProtocol(BRLD_ALERT, "Unable to locate instance: '" + instance + "'");
+			user->SendProtocol(ERR_INPUT, PROCESS_NULL);
 			return FAILED;
 		}
 	}

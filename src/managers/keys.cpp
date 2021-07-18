@@ -187,3 +187,17 @@ void KeyHelper::GetPersist(User* user, const std::string& key)
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::IsBool(User* user, const std::string& entry)
+{
+       std::shared_ptr<isbool_query> query = std::make_shared<isbool_query>();
+       Helpers::make_query(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void KeyHelper::AsBool(User* user, const std::string& entry)
+{
+       std::shared_ptr<asbool_query> query = std::make_shared<asbool_query>();
+       Helpers::make_query(user, query, entry);
+       Kernel->Store->Push(query);
+}
+

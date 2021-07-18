@@ -13,6 +13,17 @@
 
 #include "beryl.h"
 #include "exit.h"
+#include "login.h"
+#include "monitor.h"
+#include "notifier.h"
+#include "group.h"
+#include "channelmanager.h"
+#include "channels.h"
+#include "settings.h"
+#include "filehandler.h"
+#include "interval.h"
+#include "engine.h"
+#include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 
@@ -55,6 +66,44 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Creates sockets fds */
 	
 	SocketPool::Start();
+
+        this->Sets = std::make_unique<Settings>();
+
+	/* Channel initializer */ 
+	
+        this->Channels = std::make_unique<ChannelManager>();
+
+	/* Notification handler */
+	
+        this->Notify = std::make_unique<Notifier>();
+
+	/* Monitor initializer */
+	
+        this->Monitor = std::make_unique<MonitorHandler>();
+        
+        /* Login cache initializer */
+        
+        this->Logins = std::make_unique<LoginCache>();
+        
+        /* Core database initializer */
+        
+        this->Core = std::make_unique<CoreManager>();
+
+        /* Store manager initializer */ 
+        
+        this->Store = std::make_unique<StoreManager>();
+
+        /* Daemon initializer */ 
+        
+        this->Engine = std::make_unique<Daemon>();
+
+        /* Group manager initializer */
+        
+        this->Groups = std::make_unique<GroupManager>();
+
+        /* Manages intervals */
+        
+        this->Interval = std::make_unique<IntervalManager>();
 
 	/* Configuration class. This class will read and our config file. */
 	
@@ -157,7 +206,7 @@ void Beryl::Initialize()
 
 	/* Sets up the very first unique ID for future clients. */
 
-	this->UID.Initialize();
+	this->UID->Initialize();
 
 	/* User that acts as a server. */
 	
@@ -525,7 +574,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         
         /* Close core db. */
          
-        this->Core->DB->Close();
+        this->Core->GetDatabase()->Close();
 
 	/* Exit msg */
 	
@@ -556,8 +605,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
         this->ConfigFile.clear();
 
-        this->Config = nullptr;
-        
         /* Reset memory assignations. */
         
         memset(&this->TIME, 0, sizeof(timespec));        
@@ -565,8 +612,22 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         memset(&this->startup, 0, sizeof(time_t));        
         
         memset(&this->PendingBuffer, BUFFERSIZE, sizeof(char));
+
+        /* Free memory */
+        
+        this->Groups	= 	nullptr;
+        this->Notify    =       nullptr;
+        this->Core      =       nullptr;
+        this->Store     =       nullptr;
+        this->Monitor   =       nullptr;
+        this->Logins    =       nullptr;
+        this->Channels  =       nullptr;
+        this->Config    =       nullptr;
+        this->Sets	=	nullptr;
+        this->Interval	= 	nullptr;
+        this->Engine	=	nullptr;
         
         /* The END. */
-        
+
         Kernel = nullptr;
 }

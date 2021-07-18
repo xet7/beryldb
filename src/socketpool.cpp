@@ -11,10 +11,11 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
+#include <iostream>
+
 #include "exit.h"
 #include "beryl.h"
-
-#include <iostream>
+#include "engine.h"
 
 std::vector<EventHandler*> SocketPool::ref;
 

@@ -37,6 +37,8 @@ class CoreModKeys : public Module
         CommandIsAlpha cmdisalpha;
         CommandIsNum cmdisnum;
         CommandGetPersist cmdgetpersist;
+        CommandIsBool cmdisbool;
+        CommandAsBool cmdasbool;
         
     public:	
         
@@ -58,7 +60,9 @@ class CoreModKeys : public Module
                         cmdgetexp(this),
                         cmdisalpha(this),
                         cmdisnum(this),
-                        cmdgetpersist(this)
+                        cmdgetpersist(this),
+                        cmdisbool(this),
+                        cmdasbool(this)
         {
         
         }

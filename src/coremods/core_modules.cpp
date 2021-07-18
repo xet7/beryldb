@@ -12,6 +12,8 @@
  */
 
 #include "beryl.h"
+#include "notifier.h"
+#include "engine.h"
 
 class CommandLoadmodule : public Command
 {

@@ -11,8 +11,6 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include <tuple>
-
 #include "beryl.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"

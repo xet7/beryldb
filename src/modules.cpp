@@ -13,6 +13,8 @@
 
 #include "beryl.h"
 #include "exit.h"
+#include "engine.h"
+#include "channelmanager.h"
 
 static brld::node_list<ddl_base_ref>* dll_reference = NULL;
 

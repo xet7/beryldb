@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
@@ -19,6 +20,7 @@
 #include "brldb/functions.h"
 #include "extras.h"
 #include "helpers.h"
+#include "brldb/dbmanager.h"
 
 void expire_list_query::Run()
 {
@@ -268,6 +270,29 @@ void isnum_query::Run()
 }
 
 void isnum_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
+
+void isbool_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::string as_str = to_string(result.value);
+       
+       if (as_str == "0" || as_str == "1" || as_str == "true" || as_str == "false" || as_str == "on" || as_str == "off")
+       {
+             this->response = "1";
+       }
+       else
+       {
+            this->response = "0";
+       }
+       
+       this->SetOK();
+}
+
+void isbool_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
 }
@@ -1009,4 +1034,27 @@ void getexp_query::Run()
 void getexp_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
+}
+
+void asbool_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::string as_str = to_string(result.value);
+       
+       if (as_str == "1" || as_str == "true" || as_str == "on")
+       {
+             this->response = "true";
+       }
+       else
+       {
+            this->response = "false";
+       }
+       
+       this->SetOK();
+}
+
+void asbool_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
 }

@@ -13,6 +13,8 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
+Help us by starring this project 👍⭐ 
+
 ## What is Beryl?
 
 Beryl is a data structures server. Our software provides access to structures via a 
@@ -101,6 +103,8 @@ beryl> get hello
 beryl> strlen hello
 5
 ```
+
+Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).
 
 ## Discussions
 

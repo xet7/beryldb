@@ -14,6 +14,7 @@
 #pragma once
 
 #include "beryl.h"
+#include "engine.h"
 
 /* 
  * Checks whether a given number is valid and, positive.

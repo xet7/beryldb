@@ -17,47 +17,106 @@
 #include "brldb/expires.h"
 #include "brldb/futures.h"
 #include "brldb/database.h"
+#include "group.h"
 
 class ExportAPI DBManager : public safecast<DBManager>
 {
    private:
      
-      DataMap DBMap;
+        DataMap DBMap;
 
    public:
        
-      /* Constructor */
+        /* Constructor */
          
-      DBManager();
+        DBManager();
+
+        /* 
+         * Opens all databases.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Counter of opened databases.
+         */             
          
-      unsigned int OpenAll();
+        unsigned int OpenAll();
       
-      void CloseAll();
+        void CloseAll();
       
-      void Load(const std::string& name, bool defaultdb = false);
+        void Load(const std::string& name, bool defaultdb = false);
 
-      std::shared_ptr<UserDatabase> Find(const std::string& name);
-
-      static void SetDefault(const std::string& name);
-
-      bool Delete(const std::string& name);
+        /* 
+         * Finds a database within DBMap.
+         * 
+         * @parameters:
+	 *
+	 *         · name: Database to lookup.
+	 * 
+         * @return:
+ 	 *
+         *         · Database ptr to UserDatabase. Returns nullptr if not found.
+         */    
          
-      bool Create(const std::string& name, const std::string& path);
+        std::shared_ptr<UserDatabase> Find(const std::string& name);
+
+        static void SetDefault(const std::string& name);
+
+        /* 
+         * Deletes a database from DBMap.
+         * 
+         * @parameters:
+	 *
+	 *         · string: Database to remove.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Database found and removed.
+         */    
          
-      DataMap& GetDatabases()
-      {
+        bool Delete(const std::string& name);
+        
+        /* 
+         * Creates a new database.
+         * 
+         * @parameters:
+	 *
+	 *         · name: Name of database.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Database opened.
+         */             
+         
+        bool Create(const std::string& name, const std::string& path);
+        
+        /* 
+         * Get database.
+         * 
+         * @return:
+ 	 *
+         *         · DataMap. 
+         */             
+         
+        DataMap& GetDatabases()
+        {
                return this->DBMap;
-      }
+        }
 };
 
-class ExportAPI CoreManager : public safecast<CoreManager>
+class ExportAPI CoreManager 
 {
+    private:
+    
+         /* Core database pointer. This is unique. */
+         
+         std::shared_ptr<CoreDatabase> DB;
+
     public:
     
+        /* Constructor */
+        
         CoreManager();
 
-        std::shared_ptr<CoreDatabase> DB;
-        
         /* Opens core database. */
         
         void Open();
@@ -69,28 +128,52 @@ class ExportAPI CoreManager : public safecast<CoreManager>
         void CheckDefaults();
         
         void UserDefaults();
+
+        /* 
+         * Returns a reference to the core database.
+         * 
+         * @return:
+ 	 *
+         *         · this->DB
+         */            
+         
+        std::shared_ptr<CoreDatabase>& GetDatabase()
+        {
+             return this->DB;
+        }
 };
 
-class ExportAPI StoreManager : public safecast<StoreManager>
+class ExportAPI StoreManager 
 {
     friend class DBManager;
+    friend class CoreManager;
     
     private:
+
+        rocksdb::Env* env = NULL;
     
-         std::shared_ptr<UserDatabase> Default;
+        /* Default database to use */
+        
+        std::shared_ptr<UserDatabase> Default;
+
+        /* Time this instance was created. */
+
+        time_t created;
+
+        /* Whether this is the first time this instance is ran. */
+
+        bool First;
 
     public:
 
-        rocksdb::Env* env = NULL;
-            
-        /* Whether this is the first time this instance is ran. */
+        /* Constructor. */
+
+        StoreManager();
         
-        bool First;
+        /* Destructor */
         
-        /* Time this instance was created. */
-        
-        time_t instance;
-        
+        ~StoreManager();
+
         /* Map of active databases. */
         
         DBManager DBM;
@@ -103,10 +186,6 @@ class ExportAPI StoreManager : public safecast<StoreManager>
         
         FutureManager Futures;
         
-        /* Constructor. */
-        
-        StoreManager();
-
         /* Flusher class */
         
         DataFlush Flusher; 
@@ -116,6 +195,32 @@ class ExportAPI StoreManager : public safecast<StoreManager>
         void OpenAll();
 
         void Push(std::shared_ptr<QueryBase> request);
+
+        /* 
+         * Returns whether this is the first time this instance was ran.
+	 * 
+         * @return:
+ 	 *
+         *         · True: First time ran.
+         */            
+         
+        bool IsFirst()
+        {
+              return this->First;
+        }
+
+        /* 
+         * Returns created time.
+         * 
+         * @return:
+ 	 *
+         *         · time_t: Created time.
+         */            
+         
+        time_t GetCreated()
+        {
+              return this->created;
+        }
         
         void SetDefault(const std::shared_ptr<UserDatabase>& db)
         {
@@ -125,6 +230,19 @@ class ExportAPI StoreManager : public safecast<StoreManager>
         std::shared_ptr<UserDatabase> GetDefault()
         {
               return this->Default;
+        }
+
+        /* 
+         * Returns current environment variable.
+         * 
+         * @return:
+ 	 *
+         *         · rocksdb::Env*: env var.
+         */            
+         
+        rocksdb::Env* GetEnv()
+        {
+              return this->env;
         }
 
 };

@@ -15,6 +15,7 @@
 
 #include "beryl.h"
 #include "monitor.h"
+#include "engine.h"
 
 MonitorHandler::MonitorHandler()
 {

@@ -66,11 +66,7 @@ CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MR
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 {
        Kernel->Monitor->Reset();
-<<<<<<< HEAD
-       user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
        user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
        return SUCCESS;
 }
 

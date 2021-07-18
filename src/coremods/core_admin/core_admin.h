@@ -14,7 +14,7 @@
 #pragma once
 
 #include "beryl.h"
-
+#include "engine.h"
 
 class CommandLogout : public Command
 {

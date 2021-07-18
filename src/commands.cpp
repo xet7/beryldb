@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "exit.h"
 
 CommandModel::CommandModel(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara) : ServiceProvider(mod, cmd, SERVICE_COMMAND)
@@ -59,11 +60,7 @@ void Command::RegisterService()
 	if (this->group != 0 && this->groups.size() > 0)
 	{
 		bprint(ERROR, "A command may not have group and groups defined.");
-<<<<<<< HEAD
-		Kernel->Exit(EXIT_CODE_CONFIG, true, true);
-=======
 		Kernel->Exit(EXIT_CODE_COMMAND, true, true);
->>>>>>> unstable
 	}
 	
 	if (!Kernel->Commander.AddCommand(this))

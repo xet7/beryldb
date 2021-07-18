@@ -15,6 +15,8 @@
 
 #include <list>
 
+class Notifier;
+
 #define DONE 1
 #define INFO 2
 #define ERROR 3

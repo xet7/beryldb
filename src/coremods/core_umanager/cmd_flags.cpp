@@ -76,11 +76,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-<<<<<<< HEAD
-                user->SendProtocol(ERR_INPUT, ERR_INVALID_PARAM, PROCESS_FALSE);
-=======
                 user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_FALSE);
->>>>>>> unstable
                 return FAILED;
         }
         

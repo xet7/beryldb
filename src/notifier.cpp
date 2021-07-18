@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "notifier.h"
+#include "engine.h"
 
 Notifier::Notifier()
 {

@@ -12,6 +12,10 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
+
+#include "notifier.h"
+#include "monitor.h"
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
@@ -23,19 +27,19 @@ std::mutex User::db_mute;
 ProtocolTrigger::MessageList LocalUser::SendMsgList;
 
 User::User(const std::string& uid, Server* srv, UserType type) :
-					  Locked(false)	 
-				        , Multi(false)
-				        , MultiRunning(false)
-				        , Paused(false)
-				        , age(Kernel->Now())
-					, connected(0)
-					, logged(0)
-					, uuid(uid)
-					, server(srv)
-					, session(nullptr)
-					, select("1")
-					, registered(REG_NONE)
-                                        , usertype(type)
+                                        	  age(Kernel->Now())
+                                        	, connected(0)
+                                        	, logged(0)
+                                        	, Locked(false)	 
+                                        	, Multi(false)
+                                        	, MultiRunning(false)
+                                        	, Paused(false)
+                                        	, uuid(uid)
+                                        	, server(srv)
+                                        	, session(nullptr)
+                                        	, select("1")
+                                        	, registered(REG_NONE)
+                                        	, usertype(type)
                                         
 					
 {
@@ -61,7 +65,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 }
 
 LocalUser::LocalUser(int myfd, engine::sockets::sockaddrs* client, engine::sockets::sockaddrs* servaddr)
-	: User(Kernel->UID.GetUID(), Kernel->Clients->Global->server, CLIENT_TYPE_LOCAL)
+	: User(Kernel->UID->GetUID(), Kernel->Clients->Global->server, CLIENT_TYPE_LOCAL)
 	, usercon(this)
 	, serializer(NULL)
 	, lastping(true)
@@ -97,6 +101,7 @@ User::~User()
 	pending.clear();
 	notifications.clear();
 	Groups.clear();
+	instance.clear();
 	
         Kernel->Logins->Sessions->DetermineLifetime(this->login);
 }
@@ -194,11 +199,7 @@ bool User::InGroup(unsigned char flag)
 		return false;
 	}	
 	
-<<<<<<< HEAD
-        for (std::vector<std::shared_ptr<Group>>::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
-=======
         for (GroupVector::iterator i = this->Groups.begin(); i != this->Groups.end(); ++i)
->>>>>>> unstable
         {
         	std::shared_ptr<Group> group = (*i);
         	
@@ -214,8 +215,6 @@ bool User::InGroup(unsigned char flag)
         return false;
 }
 
-<<<<<<< HEAD
-=======
 std::string User::GetAllGroups()
 {
 	std::string flags;
@@ -239,7 +238,6 @@ std::string User::GetAllGroups()
 	return flags;
 }
 
->>>>>>> unstable
 bool User::CanPerform(unsigned char flag)
 {
 	/* We cannot check privs if no session is present. */
@@ -459,7 +457,6 @@ void LocalUser::ack_connection()
 void User::ResetCache()
 {
 	user_ip.clear();
-	cached_hostip.clear();
 	cached_user_real_host.clear();
 }
 

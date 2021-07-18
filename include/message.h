@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "channels.h"
+
 class ExportAPI MessageLoad
 {
   public:

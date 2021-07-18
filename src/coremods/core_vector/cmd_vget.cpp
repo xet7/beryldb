@@ -58,22 +58,12 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 
        if (!CheckKey(user, key))
        {
-<<<<<<< HEAD
-                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
-                 return FAILED;
-=======
             return FAILED;
->>>>>>> unstable
        }
 
        if (!CheckValidPos(user, parameters[0]))
        {
-<<<<<<< HEAD
-                user->SendProtocol(ERR_INPUT, MUST_BE_POSIT);
-                return FAILED;
-=======
               return FAILED;
->>>>>>> unstable
        }
        
        VectorHelper::Index(user, key, value);
@@ -300,3 +290,67 @@ COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
         VectorHelper::Sort(user, key);
         return SUCCESS;  
 }
+
+CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
+{
+         group = 'v';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+        
+        if (!CheckFormat(user, value))
+        {
+            return FAILED;
+        }
+
+        VectorHelper::Push(user, key, value);
+        return SUCCESS;  
+}
+
+CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRONT", 1, 1)
+{
+         group = 'v';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+
+        VectorHelper::PopFront(user, key);
+        return SUCCESS;  
+}
+
+CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK", 1, 1)
+{
+         group = 'v';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
+{  
+        const std::string key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
+        VectorHelper::PopBack(user, key);
+        return SUCCESS;  
+}
+

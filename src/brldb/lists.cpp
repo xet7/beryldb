@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
@@ -19,6 +20,7 @@
 #include "helpers.h"
 #include "managers/maps.h"
 #include "cstruct.h"
+#include "brldb/dbmanager.h"
 
 void lkeys_query::Run()
 {

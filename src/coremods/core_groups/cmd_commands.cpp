@@ -29,11 +29,7 @@ COMMAND_RESULT CommandGroupAdd::Handle(User* user, const Params& parameters)
        
        if (!Kernel->Engine->IsGroup(gname))
        {
-<<<<<<< HEAD
-               user->SendProtocol(ERR_INPUT2, ERR_BAD_FORMAT, WRONG_AGENT);
-=======
                user->SendProtocol(ERR_INPUT, WRONG_AGENT);
->>>>>>> unstable
                return FAILED;
        }
        
@@ -41,11 +37,7 @@ COMMAND_RESULT CommandGroupAdd::Handle(User* user, const Params& parameters)
        
        if (Kernel->Groups->Add(gname, DEFAULT_GFLAGS))
        {
-<<<<<<< HEAD
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
              user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
              return SUCCESS;
        }
        
@@ -92,11 +84,7 @@ COMMAND_RESULT CommandDelGroup::Handle(User* user, const Params& parameters)
 
        if (Kernel->Groups->Delete(gname))
        {
-<<<<<<< HEAD
-             user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
              user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
              return SUCCESS;
        }
 
@@ -213,19 +201,11 @@ COMMAND_RESULT CommandGFlags::Handle(User* user, const Params& parameters)
        
        if (a_group->GetFlags().empty() || a_group->GetFlags() == "")
        {
-<<<<<<< HEAD
-             user->SendProtocol(BRLD_INPUT, PROCESS_EMPTY);
-             return SUCCESS;
-       }
-       
-       user->SendProtocol(BRLD_INPUT, a_group->GetFlags());
-=======
              user->SendProtocol(BRLD_OK, PROCESS_EMPTY);
              return SUCCESS;
        }
        
        user->SendProtocol(BRLD_OK, a_group->GetFlags());
->>>>>>> unstable
        return SUCCESS;
 }
 
@@ -238,13 +218,9 @@ COMMAND_RESULT CommandMyGroups::Handle(User* user, const Params& parameters)
 {
         Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
 
-<<<<<<< HEAD
-        for (std::vector<std::shared_ptr<Group>>::iterator i = user->Groups.begin(); i != user->Groups.end(); ++i)
-=======
         GroupVector ugroups = user->GetGroups();
         
         for (GroupVector::iterator i = ugroups.begin(); i != ugroups.end(); ++i)
->>>>>>> unstable
         {
                 std::shared_ptr<Group> item = (*i);
                 user->SendProtocol(BRLD_GROUP, item->GetName().c_str());
@@ -278,11 +254,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
 
         if (!exists)
         {
-<<<<<<< HEAD
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
-=======
                user->SendProtocol(ERR_INPUT, NOT_FOUND);
->>>>>>> unstable
                return FAILED;
         }
         
@@ -295,11 +267,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
                
                if (item == gname)
                {
-<<<<<<< HEAD
-                     user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
-=======
                      user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
->>>>>>> unstable
                      return FAILED;
                } 
         }
@@ -308,36 +276,21 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         
         if (!Found)
         {
-<<<<<<< HEAD
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
-=======
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
->>>>>>> unstable
              return FAILED;
         }
         
         UserVector logins = Kernel->Clients->FindLogin(dest);
 
-<<<<<<< HEAD
-        for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
-        {
-             User* user_iter = *o;
-             user_iter->Groups.push_back(Found);
-=======
         for (UserVector::iterator usr = logins.begin(); usr != logins.end(); ++usr)
         {
              User* user_iter = *usr;
              user_iter->PushGroup(Found);
->>>>>>> unstable
         }
 
         CMapsHelper::Set(usergrups, gname, convto_string(Kernel->Now()));
         
-<<<<<<< HEAD
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
         user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
         return FAILED;
 }
 
@@ -355,11 +308,7 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
 
         if (!exists)
         {
-<<<<<<< HEAD
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
-=======
                user->SendProtocol(ERR_INPUT, NOT_FOUND);
->>>>>>> unstable
                return FAILED;
         }
        
@@ -398,30 +347,17 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
 
         if (!Found)
         {
-<<<<<<< HEAD
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_NULL);
-             return FAILED;
-=======
               user->SendProtocol(ERR_INPUT, PROCESS_NULL);
               return FAILED;
->>>>>>> unstable
         }
 
         if (!Kernel->Groups->ResetFlags(gname))
         {
-<<<<<<< HEAD
-             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-             return FAILED;
-        }
-
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
               user->SendProtocol(ERR_INPUT, NOT_FOUND);
               return FAILED;
         }
 
         user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
         return FAILED;
 }
 
@@ -448,11 +384,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
 
        if (!exists)
        {
-<<<<<<< HEAD
-               user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, PROCESS_NULL);
-=======
                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
->>>>>>> unstable
                return FAILED;
        }
        
@@ -474,11 +406,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        
        if (!found)
        {
-<<<<<<< HEAD
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_NULL);
-=======
              user->SendProtocol(ERR_INPUT, PROCESS_NULL);
->>>>>>> unstable
              return FAILED;
        }
 
@@ -486,11 +414,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
 
         if (!Found)
         {
-<<<<<<< HEAD
-             user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_ALREADY);
-=======
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
->>>>>>> unstable
              return FAILED;
         }
         
@@ -503,10 +427,6 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
         }
         
         CMapsHelper::Del(usergrups, gname);
-<<<<<<< HEAD
-        user->SendProtocol(BRLD_INPUT, PROCESS_OK);
-=======
         user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
         return FAILED;
 }

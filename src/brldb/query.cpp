@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "brldb/query.h"
+#include "brldb/dbmanager.h"
 
 void QueryBase::Write(const std::string& wdest, const std::string& lvalue)
 {

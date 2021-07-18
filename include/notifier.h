@@ -40,7 +40,7 @@ struct Event
 
 typedef std::map<User*, NOTIFY_LEVEL> NotifyMap;
 
-class ExportAPI Notifier : public safecast<Notifier>
+class ExportAPI Notifier 
 {
    private:
          

@@ -12,7 +12,7 @@
  */
 
 #include "beryl.h"
-
+#include "notifier.h"
 #include "channelmanager.h"
 
 Channel::Channel(const std::string &cname, time_t current) : name(cname), created(current)

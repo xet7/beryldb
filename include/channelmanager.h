@@ -18,13 +18,17 @@
  * a Find and CheckRemoval functions.
  */
  
-class ExportAPI ChannelManager : public safecast<ChannelManager>
+class ExportAPI ChannelManager 
 {
-    public: 
-
+    friend class Channel;
+    
+    private:
+    
         /* Map containing all channels. */
-        
+
         ChanMap ChannelList;
+
+    public: 
 
         /* Constructor. */
         

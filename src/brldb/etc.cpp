@@ -12,11 +12,14 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
+#include "brldb/dbmanager.h"
 #include "helpers.h"
+#include "notifier.h"
 
 void future_list_query::Run()
 {

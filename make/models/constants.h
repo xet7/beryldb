@@ -13,8 +13,6 @@
 
 #pragma once
 
-<<<<<<< HEAD
-=======
 const std::string INVALID_CHAN = "INVALID_CHAN";
 
 /* User is not subscribed */
@@ -25,7 +23,6 @@ const std::string NOT_SUBSCRIBED = "NOT_SUBSCRIBED";
 
 const std::string NO_SYNTAX = "NO_SYNTAX";
 
->>>>>>> unstable
 /* Target not defined */
 
 const std::string NOT_DEFINED = "NOT_DEFINED";

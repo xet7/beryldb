@@ -11,9 +11,10 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#include "beryl.h"
-
 #include <fstream>
+
+#include "beryl.h"
+#include "engine.h"
 
 const std::string LogStream::StreamHead = "Log head for " VERSION;
 

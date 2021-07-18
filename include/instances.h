@@ -51,7 +51,6 @@ enum UserType
 
 struct ExportAPI ConfigConnect : public refcountbase
 {
-
 	reference<config_rule> config;
 
 	char type;
@@ -70,11 +69,7 @@ struct ExportAPI ConfigConnect : public refcountbase
 	
 	ConfigConnect(config_rule* tag, char type, const std::string& mask, const ConfigConnect& parent);
 
-<<<<<<< HEAD
-	void Update(const connect_config* newSettings);
-=======
 	void Update(const ConfigConnect* newSettings);
->>>>>>> unstable
 
 	const std::string& GetName() 
 	{ 
@@ -103,11 +98,30 @@ class ExportAPI User : public Expandable
     */
     
    friend class DataFlush;
+   friend class LocalUser;
    
    private:
    
-	std::string cached_hostip;
-	
+        /* Time since logged. */
+
+        time_t age;
+
+        /* Time at which this connection was established. */
+
+        time_t connected;
+
+        /* Time at which this user was logged. */
+
+        time_t logged;
+
+        /* Locks db in use. */
+        
+        static std::mutex db_mute;
+        
+        /* Whether this user is busy. */
+        
+        bool Locked;
+
 	std::string cached_user_real_host;
 	
 	std::string user_ip;
@@ -123,13 +137,9 @@ class ExportAPI User : public Expandable
         /* Groups' this user belongs to. */
         
         GroupVector Groups;
-        
+
  public:
 
-	static std::mutex db_mute;
-	
-	bool Locked;
-	
 	bool Multi;
 	
 	bool MultiRunning;
@@ -146,14 +156,6 @@ class ExportAPI User : public Expandable
         /* Indicates whether this used is paused or not. */
         
         bool Paused;
-	
-	/* Time since logged. */
-	
-	time_t age;
-	
-	/* Time at which this connection was established. */
-
-	time_t connected;
 
 	/* Password this user used to log in. */
 	
@@ -162,10 +164,6 @@ class ExportAPI User : public Expandable
 	/* login this user is using to access the server. */
 
 	std::string login;
-	
-	/* Time at which this user was logged. */
-
-	time_t logged;
 	
 	engine::sockets::sockaddrs client_sa;
 
@@ -262,42 +260,6 @@ class ExportAPI User : public Expandable
 	
 	int GetFirstFlag();
 
-<<<<<<< HEAD
-	std::vector<std::shared_ptr<Group>> Groups;
-	
-	void RemoveGroup(std::shared_ptr<Group> group);
-	
-        /* 
-         * Checks if given user is in group.
-         * 
-         * @parameters:
-	 *
-	 *         · group: Group to check.
-	 * 
-         * @return:
- 	 *
-         *         · True: User is in group.
-         *         · False: Unable to find user.
-         */    
-         
-	bool HasGroup(std::shared_ptr<Group> group);
-
-        /* 
-         * Checks whether user is in a given group.
-         * 
-         * @parameters:
-	 *
-	 *         · flag: Flag to check.
-	 * 
-         * @return:
- 	 *
-         *         · True: User is in group.
-         */    	
-         
-	bool InGroup(unsigned char flag);
-	
-	bool CanPerform(unsigned char flag);
-=======
         /* 
          * Removes group from Groups
          * 
@@ -307,7 +269,6 @@ class ExportAPI User : public Expandable
          */    	
          
 	void RemoveGroup(std::shared_ptr<Group> group);
->>>>>>> unstable
 	
         /* 
          * Checks if given user is in group.
@@ -364,9 +325,6 @@ class ExportAPI User : public Expandable
          
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
         
-<<<<<<< HEAD
-        
-=======
         /* 
          * Gets user's database.
          * 
@@ -375,7 +333,6 @@ class ExportAPI User : public Expandable
 	 *         · UserDatabase: current_db.
          */            
          
->>>>>>> unstable
         std::shared_ptr<UserDatabase> GetDatabase();
 	
 	const std::string& GetReadableIP();
@@ -440,6 +397,32 @@ class ExportAPI User : public Expandable
          
 	std::string GetAllGroups();
 	
+        /* 
+         * Returns current connected time.
+         * 
+         * @return:
+ 	 *
+         *         · time_t: this->connected.
+         */    	
+         
+	time_t GetConnected()
+	{
+		return this->connected;
+	}
+
+        /* 
+         * Time at which this user logged in.
+	 * 
+         * @return:
+ 	 *
+         *         · time_t: Logging time.
+         */    
+         
+	time_t GetLogged()
+	{
+		return this->logged;
+	}
+		
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
 	template <typename T1>

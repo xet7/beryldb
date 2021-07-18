@@ -59,7 +59,7 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
             	        continue;
             	}
             	
-            	user->SendProtocol(BRLD_FINGER_LIST, Daemon::Format("%-15s (%s) | %s (%s) | Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->connected).c_str()));
+            	user->SendProtocol(BRLD_FINGER_LIST, Daemon::Format("%-15s (%s) | %s (%s) | Logged: %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_FINGER_END);

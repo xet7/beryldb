@@ -14,6 +14,7 @@
 #pragma once
 
 #include "modules.h"
+#include "engine.h"
 
 class HashProvider : public DataProvider
 {

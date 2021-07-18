@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 
 bool engine::sockets::MatchCompactIP(const std::string &address, const std::string &cidr_mask, bool check_agent)
 {

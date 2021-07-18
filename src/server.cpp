@@ -14,11 +14,14 @@
 #include <signal.h>
 #include <getopt.h>
 
+#include "beryl.h"
+#include "colors.h"
 #include "devel.h"
 #include "testoffice.h"
-#include "beryl.h"
+#include "interval.h"
 #include "engine.h"
 #include "exit.h"
+#include "notifier.h"
 
 void Beryl::CheckOffice()
 {
@@ -289,7 +292,3 @@ void Beryl::StartListening()
 	}
 }
 
-Beryl::~Beryl()
-{
-	
-}

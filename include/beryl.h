@@ -1,4 +1,4 @@
-/*
+/*	
  * BerylDB - A lightweight database.
  * http://www.beryldb.com
  *
@@ -14,11 +14,11 @@
 #pragma once
 
 #include <csignal>
-#include <map>
 #include <string>
-#include <vector>
 #include <memory>
+#include <vector>
 
+#include "devel.h"
 #include "constants.h"
 #include "ilist.h"
 #include "flat_map.h"
@@ -27,30 +27,23 @@
 #include "forwards.h"
 #include "typedefs.h"
 #include "bmaps.h"
-#include "converter.h"
-#include "stdhelpers.h"
 
 ExportAPI extern std::unique_ptr<Beryl> Kernel;
 
 #include "config.h"
 #include "dynref.h"
-#include "colors.h"
 #include "reducer.h"
 #include "serialize.h"
 #include "expandable.h"
-#include "filehandler.h"
 #include "chandler.h"
 #include "protocols.h"
 #include "numeric.h"
 #include "uid.h"
 #include "server.h"
-#include "instances.h"
-#include "channels.h"
 #include "timer.h"
 #include "nodes.h"
 #include "logs.h"
 #include "clientmanager.h"
-#include "channelmanager.h"
 #include "socket.h"
 #include "commandproc.h"
 #include "socketstream.h"
@@ -61,14 +54,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "brldstr.h"
 #include "protocol.h"
 #include "stats.h"
-#include "engine.h"
-#include "login.h"
-#include "monitor.h"
-#include "settings.h"
-#include "notifier.h"
-#include "brldb/dbmanager.h"
-#include "interval.h"
-#include "group.h"
 
 int main(int argc, char** argv);
 
@@ -185,17 +170,21 @@ class ExportAPI Beryl
 	
 	static sig_atomic_t s_signal;
 
+        /* Handles unique ids. */
+
+        UIDHandler UID;
+
 	/* Handles BerylDB's configuration files. */
 	
 	std::unique_ptr<Configuration> Config;
 	
-	/* Handles unique ids. */
-        
-	UIDHandler UID;
-	
 	/* Handles monitors. */
 	
-	MonitorHandler Monitor;
+	std::unique_ptr<MonitorHandler> Monitor;
+
+        /* Handles Cache and Session information */
+
+        std::unique_ptr<LoginCache> Logins;
 
 	/* Handles class objects that are awaiting to be removed. */
 	
@@ -207,29 +196,37 @@ class ExportAPI Beryl
 
 	ExtensionManager Extensions;
 	
-	/* Handles Cache and Session information */
-	
-	LoginCache Logins;
-	
 	/* Handles core databases. */
 	
-	CoreManager Core;
+        std::unique_ptr<CoreManager> Core;
 	
 	/* Manages databases, both user-related and core ones. */
 	
-	StoreManager Store;
+        std::unique_ptr<StoreManager> Store;
 	
 	/* Notification manager. */
 	
-	Notifier Notify;
+	std::unique_ptr<Notifier> Notify;
 	
 	/* Handles groups */
 	
-	GroupManager Groups;
+	std::unique_ptr<GroupManager> Groups;
 	
+	/* Handles sets */
+	
+        std::unique_ptr<Settings> Sets;
+	
+        /* Handles subscriptions channels. */
+
+        std::unique_ptr<ChannelManager> Channels;
+        
 	/* Handles intervals */
 	
-	IntervalManager Interval;
+	std::unique_ptr<IntervalManager> Interval;
+
+        /* Utils function to the Beryl class. */
+
+        std::unique_ptr<Daemon> Engine;
 	
 	/* Parses and processes user-provided commands. */
 	
@@ -243,10 +240,6 @@ class ExportAPI Beryl
 	
 	ModuleHandler Modules;
 
-	/* Handles subscriptions channels. */
-	
-	ChannelManager Channels;
-	
 	/* Internal statistics. */
 	
 	Serverstats Stats;
@@ -259,12 +252,6 @@ class ExportAPI Beryl
 	
 	ClientManager Clients;
 	
-	Settings Sets;
-
-	/* Utils function to the Beryl class. */
-	
-	Daemon Engine;
-
 	/*
 	 * Beryl's main. This function will initialize most of the Beryl's core system
 	 * and read all configuration files.
@@ -280,10 +267,6 @@ class ExportAPI Beryl
 
 	Beryl(int argc, char** argv);
 	
-	/* Destructor: it does not perform any task. */
-	
-	~Beryl();
-
 	/*
 	 * This function contains Beryl's mainloop. The mainloop runs
 	 * continuously, unless a signal is received.

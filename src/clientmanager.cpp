@@ -12,7 +12,10 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "queues.h"
+#include "notifier.h"
+#include "channelmanager.h"
 #include "brldb/dbmanager.h"
 #include "brldb/dbflush.h"
 
@@ -77,7 +80,7 @@ namespace
 
 	void VerifyRegistrationTimeout(LocalUser* user)
 	{
-		if (user->GetClass() && (Kernel->Now() > (user->connected + 10)))
+		if (user->GetClass() && (Kernel->Now() > (user->GetConnected() + 10)))
 		{
 			Kernel->Clients.Disconnect(user, "Registration timeout");
 		}

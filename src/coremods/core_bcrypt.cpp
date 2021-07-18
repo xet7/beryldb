@@ -15,6 +15,7 @@
 
 #include "beryl.h"
 #include "modules/encrypt.h"
+#include "engine.h"
 
 #include <crypt_blowfish.c>
 

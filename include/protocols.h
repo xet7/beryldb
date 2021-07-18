@@ -183,10 +183,6 @@ enum BRLD_PROTOCOL
 	BRLD_AGENT			=		268,
 	BRLD_LOCAL_EPOCH		=		269,
 	
-<<<<<<< HEAD
-	BRLD_TEST			=		270,
-=======
->>>>>>> unstable
 	BRLD_GROUP			=		272,
 	BRLD_USER_LIST_BEGIN		=		273,
 	BRLD_ADMIN_LIST_BEGIN		=		274,
@@ -226,14 +222,8 @@ enum BRLD_PROTOCOL
 	BRLD_EXPIRES			=		306,
 	BRLD_FUTURES			=		307,	
 	BRLD_LOGIN			=		308,
-<<<<<<< HEAD
-	BRLD_INPUT			=		309,
-	
-	BRLD_INPUT2			=		310,
-=======
 	
 	BRLD_OK2			=		310,
->>>>>>> unstable
 	BRLD_USERS_INFO			=		311,
 	BRLD_CHAN_INFO			=		312,
 	BRLD_COMMANDS			=		313,

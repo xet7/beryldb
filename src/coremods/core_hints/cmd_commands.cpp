@@ -173,13 +173,8 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
 
 CommandTouch::CommandTouch(Module* Creator) : Command(Creator, "TOUCH", 1, 1)
 {
-<<<<<<< HEAD
-         syntax = "[keys]";
-         group = 'h';
-=======
          group = 'h';
          syntax = "[keys]";
->>>>>>> unstable
 }
 
 COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
@@ -204,8 +199,6 @@ COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-<<<<<<< HEAD
-=======
 
 CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 {
@@ -266,4 +259,3 @@ COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
        GlobalHelper::Diff(user, key, value, offset, limit);
        return SUCCESS;
 }
->>>>>>> unstable

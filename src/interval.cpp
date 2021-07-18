@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "interval.h"
 
 IntervalManager::IntervalManager() : counter(0)
 {

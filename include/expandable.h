@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "stdhelpers.h"
+
 class ExportAPI extension_item : public ServiceProvider, public usecountbase
 {
  

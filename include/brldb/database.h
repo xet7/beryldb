@@ -63,6 +63,14 @@ class ExportAPI Database
         
         Database(const std::string& dbname, const std::string& dbpath);
 
+        /* 
+         * Sets current flag to closing.
+         * 
+         * @parameters:
+	 *
+	 *         · flag: Database is closing.
+	 */
+	 
         void SetClosing(bool flag);
         
         bool IsClosing();

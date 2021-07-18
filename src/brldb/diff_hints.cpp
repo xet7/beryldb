@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
@@ -21,6 +22,7 @@
 #include "brldb/map_handler.h"
 #include "brldb/vector_handler.h"
 #include "brldb/diff.h"
+#include "brldb/dbmanager.h"
 #include "helpers.h"
 
 void diff_query::Keys()

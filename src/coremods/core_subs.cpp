@@ -12,6 +12,8 @@
  */
  
 #include "beryl.h"
+#include "engine.h"
+#include "channelmanager.h"
 
 class CommandSubs : public Command
 {

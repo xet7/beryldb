@@ -12,10 +12,12 @@
  */
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/database.h"
 #include "brldb/datathread.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/dbflush.h"
+#include "brldb/dbmanager.h"
 #include "algo.h"
 
 std::mutex DataFlush::query_mute;
@@ -447,9 +449,9 @@ void DataThread::Process()
 
                           if (request->access != DBL_INTERRUPT)
                           {
-                                /* Adds result to the pending notification list. */
+                                 /* Adds result to the pending notification list. */
 
-                               DataFlush::AttachResult(request);
+                                 DataFlush::AttachResult(request);
                           }
                         
                         break;

@@ -14,6 +14,8 @@
 #include "beryl.h"
 #include "core_info.h"
 #include "managers/keys.h"
+#include "engine.h"
+
 #include "managers/user.h"
 #include "managers/databases.h"
 #include "brldb/dbmanager.h"
@@ -61,14 +63,6 @@ CommandL::CommandL(Module* parent) : Command(parent, "I", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-<<<<<<< HEAD
-        
-        Dispatcher::JustAPI(user, BRLD_I_START);
-        
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
-=======
->>>>>>> unstable
         
         Dispatcher::JustAPI(user, BRLD_I_START);
         
@@ -77,11 +71,7 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         
         if (user->GetDatabase())
         {
-<<<<<<< HEAD
-             user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Database", user->current_db->GetName().c_str()));
-=======
              user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
->>>>>>> unstable
         }
         
         /* Returns admin flags to requesting user, if any. */
@@ -91,9 +81,7 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         if (!exists.empty())
         {
                 user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->instance).c_str()).c_str());
-<<<<<<< HEAD
-=======
+                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         }
         
         const std::string& all_groups = user->GetAllGroups();
@@ -101,7 +89,6 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         if (!all_groups.empty())
         {
                 user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Groups", all_groups.c_str()).c_str());
->>>>>>> unstable
         }
         
         /* Requesting user login. */

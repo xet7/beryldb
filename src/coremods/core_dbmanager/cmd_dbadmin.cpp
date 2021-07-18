@@ -19,10 +19,11 @@
 #include "managers/tests.h"
 #include "managers/databases.h"
 #include "managers/globals.h"
-#include "converter.h"
-#include "engine.h"
 #include "managers/settings.h"
 #include "core_dbmanager.h"
+#include "notifier.h"
+#include "converter.h"
+#include "engine.h"
 
 CommandPWD::CommandPWD(Module* Creator) : Command(Creator, "PWD", 0)
 {
@@ -71,11 +72,7 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
        if (user->GetDatabase())
        {
              std::string dbname = user->GetDatabase()->GetName();                                  
-<<<<<<< HEAD
-             user->SendProtocol(BRLD_QUERY_OK, dbname);
-=======
              user->SendProtocol(BRLD_OK, dbname);
->>>>>>> unstable
              return SUCCESS;	
        }
        

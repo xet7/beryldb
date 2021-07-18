@@ -15,7 +15,7 @@
 
 #include <thread>
 
-class ExportAPI Daemon : public safecast<Daemon>
+class ExportAPI Daemon 
 {
     friend class Beryl;
 

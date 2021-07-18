@@ -97,11 +97,7 @@ CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETAL
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 {
        FutureManager::Reset();
-<<<<<<< HEAD
-       user->SendProtocol(BRLD_INPUT2, BRLD_FUTURE_DELETED, PROCESS_OK);
-=======
        user->SendProtocol(BRLD_OK, PROCESS_OK);
->>>>>>> unstable
        return SUCCESS;
 }
 

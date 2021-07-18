@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "channelmanager.h"
 
 class CommandForcePart : public Command
 {
@@ -36,7 +37,7 @@ class CommandForcePart : public Command
                 
                 if (!channel)
                 {
-                         user->SendRemoteProtocol(ERR_NO_CHAN, parameters[1], "Channel " + parameters[1] + " does not exist.");
+                         user->SendRemoteProtocol(ERR_INPUT2, ERR_NO_CHAN, PROCESS_NULL);
                          return FAILED;
                 }
                 
@@ -44,7 +45,7 @@ class CommandForcePart : public Command
                 {
                         if (!channel->IsSubscribed(dest))
                         {
-                                user->SendRemoteProtocol(BRLD_ALERT, dest->instance + " is not subscribed to " + channel->name);
+                                user->SendRemoteProtocol(ERR_INPUT2, BRLD_ALERT, NOT_SUBSCRIBED);
                                 return FAILED;
                         }
         
@@ -57,7 +58,7 @@ class CommandForcePart : public Command
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INVALID_PARAM, parameters[0], parameters[1], "Instance not located.");
+                        user->SendProtocol(ERR_INPUT, INVALID_CHAN);
                 }
                 
                 return FAILED;

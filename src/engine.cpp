@@ -20,8 +20,9 @@
 #include <sys/resource.h>
 #include <pwd.h>
 #include <grp.h>
-	
+
 #include "beryl.h"
+#include "colors.h"
 #include "engine.h"
 #include "exit.h"
 #include "extras.h"

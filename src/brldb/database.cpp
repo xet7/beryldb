@@ -13,7 +13,7 @@
 
 #include "beryl.h"
 #include "exit.h"
-
+#include "engine.h"
 #include "brldb/dbmanager.h"
 #include "brldb/query.h"
 #include "brldb/datathread.h"
@@ -65,7 +65,7 @@ bool Database::Open()
 {	
         this->db = NULL;
         
-        options.env = Kernel->Store->env;
+        options.env = Kernel->Store->GetEnv();
         options.create_if_missing = Kernel->Config->DB.createim;
         options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
         options.keep_log_file_num = 1;
@@ -142,7 +142,7 @@ void CoreManager::Open()
 
 void CoreManager::UserDefaults()
 {
-       if (!Kernel->Store->First)
+       if (!Kernel->Store->IsFirst())
        {
             return;
        }
@@ -168,13 +168,14 @@ void CoreManager::CheckDefaults()
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
                  bprint(DONE, "Welcome to Beryl.");
-                 bprint(INFO, "Setting configuration.");
 
                  Kernel->Store->DBM->Create("default", "default");
                  Kernel->Store->DBM->SetDefault("default");
                  Kernel->Sets->SetDefaults();
                  
                  Kernel->Groups->Add("default", DEFAULT_GFLAGS);
+
+                 bprint(DONE, "Default settings created.");
                  
                  /* Default settings. */
                  
@@ -187,13 +188,18 @@ void CoreManager::CheckDefaults()
                Kernel->Store->First = false;
        }
        
-       Kernel->Store->instance = instance;
+       Kernel->Store->created = instance;
 }
 
-StoreManager::StoreManager() : env(rocksdb::Env::Default()), First(false)
+StoreManager::StoreManager() : env(rocksdb::Env::Default()), Default(nullptr), First(false)
 {
        env->SetBackgroundThreads(2, rocksdb::Env::LOW);
        env->SetBackgroundThreads(3, rocksdb::Env::HIGH);
+}
+
+StoreManager::~StoreManager() 
+{
+       env = NULL;
 }
 
 void StoreManager::OpenAll()

@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "beryl.h"
+#include "engine.h"
 #include "brldb/list_handler.h"
 
 ListHandler::ListHandler()

@@ -13,6 +13,9 @@
 
 #include "beryl.h"
 #include "modules/status.h"
+#include "channelmanager.h"
+#include "brldb/dbmanager.h"
+#include "engine.h"
 
 class CommandStatus : public Command
 {

@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "channelmanager.h"
+#include "notifier.h"
 
 ChannelManager::ChannelManager()
 {
