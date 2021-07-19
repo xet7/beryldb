@@ -746,6 +746,7 @@ void lrop_query::Run()
        if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
        {
              access_set(DBL_NOT_FOUND);
+             return;
        }
 
        if (handler->Count() > 0)
@@ -782,6 +783,7 @@ void lrfront_query::Run()
        if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
        {
              access_set(DBL_NOT_FOUND);
+             return;
        }
 
        if (handler->Count() > 0)
@@ -797,6 +799,34 @@ void lrfront_query::Run()
 }
 
 void lrfront_query::Process()
+{
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
+}
+
+void lback_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
+
+       this->response = handler->Back();
+
+       if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
+       {
+             access_set(DBL_NOT_FOUND);
+             return;
+       }
+
+       this->SetOK();
+}
+
+void lback_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }

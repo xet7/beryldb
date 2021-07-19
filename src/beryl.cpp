@@ -67,47 +67,47 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	
 	SocketPool::Start();
 
-        this->Sets = std::make_unique<Settings>();
+        this->Sets 		= 	std::make_unique<Settings>();
 
 	/* Channel initializer */ 
 	
-        this->Channels = std::make_unique<ChannelManager>();
+        this->Channels 		= 	std::make_unique<ChannelManager>();
 
 	/* Notification handler */
 	
-        this->Notify = std::make_unique<Notifier>();
+        this->Notify 		= 	std::make_unique<Notifier>();
 
 	/* Monitor initializer */
 	
-        this->Monitor = std::make_unique<MonitorHandler>();
+        this->Monitor 		= 	std::make_unique<MonitorHandler>();
         
         /* Login cache initializer */
         
-        this->Logins = std::make_unique<LoginCache>();
+        this->Logins 		= 	std::make_unique<LoginCache>();
         
         /* Core database initializer */
         
-        this->Core = std::make_unique<CoreManager>();
+        this->Core 		= 	std::make_unique<CoreManager>();
 
         /* Store manager initializer */ 
         
-        this->Store = std::make_unique<StoreManager>();
+        this->Store 		= 	std::make_unique<StoreManager>();
 
         /* Daemon initializer */ 
         
-        this->Engine = std::make_unique<Daemon>();
+        this->Engine 		= 	std::make_unique<Daemon>();
 
         /* Group manager initializer */
         
-        this->Groups = std::make_unique<GroupManager>();
+        this->Groups 		= 	std::make_unique<GroupManager>();
 
         /* Manages intervals */
         
-        this->Interval = std::make_unique<IntervalManager>();
+        this->Interval 		= 	std::make_unique<IntervalManager>();
 
 	/* Configuration class. This class will read and our config file. */
 	
-	this->Config = std::make_unique<Configuration>();
+	this->Config 		= 	std::make_unique<Configuration>();
 	
 	/* Keep a copy of arguments from main() */
 	

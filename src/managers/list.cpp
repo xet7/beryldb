@@ -155,3 +155,9 @@ void ListHelper::FRop(User* user, const std::string& entry)
        Kernel->Store->Push(query);
 }
 
+void ListHelper::Back(User* user, const std::string& entry)
+{
+       std::shared_ptr<lback_query> query = std::make_shared<lback_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}

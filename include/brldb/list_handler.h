@@ -150,6 +150,8 @@ class ExportAPI ListHandler
          
         std::string RPOP();
 
+        std::string Back();
+
         std::string FPOP();
          
         /* 
