@@ -39,6 +39,7 @@ class CoreModKeys : public Module
         CommandGetPersist cmdgetpersist;
         CommandIsBool cmdisbool;
         CommandAsBool cmdasbool;
+        CommandIsMatch cmdismatch;
         
     public:	
         
@@ -62,7 +63,8 @@ class CoreModKeys : public Module
                         cmdisnum(this),
                         cmdgetpersist(this),
                         cmdisbool(this),
-                        cmdasbool(this)
+                        cmdasbool(this),
+                        cmdismatch(this)
         {
         
         }

@@ -1058,3 +1058,26 @@ void asbool_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
 }
+
+void ismatch_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       std::string as_str = to_string(result.value);
+
+       if (Daemon::Match(as_str, this->value))
+       {
+             this->response = "true";
+       }
+       else
+       {
+            this->response = "false";
+       }
+
+       this->SetOK();
+}
+
+void ismatch_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}

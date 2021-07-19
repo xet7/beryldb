@@ -189,6 +189,19 @@ double VectorHandler::GetHigh()
       return value;
 }
 
+double VectorHandler::Sum()
+{
+      double sum = 0;
+      
+      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+             sum += item;
+      }
+
+      return sum;
+}
+
 double VectorHandler::GetLow()
 {
       double value = convto_num<double>(mhandler.front());

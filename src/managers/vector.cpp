@@ -149,3 +149,10 @@ void VectorHelper::Low(User* user, const std::string& entry)
        Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void VectorHelper::Sum(User* user, const std::string& entry)
+{
+       std::shared_ptr<vsum_query> query = std::make_shared<vsum_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}

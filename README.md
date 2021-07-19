@@ -41,10 +41,16 @@ Beryl's development branches are available in [our GitHub repository](https://gi
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
 using 4 cores. Feel free to change this number according to your cpu.
 
-Install dependencies:
+Install dependencies in Debian-based systems:
 
 ```
 sudo apt-get install librocksdb-dev build-essential
+```
+
+in MacOS:
+
+```
+brew install rocksdb 
 ```
 
 Download latest version:

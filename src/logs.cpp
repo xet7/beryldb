@@ -285,6 +285,7 @@ void LogHandler::Log(const std::string &type, log_level loglevel, const std::str
 		{
 			continue;
 		}
+		
 		gi->first->WriteLog(loglevel, type, msg);
 	}
 

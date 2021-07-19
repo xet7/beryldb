@@ -128,3 +128,21 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         Dispatcher::JustAPI(user, BRLD_END_MONITOR_LIST);
         return SUCCESS;
 }
+
+CommandStopMonitor::CommandStopMonitor(Module* Creator) : Command(Creator, "STOPMONITOR", 0, 0)
+{
+        requires = 'm';
+}
+
+COMMAND_RESULT CommandStopMonitor::Handle(User* user, const Params& parameters)
+{  
+       if (!Kernel->Monitor->Has(user))
+       {
+               user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+               return FAILED;
+       }
+       
+       Kernel->Monitor->Remove(user);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);          
+       return SUCCESS;
+}
