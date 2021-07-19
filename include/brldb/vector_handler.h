@@ -45,6 +45,10 @@ class ExportAPI VectorHandler
          */    
          
         bool IsNumeric();
+
+        double GetHigh();
+        
+        double GetLow();
      
         void Dump();
          

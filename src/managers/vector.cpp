@@ -135,3 +135,17 @@ void VectorHelper::Avg(User* user, const std::string& entry)
        Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void VectorHelper::High(User* user, const std::string& entry)
+{
+       std::shared_ptr<vhigh_query> query = std::make_shared<vhigh_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void VectorHelper::Low(User* user, const std::string& entry)
+{
+       std::shared_ptr<vlow_query> query = std::make_shared<vlow_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}

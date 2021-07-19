@@ -49,4 +49,9 @@ class ExportAPI VectorHelper
 
        static void Avg(User* user, const std::string& entry);
 
+       static void High(User* user, const std::string& entry);
+
+       static void Low(User* user, const std::string& entry);
+       
+
 };

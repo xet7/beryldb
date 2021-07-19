@@ -44,9 +44,9 @@ enum QUERY_TYPE
 
 enum QUERY_FLAGS
 {
-       QUERY_FLAGS_NONE 		 = 	0,
+       QUERY_FLAGS_NONE 	 = 	0,
        QUERY_FLAGS_QUIET 	 = 	1,
-       QUERY_FLAGS_CORE 		 = 	2,
+       QUERY_FLAGS_CORE 	 = 	2,
        QUERY_FLAGS_COUNT 	 = 	9
 };
 
@@ -809,6 +809,36 @@ class ExportAPI vpush_query  : public QueryBase
         vpush_query() 
         {
                 this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vlow_query  : public QueryBase
+{
+    public:
+
+        vlow_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vhigh_query  : public QueryBase
+{
+    public:
+
+        vhigh_query() 
+        {
+                this->type = QUERY_TYPE_READ;
                 this->base_request = INT_VECTOR;
         }
 

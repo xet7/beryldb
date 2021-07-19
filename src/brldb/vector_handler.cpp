@@ -171,6 +171,43 @@ double VectorHandler::GetSMA()
       return value/size;
 }
 
+double VectorHandler::GetHigh()
+{
+      double value = 0;
+      
+      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+             
+             if (item > value)
+             {
+                  value = item;
+             }
+             
+      }
+
+      return value;
+}
+
+double VectorHandler::GetLow()
+{
+      double value = convto_num<double>(mhandler.front());
+      
+      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+             
+             if (item < value)
+             {
+                  value = item;
+             }
+             
+      }
+
+      return value;
+}
+
+
 void VectorHandler::EraseFrom(unsigned int from)
 {
       if (!this->mhandler.size())
