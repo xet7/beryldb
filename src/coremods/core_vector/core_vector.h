@@ -15,6 +15,15 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
+class CommandVHigh : public Command 
+{
+    public: 
+
+        CommandVHigh(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 class CommandVGet : public Command 
 {
     public: 
@@ -138,6 +147,24 @@ class CommandVSort : public Command
     public: 
 
         CommandVSort(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandVAvg : public Command 
+{
+    public: 
+
+        CommandVAvg(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandVLow : public Command 
+{
+    public: 
+
+        CommandVLow(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

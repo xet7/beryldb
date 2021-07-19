@@ -349,3 +349,59 @@ COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandVAvg::CommandVAvg(Module* Creator) : Command(Creator, "VAVG", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandVAvg::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       VectorHelper::Avg(user, key);
+       return SUCCESS;  
+}
+
+CommandVHigh::CommandVHigh(Module* Creator) : Command(Creator, "VHIGH", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       VectorHelper::High(user, key);
+       return SUCCESS;  
+}
+
+CommandVLow::CommandVLow(Module* Creator) : Command(Creator, "VLOW", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandVLow::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       VectorHelper::Low(user, key);
+       return SUCCESS;  
+}

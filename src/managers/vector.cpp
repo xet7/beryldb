@@ -129,3 +129,23 @@ void VectorHelper::Sort(User* user, const std::string& entry)
        Kernel->Store->Push(query);
 }
 
+void VectorHelper::Avg(User* user, const std::string& entry)
+{
+       std::shared_ptr<vavg_query> query = std::make_shared<vavg_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void VectorHelper::High(User* user, const std::string& entry)
+{
+       std::shared_ptr<vhigh_query> query = std::make_shared<vhigh_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void VectorHelper::Low(User* user, const std::string& entry)
+{
+       std::shared_ptr<vlow_query> query = std::make_shared<vlow_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}

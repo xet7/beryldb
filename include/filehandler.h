@@ -31,6 +31,14 @@ class ExportAPI FileLoader
 
 	FileLoader(const std::string& filename);
 
+        /* 
+         * Loads a filename.
+         * 
+         * @parameters:
+	 *
+	 *         · filename: File to load.
+         */    
+         
 	void Load(const std::string& filename);
 
 	std::string as_string() const;
@@ -40,6 +48,14 @@ class ExportAPI FileLoader
 		return lines; 
 	}
 
+        /* 
+         * Returns total size of a file.
+         * 
+         * @return:
+ 	 *
+         *         · ulong: Size in bytes.
+         */    
+         
 	unsigned long TotalSize() const 
 	{ 
 		return this->Size; 
