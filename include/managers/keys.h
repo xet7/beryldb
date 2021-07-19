@@ -73,4 +73,6 @@ class ExportAPI KeyHelper
 
         static void AsBool(User* user, const std::string& entry);
         
+        static void IsMatch(User* user, const std::string& entry, const std::string& value);
+        
 };

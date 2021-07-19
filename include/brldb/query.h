@@ -2008,3 +2008,17 @@ class ExportAPI asbool_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI ismatch_query  : public QueryBase
+{
+    public:
+
+        ismatch_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};

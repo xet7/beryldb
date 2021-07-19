@@ -264,3 +264,22 @@ COMMAND_RESULT CommandAsBool::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandIsMatch::CommandIsMatch(Module* Creator) : Command(Creator, "ISMATCH", 2, 2)
+{
+         group = 'k';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& value = parameters[1];
+
+       if (!CheckFormat(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::IsMatch(user, key, value);
+       return SUCCESS;
+}
