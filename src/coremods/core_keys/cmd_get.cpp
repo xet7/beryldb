@@ -275,7 +275,7 @@ COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
        const std::string& key = parameters[0];
        const std::string& value = parameters[1];
 
-       if (!CheckFormat(user, key))
+       if (!CheckFormat(user, value))
        {
             return FAILED;
        }

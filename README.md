@@ -47,7 +47,7 @@ Install dependencies in Debian-based systems:
 sudo apt-get install librocksdb-dev build-essential
 ```
 
-in MacOS:
+dependencies in MacOS:
 
 ```
 brew install rocksdb 
@@ -108,6 +108,31 @@ beryl> get hello
 "world"
 beryl> strlen hello
 5
+beryl> ismatch hello "worl?"
+true
+```
+
+You can also run the 'ls' command to obtain a counter of all structures:
+
+```
+beryl> ls
+KEY       |  1 
+MAP       |  0 
+LIST      |  5 
+GEO       |  2 
+MULTIMAP  |  0 
+VECTOR    |  6 
+EXPIRES   |  1 
+FUTURES   |  0 
+beryl> 
+```
+
+To get all keys:
+
+```
+beryl> keys *
+hello
+var2
 ```
 
 Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).
