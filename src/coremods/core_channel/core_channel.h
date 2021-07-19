@@ -54,7 +54,7 @@ class CommandPart : public Command
 
         CommandPart(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
         RouteParams GetRouting(User* user, const Params& parameters) ;
 };
 

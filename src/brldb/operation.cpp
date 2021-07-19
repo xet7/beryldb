@@ -453,10 +453,85 @@ void total_query::Process()
 }
 
 
+void glist_query::Run()
+{
+       std::map<std::string, unsigned int> result;
 
+       for (std::vector<std::string>::const_iterator iter = TypeRegs.begin(); iter != TypeRegs.end(); ++iter)
+       {
+              std::string ltype = *iter;
+              result[ltype] = 0;
+       }
 
+       rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
 
+       for (it->SeekToFirst(); it->Valid(); it->Next()) 
+       {
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                {
+                      this->access_set(DBL_INTERRUPT);
+                      return;
+                }
 
+                std::string rawmap = it->key().ToString();
+                std::string rawvalue = to_string(it->value().ToString());
+                         
+                engine::colon_node_stream stream(rawmap);
+                std::string token;
+                unsigned int strcounter = 0;
+                bool skip = false;
 
+                std::string key_as_string;
+                
+                while (stream.items_extract(token))
+                {
+                        if (skip)
+                        {
+                            break;
+                        }
 
+                        switch (strcounter)
+                        {
 
+                             case 1:
+                             {
+                             
+                             }
+
+                             break;
+                             
+                             case 2:
+                             {
+                                  result[token]++; 
+                             }
+
+                             break;
+
+                             default:
+                             {
+                                 break;   
+                             }
+                        }
+
+                        strcounter++;
+                }
+    }
+                
+    this->nmap = result;
+    this->SetOK();
+}
+
+void glist_query::Process()
+{
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        
+        for (std::map<std::string, unsigned int>::iterator i = this->nmap.begin(); i != this->nmap.end(); ++i)
+        {
+                 std::string ikey = Helpers::TypeString(i->first);
+                 unsigned int item = i->second;
+
+                 user->SendProtocol(BRLD_ITEM, Daemon::Format("%-9s | %2s ", ikey.c_str(), convto_string(item).c_str()));
+        }
+        
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
+}

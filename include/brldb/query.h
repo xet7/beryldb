@@ -518,6 +518,20 @@ class ExportAPI total_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI glist_query  : public QueryBase
+{
+    public:
+
+        glist_query() 
+        {
+                this->type = QUERY_TYPE_SKIP;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI list_query  : public QueryBase
 {
     public:

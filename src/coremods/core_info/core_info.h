@@ -34,7 +34,7 @@ class CommandCommands : public Command
 	
 	CommandCommands(Module* parent);
 
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandModules : public ServerTargetCommand
@@ -43,7 +43,7 @@ class CommandModules : public ServerTargetCommand
 
 	CommandModules(Module* parent);
 	
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandCoreModules : public ServerTargetCommand
@@ -52,7 +52,7 @@ class CommandCoreModules : public ServerTargetCommand
 
         CommandCoreModules(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandTime : public ServerTargetCommand
@@ -61,7 +61,7 @@ class CommandTime : public ServerTargetCommand
 	
 	CommandTime(Module* parent);
 	
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandEpoch:  public ServerTargetCommand
@@ -80,7 +80,7 @@ class CommandVersion : public Command
 	
 	CommandVersion(Module* parent);
 	
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandL : public Command
@@ -89,7 +89,7 @@ class CommandL : public Command
 
         CommandL(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandSyntax : public Command
@@ -98,7 +98,7 @@ class CommandSyntax : public Command
 
         CommandSyntax(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandMyChans : public Command
@@ -107,7 +107,7 @@ class CommandMyChans : public Command
 
         CommandMyChans(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandChans : public Command
@@ -116,7 +116,7 @@ class CommandChans : public Command
 
         CommandChans(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandWhoami : public Command
@@ -125,7 +125,7 @@ class CommandWhoami : public Command
 
         CommandWhoami(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandAgent : public Command
@@ -134,7 +134,7 @@ class CommandAgent : public Command
 
         CommandAgent(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandFirstOf : public Command
@@ -143,7 +143,7 @@ class CommandFirstOf : public Command
 
         CommandFirstOf(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandLS : public Command
@@ -152,7 +152,7 @@ class CommandLS : public Command
 
         CommandLS(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandTotal : public Command
@@ -161,5 +161,14 @@ class CommandTotal : public Command
 
         CommandTotal(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandGS : public Command
+{
+ public:
+
+        CommandGS(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

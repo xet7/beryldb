@@ -234,7 +234,7 @@ class ExportAPI MultiCommand : public Command
 
  public:
 	
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 
 	virtual COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters);
 	

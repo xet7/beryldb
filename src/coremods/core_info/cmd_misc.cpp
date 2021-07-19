@@ -163,6 +163,17 @@ COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
+CommandGS::CommandGS(Module* parent) : Command(parent, "GLS", 0)
+{
+         group = 'w';
+}
+
+COMMAND_RESULT CommandGS::Handle(User* user, const Params& parameters)
+{
+      DBHelper::GList(user);
+      return SUCCESS;
+}
+
 CommandLS::CommandLS(Module* parent) : Command(parent, "LS", 0)
 {
          group = 'w';
