@@ -52,6 +52,8 @@ class ExportAPI ListHelper
         static void Rop(User* user, const std::string& entry);
         
         static void FRop(User* user, const std::string& entry);
+
+        static void Back(User* user, const std::string& entry);
         
         
 };

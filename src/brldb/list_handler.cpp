@@ -260,6 +260,20 @@ std::string ListHandler::RPOP()
       return item;
 }
 
+std::string ListHandler::Back()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      std::string item = this->mhandler.back();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
+}
+
+
 std::string ListHandler::FPOP()
 {
       if (!this->mhandler.size())

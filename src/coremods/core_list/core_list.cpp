@@ -35,6 +35,7 @@ class CoreModuleList : public Module
         CommandLRepeats cmdlrepeats;
         CommandLRop cmdlrop;
         CommandFRop cmdfrop;
+        CommandLBack cmdlback;
         
     public:	
         
@@ -54,7 +55,8 @@ class CoreModuleList : public Module
                            cmdldel(this),
                            cmdlrepeats(this),
                            cmdlrop(this),
-                           cmdfrop(this)
+                           cmdfrop(this),
+                           cmdlback(this)
 
         {
         

@@ -171,3 +171,12 @@ class CommandFRop : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandLBack : public Command 
+{
+
+    public: 
+
+        CommandLBack(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

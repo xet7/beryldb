@@ -53,7 +53,7 @@ dependencies in MacOS:
 brew install rocksdb 
 ```
 
-Download latest version:
+Download Beryl's latest version:
 
 ```
 wget https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
@@ -112,7 +112,7 @@ beryl> ismatch hello "worl?"
 true
 ```
 
-You can also run the 'ls' command to obtain a counter of all structures:
+You can also run the **'ls'** command to obtain a counter of all structures:
 
 ```
 beryl> ls

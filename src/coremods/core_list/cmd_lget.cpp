@@ -279,3 +279,17 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
        ListHelper::Count(user, key);
        return SUCCESS;  
 }
+
+CommandLBack::CommandLBack(Module* Creator) : Command(Creator, "LBACK", 1, 1)
+{
+         group = 'l';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       
+       ListHelper::Rop(user, key);
+       return SUCCESS;  
+}
