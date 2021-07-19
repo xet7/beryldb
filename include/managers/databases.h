@@ -49,5 +49,6 @@ class ExportAPI DBHelper
 
         static void Total(User* user);
         
+        static void GList(User* user);
     
 };

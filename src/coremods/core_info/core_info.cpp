@@ -42,6 +42,7 @@ class CoreModInfo : public Module
 	CommandEpoch cmdepoch;
 	CommandFirstOf cmdfirstof;
 	CommandLS cmdls;
+	CommandGS cmdgs;
 	CommandTotal cmdtotal;
 	
   public:
@@ -50,7 +51,7 @@ class CoreModInfo : public Module
 			cmdversion(this), cmdl(this), cmdsyntax(this),
 			cmdmychans(this), cmdchans(this), cmdwhoami(this),
 			cmdagent(this), cmdepoch(this), cmdfirstof(this),
-			cmdls(this), cmdtotal(this)
+			cmdls(this), cmdgs(this), cmdtotal(this)
 	{
 
 	}

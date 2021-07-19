@@ -33,7 +33,7 @@ class CommandStatus : public Command
 		group = 'w';
 	}
 
-	COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+	COMMAND_RESULT Handle(User* user, const Params& parameters);
 
 	RouteParams GetRouting(User* user, const Params& parameters) 
 	{

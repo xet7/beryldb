@@ -29,7 +29,7 @@ CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2
 COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -54,7 +54,7 @@ CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {

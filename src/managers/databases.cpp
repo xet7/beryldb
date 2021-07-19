@@ -74,6 +74,13 @@ void DBHelper::List(User* user)
        Kernel->Store->Push(query);
 }
 
+void DBHelper::GList(User* user)
+{
+       std::shared_ptr<glist_query> query = std::make_shared<glist_query>();
+       Helpers::make_query(user, query);
+       Kernel->Store->Push(query);
+}
+
 void DBHelper::Total(User* user)
 {
        std::shared_ptr<total_query> query = std::make_shared<total_query>();

@@ -39,15 +39,61 @@ class ExportAPI ListHandler
 
         void PopFront();
 
+        /* 
+         * Determines whether a given key exists.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key to verify.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Key is present.
+         */    
+         
         bool Exist(const std::string& key);
 
+        /* 
+         * Counts repeats in a given list.
+         * 
+         * @parameters:
+	 *
+	 *         · word: Word to lookup.
+	 * 
+         * @return:
+ 	 *
+         *         · uint: Times a given key is repeated.
+         */    
+         
         unsigned int Repeats(const std::string& word);
 
+        /* 
+         * Returns a string provided a given pos.
+         * 
+         * @parameters:
+	 *
+	 *         · pos: Pos to find.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Item found in given position.
+         */
+                     
         std::string Index(unsigned int pos);
         
         /*  Removes last element in mhandler. */
 
         void PopBack();
+
+        /* 
+         * Returns front element from list.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Front element as string.
+         */    
+         
+        std::string Front();
          
         /* 
          * Removes all matching keys for given element.
@@ -96,7 +142,9 @@ class ExportAPI ListHandler
                 this->LastMsg = HANDLER_MSG_OK;
                 return this->mhandler.size();
         }
-         
+        
+        /* Reverses a list. */
+        
         void Reverse()
         {
                 this->LastMsg = HANDLER_MSG_OK;                

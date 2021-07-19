@@ -34,6 +34,15 @@ class ExportAPI VectorHandler
          
         static std::shared_ptr<VectorHandler> Create(const std::string& load);
 
+        /* 
+         * Gets average of given vector Keep in mind that in order to use this
+         * this function, all elements in vector must be numeric.
+         *
+         * @return:
+ 	 *
+         *         · double: Average
+         */    
+         
         double GetSMA();
 
         /* 
@@ -166,8 +175,21 @@ class ExportAPI VectorHandler
                std::sort(this->mhandler.begin(), this->mhandler.end());
         }
 
+        /*  
+         * Sum of all elements in vector.
+         * 
+         * @return:
+ 	 *
+         *         · double: Sum of all elements.
+         */ 
+         
         double Sum();
-        
+
+        /* 
+         * Reverses vector.
+         * This function will reverse the order of a given vector.
+         */            
+         
         void Reverse();
 
         /* 
@@ -185,6 +207,15 @@ class ExportAPI VectorHandler
 
         unsigned int Repeats(const std::string& word);
 
+        /* 
+         * Return last msg from an operation.
+         * 
+	 * 
+         * @return:
+ 	 *
+         *         · GetLast(): LastMsg.
+         */    
+         
         HANDLER_MSG GetLast()
         {
              return this->LastMsg;

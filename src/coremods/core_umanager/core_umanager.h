@@ -21,7 +21,7 @@ class CommandGetFlags : public Command
 
         CommandGetFlags(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandAddUser : public Command
@@ -30,7 +30,7 @@ class CommandAddUser : public Command
 
         CommandAddUser(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandDelUser : public Command
@@ -39,7 +39,7 @@ class CommandDelUser : public Command
 
         CommandDelUser(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandAddFlag : public Command
@@ -48,7 +48,7 @@ class CommandAddFlag : public Command
 
         CommandAddFlag(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 /* Delete flags in the system. */
@@ -59,7 +59,7 @@ class CommandDelFlags : public Command
 
         CommandDelFlags(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 /* List all users in the system. */
@@ -70,7 +70,7 @@ class CommandListUsers : public Command
 
         CommandListUsers(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandPasswd : public Command
@@ -79,7 +79,7 @@ class CommandPasswd : public Command
 
         CommandPasswd(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandListAdmins : public Command
@@ -88,7 +88,7 @@ class CommandListAdmins : public Command
 
         CommandListAdmins(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 /* Checks whether a login is in cache. */
@@ -99,7 +99,7 @@ class CommandInCache : public Command
 
         CommandInCache(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 /* Resets cache login */
@@ -110,7 +110,7 @@ class CommandResetCache : public Command
 
         CommandResetCache(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
 class CommandListFlags : public Command
@@ -119,5 +119,5 @@ class CommandListFlags : public Command
 
         CommandListFlags(Module* parent);
 
-        COMMAND_RESULT Handle(User* user, const Params& parameters) ;
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
