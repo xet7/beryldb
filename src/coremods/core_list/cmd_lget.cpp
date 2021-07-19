@@ -53,7 +53,7 @@ CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 
 COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string key = parameters[0];
+       const std::string& key = parameters[0];
   
        if (!CheckKey(user, key))
        {
@@ -107,7 +107,7 @@ CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
 COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -137,7 +137,7 @@ CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -162,7 +162,7 @@ CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS",
 COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -219,8 +219,8 @@ CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
 
 COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
-        const std::string value = parameters.back();
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -245,7 +245,7 @@ CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2
 COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& value = parameters.back();
 
        if (!CheckKey(user, key))
        {
