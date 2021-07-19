@@ -17,12 +17,12 @@ Help us by starring this project 👍⭐
 
 ## What is Beryl?
 
-Beryl is a data structures server. Our software provides access to structures via a 
-wide range of commands, which are later queued, processed and dispatched to an 
-internal processor. Beryl is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
+Beryl is a data structure server. Our database provide access to structures via a 
+wide range of commands, which are later queued, processed and dispatched. 
+The server is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
 
 Beryl provides lists, maps, keys, and channel subscription for its clients. 
-Beryl is available for GNU/Linux, FreeBSD and MacOS.
+Currently, the server is available for GNU/Linux, FreeBSD and MacOS.
 
 * Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 * We are on [Twitter](https://twitter.com/beryldb).
