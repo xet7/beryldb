@@ -144,6 +144,33 @@ std::string VectorHandler::Index(unsigned int pos)
       return "";
 }
 
+bool VectorHandler::IsNumeric()
+{
+      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+               if (!is_number(*i, true))
+               {
+                    return false;
+               }
+      }
+      
+      return true;
+}
+
+double VectorHandler::GetSMA()
+{
+      double value = 0;
+      
+      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+             value += item;
+      }
+      
+      double size = (double)this->mhandler.size();
+      return value/size;
+}
+
 void VectorHandler::EraseFrom(unsigned int from)
 {
       if (!this->mhandler.size())

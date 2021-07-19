@@ -1196,6 +1196,21 @@ class ExportAPI lpos_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vavg_query  : public QueryBase
+{
+    public:
+
+        vavg_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vreverse_query  : public QueryBase
 {
     public:

@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "brldb/dbmanager.h"
 #include "exit.h"
 #include "login.h"
 #include "monitor.h"
@@ -23,7 +24,6 @@
 #include "filehandler.h"
 #include "interval.h"
 #include "engine.h"
-#include "brldb/dbmanager.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 

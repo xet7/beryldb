@@ -21,10 +21,10 @@ namespace ProtocolTrigger
 	{
 		class Numeric;
 		class Join;
+                class Publish;
 		struct Part;
 		struct Quit;
 		struct Login;
-		class Publish;
 		struct Ping;
 		struct Pong;
 		struct Error;

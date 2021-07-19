@@ -349,3 +349,21 @@ COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
         return SUCCESS;  
 }
 
+CommandVAvg::CommandVAvg(Module* Creator) : Command(Creator, "VAVG", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandVAvg::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       VectorHelper::Avg(user, key);
+       return SUCCESS;  
+}

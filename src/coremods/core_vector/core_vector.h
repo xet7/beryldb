@@ -142,3 +142,12 @@ class CommandVSort : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandVAvg : public Command 
+{
+    public: 
+
+        CommandVAvg(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

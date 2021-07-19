@@ -33,6 +33,18 @@ class ExportAPI VectorHandler
         /* Static constructor. */
          
         static std::shared_ptr<VectorHandler> Create(const std::string& load);
+
+        double GetSMA();
+
+        /* 
+         * Checks whether all values are numeric or not.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Is numeric.
+         */    
+         
+        bool IsNumeric();
      
         void Dump();
          
