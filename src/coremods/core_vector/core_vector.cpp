@@ -35,6 +35,7 @@ class CoreModuleVector : public Module
         CommandVAvg cmdavg;
         CommandVHigh cmdvhigh;
         CommandVLow cmdvlow;
+        CommandVSum cmdvsum;
         
     public:	
         
@@ -54,7 +55,8 @@ class CoreModuleVector : public Module
                              cmdvsort(this),
                              cmdavg(this),
                              cmdvhigh(this),
-                             cmdvlow(this)
+                             cmdvlow(this),
+                             cmdvsum(this)
                              
 
         {

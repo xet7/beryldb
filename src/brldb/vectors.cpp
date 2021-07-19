@@ -710,3 +710,30 @@ void vlow_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response.c_str());
 }
+
+void vsum_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
+
+       if (!handler->IsNumeric())
+       {
+              access_set(DBL_INVALID_RANGE);
+              return;
+       }
+
+       this->response = convto_string(handler->Sum());
+       this->SetOK();
+}
+
+void vsum_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response.c_str());
+}

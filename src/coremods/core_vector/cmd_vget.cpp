@@ -405,3 +405,23 @@ COMMAND_RESULT CommandVLow::Handle(User* user, const Params& parameters)
        VectorHelper::Low(user, key);
        return SUCCESS;  
 }
+
+CommandVSum::CommandVSum(Module* Creator) : Command(Creator, "VSUM", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       VectorHelper::Sum(user, key);
+       return SUCCESS;  
+}
+

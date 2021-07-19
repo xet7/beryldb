@@ -817,6 +817,21 @@ class ExportAPI vpush_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vsum_query  : public QueryBase
+{
+    public:
+
+        vsum_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vlow_query  : public QueryBase
 {
     public:

@@ -169,3 +169,11 @@ class CommandVLow : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandVSum : public Command 
+{
+    public: 
+
+        CommandVSum(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
