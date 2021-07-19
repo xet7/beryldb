@@ -251,7 +251,7 @@ CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS",
 COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& value = parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -319,7 +319,7 @@ CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRON
 
 COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
+        const std::string& key = parameters[0];
 
         if (!CheckKey(user, key))
         {
@@ -338,7 +338,7 @@ CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK",
 
 COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
+        const std::string& key = parameters[0];
 
         if (!CheckKey(user, key))
         {
