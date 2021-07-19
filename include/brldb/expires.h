@@ -19,14 +19,30 @@ class ExpireEntry
 {
     public:
 
+        /* Expected time at which this timer will run */
+        
         time_t schedule;
+        
+        /* Time added */ 
+        
         time_t added;
+        
+        /* Epoch time */
         
         bool epoch;
 
         unsigned int secs;
+        
+        /* select used */
+         
         std::string select;
+        
+        /* Key used */
+        
         std::string key;
+        
+        /* Database in which this expire will run */
+        
         std::shared_ptr<Database> database;
 
         ExpireEntry()

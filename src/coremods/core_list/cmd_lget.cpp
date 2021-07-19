@@ -187,6 +187,11 @@ CommandLRop::CommandLRop(Module* Creator) : Command(Creator, "LRPOP", 1, 1)
 COMMAND_RESULT CommandLRop::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        ListHelper::Rop(user, key);
        return SUCCESS;  
@@ -289,7 +294,31 @@ CommandLBack::CommandLBack(Module* Creator) : Command(Creator, "LBACK", 1, 1)
 COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
        
        ListHelper::Rop(user, key);
+       return SUCCESS;  
+}
+
+CommandLFront::CommandLFront(Module* Creator) : Command(Creator, "LFRONT", 1, 1)
+{
+         group = 'l';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Front(user, key);
        return SUCCESS;  
 }

@@ -55,5 +55,6 @@ class ExportAPI ListHelper
 
         static void Back(User* user, const std::string& entry);
         
+        static void Front(User* user, const std::string& entry);
         
 };

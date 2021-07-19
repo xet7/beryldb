@@ -112,7 +112,7 @@ beryl> ismatch hello "worl?"
 true
 ```
 
-You can also run the **'ls'** command to obtain a counter of all structures:
+You can also run the **'ls'** command to obtain a counter in all structures:
 
 ```
 beryl> ls

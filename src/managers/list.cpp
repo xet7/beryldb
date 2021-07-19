@@ -161,3 +161,10 @@ void ListHelper::Back(User* user, const std::string& entry)
        Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void ListHelper::Front(User* user, const std::string& entry)
+{
+       std::shared_ptr<lfront_query> query = std::make_shared<lfront_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}

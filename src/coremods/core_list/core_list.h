@@ -180,3 +180,13 @@ class CommandLBack : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandLFront : public Command 
+{
+    public: 
+
+        CommandLFront(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
