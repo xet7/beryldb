@@ -580,7 +580,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	if (this->GetUptime() > 1)
 	{
-		std::string exit = Daemon::Uptime("Exiting after uptime:", this->GetUptime());
+		const std::string& exit = Daemon::Uptime("Exiting after uptime: ", this->GetUptime());
 	
 		/* Log uptime. */
 		
