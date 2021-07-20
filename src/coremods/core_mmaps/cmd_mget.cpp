@@ -269,7 +269,6 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)

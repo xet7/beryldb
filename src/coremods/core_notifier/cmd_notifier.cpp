@@ -18,8 +18,8 @@
 
 CommandNotifier::CommandNotifier(Module* Creator) : Command(Creator, "NOTIFY", 0, 1)
 {
-         requires = 'm';
-         syntax = "<level>";
+       requires = 'm';
+       syntax = "<level>";
 }
 
 COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
