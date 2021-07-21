@@ -108,7 +108,7 @@ inline bool is_number(const std::string& str, bool allowdots = false)
                     continue;
                 }
 
-                if (allowdots && (c == '.' || c == '+' || c == 'e'))
+                if (allowdots && (c == ',' || c == '.' || c == '+' || c == 'e'))
                 {
                      counter++;
                      continue;
