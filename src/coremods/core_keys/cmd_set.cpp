@@ -24,7 +24,7 @@
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
@@ -49,7 +49,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
@@ -74,7 +74,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 {
          groups = { 'e', 'k' };
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
@@ -99,7 +99,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
@@ -125,7 +125,7 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)

@@ -243,7 +243,7 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 CommandSetex::CommandSetex(Module* Creator) : Command(Creator, "SETEX", 3, 3)
 {
           group = 'e';
-          syntax = "<seconds> <key> <value>";
+          syntax = "<seconds> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters) 

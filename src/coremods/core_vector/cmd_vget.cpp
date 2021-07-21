@@ -23,7 +23,7 @@
 CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
@@ -48,7 +48,7 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
 CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
@@ -121,7 +121,7 @@ COMMAND_RESULT CommandVCount::Handle(User* user, const Params& parameters)
 CommandVResize::CommandVResize(Module* Creator) : Command(Creator, "VRESIZE", 2, 2)
 {
        group = 'v';
-       syntax = "<key> <value>";
+       syntax = "<key> <size>";
 }
 
 COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
@@ -170,7 +170,7 @@ COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 CommandVDel::CommandVDel(Module* Creator) : Command(Creator, "VDEL", 2, 2)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
@@ -245,7 +245,7 @@ COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
 CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS", 2, 2)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
@@ -289,7 +289,7 @@ COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
 CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
@@ -314,7 +314,7 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
 CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRONT", 1, 1)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
@@ -333,7 +333,7 @@ COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK", 1, 1)
 {
          group = 'v';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)

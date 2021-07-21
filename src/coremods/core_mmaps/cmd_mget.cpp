@@ -71,7 +71,7 @@ COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
 CommandMSet::CommandMSet(Module* Creator) : Command(Creator, "MSET", 3, 3)
 {
          group = 'x';
-         syntax = "<map> <key> <value>";
+         syntax = "<map> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
