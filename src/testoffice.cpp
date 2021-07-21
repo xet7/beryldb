@@ -48,31 +48,14 @@ TestOffice::~TestOffice()
 void TestOffice::Run()
 {
    
-/*       std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
+       std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
        
        handler3->Add("key", "value");
        handler3->Add("key", "value3");
        handler3->Add("key2", "value2");
 
-       handler3->Remove("key");
-       
        handler3->Dump();
        
-       return;
-*/
-
-
-       std::shared_ptr<MapHandler> handler4 = std::make_shared<MapHandler>();
-       handler4->Add("key", "value");
-       handler4->Add("key", "value3");
-       handler4->Add("key3", "value33");
-       
-       std::cout << "exists: " << handler4->Exists("key") << std::endl;
-       
-//       handler4->Dump();
-       
-       return;
-   
        STHelper::Set("tests", "hello", "world");
        STHelper::Set("tests", "hello3", "world3");
        STHelper::Set("tests", "hello6", "world6");
@@ -82,10 +65,9 @@ void TestOffice::Run()
        for (Args::iterator i = items.begin(); i != items.end(); ++i)
        {
             std::string item_list = *i;
-       //     std::cout << "item: " <<  item_list << std::endl;
+            std::cout << "item: " <<  item_list << std::endl;
        }
        
-       STHelper::Erase("tests");
        
        std::shared_ptr<ListHandler> handler = std::make_shared<ListHandler>();
 
@@ -100,7 +82,7 @@ void TestOffice::Run()
        std::cout << "pos: " << handler->Index(3) << std::endl;
        std::cout << "Repeats: " << handler->Repeats("test2") << std::endl;
        
-         handler->Reverse();
+       handler->Reverse();
         //handler->Resize(4);
    
         //handler->PopFront();

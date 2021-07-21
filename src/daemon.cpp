@@ -11,6 +11,9 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
+#include <fstream>
+#include <dirent.h>
+
 #include "beryl.h"
 #include "engine.h"
 #include "exit.h"
@@ -397,3 +400,286 @@ void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, c
         }
 }
 
+static bool MatchInternal(const unsigned char* str, const unsigned char* mask, unsigned const char* map)
+{
+	unsigned char* cp = NULL;
+	unsigned char* mp = NULL;
+	unsigned char* base = (unsigned char*)str;
+	unsigned char* wildcard = (unsigned char*)mask;
+
+	while ((*base) && (*wildcard != '*'))
+	{
+		if ((map[*wildcard] != map[*base]) && (*wildcard != '?'))
+		{
+			return 0;
+		}
+
+		wildcard++;
+		base++;
+	}
+
+	while (*base)
+	{
+		if (*wildcard == '*')
+		{
+			if (!*++wildcard)
+			{
+				return 1;
+			}
+
+			mp = wildcard;
+			cp = base+1;
+		}
+		else
+			if ((map[*wildcard] == map[*base]) || (*wildcard == '?'))
+			{
+				wildcard++;
+				base++;
+			}
+			else
+			{
+				wildcard = mp;
+				base = cp++;
+			}
+	}
+
+	while (*wildcard == '*')
+	{
+		wildcard++;
+	}
+
+	return !*wildcard;
+}
+
+bool Daemon::Match(const std::string& str, const std::string& mask, unsigned const char* map)
+{
+	if (!map)
+	{
+		map = locale_case_insensitive_map;
+	}
+
+	return MatchInternal((const unsigned char*)str.c_str(), (const unsigned char*)mask.c_str(), map);
+}
+
+bool Daemon::Match(const char* str, const char* mask, unsigned const char* map)
+{
+	if (!map)
+	{
+		map = locale_case_insensitive_map;
+	}
+
+	return MatchInternal((const unsigned char*)str, (const unsigned char*)mask, map);
+}
+
+bool Daemon::MatchCompactIP(const std::string& str, const std::string& mask, unsigned const char* map)
+{
+	if (engine::sockets::MatchCompactIP(str, mask, true))
+	{
+		return true;
+	}
+
+	return Daemon::Match(str, mask, map);
+}
+
+bool Daemon::MatchCompactIP(const char* str, const char* mask, unsigned const char* map)
+{
+	if (engine::sockets::MatchCompactIP(str, mask, true))
+	{
+		return true;
+	}
+
+	return Daemon::Match(str, mask, map);
+}
+
+bool Daemon::MatchMask(const std::string& masks, const std::string& hostname, const std::string& ipaddr)
+{
+	engine::space_node_stream maske_list(masks);
+	std::string mask;
+
+	while (maske_list.items_extract(mask))
+	{
+		if (Daemon::Match(hostname, mask, ascii_case_insensitive) || Daemon::MatchCompactIP(ipaddr, mask, ascii_case_insensitive))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+FileLoader::FileLoader(const std::string& filename)
+{
+	Load(filename);
+}
+
+void FileLoader::Load(const std::string& filename)
+{
+	cached_config::const_iterator it = Kernel->Config->Files.find(filename);
+	
+	if (it != Kernel->Config->Files.end())
+	{
+		this->lines = it->second;
+	}
+	else
+	{
+		const std::string real_name = Kernel->Config->Paths.SetWDConfig(filename);
+		lines.clear();
+
+		std::ifstream stream(real_name.c_str());
+	
+		if (!stream.is_open())
+		{
+			throw KernelException(filename + " does not exist.");
+		}
+
+		std::string line;
+		
+		while (std::getline(stream, line))
+		{
+			lines.push_back(line);
+			Size += line.size() + 2;
+		}
+
+		stream.close();
+	}
+}
+
+std::string FileLoader::as_string() const
+{
+	std::string buffer;
+	
+	for (file_cache::const_iterator it = this->lines.begin(); it != this->lines.end(); ++it)
+	{
+		buffer.append(*it);
+		buffer.append("\r\n");
+	}
+	
+	return buffer;
+}
+
+std::string FileSystem::GetRealPath(const std::string& base, const std::string& fragment)
+{
+	if (fragment[0] == '/')
+	{
+		return fragment;
+	}
+
+	if (!fragment.compare(0, 2, "~/", 2))
+	{
+		const char* home_directory = getenv("HOME");
+
+		if (home_directory && *home_directory)
+		{
+			return std::string(home_directory) + '/' + fragment.substr(2);
+		}
+	}
+
+	return base + '/' + fragment;
+}
+
+bool FileSystem::Exists(const std::string& file)
+{
+	struct stat sb;
+
+	if (stat(file.c_str(), &sb) == -1)
+	{
+		return false;
+	}
+
+	if ((sb.st_mode & S_IFDIR) > 0)
+	{
+		return false;
+	}
+
+	return !access(file.c_str(), F_OK);
+}
+
+bool FileSystem::AsFileList(const std::string& directory, std::vector<std::string>& entries, const std::string& match)
+{
+	DIR* library = opendir(directory.c_str());
+
+	if (!library)
+	{
+		return false;
+	}
+
+	dirent* entry = NULL;
+	
+	while ((entry = readdir(library)))
+	{
+		if (Daemon::Match(entry->d_name, match, ascii_case_insensitive))
+		{
+			entries.push_back(entry->d_name);
+		}
+	}
+	
+	closedir(library);
+	return true;
+}
+
+std::string FileSystem::GetName(const std::string& name)
+{
+	size_t pos = name.rfind('/');
+	return pos == std::string::npos ? name : name.substr(++pos);
+}
+
+int FileSystem::remove_directory(const char *path) 
+{
+	DIR *dopen = opendir(path);
+	size_t path_len = strlen(path);
+	int answer = -1;
+
+	if (dopen) 
+	{
+		struct dirent *p;
+
+		answer = 0;
+		
+		while (!answer && (p = readdir(dopen))) 
+		{
+				int r2 = -1;
+				char *buf;
+				size_t len;
+
+				if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, ".."))
+				{
+					continue;
+				}
+
+				len = path_len + strlen(p->d_name) + 2; 
+				buf = (char*)malloc(len);
+
+				if (buf) 
+				{
+					struct stat statbuf;
+
+					snprintf(buf, len, "%s/%s", path, p->d_name);
+					
+					if (!stat(buf, &statbuf)) 
+					{
+							if (S_ISDIR(statbuf.st_mode))
+							{
+								r2 = remove_directory(buf);
+							}
+							else
+							{
+								r2 = unlink(buf);
+							}
+					}
+					
+					free(buf);
+				}
+				
+				answer = r2;
+			}
+			
+			closedir(dopen);
+	}
+
+	if (!answer)
+	{
+		answer = rmdir(path);
+	}
+
+	return answer;
+}
