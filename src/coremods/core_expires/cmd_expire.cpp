@@ -291,11 +291,6 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
                return FAILED;
           }
           
-          if (!CheckValid(user, seconds))
-          {
-               return FAILED;
-          }
-
           if (!CheckValidPos(user, seconds))
           {
               return FAILED;

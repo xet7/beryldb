@@ -371,7 +371,7 @@ void list_query::Process()
         
         for (std::map<std::string, unsigned int>::iterator i = this->nmap.begin(); i != this->nmap.end(); ++i)
         {
-                 std::string ikey = Helpers::TypeString(i->first);
+                 std::string ikey = Helpers::TypeString(i->first, true);
                  unsigned int item = i->second;
 
                  user->SendProtocol(BRLD_ITEM, Daemon::Format("%-9s | %2s ", ikey.c_str(), convto_string(item).c_str()));
@@ -527,7 +527,7 @@ void glist_query::Process()
         
         for (std::map<std::string, unsigned int>::iterator i = this->nmap.begin(); i != this->nmap.end(); ++i)
         {
-                 std::string ikey = Helpers::TypeString(i->first);
+                 std::string ikey = Helpers::TypeString(i->first, true);
                  unsigned int item = i->second;
 
                  user->SendProtocol(BRLD_ITEM, Daemon::Format("%-9s | %2s ", ikey.c_str(), convto_string(item).c_str()));

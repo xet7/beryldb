@@ -245,7 +245,7 @@ void Helpers::make_list(User* user, std::shared_ptr<QueryBase> base, const std::
       }
 }
 
-std::string Helpers::TypeString(const std::string& type)
+std::string Helpers::TypeString(const std::string& type, bool plural)
 {
      if (type.empty() || type == PROCESS_NULL)
      {
@@ -254,42 +254,42 @@ std::string Helpers::TypeString(const std::string& type)
      
      if (type == INT_KEY)
      {
-           return "KEY";
+           return Daemon::Format("KEY%s", plural == true ? "S" : "");
      }
      
      if (type == INT_GEO)
      {
-          return "GEO";
+           return Daemon::Format("GEO%s", plural == true ? "S" : "");
      }
      
      if (type == INT_LIST)
      {
-          return "LIST";
+           return Daemon::Format("LIST%s", plural == true ? "S" : "");
      }
      
      if (type == INT_MAP)
      {
-          return "MAP";
+           return Daemon::Format("MAP%s", plural == true ? "S" : "");
      }
      
      if (type == INT_VECTOR)
      {
-          return "VECTOR";
+           return Daemon::Format("VECTOR%s", plural == true ? "S" : "");
      }
      
      if (type == INT_MMAP)
      {
-          return "MULTIMAP";
+           return Daemon::Format("MULTIMAP%s", plural == true ? "S" : "");
      }
      
      if (type == INT_FUTURE)
      {
-          return "FUTURES";
+           return Daemon::Format("FUTURE%s", plural == true ? "S" : "");
      }
      
      if (type == INT_EXPIRE)
      {
-          return "EXPIRES";
+           return Daemon::Format("EXPIRE%s", plural == true ? "S" : "");
      }
      
      return "UNKNOWN";
