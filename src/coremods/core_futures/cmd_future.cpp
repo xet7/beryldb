@@ -25,7 +25,7 @@
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 {
          group = 'f';
-         syntax = "<seconds> <key> <value>";
+         syntax = "<seconds> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 

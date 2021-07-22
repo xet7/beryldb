@@ -81,11 +81,12 @@ class ExportAPI Helpers
          * @parameters:
 	 *
 	 *         · type: Request base (1, 2, 3, ..).
+	 *         · plural: Whether to add the 's' at the end.
 	 * 
          * @return:
  	 *
          *         · string: Human readable format (MAP, GEOS, LISTS, ..).
          */    
          
-         static std::string TypeString(const std::string& type);
+         static std::string TypeString(const std::string& type, bool plural = false);
 };

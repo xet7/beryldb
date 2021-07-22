@@ -131,7 +131,7 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 {
          group = 'l';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
@@ -156,7 +156,7 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS", 2, 2)
 {
          group = 'l';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
@@ -219,7 +219,7 @@ COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
 CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
 {
          group = 'l';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
@@ -244,7 +244,7 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
 CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
 {
          group = 'l';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)

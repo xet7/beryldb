@@ -173,12 +173,12 @@ inline bool CheckKey(User* user, const std::string& value, bool notify = true)
 {
         if (!value.size())
         {
-             if (notify)
-             {
-                 user->SendProtocol(ERR_INPUT, INVALID_KEY);
-             }
+              if (notify)
+              {
+                  user->SendProtocol(ERR_INPUT, INVALID_KEY);
+              }
 
-             return false;
+              return false;
         }
         
         if (Kernel->Engine->ValidKey(value))
@@ -188,7 +188,7 @@ inline bool CheckKey(User* user, const std::string& value, bool notify = true)
         
         if (notify)
         {
-                user->SendProtocol(ERR_INPUT, INVALID_KEY);
+              user->SendProtocol(ERR_INPUT, INVALID_KEY);
         }
         
         return false;

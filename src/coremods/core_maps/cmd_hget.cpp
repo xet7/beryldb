@@ -200,7 +200,7 @@ COMMAND_RESULT CommandHWDel::Handle(User* user, const Params& parameters)
 CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 {
          group = 'm';
-         syntax = "<map> <key> <value>";
+         syntax = "<map> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
@@ -226,7 +226,7 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
 CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 {
          group = 'm';
-         syntax = "<map> <key> <value>";
+         syntax = "<map> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
