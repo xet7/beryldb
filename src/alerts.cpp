@@ -14,6 +14,7 @@
 #include <sstream>
 
 #include "beryl.h"
+#include "notifier.h"
 #include "monitor.h"
 #include "engine.h"
 
@@ -164,3 +165,128 @@ void MonitorHandler::Reset()
         this->MonitorList.clear();
         this->buffer.clear();
 }
+
+Notifier::Notifier()
+{
+
+}
+
+bool Notifier::Add(NOTIFY_LEVEL lvl, User* user)
+{
+        if (!user || user->IsQuitting())
+        {
+            return false;
+        }
+        
+        this->NotifyList.insert(std::make_pair(user, lvl));
+        return true;
+}
+
+bool Notifier::Has(User* user)
+{
+        NotifyMap::iterator it = this->NotifyList.find(user);
+
+        if (it == this->NotifyList.end())
+        {
+                return false;
+        }
+
+        return true;
+}
+
+void Notifier::Remove(User* user)
+{
+        this->NotifyList.erase(user);
+}
+
+void Notifier::SkipPush(User* skip, NOTIFY_LEVEL level, const std::string& buff)
+{
+        if (!this->NotifyList.size() || buff.empty() || !skip || skip->IsQuitting())
+        {
+             return;
+        }
+
+        Event adding(skip, buff, level);
+        this->events.push_back(adding);
+}
+
+void Notifier::SkipPush(User* skip, NOTIFY_LEVEL level, const char *fmt, ...) 
+{
+       std::string buff;
+       SCHEME(buff, fmt, fmt);
+       this->SkipPush(skip, level, buff);
+}
+
+void Notifier::Push(NOTIFY_LEVEL level, const std::string& buff)
+{
+        if (!this->NotifyList.size() || buff.empty())
+        {
+             return;
+        }
+
+        Event adding(NULL, buff, level);
+        this->events.push_back(adding);
+}
+
+void Notifier::Push(NOTIFY_LEVEL level, const char *fmt, ...) 
+{
+       std::string buff;
+       SCHEME(buff, fmt, fmt);
+       this->Push(level, buff);
+}
+
+
+void Notifier::Flush()
+{
+       if (this->events.empty())
+       {
+            return;
+       }
+
+       if (!this->NotifyList.size())
+       {
+            this->events.clear();
+            return;
+       }
+      
+       Event ready = this->events.front();
+       
+       const NotifyMap& all = this->NotifyList;
+
+       for (NotifyMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
+       {
+                      User* user = uit->first;
+                      
+                      if (!user || user->IsQuitting())
+                      {
+                           continue;
+                      }
+                       
+                      if (ready.skip && !ready.skip->IsQuitting())
+                      {
+                            /* Continues on skipping user. */
+                            
+                            if (ready.skip == user)
+                            {
+                                 continue;
+                            }
+                      }
+                      
+                      NOTIFY_LEVEL level = uit->second;
+                      
+                      if (level <= ready.level)
+                      {
+                             user->SendProtocol(BRLD_NOTIFICATION, Daemon::Format("%s", ready.command.c_str()).c_str());
+                      }
+       }
+
+       this->events.pop_front();
+}
+
+void Notifier::Reset()
+{
+       this->events.clear();
+       this->NotifyList.clear();
+}
+
+

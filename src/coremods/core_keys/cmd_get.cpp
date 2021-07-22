@@ -267,7 +267,7 @@ COMMAND_RESULT CommandAsBool::Handle(User* user, const Params& parameters)
 CommandIsMatch::CommandIsMatch(Module* Creator) : Command(Creator, "ISMATCH", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
