@@ -92,6 +92,8 @@ void expire_list_query::Run()
                                    }
                              }
                              
+                             break;
+                             
                              default:
                              {
                                       break;
@@ -463,8 +465,7 @@ void wdel_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
