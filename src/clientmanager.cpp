@@ -569,9 +569,9 @@ void ClientManager::Part(User* skip, const std::string& login, const std::string
 
      UserVector FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::iterator o = FoundLogins.begin(); o != FoundLogins.end(); ++o)
+     for (UserVector::iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
      {
-           User* user = *o;
+           User* user = *i;
 
            if (user == skip)
            {
@@ -605,9 +605,9 @@ void ClientManager::Join(User* skip, const std::string& login, const std::string
 {
      UserVector FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::iterator o = FoundLogins.begin(); o != FoundLogins.end(); ++o)
+     for (UserVector::iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
      {
-           User* user = *o;
+           User* user = *i;
 
            if (user == skip)
            {

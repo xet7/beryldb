@@ -110,9 +110,9 @@ void expire_list_query::Run()
                 std::string valid_key = key_as_bin + ":" + select_as_string + ":" + INT_KEY;
                 
                 std::string dbvalue;
-                this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
+                rocksdb::Status status = this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
                 
-                if (dbvalue.empty())
+                if (!status.ok())
                 {
                      this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawmap);
                      broken_keys++;
@@ -128,7 +128,6 @@ void expire_list_query::Run()
                 {
                      this->Delete(rawmap);
                 }
-                
         }
         
         if (broken_keys > 0)
