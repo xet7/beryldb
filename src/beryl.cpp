@@ -421,28 +421,6 @@ void Beryl::Signalizer(int signal)
 	s_signal = signal;
 }
 
-void Beryl::Exit(int status, bool nline, bool skip, const std::string& exitmsg)
-{
-        if (nline)
-        {
-                do_newline;
-        }
-        
-        if (!skip)
-        {
-        	if (!exitmsg.empty())
-        	{
-        		this->PrepareExit(status, exitmsg);
-		}
-		else
-		{
-			this->PrepareExit(status, Daemon::Format("%s: %s", SERVER_EXITING.c_str(), ExitMap[status]).c_str());
-		}
-	}
-	
-        exit (status);
-}
-
 void Beryl::PrepareExit(int status, const std::string& quitmsg)
 {
 	/* Timers reset */

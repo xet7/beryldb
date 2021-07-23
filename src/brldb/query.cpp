@@ -402,6 +402,13 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_MOVE:
            {
                    GetRegistry(this->select_query, this->key, true);
+                   
+                   if (this->identified == PROCESS_NULL)
+                   {
+                                this->access_set(DBL_NOT_FOUND);
+                                return false;
+                   }
+                   
                    int result = this->CheckDest(this->value, this->key, this->identified); 
 
                    if (result == 0 || result == 1)
