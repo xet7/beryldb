@@ -375,7 +375,7 @@ void Dispatcher::CondList(User* user, BRLD_PROTOCOL brld, const std::string& one
         {
              if (!comillas)
              {
-                     user->SendProtocol(brld, Daemon::Format("%-39s | %5s", one_api.c_str(), second_api.c_str()).c_str());
+                     user->SendProtocol(brld, Daemon::Format("%-29s | %5s", one_api.c_str(), second_api.c_str()).c_str());
 	     } 
 	     else
 	     {
