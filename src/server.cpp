@@ -55,15 +55,15 @@ void Beryl::CommandLine()
 
 	struct option longopts[] =
 	{
-			{ "config",    required_argument, NULL,          'c' },
-                        { "debug",     no_argument,       &do_debug,     1   },
-			{ "nofork",    no_argument,       &do_nofork,    1   },
-			{ "nolog",     no_argument,       &do_nolog,     1   },
-                        { "testsuite",  no_argument,      &do_tests,     1   },
-			{ "nopid",     no_argument,       &do_nopid,     1   },
-			{ "asroot",    no_argument,       &do_asroot,    1   },
-			{ "version",   no_argument,       &do_version,   1   },
-			{ 0, 0, 0, 0 }
+			{ "config",     required_argument, NULL,          'c' },
+                        { "debug",      no_argument,       &do_debug,     1   },
+			{ "nofork",     no_argument,       &do_nofork,    1   },
+			{ "nolog",      no_argument,       &do_nolog,     1   },
+                        { "testsuite",  no_argument,       &do_tests,     1   },
+			{ "nopid",      no_argument,       &do_nopid,     1   },
+			{ "asroot",     no_argument,       &do_asroot,    1   },
+			{ "version",    no_argument,       &do_version,   1   },
+			{ 0, 		0, 		   0, 		  0   }
 	};
 
 	char** argv = this->Config->usercmd.argv;

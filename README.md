@@ -64,7 +64,7 @@ Clone Beryl's latest stable version:
 
 ```
 git clone --branch 1.0 https://github.com/beryldb/beryldb.git --depth=5
-cd beryldb
+cd beryldb/
 ```
 
 You may now configure BerylDB following these quick steps: 
