@@ -329,6 +329,13 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_RENAME:
            {
                    GetRegistry(this->select_query, this->key, true);
+                   
+                   if (this->identified == PROCESS_NULL)
+                   {
+                                this->access_set(DBL_NOT_FOUND);
+                                return false;
+                   }
+                   
                    int result = this->CheckDest(this->select_query, this->value, this->identified); 
                    
                    if (result == 0 || result == 1)
@@ -356,6 +363,13 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_RENAMENX:
            {
                    GetRegistry(this->select_query, this->key, true);
+                   
+                   if (this->identified == PROCESS_NULL)
+                   {
+                                this->access_set(DBL_NOT_FOUND);
+                                return false;
+                   }
+                   
                    int result = this->CheckDest(this->select_query, this->value, this->identified); 
                    
                    if (result == 0)
