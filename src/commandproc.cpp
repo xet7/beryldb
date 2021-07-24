@@ -16,6 +16,7 @@
 #include "group.h"
 #include "monitor.h"
 #include "interval.h"
+#include "stats.h"
 
 bool Daemon::PassCompare(Expandable* ex, const std::string& data, const std::string& input, const std::string& hashtype)
 {
@@ -184,7 +185,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 				user->SendProtocol(ERR_CMD_NOFND, command, CMD_NOT_FOUND.c_str());
 			}
 
-			Kernel->Stats.Unknown++;
+			Kernel->Stats->Unknown++;
                         NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
                         return;
 		}

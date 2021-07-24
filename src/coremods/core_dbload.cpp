@@ -181,7 +181,6 @@ class ModuleCoreDB : public Module
               }
               
               const std::string& flags = UserHelper::CheckFlags(user->login);    
-              
               Kernel->Logins->Sessions->Attach(user, user->login, flags);
               LoadNotify(user);
               

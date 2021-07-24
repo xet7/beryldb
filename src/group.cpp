@@ -40,26 +40,25 @@ std::shared_ptr<Group> GroupManager::Find(const std::string& name)
 
 bool GroupManager::Add(const std::string& gname, const std::string& flags)
 {
-      std::string name = gname;
-      
+      std::string name 		    =   gname;
+
       std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
       /* Check if name is taken. */
-      
+
       if (this->Find(name))
       {
-           return false;
+      return false;
       }
-      
-      std::shared_ptr<Group> New = std::make_shared<Group>();
-      New->created = Kernel->Now();
-      New->name = name;
+
+      std::shared_ptr<Group> New    = 	std::make_shared<Group>();
+      New->created 		    = 	Kernel->Now();
+      New->name 		    = 	name;
       New->UpdateFlags(flags);
-      
+
       this->GroupList.insert(std::make_pair(name, New));
-      
+
       bprint(DONE, "Adding group: %s", name.c_str());
-      
       return true;
 }
 

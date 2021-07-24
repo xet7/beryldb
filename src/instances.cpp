@@ -13,7 +13,7 @@
 
 #include "beryl.h"
 #include "engine.h"
-
+#include "stats.h"
 #include "notifier.h"
 #include "monitor.h"
 #include "brldb/dbmanager.h"
@@ -430,7 +430,7 @@ void LocalUser::check_con_conf(bool clone_count)
 
 void LocalUser::ack_connection()
 {
-	Kernel->Stats.Connects++;
+	Kernel->Stats->Connects++;
 	this->touchbase = Kernel->Now();
 
 	assigned_class = NULL;

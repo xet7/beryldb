@@ -30,27 +30,27 @@ std::shared_ptr<Session> Session::SetFlags(std::shared_ptr<Session> New, const s
 {
        /* Session has no flags by default. */
       
-       New->can_admin 		= false;
-       New->can_execute 	= false;
-       New->can_manage 		= false;
+       New->can_admin 		  = 	false;
+       New->can_execute 	  = 	false;
+       New->can_manage 		  = 	false;
        
        for (auto it = flags.cbegin() ; it != flags.cend(); ++it) 
        {
             if (*it == 'r')
             {
-                  New->can_admin = true;
+                  New->can_admin   = 	true;
                   continue;
             }
 
             if (*it == 'e')
             {
-                  New->can_execute = true;
+                  New->can_execute =    true;
                   continue;
             }
 
             if (*it == 'm')
             {
-                  New->can_manage = true;
+                  New->can_manage  =    true;
             }
       }
      
@@ -91,27 +91,27 @@ void SessionManager::DetermineLifetime(const std::string& login)
 
 std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std::string& flags)
 {
-    if (login.empty())
-    {
-         return nullptr;
-    } 
+      if (login.empty())
+      {
+          return nullptr;
+      } 
 
-    std::shared_ptr<Session> New = std::make_shared<Session>();
-    New->created = Kernel->Now();
-    New = Session::SetFlags(New, flags);
-    New->SetRaw(flags);
+      std::shared_ptr<Session> New =  std::make_shared<Session>();
+      New->created 		   =  Kernel->Now();
+      New 			   =  Session::SetFlags(New, flags);
+      New->SetRaw(flags);
 
-    this->sessions.insert(std::make_pair(login, New));
-    return New;
+      this->sessions.insert(std::make_pair(login, New));
+      return New;
 }
 
 void SessionManager::AttachExternal(const std::string& login, const std::string& flags)
 {
      UserVector logins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+     for (UserVector::iterator i = logins.begin(); i != logins.end(); ++i)
      {
-           User* user = *o;
+           User* user = *i;
            this->Attach(user, login, flags);
      }
 }
@@ -152,10 +152,10 @@ void SessionManager::NotifyFlags(const std::string& login, const std::string& fl
 {
       UserVector logins = Kernel->Clients->FindLogin(login);
 
-      for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+      for (UserVector::iterator i = logins.begin(); i != logins.end(); ++i)
       {
-           User* user = *o;
-           user->SendProtocol(BRLD_YOUR_FLAGS, user, flags.c_str());
+            User* user = *i;
+            user->SendProtocol(BRLD_YOUR_FLAGS, flags.c_str());
       }
 }
 

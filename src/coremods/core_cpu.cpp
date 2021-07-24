@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "interval.h"
+#include "stats.h"
 
 class ModuleCoreCPU : public Module
 {
@@ -45,8 +46,8 @@ class ModuleCoreCPU : public Module
 
               if (!getrusage(RUSAGE_SELF,&R)) 
               {
-                      sample_sincelast = (Kernel->Now() - Kernel->Stats.LastSampled.tv_sec) * 1000000 + (Kernel->TimeStamp() - Kernel->Stats.LastSampled.tv_nsec) / 1000;
-                      sample_used = ((R.ru_utime.tv_sec - Kernel->Stats.LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats.LastCPU.tv_usec);
+                      sample_sincelast = (Kernel->Now() - Kernel->Stats->LastSampled.tv_sec) * 1000000 + (Kernel->TimeStamp() - Kernel->Stats->LastSampled.tv_nsec) / 1000;
+                      sample_used = ((R.ru_utime.tv_sec - Kernel->Stats->LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats->LastCPU.tv_usec);
                       usage = (sample_used / sample_sincelast) * 100;
               }
         }

@@ -57,11 +57,10 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
         }
         else 
         {
-                user->SendProtocol(ERR_LOGIN_NO_FLAGS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT, ERR_NO_FLAGS);
         }
 
         return FAILED;
- 
 }
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
@@ -180,7 +179,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
         
         /* We notify all users connected about the change */
 
-        Kernel->Logins->Sessions->NotifyFlags(newlogin, creating);
+        //Kernel->Logins->Sessions->NotifyFlags(newlogin, creating);
         return SUCCESS;
 }
 

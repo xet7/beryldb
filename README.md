@@ -41,24 +41,30 @@ Beryl's development branches are available in [our GitHub repository](https://gi
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
 using 4 cores. Feel free to change this number according to your cpu.
 
-Install dependencies in Debian-based systems:
+Installing dependencies in **Debian** based systems:
 
 ```
 sudo apt-get install librocksdb-dev build-essential
 ```
 
-dependencies in MacOS:
+Installing dependencies in **Redhat** based systems:
+
+```
+dnf install @development-tools
+yum install git rocksdb-devel.x86_64
+```
+
+Installing dependencies in **MacOS**:
 
 ```
 brew install rocksdb 
 ```
 
-Download Beryl's latest version:
+Clone Beryl's latest stable version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
-unzip 1.0.zip
-cd beryldb-1.0/
+git clone --branch 1.0 https://github.com/beryldb/beryldb.git --depth=5
+cd beryldb/
 ```
 
 You may now configure BerylDB following these quick steps: 

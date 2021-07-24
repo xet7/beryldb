@@ -23,6 +23,7 @@
 
 #include "beryl.h"
 #include "colors.h"
+#include "stats.h"
 #include "engine.h"
 #include "exit.h"
 #include "extras.h"
@@ -273,9 +274,9 @@ void Daemon::SnapshotStats()
                 return; 
         }
 
-        Kernel->Stats.LastSampled.tv_sec = Kernel->Now();
-        Kernel->Stats.LastSampled.tv_nsec = Kernel->TimeStamp();
-        Kernel->Stats.LastCPU = ru.ru_utime;
+        Kernel->Stats->LastSampled.tv_sec = Kernel->Now();
+        Kernel->Stats->LastSampled.tv_nsec = Kernel->TimeStamp();
+        Kernel->Stats->LastCPU = ru.ru_utime;
 }
 
 void Daemon::RunAs()

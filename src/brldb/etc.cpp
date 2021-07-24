@@ -127,6 +127,8 @@ void future_list_query::Run()
 
 void future_list_query::Process()
 {
+        /* We may now begin processing queries. */
+
         return;
 }
 

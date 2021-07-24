@@ -24,6 +24,7 @@
 #include "filehandler.h"
 #include "interval.h"
 #include "engine.h"
+#include "stats.h"
 
 std::unique_ptr<Beryl> Kernel = nullptr;
 
@@ -108,6 +109,10 @@ Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
 	/* Configuration class. This class will read and our config file. */
 	
 	this->Config 		= 	std::make_unique<Configuration>();
+	
+	/* Stats initializer. */
+	
+	this->Stats 		=	std::make_unique<Serverstats>();
 	
 	/* Keep a copy of arguments from main() */
 	
@@ -263,10 +268,6 @@ void Beryl::Initialize()
 	
 	this->CheckOffice();
 	
-	/* We may now begin processing queries. */
-	
-	this->Store->Flusher->Resume();
-
 	/* Start mainloop */
 
 	this->Dispatcher();
@@ -278,6 +279,10 @@ void Beryl::Dispatcher()
 
 	usleep(PRELOOP_WAIT);
 
+	/* We may now accept queries */
+	
+        this->Store->Flusher->Resume();
+        
 	/* Refresh timer before entering mainloop. */
 	
 	this->Refresh();
