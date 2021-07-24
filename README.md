@@ -60,12 +60,11 @@ Installing dependencies in **MacOS**:
 brew install rocksdb 
 ```
 
-Download Beryl's latest version:
+Clone Beryl's latest stable version:
 
 ```
-wget https://github.com/beryldb/beryldb/archive/refs/heads/1.0.zip
-unzip 1.0.zip
-cd beryldb-1.0/
+git clone --branch 1.0 https://github.com/beryldb/beryldb.git --depth=5
+cd beryldb
 ```
 
 You may now configure BerylDB following these quick steps: 

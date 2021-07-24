@@ -390,6 +390,13 @@ bool QueryBase::Prepare()
                    GetRegistry(this->select_query, this->key, true);
                    int result = this->CheckDest(this->value, this->key, this->identified); 
                    
+                   if (this->identified == PROCESS_NULL)
+                   {
+                                this->access_set(DBL_NOT_FOUND);
+                                this->response = this->identified;
+                                return false;
+                   }
+                   
                    if (result == 0 || result == 1)
                    {
                              this->Run();
@@ -399,14 +406,6 @@ bool QueryBase::Prepare()
                    {
                              this->access_set(DBL_INVALID_TYPE);
                              this->response = this->identified;
-                   }
-                   else
-                   {
-                         if (this->identified == PROCESS_NULL)
-                         {
-                                this->access_set(DBL_NOT_FOUND);
-                                this->response = this->identified;
-                         }
                    }
            
            }
