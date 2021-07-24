@@ -70,3 +70,21 @@ class CommandGeoRemove : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGeoLoGet : public Command 
+{
+    public: 
+
+        CommandGeoLoGet(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandGeoLaGet : public Command 
+{
+    public: 
+
+        CommandGeoLaGet(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

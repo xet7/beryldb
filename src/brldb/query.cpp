@@ -229,6 +229,8 @@ bool QueryBase::Prepare()
            
            break;
            
+           case QUERY_TYPE_LAT:
+           case QUERY_TYPE_LONG:
            case QUERY_TYPE_READ:
            {
                  if (this->GetRegistry(this->select_query, this->key, true))
@@ -236,12 +238,13 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                             this->Run();
-                            break;
+                            return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                      
                  }
@@ -250,6 +253,7 @@ bool QueryBase::Prepare()
                      if (this->identified == PROCESS_NULL)
                      {
                             this->access_set(DBL_NOT_FOUND);
+                            return false;
                      }  
                  }
             

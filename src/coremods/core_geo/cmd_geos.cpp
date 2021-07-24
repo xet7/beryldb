@@ -42,13 +42,13 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        
        if (!ValidLong(convto_num<int>(longitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_USE, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
              return FAILED;
        }
        
        if (!ValidLat(convto_num<int>(latitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_USE, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
              return FAILED;
        }
        
@@ -65,11 +65,15 @@ CommandGeoGet::CommandGeoGet(Module* Creator) : Command(Creator, "GEOGET", 1, 1)
 COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
+
+       if (!CheckKey(user, gname))
+       {
+            return FAILED;
+       }
        
        GeoHelper::Get(user, gname);
        return SUCCESS;
 }
-
 
 CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GKEYS", 1, 3)
 {
@@ -106,6 +110,11 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
          const std::string& gname = parameters[0];
          const std::string& gname2 = parameters[1];
          
+         if (!CheckKey(user, gname) || !CheckKey(user, gname2))
+         {
+              return FAILED;
+         }
+         
          GeoHelper::Calc(user, gname, gname2);
          return SUCCESS;
 }
@@ -120,6 +129,11 @@ COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 {  
        const std::string& gname = parameters[0];
        const std::string& distance = parameters[1];
+
+       if (!CheckKey(user, gname))
+       {
+            return FAILED;
+       }
 
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
@@ -148,4 +162,41 @@ COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
          
          GeoHelper::Remove(user, gname, dist);
          return SUCCESS;
+}
+
+CommandGeoLoGet::CommandGeoLoGet(Module* Creator) : Command(Creator, "GLOGET", 1, 1)
+{
+         group = 'g';
+         syntax = "<name>";
+}
+
+COMMAND_RESULT CommandGeoLoGet::Handle(User* user, const Params& parameters)
+{
+       const std::string& gname = parameters[0];
+
+       if (!CheckKey(user, gname))
+       {
+            return FAILED;
+       }
+       
+       GeoHelper::GetCustom(user, gname, QUERY_TYPE_LONG);
+       return SUCCESS;
+}
+
+CommandGeoLaGet::CommandGeoLaGet(Module* Creator) : Command(Creator, "GLAGET", 1, 1)
+{
+         group = 'g';
+         syntax = "<name>";
+}
+
+COMMAND_RESULT CommandGeoLaGet::Handle(User* user, const Params& parameters)
+{       const std::string& gname = parameters[0];
+
+       if (!CheckKey(user, gname))
+       {
+            return FAILED;
+       }
+       
+       GeoHelper::GetCustom(user, gname, QUERY_TYPE_LAT);
+       return SUCCESS;
 }

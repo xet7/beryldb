@@ -30,6 +30,14 @@ void GeoHelper::Add(User* user, const std::string& key, const std::string& latit
        Kernel->Store->Push(query);
 }
 
+void GeoHelper::GetCustom(User* user, const std::string& key, QUERY_TYPE type)
+{
+       std::shared_ptr<geoget_custom_query> query = std::make_shared<geoget_custom_query>();
+       Helpers::make_geo_query(user, query, key);
+       query->type = type;
+       Kernel->Store->Push(query);
+}
+
 void GeoHelper::Get(User* user, const std::string& key)
 {
        std::shared_ptr<geoget_query> query = std::make_shared<geoget_query>();

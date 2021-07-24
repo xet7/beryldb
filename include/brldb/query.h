@@ -39,7 +39,9 @@ enum QUERY_TYPE
        QUERY_TYPE_FUTURE_RUN     = 	19,
        QUERY_TYPE_READ_ALLOW     = 	20,
        QUERY_TYPE_RENAMENX       = 	21,
-       QUERY_TYPE_DIFF           = 	22
+       QUERY_TYPE_DIFF           = 	22,
+       QUERY_TYPE_LAT		 =	23,
+       QUERY_TYPE_LONG		 = 	24
 };
 
 enum QUERY_FLAGS
@@ -784,6 +786,22 @@ class ExportAPI alpha_query  : public QueryBase
 
         void Process();
 };
+
+class ExportAPI geoget_custom_query  : public QueryBase
+{
+    public:
+
+        geoget_custom_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 
 class ExportAPI geoget_query  : public QueryBase
 {

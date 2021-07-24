@@ -39,11 +39,37 @@ void geoget_query::Run()
     size_t found =  dbvalue.find_first_of(":");
     std::string path = dbvalue.substr(0,found);
     std::string file = dbvalue.substr(found+1);
-    this->response = to_string(path) + ":" + to_string(file);
+    this->response = to_string(path) + " " + to_string(file);
     this->SetOK();
 }
 
 void geoget_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
+
+void geoget_custom_query::Run()
+{
+    RocksData result = this->Get(this->dest);
+    std::string dbvalue = result.value;
+
+    size_t found =  dbvalue.find_first_of(":");
+    
+    if (this->type == QUERY_TYPE_LONG)
+    {
+          const std::string& path = dbvalue.substr(0,found);
+          this->response = to_string(path);
+    }
+    else
+    {
+          const std::string& file = dbvalue.substr(found+1);
+          this->response = to_string(file);
+    }
+
+    this->SetOK();
+}
+
+void geoget_custom_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
 }
