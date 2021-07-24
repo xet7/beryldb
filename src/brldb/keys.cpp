@@ -92,6 +92,8 @@ void expire_list_query::Run()
                                    }
                              }
                              
+                             break;
+                             
                              default:
                              {
                                       break;
@@ -110,9 +112,9 @@ void expire_list_query::Run()
                 std::string valid_key = key_as_bin + ":" + select_as_string + ":" + INT_KEY;
                 
                 std::string dbvalue;
-                this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
+                rocksdb::Status status = this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
                 
-                if (dbvalue.empty())
+                if (!status.ok())
                 {
                      this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawmap);
                      broken_keys++;
@@ -128,7 +130,6 @@ void expire_list_query::Run()
                 {
                      this->Delete(rawmap);
                 }
-                
         }
         
         if (broken_keys > 0)
@@ -464,8 +465,7 @@ void wdel_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;

@@ -23,7 +23,7 @@
 CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)
 {
          group = 'l';
-         syntax = "<key> <value>";
+         syntax = "<key> <size>";
 }
 
 COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)

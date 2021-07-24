@@ -98,6 +98,19 @@ std::string Daemon::GetRealPath(const char* path)
       return path;
 }
 
+bool Daemon::SameChars(const std::string& str)
+{
+      for (unsigned int i = 1; i < str.length(); i++)
+      {
+           if (str[i] != str[0])
+           {
+               return false;
+           }
+      }
+ 
+      return true;
+}
+
 bool Daemon::ChannelValidator(const std::string& chname)
 {
         if (chname.empty() || chname.length() > 15)
@@ -105,7 +118,7 @@ bool Daemon::ChannelValidator(const std::string& chname)
                 return false;
         }
 
-        if (chname[0] != '#' || chname == "#")
+        if (chname[0] != '#' || chname == "#" || (chname[1] == '#' && Daemon::SameChars(chname)))
         {
                 return false;
         }

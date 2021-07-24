@@ -189,14 +189,14 @@ inline bool isalpha(const std::string & str)
 {
         if (str.size() == 0) 
         {	
-            return false;
+              return false;
         }
         
         for (int i = 0; str[i] != '\0'; i++)
         {	
               if (!isalnum(str[i]))                
               {
-                  return false;
+                    return false;
               }
         }
         

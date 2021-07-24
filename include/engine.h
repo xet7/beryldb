@@ -382,6 +382,20 @@ class ExportAPI Daemon
          */    
         
         static std::string Uptime(const std::string& msg, unsigned int up);
+
+        /* 
+         * Checks whether all characeters are the same.
+         * 
+         * @parameters:
+	 *
+	 *         · string: String to check.
+	 * 
+         * @return:
+ 	 *
+         *         · True: All the same.
+         */            
+         
+        static bool SameChars(const std::string& str);
 };
 
 class ExportAPI Dispatcher : public safecast<Dispatcher>
