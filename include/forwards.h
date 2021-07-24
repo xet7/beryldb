@@ -48,6 +48,7 @@ class GroupManager;
 class MonitorHandler;
 class IntervalManager;
 class Daemon;
+class Serverstats;
 
 struct PendingCMD;
 

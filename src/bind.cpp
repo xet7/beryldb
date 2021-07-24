@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "queues.h"
+#include "stats.h"
 
 #include <netinet/tcp.h>
 
@@ -143,7 +144,7 @@ void BindingPort::OnPendingRead()
 
 	if (incoming_socket_descriptor < 0)
 	{
-		Kernel->Stats.Refused++;
+		Kernel->Stats->Refused++;
 		return;
 	}
 
@@ -194,11 +195,11 @@ void BindingPort::OnPendingRead()
 	}
 	if (res == MOD_RES_OK)
 	{
-		Kernel->Stats.Accept++;
+		Kernel->Stats->Accept++;
 	}
 	else
 	{
-		Kernel->Stats.Refused++;
+		Kernel->Stats->Refused++;
 		SocketPool::Close(incoming_socket_descriptor);
 	}
 }

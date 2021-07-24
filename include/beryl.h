@@ -53,7 +53,6 @@ ExportAPI extern std::unique_ptr<Beryl> Kernel;
 #include "configprocess.h"
 #include "brldstr.h"
 #include "protocol.h"
-#include "stats.h"
 
 int main(int argc, char** argv);
 
@@ -242,7 +241,7 @@ class ExportAPI Beryl
 
 	/* Internal statistics. */
 	
-	Serverstats Stats;
+	std::unique_ptr<Serverstats> Stats;
 	
 	/* Manages tick timers. */
 	
