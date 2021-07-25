@@ -42,14 +42,28 @@ void geoadd_pub_query::Run()
 
 void geoadd_pub_query::Process()
 {
-      user->SendProtocol(BRLD_OK, PROCESS_OK);
-      Channel* chan = Kernel->Channels->Find(this->newkey);
-      
-      if (chan)
+      engine::comma_node_stream CMD(this->newkey);
+      std::string server;
+
+      while (CMD.items_extract(server))
       {
-            ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, this->key, this->value + ":" + this->hesh);
-            chan->Write(Kernel->GetBRLDEvents().publish, publish);
+             if (!Kernel->Engine->ValidChannel(server))
+             {
+                  continue;
+             }
+             
+             Channel* chan = Kernel->Channels->Find(server);
+             
+             if (!chan)
+             {
+                  continue;
+             }
+
+             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, server, this->key + " " + this->value + ":" + this->hesh);
+             chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
+      
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()
