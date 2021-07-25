@@ -121,11 +121,14 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         Args users = STHelper::HKeys("userlist");
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
-        
+
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s", "User"));
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+
         for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
-                user->SendProtocol(BRLD_USER_ITEM, item.c_str());
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }        
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
@@ -143,6 +146,9 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 
         Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
 
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "Admin", "Flag"));
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
         for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
@@ -153,7 +159,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
                       continue;
                 }
                 
-                user->SendProtocol(BRLD_USER_ITEM, Daemon::Format("%-10s | %5s ", item.c_str(), flags.c_str()));
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), flags.c_str()), Daemon::Format("%s %s", item.c_str(), flags.c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);

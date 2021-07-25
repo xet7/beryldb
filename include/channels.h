@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "channelmanager.h"
 #include "subscription.h"
 
 /*

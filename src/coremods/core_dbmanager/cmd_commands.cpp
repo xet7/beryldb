@@ -247,14 +247,18 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
       const DataMap& dbases = Kernel->Store->DBM->GetDatabases();
 
       Dispatcher::JustAPI(user, BRLD_DB_BEGIN);
+
+      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", "Name", "Path"));
+      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
       for (DataMap::const_iterator it = dbases.begin(); it != dbases.end(); ++it)
       {
             std::shared_ptr<UserDatabase> udb = it->second;
+            
             const std::string& dbname = udb->GetName();
             const std::string& dbpath = udb->GetPath();
-            
-            Dispatcher::CondList(user, BRLD_DB_ITEM, dbname, dbpath);
+
+            Dispatcher::ListDepend(user, BRLD_COMMAND_ITEM, Daemon::Format("%-30s | %-10s", dbname.c_str(), dbpath.c_str()), Daemon::Format("%s %s", dbname.c_str(), dbpath.c_str()));
       }     
       
 

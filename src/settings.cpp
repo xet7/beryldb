@@ -14,7 +14,6 @@
 #include "beryl.h"
 #include "settings.h"
 #include "helpers.h"
-#include "engine.h"
 #include "managers/user.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
