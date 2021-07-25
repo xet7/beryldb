@@ -23,7 +23,7 @@
 CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "OCCURS", 2, 2)
 {
          group = 'k';
-         syntax = "<key> <value>";
+         syntax = "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)

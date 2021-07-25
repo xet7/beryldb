@@ -36,6 +36,7 @@ class CoreModuleVector : public Module
         CommandVHigh cmdvhigh;
         CommandVLow cmdvlow;
         CommandVSum cmdvsum;
+        CommandVPushNX cmdvpushnx;
         
     public:	
         
@@ -56,7 +57,8 @@ class CoreModuleVector : public Module
                              cmdavg(this),
                              cmdvhigh(this),
                              cmdvlow(this),
-                             cmdvsum(this)
+                             cmdvsum(this),
+                             cmdvpushnx(this)
                              
 
         {
@@ -65,7 +67,7 @@ class CoreModuleVector : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides vector-related commands, VMOVE, VPUSH, VGET and VPOPs.", VF_BERYLDB|VF_CORE);
+                return Version("Provides vector-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

@@ -187,15 +187,18 @@ void vkeys_query::Process()
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
+        {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 
@@ -379,18 +382,21 @@ void vget_query::Process()
 
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
-               std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+        {            
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 
@@ -471,12 +477,6 @@ void vpop_front_query::Run()
        RocksData result = this->Get(this->dest);
        std::shared_ptr<VectorHandler> handler;
 
-       if (!result.status.ok())
-       {
-               access_set(DBL_NOT_FOUND);
-               return;
-       }
-
        handler = VectorHandler::Create(result.value);
        handler->PopFront();
 
@@ -501,12 +501,6 @@ void vpop_back_query::Run()
 {
        RocksData result = this->Get(this->dest);
        std::shared_ptr<VectorHandler> handler;
-
-       if (!result.status.ok())
-       {
-               access_set(DBL_NOT_FOUND);
-               return;
-       }
 
        handler = VectorHandler::Create(result.value);
        handler->PopBack();
@@ -533,15 +527,34 @@ void vdel_query::Process()
        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
-void vdel_query::Run()
+void vpushnx_query::Run()
 {
        RocksData query_result = this->Get(this->dest);
 
-       if (!query_result.status.ok())
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
+       
+       if (handler->Exist(this->value))
        {
-               access_set(DBL_NOT_FOUND);
-               return;
+              access_set(DBL_ENTRY_EXISTS);
+              return;
        }
+       else
+       {
+             handler->Add(this->value);
+             this->Write(this->dest, handler->as_string());
+       }
+
+       this->SetOK();
+}
+
+void vpushnx_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+void vdel_query::Run()
+{
+       RocksData query_result = this->Get(this->dest);
 
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
        handler->Remove(this->value);

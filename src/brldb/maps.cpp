@@ -164,18 +164,20 @@ void hfind_query::Process()
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
+        {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
-
 
 void hset_query::Run()
 {
@@ -467,19 +469,23 @@ void hlist_query::Process()
         
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-               std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, item.c_str());
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
+
 }
 
 
@@ -582,18 +588,21 @@ void hvals_query::Process()
 {
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Value"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-               std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 
@@ -673,21 +682,24 @@ void hgetall_query::Process()
 {
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
-        for (DualMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
-        {            
-               std::string litem = i->first;
-               std::string lvalue = i->second;
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Map", "Value"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-               user->SendProtocol(BRLD_ITEM, litem.c_str());
-               user->SendProtocol(BRLD_ITEM, Helpers::Format(lvalue).c_str());
+        for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
+        {
+                 std::string ikey = i->first;
+                 std::string item = i->second;
+
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
+
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_END_LIST);
         }
 }
 

@@ -37,6 +37,7 @@ class CoreModuleList : public Module
         CommandFRop cmdfrop;
         CommandLBack cmdlback;
         CommandLFront cmdlfront;
+        CommandLPushNX cmdlpushnx;
         
     public:	
         
@@ -58,7 +59,8 @@ class CoreModuleList : public Module
                            cmdlrop(this),
                            cmdfrop(this),
                            cmdlback(this),
-                           cmdlfront(this)
+                           cmdlfront(this),
+                           cmdlpushnx(this)
 
         {
         
@@ -66,7 +68,7 @@ class CoreModuleList : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides list-related commands, LMOVE, LPUSH, LGET and LPOP.", VF_BERYLDB|VF_CORE);
+                return Version("Provides list-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

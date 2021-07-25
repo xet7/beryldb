@@ -18,6 +18,8 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/geo.h"
 #include "brldb/dbmanager.h"
+#include "channels.h"
+#include "channelmanager.h"
 
 void geoadd_query::Run()
 {
@@ -28,7 +30,40 @@ void geoadd_query::Run()
 
 void geoadd_query::Process()
 {
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+void geoadd_pub_query::Run()
+{
+     const std::string save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     this->Write(this->dest, save);
+     this->SetOK();
+}
+
+void geoadd_pub_query::Process()
+{
+      engine::comma_node_stream CMD(this->newkey);
+      std::string server;
+
+      while (CMD.items_extract(server))
+      {
+             if (!Kernel->Engine->ValidChannel(server))
+             {
+                  continue;
+             }
+             
+             Channel* chan = Kernel->Channels->Find(server);
+             
+             if (!chan)
+             {
+                  continue;
+             }
+
+             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, server, this->key + " " + this->value + ":" + this->hesh);
+             chan->Write(Kernel->GetBRLDEvents().publish, publish);
+      }
+      
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()
@@ -39,11 +74,37 @@ void geoget_query::Run()
     size_t found =  dbvalue.find_first_of(":");
     std::string path = dbvalue.substr(0,found);
     std::string file = dbvalue.substr(found+1);
-    this->response = to_string(path) + ":" + to_string(file);
+    this->response = to_string(path) + " " + to_string(file);
     this->SetOK();
 }
 
 void geoget_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
+
+void geoget_custom_query::Run()
+{
+    RocksData result = this->Get(this->dest);
+    std::string dbvalue = result.value;
+
+    size_t found =  dbvalue.find_first_of(":");
+    
+    if (this->type == QUERY_TYPE_LONG)
+    {
+          const std::string& path = dbvalue.substr(0,found);
+          this->response = to_string(path);
+    }
+    else
+    {
+          const std::string& file = dbvalue.substr(found+1);
+          this->response = to_string(file);
+    }
+
+    this->SetOK();
+}
+
+void geoget_custom_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
 }
@@ -191,13 +252,16 @@ void gkeys_query::Process()
 {
         if (this->subresult == 1)
         {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
+
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
@@ -416,13 +480,16 @@ void geodistance_query::Process()
 {
         if (this->subresult == 1)
         {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
+
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)

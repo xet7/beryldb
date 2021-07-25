@@ -341,7 +341,7 @@ class ModuleCoreMessage : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides the PUBLISH, and SQUERY commands", VF_CORE|VF_BERYLDB);
+		return Version("Provides publish-related commands.", VF_CORE|VF_BERYLDB);
 	}
 };
 

@@ -24,12 +24,21 @@ class CoreModuleGeo : public Module
         CommandGeoCalc cmdgcalc;
         CommandGeoDistance cmdgeoclose;
         CommandGeoRemove cmdgeoremove;
-
+        CommandGeoLaGet cmdgeolaget;
+        CommandGeoLoGet  cmdgeologet;
+        CommandGeoAddPub cmdgapub;
+        
     public:     
         
-        CoreModuleGeo() : cmdgeoadd(this), cmdgeoget(this), 
-                          cmdgfind(this), cmdgcalc(this), cmdgeoclose(this),
-                          cmdgeoremove(this)
+        CoreModuleGeo() : cmdgeoadd(this), 
+                          cmdgeoget(this), 
+                          cmdgfind(this), 
+                          cmdgcalc(this), 
+                          cmdgeoclose(this),
+                          cmdgeoremove(this),
+                          cmdgeolaget(this),
+                          cmdgeologet(this),
+                          cmdgapub(this)
         {
         
         }

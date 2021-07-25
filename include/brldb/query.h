@@ -39,7 +39,9 @@ enum QUERY_TYPE
        QUERY_TYPE_FUTURE_RUN     = 	19,
        QUERY_TYPE_READ_ALLOW     = 	20,
        QUERY_TYPE_RENAMENX       = 	21,
-       QUERY_TYPE_DIFF           = 	22
+       QUERY_TYPE_DIFF           = 	22,
+       QUERY_TYPE_LAT		 =	23,
+       QUERY_TYPE_LONG		 = 	24
 };
 
 enum QUERY_FLAGS
@@ -755,6 +757,21 @@ class ExportAPI geocalc_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI geoadd_pub_query  : public QueryBase
+{
+    public:
+
+        geoadd_pub_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI geoadd_query  : public QueryBase
 {
     public:
@@ -784,6 +801,22 @@ class ExportAPI alpha_query  : public QueryBase
 
         void Process();
 };
+
+class ExportAPI geoget_custom_query  : public QueryBase
+{
+    public:
+
+        geoget_custom_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 
 class ExportAPI geoget_query  : public QueryBase
 {
@@ -868,6 +901,36 @@ class ExportAPI vhigh_query  : public QueryBase
         vhigh_query() 
         {
                 this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lpushnx_query  : public QueryBase
+{
+    public:
+
+        lpushnx_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vpushnx_query  : public QueryBase
+{
+    public:
+
+        vpushnx_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
                 this->base_request = INT_VECTOR;
         }
 

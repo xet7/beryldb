@@ -38,7 +38,7 @@ class CoreModuleAdmin : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides LOGOUT, LOGINS, and FINGER commands.", VF_BERYLDB|VF_CORE);
+		return Version("Provides admin-related commands.", VF_BERYLDB|VF_CORE);
 	}
 };
 

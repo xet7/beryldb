@@ -164,13 +164,16 @@ void lkeys_query::Process()
 {
         if (this->subresult == 1)
         {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
+
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
@@ -406,18 +409,21 @@ void lfind_query::Process()
 {
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
-               std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, item.c_str());
+        {            
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 
@@ -635,18 +641,21 @@ void lget_query::Process()
 
         if (this->subresult == 1)
         {
-               Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
-               std::string item = *i;
-               user->SendProtocol(BRLD_ITEM, Helpers::Format(item.c_str()));
+        {            
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
         {
-               Dispatcher::JustAPI(user, BRLD_END_LIST);
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
 
@@ -857,4 +866,29 @@ void lfront_query::Run()
 void lfront_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
+}
+
+void lpushnx_query::Run()
+{
+       RocksData query_result = this->Get(this->dest);
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(query_result.value);
+       
+       if (handler->Exist(this->value))
+       {
+              access_set(DBL_ENTRY_EXISTS);
+              return;
+       }
+       else
+       {
+             handler->Add(this->value);
+             this->Write(this->dest, handler->as_string());
+       }
+
+       this->SetOK();
+}
+
+void lpushnx_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }

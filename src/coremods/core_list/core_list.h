@@ -15,6 +15,16 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
+
+class CommandLPushNX : public Command 
+{
+    public: 
+
+        CommandLPushNX(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 class CommandLPush : public Command 
 {
 

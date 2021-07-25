@@ -31,7 +31,7 @@ class CoreModuleMulti : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides MULTI support.", VF_BERYLDB|VF_CORE);
+                return Version("Provides multi support.", VF_BERYLDB|VF_CORE);
         }
 };
 
