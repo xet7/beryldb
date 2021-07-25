@@ -599,7 +599,6 @@ void georem_query::Run()
                 std::string file2 = rawvalue.substr(found2+1);
 
                 double distance = CalculateDistance(convto_num<double>(to_string(path1)), convto_num<double>(to_string(file1)), convto_num<double>(to_string(path2)), convto_num<double>(to_string(file2)));
- 
                 
                 if (distance >= convto_num<double>(this->value))
                 {

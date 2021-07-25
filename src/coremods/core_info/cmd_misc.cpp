@@ -230,7 +230,7 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
           return SUCCESS;
 }
 
-CommandChans::CommandChans(Module* parent) : Command(parent, "CHANS", 1, 1)
+CommandChans::CommandChans(Module* parent) : Command(parent, "GETCHANS", 1, 1)
 {
           syntax = "<instance>";
 }

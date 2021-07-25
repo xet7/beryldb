@@ -1074,11 +1074,11 @@ void ismatch_query::Run()
 
        if (Daemon::Match(as_str, this->value))
        {
-             this->response = "true";
+             this->response = "1";
        }
        else
        {
-            this->response = "false";
+            this->response = "0";
        }
 
        this->SetOK();
