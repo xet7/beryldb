@@ -20,6 +20,15 @@
 #include "helpers.h"
 #include "extras.h"
 
+void KeyHelper::Insert(User* user, const std::string& entry, const std::string& value, signed int id)
+{
+       std::shared_ptr<insert_query> query = std::make_shared<insert_query>();
+       Helpers::make_query(user, query, entry);
+       query->id = id;
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
 void KeyHelper::IsMatch(User* user, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<ismatch_query> query = std::make_shared<ismatch_query>();

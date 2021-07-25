@@ -15,6 +15,16 @@
 #include "brldb/dbmanager.h"
 #include "engine.h"
 
+class CommandInsert : public Command 
+{
+
+    public: 
+
+        CommandInsert(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 class CommandIsMatch : public Command 
 {
 

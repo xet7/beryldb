@@ -288,3 +288,35 @@ COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
        KeyHelper::IsMatch(user, key, value);
        return SUCCESS;
 }
+
+CommandInsert::CommandInsert(Module* Creator) : Command(Creator, "INSERT", 3, 3)
+{
+         group = 'k';
+         syntax = "<key> <where> \"value\"";
+}
+
+COMMAND_RESULT CommandInsert::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& where = parameters[1];
+       const std::string& value = parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       if (!CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+        if (!is_number(where, false))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+
+       KeyHelper::Insert(user, key, value, convto_num<signed int>(where));
+       return SUCCESS;
+}

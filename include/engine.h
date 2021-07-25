@@ -16,6 +16,8 @@
 #include <thread>
 
 #include "protocol.h"
+#include "filehandler.h"
+#include "exit.h"
 
 class ExportAPI Daemon 
 {

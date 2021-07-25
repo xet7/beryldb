@@ -1088,3 +1088,25 @@ void ismatch_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
 }
+
+void insert_query::Run()
+{       
+       RocksData result = this->Get(this->dest);
+       std::string as_str = to_string(result.value);
+       
+       if (as_str.length() < this->id)
+       {
+             access_set(DBL_INVALID_RANGE);
+             return;
+       }
+       
+       as_str.insert(this->id, this->value);
+       
+       this->Write(this->dest, to_bin(as_str));
+       this->SetOK();
+}
+
+void insert_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+}

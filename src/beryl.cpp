@@ -12,13 +12,10 @@
  */
 
 #include "beryl.h"
-#include "exit.h"
 #include "engine.h"
 #include "login.h"
 #include "monitor.h"
 #include "channels.h"
-#include "settings.h"
-#include "filehandler.h"
 
 std::unique_ptr<Beryl> Kernel = NULL;
 
