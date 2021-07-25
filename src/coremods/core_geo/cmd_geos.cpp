@@ -30,10 +30,10 @@ CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 
 
 COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       const std::string& chan = parameters[1];
-       const std::string& latitude = parameters[2];
-       const std::string& longitude = parameters[3];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& chan 		= 	parameters[1];
+       const std::string& latitude 	= 	parameters[2];
+       const std::string& longitude 	= 	parameters[3];
        
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
@@ -88,6 +88,40 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        }
        
        GeoHelper::Add(user, gname, latitude, longitude);
+       return SUCCESS;
+}
+
+CommandGeoAddNX::CommandGeoAddNX(Module* Creator) : Command(Creator, "GEOADDNX", 3, 3)
+{
+         group = 'g';
+         syntax = "<name> <longitude> <latitude>";
+}
+
+COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
+{
+       const std::string& gname = parameters[0];
+       const std::string& latitude = parameters[1];
+       const std::string& longitude = parameters[2];
+
+       if (!is_number(latitude, true) || !is_number(longitude, true))
+       {
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!ValidLong(convto_num<int>(longitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       if (!ValidLat(convto_num<int>(latitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       GeoHelper::AddNX(user, gname, latitude, longitude);
        return SUCCESS;
 }
 

@@ -37,19 +37,40 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-CommandCommands::CommandCommands(Module* parent) : Command(parent, "COMMANDS", 0, 0)
+CommandCommands::CommandCommands(Module* parent) : Command(parent, "COMMANDS", 0, 1)
 {
          group = 'w';
+         syntax = "<key>";
 }
 
 COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 {
+	std::string key;
+	
+	if (parameters.size() > 0)
+	{
+		key = parameters[0];
+	}
+	else
+	{
+		key = "*";
+	}
+
+	std::transform(key.begin(), key.end(), key.begin(), ::toupper);
+	
 	const CommandHandler::CommandMap& commands = Kernel->Commander.GetCommands();
 	
 	std::map<std::string, std::string> list;
 
 	for (CommandHandler::CommandMap::const_iterator i = commands.begin(); i != commands.end(); ++i)
 	{
+		std::string cmd = i->first;
+		
+	        if (!Daemon::Match(cmd, key))
+	        {
+	        	continue;
+	        }
+	        
 		/* Requesting user must have required flags. */
 		
 		if (i->second->requires)

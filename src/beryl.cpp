@@ -12,21 +12,15 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "exit.h"
+#include "engine.h"
 #include "login.h"
 #include "monitor.h"
-#include "notifier.h"
-#include "group.h"
-#include "channelmanager.h"
 #include "channels.h"
 #include "settings.h"
 #include "filehandler.h"
-#include "interval.h"
-#include "engine.h"
-#include "stats.h"
 
-std::unique_ptr<Beryl> Kernel = nullptr;
+std::unique_ptr<Beryl> Kernel = NULL;
 
 /* Beryl's main. */
  

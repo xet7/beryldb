@@ -247,14 +247,18 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
       const DataMap& dbases = Kernel->Store->DBM->GetDatabases();
 
       Dispatcher::JustAPI(user, BRLD_DB_BEGIN);
+
+      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", "Name", "Path"));
+      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
       for (DataMap::const_iterator it = dbases.begin(); it != dbases.end(); ++it)
       {
             std::shared_ptr<UserDatabase> udb = it->second;
+            
             const std::string& dbname = udb->GetName();
             const std::string& dbpath = udb->GetPath();
-            
-            Dispatcher::CondList(user, BRLD_DB_ITEM, dbname, dbpath);
+
+            Dispatcher::ListDepend(user, BRLD_COMMAND_ITEM, Daemon::Format("%-30s | %-10s", dbname.c_str(), dbpath.c_str()), Daemon::Format("%s %s", dbname.c_str(), dbpath.c_str()));
       }     
       
 
@@ -373,3 +377,60 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
       user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }
+
+CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 1)
+{
+       requires = 'r';
+}
+
+COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
+{  
+     DataMap dbs = Kernel->Store->DBM->GetDatabases();
+
+     for (DataMap::iterator i = dbs.begin(); i != dbs.end(); ++i)
+     {
+               std::shared_ptr<UserDatabase> db = i->second;
+               db->FlushDB();
+     }
+                
+     user->SendProtocol(BRLD_OK, PROCESS_OK);                
+     return SUCCESS;
+}
+
+CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
+{
+       requires = 'r';
+}
+
+COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
+{  
+       const std::string& dbname = parameters[0];
+       
+       std::shared_ptr<UserDatabase> database;
+       
+       if (parameters.size())
+       {
+             database = Kernel->Store->DBM->Find(dbname);
+       }
+       else
+       {
+            database = user->GetDatabase();
+       }
+       
+       if (!database)
+       {
+            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+            return FAILED;
+       }
+       
+       if (DBHelper::FlushDB(database, true))
+       {
+             user->SendProtocol(BRLD_OK, PROCESS_OK);
+             return SUCCESS;
+       }
+
+       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+       user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+       return FAILED;
+}
+

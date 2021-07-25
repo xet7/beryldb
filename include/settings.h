@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include "interval.h"
+#include "engine.h"
+
 /* Settings to share across all servers. */
  
 class ExportAPI Settings

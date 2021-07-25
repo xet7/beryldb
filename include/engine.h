@@ -15,6 +15,8 @@
 
 #include <thread>
 
+#include "protocol.h"
+
 class ExportAPI Daemon 
 {
     friend class Beryl;

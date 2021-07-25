@@ -21,9 +21,29 @@
 #include "channels.h"
 #include "channelmanager.h"
 
+void geoaddnx_query::Run()
+{
+     RocksData result = this->Get(this->dest);
+
+     if (result.status.ok())
+     {
+          access_set(DBL_ENTRY_EXISTS);
+          return;
+     }
+     
+     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     this->Write(this->dest, save);
+     this->SetOK();
+}
+
+void geoaddnx_query::Process()
+{
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
 void geoadd_query::Run()
 {
-     const std::string save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
      this->Write(this->dest, save);
      this->SetOK();
 }
@@ -59,7 +79,7 @@ void geoadd_pub_query::Process()
                   continue;
              }
 
-             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, server, this->key + " " + this->value + ":" + this->hesh);
+             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->instance, server, "GEOADD " + this->key + " " + this->value + ":" + this->hesh);
              chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
       
@@ -68,14 +88,14 @@ void geoadd_pub_query::Process()
 
 void geoget_query::Run()
 {
-    RocksData result = this->Get(this->dest);
-    std::string dbvalue = result.value;
+      RocksData result = this->Get(this->dest);
+      std::string dbvalue = result.value;
     
-    size_t found =  dbvalue.find_first_of(":");
-    std::string path = dbvalue.substr(0,found);
-    std::string file = dbvalue.substr(found+1);
-    this->response = to_string(path) + " " + to_string(file);
-    this->SetOK();
+      size_t found =  dbvalue.find_first_of(":");
+      std::string path = dbvalue.substr(0,found);
+      std::string file = dbvalue.substr(found+1);
+      this->response = to_string(path) + " " + to_string(file);
+      this->SetOK();
 }
 
 void geoget_query::Process()
@@ -85,23 +105,23 @@ void geoget_query::Process()
 
 void geoget_custom_query::Run()
 {
-    RocksData result = this->Get(this->dest);
-    std::string dbvalue = result.value;
+      RocksData result = this->Get(this->dest);
+      std::string dbvalue = result.value;
 
-    size_t found =  dbvalue.find_first_of(":");
-    
-    if (this->type == QUERY_TYPE_LONG)
-    {
-          const std::string& path = dbvalue.substr(0,found);
-          this->response = to_string(path);
-    }
-    else
-    {
-          const std::string& file = dbvalue.substr(found+1);
-          this->response = to_string(file);
-    }
+      size_t found =  dbvalue.find_first_of(":");
+      
+      if (this->type == QUERY_TYPE_LONG)
+      {
+               const std::string& path = dbvalue.substr(0,found);
+               this->response = to_string(path);
+      }
+      else
+      {
+               const std::string& file = dbvalue.substr(found+1);
+               this->response = to_string(file);
+      }
 
-    this->SetOK();
+      this->SetOK();
 }
 
 void geoget_custom_query::Process()
@@ -599,7 +619,6 @@ void georem_query::Run()
                 std::string file2 = rawvalue.substr(found2+1);
 
                 double distance = CalculateDistance(convto_num<double>(to_string(path1)), convto_num<double>(to_string(file1)), convto_num<double>(to_string(path2)), convto_num<double>(to_string(file2)));
- 
                 
                 if (distance >= convto_num<double>(this->value))
                 {

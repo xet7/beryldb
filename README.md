@@ -147,7 +147,8 @@ Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands
 
 In order to maintain a documentation that is easy to follow, we try to maintain 
 discussions at a very shallow level. Our code is actively changing and thus
-a brief discussion board is always appreacited.
+having a brief discussion board is preferred. Join our [Google groups](https://groups.google.com/g/beryldb) 
+If you would like to learn more about Beryl's development process.
 
 ## Source code organization
 

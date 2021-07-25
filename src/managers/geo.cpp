@@ -41,6 +41,15 @@ void GeoHelper::Add(User* user, const std::string& key, const std::string& latit
        Kernel->Store->Push(query);
 }
 
+void GeoHelper::AddNX(User* user, const std::string& key, const std::string& latitude, const std::string& longitude)
+{
+       std::shared_ptr<geoaddnx_query> query = std::make_shared<geoaddnx_query>();
+       Helpers::make_geo_query(user, query, key);
+       query->value = latitude;
+       query->hesh = longitude;
+       Kernel->Store->Push(query);
+}
+
 void GeoHelper::GetCustom(User* user, const std::string& key, QUERY_TYPE type)
 {
        std::shared_ptr<geoget_custom_query> query = std::make_shared<geoget_custom_query>();

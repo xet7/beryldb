@@ -186,6 +186,7 @@ bool LoginCache::RemoveLastCache()
 
 void LoginCache::Add(const std::string& user, const std::string& pass)
 {
+      Kernel->Stats->Cached++;
       this->logins.insert(std::make_pair(user, pass));
   
       /* This cache should not have more than 1024 entries. */

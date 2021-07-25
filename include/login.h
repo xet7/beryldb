@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "stats.h"
+
 class ExportAPI Session : public safecast<Session>
 {
     friend class SessionManager;

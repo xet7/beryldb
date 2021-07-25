@@ -65,7 +65,7 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
 }
 
 
-CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1)
+CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1, 1)
 {
          group = 'k';
          syntax = "<key>";

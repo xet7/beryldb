@@ -13,6 +13,10 @@
 
 #pragma once
 
+#include "brldb/dbmanager.h"
+#include "notifier.h"
+#include "group.h"
+
 enum MONITOR_LEVEL
 {
       MONITOR_DEBUG = 10, /* Shows all found commands */

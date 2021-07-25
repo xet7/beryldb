@@ -29,11 +29,13 @@ class Serverstats : public safecast<Serverstats>
 
       unsigned long Connects;
       
+      unsigned long Cached;
+      
       timeval LastCPU;
 
       timespec LastSampled;
 
-      Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0)
+      Serverstats() : Accept(0), Refused(0), Unknown(0), Collisions(0), Connects(0), Cached(0)
       {
 		
       }
