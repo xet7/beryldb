@@ -91,6 +91,40 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandGeoAddNX::CommandGeoAddNX(Module* Creator) : Command(Creator, "GEOADDNX", 3, 3)
+{
+         group = 'g';
+         syntax = "<name> <longitude> <latitude>";
+}
+
+COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
+{
+       const std::string& gname = parameters[0];
+       const std::string& latitude = parameters[1];
+       const std::string& longitude = parameters[2];
+
+       if (!is_number(latitude, true) || !is_number(longitude, true))
+       {
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!ValidLong(convto_num<int>(longitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       if (!ValidLat(convto_num<int>(latitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       GeoHelper::AddNX(user, gname, latitude, longitude);
+       return SUCCESS;
+}
+
 CommandGeoGet::CommandGeoGet(Module* Creator) : Command(Creator, "GEOGET", 1, 1)
 {
          group = 'g';

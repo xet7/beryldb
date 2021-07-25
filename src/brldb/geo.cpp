@@ -21,9 +21,29 @@
 #include "channels.h"
 #include "channelmanager.h"
 
+void geoaddnx_query::Run()
+{
+     RocksData result = this->Get(this->dest);
+
+     if (result.status.ok())
+     {
+          access_set(DBL_ENTRY_EXISTS);
+          return;
+     }
+     
+     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     this->Write(this->dest, save);
+     this->SetOK();
+}
+
+void geoaddnx_query::Process()
+{
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
 void geoadd_query::Run()
 {
-     const std::string save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
      this->Write(this->dest, save);
      this->SetOK();
 }

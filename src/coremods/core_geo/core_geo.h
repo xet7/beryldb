@@ -24,6 +24,15 @@ class CommandGeoAdd : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandGeoAddNX : public Command 
+{
+    public: 
+
+        CommandGeoAddNX(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 class CommandGeoGet : public Command 
 {
     public: 
