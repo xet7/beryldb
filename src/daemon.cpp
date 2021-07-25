@@ -359,6 +359,28 @@ void Dispatcher::SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key
         }
 }
 
+void Dispatcher::JustEmerald(User* user, BRLD_PROTOCOL brld, const std::string& msg)
+{
+        if (user->agent != DEFAULT_EMERALD)
+        {
+                 return;
+        }
+        
+        user->SendProtocol(brld, msg);
+}
+
+std::string Dispatcher::Repeat(const std::string& str, unsigned int times)
+{	
+  	std::string result;
+  	
+	for (unsigned int i = 0; i < times; i++)
+	{
+		result.append(str);	
+	}
+	
+	return result;
+}
+
 void Dispatcher::JustAPI(User* user, BRLD_PROTOCOL brld)
 {
         if (user->agent == DEFAULT_EMERALD)
@@ -398,6 +420,19 @@ void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, c
         {
              user->SendProtocol(brld, brld2);
         }
+}
+
+void Dispatcher::ListDepend(User* user, BRLD_PROTOCOL brld, const std::string& msg, const std::string& msg2)
+{
+        if (user->agent == DEFAULT_EMERALD)
+        {
+             user->SendProtocol(brld, msg);
+        }
+        else
+        {
+             user->SendProtocol(brld, msg2);
+        }
+	
 }
 
 static bool MatchInternal(const unsigned char* str, const unsigned char* mask, unsigned const char* map)

@@ -732,12 +732,16 @@ void search_query::Process()
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
 
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Key", "Value"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {
                  std::string ikey = i->first;
                  std::string item = i->second;
                  
-                 Dispatcher::CondList(user, BRLD_ITEM, ikey, item, true); 
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
+                 
         }
 
         if (!this->partial)
@@ -889,13 +893,16 @@ void keys_query::Process()
 {
         if (this->subresult == 1)
         {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);                 
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
         }
+
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 user->SendProtocol(BRLD_ITEM, item.c_str());
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)

@@ -51,6 +51,9 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
       unsigned int counter = 0;
 
       Dispatcher::JustAPI(user, BRLD_SUBS_LIST_BEGIN);
+
+      Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "Name", "Clients"));
+      Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
       for (ChanMap::const_iterator i = chans.begin(); i != chans.end(); ++i)
       {
@@ -63,7 +66,7 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
                      }
                      
                      counter++;
-                     Dispatcher::CondList(user, BRLD_SUBS_LIST, chan->name, convto_string(users));
+                     Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s | %-10s", chan->name.c_str(), convto_string(users).c_str()), Daemon::Format("%s %s", chan->name.c_str(), convto_string(users).c_str()));
       }
 
       Dispatcher::JustAPI(user, BRLD_SUBS_LIST_END);

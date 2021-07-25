@@ -441,4 +441,10 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          */    
          
         static void CondList(User* user, BRLD_PROTOCOL brld, const std::string& one_api, const std::string& second_api, bool comillas = false);
+        
+        static void JustEmerald(User* user, BRLD_PROTOCOL brld, const std::string& msg);
+        
+        static std::string Repeat(const std::string& str, unsigned int times);
+
+        static void ListDepend(User* user, BRLD_PROTOCOL brld, const std::string& msg, const std::string& msg2);
 };

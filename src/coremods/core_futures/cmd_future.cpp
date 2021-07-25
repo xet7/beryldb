@@ -216,7 +216,10 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          FutureMap& futures = Kernel->Store->Futures->GetFutures();
          
-         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
+         Dispatcher::JustAPI(user, BRLD_FUTURE_BEGIN);
+
+         Dispatcher::JustEmerald(user, BRLD_FUTURE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
+         Dispatcher::JustEmerald(user, BRLD_FUTURE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
          for (FutureMap::iterator it = futures.begin(); it != futures.end(); ++it)
          {
@@ -233,7 +236,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               user->SendProtocol(BRLD_FUTURE_ITEM, Daemon::Format("%-29s | %5s | %3s | %5s ", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_FUTURE_ITEM, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_FUTURE_END);

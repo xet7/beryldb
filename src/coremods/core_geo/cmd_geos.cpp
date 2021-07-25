@@ -25,7 +25,7 @@
 CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 4, 4)
 {
          group = 'g';
-         syntax = "<name> <channel> <longitude> <latitude>";
+         syntax = "<name> <channel>[,<channel>] <longitude> <latitude>";
 }
 
 COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
