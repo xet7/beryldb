@@ -26,7 +26,8 @@ class CoreModuleGeo : public Module
         CommandGeoRemove cmdgeoremove;
         CommandGeoLaGet cmdgeolaget;
         CommandGeoLoGet  cmdgeologet;
-
+        CommandGeoAddPub cmdgapub;
+        
     public:     
         
         CoreModuleGeo() : cmdgeoadd(this), 
@@ -36,7 +37,8 @@ class CoreModuleGeo : public Module
                           cmdgeoclose(this),
                           cmdgeoremove(this),
                           cmdgeolaget(this),
-                          cmdgeologet(this)
+                          cmdgeologet(this),
+                          cmdgapub(this)
         {
         
         }

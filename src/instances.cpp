@@ -74,9 +74,10 @@ LocalUser::LocalUser(int myfd, engine::sockets::sockaddrs* client, engine::socke
 	, touchbase(0)
 	, already_sent(0)
 {
-	connected = Kernel->Now();
-	instance = uuid;
-	agent = uuid;
+	connected 	= 	Kernel->Now();
+	instance 	= 	uuid;
+	agent 		= 	uuid;
+	
 	usercon.SetFileDesc(myfd);
 	memcpy(&client_sa, client, sizeof(engine::sockets::sockaddrs));
 	memcpy(&server_sa, servaddr, sizeof(engine::sockets::sockaddrs));

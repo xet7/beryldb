@@ -21,6 +21,17 @@
 #include "managers/geo.h"
 #include "helpers.h"
 
+void GeoHelper::AddPub(User* user, const std::string& chan, const std::string& key, const std::string& latitude, const std::string& longitude)
+{
+       std::shared_ptr<geoadd_pub_query> query = std::make_shared<geoadd_pub_query>();
+       Helpers::make_geo_query(user, query, key);
+
+       query->newkey = chan;
+       query->value = latitude;
+       query->hesh = longitude;
+       Kernel->Store->Push(query);
+}
+
 void GeoHelper::Add(User* user, const std::string& key, const std::string& latitude, const std::string& longitude)
 {
        std::shared_ptr<geoadd_query> query = std::make_shared<geoadd_query>();

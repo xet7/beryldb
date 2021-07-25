@@ -22,6 +22,41 @@
 #include "engine.h"
 #include "core_geo.h"
 
+CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 4, 4)
+{
+         group = 'g';
+         syntax = "<name> <channel> <longitude> <latitude>";
+}
+
+COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
+{
+       const std::string& gname = parameters[0];
+       const std::string& chan = parameters[1];
+       const std::string& latitude = parameters[2];
+       const std::string& longitude = parameters[3];
+       
+       if (!is_number(latitude, true) || !is_number(longitude, true))
+       {
+                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                 return FAILED;
+       }
+
+       if (!ValidLong(convto_num<int>(longitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       if (!ValidLat(convto_num<int>(latitude)))
+       {
+             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             return FAILED;
+       }
+
+       GeoHelper::AddPub(user, chan, gname, latitude, longitude);
+       return SUCCESS;
+}
+
 CommandGeoAdd::CommandGeoAdd(Module* Creator) : Command(Creator, "GEOADD", 3, 3)
 {
          group = 'g';

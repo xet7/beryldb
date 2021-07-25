@@ -88,3 +88,12 @@ class CommandGeoLaGet : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGeoAddPub : public Command 
+{
+    public: 
+
+        CommandGeoAddPub(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

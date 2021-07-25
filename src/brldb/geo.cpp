@@ -18,6 +18,8 @@
 #include "brldb/dbnumeric.h"
 #include "brldb/geo.h"
 #include "brldb/dbmanager.h"
+#include "channels.h"
+#include "channelmanager.h"
 
 void geoadd_query::Run()
 {
@@ -28,7 +30,26 @@ void geoadd_query::Run()
 
 void geoadd_query::Process()
 {
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+void geoadd_pub_query::Run()
+{
+     const std::string save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     this->Write(this->dest, save);
+     this->SetOK();
+}
+
+void geoadd_pub_query::Process()
+{
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+      Channel* chan = Kernel->Channels->Find(this->newkey);
+      
+      if (chan)
+      {
+            ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, this->key, this->value + ":" + this->hesh);
+            chan->Write(Kernel->GetBRLDEvents().publish, publish);
+      }
 }
 
 void geoget_query::Run()

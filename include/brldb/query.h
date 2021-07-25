@@ -757,6 +757,21 @@ class ExportAPI geocalc_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI geoadd_pub_query  : public QueryBase
+{
+    public:
+
+        geoadd_pub_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_GEO;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI geoadd_query  : public QueryBase
 {
     public:

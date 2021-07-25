@@ -19,6 +19,8 @@ class ExportAPI GeoHelper
 {
     public:
 
+       static void AddPub(User* user, const std::string& chan, const std::string& key, const std::string& latitude, const std::string& longitude);
+
        static void GetCustom(User* user, const std::string& key, QUERY_TYPE type);
 
        static void Delete(User* user, const std::string& key);
