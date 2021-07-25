@@ -20,6 +20,15 @@
 #include "managers/lists.h"
 #include "helpers.h"
 
+void ListHelper::PushNX(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<lpushnx_query> query = std::make_shared<lpushnx_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
+
 void ListHelper::Push(User* user, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<lpush_query> query = std::make_shared<lpush_query>();

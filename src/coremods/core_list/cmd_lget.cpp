@@ -322,3 +322,28 @@ COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
        ListHelper::Front(user, key);
        return SUCCESS;  
 }
+
+CommandLPushNX::CommandLPushNX(Module* Creator) : Command(Creator, "LPUSHNX", 2, 2)
+{
+         group = 'v';
+         syntax = "<key> \"value\"";
+}
+
+COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+
+        if (!CheckFormat(user, value))
+        {
+            return FAILED;
+        }
+
+        ListHelper::PushNX(user, key, value);
+        return SUCCESS;  
+}

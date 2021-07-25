@@ -867,3 +867,28 @@ void lfront_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }
+
+void lpushnx_query::Run()
+{
+       RocksData query_result = this->Get(this->dest);
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(query_result.value);
+       
+       if (handler->Exist(this->value))
+       {
+              access_set(DBL_ENTRY_EXISTS);
+              return;
+       }
+       else
+       {
+             handler->Add(this->value);
+             this->Write(this->dest, handler->as_string());
+       }
+
+       this->SetOK();
+}
+
+void lpushnx_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+}

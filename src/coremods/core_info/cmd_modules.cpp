@@ -40,7 +40,10 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
         Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
 
-	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
+        const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
 
   	for (ModuleHandler::ModuleMap::const_iterator i = mods.begin(); i != mods.end(); ++i)
 	{
@@ -74,11 +77,12 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
                               continue;
                         }
 
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+                        Dispatcher::ListDepend(user, BRLD_MODLIST, Daemon::Format("%-30s | %-10s", m->SourceFile.c_str(), V.description.c_str()), Daemon::Format("%s %s", m->SourceFile.c_str(), V.description.c_str()));
+			
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			Dispatcher::ListDepend(user, BRLD_MODLIST, Daemon::Format("%-30s | %-10s", m->SourceFile.c_str(), V.description.c_str()), Daemon::Format("%s %s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	
@@ -110,6 +114,8 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 	}
 
         Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
 	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
 
@@ -145,11 +151,11 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 			      continue;
 			}
 			
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			Dispatcher::ListDepend(user, BRLD_MODLIST, Daemon::Format("%-30s | %-10s", m->SourceFile.c_str(), V.description.c_str()), Daemon::Format("%s %s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 		else
 		{
-			user->SendRemoteProtocol(BRLD_MODLIST, Daemon::Format("%-20s | %5s", m->SourceFile.c_str(), V.description.c_str()));
+			Dispatcher::ListDepend(user, BRLD_MODLIST, Daemon::Format("%-30s | %-10s", m->SourceFile.c_str(), V.description.c_str()), Daemon::Format("%s %s", m->SourceFile.c_str(), V.description.c_str()));
 		}
 	}
 	
