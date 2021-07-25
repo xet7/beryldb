@@ -909,6 +909,21 @@ class ExportAPI vhigh_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vpushnx_query  : public QueryBase
+{
+    public:
+
+        vpushnx_query() 
+        {
+                this->type = QUERY_TYPE_WRITE;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vget_query  : public QueryBase
 {
     public:

@@ -177,3 +177,12 @@ class CommandVSum : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandVPushNX : public Command 
+{
+    public: 
+
+        CommandVPushNX(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

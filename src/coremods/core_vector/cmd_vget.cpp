@@ -425,3 +425,27 @@ COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
        return SUCCESS;  
 }
 
+CommandVPushNX::CommandVPushNX(Module* Creator) : Command(Creator, "VPUSHNX", 2, 2)
+{
+         group = 'v';
+         syntax = "<key> \"value\"";
+}
+
+COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+        const std::string& value = parameters.back();
+
+        if (!CheckKey(user, key))
+        {
+             return FAILED;
+        }
+
+        if (!CheckFormat(user, value))
+        {
+            return FAILED;
+        }
+
+        VectorHelper::PushNX(user, key, value);
+        return SUCCESS;  
+}

@@ -477,12 +477,6 @@ void vpop_front_query::Run()
        RocksData result = this->Get(this->dest);
        std::shared_ptr<VectorHandler> handler;
 
-       if (!result.status.ok())
-       {
-               access_set(DBL_NOT_FOUND);
-               return;
-       }
-
        handler = VectorHandler::Create(result.value);
        handler->PopFront();
 
@@ -507,12 +501,6 @@ void vpop_back_query::Run()
 {
        RocksData result = this->Get(this->dest);
        std::shared_ptr<VectorHandler> handler;
-
-       if (!result.status.ok())
-       {
-               access_set(DBL_NOT_FOUND);
-               return;
-       }
 
        handler = VectorHandler::Create(result.value);
        handler->PopBack();
@@ -539,15 +527,34 @@ void vdel_query::Process()
        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
-void vdel_query::Run()
+void vpushnx_query::Run()
 {
        RocksData query_result = this->Get(this->dest);
 
-       if (!query_result.status.ok())
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
+       
+       if (handler->Exist(this->value))
        {
-               access_set(DBL_NOT_FOUND);
-               return;
+              access_set(DBL_ENTRY_EXISTS);
+              return;
        }
+       else
+       {
+             handler->Add(this->value);
+             this->Write(this->dest, handler->as_string());
+       }
+
+       this->SetOK();
+}
+
+void vpushnx_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+void vdel_query::Run()
+{
+       RocksData query_result = this->Get(this->dest);
 
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
        handler->Remove(this->value);

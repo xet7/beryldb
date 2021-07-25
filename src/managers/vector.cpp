@@ -20,6 +20,14 @@
 #include "managers/vectors.h"
 #include "helpers.h"
 
+void VectorHelper::PushNX(User* user, const std::string& entry, const std::string& value)
+{
+       std::shared_ptr<vpushnx_query> query = std::make_shared<vpushnx_query>();
+       Helpers::make_list(user, query, entry);
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
 void VectorHelper::Push(User* user, const std::string& entry, const std::string& value)
 {
        std::shared_ptr<vpush_query> query = std::make_shared<vpush_query>();
