@@ -122,7 +122,7 @@ const std::string INVALID_TYPE = "INVALID";
 
 /* Invalid coordinate */
 
-const std::string INVALID_COORD = "Invalid coordinate.";
+const std::string INVALID_COORD = "INVALID_COORDINATE";
 
 /* An error has occured. */
 

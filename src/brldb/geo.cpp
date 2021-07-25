@@ -59,7 +59,7 @@ void geoadd_pub_query::Process()
                   continue;
              }
 
-             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->login, server, this->key + " " + this->value + ":" + this->hesh);
+             ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->instance, server, "GEOADD " + this->key + " " + this->value + ":" + this->hesh);
              chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
       
@@ -68,14 +68,14 @@ void geoadd_pub_query::Process()
 
 void geoget_query::Run()
 {
-    RocksData result = this->Get(this->dest);
-    std::string dbvalue = result.value;
+      RocksData result = this->Get(this->dest);
+      std::string dbvalue = result.value;
     
-    size_t found =  dbvalue.find_first_of(":");
-    std::string path = dbvalue.substr(0,found);
-    std::string file = dbvalue.substr(found+1);
-    this->response = to_string(path) + " " + to_string(file);
-    this->SetOK();
+      size_t found =  dbvalue.find_first_of(":");
+      std::string path = dbvalue.substr(0,found);
+      std::string file = dbvalue.substr(found+1);
+      this->response = to_string(path) + " " + to_string(file);
+      this->SetOK();
 }
 
 void geoget_query::Process()
@@ -85,23 +85,23 @@ void geoget_query::Process()
 
 void geoget_custom_query::Run()
 {
-    RocksData result = this->Get(this->dest);
-    std::string dbvalue = result.value;
+      RocksData result = this->Get(this->dest);
+      std::string dbvalue = result.value;
 
-    size_t found =  dbvalue.find_first_of(":");
-    
-    if (this->type == QUERY_TYPE_LONG)
-    {
-          const std::string& path = dbvalue.substr(0,found);
-          this->response = to_string(path);
-    }
-    else
-    {
-          const std::string& file = dbvalue.substr(found+1);
-          this->response = to_string(file);
-    }
+      size_t found =  dbvalue.find_first_of(":");
+      
+      if (this->type == QUERY_TYPE_LONG)
+      {
+               const std::string& path = dbvalue.substr(0,found);
+               this->response = to_string(path);
+      }
+      else
+      {
+               const std::string& file = dbvalue.substr(found+1);
+               this->response = to_string(file);
+      }
 
-    this->SetOK();
+      this->SetOK();
 }
 
 void geoget_custom_query::Process()

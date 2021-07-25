@@ -30,10 +30,10 @@ CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 
 
 COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       const std::string& chan = parameters[1];
-       const std::string& latitude = parameters[2];
-       const std::string& longitude = parameters[3];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& chan 		= 	parameters[1];
+       const std::string& latitude 	= 	parameters[2];
+       const std::string& longitude 	= 	parameters[3];
        
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
