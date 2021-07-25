@@ -46,8 +46,7 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 {
 	const CommandHandler::CommandMap& commands = Kernel->Commander.GetCommands();
 	
-	std::vector<std::string> list;
-	list.reserve(commands.size());
+	std::map<std::string, std::string> list;
 
 	for (CommandHandler::CommandMap::const_iterator i = commands.begin(); i != commands.end(); ++i)
 	{
@@ -57,7 +56,14 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 		{
 			if (user->CanPerform(i->second->requires))
 			{
-	                        list.push_back(Daemon::Format("%s", i->second->name.c_str()));
+	                        std::string fsyntax = i->second->syntax;
+	                        
+	                        if (fsyntax == NO_SYNTAX)
+	                        {
+	                        	fsyntax = "";
+	                        }
+	                        
+	                        list.insert(std::make_pair(i->second->name.c_str(), fsyntax.c_str()));
 			}
 			else
 			{
@@ -66,17 +72,25 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 		}
 		else
 		{
-			list.push_back(Daemon::Format("%s", i->second->name.c_str()));
+		        std::string fsyntax = i->second->syntax;
+                                
+                        if (fsyntax == NO_SYNTAX)
+                        {
+                              fsyntax = "";
+                        }
+
+                        list.insert(std::make_pair(i->second->name.c_str(), fsyntax.c_str()));
 		}
 	}
 
-	std::sort(list.begin(), list.end());
-	
 	Dispatcher::JustAPI(user, BRLD_COMMANDS_START);
+
+        Dispatcher::JustEmerald(user, BRLD_COMMANDS_START, Daemon::Format("%-30s | %-10s", "Command", "Syntax"));
+        Dispatcher::JustEmerald(user, BRLD_COMMANDS_START, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 	
-	for (unsigned int i = 0; i < list.size(); i++)
+	for (std::map<std::string, std::string>::iterator i = list.begin(); i != list.end(); ++i)
 	{
-		user->SendProtocol(BRLD_COMMAND_ITEM, list[i]);
+		Dispatcher::ListDepend(user, BRLD_COMMAND_ITEM, Daemon::Format("%-30s | %-10s", i->first.c_str(), i->second.c_str()), Daemon::Format("%s %s", i->first.c_str(), i->second.c_str()));
 	}
 	
         Dispatcher::JustAPI(user, BRLD_COMMANDS_END);

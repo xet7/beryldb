@@ -89,7 +89,7 @@ class ModuleCoreSubs : public Module
 
         Version GetDescription()
         {
-                return Version("Provides SUBS command.", VF_BERYLDB|VF_CORE);
+                return Version("Provides subs command.", VF_BERYLDB|VF_CORE);
         }
 };
 

@@ -122,7 +122,7 @@ class CoreModUser : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides user-related commands, such as LOGIN, PING, and EXIT.", VF_BERYLDB|VF_CORE);
+		return Version("Provides user-related commands.", VF_BERYLDB|VF_CORE);
 	}
 };
 

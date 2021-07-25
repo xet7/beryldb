@@ -28,8 +28,12 @@ class CoreModOperations : public Module
         
     public:     
         
-        CoreModOperations() : cmdincr(this), cmdincrby(this), cmddecr(this), 
-                              cmddecrby(this), cmdavg(this), cmddiv(this),
+        CoreModOperations() : cmdincr(this), 
+                              cmdincrby(this), 
+                              cmddecr(this), 
+                              cmddecrby(this), 
+                              cmdavg(this), 
+                              cmddiv(this),
                               cmdmult(this)
         {
         
@@ -37,7 +41,7 @@ class CoreModOperations : public Module
 
         Version GetDescription() 
         {
-                return Version("Provides operation commands, such as INCR, DECR, INCRBY, DECRBY..", VF_BERYLDB|VF_CORE);
+                return Version("Provides operation-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

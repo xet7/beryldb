@@ -63,7 +63,7 @@ class CoreModInfo : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides COMMANDS, MODULES, TIME, VERSION and L.", VF_BERYLDB|VF_CORE);
+		return Version("Provides info-related commands.", VF_BERYLDB|VF_CORE);
 	}
 };
 

@@ -71,7 +71,7 @@ class CoreModKeys : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides commands related to keys, such as SET, DEL and GET.", VF_BERYLDB|VF_CORE);
+                return Version("Provides key-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

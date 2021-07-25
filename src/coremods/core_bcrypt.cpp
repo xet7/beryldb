@@ -89,7 +89,7 @@ class ModuleBCrypt : public Module
 
         Version GetDescription()
         {
-                return Version("Provides BCrypt encrpytion.", VF_BERYLDB|VF_CORE);
+                return Version("Provides BCrypt support.", VF_BERYLDB|VF_CORE);
         }
 };
 

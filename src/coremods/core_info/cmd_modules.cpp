@@ -40,7 +40,7 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
         Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
 
-        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Description"));
         Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();
@@ -114,7 +114,7 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 	}
 
         Dispatcher::JustAPI(user, BRLD_BEGIN_OF_MODLIST);
-        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", "Module", "Description"));
         Dispatcher::JustEmerald(user, BRLD_BEGIN_OF_MODLIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
 	const ModuleHandler::ModuleMap& mods = Kernel->Modules->GetModules();

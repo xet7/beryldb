@@ -53,7 +53,7 @@ class CoreModChannel : public Module
 
 	Version GetDescription() 
 	{
-		return Version("Provides JOIN and SLIST commands.", VF_BERYLDB|VF_CORE);
+		return Version("Provides channel-related commands.", VF_BERYLDB|VF_CORE);
 	}
 };
 

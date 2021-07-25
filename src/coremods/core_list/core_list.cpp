@@ -68,7 +68,7 @@ class CoreModuleList : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides list-related commands, LMOVE, LPUSH, LGET and LPOP.", VF_BERYLDB|VF_CORE);
+                return Version("Provides list-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 

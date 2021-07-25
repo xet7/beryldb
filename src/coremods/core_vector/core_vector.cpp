@@ -67,7 +67,7 @@ class CoreModuleVector : public Module
         
         Version GetDescription() 
         {
-                return Version("Provides vector-related commands, VMOVE, VPUSH, VGET and VPOPs.", VF_BERYLDB|VF_CORE);
+                return Version("Provides vector-related commands.", VF_BERYLDB|VF_CORE);
         }
 };
 
