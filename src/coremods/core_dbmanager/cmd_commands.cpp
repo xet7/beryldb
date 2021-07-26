@@ -135,14 +135,34 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0)
+CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0, 1)
 {
        group = 'w';
+       syntax = "<database>";
 }
 
 COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)
 {  
-       DBHelper::DBSize(user);
+       std::string db;
+       
+       if (parameters.size())
+       {
+            db = parameters[0];
+       }
+       else
+       {
+            db = user->GetDatabase()->GetName();
+       }
+       
+       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(db);
+
+       if (!database)
+       {
+              user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+              return FAILED;
+       }
+
+       DBHelper::DBSize(user, database);
        return SUCCESS;
 }
 

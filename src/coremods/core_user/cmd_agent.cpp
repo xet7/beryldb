@@ -13,7 +13,6 @@
 
 #include "beryl.h"
 #include "core_user.h"
-#include "engine.h"
 
 CommandAgent::CommandAgent(Module* parent) : MultiCommand(parent, "AGENT", 1, 1)
 {

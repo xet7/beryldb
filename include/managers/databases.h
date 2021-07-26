@@ -41,7 +41,7 @@ class ExportAPI DBHelper
 
         /* Calculate db size */
         
-        static void DBSize(User* user);
+        static void DBSize(User* user, std::shared_ptr<Database> db);
         
         static void SFlush(User* user, const std::string& key);
         
