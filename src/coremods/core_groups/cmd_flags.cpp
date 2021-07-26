@@ -13,9 +13,6 @@
 
 #include "beryl.h"
 #include "core_groups.h"
-#include "managers/maps.h"
-#include "managers/user.h"
-#include "managers/settings.h"
 
 CommandFlagUpdate::CommandFlagUpdate(Module* Creator) : Command(Creator, "GUPDATE", 2, 2)
 {

@@ -12,8 +12,16 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
+#include "maker.h"
+#include "extras.h"
 #include "engine.h"
+
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+
+#include "managers/geo.h"
+#include "managers/globals.h"
 
 class CommandGeoAdd : public Command 
 {

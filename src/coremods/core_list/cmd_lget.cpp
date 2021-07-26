@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "managers/lists.h"
-#include "engine.h"
 #include "core_list.h"
 
 CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)

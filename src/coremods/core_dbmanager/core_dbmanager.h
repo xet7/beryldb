@@ -12,8 +12,20 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
+#include "converter.h"
+#include "notifier.h"
+#include "maker.h"
 #include "engine.h"
+
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+#include "brldb/database.h"
+
+#include "managers/databases.h"
+#include "managers/settings.h"
+#include "managers/globals.h"
+#include "managers/tests.h"
 
 class CommandCurrent : public Command 
 {

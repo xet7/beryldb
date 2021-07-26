@@ -12,20 +12,6 @@
  */
 
 #include "beryl.h"
-#include "engine.h"
-
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "brldb/database.h"
-#include "managers/databases.h"
-#include "managers/settings.h"
-#include "managers/globals.h"
-#include "managers/tests.h"
-#include "converter.h"
-#include "notifier.h"
-#include "maker.h"
-#include "engine.h"
 #include "core_dbmanager.h"
 
 CommandSFlush::CommandSFlush(Module* Creator) : Command(Creator, "SFLUSH", 0, 1)

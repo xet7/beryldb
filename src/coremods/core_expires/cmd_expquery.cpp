@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbflush.h"
-#include "managers/expires.h"
-#include "brldb/expires.h"
-#include "engine.h"
-#include "converter.h"
 #include "core_expires.h"
 
 CommandTTL::CommandTTL(Module* Creator) : Command(Creator, "TTL", 1)

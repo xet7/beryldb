@@ -12,13 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbflush.h"
-#include "managers/expires.h"
-#include "notifier.h"
-#include "engine.h"
-#include "converter.h"
-#include "maker.h"
 #include "core_expires.h"
 
 CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)

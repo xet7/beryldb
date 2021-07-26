@@ -13,9 +13,6 @@
 
 #include "beryl.h"
 #include "core_groups.h"
-#include "managers/maps.h"
-#include "managers/user.h"
-#include "managers/settings.h"
 
 CommandGroupAdd::CommandGroupAdd(Module* Creator) : Command(Creator, "GROUPADD", 1, 1)
 {

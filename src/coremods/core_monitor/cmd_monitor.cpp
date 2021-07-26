@@ -12,7 +12,6 @@
  */
 
 #include "beryl.h"
-#include "monitor.h"
 #include "core_monitor.h"
 
 CommandMonitor::CommandMonitor(Module* Creator) : Command(Creator, "MONITOR", 0, 1)

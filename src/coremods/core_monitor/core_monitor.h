@@ -12,8 +12,10 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "monitor.h"
+
+#include "brldb/dbmanager.h"
 
 class CommandMonitor : public Command 
 {

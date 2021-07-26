@@ -12,8 +12,14 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
+#include "maker.h"
 #include "engine.h"
+
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+
+#include "managers/vectors.h"
 
 class CommandVHigh : public Command 
 {

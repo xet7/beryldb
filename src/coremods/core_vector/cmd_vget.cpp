@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "managers/vectors.h"
-#include "engine.h"
 #include "core_vector.h"
 
 CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2)

@@ -12,9 +12,14 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "maker.h"
 
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+
+#include "managers/lists.h"
 
 class CommandLPushNX : public Command 
 {

@@ -12,8 +12,11 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "maker.h"
+
+#include "brldb/dbmanager.h"
+#include "managers/keys.h"
 
 class CommandInsert : public Command 
 {

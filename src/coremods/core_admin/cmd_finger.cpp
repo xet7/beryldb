@@ -145,3 +145,59 @@ COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
         
         return FAILED;
 }
+
+CommandLogins::CommandLogins(Module* parent) : Command(parent, "LOGINS", 1, 1)
+{
+        requires = 'e';
+        syntax = "<login>";
+}
+
+COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
+{
+        const std::string& loginid = parameters[0];
+        
+        UserVector logins = Kernel->Clients->FindLogin(loginid);
+
+        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
+
+        for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
+        {
+            	User* const login = *i;
+            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) | %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
+        }
+
+        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
+	return SUCCESS;
+}
+
+
+CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 0, 1)
+{
+        requires = 'e';
+        syntax = "<flag>";
+}
+
+COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
+{
+        std::string flag;
+        
+        if (parameters.size())
+        {
+                flag = parameters[0];
+        }
+        
+        UserVector logins = ClientManager::FindPrivs(flag);
+
+        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
+
+        for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
+        {
+                User* const login = *i;
+                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%-10s (%s) | %-10s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str()).c_str());
+        }
+
+        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
+        
+        return SUCCESS;
+
+}

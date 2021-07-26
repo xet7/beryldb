@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "managers/mmaps.h"
-#include "engine.h"
 #include "core_mmaps.h"
 
 CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)

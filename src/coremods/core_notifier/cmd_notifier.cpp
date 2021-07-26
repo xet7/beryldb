@@ -12,9 +12,7 @@
  */
 
 #include "beryl.h"
-#include "notifier.h"
 #include "core_notifier.h"
-#include "managers/settings.h"
 
 CommandNotifier::CommandNotifier(Module* Creator) : Command(Creator, "NOTIFY", 0, 1)
 {

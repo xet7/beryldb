@@ -12,14 +12,6 @@
  */
 
 #include "beryl.h"
-#include "maker.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbflush.h"
-#include "brldb/expires.h"
-#include "managers/expires.h"
-#include "managers/globals.h"
-#include "engine.h"
-#include "converter.h"
 #include "core_futures.h"
 
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
