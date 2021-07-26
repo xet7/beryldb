@@ -216,7 +216,7 @@ class ExportAPI QueryBase
         
         void SetDest(const std::string& regkey, const std::string& regselect, const std::string& regtype);
         
-        int CheckDest(const std::string& select, const std::string& regkey,  const std::string& ltype);
+        int CheckDest(const std::string& select, const std::string& regkey,  const std::string& ltype, std::shared_ptr<Database> db = NULL);
 
         RocksData Get(const std::string& where);
         

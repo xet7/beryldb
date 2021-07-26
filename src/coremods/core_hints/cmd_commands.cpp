@@ -37,6 +37,12 @@ COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
             user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
             return FAILED; 
        }
+       
+       if (database == user->GetDatabase())
+       {
+            user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
+            return FAILED;        
+       }
 
        GlobalHelper::Transfer(user, key, database);
        return SUCCESS;

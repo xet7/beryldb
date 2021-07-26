@@ -88,9 +88,14 @@ RocksData QueryBase::Get(const std::string& where)
        return result;
 }
 
-int QueryBase::CheckDest(const std::string& select, const std::string& regkey, const std::string& ltype)
+int QueryBase::CheckDest(const std::string& select, const std::string& regkey, const std::string& ltype, std::shared_ptr<Database> db)
 {
-       if (select == this->select_query && this->key == regkey && ltype == this->identified)
+       if (db == NULL)
+       {
+            db = this->database;
+       }
+
+       if (db == this->database && select == this->select_query && this->key == regkey && ltype == this->identified)
        {
               return 1;
        }
@@ -101,13 +106,13 @@ int QueryBase::CheckDest(const std::string& select, const std::string& regkey, c
               std::string saved = to_bin(regkey) + ":" + select + ":" + found_type;
        
               std::string dbvalue;
-              rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), saved, &dbvalue);
+              rocksdb::Status fstatus2 = db->GetAddress()->Get(rocksdb::ReadOptions(), saved, &dbvalue);
        
               if (!dbvalue.empty())
               {
                    if (found_type == ltype)
                    {
-                        /* Ltype found */
+                        /* Ltype found, same type. */
                         
                         return 1;
                    }
@@ -375,20 +380,31 @@ bool QueryBase::Prepare()
  
                    if (this->identified == PROCESS_NULL)
                    {
-                                this->access_set(DBL_NOT_FOUND);
-                                return false;
+                         this->access_set(DBL_NOT_FOUND);
+                         return false;
                    }
                    
-                   if (this->transf_db)
-                   {
-                          this->Run();
-                          return true;
-                   }
-                   else
+                   if (!this->transf_db)
                    {
                           this->access_set(DBL_UNABLE_WRITE);
                           return false;
                    }
+
+                   int result = this->CheckDest(this->select_query, this->key, this->identified, this->transf_db); 
+                   
+                   if (result == 0 || result == 1)
+                   {
+                         this->Run();
+                         return true;
+                   }
+                   else if (result == 2)
+                   {
+                         this->access_set(DBL_INVALID_TYPE);
+                         this->response = this->identified;
+                   }
+                   
+                   return false;
+
            }
 
            break;
