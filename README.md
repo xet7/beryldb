@@ -115,7 +115,7 @@ beryl> get hello
 beryl> strlen hello
 5
 beryl> ismatch hello "worl?"
-true
+1
 ```
 
 You can also run the **'ls'** command to obtain a counter in all structures:

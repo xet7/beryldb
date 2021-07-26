@@ -409,12 +409,7 @@ void DataThread::Process()
                           
                           /* Let's release the locked user. */
 
-                          if (request->user && !request->user->IsQuitting())
-                          {
-                                /* OK */
-                                
-                          }
-                          else
+                          if (!request->user && request->user->IsQuitting())
                           {
                                /* In case lock status gets locked. */
                                
@@ -428,7 +423,7 @@ void DataThread::Process()
                                signal.reset();
                                signal = nullptr;
                                
-                               continue;
+                               break;
                           }
                           
                           queue.pop();

@@ -62,6 +62,8 @@ void geoadd_pub_query::Run()
 
 void geoadd_pub_query::Process()
 {
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+
       engine::comma_node_stream CMD(this->newkey);
       std::string server;
 
@@ -83,7 +85,6 @@ void geoadd_pub_query::Process()
              chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
       
-      user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()

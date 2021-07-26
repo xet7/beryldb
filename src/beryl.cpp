@@ -13,9 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "login.h"
-#include "monitor.h"
-#include "channels.h"
 
 std::unique_ptr<Beryl> Kernel = NULL;
 
@@ -589,19 +586,19 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 
         /* Free memory */
         
-        this->Groups	= 	nullptr;
-        this->Notify    =       nullptr;
-        this->Core      =       nullptr;
-        this->Store     =       nullptr;
-        this->Monitor   =       nullptr;
-        this->Logins    =       nullptr;
-        this->Channels  =       nullptr;
-        this->Config    =       nullptr;
-        this->Sets	=	nullptr;
-        this->Interval	= 	nullptr;
-        this->Engine	=	nullptr;
+        this->Groups	  = 	NULL;
+        this->Notify      =     NULL;
+        this->Core        =     NULL;
+        this->Store       =     NULL;
+        this->Monitor     =     NULL;
+        this->Logins      =     NULL;
+        this->Channels    =     NULL;
+        this->Config      =     NULL;
+        this->Sets	  =	NULL;
+        this->Interval	  = 	NULL;
+        this->Engine	  =	NULL;
         
         /* The END. */
 
-        Kernel = nullptr;
+        Kernel            =     NULL;
 }
