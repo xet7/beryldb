@@ -12,8 +12,25 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "maker.h"
+
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+
+#include "managers/keys.h"
+#include "managers/globals.h"
+#include "managers/databases.h"
+
+class CommandTransfer : public Command 
+{
+    public: 
+
+        CommandTransfer(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
 
 class CommandDel : public Command 
 {

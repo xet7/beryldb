@@ -41,7 +41,8 @@ enum QUERY_TYPE
        QUERY_TYPE_RENAMENX       = 	21,
        QUERY_TYPE_DIFF           = 	22,
        QUERY_TYPE_LAT		 =	23,
-       QUERY_TYPE_LONG		 = 	24
+       QUERY_TYPE_LONG		 = 	24,
+       QUERY_TYPE_TRANSFER	 =      25
 };
 
 enum QUERY_FLAGS
@@ -138,6 +139,8 @@ class ExportAPI QueryBase
         std::map<std::string, unsigned int> nmap;
         
         std::shared_ptr<Database> database;
+
+        std::shared_ptr<Database> transf_db;
         
         std::vector<std::string> list;
 
@@ -203,7 +206,7 @@ class ExportAPI QueryBase
 	 *         · Expire information, including expiring time.
          */    
                  
-        void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl);
+        void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
         
         void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);
 
@@ -342,7 +345,6 @@ class ExportAPI diff_query : public routed_query
 };
 
 
-
 class ExportAPI del_query : public routed_query
 {
     public:
@@ -360,6 +362,32 @@ class ExportAPI del_query : public routed_query
 
         void Multis();
         
+        void Lists();
+
+        void Vectors();
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI transfer_query : public routed_query
+{
+    public:
+
+        transfer_query() : routed_query(QUERY_TYPE_TRANSFER)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
         void Lists();
 
         void Vectors();

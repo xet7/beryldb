@@ -12,7 +12,6 @@
  */
 
 #include "beryl.h"
-#include "exit.h"
 #include "core_admin.h"
 
 CommandShutdown::CommandShutdown(Module* parent) : Command(parent, "SHUTDOWN", 0, 1)

@@ -24,6 +24,7 @@ class ExportAPI GlobalHelper
 {
     public:
 
+      static void Transfer(User* user, const std::string& entry, std::shared_ptr<Database>);
 
       static void Touch(User* user, const std::string& entry);
 

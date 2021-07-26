@@ -12,12 +12,7 @@
  */
 
 #include "beryl.h"
-#include "engine.h"
 #include "core_umanager.h"
-#include "managers/user.h"
-#include "brldb/database.h"
-#include "managers/maps.h"
-#include "managers/settings.h"
 
 CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2)
 {
@@ -60,7 +55,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (UserHelper::Add(newlogin, pass))
         {
-                user->SendProtocol(BRLD_USER_ADD, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
 
         return SUCCESS;

@@ -16,7 +16,9 @@
 #include <thread>
 
 #include "protocol.h"
+#include "helpers.h"
 #include "monitor.h"
+#include "cstruct.h"
 #include "filehandler.h"
 #include "exit.h"
 

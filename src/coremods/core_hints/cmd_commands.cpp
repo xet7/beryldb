@@ -12,16 +12,35 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/keys.h"
-#include "managers/globals.h"
-#include "managers/databases.h"
-#include "engine.h"
-#include "maker.h"
 #include "core_hints.h"
 
+CommandTransfer::CommandTransfer(Module* Creator) : Command(Creator, "TRANSFER", 2, 2)
+{
+         group = 'h';
+         syntax = "<key> <dest database>";
+}
+
+COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+       const std::string& newkey = parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+       
+       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(newkey);
+       
+       if (!database)
+       {
+            user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+            return FAILED; 
+       }
+
+       GlobalHelper::Transfer(user, key, database);
+       return SUCCESS;
+}
 CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
 {
          group = 'h';

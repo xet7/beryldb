@@ -13,14 +13,14 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/list_handler.h"
-#include "helpers.h"
-#include "managers/maps.h"
-#include "cstruct.h"
 #include "brldb/dbmanager.h"
+
+#include "managers/maps.h"
 
 void lkeys_query::Run()
 {

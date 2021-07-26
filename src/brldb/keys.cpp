@@ -13,13 +13,13 @@
 
 #include "beryl.h"
 #include "engine.h"
+#include "extras.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 #include "brldb/functions.h"
-#include "extras.h"
-#include "helpers.h"
 #include "brldb/dbmanager.h"
 
 void expire_list_query::Run()

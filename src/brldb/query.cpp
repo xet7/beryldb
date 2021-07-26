@@ -25,11 +25,16 @@ void QueryBase::Delete(const std::string& wdest)
        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), wdest);
 }
 
-void QueryBase::WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl)
+void QueryBase::WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db)
 {
-       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       if (db == NULL)
+       {
+            db = this->database;
+       }
+       
+       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
        this->Write(lookup, convto_string(ttl));
-       Kernel->Store->Expires->Add(this->database, ttl, e_key, select, true);
+       Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
 }
 
 void QueryBase::WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& fvalue)
@@ -362,6 +367,30 @@ bool QueryBase::Prepare()
                    }
            }
            
+           break;
+           
+           case QUERY_TYPE_TRANSFER:
+           {
+                   GetRegistry(this->select_query, this->key, true);
+ 
+                   if (this->identified == PROCESS_NULL)
+                   {
+                                this->access_set(DBL_NOT_FOUND);
+                                return false;
+                   }
+                   
+                   if (this->transf_db)
+                   {
+                          this->Run();
+                          return true;
+                   }
+                   else
+                   {
+                          this->access_set(DBL_UNABLE_WRITE);
+                          return false;
+                   }
+           }
+
            break;
            
            case QUERY_TYPE_RENAMENX:
