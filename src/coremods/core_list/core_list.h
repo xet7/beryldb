@@ -21,6 +21,16 @@
 
 #include "managers/lists.h"
 
+class CommandLAvg : public Command 
+{
+
+    public: 
+
+        CommandLAvg(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
 class CommandLPushNX : public Command 
 {
     public: 

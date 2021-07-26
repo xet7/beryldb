@@ -19,6 +19,8 @@ class ExportAPI ListHelper
 {
     public:
 
+        static void Avg(User* user, const std::string& entry);
+       
         static void PushNX(User* user, const std::string& entry, const std::string& value);
 
         static void Push(User* user, const std::string& entry, const std::string& hesh);

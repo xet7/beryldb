@@ -341,3 +341,23 @@ COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
         ListHelper::PushNX(user, key, value);
         return SUCCESS;  
 }
+
+CommandLAvg::CommandLAvg(Module* Creator) : Command(Creator, "LAVG", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Avg(user, key);
+       return SUCCESS;  
+}
+

@@ -1405,6 +1405,21 @@ class ExportAPI lpos_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI lavg_query  : public QueryBase
+{
+    public:
+
+        lavg_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vavg_query  : public QueryBase
 {
     public:

@@ -32,6 +32,26 @@ class ExportAPI ListHandler
         static std::shared_ptr<ListHandler> Create(const std::string& load);
      
         void Dump();
+
+        /* 
+         * Obtains the average size of a given list.
+         * 
+         * @return:
+ 	 *
+         *         · double: Avg value.
+         */    
+         
+        double GetSMA();
+        
+        /* 
+         * Checks whether a entire list if numeric.
+         * 
+         * @return:
+ 	 *
+         *         · True: All elements are numeric.
+         */    
+
+        bool IsNumeric();
          
         /* Removes all elements. */
          
