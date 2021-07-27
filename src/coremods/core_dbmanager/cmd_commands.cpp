@@ -431,11 +431,12 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (DBHelper::FlushDB(database, true))
        {
+             sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
              user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
 
-       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+       sfalert(user, NOTIFY_DEFAULT, "Unable to flush database: %s", user->GetDatabase()->GetName().c_str());      
        user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
        return FAILED;
 }

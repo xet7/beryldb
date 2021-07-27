@@ -12,13 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/keys.h"
-#include "managers/globals.h"
-#include "engine.h"
-#include "maker.h"
 #include "core_keys.h"
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)

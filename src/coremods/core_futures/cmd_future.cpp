@@ -22,9 +22,9 @@ CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
 {       
-          const std::string& seconds = parameters[0];
-          const std::string& key = parameters[1];
-          const std::string& value = parameters.back();
+          const std::string& seconds 	= 	parameters[0];
+          const std::string& key 	= 	parameters[1];
+          const std::string& value 	= 	parameters.back();
           
           if (!CheckValidPos(user, seconds))
           {
@@ -147,17 +147,17 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
-CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTUREAT", 3, 3)
+CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3, 3)
 {
           group = 'f';
-          syntax = "<epoch time> <key> <value>";
+          syntax = "<epoch time> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
 {    
-          const std::string& seconds = parameters[0];
-          const std::string& key = parameters[1];
-          const std::string& value = parameters[1];
+          const std::string& seconds 	= 	parameters[0];
+          const std::string& key 	= 	parameters[1];
+          const std::string& value 	= 	parameters.back();
           
           if (!CheckValid(user, seconds))
           {
