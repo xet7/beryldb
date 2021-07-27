@@ -15,7 +15,6 @@
 
 #include "beryl.h"
 #include "core_umanager.h"
-#include "managers/user.h"
 
 CommandListFlags::CommandListFlags(Module* parent) : Command(parent, "LISTFLAGS", 1, 1)
 {

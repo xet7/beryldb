@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "managers/maps.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "engine.h"
 #include "core_maps.h"
 
 CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)

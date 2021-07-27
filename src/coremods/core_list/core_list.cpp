@@ -38,6 +38,7 @@ class CoreModuleList : public Module
         CommandLBack cmdlback;
         CommandLFront cmdlfront;
         CommandLPushNX cmdlpushnx;
+        CommandLAvg cmdlavg;
         
     public:	
         
@@ -60,7 +61,8 @@ class CoreModuleList : public Module
                            cmdfrop(this),
                            cmdlback(this),
                            cmdlfront(this),
-                           cmdlpushnx(this)
+                           cmdlpushnx(this),
+                           cmdlavg(this)
 
         {
         

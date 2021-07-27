@@ -12,13 +12,7 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/keys.h"
-#include "engine.h"
 #include "core_keys.h"
-#include "maker.h"
 
 CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 {

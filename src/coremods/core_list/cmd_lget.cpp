@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "managers/lists.h"
-#include "engine.h"
 #include "core_list.h"
 
 CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)
@@ -347,3 +341,23 @@ COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
         ListHelper::PushNX(user, key, value);
         return SUCCESS;  
 }
+
+CommandLAvg::CommandLAvg(Module* Creator) : Command(Creator, "LAVG", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Avg(user, key);
+       return SUCCESS;  
+}
+

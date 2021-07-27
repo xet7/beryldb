@@ -12,20 +12,6 @@
  */
 
 #include "beryl.h"
-#include "engine.h"
-
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "brldb/database.h"
-#include "managers/databases.h"
-#include "managers/settings.h"
-#include "managers/globals.h"
-#include "managers/tests.h"
-#include "converter.h"
-#include "notifier.h"
-#include "maker.h"
-#include "engine.h"
 #include "core_dbmanager.h"
 
 CommandSFlush::CommandSFlush(Module* Creator) : Command(Creator, "SFLUSH", 0, 1)
@@ -149,14 +135,34 @@ COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0)
+CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0, 1)
 {
        group = 'w';
+       syntax = "<database>";
 }
 
 COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)
 {  
-       DBHelper::DBSize(user);
+       std::string db;
+       
+       if (parameters.size())
+       {
+            db = parameters[0];
+       }
+       else
+       {
+            db = user->GetDatabase()->GetName();
+       }
+       
+       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(db);
+
+       if (!database)
+       {
+              user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+              return FAILED;
+       }
+
+       DBHelper::DBSize(user, database);
        return SUCCESS;
 }
 
@@ -293,7 +299,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              user->SendProtocol(BRLD_OK, PROCESS_OK);
              sfalert(user, NOTIFY_DEFAULT, "Added database: %s", dbname.c_str());      
              
-             if (user->GetDatabase() == nullptr)
+             if (user->GetDatabase() == NULL)
              {
                   std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
                   
@@ -397,7 +403,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
      return SUCCESS;
 }
 
-CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
+CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "DBFLUSH", 0, 1)
 {
        requires = 'r';
 }
@@ -425,11 +431,12 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (DBHelper::FlushDB(database, true))
        {
+             sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
              user->SendProtocol(BRLD_OK, PROCESS_OK);
              return SUCCESS;
        }
 
-       sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+       sfalert(user, NOTIFY_DEFAULT, "Unable to flush database: %s", user->GetDatabase()->GetName().c_str());      
        user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
        return FAILED;
 }

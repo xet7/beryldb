@@ -14,6 +14,13 @@
 #pragma once
 
 #include "beryl.h"
+#include "engine.h"
+
+#include "brldb/database.h"
+
+#include "managers/user.h"
+#include "managers/maps.h"
+#include "managers/settings.h"
 
 class CommandGetFlags : public Command
 {

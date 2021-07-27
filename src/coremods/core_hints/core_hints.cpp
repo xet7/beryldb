@@ -29,6 +29,7 @@ class CoreModHints : public Module
         CommandDiff cmddiff;
         CommandTouch cmdtouch;
         CommandNTouch cmdntouch;
+        CommandTransfer cmdtransfer;
 
     public:
     
@@ -42,7 +43,8 @@ class CoreModHints : public Module
                          cmdrenamenx(this),
                          cmddiff(this),
                          cmdtouch(this),
-                         cmdntouch(this)
+                         cmdntouch(this),
+                         cmdtransfer(this)
         {
         
         }

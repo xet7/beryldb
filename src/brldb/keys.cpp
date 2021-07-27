@@ -13,13 +13,13 @@
 
 #include "beryl.h"
 #include "engine.h"
+#include "extras.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 #include "brldb/functions.h"
-#include "extras.h"
-#include "helpers.h"
 #include "brldb/dbmanager.h"
 
 void expire_list_query::Run()
@@ -730,10 +730,9 @@ void search_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Key", "Value"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Key", "Value"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {
@@ -894,10 +893,9 @@ void keys_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -1087,4 +1085,26 @@ void ismatch_query::Run()
 void ismatch_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response);
+}
+
+void insert_query::Run()
+{       
+       RocksData result = this->Get(this->dest);
+       std::string as_str = to_string(result.value);
+       
+       if (as_str.length() < this->id)
+       {
+             access_set(DBL_INVALID_RANGE);
+             return;
+       }
+       
+       as_str.insert(this->id, this->value);
+       
+       this->Write(this->dest, to_bin(as_str));
+       this->SetOK();
+}
+
+void insert_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }

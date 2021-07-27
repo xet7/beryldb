@@ -13,14 +13,14 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/list_handler.h"
-#include "helpers.h"
-#include "managers/maps.h"
-#include "cstruct.h"
 #include "brldb/dbmanager.h"
+
+#include "managers/maps.h"
 
 void lkeys_query::Run()
 {
@@ -165,10 +165,9 @@ void lkeys_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -410,10 +409,9 @@ void lfind_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -642,10 +640,9 @@ void lget_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "List"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -891,4 +888,31 @@ void lpushnx_query::Run()
 void lpushnx_query::Process()
 {
        user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+void lavg_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
+
+       if (!handler->IsNumeric())
+       {
+              access_set(DBL_INVALID_RANGE);
+              return;
+       }
+       
+       this->response = convto_string(handler->GetSMA());
+       this->SetOK();
+}
+
+void lavg_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response.c_str());
 }

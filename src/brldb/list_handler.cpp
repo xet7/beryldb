@@ -81,6 +81,33 @@ void ListHandler::PopBack()
       this->LastMsg = HANDLER_MSG_OK;
 }
 
+double ListHandler::GetSMA()
+{
+      double value = 0;
+  
+      for (ListMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+             value += item;
+      }
+      
+      double size = (double)this->mhandler.size();
+      return value/size;
+}
+
+bool ListHandler::IsNumeric()
+{
+      for (ListMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+               if (!is_number(*i, true))
+               {
+                    return false;
+               }
+      }
+
+      return true;
+}
+
 bool ListHandler::Exist(const std::string& key)
 {
      return (std::find(this->mhandler.begin(), this->mhandler.end(), key) != this->mhandler.end());

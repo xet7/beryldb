@@ -332,7 +332,7 @@ void DataThread::Exit()
       }
 
       m_thread->join();
-      m_thread = nullptr;
+      m_thread = NULL;
 }
 
 void DataThread::Post(std::shared_ptr<QueryBase> query)
@@ -409,12 +409,7 @@ void DataThread::Process()
                           
                           /* Let's release the locked user. */
 
-                          if (request->user && !request->user->IsQuitting())
-                          {
-                                /* OK */
-                                
-                          }
-                          else
+                          if (!request->user && request->user->IsQuitting())
                           {
                                /* In case lock status gets locked. */
                                
@@ -426,9 +421,9 @@ void DataThread::Process()
                                queue.pop();
                                
                                signal.reset();
-                               signal = nullptr;
+                               signal = NULL;
                                
-                               continue;
+                               break;
                           }
                           
                           queue.pop();

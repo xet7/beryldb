@@ -12,10 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "engine.h"
 #include "core_multi.h"
 
 CommandMulti::CommandMulti(Module* Creator) : Command(Creator, "MULTI", 0, 0)

@@ -15,6 +15,8 @@
 
 #include "beryl.h"
 #include "modules/message.h"
+#include "managers/settings.h"
+#include "brldb/dbmanager.h"
 
 class CommandLogin : public MultiCommand
 {

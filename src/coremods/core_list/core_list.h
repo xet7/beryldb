@@ -12,9 +12,24 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "maker.h"
 
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
+
+#include "managers/lists.h"
+
+class CommandLAvg : public Command 
+{
+
+    public: 
+
+        CommandLAvg(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
 
 class CommandLPushNX : public Command 
 {

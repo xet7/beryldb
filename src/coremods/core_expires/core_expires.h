@@ -12,8 +12,15 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "notifier.h"
+#include "converter.h"
+#include "maker.h"
+
+#include "managers/expires.h"
+
+#include "brldb/dbflush.h"
+#include "brldb/dbmanager.h"
 
 class CommandExpireFIND : public Command 
 {

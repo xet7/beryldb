@@ -36,7 +36,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
                                         	, Paused(false)
                                         	, uuid(uid)
                                         	, server(srv)
-                                        	, session(nullptr)
+                                        	, session(NULL)
                                         	, select("1")
                                         	, registered(REG_NONE)
                                         	, usertype(type)
@@ -121,7 +121,7 @@ bool User::PushGroup(std::shared_ptr<Group> grp)
 void User::SetNullDB()
 {
         std::lock_guard<std::mutex> lg(User::db_mute);
-        this->current_db = nullptr;
+        this->current_db = NULL;
 }
 
 void User::SetDatabase(const std::shared_ptr<UserDatabase>& database)
@@ -243,7 +243,7 @@ bool User::CanPerform(unsigned char flag)
 {
 	/* We cannot check privs if no session is present. */
 	
-	if (this->session == nullptr)
+	if (this->session == NULL)
 	{
 		return false;
 	}
@@ -270,7 +270,7 @@ bool User::IsAdmin()
 {
         /* We cannot check admin condition if no session is present. */
         
-        if (this->session == nullptr)
+        if (this->session == NULL)
         {
                 return false;
         }
@@ -287,7 +287,7 @@ int User::GetFirstFlag()
 {
         /* We cannot check admin condition if no session is present. */
 
-        if (this->session == nullptr)
+        if (this->session == NULL)
         {
                 return 0;
         }
@@ -951,10 +951,9 @@ ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask, 
 
 void ConfigConnect::Update(const ConfigConnect* src)
 {
-		config = src->config;
-		type = src->type;
-		name = src->name;
-		host = src->host;
-		ports = src->ports;
-
+	config = src->config;
+	type = src->type;
+	name = src->name;
+	host = src->host;
+	ports = src->ports;
 }

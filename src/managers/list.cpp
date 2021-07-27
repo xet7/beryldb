@@ -28,6 +28,12 @@ void ListHelper::PushNX(User* user, const std::string& entry, const std::string&
        Kernel->Store->Push(query);
 }
 
+void ListHelper::Avg(User* user, const std::string& entry)
+{
+       std::shared_ptr<lavg_query> query = std::make_shared<lavg_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
 
 void ListHelper::Push(User* user, const std::string& entry, const std::string& value)
 {

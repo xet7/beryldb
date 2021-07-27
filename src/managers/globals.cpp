@@ -23,6 +23,15 @@
 #include "helpers.h"
 #include "extras.h"
 
+void GlobalHelper::Transfer(User* user, const std::string& entry, std::shared_ptr<Database> db)
+{
+       std::shared_ptr<transfer_query> query = std::make_shared<transfer_query>();
+       Helpers::make_query(user, query, entry);
+       query->transf_db = db;
+       query->value = entry;
+       Kernel->Store->Push(query);
+}
+
 void GlobalHelper::Touch(User* user, const std::string& entry)
 {
        std::shared_ptr<touch_query> query = std::make_shared<touch_query>();

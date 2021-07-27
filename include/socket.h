@@ -93,12 +93,9 @@ namespace engine
 
 struct ExportAPI FailedPort
 {
-	
 	int error;
 
-	
 	engine::sockets::sockaddrs sa;
-
 	
 	config_rule* tag;
 
@@ -107,6 +104,7 @@ struct ExportAPI FailedPort
 		, sa(ep)
 		, tag(cfg)
 	{
+	
 	}
 };
 

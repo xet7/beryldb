@@ -12,8 +12,21 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "maker.h"
+
+#include "brldb/dbmanager.h"
+#include "managers/keys.h"
+
+class CommandInsert : public Command 
+{
+
+    public: 
+
+        CommandInsert(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
 
 class CommandIsMatch : public Command 
 {

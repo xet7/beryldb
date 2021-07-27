@@ -47,50 +47,40 @@ TestOffice::~TestOffice()
 
 void TestOffice::Run()
 {
-   
-       std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
-       
-       handler3->Add("key", "value");
-       handler3->Add("key", "value3");
-       handler3->Add("key2", "value2");
-
-       handler3->Dump();
-       
-       STHelper::Set("tests", "hello", "world");
-       STHelper::Set("tests", "hello3", "world3");
-       STHelper::Set("tests", "hello6", "world6");
-
-       Args items = STHelper::HKeys("tests");
-       
-       for (Args::iterator i = items.begin(); i != items.end(); ++i)
-       {
-            std::string item_list = *i;
-            std::cout << "item: " <<  item_list << std::endl;
-       }
-       
-       
-       std::shared_ptr<ListHandler> handler = std::make_shared<ListHandler>();
-
-       handler->Add("test4");
-
-       handler->Add("test");
-       handler->Add("test2");
-       handler->Add("test2");
-       handler->Add("test3");
-       handler->Add("test3");
-
-       std::cout << "pos: " << handler->Index(3) << std::endl;
-       std::cout << "Repeats: " << handler->Repeats("test2") << std::endl;
-       
-       handler->Reverse();
-        //handler->Resize(4);
-   
-        //handler->PopFront();
-        //handler->PopBack();
-        //handler->PopBack();
+        std::shared_ptr<MultiMapHandler> handler3 = std::make_shared<MultiMapHandler>();
         
-        //handler->PopAll("test2");
-        //std::cout << "Found items: " << handler->Find("test?").size() << std::endl;
+        handler3->Add("key", "value");
+        handler3->Add("key", "value3");
+        handler3->Add("key2", "value2");
+
+        handler3->Dump();
+        
+        STHelper::Set("tests", "hello", "world");
+        STHelper::Set("tests", "hello3", "world3");
+        STHelper::Set("tests", "hello6", "world6");
+
+        Args items = STHelper::HKeys("tests");
+       
+        for (Args::iterator i = items.begin(); i != items.end(); ++i)
+        {
+             std::string item_list = *i;
+             std::cout << "item: " <<  item_list << std::endl;
+        }
+       
+        std::shared_ptr<ListHandler> handler = std::make_shared<ListHandler>();
+
+        handler->Add("test4");
+
+        handler->Add("test");
+        handler->Add("test2");
+        handler->Add("test2");
+        handler->Add("test3");
+        handler->Add("test3");
+
+        std::cout << "pos: " << handler->Index(3) << std::endl;
+        std::cout << "Repeats: " << handler->Repeats("test2") << std::endl;
+       
+        handler->Reverse();
         
         handler->Sort();
         

@@ -12,8 +12,12 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+#include "brldb/dbmanager.h"
+
+#include "managers/maps.h"
+#include "managers/user.h"
+#include "managers/settings.h"
 
 class CommandGroupAdd : public Command 
 {

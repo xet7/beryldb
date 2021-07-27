@@ -12,12 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "maker.h"
-#include "managers/maps.h"
-#include "engine.h"
 #include "core_maps.h"
 
 CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)

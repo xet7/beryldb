@@ -13,11 +13,11 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/map_handler.h"
-#include "helpers.h"
 #include "brldb/dbmanager.h"
 
 void hfind_query::Run()
@@ -162,11 +162,10 @@ void hfind_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
-        
+         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
@@ -470,10 +469,9 @@ void hlist_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Map"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -589,10 +587,9 @@ void hvals_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Value"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Value"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -683,10 +680,9 @@ void hgetall_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Map", "Value"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Map", "Value"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {

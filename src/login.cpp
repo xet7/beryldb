@@ -93,7 +93,7 @@ std::shared_ptr<Session> SessionManager::Add(const std::string& login, const std
 {
       if (login.empty())
       {
-          return nullptr;
+          return NULL;
       } 
 
       std::shared_ptr<Session> New =  std::make_shared<Session>();
@@ -120,7 +120,7 @@ void SessionManager::Attach(User* user, const std::string& login, const std::str
 {
       std::shared_ptr<Session> attach = this->Find(login);
       
-      if (attach == nullptr)
+      if (attach == NULL)
       {
             attach = this->Add(login, flags);
       }
@@ -142,7 +142,7 @@ std::shared_ptr<Session> SessionManager::Find(const std::string& login)
 
      if (iter == this->sessions.end())
      {
-             return nullptr;
+             return NULL;
      }
 
      return iter->second;

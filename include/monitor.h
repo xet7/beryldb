@@ -16,6 +16,7 @@
 #include "brldb/dbmanager.h"
 #include "notifier.h"
 #include "group.h"
+#include "settings.h"
 
 enum MONITOR_LEVEL
 {

@@ -25,11 +25,16 @@ void QueryBase::Delete(const std::string& wdest)
        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), wdest);
 }
 
-void QueryBase::WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl)
+void QueryBase::WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db)
 {
-       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       if (db == NULL)
+       {
+            db = this->database;
+       }
+       
+       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
        this->Write(lookup, convto_string(ttl));
-       Kernel->Store->Expires->Add(this->database, ttl, e_key, select, true);
+       Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
 }
 
 void QueryBase::WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& fvalue)
@@ -83,9 +88,14 @@ RocksData QueryBase::Get(const std::string& where)
        return result;
 }
 
-int QueryBase::CheckDest(const std::string& select, const std::string& regkey, const std::string& ltype)
+int QueryBase::CheckDest(const std::string& select, const std::string& regkey, const std::string& ltype, std::shared_ptr<Database> db)
 {
-       if (select == this->select_query && this->key == regkey && ltype == this->identified)
+       if (db == NULL)
+       {
+            db = this->database;
+       }
+
+       if (db == this->database && select == this->select_query && this->key == regkey && ltype == this->identified)
        {
               return 1;
        }
@@ -96,13 +106,13 @@ int QueryBase::CheckDest(const std::string& select, const std::string& regkey, c
               std::string saved = to_bin(regkey) + ":" + select + ":" + found_type;
        
               std::string dbvalue;
-              rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), saved, &dbvalue);
+              rocksdb::Status fstatus2 = db->GetAddress()->Get(rocksdb::ReadOptions(), saved, &dbvalue);
        
               if (!dbvalue.empty())
               {
                    if (found_type == ltype)
                    {
-                        /* Ltype found */
+                        /* Ltype found, same type. */
                         
                         return 1;
                    }
@@ -362,6 +372,41 @@ bool QueryBase::Prepare()
                    }
            }
            
+           break;
+           
+           case QUERY_TYPE_TRANSFER:
+           {
+                   GetRegistry(this->select_query, this->key, true);
+ 
+                   if (this->identified == PROCESS_NULL)
+                   {
+                         this->access_set(DBL_NOT_FOUND);
+                         return false;
+                   }
+                   
+                   if (!this->transf_db)
+                   {
+                          this->access_set(DBL_UNABLE_WRITE);
+                          return false;
+                   }
+
+                   int result = this->CheckDest(this->select_query, this->key, this->identified, this->transf_db); 
+                   
+                   if (result == 0 || result == 1)
+                   {
+                         this->Run();
+                         return true;
+                   }
+                   else if (result == 2)
+                   {
+                         this->access_set(DBL_INVALID_TYPE);
+                         this->response = this->identified;
+                   }
+                   
+                   return false;
+
+           }
+
            break;
            
            case QUERY_TYPE_RENAMENX:

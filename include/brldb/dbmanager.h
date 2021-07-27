@@ -54,7 +54,7 @@ class ExportAPI DBManager : public safecast<DBManager>
 	 * 
          * @return:
  	 *
-         *         · Database ptr to UserDatabase. Returns nullptr if not found.
+         *         · Database ptr to UserDatabase. Returns NULL if not found.
          */    
          
         std::shared_ptr<UserDatabase> Find(const std::string& name);

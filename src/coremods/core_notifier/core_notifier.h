@@ -12,8 +12,10 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
+
+#include "managers/settings.h"
+#include "brldb/dbmanager.h"
 
 class CommandNotifier : public Command 
 {

@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/dbmanager.h"
 #include "brldb/database.h"
 #include "brldb/query.h"
@@ -20,7 +21,6 @@
 #include "managers/databases.h"
 #include "managers/lists.h"
 #include "managers/maps.h"
-#include "helpers.h"
 
 bool DBHelper::FlushDB(std::shared_ptr<Database> database, bool notify)
 {
@@ -53,10 +53,12 @@ MapData DBHelper::CType(const std::string& key)
        return MapData(query->access, Helpers::TypeString(query->identified));
 }
 
-void DBHelper::DBSize(User* user)
+void DBHelper::DBSize(User* user, std::shared_ptr<Database> db)
 {
        std::shared_ptr<dbsize_query> query = std::make_shared<dbsize_query>();
-       Helpers::make_query(user, query);
+       query->user = user;
+       query->database = db;
+       
        Kernel->Store->Push(query);
 }
 

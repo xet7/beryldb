@@ -13,13 +13,12 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/geo.h"
 #include "brldb/dbmanager.h"
-#include "channels.h"
-#include "channelmanager.h"
 
 void geoaddnx_query::Run()
 {
@@ -62,6 +61,8 @@ void geoadd_pub_query::Run()
 
 void geoadd_pub_query::Process()
 {
+      user->SendProtocol(BRLD_OK, PROCESS_OK);
+
       engine::comma_node_stream CMD(this->newkey);
       std::string server;
 
@@ -83,7 +84,6 @@ void geoadd_pub_query::Process()
              chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
       
-      user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void geoget_query::Run()
@@ -273,10 +273,9 @@ void gkeys_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -501,10 +500,9 @@ void geodistance_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Location"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            

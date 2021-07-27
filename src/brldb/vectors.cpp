@@ -13,14 +13,14 @@
 
 #include "beryl.h"
 #include "engine.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/vector_handler.h"
 #include "brldb/dbmanager.h"
-#include "helpers.h"
+
 #include "managers/maps.h"
-#include "cstruct.h"
 
 void vsort_query::Process()
 {
@@ -185,10 +185,9 @@ void vkeys_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
@@ -383,10 +382,9 @@ void vget_query::Process()
         if (this->subresult == 1)
         {
                 Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
-
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
