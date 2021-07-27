@@ -22,8 +22,8 @@ CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2
 
 COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -47,8 +47,8 @@ CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 
 COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -194,8 +194,8 @@ CommandVEraseFrom::CommandVEraseFrom(Module* Creator) : Command(Creator, "VERASE
 
 COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -244,8 +244,8 @@ CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS",
 
 COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -288,8 +288,8 @@ CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
 
 COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -427,8 +427,8 @@ CommandVPushNX::CommandVPushNX(Module* Creator) : Command(Creator, "VPUSHNX", 2,
 
 COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {

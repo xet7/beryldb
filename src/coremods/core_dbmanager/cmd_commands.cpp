@@ -403,7 +403,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
      return SUCCESS;
 }
 
-CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
+CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "DBFLUSH", 0, 1)
 {
        requires = 'r';
 }

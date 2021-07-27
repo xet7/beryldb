@@ -22,8 +22,8 @@ CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2
 
 COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        const std::string& pass = parameters[1];
+        const std::string& newlogin 	= 	parameters[0];
+        const std::string& pass 	= 	parameters[1];
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
@@ -238,7 +238,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
 CommandResetCache::CommandResetCache(Module* parent) : Command(parent, "RESETCACHE", 0)
 {
-         requires = 'r';
+         requires = 'm';
 }
 
 COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
@@ -251,7 +251,7 @@ COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 
 CommandInCache::CommandInCache(Module* parent) : Command(parent, "INCACHE", 1, 1)
 {
-         requires = 'r';
+         requires = 'm';
          syntax = "<login>";
 }
 
