@@ -299,7 +299,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              user->SendProtocol(BRLD_OK, PROCESS_OK);
              sfalert(user, NOTIFY_DEFAULT, "Added database: %s", dbname.c_str());      
              
-             if (user->GetDatabase() == nullptr)
+             if (user->GetDatabase() == NULL)
              {
                   std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
                   

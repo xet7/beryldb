@@ -169,7 +169,7 @@ class ExportAPI User : public Expandable
 
 	std::string instance;
 	
-	/* Sets current_db to nullptr. */
+	/* Sets current_db to NULL. */
 		
 	void SetNullDB();
 	

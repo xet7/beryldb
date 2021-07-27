@@ -41,7 +41,7 @@ void DBManager::Load(const std::string& name, bool dbdefault)
 
         std::string path = STHelper::Get("databases", name);
 
-        std::shared_ptr<UserDatabase> New = nullptr;
+        std::shared_ptr<UserDatabase> New = NULL;
         New = std::make_shared<UserDatabase>(name, path);
 
         New->created = Kernel->Now();
@@ -133,7 +133,7 @@ std::shared_ptr<UserDatabase> DBManager::Find(const std::string& name)
 
         if (it == this->DBMap.end())
         {
-                return nullptr;
+                return NULL;
         }
 
         return it->second;

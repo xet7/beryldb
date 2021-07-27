@@ -74,7 +74,7 @@ void DataFlush::UnableWrite(User* user, std::shared_ptr<QueryBase> signal)
 void DataFlush::Flush(User* user, std::shared_ptr<QueryBase> signal)
 {
         signal->Process();
-        signal = nullptr;
+        signal = NULL;
 }
 
 void DataFlush::NotNumeric(User* user, std::shared_ptr<QueryBase> signal)

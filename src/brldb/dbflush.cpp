@@ -332,7 +332,7 @@ void DataThread::Exit()
       }
 
       m_thread->join();
-      m_thread = nullptr;
+      m_thread = NULL;
 }
 
 void DataThread::Post(std::shared_ptr<QueryBase> query)
@@ -421,7 +421,7 @@ void DataThread::Process()
                                queue.pop();
                                
                                signal.reset();
-                               signal = nullptr;
+                               signal = NULL;
                                
                                break;
                           }

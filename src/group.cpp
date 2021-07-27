@@ -57,7 +57,6 @@ bool GroupManager::Add(const std::string& gname, const std::string& flags)
       New->UpdateFlags(flags);
 
       this->GroupList.insert(std::make_pair(name, New));
-
       bprint(DONE, "Adding group: %s", name.c_str());
       return true;
 }
@@ -350,7 +349,7 @@ void GroupManager::Reset()
       for (GroupMap::iterator i = GroupList.begin(); i != GroupList.end(); i++)
       {
                   std::shared_ptr<Group> InUse = i->second;
-                  InUse = nullptr;
+                  InUse = NULL;
       }
 
       this->GroupList.clear();

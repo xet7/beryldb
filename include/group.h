@@ -55,7 +55,7 @@ class ExportAPI GroupManager
 	 * 
          * @return:
  	 *
-         *         · shared_ptr<Group>: Group pointer, returns nullptr if not 
+         *         · shared_ptr<Group>: Group pointer, returns NULL if not 
          *                              found.
          */             
          

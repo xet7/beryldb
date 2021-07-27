@@ -45,7 +45,7 @@ COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
              }
              else
              {
-                    user->SendProtocol(ERR_INPUT2, ERR_INVALID_NOTLVL, Daemon::Format("%s:%s", INVALID_NLEVEL.c_str(), level.c_str())); 
+                    user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                     return FAILED;
              }
        
@@ -84,7 +84,7 @@ COMMAND_RESULT CommandStopNotify::Handle(User* user, const Params& parameters)
 {  
        if (!Kernel->Notify->Has(user))
        {
-               user->SendProtocol(ERR_NO_NOTIFY, PROCESS_FALSE);
+               user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
                return FAILED;
        }
        
