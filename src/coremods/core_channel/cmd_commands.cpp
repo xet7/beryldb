@@ -13,8 +13,6 @@
 
 #include "beryl.h"
 #include "core_channel.h"
-#include "channelmanager.h"
-#include "engine.h"
 
 CommandJoin::CommandJoin(Module* parent) : MultiCommand(parent, "JOIN", 1, 1)
 {

@@ -35,8 +35,6 @@ class CoreModInfo : public Module
 	CommandVersion cmdversion;
 	CommandL cmdl;
 	CommandSyntax cmdsyntax;
-	CommandMyChans cmdmychans;
-	CommandChans cmdchans;
 	CommandWhoami cmdwhoami;
 	CommandAgent cmdagent;
 	CommandEpoch cmdepoch;
@@ -55,8 +53,6 @@ class CoreModInfo : public Module
 			cmdversion(this), 
 			cmdl(this), 
 			cmdsyntax(this),
-			cmdmychans(this), 
-			cmdchans(this), 
 			cmdwhoami(this),
 			cmdagent(this), 
 			cmdepoch(this), 

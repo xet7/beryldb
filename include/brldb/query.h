@@ -80,7 +80,7 @@ class ExportAPI QueryBase
         RocksData mapped;
         
     public:
-
+    
         void Required(bool flag)
         {
               this->key_required = flag;

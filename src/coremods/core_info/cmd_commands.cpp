@@ -126,7 +126,6 @@ CommandGetStartup::CommandGetStartup(Module* parent) : Command(parent, "STARTUP"
 
 COMMAND_RESULT CommandGetStartup::Handle(User* user, const Params& parameters)
 {
-	
 	if (parameters.size())
 	{
 		user->SendProtocol(BRLD_OK, Daemon::HumanEpochTime(Kernel->GetStartup()));

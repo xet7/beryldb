@@ -101,24 +101,6 @@ class CommandSyntax : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMyChans : public Command
-{
- public:
-
-        CommandMyChans(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandChans : public Command
-{
- public:
-
-        CommandChans(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
 class CommandWhoami : public Command
 {
  public:
