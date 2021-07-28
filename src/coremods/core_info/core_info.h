@@ -172,3 +172,12 @@ class CommandGS : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandGetStartup : public Command
+{
+ public:
+
+        CommandGetStartup(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
