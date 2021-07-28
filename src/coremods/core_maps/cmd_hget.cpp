@@ -22,8 +22,8 @@ CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)
 
 COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap     	= 	parameters[0];
+       const std::string& key      	= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -61,8 +61,8 @@ CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2,
 
 COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap 		= 	parameters[0];
+       const std::string& key		= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -81,8 +81,8 @@ CommandHStrlen::CommandHStrlen(Module* Creator) : Command(Creator, "HSTRLEN", 2,
 
 COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap 		= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -159,8 +159,8 @@ CommandHDel::CommandHDel(Module* Creator) : Command(Creator, "HDEL", 2, 2)
 
 COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap 		= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -179,8 +179,8 @@ CommandHWDel::CommandHWDel(Module* Creator) : Command(Creator, "HWDEL", 2, 2)
 
 COMMAND_RESULT CommandHWDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap 		= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
        
        if (!CheckKey(user, kmap))
        {
@@ -225,9 +225,9 @@ CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 
 COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  = parameters[0];
-       const std::string& key   = parameters[1];
-       const std::string& value = parameters.back();
+       const std::string& kmap  	= 	parameters[0];
+       const std::string& key   	= 	parameters[1];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
