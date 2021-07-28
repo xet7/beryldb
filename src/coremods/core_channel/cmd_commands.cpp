@@ -32,6 +32,17 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 		
 		if (Kernel->Engine->ValidChannel(parameters[0]))
 		{
+			Channel* chan = Kernel->Channels->Find(parameters[0]);
+			
+			if (chan)
+			{
+				if (chan->GetUser(user))
+				{
+					user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
+					return FAILED;
+				}
+			}
+			
 			Channel::JoinUser(false, user, parameters[0], false);
                         std::string login = user->login;
 
@@ -52,6 +63,17 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 
 		if (Kernel->Engine->ValidChannel(parameters[0]))
 		{
+		        Channel* chan = Kernel->Channels->Find(parameters[0]);
+
+                        if (chan)
+                        {
+                                if (chan->GetUser(user))
+                                {
+                                        user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
+                                        return FAILED;
+                                }
+                        }
+
 			Channel::JoinUser(false, user, parameters[0]);
 			std::string login = user->login;
 			
