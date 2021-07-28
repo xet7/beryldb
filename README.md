@@ -133,7 +133,7 @@ FUTURES   |  0
 beryl> 
 ```
 
-To search over all keys:
+To search all keys:
 
 ```
 beryl> search *

@@ -35,8 +35,6 @@ class CoreModInfo : public Module
 	CommandVersion cmdversion;
 	CommandL cmdl;
 	CommandSyntax cmdsyntax;
-	CommandMyChans cmdmychans;
-	CommandChans cmdchans;
 	CommandWhoami cmdwhoami;
 	CommandAgent cmdagent;
 	CommandEpoch cmdepoch;
@@ -44,14 +42,26 @@ class CoreModInfo : public Module
 	CommandLS cmdls;
 	CommandGS cmdgs;
 	CommandTotal cmdtotal;
+	CommandGetStartup cmdgetstartup;
 	
   public:
  
-	CoreModInfo() : cmdcommands(this), cmdmodules(this), cmdcoremodules(this), cmdtime(this),
-			cmdversion(this), cmdl(this), cmdsyntax(this),
-			cmdmychans(this), cmdchans(this), cmdwhoami(this),
-			cmdagent(this), cmdepoch(this), cmdfirstof(this),
-			cmdls(this), cmdgs(this), cmdtotal(this)
+	CoreModInfo() : cmdcommands(this), 
+			cmdmodules(this), 
+			cmdcoremodules(this), 
+			cmdtime(this),
+			cmdversion(this), 
+			cmdl(this), 
+			cmdsyntax(this),
+			cmdwhoami(this),
+			cmdagent(this), 
+			cmdepoch(this), 
+			cmdfirstof(this),
+			cmdls(this), 
+			cmdgs(this), 
+			cmdtotal(this),
+			cmdgetstartup(this)
+			
 	{
 
 	}

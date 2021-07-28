@@ -14,6 +14,9 @@
 #pragma once
 
 #include "beryl.h"
+#include "engine.h"
+
+#include "channelmanager.h"
 #include "modules/message.h"
 
 /* Subscribes an user to a channel. */
@@ -58,5 +61,20 @@ class CommandPart : public Command
         RouteParams GetRouting(User* user, const Params& parameters) ;
 };
 
+class CommandMyChans : public Command
+{
+ public:
 
+        CommandMyChans(Module* parent);
 
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandChans : public Command
+{
+ public:
+
+        CommandChans(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

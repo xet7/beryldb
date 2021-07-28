@@ -117,3 +117,21 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
         Dispatcher::JustAPI(user, BRLD_COMMANDS_END);
 	return SUCCESS;
 }
+
+CommandGetStartup::CommandGetStartup(Module* parent) : Command(parent, "STARTUP", 0, 1)
+{
+        group = 'z';
+        syntax = "<*f>";
+}
+
+COMMAND_RESULT CommandGetStartup::Handle(User* user, const Params& parameters)
+{
+	if (parameters.size())
+	{
+		user->SendProtocol(BRLD_OK, Daemon::HumanEpochTime(Kernel->GetStartup()));
+		return SUCCESS;
+	}
+	
+        user->SendProtocol(BRLD_OK, Kernel->GetStartup());
+        return SUCCESS;
+}

@@ -101,24 +101,6 @@ class CommandSyntax : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMyChans : public Command
-{
- public:
-
-        CommandMyChans(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandChans : public Command
-{
- public:
-
-        CommandChans(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
 class CommandWhoami : public Command
 {
  public:
@@ -169,6 +151,15 @@ class CommandGS : public Command
  public:
 
         CommandGS(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandGetStartup : public Command
+{
+ public:
+
+        CommandGetStartup(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

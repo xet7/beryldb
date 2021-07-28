@@ -68,6 +68,9 @@ void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 
 	Dispatcher::JustAPI(user, BRLD_SLIST_BEGIN);
 
+        Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+
 	for (Channel::SubscriptionMap::const_iterator i = members.begin(); i != members.end(); ++i)
 	{
 		Subscription* const memb = i->second;

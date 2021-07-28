@@ -21,11 +21,16 @@ class CoreModChannel : public Module
 	CommandJoin cmdjoin;
 	CommandSlist cmdslist;
         CommandPart cmdpart;
+        CommandMyChans cmdmychans;
+        CommandChans cmdchans;
 
   public:
 
-	CoreModChannel() : cmdjoin(this), cmdslist(this), cmdpart(this)
-	
+	CoreModChannel() : cmdjoin(this), 
+			   cmdslist(this), 
+			   cmdpart(this),
+                           cmdmychans(this), 
+                           cmdchans(this)
 	{
 
 	}

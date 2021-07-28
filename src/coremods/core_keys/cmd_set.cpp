@@ -47,8 +47,8 @@ CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 
 COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -72,8 +72,8 @@ CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 
 COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -97,8 +97,8 @@ CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 
 COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -123,8 +123,8 @@ CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 
 COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -173,8 +173,8 @@ CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "OCCURS",
 
 COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back(); 
+       const std::string& key 		=	 parameters[0];
+       const std::string& value 	= 	 parameters.back(); 
 
        if (!CheckKey(user, key))
        {
@@ -278,8 +278,8 @@ CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 
 COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 {  
-       const std::string& seconds = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& seconds 	= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -442,9 +442,9 @@ CommandInsert::CommandInsert(Module* Creator) : Command(Creator, "INSERT", 3, 3)
 
 COMMAND_RESULT CommandInsert::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& where = parameters[1];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& where 	= 	parameters[1];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
