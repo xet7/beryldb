@@ -38,12 +38,22 @@ class CoreModDBManager : public Module
 
     public:     
         
-        CoreModDBManager() : cmduse(this), cmdcurrent(this), cmdflushdb(this), cmdpwd(this),
+        CoreModDBManager() : cmduse(this), 
+                             cmdcurrent(this), 
+                             cmdflushdb(this), 
+                             cmdpwd(this),
                              cmddbsize(this), 
-                             cmddbreset(this), cmdsflush(this), cmdusing(this),
-                             cmddb(this), cmdchange(this),
-                             dblist(this), cmddbcreate(this), cmddbdelete(this), 
-                             cmdefault(this), cmddbtest(this), cmdsdfault(this),
+                             cmddbreset(this), 
+                             cmdsflush(this), 
+                             cmdusing(this),
+                             cmddb(this), 
+                             cmdchange(this),
+                             dblist(this), 
+                             cmddbcreate(this), 
+                             cmddbdelete(this), 
+                             cmdefault(this), 
+                             cmddbtest(this), 
+                             cmdsdfault(this),
                              cmdflushall(this)
         {
         
