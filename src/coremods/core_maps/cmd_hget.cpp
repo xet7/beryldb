@@ -199,9 +199,9 @@ CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 
 COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  = parameters[0];
-       const std::string& key   = parameters[1];
-       const std::string& value = parameters.back();
+       const std::string& kmap  	= 	parameters[0];
+       const std::string& key   	= 	parameters[1];
+       const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key) || !CheckKey(user, kmap))
         {

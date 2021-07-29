@@ -25,6 +25,7 @@ class CoreModOperations : public Module
         CommandAvg cmdavg;
         CommandDiv cmddiv;
         CommandMult cmdmult;
+        CommandSqrt cmdsqrt;
         
     public:     
         
@@ -34,7 +35,8 @@ class CoreModOperations : public Module
                               cmddecrby(this), 
                               cmdavg(this), 
                               cmddiv(this),
-                              cmdmult(this)
+                              cmdmult(this),
+                              cmdsqrt(this)
         {
         
         }

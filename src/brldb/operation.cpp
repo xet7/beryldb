@@ -154,6 +154,15 @@ void op_query::Run()
                 real_value -= real_oper;
         break;
         
+        case OP_SQRT:
+        
+               real_value = std::sqrt(real_value);
+        break;
+        
+        default:
+        
+             real_value = real_value;
+        
     }
     
     std::string inserting = convto_string(real_value);        

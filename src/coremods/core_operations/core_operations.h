@@ -84,3 +84,13 @@ class CommandMult : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
+class CommandSqrt : public Command 
+{
+    public: 
+
+        CommandSqrt(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
