@@ -161,7 +161,7 @@ void op_query::Run()
         
         default:
         
-             real_value = real_value;
+         break;
         
     }
     
