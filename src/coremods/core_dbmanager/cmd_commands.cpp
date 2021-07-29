@@ -24,16 +24,16 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
 {  
        std::string select;
        
-       if (parameters.size() > 0)
+       if (parameters.size())
        {
              select = parameters[0];
        }
        else
        {
-            select = user->select;
+             select = user->select;
        }
        
-       if (CheckValidPos(user, select))
+       if (!CheckValidPos(user, select))
        {
               return FAILED;
        }
@@ -42,7 +42,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
        {
               return FAILED;
        }
-
+       
        DBHelper::SFlush(user, select);
        return SUCCESS;
 }
@@ -403,7 +403,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
      return SUCCESS;
 }
 
-CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "DBFLUSH", 0, 1)
+CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
 {
        requires = 'r';
 }

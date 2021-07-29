@@ -244,6 +244,7 @@ void sflush_query::Run()
 void sflush_query::Process()
 {
         user->SendProtocol(BRLD_OK, PROCESS_OK);
+        sfalert(user, NOTIFY_DEFAULT, "SFlushed database: %s", user->GetDatabase()->GetName().c_str());
 }
 
 void touch_query::Run()
