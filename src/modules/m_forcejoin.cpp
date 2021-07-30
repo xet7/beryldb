@@ -53,7 +53,7 @@ class CommandForceJoin : public Command
 			
 			if ((chan) && (chan->IsSubscribed(dest)))
 			{
-				user->SendRemoteProtocol(ERR_INPUT2, PROCESS_ALREADY);
+				user->SendRemoteProtocol(ERR_INPUT, PROCESS_ALREADY);
 				return FAILED;
 			}
 

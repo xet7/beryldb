@@ -49,13 +49,13 @@ class CommandMassJoin : public Command
                         
                         if (chan)
                         {
-                               localuser->SendProtocol(BRLD_MASS_JOIN, "Mass join to " + channel);
+                               localuser->SendProtocol(BRLD_MASS_JOIN, "MASSJOIN:" + channel);
                                total++;
                         }
                   }
              }
              
-             user->SendProtocol(BRLD_END_MASS_JOIN, total, "Mass join finished, total: " + convto_string(total));
+             user->SendProtocol(BRLD_OK, convto_string(total));
              return SUCCESS;
 
         }

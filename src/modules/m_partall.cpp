@@ -26,11 +26,11 @@ class CommandPartAll : public Command
         {
                if (!user->chans.size())
                {
-                      user->SendProtocol(ERR_INPUT2, ERR_PARTALL, NO_CHANS); 
+                      user->SendProtocol(ERR_INPUT, NO_CHANS); 
                       return FAILED;
                }
                
-               user->SendProtocol(BRLD_OK, BRLD_PARTALL, PROCESS_OK);
+               user->SendProtocol(BRLD_OK, PROCESS_OK);
 
 	       for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
 	       {
