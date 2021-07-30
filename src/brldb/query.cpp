@@ -15,6 +15,22 @@
 #include "brldb/query.h"
 #include "brldb/dbmanager.h"
 
+bool QueryBase::Swap(const std::string& newdest, const std::string& ldest, const std::string& lvalue)
+{
+       rocksdb::WriteBatch batch;
+
+       batch.Put(newdest, lvalue);
+       batch.Delete(ldest);
+       rocksdb::Status status = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+       
+       if (status.ok())
+       {
+            return true;
+       }
+       
+       return false;
+}
+
 void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, const std::string& select, unsigned int ttl)
 {
        rocksdb::WriteBatch batch;

@@ -99,6 +99,8 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 
          static void StatusFailed(User* user, std::shared_ptr<QueryBase> signal);
 
+         static void BatchFailed(User* user, std::shared_ptr<QueryBase> signal);
+
         /* 
          * Entry already is defined.
          * 

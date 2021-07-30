@@ -209,6 +209,8 @@ class ExportAPI QueryBase
                  
         void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
 
+        bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue);
+
         void ExpireBatch(const std::string& wdest, const std::string& value, const std::string& e_key, const std::string& select, unsigned int ttl);
         
         void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);

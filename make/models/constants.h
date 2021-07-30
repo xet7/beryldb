@@ -13,6 +13,8 @@
 
 #pragma once
 
+const std::string BATCH_FAIL = "SYNC_FAILED";
+
 const std::string INVALID_CHAN = "INVALID_CHAN";
 
 /* User is not subscribed */

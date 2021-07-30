@@ -100,6 +100,12 @@ void DataFlush::GetResults()
                              
                              break;
                              
+                             case DBL_BATCH_FAILED:
+                             
+                                DataFlush::BatchFailed(user, signal);
+                                
+                             break;
+                             
                              case DBL_INVALID_FORMAT:
                              
                                   DataFlush::InvalidFormat(user, signal);

@@ -84,9 +84,14 @@ void rename_query::Run()
     
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
-    this->Write(newdest, result.value);
-    this->Delete(this->dest);
+
+    if (!this->Swap(newdest, this->dest, result.value))
+    {
+          access_set(DBL_BATCH_FAILED);
+          return;  
+    }
     
+    this->SetOK();
 }
 
 void rename_query::Process()
