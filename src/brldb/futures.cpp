@@ -345,3 +345,33 @@ unsigned int FutureManager::Count(std::shared_ptr<Database> database, const std:
 
         return counter;
 }
+
+void FutureManager::DatabaseDestroy(const std::string& dbname)
+{
+      FutureMap& futures = Kernel->Store->Futures->GetFutures();
+
+      if (!futures.size())
+      {
+              return;
+      }
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(FutureManager::mute);
+
+      for (FutureMap::iterator it = futures.begin(); it != futures.end(); )
+      {
+            if (it->second.database == database)
+            {
+                    futures.erase(it++);
+                    continue;
+            }
+
+            it++;
+      }  
+}

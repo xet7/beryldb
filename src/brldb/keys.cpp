@@ -150,8 +150,7 @@ void expire_list_query::Process()
 
 void setex_query::Run()
 {
-       this->Write(this->dest, to_bin(this->value));
-       this->WriteExpire(this->key, this->select_query, this->id);
+       this->ExpireBatch(this->dest, this->value, this->key, this->select_query, this->id);
        this->SetOK();
 }
 

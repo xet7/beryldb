@@ -15,6 +15,22 @@
 #include "brldb/query.h"
 #include "brldb/dbmanager.h"
 
+void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, const std::string& select, unsigned int ttl)
+{
+       rocksdb::WriteBatch batch;
+       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       
+       batch.Put(lookup, convto_string(ttl));
+       batch.Put(wdest, to_bin(lvalue));
+       
+       rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+       
+       if (stats.ok())
+       {
+            Kernel->Store->Expires->Add(this->database, ttl, e_key, select, true);
+       }
+}
+
 void QueryBase::Write(const std::string& wdest, const std::string& lvalue)
 {
        this->database->GetAddress()->Put(rocksdb::WriteOptions(), wdest, lvalue);
@@ -260,6 +276,7 @@ bool QueryBase::Prepare()
                  }
                  else
                  {
+                 
                      if (this->identified == PROCESS_NULL)
                      {
                             this->access_set(DBL_NOT_FOUND);

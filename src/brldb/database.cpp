@@ -108,11 +108,11 @@ bool Database::FlushDB()
         
         this->Close();
         
+        Kernel->Store->Expires->DatabaseDestroy(this->GetName());
+        Kernel->Store->Futures->DatabaseDestroy(this->GetName());
+        
         rocksdb::Options d_options;
         rocksdb::DestroyDB(this->path, d_options);
-        
-        Kernel->Store->Expires->DatabaseReset(this->GetName());
-        Kernel->Store->Futures->DatabaseReset(this->GetName());
         
         this->SetClosing(false);
         
