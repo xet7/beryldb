@@ -232,7 +232,7 @@ class ExportAPI QueryBase
 	 *         · value: Value to store.
          */          
            
-        void Write(const std::string& wdest, const std::string& lvalue);        
+        bool Write(const std::string& wdest, const std::string& lvalue);        
         
         void Delete(const std::string& wdest);
         

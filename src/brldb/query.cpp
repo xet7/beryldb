@@ -31,9 +31,16 @@ void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue,
        }
 }
 
-void QueryBase::Write(const std::string& wdest, const std::string& lvalue)
+bool QueryBase::Write(const std::string& wdest, const std::string& lvalue)
 {
-       this->database->GetAddress()->Put(rocksdb::WriteOptions(), wdest, lvalue);
+       rocksdb::Status status = this->database->GetAddress()->Put(rocksdb::WriteOptions(), wdest, lvalue);
+       
+       if (status.ok())
+       {
+             return true;
+       }
+       
+       return false;
 }
 
 void QueryBase::Delete(const std::string& wdest)
@@ -49,16 +56,22 @@ void QueryBase::WriteExpire(const std::string& e_key, const std::string& select,
        }
        
        std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
-       this->Write(lookup, convto_string(ttl));
-       Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
+       
+       if (this->Write(lookup, convto_string(ttl)))
+       {
+           Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
+       }
 }
 
 void QueryBase::WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& fvalue)
 {
        std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_FUTURE + ":" + this->database->GetName();
        std::string lvalue = convto_string(ttl) + ":" + fvalue;
-       this->Write(lookup, lvalue);
-       Kernel->Store->Futures->Add(this->database, ttl, e_key, fvalue, select, true);
+       
+       if (this->Write(lookup, lvalue))
+       {
+            Kernel->Store->Futures->Add(this->database, ttl, e_key, fvalue, select, true);
+       }
 }
 
 void QueryBase::DelFuture()
