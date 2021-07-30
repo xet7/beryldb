@@ -171,3 +171,22 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
         KeyHelper::Operation(user, key, OP_MULT, value);
         return SUCCESS; 
 }
+
+CommandSqrt::CommandSqrt(Module* Creator) : Command(Creator, "SQRT", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandSqrt::Handle(User* user, const Params& parameters)
+{  
+        const std::string& key = parameters[0];
+
+        if (!CheckKey(user, key))
+        {
+            return FAILED;
+        }
+
+        KeyHelper::Operation(user, key, OP_SQRT, "NULL");
+        return SUCCESS; 
+}

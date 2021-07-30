@@ -160,9 +160,14 @@ bool UserHelper::Remove(const std::string& user)
         CMapsHelper::Del(user, "flags");
         CMapsHelper::Del(user, "userlogin");      
         CMapsHelper::Del("userlist", user);
+        CMapsHelper::Del("notify", user);
 
         std::string usergrups = user + "/groups";
         CMapsHelper::Erase(usergrups);
+        
+        std::string userchans = user + "/chans";
+        CMapsHelper::Erase(userchans);
+        
         return true;
 }
 

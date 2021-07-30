@@ -154,6 +154,15 @@ void op_query::Run()
                 real_value -= real_oper;
         break;
         
+        case OP_SQRT:
+        
+               real_value = std::sqrt(real_value);
+        break;
+        
+        default:
+        
+         break;
+        
     }
     
     std::string inserting = convto_string(real_value);        
@@ -235,6 +244,7 @@ void sflush_query::Run()
 void sflush_query::Process()
 {
         user->SendProtocol(BRLD_OK, PROCESS_OK);
+        sfalert(user, NOTIFY_DEFAULT, "SFlushed database: %s", user->GetDatabase()->GetName().c_str());
 }
 
 void touch_query::Run()

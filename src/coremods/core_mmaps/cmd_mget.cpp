@@ -70,9 +70,9 @@ CommandMSet::CommandMSet(Module* Creator) : Command(Creator, "MSET", 3, 3)
 
 COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  = parameters[0];
-       const std::string& key   = parameters[1];
-       const std::string& value = parameters.back();
+       const std::string& kmap  	= 	parameters[0];
+       const std::string& key   	= 	parameters[1];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -121,8 +121,8 @@ CommandMDel::CommandMDel(Module* Creator) : Command(Creator, "MDEL", 2, 2)
 
 COMMAND_RESULT CommandMDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  = parameters[0];
-       const std::string& key   = parameters[1];
+       const std::string& kmap  	= 	parameters[0];
+       const std::string& key   	= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -141,8 +141,8 @@ CommandMSeek::CommandMSeek(Module* Creator) : Command(Creator, "MSEEK", 2, 4)
 
 COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
 {  
-       const std::string& mname = parameters[0];
-       const std::string& hesh = parameters[1];
+       const std::string& mname 	= 	parameters[0];
+       const std::string& hesh 		= 	parameters[1];
 
        if (!CheckKey(user, mname))
        {
@@ -176,8 +176,8 @@ CommandMRepeats::CommandMRepeats(Module* Creator) : Command(Creator, "MREPEATS",
 
 COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap  	= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {
@@ -255,8 +255,8 @@ CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 
 COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::string& key = parameters[1];
+       const std::string& kmap 		= 	parameters[0];
+       const std::string& key 		= 	parameters[1];
 
        if (!CheckKey(user, key) || !CheckKey(user, kmap))
        {

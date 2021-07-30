@@ -53,6 +53,14 @@ class ExportAPI Session : public safecast<Session>
         
         static std::shared_ptr<Session> SetFlags(std::shared_ptr<Session> New, const std::string& flags);
         
+        /* 
+         * Sets this->rawflgs.
+         * 
+         * @parameters:
+	 *
+	 *         · flags: Flags to set.
+         */            
+         
         void SetRaw(const std::string& flags);
         
         bool CanExecute()
@@ -70,9 +78,30 @@ class ExportAPI Session : public safecast<Session>
             return this->can_manage;
         }
         
+        /* 
+         * Returns associated flags with session.
+         * 
+         * @return:
+ 	 *
+         *         · string: flags.
+         */            
+         
         std::string GetFlags()
         {
               return this->rawflags;
+        }
+        
+        /* 
+         * Returns associated login with session.
+	 * 
+         * @return:
+ 	 *
+         *         · string: login.
+         */            
+        
+        std::string GetLogin()
+        {
+              return this->login;
         }
         
 };

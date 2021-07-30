@@ -62,7 +62,8 @@ enum OP_TYPE
        OP_MIN	=   4,
        OP_AVG	=   5,
        OP_DIV	=   6,
-       OP_MULT	=   7
+       OP_MULT	=   7,
+       OP_SQRT	=   8
 };
 
 class ExportAPI QueryBase

@@ -92,7 +92,8 @@ IntervalManager::IntervalManager() : counter(0)
 
 IntervalManager::~IntervalManager()
 {
-
+	this->counter = 0;
+	this->Sleep   = false;
 }
 
 bool IntervalManager::RestingStatus()
