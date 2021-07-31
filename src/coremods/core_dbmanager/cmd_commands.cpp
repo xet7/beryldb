@@ -269,7 +269,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
       
       if (dbname == "dbdefault" || dbname == "core")
       {
-             user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
+             user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
       }
       
@@ -295,7 +295,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              return SUCCESS;
       }
       
-      user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
+      user->SendProtocol(ERR_INPUT, INVALID_TYPE);
       return FAILED;
 }
 

@@ -209,7 +209,7 @@ class ExportAPI QueryBase
                  
         void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
 
-        bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue);
+        bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue, std::shared_ptr<Database> db = NULL);
 
         bool SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& key, unsigned int ttl, const std::string& oldkey);
 

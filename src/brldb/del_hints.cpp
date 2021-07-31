@@ -20,10 +20,23 @@
 
 void del_query::Keys()
 {
-     if (this->IsExpiring() > 0)
-     {
-            this->DelExpire();
-     }
+       const std::string& lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_EXPIRE + ":" + this->database->GetName();
+
+       rocksdb::WriteBatch batch;
+
+       batch.Delete(this->dest);
+       batch.Delete(lookup);
+       
+       rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+
+       if (stats.ok())
+       {
+             Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+             this->SetOK();
+             return;
+       }
+       
+       access_set(DBL_BATCH_FAILED);
 }
 
 void del_query::Lists()
@@ -53,11 +66,16 @@ void del_query::Vectors()
 
 void del_query::Run()
 {
-    this->Delete(this->dest);
-
     if (this->identified == INT_KEY)
     {
-          this->Keys();
+          signed int ttl = this->IsExpiring();
+
+          if (this->IsExpiring() > 0)
+          {
+              this->id = ttl;
+              this->Keys();
+              return;    
+          }
     } 
     else if (this->identified == INT_MAP)
     {
@@ -80,6 +98,8 @@ void del_query::Run()
           this->Vectors();
     }   
 
+    this->Delete(this->dest);
+    this->SetOK();
 }
 
 void del_query::Process()

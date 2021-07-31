@@ -168,8 +168,8 @@ CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2
 
 COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
 {  
-         const std::string& gname = parameters[0];
-         const std::string& gname2 = parameters[1];
+         const std::string& gname 	= 	parameters[0];
+         const std::string& gname2 	= 	parameters[1];
          
          if (!CheckKey(user, gname) || !CheckKey(user, gname2))
          {
@@ -188,8 +188,8 @@ CommandGeoDistance::CommandGeoDistance(Module* Creator) : Command(Creator, "GDIS
 
 COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 {  
-       const std::string& gname = parameters[0];
-       const std::string& distance = parameters[1];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& distance 	= 	parameters[1];
 
        if (!CheckKey(user, gname))
        {
@@ -218,8 +218,8 @@ CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2
 
 COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
 {  
-         const std::string& gname = parameters[0];
-         const std::string& dist = parameters[1];
+         const std::string& gname 	= 	parameters[0];
+         const std::string& dist 	= 	parameters[1];
          
          GeoHelper::Remove(user, gname, dist);
          return SUCCESS;
