@@ -604,6 +604,7 @@ bool QueryBase::Prepare()
            {
                  this->GetRegistry(this->select_query, this->key, false);
                  this->Run();
+                 return true;
            }
            
            break;
@@ -611,6 +612,7 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_SKIP:
            {
                  this->Run();
+                 return true;
            }
            
            break;
@@ -623,18 +625,19 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                 }
                 else
                 {
                          this->Run();
-                         break;
+                         return true;
                 }
                 
            }
@@ -648,19 +651,20 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->DelFuture();
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                 }
                 else
                 {
                          this->Run();
-                         break;
+                         return false;
                 }
                  
            
@@ -675,19 +679,19 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
-                            break;
+                            return false;
                      }
                  }
                  else
                  {
                         this->access_set(DBL_NOT_FOUND);
-                        break;
+                        return false;
                  }
            }
            
@@ -700,12 +704,13 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                      
                 }
@@ -718,6 +723,7 @@ bool QueryBase::Prepare()
                  if (this->GetRegistry(this->select_query, this->key, false))
                  {
                            this->Run();
+                           return true;
                  }
                  else
                  {
@@ -725,6 +731,7 @@ bool QueryBase::Prepare()
                          {
                               this->access_set(DBL_NOT_FOUND);
                               this->response = this->identified;
+                              return false;
                          }
                  }
            }
