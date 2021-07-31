@@ -227,10 +227,10 @@ void dbreset_query::Process()
             {
                   user->SetNullDB();
             }
-  
+
             sfalert(user, NOTIFY_DEFAULT, "Removed database: %s", userdb->GetName().c_str());
             FileSystem::remove_directory(userdb->GetPath().c_str());
-         
+
             Kernel->Store->DBM->Delete(this->key);  
             user->SendProtocol(BRLD_OK, PROCESS_OK);
       }

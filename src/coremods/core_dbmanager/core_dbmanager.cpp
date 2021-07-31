@@ -23,7 +23,6 @@ class CoreModDBManager : public Module
         CommandFlushDB cmdflushdb;
         CommandPWD cmdpwd;
         CommandDBSize cmddbsize;
-        CommandDBReset cmddbreset;
         CommandSFlush cmdsflush;
         CommandUsing cmdusing;
         CommandDB cmddb;
@@ -43,7 +42,6 @@ class CoreModDBManager : public Module
                              cmdflushdb(this), 
                              cmdpwd(this),
                              cmddbsize(this), 
-                             cmddbreset(this), 
                              cmdsflush(this), 
                              cmdusing(this),
                              cmddb(this), 

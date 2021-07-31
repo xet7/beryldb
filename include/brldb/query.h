@@ -211,6 +211,8 @@ class ExportAPI QueryBase
 
         bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue);
 
+        bool SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& key, unsigned int ttl, const std::string& oldkey);
+
         void ExpireBatch(const std::string& wdest, const std::string& value, const std::string& e_key, const std::string& select, unsigned int ttl);
         
         void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);

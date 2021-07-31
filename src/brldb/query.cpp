@@ -31,6 +31,30 @@ bool QueryBase::Swap(const std::string& newdest, const std::string& ldest, const
        return false;
 }
 
+bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& lkey, unsigned int ttl, const std::string& oldkey)
+{
+       rocksdb::WriteBatch batch;
+
+       batch.Put(newdest, lvalue);
+       batch.Delete(ldest);
+       
+       std::string lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+
+       batch.Put(lookup, convto_string(ttl));
+
+       rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+
+       if (stats.ok())
+       {
+             Kernel->Store->Expires->Delete(this->database, oldkey, select);
+             Kernel->Store->Expires->Add(this->database, ttl, lkey, select, true);
+             return true;
+       }
+       
+       return false;
+}
+
+
 void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, const std::string& select, unsigned int ttl)
 {
        rocksdb::WriteBatch batch;

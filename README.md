@@ -130,7 +130,6 @@ MULTIMAP  |  0
 VECTOR    |  6 
 EXPIRES   |  1 
 FUTURES   |  0 
-beryl> 
 ```
 
 To search all keys:

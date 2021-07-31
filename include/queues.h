@@ -114,9 +114,10 @@ class IOQueueMiddle : public IOQueue
 		return nextattach; 
 	}
 
-	
-	void SetNextHook(IOQueue* attach) { nextattach = attach; }
-
+	void SetNextHook(IOQueue* attach) 
+	{ 	
+		nextattach = attach; 
+	}
 	
 	static IOQueueMiddle* ToMiddleQueue(IOQueue* attach)
 	{

@@ -20,12 +20,11 @@
 
 void clone_query::Keys()
 {
-     unsigned int ttl = this->IsExpiring();
-     
-     if (ttl > 0)
-     {
-          this->WriteExpire(this->key, this->value, ttl);
-     }
+    RocksData result = this->Get(this->dest);
+    const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
+
+    this->ExpireBatch(newdest, this->value, this->key, this->value, this->id);
+    this->SetOK();
 }
 
 void clone_query::Lists()
@@ -57,7 +56,14 @@ void clone_query::Run()
 {
     if (this->identified == INT_KEY)
     {
-          this->Keys();
+          signed int ttl = this->IsExpiring();
+
+          if (ttl > 0)
+          {
+               this->id = ttl;
+               this->Keys();
+               return;
+          }
     } 
     else if (this->identified == INT_MAP)
     {
@@ -83,7 +89,7 @@ void clone_query::Run()
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
     this->Write(newdest, result.value);
-
+    this->SetOK();
 }
 
 void clone_query::Process()

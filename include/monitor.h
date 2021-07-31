@@ -20,8 +20,8 @@
 
 enum MONITOR_LEVEL
 {
-      MONITOR_DEBUG = 10, /* Shows all found commands */
-      MONITOR_DEFAULT = 20   /* Shows not-found commands plus everything on Default */
+      MONITOR_DEBUG    =  10, 	/* Shows all found commands */
+      MONITOR_DEFAULT  =  20    /* Shows not-found commands plus everything on Default */
 };
 
 typedef std::multimap<User*, MONITOR_LEVEL> MonitorMap;

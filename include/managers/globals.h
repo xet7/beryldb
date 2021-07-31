@@ -57,5 +57,5 @@ class ExportAPI GlobalHelper
       static void Diff(User* user, const std::string& key, const std::string& value, signed int offset, signed int limit);
 
       static void DatabaseReset(User* user, const std::string& dbname);
-      
+
 };
