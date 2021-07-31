@@ -299,9 +299,29 @@ class ExportAPI ClientManager : public safecast<ClientManager>
          */    	
 	
 	User* FirstLogin(const std::string& login, registration_state state = REG_OK);
+
+        /* 
+         * Returns all users that are in a given group.
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to verify.
+	 *  
+         * @return:
+ 	 *
+         *         · vector: All users that belong to group.
+         */    	
+         
+	UserVector FindGroup(const std::shared_ptr<Group> group);
 	
-	UserVector FindGroup(std::shared_ptr<Group> group);
-	
-	void RemoveGroup(std::shared_ptr<Group> group);
+        /* 
+         * Removes a given group from all users.
+         * 
+         * @parameters:
+	 *
+	 *         · group: Group to remove.
+         */    	
+         
+	void RemoveGroup(const std::shared_ptr<Group> group);
 	
 };

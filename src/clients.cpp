@@ -415,7 +415,7 @@ unsigned int ClientManager::CountLogin(const std::string& login)
      return counter;
 }
 
-void ClientManager::RemoveGroup(std::shared_ptr<Group> group)
+void ClientManager::RemoveGroup(const std::shared_ptr<Group> group)
 {
         UserVector users;
 
@@ -428,7 +428,7 @@ void ClientManager::RemoveGroup(std::shared_ptr<Group> group)
         }
 }
 
-UserVector ClientManager::FindGroup(std::shared_ptr<Group> group)
+UserVector ClientManager::FindGroup(const std::shared_ptr<Group> group)
 {
         UserVector users;
 
