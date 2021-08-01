@@ -31,13 +31,13 @@ class CommandMKPasswd : public Command
 			
 			if (!provider)
 			{
-				user->SendProtocol(ERR_UNKNOWN_HASH, "Hash server not found.");
+				user->SendProtocol(ERR_INPUT, INVALID);
 				return FAILED;
 			}
 
 			if (provider->IsKDF())
 			{
-				user->SendProtocol(ERR_UNKNOWN_HASH, type + " is not supported by hmac.");
+				user->SendProtocol(ERR_INPUT, INVALID);
 				return FAILED;
 			}
 
@@ -45,7 +45,7 @@ class CommandMKPasswd : public Command
 			std::string target = provider->hmac(salt, parameters[1]);
 			std::string hashed = bin_to_base64(salt) + "$" + bin_to_base64(target, NULL, 0);
 
-			user->SendProtocol(BRLD_HASH, hashed, parameters[0] + " hashed password: " + parameters[1] + ": " + hashed);
+			user->SendProtocol(BRLD_OK, hashed);
 			return SUCCESS;
 		}
 
@@ -53,12 +53,12 @@ class CommandMKPasswd : public Command
 		
 		if (!provider)
 		{
-			user->SendProtocol(ERR_HASH_NOT_FOUND, "Hash server not found.");
+			user->SendProtocol(ERR_INPUT, NOT_FOUND);
 			return FAILED;
 		}
 
 		std::string hashed_pass = provider->Generate(parameters[1]);
-		user->SendProtocol(BRLD_HASH, hashed_pass, parameters[0] + " hashed password: " + parameters[1] + ": " + hashed_pass);
+		user->SendProtocol(BRLD_OK, hashed_pass);
 		return SUCCESS;
 	}
 };
