@@ -234,10 +234,10 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
 {
       const DataMap& dbases = Kernel->Store->DBM->GetDatabases();
 
-      Dispatcher::JustAPI(user, BRLD_DB_BEGIN);
+      Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", "Name", "Path"));
-      Dispatcher::JustEmerald(user, BRLD_DB_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+      Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Name", "Path"));
+      Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
       for (DataMap::const_iterator it = dbases.begin(); it != dbases.end(); ++it)
       {
@@ -245,13 +245,10 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
             
             const std::string& dbname = udb->GetName();
             const std::string& dbpath = udb->GetPath();
-
-            Dispatcher::ListDepend(user, BRLD_COMMAND_ITEM, Daemon::Format("%-30s | %-10s", dbname.c_str(), dbpath.c_str()), Daemon::Format("%s %s", dbname.c_str(), dbpath.c_str()));
+            Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", dbname.c_str(), dbpath.c_str()), Daemon::Format("%s %s", dbname.c_str(), dbpath.c_str()));
       }     
       
-
-      Dispatcher::JustAPI(user, BRLD_DB_END);
-      
+      Dispatcher::JustAPI(user, BRLD_END_LIST);
       return SUCCESS;
 }
 

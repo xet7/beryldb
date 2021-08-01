@@ -48,9 +48,10 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 {
         const LoginHash& users = Kernel->Clients->GetLogins();
 
-        Dispatcher::JustAPI(user, BRLD_FINGER_BEGIN);
-        Dispatcher::JustEmerald(user, BRLD_FINGER_BEGIN, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", "Instance", "IP", "Login", "Agent", "Logged"));
-        Dispatcher::JustEmerald(user, BRLD_FINGER_BEGIN, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str(), Dispatcher::Repeat("―", 8).c_str(), Dispatcher::Repeat("―", 10).c_str(), Dispatcher::Repeat("―", 5).c_str()));
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", "Instance", "IP", "Login", "Agent", "Logged"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str(), Dispatcher::Repeat("―", 8).c_str(), Dispatcher::Repeat("―", 10).c_str(), Dispatcher::Repeat("―", 5).c_str()));
 
         for (LoginHash::const_iterator i = users.begin(); i != users.end(); ++i)
         {
@@ -61,10 +62,10 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
             	        continue;
             	}
             	
-            	Dispatcher::ListDepend(user, BRLD_FINGER_LIST, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()), Daemon::Format("%s %s %s %s %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
+                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s | %-8s | %-10s | %-5s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()), Daemon::Format("%s %s %s %s %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->login.c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
         }
 
-        Dispatcher::JustAPI(user, BRLD_FINGER_END);
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 	return SUCCESS;
 }
 
@@ -158,15 +159,23 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
         
         UserVector logins = Kernel->Clients->FindLogin(loginid);
 
-        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", "Login", "IP", "Agent", "Logged"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 16).c_str(), Dispatcher::Repeat("―", 20).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
             	User* const login = *i;
-            	user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%s (%s) | %s (%s)", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str()));
+
+                if (login->registered != REG_OK)
+                {
+                        continue;
+                }
+            	
+            	user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str())), Daemon::Format("%s %s %s %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str());
         }
 
-        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 	return SUCCESS;
 }
 

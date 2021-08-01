@@ -27,19 +27,19 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, ERR_INVALID_LOGIN);
                 return FAILED;
         }
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, INVALID_UNAME);
+                user->SendProtocol(ERR_INPUT, ERR_INVALID_LOGIN);
                 return FAILED;
         }
         
         if (pass.length() < 3 || pass.length() > 30)
         {
-                user->SendProtocol(ERR_INVALID_PASS, PASS_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, PASS_MIMMAX_LENGTH);
                 return FAILED; 
         }
         
@@ -73,13 +73,13 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_INPUT2, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;
         }
         
@@ -115,10 +115,10 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
         Args users = STHelper::HKeys("userlist");
         
-        Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "User", "Created"));
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "User", "Created"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
@@ -130,7 +130,7 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
                       continue;
                 }
 
-                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), Daemon::HumanEpochTime(convto_num<time_t>(created)).c_str()), Daemon::Format("%s %s", item.c_str(), created.c_str()));
+                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", item.c_str(), Daemon::HumanEpochTime(convto_num<time_t>(created)).c_str()), Daemon::Format("%s %s", item.c_str(), created.c_str()));
         }        
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
@@ -146,10 +146,10 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
         Args users = STHelper::HKeys("userlist");
 
-        Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "Admin", "Flag"));
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Flag"));
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
@@ -164,7 +164,7 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
                 Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), flags.c_str()), Daemon::Format("%s %s", item.c_str(), flags.c_str()));
         }
 
-        Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
 
@@ -186,7 +186,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INPUT, PASS_AT_LEAST);
+                        user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                         return FAILED;
                 }
 
@@ -236,7 +236,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         }
         else
         {
-                user->SendProtocol(ERR_INPUT, PASS_AT_LEAST);
+                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;
         }
         
