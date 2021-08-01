@@ -63,14 +63,14 @@ CommandL::CommandL(Module* parent) : Command(parent, "I", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-        Dispatcher::JustAPI(user, BRLD_I_START);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
         
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
         
         if (user->GetDatabase())
         {
-             user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
+             user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
         }
         
         /* Returns admin flags to requesting user, if any. */
@@ -79,24 +79,23 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         
         if (!exists.empty())
         {
-                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
+                user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
+                user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         }
         
         const std::string& all_groups = user->GetAllGroups();
         
         if (!all_groups.empty())
         {
-                user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Groups", all_groups.c_str()).c_str());
+                user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Groups", all_groups.c_str()).c_str());
         }
         
         /* Requesting user login. */
 
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
-        user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Login", user->login.c_str())); 
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Login", user->login.c_str())); 
 
-        Dispatcher::JustAPI(user, BRLD_I_END);
-        
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 	return SUCCESS;
 }
 

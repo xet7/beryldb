@@ -274,7 +274,6 @@ CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE",
 COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 {
       std::string dbname = parameters[0];
-
       std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
 
       /* 'dbdefault' is a reserved database name. */
@@ -383,7 +382,7 @@ CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL",
 
 COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
 {  
-     DataMap dbs = Kernel->Store->DBM->GetDatabases();
+     DataMap& dbs = Kernel->Store->DBM->GetDatabases();
 
      for (DataMap::iterator i = dbs.begin(); i != dbs.end(); ++i)
      {

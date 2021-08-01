@@ -146,10 +146,10 @@ To search all keys:
 
 ```
 beryl> search *
-Key                    | Value     
-―――――――――――――――――――――― | ―――――――――
-hello                  | "world"  
-test		       | "value"
+Key                | Value     
+―――――――――――――――――― | ―――――――
+hello              | "world"  
+test		   | "value"
 ```
 
 Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).
