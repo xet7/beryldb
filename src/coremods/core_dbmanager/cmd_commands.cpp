@@ -112,7 +112,14 @@ CommandCurrent::CommandCurrent(Module* Creator) : Command(Creator, "CURRENT", 0)
 
 COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 {  
-       const std::string use = user->select;
+       const std::string& use = user->select;
+       
+       if (use.empty())
+       {
+            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+            return FAILED;
+       }
+       
        user->SendProtocol(BRLD_OK, use.c_str());
        return SUCCESS;
 }
@@ -133,6 +140,12 @@ COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)
        }
        else
        {
+            if (!user->GetDatabase())
+            {
+                 user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+                 return FAILED;
+            }
+            
             db = user->GetDatabase()->GetName();
        }
        
@@ -157,7 +170,7 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
        if (!BASE_PATH.empty())
        {
-            const std::string path = BASE_PATH.c_str();
+            const std::string& path = BASE_PATH.c_str();
             user->SendProtocol(BRLD_OK, path);
             return SUCCESS;
        }
@@ -173,7 +186,7 @@ CommandDefault::CommandDefault(Module* Creator) : Command(Creator, "DEFAULT", 0)
 
 COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
 {  
-       std::string dbname = STHelper::Get("dbconf", "dbdefault");
+       const std::string& dbname = STHelper::Get("dbconf", "dbdefault");
        
        if (dbname.empty())
        {
@@ -181,7 +194,7 @@ COMMAND_RESULT CommandDefault::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       user->SendProtocol(BRLD_OK, dbname);
+       user->SendProtocol(BRLD_OK, dbname.c_str());
        return SUCCESS;
 }
 
@@ -210,7 +223,7 @@ CommandChange::CommandChange(Module* Creator) : Command(Creator, "CHANGE", 1, 1)
 
 COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 {  
-       std::string dbname = parameters[0];
+       const std::string& dbname = parameters[0];
        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
 
        if (!database)
@@ -262,6 +275,8 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 {
       std::string dbname = parameters[0];
 
+      std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
+
       /* 'dbdefault' is a reserved database name. */
       
       if (dbname == "dbdefault" || dbname == "core")
@@ -269,8 +284,6 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
       }
-      
-      std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
       
       if (Kernel->Store->DBM->Create(dbname, dbname))
       {			
@@ -304,7 +317,7 @@ CommandDBDelete::CommandDBDelete(Module* Creator) : Command(Creator, "DBDELETE",
 
 COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 {
-      std::string dbname = parameters[0];
+      const std::string& dbname = parameters[0];
       
       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
 

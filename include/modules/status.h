@@ -77,7 +77,10 @@ class Status::Context
 		return symbol; 
 	}
 
-	void AppendLine(const Row& row) { rows.push_back(row); }
+	void AppendLine(const Row& row) 
+	{ 
+		rows.push_back(row); 
+	}
 
 	template <typename T1>
 	void AppendLine(unsigned int numeric, T1 p1)

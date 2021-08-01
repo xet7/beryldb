@@ -23,7 +23,7 @@ class CommandStatus : public Command
  private:
 
 	Events::ModuleEventProvider statusevprov;
-	void DispatchData(Status::Context& status);
+	void PreloadData(Status::Context& status);
 
  public:
 	
@@ -48,17 +48,9 @@ class CommandStatus : public Command
 };
 
 
-void CommandStatus::DispatchData(Status::Context& status)
+void CommandStatus::PreloadData(Status::Context& status)
 {
 	const char statusid = status.GetSymbol();
-
-	ModuleResult MOD_RESULT;
-	UNTIL_RESULT_CUSTOM(statusevprov, Status::EventListener, OnStatus, MOD_RESULT, (status));
-
-	if (MOD_RESULT == MOD_RES_STOP)
-	{
-		return;
-	}
 
 	switch (statusid)
 	{
@@ -70,7 +62,7 @@ void CommandStatus::DispatchData(Status::Context& status)
 				const std::string type = ls->listen_tag->as_string("type", "clients", 1);
 				const std::string attach = ls->listen_tag->as_string("ssl", "plaintext", 1);
 
-				status.AppendLine(BRLD_STATUS, BRLD_SSL, ls->bind_sa.str() + " (" + type + ", " + attach + ")");
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_SSL, ls->bind_sa.str() + " (" + type + ", " + attach + ")");
 			}
 		}
 
@@ -78,9 +70,9 @@ void CommandStatus::DispatchData(Status::Context& status)
 
 		case 'c':
 		{
-			status.AppendLine(BRLD_STATUS, BRLD_USERS_INFO, "Users: "+convto_string(Kernel->Clients->GetInstances().size()));
-			status.AppendLine(BRLD_STATUS, BRLD_CHAN_INFO, "Channels: "+convto_string(Kernel->Channels->GetSubs().size()));
-			status.AppendLine(BRLD_STATUS, BRLD_COMMANDS, "Commands: "+convto_string(Kernel->Commander.GetCommands().size()));
+			status.AppendLine(BRLD_ITEM_LIST, BRLD_USERS_INFO, "Users: "+convto_string(Kernel->Clients->GetInstances().size()));
+			status.AppendLine(BRLD_ITEM_LIST, BRLD_CHAN_INFO, "Channels: "+convto_string(Kernel->Channels->GetSubs().size()));
+			status.AppendLine(BRLD_ITEM_LIST, BRLD_COMMANDS, "Commands: "+convto_string(Kernel->Commander.GetCommands().size()));
 
 			rusage R;
 
@@ -88,25 +80,25 @@ void CommandStatus::DispatchData(Status::Context& status)
 			if (!getrusage(RUSAGE_SELF,&R))	
 			{
 #ifndef __HAIKU__
-				status.AppendLine(BRLD_STATUS, BRLD_ALLOCATION, "Total allocation: "+convto_string(R.ru_maxrss)+"K");
-				status.AppendLine(BRLD_STATUS, BRLD_SHARED_MEM, "Shared memory size: "+convto_string(R.ru_idrss));
-				status.AppendLine(BRLD_STATUS, BRLD_SIGNALS, "Signals:          "+convto_string(R.ru_nsignals));
-				status.AppendLine(BRLD_STATUS, BRLD_PFAULTS, "Page faults:      "+convto_string(R.ru_majflt));
-				status.AppendLine(BRLD_STATUS, BRLD_SWAPS, "Swaps:            "+convto_string(R.ru_nswap));
-				status.AppendLine(BRLD_STATUS, BRLD_CSW, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_ALLOCATION, "Total allocation: "+convto_string(R.ru_maxrss)+"K");
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_SHARED_MEM, "Shared memory size: "+convto_string(R.ru_idrss));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_SIGNALS, "Signals:          "+convto_string(R.ru_nsignals));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_PFAULTS, "Page faults:      "+convto_string(R.ru_majflt));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_SWAPS, "Swaps:            "+convto_string(R.ru_nswap));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_CSW, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
 #endif
 				float sample_sincelast = (Kernel->Now() - Kernel->Stats->LastSampled.tv_sec) * 1000000
 					+ (Kernel->TimeStamp() - Kernel->Stats->LastSampled.tv_nsec) / 1000;
 				float sample_used = ((R.ru_utime.tv_sec - Kernel->Stats->LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats->LastCPU.tv_usec);
 				float per = (sample_used / sample_sincelast) * 100;
 
-				status.AppendLine(BRLD_STATUS, BRLD_CPU_NOW, Daemon::Format("CPU Usage (current):    %03.5f%%", per));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_CPU_NOW, Daemon::Format("CPU Usage (current):    %03.5f%%", per));
 
 				sample_sincelast = Kernel->Now() - Kernel->GetStartup();
 				sample_used = (float)R.ru_utime.tv_sec + R.ru_utime.tv_usec / 100000.0;
 				per = (sample_used / sample_sincelast) * 100;
 
-				status.AppendLine(BRLD_STATUS, BRLD_CPU_USE, Daemon::Format("CPU Usage (total):  %03.5f%%", per));
+				status.AppendLine(BRLD_ITEM_LIST, BRLD_CPU_USE, Daemon::Format("CPU Usage (total):  %03.5f%%", per));
 			}
 		}
 
@@ -114,28 +106,28 @@ void CommandStatus::DispatchData(Status::Context& status)
 
 		case 't':
 		{
-                        status.AppendLine(BRLD_STATUS, BRLD_CORES, Daemon::Format("Cores: %u", CORE_COUNT));
-                        status.AppendLine(BRLD_STATUS, BRLD_CORES, Daemon::Format("Threads: %u", Kernel->Store->Flusher->CountThreads()));
+                        status.AppendLine(BRLD_ITEM_LIST, BRLD_CORES, Daemon::Format("Cores: %u", CORE_COUNT));
+                        status.AppendLine(BRLD_ITEM_LIST, BRLD_CORES, Daemon::Format("Threads: %u", Kernel->Store->Flusher->CountThreads()));
 		}                        
                         
 		break;
 		
 		case 'u':
 		{
-			status.AppendLine(BRLD_STATUS, BRLD_UPTIME, Daemon::Uptime("", Kernel->GetUptime()));
+			status.AppendLine(BRLD_ITEM_LIST, BRLD_UPTIME, Daemon::Uptime("", Kernel->GetUptime()));
 		}
 		
 		break;
 
 		case 's':
 		{
-                        status.AppendLine(BRLD_STATUS, BRLD_UPTIME, Kernel->GetUptime());
+                        status.AppendLine(BRLD_ITEM_LIST, BRLD_UPTIME, Kernel->GetUptime());
 		}
 
 		default:
 		break;
 	}
-
+	
 	return;
 }
 
@@ -147,7 +139,10 @@ COMMAND_RESULT CommandStatus::Handle(User* user, const Params& parameters)
 	}
 	
 	Status::Context status(user, parameters[0][0]);
-	DispatchData(status);
+
+	PreloadData(status);
+
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
 	const std::vector<Status::Row>& rows = status.GetRows();
 	
@@ -156,6 +151,8 @@ COMMAND_RESULT CommandStatus::Handle(User* user, const Params& parameters)
 		const Status::Row& row = *i;
 		user->SendRemoteProtocol(row);
 	}
+
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 
 	return SUCCESS;
 }
