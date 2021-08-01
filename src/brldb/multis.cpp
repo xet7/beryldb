@@ -123,7 +123,14 @@ void mdel_query::Run()
        
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                       this->SetOK();
+               }
+               else
+               {
+                       access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -660,7 +667,6 @@ void mgetall_query::Process()
         {
                 Dispatcher::JustAPI(user, BRLD_END_LIST);
         }
-
 }
 
 void miter_query::Run()

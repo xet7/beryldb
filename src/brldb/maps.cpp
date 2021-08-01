@@ -197,7 +197,14 @@ void hset_query::Run()
                
                if (handler->GetLast() == HANDLER_MSG_OK)
                {
-                    this->Write(this->dest, handler->as_string());
+                    if (this->Write(this->dest, handler->as_string()))
+                    {
+                        this->SetOK();
+                    }
+                    else
+                    {
+                        access_set(DBL_UNABLE_WRITE);
+                    }
                }
                
                this->SetOK();
@@ -209,9 +216,15 @@ void hset_query::Run()
        
        if (handler->GetLast() == HANDLER_MSG_OK)
        {
-            this->Write(this->dest, handler->as_string());
+            if (this->Write(this->dest, handler->as_string()))
+            {
+                this->SetOK();
+            }
+            else
+            {
+                 access_set(DBL_UNABLE_WRITE);
+            }
        }
-       
       
        this->SetOK();
 }
@@ -240,7 +253,14 @@ void hsetnx_query::Run()
 
        if (handler->GetLast() == HANDLER_MSG_OK)
        {  
-                 this->Write(this->dest, handler->as_string());
+                 if (this->Write(this->dest, handler->as_string()))
+                 {
+                      this->SetOK();
+                 }
+                 else
+                 {
+                      access_set(DBL_UNABLE_WRITE);
+                 }
        }
 
        this->SetOK();

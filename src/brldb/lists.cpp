@@ -243,8 +243,15 @@ void lreverse_query::Run()
 
        std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
        handler->Reverse();
-       this->Write(this->dest, handler->as_string());
-       this->SetOK();
+       
+       if (this->Write(this->dest, handler->as_string()))
+       {
+              this->SetOK();
+       }
+       else
+       {
+              access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void lsort_query::Process()
@@ -264,8 +271,15 @@ void lsort_query::Run()
 
        std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
        handler->Reverse();
-       this->Write(this->dest, handler->as_string());
-       this->SetOK();
+       
+       if (this->Write(this->dest, handler->as_string()))
+       {
+             this->SetOK();
+       }
+       else
+       {
+             access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void lpos_query::Run()
@@ -311,14 +325,19 @@ void lresize_query::Run()
        
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
                this->Delete(this->dest);
        } 
-       
-       this->SetOK();
 }
 
 void lresize_query::Process()
@@ -441,14 +460,19 @@ void lpop_front_query::Run()
  
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
                this->Delete(this->dest);
        } 
- 
-       this->SetOK();
 }
 
 void lpop_front_query::Process()
@@ -472,14 +496,19 @@ void lpop_back_query::Run()
        
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
                this->Delete(this->dest);
        } 
-       
-       this->SetOK();
 }
 
 void lpop_back_query::Process()
@@ -502,7 +531,14 @@ void lpopall_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {             
@@ -529,7 +565,6 @@ void lcount_query::Run()
 
        std::shared_ptr<ListHandler> handler = ListHandler::Create(query_result.value);
        this->counter = handler->Count();
-       
        this->SetOK();
 }
 
@@ -705,7 +740,14 @@ void ldel_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -757,7 +799,14 @@ void lrop_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -794,7 +843,14 @@ void lrfront_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -879,7 +935,15 @@ void lpushnx_query::Run()
        else
        {
              handler->Add(this->value);
-             this->Write(this->dest, handler->as_string());
+             
+             if (this->Write(this->dest, handler->as_string()))
+             {
+                     this->SetOK();
+             }
+             else
+             {
+                     access_set(DBL_UNABLE_WRITE);
+             }
        }
 
        this->SetOK();

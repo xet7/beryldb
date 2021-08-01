@@ -43,8 +43,15 @@ void geoaddnx_query::Process()
 void geoadd_query::Run()
 {
      const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
-     this->Write(this->dest, save);
-     this->SetOK();
+     
+     if (this->Write(this->dest, save))
+     {
+            this->SetOK();
+     }
+     else
+     {
+           access_set(DBL_UNABLE_WRITE);
+     }
 }
 
 void geoadd_query::Process()
@@ -55,8 +62,15 @@ void geoadd_query::Process()
 void geoadd_pub_query::Run()
 {
      const std::string save = to_bin(this->value) + ":" + to_bin(this->hesh);
-     this->Write(this->dest, save);
-     this->SetOK();
+     
+     if (this->Write(this->dest, save))
+     {
+          this->SetOK();
+     }	
+     else
+     {
+           access_set(DBL_UNABLE_WRITE);
+     }
 }
 
 void geoadd_pub_query::Process()
@@ -83,7 +97,6 @@ void geoadd_pub_query::Process()
              ProtocolTrigger::Messages::Publish publish(ProtocolTrigger::Messages::Publish::no_replicate, user->instance, server, "GEOADD " + this->key + " " + this->value + ":" + this->hesh);
              chan->Write(Kernel->GetBRLDEvents().publish, publish);
       }
-      
 }
 
 void geoget_query::Run()
@@ -131,7 +144,6 @@ void geoget_custom_query::Process()
 
 void gkeys_query::Run()
 {
-
        Args result;
        unsigned int total_counter = 0;
        unsigned int aux_counter = 0;

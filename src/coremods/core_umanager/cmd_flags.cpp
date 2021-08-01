@@ -108,7 +108,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
         
         if (flag.empty())
         {
-               user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_FLAGS, INVALID_TYPE);
+               user->SendProtocol(ERR_INPUT, INVALID_TYPE);
                return FAILED;
         }
 
@@ -126,7 +126,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin == "root")
         {
-               user->SendProtocol(ERR_INPUT, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+               user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                return FAILED;
         }
         

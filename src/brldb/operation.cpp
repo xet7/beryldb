@@ -168,9 +168,15 @@ void op_query::Run()
     std::string inserting = convto_string(real_value);        
     std::string newvalue = to_bin(inserting);
     
-    this->Write(this->dest, newvalue);
-    this->response = inserting;
-    this->SetOK();
+    if (this->Write(this->dest, newvalue))
+    {
+             this->response = inserting;
+             this->SetOK();
+    }
+    else
+    {
+             access_set(DBL_UNABLE_WRITE);
+    }
 }
 
 void op_query::Process()
@@ -372,7 +378,6 @@ void list_query::Run()
                 
     this->nmap = result;
     this->SetOK();
-                
 }
 
 void list_query::Process()
@@ -389,7 +394,6 @@ void list_query::Process()
         
         Dispatcher::JustAPI(user, BRLD_END_LIST);
 }
-
 
 void total_query::Run()
 {
@@ -454,14 +458,12 @@ void total_query::Run()
                 
     this->counter = total_counter;
     this->SetOK();
-                
 }
 
 void total_query::Process()
 {
        user->SendProtocol(BRLD_OK, convto_string(this->counter).c_str());
 }
-
 
 void glist_query::Run()
 {

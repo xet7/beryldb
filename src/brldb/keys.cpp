@@ -171,8 +171,14 @@ void expire_del_query::Process()
 
 void set_query::Run()
 {
-       this->Write(this->dest, to_bin(this->value));
-       this->SetOK();
+       if (this->Write(this->dest, to_bin(this->value)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void set_query::Process()
@@ -311,8 +317,6 @@ void strlen_query::Run()
        RocksData result = this->Get(this->dest);
        this->response = convto_string(to_string(result.value).length());
        this->SetOK();
-       
-       this->SetOK();
 }
 
 void strlen_query::Process()
@@ -428,8 +432,14 @@ void getset_query::Run()
        RocksData result = this->Get(this->dest);
        this->response = to_string(result.value);
 
-       this->Write(this->dest, to_bin(this->value));
-       this->SetOK();
+       if (this->Write(this->dest, to_bin(this->value)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void getset_query::Process()
@@ -538,8 +548,15 @@ void setnx_query::Run()
        
        if (!result.status.ok())
        {
-            this->Write(this->dest, to_bin(this->value));
-            this->SetOK();
+            if (this->Write(this->dest, to_bin(this->value)))
+            {
+                this->SetOK();
+            }
+            else
+            {
+                 access_set(DBL_UNABLE_WRITE);
+            }
+            
             return;
        }
        
@@ -720,9 +737,7 @@ void search_query::Process()
         {
                  std::string ikey = i->first;
                  std::string item = "\"" + i->second + "\"";
-                 
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
-                 
         }
 
         if (!this->partial)
@@ -1082,8 +1097,14 @@ void insert_query::Run()
        
        as_str.insert(this->id, this->value);
        
-       this->Write(this->dest, to_bin(as_str));
-       this->SetOK();
+       if (this->Write(this->dest, to_bin(as_str)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void insert_query::Process()

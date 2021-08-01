@@ -220,8 +220,24 @@ class ExportAPI ListHandler
          
         std::string RPOP();
 
+        /* 
+         * Returns last element in list.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Last element.
+         */    
+         
         std::string Back();
 
+        /* 
+         * Obtains front (first) element in list.
+         * 
+         * @return:
+ 	 *
+         *         · string: Front element.
+         */    
+         
         std::string FPOP();
          
         /* 
@@ -259,6 +275,14 @@ class ExportAPI ListHandler
                 return this->mhandler;
         }
 
+        /* 
+         * Fetch last returned msg from a list operation.
+         *
+         * @return:
+ 	 *
+         *         · HANDLER_MSG: Last msg.
+         */    
+         
         HANDLER_MSG GetLast()
         {
              return this->LastMsg;
