@@ -105,7 +105,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          
          if (!parameters.size())
          {
-                  select = user->select;
+                  select  = user->select;
          }
          else
          {

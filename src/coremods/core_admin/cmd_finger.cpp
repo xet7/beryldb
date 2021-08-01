@@ -172,7 +172,7 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
                         continue;
                 }
             	
-            	user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str())), Daemon::Format("%s %s %s %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str());
+            	Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str())), Daemon::Format("%s %s %s %s", login->instance.c_str(), login->GetReadableIP().c_str(), login->agent.c_str(), Daemon::HumanEpochTime(login->GetConnected()).c_str());
         }
 
         Dispatcher::JustAPI(user, BRLD_END_LIST);
@@ -195,18 +195,18 @@ COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
                 flag = parameters[0];
         }
         
-        UserVector logins = ClientManager::FindPrivs(flag);
+        const UserVector& logins = ClientManager::FindPrivs(flag);
 
-        Dispatcher::JustAPI(user, BRLD_LOGINS_BEGIN);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s", "Instance", "Login", "Flags"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 16).c_str(), Dispatcher::Repeat("―", 20).c_str()));
 
         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
         {
                 User* const login = *i;
-                user->SendProtocol(BRLD_LOGINS_ITEM, Daemon::Format("%-10s (%s) | %-10s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str()).c_str());
+                Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-16s | %-20s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str())), Daemon::Format("%s %s %s", login->instance.c_str(), login->login.c_str(), login->session->GetFlags().c_str());
         }
 
-        Dispatcher::JustAPI(user, BRLD_LOGINS_END);
-        
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
-
 }
