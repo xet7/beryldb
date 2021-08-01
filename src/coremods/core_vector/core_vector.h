@@ -192,3 +192,13 @@ class CommandVPushNX : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+class CommandVFind : public Command 
+{
+    public: 
+
+        CommandVFind(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

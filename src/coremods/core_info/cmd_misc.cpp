@@ -63,7 +63,6 @@ CommandL::CommandL(Module* parent) : Command(parent, "I", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-        
         Dispatcher::JustAPI(user, BRLD_I_START);
         
         user->SendProtocol(BRLD_I_ITEM, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());

@@ -1502,6 +1502,22 @@ class ExportAPI lkeys_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vfind_query  : public QueryBase
+{
+    public:
+
+        vfind_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+
 class ExportAPI lfind_query  : public QueryBase
 {
     public:

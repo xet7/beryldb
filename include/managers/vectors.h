@@ -56,4 +56,7 @@ class ExportAPI VectorHelper
        static void Low(User* user, const std::string& entry);
 
        static void Sum(User* user, const std::string& entry);
+       
+       static void Find(User* user, const std::string& entry, const std::string& value, signed int offset, signed int limit);
+       
 };

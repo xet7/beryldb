@@ -121,13 +121,13 @@ COMMAND_RESULT CommandILogin::Handle(User* user, const Params& parameters)
 		return FAILED;
 	}
 	
-        const std::string& agent   =  parameters[0];
-        const std::string& auth    =  parameters[1];
-        const std::string& login   =  parameters[2];
+        const std::string& agent   	 =  parameters[0];
+        const std::string& auth    	 =  parameters[1];
+        const std::string& login   	 =  parameters[2];
         
-        std::string AGENT_CMD      =  "AGENT";
-        std::string AUTH_CMD       =  "AUTH";
-        std::string LOGIN_CMD      =  "LOGIN";
+        const std::string& AGENT_CMD     =  "AGENT";
+        const std::string& AUTH_CMD      =  "AUTH";
+        const std::string& LOGIN_CMD     =  "LOGIN";
         
 	CommandModel::Params params;
         CommandModel::Params params2;

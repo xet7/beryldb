@@ -431,7 +431,7 @@ CommandQueue::CommandQueue()
 
 }
 
-void CommandQueue::Add(LocalUser* user, std::string& command, CommandModel::Params& cmd_params)
+void CommandQueue::Add(LocalUser* user, const std::string& command, CommandModel::Params& cmd_params)
 {
 	if (!user || user->IsQuitting())
         {

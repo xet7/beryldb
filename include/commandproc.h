@@ -47,7 +47,7 @@ class ExportAPI CommandQueue : public safecast<CommandQueue>
 	 *         · cmd_params: Command's parameters.
          */          
 
-        void Add(LocalUser* user, std::string& command, CommandModel::Params& cmd_params);
+        void Add(LocalUser* user, const std::string& command, CommandModel::Params& cmd_params);
 
         /* 
          * Runs pending commands. 
