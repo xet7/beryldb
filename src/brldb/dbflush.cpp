@@ -17,7 +17,6 @@
 #include "brldb/datathread.h"
 #include "brldb/dbnumeric.h"
 #include "brldb/dbflush.h"
-#include "brldb/dbmanager.h"
 #include "algo.h"
 
 std::mutex DataFlush::query_mute;
@@ -46,6 +45,11 @@ DataFlush::DataFlush() : running(false)
 
 void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
 {
+      if (!signal)
+      {
+           return;
+      }
+      
       std::lock_guard<std::mutex> lg(DataFlush::mute);
       signal->user->notifications.push_back(signal);
 }
@@ -98,6 +102,12 @@ void DataFlush::GetResults()
                                 
                                 DataFlush::InvalidRange(user, signal);
                              
+                             break;
+                             
+                             case DBL_BATCH_FAILED:
+                             
+                                DataFlush::BatchFailed(user, signal);
+                                
                              break;
                              
                              case DBL_INVALID_FORMAT:
@@ -160,7 +170,10 @@ void DataFlush::GetResults()
                                DataFlush::Flush(user, signal);
                         }
 
-                        user->SetLock(false);
+                        if (!signal->partial)
+                        {
+                            user->SetLock(false);
+                        }
                 }
       }
           

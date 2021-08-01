@@ -21,7 +21,7 @@ Beryl is a data structure server. Our database provide access to structures via 
 wide range of commands, which are later queued, processed and dispatched. 
 The server is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
 
-Beryl provides lists, maps, keys, and channel subscription for its clients. 
+With Beryl, clients have access to lists, maps, keys, and channel subscription for its clients. 
 Currently, the server is available for GNU/Linux, FreeBSD and MacOS.
 
 * Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
@@ -41,20 +41,20 @@ Beryl's development branches are available in [our GitHub repository](https://gi
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
 using 4 cores. Feel free to change this number according to your cpu.
 
-Installing dependencies in **Debian** based systems:
+* Installing dependencies in **Debian** based systems:
 
 ```
 sudo apt-get install librocksdb-dev build-essential
 ```
 
-Installing dependencies in **Redhat** based systems:
+* Installing dependencies in **Redhat** based systems:
 
 ```
 dnf install @development-tools
 yum install git rocksdb-devel.x86_64
 ```
 
-Installing dependencies in **MacOS**:
+* Installing dependencies in **MacOS**:
 
 ```
 brew install rocksdb 
@@ -107,6 +107,12 @@ maintain that port unused before running the server.
 You may want to learn more about Beryl and run your first queries using
 Beryl-cli:
 
+* **set** is used to define a key. 
+* **get** is used to retrieve a key.
+* use **del** to remove a key.
+* use **exists** to verify whether a given key exists.
+* **strlen** is used to obtain a key's length.
+
 ```
 beryl> set hello "world"
 OK
@@ -116,9 +122,13 @@ beryl> strlen hello
 5
 beryl> ismatch hello "worl?"
 1
+beryl> del hello
+OK
+beryl> exists hello
+0
 ```
 
-You can also run the **'ls'** command to obtain a counter in all structures:
+You can also run the **ls** command to obtain a counter in all structures:
 
 ```
 beryl> ls
@@ -130,17 +140,16 @@ MULTIMAP  |  0
 VECTOR    |  6 
 EXPIRES   |  1 
 FUTURES   |  0 
-beryl> 
 ```
 
 To search all keys:
 
 ```
 beryl> search *
-Key                            | Value     
-―――――――――――――――――――――――――――――― | ――――――――――
-hello                          | world  
-test			       | value
+Key                    | Value     
+―――――――――――――――――――――― | ―――――――――
+hello                  | "world"  
+test		       | "value"
 ```
 
 Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).

@@ -117,13 +117,20 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_BEGIN);
 
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s", "User"));
-        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "User", "Created"));
+        Dispatcher::JustEmerald(user, BRLD_USER_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
         for (Args::iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
-                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+                std::string created = UserHelper::Find(item, "created");
+
+                if (created.empty())
+                {
+                      continue;
+                }
+
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), Daemon::HumanEpochTime(convto_num<time_t>(created)).c_str()), Daemon::Format("%s %s", item.c_str(), created.c_str()));
         }        
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
@@ -179,7 +186,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 }
                 else
                 {
-                        user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_AT_LEAST);
+                        user->SendProtocol(ERR_INPUT, PASS_AT_LEAST);
                         return FAILED;
                 }
 
@@ -190,7 +197,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (!user->IsAdmin())
         {
-                user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
+                user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
                 return FAILED;        
         }
                 
@@ -199,19 +206,19 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_EXISTS, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, INVALID_UNAME);
+                user->SendProtocol(ERR_INPUT, INVALID_UNAME);
                 return FAILED;
         }
         
         if (pass.length() < 3 || pass.length() > 30)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, PASS_MIMMAX_LENGTH);
                 return FAILED; 
         }
         
@@ -219,7 +226,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         
         if (exists.empty())
         {
-                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_EXISTS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
                 return FAILED;
         }
         
@@ -229,7 +236,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
         }
         else
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PASS, PASS_AT_LEAST);
+                user->SendProtocol(ERR_INPUT, PASS_AT_LEAST);
                 return FAILED;
         }
         

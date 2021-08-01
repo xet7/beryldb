@@ -18,6 +18,7 @@
 #include "brldb/expires.h"
 #include "helpers.h"
 
+
 void rename_query::Vectors()
 {
 
@@ -31,13 +32,16 @@ void rename_query::Lists()
 
 void rename_query::Keys()
 {
-     unsigned int ttl = this->IsExpiring();
-     
-     if (ttl > 0)
+     RocksData result = this->Get(this->dest);
+     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+
+     if (!this->SwapWithExpire(newdest, this->dest, result.value, this->select_query, this->value, this->id, this->key))
      {
-          this->DelExpire();
-          this->WriteExpire(this->value, this->select_query, ttl);
+          access_set(DBL_BATCH_FAILED);
+          return;  
      }
+
+     this->SetOK();
 }
 
 void rename_query::Multis()
@@ -59,7 +63,14 @@ void rename_query::Run()
 {
     if (this->identified == INT_KEY)
     {
-          this->Keys();
+          signed int ttl = this->IsExpiring();
+          
+          if (ttl > 0)
+          {
+               this->id = ttl;
+               this->Keys();
+               return;
+          }
     } 
     else if (this->identified == INT_MAP)
     {
@@ -84,9 +95,14 @@ void rename_query::Run()
     
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
-    this->Write(newdest, result.value);
-    this->Delete(this->dest);
+
+    if (!this->Swap(newdest, this->dest, result.value))
+    {
+          access_set(DBL_BATCH_FAILED);
+          return;  
+    }
     
+    this->SetOK();
 }
 
 void rename_query::Process()

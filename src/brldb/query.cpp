@@ -15,9 +15,77 @@
 #include "brldb/query.h"
 #include "brldb/dbmanager.h"
 
-void QueryBase::Write(const std::string& wdest, const std::string& lvalue)
+bool QueryBase::Swap(const std::string& newdest, const std::string& ldest, const std::string& lvalue, std::shared_ptr<Database> db)
 {
-       this->database->GetAddress()->Put(rocksdb::WriteOptions(), wdest, lvalue);
+       if (db == NULL)
+       {
+           db = this->database;
+       }       
+       
+       rocksdb::WriteBatch batch;
+
+       batch.Put(newdest, lvalue);
+       batch.Delete(ldest);
+       rocksdb::Status status = db->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+       
+       if (status.ok())
+       {
+            return true;
+       }
+       
+       return false;
+}
+
+bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& lkey, unsigned int ttl, const std::string& oldkey)
+{
+       rocksdb::WriteBatch batch;
+
+       batch.Put(newdest, lvalue);
+       batch.Delete(ldest);
+       
+       std::string lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+
+       batch.Put(lookup, convto_string(ttl));
+
+       rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+
+       if (stats.ok())
+       {
+             Kernel->Store->Expires->Delete(this->database, oldkey, select);
+             Kernel->Store->Expires->Add(this->database, ttl, lkey, select, true);
+             return true;
+       }
+       
+       return false;
+}
+
+
+void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, const std::string& select, unsigned int ttl)
+{
+       rocksdb::WriteBatch batch;
+       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       
+       batch.Put(lookup, convto_string(ttl));
+       batch.Put(wdest, to_bin(lvalue));
+       
+       rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+       
+       if (stats.ok())
+       {
+            Kernel->Store->Expires->Add(this->database, ttl, e_key, select, true);
+       }
+}
+
+bool QueryBase::Write(const std::string& wdest, const std::string& lvalue)
+{
+       rocksdb::Status status = this->database->GetAddress()->Put(rocksdb::WriteOptions(), wdest, lvalue);
+       
+       if (status.ok())
+       {
+             return true;
+       }
+       
+       return false;
 }
 
 void QueryBase::Delete(const std::string& wdest)
@@ -33,16 +101,22 @@ void QueryBase::WriteExpire(const std::string& e_key, const std::string& select,
        }
        
        std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
-       this->Write(lookup, convto_string(ttl));
-       Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
+       
+       if (this->Write(lookup, convto_string(ttl)))
+       {
+           Kernel->Store->Expires->Add(db, ttl, e_key, select, true);
+       }
 }
 
 void QueryBase::WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& fvalue)
 {
        std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_FUTURE + ":" + this->database->GetName();
        std::string lvalue = convto_string(ttl) + ":" + fvalue;
-       this->Write(lookup, lvalue);
-       Kernel->Store->Futures->Add(this->database, ttl, e_key, fvalue, select, true);
+       
+       if (this->Write(lookup, lvalue))
+       {
+            Kernel->Store->Futures->Add(this->database, ttl, e_key, fvalue, select, true);
+       }
 }
 
 void QueryBase::DelFuture()
@@ -219,12 +293,13 @@ bool QueryBase::Prepare()
                       if (this->identified == this->base_request)
                       {
                              this->Run();
-                             break;
+                             return true;
                       }   
                       else
                       {  
                              this->access_set(DBL_INVALID_TYPE);
                              this->response = this->identified;
+                             return false;
                       }
                  }
                  else
@@ -233,6 +308,7 @@ bool QueryBase::Prepare()
                       {
                             this->dest = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
                             this->Run();
+                            return true;
                       }  
                  }
            }
@@ -260,6 +336,7 @@ bool QueryBase::Prepare()
                  }
                  else
                  {
+                 
                      if (this->identified == PROCESS_NULL)
                      {
                             this->access_set(DBL_NOT_FOUND);
@@ -401,6 +478,7 @@ bool QueryBase::Prepare()
                    {
                          this->access_set(DBL_INVALID_TYPE);
                          this->response = this->identified;
+                         return false;
                    }
                    
                    return false;
@@ -482,6 +560,7 @@ bool QueryBase::Prepare()
                    {
                           this->access_set(DBL_INVALID_TYPE);
                           this->response = this->identified;
+                          return false;
                    }
                    else
                    {
@@ -489,6 +568,7 @@ bool QueryBase::Prepare()
                          {
                                 this->access_set(DBL_NOT_FOUND);
                                 this->response = this->identified;
+                                return false;
                          }
                    }
            
@@ -510,6 +590,7 @@ bool QueryBase::Prepare()
                    {
                              this->access_set(DBL_INVALID_TYPE);
                              this->response = this->identified;
+                             return false;
                    }
                    else
                    {
@@ -517,6 +598,7 @@ bool QueryBase::Prepare()
                          {
                                this->access_set(DBL_NOT_FOUND);
                                this->response = this->identified;
+                               return false;
                          }
                    }
 
@@ -529,6 +611,7 @@ bool QueryBase::Prepare()
            {
                  this->GetRegistry(this->select_query, this->key, false);
                  this->Run();
+                 return true;
            }
            
            break;
@@ -536,6 +619,7 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_SKIP:
            {
                  this->Run();
+                 return true;
            }
            
            break;
@@ -548,18 +632,19 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                 }
                 else
                 {
                          this->Run();
-                         break;
+                         return true;
                 }
                 
            }
@@ -573,19 +658,20 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->DelFuture();
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                 }
                 else
                 {
                          this->Run();
-                         break;
+                         return false;
                 }
                  
            
@@ -600,19 +686,19 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
-                            break;
+                            return false;
                      }
                  }
                  else
                  {
                         this->access_set(DBL_NOT_FOUND);
-                        break;
+                        return false;
                  }
            }
            
@@ -625,12 +711,13 @@ bool QueryBase::Prepare()
                      if (this->identified == this->base_request)
                      {
                            this->Run();
-                           break;
+                           return true;
                      }   
                      else
                      {  
                             this->access_set(DBL_INVALID_TYPE);
                             this->response = this->identified;
+                            return false;
                       }
                      
                 }
@@ -643,6 +730,7 @@ bool QueryBase::Prepare()
                  if (this->GetRegistry(this->select_query, this->key, false))
                  {
                            this->Run();
+                           return true;
                  }
                  else
                  {
@@ -650,6 +738,7 @@ bool QueryBase::Prepare()
                          {
                               this->access_set(DBL_NOT_FOUND);
                               this->response = this->identified;
+                              return false;
                          }
                  }
            }
@@ -658,5 +747,5 @@ bool QueryBase::Prepare()
            
      }
 
-     return true;
+     return false;
 }

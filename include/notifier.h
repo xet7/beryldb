@@ -15,9 +15,9 @@
 
 enum NOTIFY_LEVEL
 {
-      NOTIFY_DEBUG = 10,  
-      NOTIFY_VERBOSE = 20,
-      NOTIFY_DEFAULT = 30
+      NOTIFY_DEBUG     =  10,  
+      NOTIFY_VERBOSE   =  20,
+      NOTIFY_DEFAULT   =  30
 };
 
 struct Event

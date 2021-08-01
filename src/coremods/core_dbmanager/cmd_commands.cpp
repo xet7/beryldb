@@ -117,24 +117,6 @@ COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandDBReset::CommandDBReset(Module* Creator) : Command(Creator, "DBRESET", 0)
-{
-       requires = 'e';
-}			
-
-COMMAND_RESULT CommandDBReset::Handle(User* user, const Params& parameters)
-{  
-       if (!Kernel->Store->Flusher->Status())
-       {
-              user->SendProtocol(ERR_INPUT, ALREADY_PAUSED);
-              return FAILED;
-       }
-       
-       DataFlush::ResetAll();
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
-       return SUCCESS;
-}
-
 CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0, 1)
 {
        group = 'w';
@@ -287,7 +269,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
       
       if (dbname == "dbdefault" || dbname == "core")
       {
-             user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
+             user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
       }
       
@@ -313,7 +295,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              return SUCCESS;
       }
       
-      user->SendProtocol(ERR_INPUT2, ERR_DB_EXISTS, PROCESS_FALSE);
+      user->SendProtocol(ERR_INPUT, INVALID_TYPE);
       return FAILED;
 }
 

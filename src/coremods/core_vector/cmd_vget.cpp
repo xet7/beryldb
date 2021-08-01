@@ -443,3 +443,33 @@ COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
         VectorHelper::PushNX(user, key, value);
         return SUCCESS;  
 }
+
+CommandVFind::CommandVFind(Module* Creator) : Command(Creator, "VFIND", 2, 4)
+{
+         group = 'l';
+         syntax = "<key> \"%value\" <offset> <limit>";
+}
+
+COMMAND_RESULT CommandVFind::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =       parameters[0];
+       const std::string& value         =       parameters.back();
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+        
+       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       
+       if (lms[0] == 0)
+       {
+            return FAILED; 
+       }
+
+       signed int offset = lms[1];
+       signed int limit = lms[2];
+
+       VectorHelper::Find(user, key, value, offset, limit);
+       return SUCCESS;  
+}

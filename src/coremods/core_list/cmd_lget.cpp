@@ -22,8 +22,8 @@ CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2,
 
 COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -95,13 +95,13 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
 {
          group = 'l';
-         syntax = "<key> <%value> <offset> <limit>";
+         syntax = "<key> \"%value\" <offset> <limit>";
 }
 
 COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -130,8 +130,8 @@ CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters.back();
 
        if (!CheckKey(user, key))
        {

@@ -72,10 +72,19 @@ class ExportAPI Timer
 	 {
 		return repeat;
 	 }
-		
+
+        /* 
+         * Returns seconds between intervals.
+         * 
+         * @return:
+ 	 *
+         *         · uint: Seconds between this Run()
+         *                 and the next one.
+         */    		
+         
  	 unsigned int as_interval() const
  	 {
-		return secs;
+		return this->secs;
 	 }
 
 	/* Stops repeating a timer. */

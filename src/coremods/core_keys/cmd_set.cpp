@@ -22,8 +22,8 @@ CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 
 COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters.back();
+       const std::string& key 		= 	 parameters[0];
+       const std::string& value 	=	 parameters.back();
 
        if (!CheckKey(user, key))
        {

@@ -20,6 +20,11 @@
 #include "brldb/query.h"
 #include "helpers.h"
 
+void DataFlush::BatchFailed(User* user, std::shared_ptr<QueryBase> signal)
+{
+      user->SendProtocol(ERR_INPUT, BATCH_FAIL);
+}
+
 void DataFlush::InvalidRange(User* user, std::shared_ptr<QueryBase> signal)
 {
       user->SendProtocol(ERR_INPUT, INVALID_RANGE);

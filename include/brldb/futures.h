@@ -171,6 +171,8 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          
         unsigned int DatabaseReset(const std::string& dbname);
 
+        void DatabaseDestroy(const std::string& dbname);
+
         /* 
          * This function should be called before a database is closing.
          * The main purpose of this function is to remove pending futures from the

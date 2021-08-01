@@ -37,7 +37,7 @@ class CommandForcePart : public Command
                 
                 if (!channel)
                 {
-                         user->SendRemoteProtocol(ERR_INPUT2, ERR_NO_CHAN, PROCESS_NULL);
+                         user->SendRemoteProtocol(ERR_INPUT, PROCESS_NULL);
                          return FAILED;
                 }
                 
@@ -45,7 +45,7 @@ class CommandForcePart : public Command
                 {
                         if (!channel->IsSubscribed(dest))
                         {
-                                user->SendRemoteProtocol(ERR_INPUT2, BRLD_ALERT, NOT_SUBSCRIBED);
+                                user->SendRemoteProtocol(ERR_INPUT, NOT_SUBSCRIBED);
                                 return FAILED;
                         }
         

@@ -208,6 +208,12 @@ class ExportAPI QueryBase
          */    
                  
         void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
+
+        bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue, std::shared_ptr<Database> db = NULL);
+
+        bool SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& key, unsigned int ttl, const std::string& oldkey);
+
+        void ExpireBatch(const std::string& wdest, const std::string& value, const std::string& e_key, const std::string& select, unsigned int ttl);
         
         void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);
 
@@ -230,7 +236,7 @@ class ExportAPI QueryBase
 	 *         · value: Value to store.
          */          
            
-        void Write(const std::string& wdest, const std::string& lvalue);        
+        bool Write(const std::string& wdest, const std::string& lvalue);        
         
         void Delete(const std::string& wdest);
         
@@ -1495,6 +1501,22 @@ class ExportAPI lkeys_query  : public QueryBase
 
         void Process();
 };
+
+class ExportAPI vfind_query  : public QueryBase
+{
+    public:
+
+        vfind_query() 
+        {
+                this->type = QUERY_TYPE_ITER;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 
 class ExportAPI lfind_query  : public QueryBase
 {

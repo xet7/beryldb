@@ -154,6 +154,8 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
         
         static unsigned int SelectReset(const std::string& dbname, const std::string& select);
 
+        void DatabaseDestroy(const std::string& dbname);
+
         static unsigned int DatabaseReset(const std::string& dbname);
 
         /* 

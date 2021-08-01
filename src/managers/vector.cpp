@@ -164,3 +164,13 @@ void VectorHelper::Sum(User* user, const std::string& entry)
        Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void VectorHelper::Find(User* user, const std::string& entry, const std::string& value, signed int offset, signed int limit)
+{
+       std::shared_ptr<vfind_query> query = std::make_shared<vfind_query>();
+       Helpers::make_list(user, query, entry);
+       query->offset = offset;
+       query->limit = limit;
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}

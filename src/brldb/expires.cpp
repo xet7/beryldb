@@ -255,6 +255,36 @@ unsigned int ExpireManager::DatabaseReset(const std::string& dbname)
       return counter;
 }
 
+void ExpireManager::DatabaseDestroy(const std::string& dbname)
+{
+      ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+
+      if (!expiring.size())
+      {
+              return;
+      }
+
+      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+
+      if (!database)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(ExpireManager::mute);
+
+      for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); )
+      {
+            if (it->second.database == database)
+            {
+                    expiring.erase(it++);
+                    continue;
+            }
+
+            it++;
+      }  
+}
+
 unsigned int ExpireManager::SelectReset(const std::string& dbname, const std::string& select)
 {
       /* Keeps track of deleted expires */

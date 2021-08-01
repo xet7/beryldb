@@ -25,7 +25,6 @@
 void expire_list_query::Run()
 {
        unsigned int total_counter = 0;
-       unsigned int broken_keys = 0;
 
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
        
@@ -109,17 +108,6 @@ void expire_list_query::Run()
                 }
 
                 std::string rawvalue = it->value().ToString();
-                std::string valid_key = key_as_bin + ":" + select_as_string + ":" + INT_KEY;
-                
-                std::string dbvalue;
-                rocksdb::Status status = this->database->GetAddress()->Get(rocksdb::ReadOptions(), valid_key, &dbvalue);                
-                
-                if (!status.ok())
-                {
-                     this->database->GetAddress()->Delete(rocksdb::WriteOptions(), rawmap);
-                     broken_keys++;
-                     continue;
-                }
                 
                 if (Kernel->Config->KeepExpires)
                 {
@@ -131,11 +119,6 @@ void expire_list_query::Run()
                      this->Delete(rawmap);
                 }
         }
-        
-        if (broken_keys > 0)
-        {
-               iprint((int)broken_keys, "Broken expires found: Now fixed.");
-        }	
         
         if (Kernel->Config->KeepExpires && total_counter > 0)
         {
@@ -150,8 +133,7 @@ void expire_list_query::Process()
 
 void setex_query::Run()
 {
-       this->Write(this->dest, to_bin(this->value));
-       this->WriteExpire(this->key, this->select_query, this->id);
+       this->ExpireBatch(this->dest, this->value, this->key, this->select_query, this->id);
        this->SetOK();
 }
 
@@ -737,7 +719,7 @@ void search_query::Process()
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {
                  std::string ikey = i->first;
-                 std::string item = i->second;
+                 std::string item = "\"" + i->second + "\"";
                  
                  Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
                  

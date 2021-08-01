@@ -20,8 +20,6 @@
 #include "testoffice.h"
 #include "interval.h"
 #include "engine.h"
-#include "exit.h"
-#include "notifier.h"
 
 void Beryl::CheckOffice()
 {

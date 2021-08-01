@@ -20,14 +20,27 @@
 
 void move_query::Keys()
 {
-     unsigned int ttl = this->IsExpiring();
+     RocksData result = this->Get(this->dest);
+     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
+     const std::string& lookup = to_bin(this->key) + ":" + this->value + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
-     if (ttl > 0)
+     rocksdb::WriteBatch batch;
+
+     batch.Put(newdest, result.value);
+     batch.Delete(this->dest);
+     batch.Put(lookup, convto_string(this->id));
+
+     rocksdb::Status stats = this->database->GetAddress()->Write(rocksdb::WriteOptions(), &batch);
+
+     if (stats.ok())
      {
-          this->DelExpire();
-          this->WriteExpire(this->key, this->value, ttl);
+             Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
+             Kernel->Store->Expires->Add(this->database, this->id, this->key, this->value, true);
+             this->SetOK();
+             return;
      }
-
+     
+     access_set(DBL_BATCH_FAILED);
 }
 
 void move_query::Maps()
@@ -59,7 +72,14 @@ void move_query::Run()
 {
     if (this->identified == INT_KEY)
     {
-          this->Keys();
+          signed int ttl = this->IsExpiring();
+
+          if (ttl > 0)
+          {
+               this->id = ttl;
+               this->Keys();
+               return;
+          }
     } 
     else if (this->identified == INT_MAP)
     {
@@ -84,9 +104,15 @@ void move_query::Run()
     
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
-    this->Write(newdest, result.value);
-    this->Delete(this->dest);
     
+    if (!this->Swap(newdest, this->dest, result.value))
+    {
+          access_set(DBL_BATCH_FAILED);
+          return;  
+    }
+    
+    this->SetOK();
+        
 }
 
 void move_query::Process()

@@ -100,6 +100,17 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          static void StatusFailed(User* user, std::shared_ptr<QueryBase> signal);
 
         /* 
+         * WriteBatch has failed.
+         * 
+	 * 
+         * @print:
+ 	 *
+         *         · DBL_BATCH_FAILED.
+         */    
+         
+         static void BatchFailed(User* user, std::shared_ptr<QueryBase> signal);
+
+        /* 
          * Entry already is defined.
          * 
          * @print:

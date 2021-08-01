@@ -35,6 +35,18 @@ class ExportAPI UserHelper
          
         static bool Add(const std::string& user, const std::string& pass);
 
+        /* 
+         * Removes an user from the userlist.
+         * 
+         * @parameters:
+	 *
+	 *         · user: user to remove.
+	 * 
+         * @return:
+ 	 *
+         *         · True: User removed.
+         */    
+         
         static bool Remove(const std::string& user);
 
         /* 
@@ -52,6 +64,18 @@ class ExportAPI UserHelper
          
         static bool Exists(const std::string& user);
 
+        /* 
+         * Assigns given flags to an user.
+         * 
+         * @parameters:
+	 *
+	 *         · flags: Flags to set.
+	 * 
+         * @return:
+ 	 *
+         *         · True: Flags updated.
+         */    
+         
         static bool SetFlags(const std::string& user, const std::string& flags);
 
         static bool DeleteFlags(const std::string& user);

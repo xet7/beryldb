@@ -99,10 +99,10 @@ void DLLHandler::GetLastError()
 	const char* ErrorMsg = dlerror();
 	error = ErrorMsg ? ErrorMsg : "Unknown error";
 
-	std::string::size_type p;
+	std::string::size_type type;
 	
-	while ((p = error.find_last_of("\r\n")) != std::string::npos)
+	while ((type = error.find_last_of("\r\n")) != std::string::npos)
 	{
-		error.erase(p, 1);
+		error.erase(type, 1);
 	}
 }

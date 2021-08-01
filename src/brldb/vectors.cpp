@@ -22,6 +22,106 @@
 
 #include "managers/maps.h"
 
+void vfind_query::Run()
+{
+       unsigned int total_counter = 0;
+       unsigned int aux_counter = 0;
+       unsigned int tracker = 0;
+       
+       std::string dbvalue;
+       rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), this->dest, &dbvalue);
+
+       if (!fstatus2.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(dbvalue);
+       Args query_result = handler->Find(this->value);
+       
+       Args result;
+       
+       for (std::vector<std::string>::iterator i = query_result.begin(); i != query_result.end(); ++i)
+       {
+                std::string key_as_string = *i;
+                
+                if (this->limit != -1 && ((signed int)total_counter >= this->offset))
+                {
+                             if (((signed int)aux_counter < limit))
+                             {
+                                    aux_counter++;
+                                    
+                                    result.push_back(key_as_string);
+             
+                                    if (aux_counter % ITER_LIMIT == 0)
+                                    {
+                                                std::shared_ptr<vfind_query> request = std::make_shared<vfind_query>();
+                                                request->user = this->user;
+                                                request->partial = true;                                  
+                                                request->subresult = ++tracker;
+                                                request->VecData = result;
+                                                result.clear();
+                                                request->SetOK();
+                                                DataFlush::AttachResult(request);
+                                      }
+                                      
+                                      if (aux_counter == (unsigned int)limit)
+                                      {
+                                                break;               
+                                      }
+                             }
+                }
+                else if (limit == -1)
+                {
+                             aux_counter++;
+                             result.push_back(key_as_string);
+            
+                             if (aux_counter % ITER_LIMIT == 0)
+                             {
+                                        std::shared_ptr<vfind_query> request = std::make_shared<vfind_query>();
+                                        request->user = this->user;
+                                        request->partial = true;
+                                        request->subresult = ++tracker;
+                                        request->VecData = result;
+                                        result.clear();
+                                        request->SetOK();
+                                        DataFlush::AttachResult(request);
+                             }
+                }
+                         
+                total_counter++;
+    }
+
+    this->subresult = ++tracker;
+    this->partial = false;
+    this->counter = aux_counter;
+    this->VecData = result;
+    this->SetOK();
+}
+
+void vfind_query::Process()
+{
+        if (this->subresult == 1)
+        {
+                Dispatcher::JustAPI(user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Vector"));
+                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        }
+        
+        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
+        {            
+                 std::string item = *i;
+                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+        }
+
+        if (!this->partial)
+        {
+                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
+        }
+}
+
+
 void vsort_query::Process()
 {
        user->SendProtocol(BRLD_OK, PROCESS_OK);

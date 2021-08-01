@@ -578,10 +578,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 
         /* Reset memory assignations. */
         
-        memset(&this->TIME, 0, sizeof(timespec));        
-        
-        memset(&this->startup, 0, sizeof(time_t));        
-        
         memset(&this->PendingBuffer, BUFFERSIZE, sizeof(char));
 
         /* Free memory */

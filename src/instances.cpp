@@ -13,13 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "stats.h"
-#include "notifier.h"
-#include "monitor.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "managers/settings.h"
 #include "managers/user.h"
 
 std::mutex User::db_mute;
