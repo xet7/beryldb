@@ -17,6 +17,12 @@
 #include "brldb/database.h"
 #include "cstruct.h"
 
+enum STR_FUNCTION
+{
+       STR_TO_LOW 	         =	1,
+       STR_TO_UPPER		 = 	2
+};
+
 enum QUERY_TYPE
 {
        QUERY_TYPE_RENAME         = 	1,
@@ -86,6 +92,8 @@ class ExportAPI QueryBase
         {
               this->key_required = flag;
         }
+        
+        STR_FUNCTION function;
         
         QUERY_FLAGS flags;
         
@@ -1616,6 +1624,21 @@ class ExportAPI vdel_query  : public QueryBase
         {
                 this->type = QUERY_TYPE_DELETE;
                 this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI modify_query  : public QueryBase
+{
+    public:
+
+        modify_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
         }
 
         void Run();

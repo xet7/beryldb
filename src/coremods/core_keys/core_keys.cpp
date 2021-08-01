@@ -41,6 +41,8 @@ class CoreModKeys : public Module
         CommandAsBool cmdasbool;
         CommandIsMatch cmdismatch;
         CommandInsert cmdinsert;
+        CommandToLower cmdtolower;
+        CommandToUpper cmdtoupper;
         
     public:	
         
@@ -66,7 +68,9 @@ class CoreModKeys : public Module
                         cmdisbool(this),
                         cmdasbool(this),
                         cmdismatch(this),
-                        cmdinsert(this)
+                        cmdinsert(this),
+                        cmdtolower(this),
+                        cmdtoupper(this)
         {
         
         }

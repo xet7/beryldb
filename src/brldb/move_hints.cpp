@@ -12,15 +12,12 @@
  */
 
 #include "beryl.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/expires.h"
 #include "helpers.h"
 
 void move_query::Keys()
 {
      RocksData result = this->Get(this->dest);
+     
      const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
      const std::string& lookup = to_bin(this->key) + ":" + this->value + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
@@ -36,6 +33,7 @@ void move_query::Keys()
      {
              Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
              Kernel->Store->Expires->Add(this->database, this->id, this->key, this->value, true);
+             
              this->SetOK();
              return;
      }

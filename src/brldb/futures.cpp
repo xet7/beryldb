@@ -14,11 +14,6 @@
 #include "beryl.h"
 #include "algo.h"
 #include "brldb/futures.h"
-#include "brldb/dbflush.h"
-#include "brldb/database.h"
-#include "brldb/datathread.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/dbmanager.h"
 #include "managers/keys.h"
 #include "managers/globals.h"
 

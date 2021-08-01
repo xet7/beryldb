@@ -199,13 +199,50 @@ void get_substr_query::Run()
        
        this->response = this->response.substr(this->offset, this->limit);
        
-       this->Write(this->dest, to_bin(this->response));
+       if (this->Write(this->dest, to_bin(this->response)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
+       
        this->SetOK();
 }
 
 void get_substr_query::Process()
 {
        user->SendProtocol(BRLD_OK, Helpers::Format(this->response).c_str());
+}
+
+void modify_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+       this->response = to_string(result.value);
+       
+       if (this->function == STR_TO_UPPER)
+       {
+           std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::toupper);
+       }
+       else if (this->function == STR_TO_LOW)
+       {
+           std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::tolower);
+       }
+ 
+       if (this->Write(this->dest, to_bin(this->response)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
+}
+
+void modify_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
 void get_occurs_query::Run()
