@@ -328,3 +328,38 @@ std::string ListHandler::FPOP()
       return item;
 }
 
+double ListHandler::GetLow()
+{
+      double value = convto_num<double>(mhandler.front());
+
+      for (ListMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+
+             if (item < value)
+             {
+                  value = item;
+             }
+
+      }
+
+      return value;
+}
+
+double ListHandler::GetHigh()
+{
+      double value = 0;
+
+      for (ListMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      {
+             double item = convto_num<double>(*i);
+
+             if (item > value)
+             {
+                  value = item;
+             }
+
+      }
+
+      return value;
+}

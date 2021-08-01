@@ -916,3 +916,57 @@ void lavg_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response.c_str());
 }
+
+void lhigh_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
+       
+       if (!handler->IsNumeric())
+       {
+              access_set(DBL_INVALID_RANGE);
+              return;
+       }
+       
+       this->response = convto_string(handler->GetHigh());
+       this->SetOK();
+}
+
+void lhigh_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response.c_str());
+}
+
+void llow_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<ListHandler> handler = ListHandler::Create(result.value);
+
+       if (!handler->IsNumeric())
+       {
+              access_set(DBL_INVALID_RANGE);
+              return;
+       }
+
+       this->response = convto_string(handler->GetLow());
+       this->SetOK();
+}
+
+void llow_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response.c_str());
+}
