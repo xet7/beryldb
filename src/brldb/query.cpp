@@ -293,12 +293,13 @@ bool QueryBase::Prepare()
                       if (this->identified == this->base_request)
                       {
                              this->Run();
-                             break;
+                             return true;
                       }   
                       else
                       {  
                              this->access_set(DBL_INVALID_TYPE);
                              this->response = this->identified;
+                             return false;
                       }
                  }
                  else
@@ -307,6 +308,7 @@ bool QueryBase::Prepare()
                       {
                             this->dest = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
                             this->Run();
+                            return true;
                       }  
                  }
            }
@@ -476,6 +478,7 @@ bool QueryBase::Prepare()
                    {
                          this->access_set(DBL_INVALID_TYPE);
                          this->response = this->identified;
+                         return false;
                    }
                    
                    return false;
@@ -557,6 +560,7 @@ bool QueryBase::Prepare()
                    {
                           this->access_set(DBL_INVALID_TYPE);
                           this->response = this->identified;
+                          return false;
                    }
                    else
                    {
@@ -564,6 +568,7 @@ bool QueryBase::Prepare()
                          {
                                 this->access_set(DBL_NOT_FOUND);
                                 this->response = this->identified;
+                                return false;
                          }
                    }
            
@@ -585,6 +590,7 @@ bool QueryBase::Prepare()
                    {
                              this->access_set(DBL_INVALID_TYPE);
                              this->response = this->identified;
+                             return false;
                    }
                    else
                    {
@@ -592,6 +598,7 @@ bool QueryBase::Prepare()
                          {
                                this->access_set(DBL_NOT_FOUND);
                                this->response = this->identified;
+                               return false;
                          }
                    }
 
@@ -740,5 +747,5 @@ bool QueryBase::Prepare()
            
      }
 
-     return true;
+     return false;
 }

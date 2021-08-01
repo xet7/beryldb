@@ -170,7 +170,10 @@ void DataFlush::GetResults()
                                DataFlush::Flush(user, signal);
                         }
 
-                        user->SetLock(false);
+                        if (!signal->partial)
+                        {
+                            user->SetLock(false);
+                        }
                 }
       }
           
