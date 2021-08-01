@@ -51,15 +51,17 @@ COMMAND_RESULT CommandGroups::Handle(User* user, const Params& parameters)
 {
          GroupMap& l_groups = Kernel->Groups->GetList();
 
-         Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
+         Dispatcher::JustAPI(user, BRLD_START_LIST);
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Group"));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
 
          for (GroupMap::iterator it = l_groups.begin(); it != l_groups.end(); ++it)
          {
                std::string gname = it->first;
-               user->SendProtocol(BRLD_GROUP_ITEM, gname.c_str());
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", gname.c_str()), Daemon::Format("%s", gname.c_str()));
          }
 
-         Dispatcher::JustAPI(user, BRLD_GROUP_END);
+         Dispatcher::JustAPI(user, BRLD_END_LIST);
          return SUCCESS;
 }
 

@@ -102,10 +102,10 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          
          ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
          
-         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
+         Dispatcher::JustAPI(user, BRLD_START_LIST);
          
-         Dispatcher::JustEmerald(user, BRLD_EXPIRE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
-         Dispatcher::JustEmerald(user, BRLD_EXPIRE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -122,10 +122,10 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               Dispatcher::ListDepend(user, BRLD_EXPIRE_ITEM, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
-         Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
+         Dispatcher::JustAPI(user, BRLD_END_LIST);
          return SUCCESS;
 }
 
@@ -191,8 +191,8 @@ CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 
 COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters) 
 {       
-          const std::string& key = parameters[0];
-          const std::string& seconds = parameters[1];
+          const std::string& key 	= 	parameters[0];
+          const std::string& seconds 	= 	parameters[1];
 
           if (!CheckKey(user, key))
           {
@@ -244,9 +244,9 @@ CommandSetex::CommandSetex(Module* Creator) : Command(Creator, "SETEX", 3, 3)
 
 COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters) 
 {       
-          const std::string& seconds = parameters[0];
-          const std::string& key = parameters[1];
-          const std::string& value = parameters[2];
+          const std::string& seconds 		= 	parameters[0];
+          const std::string& key		= 	parameters[1];
+          const std::string& value 		= 	parameters.back();
 
           if (!CheckKey(user, key))
           {

@@ -361,3 +361,41 @@ COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
        return SUCCESS;  
 }
 
+CommandLHigh::CommandLHigh(Module* Creator) : Command(Creator, "LHIGH", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLHigh::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       ListHelper::High(user, key);
+       return SUCCESS;  
+}
+
+CommandLLow::CommandLLow(Module* Creator) : Command(Creator, "LLOW", 1, 1)
+{
+         group = 'v';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandLLow::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key = parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       ListHelper::Low(user, key);
+       return SUCCESS;  
+}
+

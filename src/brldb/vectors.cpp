@@ -112,7 +112,7 @@ void vfind_query::Process()
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
@@ -139,8 +139,15 @@ void vsort_query::Run()
 
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
        handler->Sort();
-       this->Write(this->dest, handler->as_string());
-       this->SetOK();
+       
+       if (this->Write(this->dest, handler->as_string()))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void vkeys_query::Run()
@@ -292,7 +299,7 @@ void vkeys_query::Process()
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
@@ -317,7 +324,14 @@ void vresize_query::Run()
        
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                    this->SetOK();
+               }
+               else
+               {
+                    access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -352,8 +366,14 @@ void vpush_query::Run()
                
                if (handler->GetLast() == HANDLER_MSG_OK)
                {
-                     this->Write(this->dest, handler->as_string());
-                     this->SetOK();
+                     if (this->Write(this->dest, handler->as_string()))
+                     {
+                           this->SetOK();
+                     }
+                     else
+                     {
+                           access_set(DBL_UNABLE_WRITE);
+                     }
                }
                else
                {
@@ -368,8 +388,14 @@ void vpush_query::Run()
        
        if (handler->GetLast() == HANDLER_MSG_OK)
        {
-               this->Write(this->dest, handler->as_string());
-               this->SetOK();
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                    this->SetOK();
+               }
+               else
+               {
+                    access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -489,7 +515,7 @@ void vget_query::Process()
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
-                 Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
         if (!this->partial)
@@ -580,7 +606,14 @@ void vpop_front_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -605,7 +638,14 @@ void vpop_back_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                      this->SetOK();
+               }
+               else
+               {
+                      access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -639,7 +679,16 @@ void vpushnx_query::Run()
        else
        {
              handler->Add(this->value);
-             this->Write(this->dest, handler->as_string());
+             
+             if (this->Write(this->dest, handler->as_string()))
+             {
+                     this->SetOK();
+             }
+             else
+             {
+                     access_set(DBL_UNABLE_WRITE);
+             }
+             
        }
 
        this->SetOK();
@@ -659,7 +708,14 @@ void vdel_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {
@@ -689,7 +745,14 @@ void verase_from_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                    this->SetOK();
+               }
+               else
+               {
+                    access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {             
@@ -711,15 +774,21 @@ void vreverse_query::Run()
 
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
        handler->Reverse();
-       this->Write(this->dest, handler->as_string());
-       this->SetOK();
+       
+       if (this->Write(this->dest, handler->as_string()))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void vreverse_query::Process()
 {
        user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
-
 
 void vrepeats_query::Run()
 {

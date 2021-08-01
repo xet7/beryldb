@@ -61,4 +61,10 @@ class ExportAPI ListHelper
         
         static void Front(User* user, const std::string& entry);
         
+        static void High(User* user, const std::string& entry);
+        
+        static void Low(User* user, const std::string& entry);
+        
+        
+        
 };

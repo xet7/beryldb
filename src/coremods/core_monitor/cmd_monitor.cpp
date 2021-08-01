@@ -43,7 +43,7 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
              }
              else
              {
-                    user->SendProtocol(ERR_INPUT2, ERR_INVALID_MONITORLVL, level, Daemon::Format("%s: %s", INVALID_MLEVEL.c_str(), level.c_str())); 
+                    user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                     return FAILED;
              }
        
@@ -94,13 +94,16 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         {
              if (arg != "DEFAULT" || arg != "DEBUG")
              {
-                  user->SendProtocol(ERR_INPUT2, ERR_INVALID_MONITORLVL, INVALID_MLEVEL);
+                  user->SendProtocol(ERR_INPUT, INVALID_MLEVEL);
                   return FAILED;
              }
         }
         
         MonitorMap all = Kernel->Monitor->GetList(arg);
-        Dispatcher::JustAPI(user, BRLD_MONITOR_LIST);
+        
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Monitor", "Level"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
         
         unsigned int counter = 0;
 
@@ -120,11 +123,11 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
                     strlevel = "DEBUG";
                }
                
-               Dispatcher::CondList(user, BRLD_MONITOR_USER, umonitor->instance.c_str(), strlevel.c_str());
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", umonitor->instance.c_str(), strlevel.c_str()), Daemon::Format("%s %s", umonitor->instance.c_str(), strlevel.c_str()));
                counter++;
         }
         
-        Dispatcher::JustAPI(user, BRLD_END_MONITOR_LIST);
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
 

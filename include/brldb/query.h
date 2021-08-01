@@ -942,6 +942,36 @@ class ExportAPI vsum_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI llow_query  : public QueryBase
+{
+    public:
+
+        llow_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI lhigh_query  : public QueryBase
+{
+    public:
+
+        lhigh_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_LIST;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI vlow_query  : public QueryBase
 {
     public:

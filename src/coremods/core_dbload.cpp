@@ -135,7 +135,7 @@ class ModuleCoreDB : public Module
 
                  /* Users joins channels based on the TABLE_AUTOJOIN */
                  
-                 const std::string userchans = memb->user->login + "/chans";
+                 const std::string& userchans = memb->user->login + "/chans";
                  CMapsHelper::Set(userchans, memb->chan->name, convto_string(Kernel->Now()));
         }
 
@@ -146,7 +146,7 @@ class ModuleCoreDB : public Module
                       return;
                  }
 
-                 const std::string userchans = memb->user->login + "/chans";
+                 const std::string& userchans = memb->user->login + "/chans";
                  CMapsHelper::Del(userchans, memb->chan->name);
         }
 

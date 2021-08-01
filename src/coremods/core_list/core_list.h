@@ -21,9 +21,27 @@
 
 #include "managers/lists.h"
 
-class CommandLAvg : public Command 
+class CommandLHigh : public Command 
+{
+    public: 
+
+        CommandLHigh(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLLow : public Command 
 {
 
+    public: 
+
+        CommandLLow(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandLAvg : public Command 
+{
     public: 
 
         CommandLAvg(Module* parent);

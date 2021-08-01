@@ -57,6 +57,8 @@ class ExportAPI ListHandler
          
         void Erase();
 
+        /* Removes first element in list. */    
+         
         void PopFront();
 
         /* 
@@ -218,9 +220,47 @@ class ExportAPI ListHandler
          
         std::string RPOP();
 
+        /* 
+         * Returns last element in list.
+	 * 
+         * @return:
+ 	 *
+         *         · string: Last element.
+         */    
+         
         std::string Back();
 
+        /* 
+         * Obtains front (first) element in list.
+         * 
+         * @return:
+ 	 *
+         *         · string: Front element.
+         */    
+         
         std::string FPOP();
+         
+        /* 
+         * Returns lowest element in list.
+         * Keep in mind that this list must be numeric in order
+         * to be ran.
+	 * 
+         * @return:
+ 	 *
+         *         · double: Lowest element.
+         */             
+        double GetLow();
+        
+        /* 
+         * Obtains highest number in list.
+	 * 
+         * @return:
+ 	 *
+         *         · double: Highest number.
+         */            
+         
+        double GetHigh();
+        
          
         /* 
          * Returns a copy of this->mhandler.
@@ -235,6 +275,14 @@ class ExportAPI ListHandler
                 return this->mhandler;
         }
 
+        /* 
+         * Fetch last returned msg from a list operation.
+         *
+         * @return:
+ 	 *
+         *         · HANDLER_MSG: Last msg.
+         */    
+         
         HANDLER_MSG GetLast()
         {
              return this->LastMsg;

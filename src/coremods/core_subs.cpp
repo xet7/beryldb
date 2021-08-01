@@ -66,7 +66,7 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
                      }
                      
                      counter++;
-                     Dispatcher::ListDepend(user, BRLD_SUBS_LIST, Daemon::Format("%-30s | %-10s", chan->name.c_str(), convto_string(users).c_str()), Daemon::Format("%s %s", chan->name.c_str(), convto_string(users).c_str()));
+                     Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", chan->name.c_str(), convto_string(users).c_str()), Daemon::Format("%s %s", chan->name.c_str(), convto_string(users).c_str()));
       }
 
       Dispatcher::JustAPI(user, BRLD_SUBS_LIST_END);

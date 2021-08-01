@@ -183,3 +183,17 @@ void ListHelper::Front(User* user, const std::string& entry)
        Helpers::make_list(user, query, entry);
        Kernel->Store->Push(query);
 }
+
+void ListHelper::High(User* user, const std::string& entry)
+{
+       std::shared_ptr<lhigh_query> query = std::make_shared<lhigh_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void ListHelper::Low(User* user, const std::string& entry)
+{
+       std::shared_ptr<llow_query> query = std::make_shared<llow_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
