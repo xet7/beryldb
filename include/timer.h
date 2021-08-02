@@ -47,11 +47,27 @@ class ExportAPI Timer
 	
 	virtual ~Timer();
 
+        /* 
+         * Get current schedule.
+	 * 
+         * @return:
+ 	 *
+         *         · time_t: Next execution.
+         */    
+         
 	time_t GetSchedule() const
 	{
 		return this->schedule;
 	}
 
+        /* 
+         * Sets a new schedule for a timer.
+         * 
+         * @parameters:
+	 *
+	 *         · time_t: Next schedule.
+         */    
+         
 	void SetSchedule(time_t nextschedule)
 	{
 		schedule = nextschedule;

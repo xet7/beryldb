@@ -465,3 +465,60 @@ COMMAND_RESULT CommandInsert::Handle(User* user, const Params& parameters)
        KeyHelper::Insert(user, key, value, convto_num<signed int>(where));
        return SUCCESS;
 }
+
+CommandToLower::CommandToLower(Module* Creator) : Command(Creator, "TOLOWER", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandToLower::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =       parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Modify(user, key, STR_TO_LOW);
+       return SUCCESS;
+}
+
+CommandToUpper::CommandToUpper(Module* Creator) : Command(Creator, "TOUPPER", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandToUpper::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =       parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Modify(user, key, STR_TO_UPPER);
+       return SUCCESS;
+}
+
+CommandToCap::CommandToCap(Module* Creator) : Command(Creator, "TOCAP", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandToCap::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =       parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Modify(user, key, STR_TO_CAP);
+       return SUCCESS;
+}

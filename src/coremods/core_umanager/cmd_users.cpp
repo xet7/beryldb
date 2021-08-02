@@ -27,23 +27,23 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT, ERR_INVALID_LOGIN);
+                user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
                 return FAILED;
         }
 
         if (!Kernel->Engine->ValidLogin(newlogin))
         {
-                user->SendProtocol(ERR_INPUT, ERR_INVALID_LOGIN);
+                user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
                 return FAILED;
         }
         
         if (pass.length() < 3 || pass.length() > 30)
         {
-                user->SendProtocol(ERR_INPUT, PASS_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
                 return FAILED; 
         }
         
-        const std::string exists = UserHelper::Find(newlogin, "created");
+        const std::string& exists = UserHelper::Find(newlogin, "created");
         
         if (!exists.empty())
         {

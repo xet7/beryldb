@@ -18,13 +18,13 @@ CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIN
 {
          last_empty_ok = true;
          requires = 'e';
-         syntax = "<key> <argument>";
+         syntax = "<%key> <argument>";
 }
 
 COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
 {
-         const std::string& key = parameters[0];
-         const std::string& arg = parameters[1];
+         const std::string& key 	= 	parameters[0];
+         const std::string& arg 	= 	parameters[1];
 
          if (parameters.size() == 2 && arg != "h" && arg != "r")
          {
@@ -34,7 +34,9 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
          
          ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
 
-         Dispatcher::JustAPI(user, BRLD_EXPIRE_BEGIN);
+         Dispatcher::JustAPI(user, BRLD_START_LIST);
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Expire", "Schedule"));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
          for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -66,11 +68,10 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-
-               user->SendProtocol(BRLD_EXPIRE_ITEM, Daemon::Format("%-29s | %5s ", entry.key.c_str(), schedule.c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", entry.key.c_str(), schedule.c_str()), Daemon::Format("%s %s", entry.key.c_str(), schedule.c_str()));
          }
 
-         Dispatcher::JustAPI(user, BRLD_EXPIRE_END);
+         Dispatcher::JustAPI(user, BRLD_END_LIST);
          return SUCCESS;
 }
 

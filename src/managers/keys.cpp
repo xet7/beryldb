@@ -20,6 +20,14 @@
 #include "helpers.h"
 #include "extras.h"
 
+void KeyHelper::Modify(User* user, const std::string& entry, const STR_FUNCTION& fnc)
+{
+       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
+       query->function = fnc;
+       Helpers::make_query(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
 void KeyHelper::Insert(User* user, const std::string& entry, const std::string& value, signed int id)
 {
        std::shared_ptr<insert_query> query = std::make_shared<insert_query>();

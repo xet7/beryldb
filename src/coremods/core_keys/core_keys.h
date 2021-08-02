@@ -15,12 +15,37 @@
 #include "engine.h"
 #include "maker.h"
 
-#include "brldb/dbmanager.h"
 #include "managers/keys.h"
+
+class CommandToCap : public Command 
+{
+    public: 
+
+        CommandToCap(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandToUpper : public Command 
+{
+    public: 
+
+        CommandToUpper(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+class CommandToLower : public Command 
+{
+    public: 
+
+        CommandToLower(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
 
 class CommandInsert : public Command 
 {
-
     public: 
 
         CommandInsert(Module* parent);

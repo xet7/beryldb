@@ -556,7 +556,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 		/* Log uptime. */
 		
 	        slog("EXIT", LOG_DEFAULT, exit);
-	
 		bprint(INFO, exit);
 	}
 

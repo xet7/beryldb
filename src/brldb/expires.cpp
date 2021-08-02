@@ -13,13 +13,7 @@
 
 #include "beryl.h"
 #include "algo.h"
-#include "brldb/dbflush.h"
-#include "brldb/database.h"
-#include "brldb/datathread.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/dbmanager.h"
-#include "managers/keys.h"
-#include "managers/maps.h"
+
 #include "managers/globals.h"
 #include "managers/settings.h"
 #include "managers/expires.h"

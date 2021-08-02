@@ -19,6 +19,8 @@ class ExportAPI KeyHelper
 {
     public:
 
+        static void Modify(User* user, const std::string& entry, const STR_FUNCTION& fnc);
+
         static void Insert(User* user, const std::string& entry, const std::string& value, signed int id);
 
         static void WDelete(User* user, const std::string& key);

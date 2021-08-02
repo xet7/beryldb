@@ -30,7 +30,6 @@ class QueueProvider : public refcountbase, public ServiceProvider
 	};
 
 	const Type type;
-
 	
 	QueueProvider(Module* mod, const std::string& Name, Type attachtype = IOH_UNKNOWN, bool middle = false)
 		: ServiceProvider(mod, Name, SERVICE_QUEUE), middleattach(middle), type(attachtype) 

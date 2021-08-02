@@ -156,8 +156,6 @@ void DataFlush::GetResults()
                                     DataFlush::EntryNOExpires(user, signal);
 
                             break;
-
-                            
                             
                             case DBL_NOT_NUM:
                                    

@@ -99,6 +99,7 @@ CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
+
        std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)

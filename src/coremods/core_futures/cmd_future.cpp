@@ -258,10 +258,10 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          
          FutureMap& expiring = Kernel->Store->Futures->GetFutures();
 
-         Dispatcher::JustAPI(user, BRLD_FUTURE_BEGIN);
+         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-         Dispatcher::JustEmerald(user, BRLD_FUTURE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
-         Dispatcher::JustEmerald(user, BRLD_FUTURE_BEGIN, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
+         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
          for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
@@ -273,10 +273,10 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                }
                
                std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
-               Dispatcher::ListDepend(user, BRLD_FUTURE_ITEM, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
-         Dispatcher::JustAPI(user, BRLD_FUTURE_END);
+         Dispatcher::JustAPI(user, BRLD_END_LIST);
          return SUCCESS;
 }
 

@@ -251,7 +251,8 @@ CommandGeoLaGet::CommandGeoLaGet(Module* Creator) : Command(Creator, "GLAGET", 1
 }
 
 COMMAND_RESULT CommandGeoLaGet::Handle(User* user, const Params& parameters)
-{       const std::string& gname = parameters[0];
+{       
+       const std::string& gname = parameters[0];
 
        if (!CheckKey(user, gname))
        {
