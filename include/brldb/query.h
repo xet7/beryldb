@@ -20,7 +20,8 @@
 enum STR_FUNCTION
 {
        STR_TO_LOW 	         =	1,
-       STR_TO_UPPER		 = 	2
+       STR_TO_UPPER		 = 	2,
+       STR_TO_CAP		 =      3
 };
 
 enum QUERY_TYPE

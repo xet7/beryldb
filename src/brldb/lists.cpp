@@ -14,13 +14,7 @@
 #include "beryl.h"
 #include "engine.h"
 
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "brldb/list_handler.h"
-#include "brldb/dbmanager.h"
-
-#include "managers/maps.h"
 
 void lkeys_query::Run()
 {
@@ -217,8 +211,14 @@ void lpush_query::Run()
        
        if (handler->GetLast() == HANDLER_MSG_OK)
        {
-               this->Write(this->dest, handler->as_string());
-               this->SetOK();
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
        }
        else
        {

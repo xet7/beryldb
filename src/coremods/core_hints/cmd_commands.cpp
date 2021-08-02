@@ -22,8 +22,8 @@ CommandTransfer::CommandTransfer(Module* Creator) : Command(Creator, "TRANSFER",
 
 COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& newkey = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& newkey 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -55,8 +55,8 @@ CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
 
 COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& newkey = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& newkey 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -93,8 +93,8 @@ CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
 
 COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& destkey = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& destkey 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -137,8 +137,8 @@ CommandMove::CommandMove(Module* Creator) : Command(Creator, "MOVE", 2, 2)
 
 COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& new_select = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& new_select 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -179,8 +179,8 @@ CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX",
 
 COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& newkey = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& newkey 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -233,8 +233,8 @@ CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 
 COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {
@@ -263,8 +263,8 @@ CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
 
 COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters[1];
 
        if (!CheckKey(user, key))
        {

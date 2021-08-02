@@ -503,3 +503,22 @@ COMMAND_RESULT CommandToUpper::Handle(User* user, const Params& parameters)
        KeyHelper::Modify(user, key, STR_TO_UPPER);
        return SUCCESS;
 }
+
+CommandToCap::CommandToCap(Module* Creator) : Command(Creator, "TOCAP", 1, 1)
+{
+         group = 'k';
+         syntax = "<key>";
+}
+
+COMMAND_RESULT CommandToCap::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =       parameters[0];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::Modify(user, key, STR_TO_CAP);
+       return SUCCESS;
+}

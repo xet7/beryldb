@@ -223,11 +223,18 @@ void modify_query::Run()
        
        if (this->function == STR_TO_UPPER)
        {
-           std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::toupper);
+            std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::toupper);
        }
        else if (this->function == STR_TO_LOW)
        {
-           std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::tolower);
+            std::transform(this->response.begin(), this->response.end(), this->response.begin(), ::tolower);
+       }
+       else if (this->function == STR_TO_CAP)
+       {
+            if (!this->response.empty())
+            {
+                this->response[0] = ::toupper(this->response[0]);
+            }
        }
  
        if (this->Write(this->dest, to_bin(this->response)))
