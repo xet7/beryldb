@@ -123,8 +123,8 @@ CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
 
 COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
     
         if (!CheckKey(user, key))
         {
