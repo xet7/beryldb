@@ -94,10 +94,7 @@ enum BRLD_PROTOCOL
         BRLD_COUNT			=		175,
         BRLD_USER_ITEM			=		176,
         BRLD_USER_LIST_END		=		177,
-        BRLD_EXPIRE_ITEM		=		179,
-        BRLD_EXPIRE_END			=		180,
         
-        BRLD_EXPIRE_BEGIN		=		181,
         BRLD_INFO_EXP_DEL		=		182,
         BRLD_EXP_DELETED		=		183,
         BRLD_FINGER_BEGIN		=		184,
@@ -177,9 +174,6 @@ enum BRLD_PROTOCOL
 	BRLD_RESUMED			=		262,
 	BRLD_IDLE			=		263,
 	BRLD_FUTURE_VALUE		=		264,
-        BRLD_FUTURE_BEGIN		=		265,
-        BRLD_FUTURE_ITEM		=		266,
-	BRLD_FUTURE_END			=		267,        
 	BRLD_AGENT			=		268,
 	BRLD_LOCAL_EPOCH		=		269,
 	

@@ -41,8 +41,8 @@ CommandIncrBy::CommandIncrBy(Module* Creator) : Command(Creator, "INCRBY", 2, 2)
 
 COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters[1];
         
         if (!CheckKey(user, key))
         {
@@ -67,8 +67,8 @@ CommandAvg::CommandAvg(Module* Creator) : Command(Creator, "AVG", 2, 2)
 
 COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters[1];
         
         if (!CheckKey(user, key))
         {
@@ -107,8 +107,8 @@ CommandDecrBy::CommandDecrBy(Module* Creator) : Command(Creator, "DECRBY", 2, 2)
 
 COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& key 		=	parameters[0];
+        const std::string& value 	= 	parameters[1];
 
         if (!is_number(value, true))
         {
@@ -128,8 +128,8 @@ CommandDiv::CommandDiv(Module* Creator) : Command(Creator, "DIV", 2, 2)
 
 COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters[1];
 
         if (!CheckKey(user, key))
         {
@@ -154,8 +154,8 @@ CommandMult::CommandMult(Module* Creator) : Command(Creator, "MULT", 2, 2)
 
 COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters[1];
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters[1];
 
         if (!CheckKey(user, key))
         {
