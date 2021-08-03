@@ -34,8 +34,8 @@ const char* ExitMap[] =
            "Database error",
            "SIG INT received",
            "Shutdown command received",
-           "Unable to create threads.",
-           "Invalid command."
+           "Unable to create threads",
+           "Invalid command"
 };
 
 unsigned const char *locale_case_insensitive_map = brld_case_insensitive_map;
@@ -646,7 +646,7 @@ std::string FileSystem::GetName(const std::string& name)
 	return pos == std::string::npos ? name : name.substr(++pos);
 }
 
-int FileSystem::remove_directory(const char *path) 
+int FileSystem::RemoveDir(const char *path) 
 {
 	DIR *dopen = opendir(path);
 	size_t path_len = strlen(path);
@@ -682,7 +682,7 @@ int FileSystem::remove_directory(const char *path)
 					{
 							if (S_ISDIR(statbuf.st_mode))
 							{
-								r2 = remove_directory(buf);
+								r2 = RemoveDir(buf);
 							}
 							else
 							{

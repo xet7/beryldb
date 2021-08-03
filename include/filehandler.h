@@ -85,6 +85,6 @@ class ExportAPI FileSystem
 	
 	static bool AsFileList(const std::string& directory, std::vector<std::string>& entries, const std::string& match = "*");
 
-	static int remove_directory(const char *path);
+	static int RemoveDir(const char *path);
 
 };

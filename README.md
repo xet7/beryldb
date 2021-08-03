@@ -13,8 +13,6 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
-Help us by starring this project 👍⭐ 
-
 ## What is Beryl?
 
 Beryl is a data structure server. Our database provide access to structures via a 
