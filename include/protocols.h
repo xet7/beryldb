@@ -220,9 +220,6 @@ enum BRLD_PROTOCOL
 	BRLD_CHAN_INFO			=		312,
 	BRLD_COMMANDS			=		313,
 	BRLD_SSL			=		314,
-	BRLD_GROUP_BEGIN		=		318,
-	BRLD_GROUP_ITEM			=		319,
-	BRLD_GROUP_END			=		320,
 		
 	/* Error protocol codes. */
 	
