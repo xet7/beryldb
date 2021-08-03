@@ -411,7 +411,6 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
     
         static void SmartDiv(User* user, BRLD_PROTOCOL brld, const std::string& key, const std::string& msg, const std::string& div);
 
-        static void SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg);
      
         /* 
          * Finds an user and sends a msg.

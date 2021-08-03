@@ -410,18 +410,6 @@ void Dispatcher::CondList(User* user, BRLD_PROTOCOL brld, const std::string& one
         }
 }
 
-void Dispatcher::SmartCmd(User* user, BRLD_PROTOCOL brld, BRLD_PROTOCOL brld2, const std::string& msg)
-{
-        if (user->agent == DEFAULT_EMERALD)
-        {
-             user->SendProtocol(brld, brld2, msg);
-        }
-        else
-        {
-             user->SendProtocol(brld, brld2);
-        }
-}
-
 void Dispatcher::ListDepend(User* user, BRLD_PROTOCOL brld, const std::string& msg, const std::string& msg2)
 {
         if (user->agent == DEFAULT_EMERALD)
