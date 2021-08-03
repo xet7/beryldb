@@ -93,7 +93,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         
         if (exists.empty())
         {
-                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NOT_EXISTS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
                 return FAILED;
         }
         
