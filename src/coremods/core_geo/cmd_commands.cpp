@@ -52,14 +52,14 @@ COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
 CommandGeoAdd::CommandGeoAdd(Module* Creator) : Command(Creator, "GEOADD", 3, 3)
 {
          group = 'g';
-         syntax = "<name> <longitude> <latitude>";
+         syntax = "<name> <latitude> <longitude>";
 }
 
 COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       const std::string& latitude = parameters[1];
-       const std::string& longitude = parameters[2];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& latitude 	= 	parameters[1];
+       const std::string& longitude 	= 	parameters[2];
        
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
@@ -86,14 +86,14 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
 CommandGeoAddNX::CommandGeoAddNX(Module* Creator) : Command(Creator, "GEOADDNX", 3, 3)
 {
          group = 'g';
-         syntax = "<name> <longitude> <latitude>";
+         syntax = "<name> <latitude> <longitude>";
 }
 
 COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       const std::string& latitude = parameters[1];
-       const std::string& longitude = parameters[2];
+       const std::string& gname         =       parameters[0];
+       const std::string& latitude      =       parameters[1];
+       const std::string& longitude     =       parameters[2];
 
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
