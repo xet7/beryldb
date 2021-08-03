@@ -130,6 +130,7 @@ void mdel_query::Run()
                else
                {
                        access_set(DBL_UNABLE_WRITE);
+                       return;
                }
        }
        else
@@ -165,7 +166,15 @@ void mset_query::Run()
 
                if (handler->GetLast() == HANDLER_MSG_OK)
                {
-                    this->Write(this->dest, handler->as_string());
+                    if (this->Write(this->dest, handler->as_string()))
+                    {
+                             this->SetOK();
+                    }
+                    else
+                    {
+                          access_set(DBL_UNABLE_WRITE);
+                          return;
+                    }
                }
 
                this->SetOK();
@@ -572,7 +581,6 @@ void mvals_query::Process()
         }
 }
 
-
 void mgetall_query::Run()
 {
        unsigned int total_counter = 0;
@@ -658,9 +666,7 @@ void mgetall_query::Process()
         {
                  std::string ikey = i->first;
                  std::string item = i->second;
-
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
-
         }
 
         if (!this->partial)

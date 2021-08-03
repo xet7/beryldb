@@ -219,6 +219,8 @@ void lpush_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -252,6 +254,8 @@ void lreverse_query::Run()
        {
               access_set(DBL_UNABLE_WRITE);
        }
+       
+       return;
 }
 
 void lsort_query::Process()
@@ -280,6 +284,8 @@ void lsort_query::Run()
        {
              access_set(DBL_UNABLE_WRITE);
        }
+       
+       return;
 }
 
 void lpos_query::Run()
@@ -333,6 +339,8 @@ void lresize_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -468,6 +476,8 @@ void lpop_front_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -504,6 +514,8 @@ void lpop_back_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -539,6 +551,8 @@ void lpopall_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {             
@@ -748,6 +762,8 @@ void ldel_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -806,6 +822,7 @@ void lrop_query::Run()
                else
                {
                      access_set(DBL_UNABLE_WRITE);
+                     return;
                }
        }
        else
@@ -851,6 +868,8 @@ void lrfront_query::Run()
                {
                      access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -944,6 +963,8 @@ void lpushnx_query::Run()
              {
                      access_set(DBL_UNABLE_WRITE);
              }
+             
+             return;
        }
 
        this->SetOK();

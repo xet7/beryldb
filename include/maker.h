@@ -46,6 +46,18 @@ inline bool CheckValidPos(User* user, const std::string& number)
        return true;
 }
 
+/* 
+ * Checks whether provided value is numeric.
+ * 
+ * @parameters:
+ *
+ *         · number: Number to check.
+ * 
+ * @return:
+ *
+ *         · True: Is numeric.
+ */    
+ 
 inline bool CheckValid(User* user, const std::string& number)
 {
        if (!is_number(number))
