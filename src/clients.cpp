@@ -527,9 +527,9 @@ unsigned int ClientManager::DisconnectAll(const std::string& login, const std::s
 {
        unsigned int counter = 0;
        
-       UserVector logins = Kernel->Clients->FindLogin(login);
+       const UserVector& logins = Kernel->Clients->FindLogin(login);
 
-       for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+       for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
        {
              User* user = *o;
              
@@ -547,9 +547,9 @@ unsigned int ClientManager::DisconnectAll(const std::string& login, const std::s
 
 void ClientManager::ExitLogins(const std::string& login, const std::string& reason)
 {
-	UserVector foundl = this->FindLogin(login);	
+	const UserVector& foundl = this->FindLogin(login);	
 	
-	for (UserVector::iterator i = foundl.begin(); i != foundl.end(); ++i)
+	for (UserVector::const_iterator i = foundl.begin(); i != foundl.end(); ++i)
 	{
 		User* user = *i;
 		this->Disconnect(user, reason);
@@ -565,9 +565,9 @@ void ClientManager::Part(User* skip, const std::string& login, const std::string
          return;
      }
 
-     UserVector FoundLogins = Kernel->Clients->FindLogin(login);
+     const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
+     for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
      {
            User* user = *i;
 
@@ -601,9 +601,9 @@ UserVector ClientManager::FindLogin(const std::string& login, registration_state
 
 void ClientManager::Join(User* skip, const std::string& login, const std::string& channel)
 {
-     UserVector FoundLogins = Kernel->Clients->FindLogin(login);
+     const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
+     for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
      {
            User* user = *i;
 

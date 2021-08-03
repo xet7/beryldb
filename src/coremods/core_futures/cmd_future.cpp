@@ -206,14 +206,14 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          /* User has requested all expires with expiration date. */
          
-         FutureMap& futures = Kernel->Store->Futures->GetFutures();
+         const FutureMap& futures = Kernel->Store->Futures->GetFutures();
          
          Dispatcher::JustAPI(user, BRLD_START_LIST);
 
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-         for (FutureMap::iterator it = futures.begin(); it != futures.end(); ++it)
+         for (FutureMap::const_iterator it = futures.begin(); it != futures.end(); ++it)
          {
                FutureEntry entry = it->second;
                
@@ -256,14 +256,14 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                   select  = parameters[0];
          }
          
-         FutureMap& expiring = Kernel->Store->Futures->GetFutures();
+         const FutureMap& expiring = Kernel->Store->Futures->GetFutures();
 
          Dispatcher::JustAPI(user, BRLD_START_LIST);
 
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-         for (FutureMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         for (FutureMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                FutureEntry entry = it->second;
 
