@@ -30,8 +30,17 @@ void geoaddnx_query::Run()
           return;
      }
      
-     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
-     this->Write(this->dest, save);
+     const std::string& save = to_bin(this->hesh) + ":" + to_bin(this->value);
+
+     if (this->Write(this->dest, save))
+     {
+            this->SetOK();
+     }
+     else
+     {
+           access_set(DBL_UNABLE_WRITE);
+     }
+
      this->SetOK();
 }
 
@@ -42,7 +51,7 @@ void geoaddnx_query::Process()
 
 void geoadd_query::Run()
 {
-     const std::string& save = to_bin(this->value) + ":" + to_bin(this->hesh);
+     const std::string& save = to_bin(this->hesh) + ":" + to_bin(this->value);
      
      if (this->Write(this->dest, save))
      {

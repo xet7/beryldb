@@ -160,7 +160,7 @@ const std::string UNABLE_SET_KEY = "Unable to set key.";
 
 /* > 0 */
 
-const std::string MUST_BE_GREAT_ZERO = "Number must be greater than zero.";
+const std::string MUST_BE_GREAT_ZERO = "GREATER_THAN_ZERO";
 
 /* Command not found. */
 
