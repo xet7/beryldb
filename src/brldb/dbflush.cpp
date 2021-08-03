@@ -13,10 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/database.h"
-#include "brldb/datathread.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/dbflush.h"
 #include "algo.h"
 
 std::mutex DataFlush::query_mute;

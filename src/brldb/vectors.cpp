@@ -14,11 +14,8 @@
 #include "beryl.h"
 #include "engine.h"
 
-#include "brldb/database.h"
 #include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "brldb/vector_handler.h"
-#include "brldb/dbmanager.h"
 
 #include "managers/maps.h"
 
@@ -120,7 +117,6 @@ void vfind_query::Process()
                 Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
 }
-
 
 void vsort_query::Process()
 {
@@ -332,6 +328,8 @@ void vresize_query::Run()
                {
                     access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -396,6 +394,8 @@ void vpush_query::Run()
                {
                     access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -613,6 +613,7 @@ void vpop_front_query::Run()
                else
                {
                      access_set(DBL_UNABLE_WRITE);
+                     return;
                }
        }
        else
@@ -646,6 +647,8 @@ void vpop_back_query::Run()
                {
                       access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {
@@ -688,6 +691,8 @@ void vpushnx_query::Run()
              {
                      access_set(DBL_UNABLE_WRITE);
              }
+             
+             return;
              
        }
 
@@ -753,6 +758,8 @@ void verase_from_query::Run()
                {
                     access_set(DBL_UNABLE_WRITE);
                }
+               
+               return;
        }
        else
        {             
@@ -777,11 +784,11 @@ void vreverse_query::Run()
        
        if (this->Write(this->dest, handler->as_string()))
        {
-            this->SetOK();
+              this->SetOK();
        }
        else
        {
-           access_set(DBL_UNABLE_WRITE);
+             access_set(DBL_UNABLE_WRITE);
        }
 }
 

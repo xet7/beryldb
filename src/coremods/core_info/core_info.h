@@ -14,6 +14,11 @@
 #pragma once
 
 #include "beryl.h"
+#include "engine.h"
+
+#include "managers/keys.h"
+#include "managers/user.h"
+#include "managers/databases.h"
 
 class ServerTargetCommand : public Command
 {

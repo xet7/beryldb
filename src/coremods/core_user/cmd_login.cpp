@@ -27,13 +27,13 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 
 	if (newlogin.empty())
 	{
-		user->SendProtocol(ERR_INPUT2, ERR_NO_LOG_PROV, NO_LOG_PROV);
+		user->SendProtocol(ERR_INPUT, ERRON_LOGIN);
 		return FAILED;
 	}
 
 	if (!Kernel->Engine->ValidLogin(newlogin))
 	{
-		user->SendProtocol(ERR_INPUT2, ERR_INVALID_LOGIN, ERRON_LOGIN);
+		user->SendProtocol(ERR_INPUT, ERRON_LOGIN);
 		return FAILED;
 	}
 
@@ -152,7 +152,7 @@ CommandExit::CommandExit(Module* parent) : Command(parent, "EXIT", 0)
 
 COMMAND_RESULT CommandExit::Handle(User* user, const Params& parameters)
 {
-        std::string exitmsg = "Exitting.";
+        const std::string& exitmsg = "Exitting.";
 
         user->SendProtocol(BRLD_QUITTING);
         Kernel->Clients->Disconnect(user, exitmsg);

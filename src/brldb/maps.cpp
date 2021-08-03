@@ -14,11 +14,7 @@
 #include "beryl.h"
 #include "engine.h"
 
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "brldb/map_handler.h"
-#include "brldb/dbmanager.h"
 
 void hfind_query::Run()
 {
@@ -201,13 +197,12 @@ void hset_query::Run()
                     {
                         this->SetOK();
                     }
-                    else
-                    {
+               }
+               else
+               {
                         access_set(DBL_UNABLE_WRITE);
-                    }
                }
                
-               this->SetOK();
                return;
        }
        
@@ -218,15 +213,11 @@ void hset_query::Run()
        {
             if (this->Write(this->dest, handler->as_string()))
             {
-                this->SetOK();
+                   this->SetOK();
             }
-            else
-            {
-                 access_set(DBL_UNABLE_WRITE);
-            }
-       }
+        }
       
-       this->SetOK();
+        access_set(DBL_UNABLE_WRITE);
 }
 
 void hset_query::Process()
@@ -257,13 +248,11 @@ void hsetnx_query::Run()
                  {
                       this->SetOK();
                  }
-                 else
-                 {
-                      access_set(DBL_UNABLE_WRITE);
-                 }
        }
-
-       this->SetOK();
+       else
+       {
+            access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void hsetnx_query::Process()
@@ -357,7 +346,7 @@ void hget_query::Run()
 
        if (handler->GetLast() == HANDLER_MSG_OK)
        {
-           this->SetOK();
+               this->SetOK();
        }
        else
        {
@@ -379,7 +368,16 @@ void hdel_query::Run()
        
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
+               
+               return;
        }
        else
        {
@@ -503,9 +501,7 @@ void hlist_query::Process()
         {
                 Dispatcher::JustAPI(user, BRLD_END_LIST);                 
         }
-
 }
-
 
 void hwdel_query::Run()
 {
@@ -516,7 +512,16 @@ void hwdel_query::Run()
 
        if (handler->Count() > 0)
        {
-               this->Write(this->dest, handler->as_string());
+               if (this->Write(this->dest, handler->as_string()))
+               {
+                     this->SetOK();
+               }
+               else
+               {
+                     access_set(DBL_UNABLE_WRITE);
+               }
+               
+               return;
        }
        else
        {
@@ -708,9 +713,7 @@ void hgetall_query::Process()
         {
                  std::string ikey = i->first;
                  std::string item = i->second;
-
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
-
         }
 
         if (!this->partial)

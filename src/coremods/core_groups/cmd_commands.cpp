@@ -109,74 +109,74 @@ COMMAND_RESULT CommandGShow::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
+       Dispatcher::JustAPI(user, BRLD_START_LIST);
        
        if (a_group->can_keys)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_keys");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_keys");
        }
        
        if (a_group->can_do_all)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_do_all");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_do_all");
        }
        
        if (a_group->can_list)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_list");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_list");
        }
        
        if (a_group->can_geo)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_geo");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_geo");
        }
        
        if (a_group->can_vector)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_vector");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_vector");
        }
        
        if (a_group->can_expire)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_expire");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_expire");
        }
        
        if (a_group->can_future)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_future");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_future");
        }
        
        if (a_group->can_map)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_map");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_map");
        }
        
        if (a_group->can_mmap)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_mmap");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_mmap");
        }
        
        if (a_group->can_publish_chan)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_publish_chan");
+             user->SendProtocol(BRLD_ITEM_LIST, "can_publish_chan");
        }
        
        if (a_group->can_publish_clients)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_publish_clients");
+             user->SendProtocol(BRLD_ITEM_LIST,  "can_publish_clients");
        }
        
        if (a_group->can_hints)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_hints");
+             user->SendProtocol(BRLD_ITEM_LIST, "can_hints");
        }
        
        if (a_group->can_dual_exec)
        {
-             user->SendProtocol(BRLD_GROUP_ITEM,  "can_dual_exec");
+             user->SendProtocol(BRLD_ITEM_LIST, "can_dual_exec");
        }
        
-       Dispatcher::JustAPI(user, BRLD_GROUP_END);
+       Dispatcher::JustAPI(user, BRLD_END_LIST);
        return SUCCESS;
 }
 
@@ -215,17 +215,17 @@ CommandMyGroups::CommandMyGroups(Module* Creator) : Command(Creator, "MYGROUPS",
 
 COMMAND_RESULT CommandMyGroups::Handle(User* user, const Params& parameters) 
 {
-        Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        GroupVector ugroups = user->GetGroups();
+        GroupVector& ugroups = user->GetGroups();
         
         for (GroupVector::iterator i = ugroups.begin(); i != ugroups.end(); ++i)
         {
                 std::shared_ptr<Group> item = (*i);
-                user->SendProtocol(BRLD_GROUP, item->GetName().c_str());
+                user->SendProtocol(BRLD_ITEM_LIST, item->GetName().c_str());
         }
         
-	Dispatcher::JustAPI(user, BRLD_GROUP_END);
+	Dispatcher::JustAPI(user, BRLD_END_LIST);
         
         return SUCCESS;        
 }
@@ -238,8 +238,8 @@ CommandAssign::CommandAssign(Module* Creator) : Command(Creator, "GSET", 2, 2)
 
 COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters) 
 {
-       const std::string& gname = parameters[0];
-       const std::string& dest = parameters[1];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& dest 		= 	parameters[1];
        
        std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
 
@@ -314,15 +314,15 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
        const std::string& usergrups = login + "/groups";
        Args grouplist = STHelper::HKeys(usergrups);
 
-       Dispatcher::JustAPI(user, BRLD_GROUP_BEGIN);
+       Dispatcher::JustAPI(user, BRLD_START_LIST);
 
        for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                 std::string gname = *i;
-                user->SendProtocol(BRLD_GROUP_ITEM, gname.c_str());
+                user->SendProtocol(BRLD_ITEM_LIST, gname.c_str());
        }
        
-       Dispatcher::JustAPI(user, BRLD_GROUP_END);
+       Dispatcher::JustAPI(user, BRLD_END_LIST);
        return SUCCESS;
 }
 

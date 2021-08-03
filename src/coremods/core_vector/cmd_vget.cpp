@@ -120,15 +120,15 @@ CommandVResize::CommandVResize(Module* Creator) : Command(Creator, "VRESIZE", 2,
 
 COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       const std::string& value = parameters[1];
+       const std::string& key 		= 	parameters[0];
+       const std::string& value 	= 	parameters[1];
        
        if (!CheckKey(user, key))
        {
             return FAILED;
        }
 
-       if (!CheckValidPos(user, parameters[0]))
+       if (!CheckValidPos(user, value))
        {
               return FAILED;
        }

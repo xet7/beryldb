@@ -53,18 +53,16 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 
 void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 {
-	std::string instance;
-	
 	const Channel::SubscriptionMap& members = chan->GetInstances();
 
 	Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Instance"));
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
 
 	for (Channel::SubscriptionMap::const_iterator i = members.begin(); i != members.end(); ++i)
 	{
-		instance = i->first->instance;
+		std::string instance = i->first->instance;
                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", instance.c_str()), Daemon::Format("%s", instance.c_str()));
 	}
 
