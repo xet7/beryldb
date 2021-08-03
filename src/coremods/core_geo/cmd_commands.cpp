@@ -29,20 +29,20 @@ COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
        
        if (!is_number(latitude, true) || !is_number(longitude, true))
        {
-                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
-                 return FAILED;
+              user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+              return FAILED;
        }
 
        if (!ValidLong(convto_num<int>(longitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
-             return FAILED;
+              user->SendProtocol(ERR_INPUT, INVALID_COORD);
+              return FAILED;
        }
 
        if (!ValidLat(convto_num<int>(latitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
-             return FAILED;
+              user->SendProtocol(ERR_INPUT, INVALID_COORD);
+              return FAILED;
        }
 
        GeoHelper::AddPub(user, chan, gname, latitude, longitude);
@@ -69,13 +69,13 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
        
        if (!ValidLong(convto_num<int>(longitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             user->SendProtocol(ERR_INPUT, INVALID_COORD);
              return FAILED;
        }
        
        if (!ValidLat(convto_num<int>(latitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             user->SendProtocol(ERR_INPUT, INVALID_COORD);
              return FAILED;
        }
        
@@ -103,13 +103,13 @@ COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
 
        if (!ValidLong(convto_num<int>(longitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             user->SendProtocol(ERR_INPUT, INVALID_COORD);
              return FAILED;
        }
 
        if (!ValidLat(convto_num<int>(latitude)))
        {
-             Dispatcher::SmartCmd(user, ERR_INPUT, ERR_NOT_VALID_COORDINATE, INVALID_COORD);
+             user->SendProtocol(ERR_INPUT, INVALID_COORD);
              return FAILED;
        }
 
