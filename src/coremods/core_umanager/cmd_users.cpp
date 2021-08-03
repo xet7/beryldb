@@ -113,14 +113,14 @@ CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS"
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
-        Args users = STHelper::HKeys("userlist");
+        const Args& users = STHelper::HKeys("userlist");
         
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "User", "Created"));
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-        for (Args::iterator i = users.begin(); i != users.end(); i++)
+        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
                 std::string created = UserHelper::Find(item, "created");
@@ -144,14 +144,14 @@ CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMI
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
-        Args users = STHelper::HKeys("userlist");
+        const Args& users = STHelper::HKeys("userlist");
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Flag"));
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-        for (Args::iterator i = users.begin(); i != users.end(); i++)
+        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
                 std::string flags = UserHelper::CheckFlags(item);
