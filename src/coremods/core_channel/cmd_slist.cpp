@@ -53,40 +53,20 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 
 void CommandSlist::SendSlist(LocalUser* user, Channel* chan)
 {
-	Numeric::Builder<' '> reply(user, BRLD_SLIST_ITEM, false, chan->name.size() + 3);
-	Numeric::Numeric& numeric = reply.GetNumeric();
-
-	numeric.push(std::string(1, '='));
-
-	numeric.push(chan->name);
-	numeric.push(std::string());
-
-	std::string prefixlist;
 	std::string instance;
 	
 	const Channel::SubscriptionMap& members = chan->GetInstances();
 
-	Dispatcher::JustAPI(user, BRLD_SLIST_BEGIN);
+	Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s", "Name"));
-        Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Name"));
+        Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
 
 	for (Channel::SubscriptionMap::const_iterator i = members.begin(); i != members.end(); ++i)
 	{
-		Subscription* const memb = i->second;
-
-		prefixlist.clear();
 		instance = i->first->instance;
-
-		ModuleResult res;
-		UNTIL_RESULT_CUSTOM(namesevprov, Names::EventListener, OnInstanceList, res, (user, memb, prefixlist, instance));
-		
-		if (res != MOD_RES_STOP)
-		{
-			reply.Add(prefixlist, instance);
-		}
+                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", instance.c_str()), Daemon::Format("%s", instance.c_str()));
 	}
 
-	reply.Flush();
-        Dispatcher::JustAPI(user, BRLD_SLIST_END);
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
 }

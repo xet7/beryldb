@@ -48,8 +48,6 @@ enum BRLD_PROTOCOL
 	BRLD_FINGER_LIST                = 		128,
 	BRLD_CHANNELCREATED             = 		130,
 	 
-        BRLD_MODLIST 			= 		131,
-        BRLD_END_OF_MODLIST 		= 		132,
 	BRLD_VERSION                    = 		133,
 	BRLD_SLIST_ITEM                 = 		134,
         BRLD_SYNTAX                     = 		135, 
