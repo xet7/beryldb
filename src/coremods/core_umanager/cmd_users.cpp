@@ -89,7 +89,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        std::string exists = UserHelper::Find(newlogin, "created");
+        const std::string& exists = UserHelper::Find(newlogin, "created");
         
         if (exists.empty())
         {
@@ -222,7 +222,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        std::string exists = UserHelper::Find(newlogin, "created");
+        const std::string& exists = UserHelper::Find(newlogin, "created");
         
         if (exists.empty())
         {
