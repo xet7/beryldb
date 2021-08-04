@@ -112,4 +112,11 @@ class CommandMIter : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+class CommandMSetNX : public Command 
+{
+    public: 
 
+        CommandMSetNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};

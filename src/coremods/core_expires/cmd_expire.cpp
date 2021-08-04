@@ -177,7 +177,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 
         /* Clears all expires pending. */
 
-        unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
+        const unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
         user->SendProtocol(BRLD_OK, PROCESS_OK);
         
         sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);
@@ -293,7 +293,7 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
               return FAILED;
           }
                   
-          unsigned int exp_usig = convto_num<unsigned int>(seconds);
+          const unsigned int exp_usig = convto_num<unsigned int>(seconds);
 
           if ((time_t)exp_usig < Kernel->Now())
           {

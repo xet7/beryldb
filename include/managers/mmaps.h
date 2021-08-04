@@ -27,6 +27,8 @@ class ExportAPI MMapsHelper
        
        static void Count(User* user, const std::string& entry);
 
+       static void SetNX(User* user, const std::string& entry, const std::string& hesh, const std::string& value);
+
        static void Set(User* user, const std::string& entry, const std::string& hesh, const std::string& value);
 
        static void Del(User* user, const std::string& entry, const std::string& hesh);

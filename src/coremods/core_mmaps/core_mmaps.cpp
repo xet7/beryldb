@@ -28,13 +28,21 @@ class CoreModuleMMaps : public Module
          CommandMVals cmdmvals;
          CommandMGetAll cmdgetalls;
          CommandMIter cmdmfind;
+         CommandMSetNX cmdsetnx;
          
     public:     
 
-        CoreModuleMMaps() : cmdmset(this), cmdmget(this), cmdmcount(this), 
-                            cmditer(this), cmdmdel(this), cmdmseek(this),
-                            cmdmrepeats(this), cmdmvals(this),
-                            cmdgetalls(this), cmdmfind(this)
+        CoreModuleMMaps() : cmdmset(this),
+                            cmdmget(this), 
+                            cmdmcount(this), 
+                            cmditer(this), 
+                            cmdmdel(this), 
+                            cmdmseek(this),
+                            cmdmrepeats(this), 
+                            cmdmvals(this),
+                            cmdgetalls(this), 
+                            cmdmfind(this),
+                            cmdsetnx(this)
         {
         
         }

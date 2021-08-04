@@ -114,7 +114,6 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
         }
 
         target->Paused = false;
-
         user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }

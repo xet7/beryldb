@@ -15,14 +15,10 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
+#include "helpers.h"
 #include "brldb/expires.h"
 #include "brldb/functions.h"
 #include "brldb/multimap_handler.h"
-#include "helpers.h"
-#include "brldb/dbmanager.h"
 
 void mseek_query::Run()
 {
@@ -130,8 +126,9 @@ void mdel_query::Run()
                else
                {
                        access_set(DBL_UNABLE_WRITE);
-                       return;
                }
+               
+               return;
        }
        else
        {
@@ -146,15 +143,69 @@ void mdel_query::Process()
         user->SendProtocol(BRLD_OK, PROCESS_OK);
 }
 
-
-void mset_query::Run()
+void msetnx_query::Run()
 {
-       if (this->value.empty() || this->hesh.empty())
+       RocksData result = this->Get(this->dest);
+
+       std::shared_ptr<MultiMapHandler> handler;
+
+       if (!result.status.ok())
        {
-               this->access_set(DBL_MISS_ARGS);
+               handler = std::make_shared<MultiMapHandler>();
+        
+               handler->Add(this->hesh, this->value);
+
+               if (handler->GetLast() == HANDLER_MSG_OK)
+               {
+                    if (this->Write(this->dest, handler->as_string()))
+                    {
+                             this->SetOK();
+                    }
+                    else
+                    {
+                          access_set(DBL_UNABLE_WRITE);
+                    }
+               }
+               
                return;
        }
 
+       handler = MultiMapHandler::Create(result.value);
+       
+       if (handler->Exists(this->hesh))
+       {
+               access_set(DBL_ENTRY_EXISTS);                                       
+               return;
+       }
+
+       handler->Add(this->hesh, this->value);
+
+       if (handler->GetLast() == HANDLER_MSG_OK)
+       {
+            if (this->Write(this->dest, handler->as_string()))
+            {
+                   this->SetOK();
+            }
+            else
+            {
+                   access_set(DBL_UNABLE_WRITE);
+            }
+            
+            return;
+            
+       }
+
+       this->SetOK();
+}
+
+void msetnx_query::Process()
+{
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+}
+
+
+void mset_query::Run()
+{
        RocksData result = this->Get(this->dest);
 
        std::shared_ptr<MultiMapHandler> handler;
@@ -173,11 +224,10 @@ void mset_query::Run()
                     else
                     {
                           access_set(DBL_UNABLE_WRITE);
-                          return;
                     }
+                    
                }
-
-               this->SetOK();
+               
                return;
        }
 
@@ -186,7 +236,17 @@ void mset_query::Run()
 
        if (handler->GetLast() == HANDLER_MSG_OK)
        {
-            this->Write(this->dest, handler->as_string());
+            if (this->Write(this->dest, handler->as_string()))
+            {
+                   this->SetOK();
+            }
+            else
+            {
+                   access_set(DBL_UNABLE_WRITE);
+            }
+            
+            return;
+            
        }
 
        this->SetOK();
@@ -210,8 +270,7 @@ void mkeys_query::Run()
        
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
                 {
                       this->access_set(DBL_INTERRUPT);
                       return;
