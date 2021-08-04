@@ -49,13 +49,13 @@ CommandGroups::CommandGroups(Module* Creator) : Command(Creator, "GROUPS", 0, 0)
 
 COMMAND_RESULT CommandGroups::Handle(User* user, const Params& parameters) 
 {
-         GroupMap& l_groups = Kernel->Groups->GetList();
+         const GroupMap& l_groups = Kernel->Groups->GetList();
 
          Dispatcher::JustAPI(user, BRLD_START_LIST);
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Group"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
 
-         for (GroupMap::iterator it = l_groups.begin(); it != l_groups.end(); ++it)
+         for (GroupMap::const_iterator it = l_groups.begin(); it != l_groups.end(); ++it)
          {
                std::string gname = it->first;
                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", gname.c_str()), Daemon::Format("%s", gname.c_str()));
@@ -217,9 +217,9 @@ COMMAND_RESULT CommandMyGroups::Handle(User* user, const Params& parameters)
 {
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        GroupVector& ugroups = user->GetGroups();
+        const GroupVector& ugroups = user->GetGroups();
         
-        for (GroupVector::iterator i = ugroups.begin(); i != ugroups.end(); ++i)
+        for (GroupVector::const_iterator i = ugroups.begin(); i != ugroups.end(); ++i)
         {
                 std::shared_ptr<Group> item = (*i);
                 user->SendProtocol(BRLD_ITEM_LIST, item->GetName().c_str());
@@ -258,9 +258,9 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         }
         
         const std::string& usergrups = dest + "/groups";
-        Args grouplist = STHelper::HKeys(usergrups);
+        const Args& grouplist = STHelper::HKeys(usergrups);
         
-        for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
+        for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
         {
                std::string item = *i;
                
@@ -279,9 +279,9 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
              return FAILED;
         }
         
-        UserVector logins = Kernel->Clients->FindLogin(dest);
+        const UserVector& logins = Kernel->Clients->FindLogin(dest);
 
-        for (UserVector::iterator usr = logins.begin(); usr != logins.end(); ++usr)
+        for (UserVector::const_iterator usr = logins.begin(); usr != logins.end(); ++usr)
         {
              User* user_iter = *usr;
              user_iter->PushGroup(Found);
@@ -312,11 +312,11 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
         }
        
        const std::string& usergrups = login + "/groups";
-       Args grouplist = STHelper::HKeys(usergrups);
+       const Args& grouplist = STHelper::HKeys(usergrups);
 
        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-       for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
+       for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                 std::string gname = *i;
                 user->SendProtocol(BRLD_ITEM_LIST, gname.c_str());
@@ -388,11 +388,11 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        }
        
        const std::string& usergrups = dest + "/groups";
-       Args grouplist = STHelper::HKeys(usergrups);
+       const Args& grouplist = STHelper::HKeys(usergrups);
 
        bool found = false;
        
-       for (Args::iterator i = grouplist.begin(); i != grouplist.end(); i++)
+       for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                std::string item = *i;
 
@@ -417,9 +417,9 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
         }
         
-        UserVector logins = Kernel->Clients->FindLogin(dest);
+        const UserVector& logins = Kernel->Clients->FindLogin(dest);
 
-        for (UserVector::iterator o = logins.begin(); o != logins.end(); ++o)
+        for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
         {
              User* user_iter = *o;
              user_iter->RemoveGroup(Found);

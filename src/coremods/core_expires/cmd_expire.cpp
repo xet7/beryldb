@@ -32,13 +32,13 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
                   return FAILED;
          }
          
-         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+         const ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
 
          Dispatcher::JustAPI(user, BRLD_START_LIST);
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Expire", "Schedule"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                ExpireEntry entry = it->second;
 
@@ -101,14 +101,14 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
          
          /* User has requested all expires with expiration date. */
          
-         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+         const ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
          
          Dispatcher::JustAPI(user, BRLD_START_LIST);
          
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                ExpireEntry entry = it->second;
                
@@ -280,8 +280,8 @@ CommandExpireAT::CommandExpireAT(Module* Creator) : Command(Creator, "EXPIREAT",
 
 COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters) 
 {    
-          const std::string& key = parameters[0];
-          const std::string& seconds = parameters[1];
+          const std::string& key 	= 	parameters[0];
+          const std::string& seconds 	= 	parameters[1];
 
           if (!CheckKey(user, key))
           {

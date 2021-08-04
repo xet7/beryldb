@@ -99,7 +99,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
              }
         }
         
-        MonitorMap all = Kernel->Monitor->GetList(arg);
+        const MonitorMap& all = Kernel->Monitor->GetList(arg);
         
         Dispatcher::JustAPI(user, BRLD_START_LIST);
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Monitor", "Level"));
@@ -107,7 +107,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
         
         unsigned int counter = 0;
 
-        for (MonitorMap::iterator uit = all.begin(); uit != all.end(); uit++)
+        for (MonitorMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
         {
                User* umonitor = uit->first;
                MONITOR_LEVEL level = uit->second;

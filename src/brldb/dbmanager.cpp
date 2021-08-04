@@ -13,7 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/dbmanager.h"
 #include "managers/lists.h"
 #include "managers/settings.h"
 
@@ -100,11 +99,11 @@ unsigned int DBManager::OpenAll()
 {
        unsigned int counter = 0;
        
-       Args dblist = STHelper::HKeys("databases");
+       const Args& dblist = STHelper::HKeys("databases");
 
-       std::string dbdefault = STHelper::Get("dbconf", "dbdefault");
+       const std::string& dbdefault = STHelper::Get("dbconf", "dbdefault");
 
-       for (Args::iterator i = dblist.begin(); i != dblist.end(); i++)
+       for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
        {
              std::string name = *i;
 

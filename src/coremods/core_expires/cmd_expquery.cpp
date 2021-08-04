@@ -112,14 +112,14 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                   select  = parameters[0];
          }
          
-         ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
+         const ExpireMap& expiring = Kernel->Store->Expires->GetExpires();
 
          Dispatcher::JustAPI(user, BRLD_START_LIST);
 
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", "Key", "Schedule", "Select", "Database"));
          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 25).c_str(), Dispatcher::Repeat("―", 9).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-         for (ExpireMap::iterator it = expiring.begin(); it != expiring.end(); ++it)
+         for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
                ExpireEntry entry = it->second;
 

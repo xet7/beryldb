@@ -33,9 +33,9 @@ namespace
              
              const std::string& usergrups = user->login + "/groups";
 
-             Args groups = STHelper::HKeys(usergrups);
+             const Args& groups = STHelper::HKeys(usergrups);
              
-             for (Args::iterator i = groups.begin(); i != groups.end(); i++)
+             for (Args::const_iterator i = groups.begin(); i != groups.end(); i++)
              {
                        std::string channel = *i;
                        
@@ -54,11 +54,11 @@ namespace
      void Autojoin(User* user)
      {
               const std::string& userchans = user->login + "/chans";
-              Args chans = STHelper::HKeys(userchans);
+              const Args& chans = STHelper::HKeys(userchans);
               
               LocalUser* localuser = IS_LOCAL(user);
 
-              for (Args::iterator i = chans.begin(); i != chans.end(); i++)
+              for (Args::const_iterator i = chans.begin(); i != chans.end(); i++)
               {
                        std::string channel = *i;
 
@@ -194,18 +194,18 @@ class ModuleCoreDB : public Module
         {
                  Kernel->Sets->Load();
                  
-                 Args grlist = STHelper::HKeys("groups");
+                 const Args& grlist = STHelper::HKeys("groups");
 
-                 for (Args::iterator i = grlist.begin(); i != grlist.end(); i++)
+                 for (Args::const_iterator i = grlist.begin(); i != grlist.end(); i++)
                  {
                         std::string name = *i;
                         std::string flags = STHelper::Get("groups", name);
                         Kernel->Groups->Add(name, flags);
                  }
                  
-                 Args dblist = STHelper::HKeys("databases");
+                 const Args& dblist = STHelper::HKeys("databases");
                  
-                 for (Args::iterator i = dblist.begin(); i != dblist.end(); i++)
+                 for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
                  {
                        std::string name = *i;
                        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(name);

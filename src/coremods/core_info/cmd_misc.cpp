@@ -58,23 +58,26 @@ CommandL::CommandL(Module* parent) : Command(parent, "I", 0)
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
         Dispatcher::JustAPI(user, BRLD_START_LIST);
+
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Connected", Daemon::HumanEpochTime(user->GetConnected()).c_str()));
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         
         user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
         user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
-        
-        if (user->GetDatabase())
-        {
-             user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
-        }
-        
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Agent", user->agent.c_str()));
+
         /* Returns admin flags to requesting user, if any. */
-        
-        std::string exists = UserHelper::CheckFlags(user->login);
-        
+
+        const std::string& exists = UserHelper::CheckFlags(user->login);
+
         if (!exists.empty())
         {
                 user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
-                user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
+        }
+     
+        if (user->GetDatabase())
+        {
+             user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
         }
         
         const std::string& all_groups = user->GetAllGroups();
