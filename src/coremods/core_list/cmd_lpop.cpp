@@ -60,8 +60,8 @@ CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2
 
 COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {

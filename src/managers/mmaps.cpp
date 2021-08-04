@@ -15,16 +15,21 @@
 
 #include "beryl.h"
 #include "extras.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
 #include "helpers.h"
 #include "managers/mmaps.h"
 
 void MMapsHelper::Set(User* user, const std::string& entry, const std::string& hesh, const std::string& value)
 {
        std::shared_ptr<mset_query> query = std::make_shared<mset_query>();
+       Helpers::make_map(user, query, entry, hesh);
+
+       query->value = stripe(value);
+       Kernel->Store->Push(query);
+}
+
+void MMapsHelper::SetNX(User* user, const std::string& entry, const std::string& hesh, const std::string& value)
+{
+       std::shared_ptr<msetnx_query> query = std::make_shared<msetnx_query>();
        Helpers::make_map(user, query, entry, hesh);
 
        query->value = stripe(value);

@@ -79,7 +79,6 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-
        if (!CheckFormat(user, value))
        {
             return FAILED;
@@ -88,7 +87,6 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
        MMapsHelper::Set(user, kmap, key, value);
        return SUCCESS;
 }
-
 
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
@@ -218,7 +216,6 @@ COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-
 CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1, 3)
 {
          group = 'x';
@@ -248,10 +245,36 @@ COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
+CommandMSetNX::CommandMSetNX(Module* Creator) : Command(Creator, "MSETNX", 3, 3)
+{
+         group = 'v';
+         syntax = "<map> <key> \"value\"";
+}
+
+COMMAND_RESULT CommandMSetNX::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap          =       parameters[0];
+       const std::string& key           =       parameters[1];
+       const std::string& value         =       parameters.back();
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
+       if (!CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       MMapsHelper::SetNX(user, kmap, key, value);
+       return SUCCESS;
+}
+
 CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 {
          group = 'x';
-         syntax = "<map> <val> <limit> <offset>";
+         syntax = "<map> <key> <limit> <offset>";
 }
 
 COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
