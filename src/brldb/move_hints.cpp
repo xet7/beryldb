@@ -106,10 +106,11 @@ void move_query::Run()
     if (!this->Swap(newdest, this->dest, result.value))
     {
           access_set(DBL_BATCH_FAILED);
-          return;  
     }
-    
-    this->SetOK();
+    else
+    {
+        this->SetOK();
+    }
         
 }
 

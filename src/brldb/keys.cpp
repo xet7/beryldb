@@ -73,7 +73,7 @@ void expire_list_query::Run()
                                   
                                   if (db_name.empty() || db_name != this->database->GetName())
                                   {
-                                       continue;
+                                       skip = true;
                                   }
                              }
                              

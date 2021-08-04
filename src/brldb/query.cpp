@@ -43,7 +43,7 @@ bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ld
        batch.Put(newdest, lvalue);
        batch.Delete(ldest);
        
-       std::string lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       const std::string& lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
        batch.Put(lookup, convto_string(ttl));
 

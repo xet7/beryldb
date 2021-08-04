@@ -12,9 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 #include "helpers.h"
 
@@ -36,11 +33,11 @@ void renamenx_query::Keys()
      if (!this->SwapWithExpire(newdest, this->dest, result.value, this->select_query, this->value, this->id, this->key))
      {
           access_set(DBL_BATCH_FAILED);
-          return;  
      }
-
-     this->SetOK();
-
+     else
+     {
+         this->SetOK();
+     }
 }
 
 void renamenx_query::Multis()
@@ -91,11 +88,11 @@ void renamenx_query::Run()
     if (!this->Swap(newdest, this->dest, result.value))
     {
           access_set(DBL_BATCH_FAILED);
-          return;  
     }
-    
-    this->SetOK();
-    
+    else
+    {
+         this->SetOK();
+    }
 }
 
 void renamenx_query::Process()
