@@ -30,7 +30,7 @@ COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(newkey);
+       const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(newkey);
        
        if (!database)
        {

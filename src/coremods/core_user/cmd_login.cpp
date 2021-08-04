@@ -52,11 +52,11 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 
         /* Default database assignation. */
 
-        const std::string dbuser = STHelper::Get("dbuser", newlogin);
+        const std::string& dbuser = STHelper::Get("dbuser", newlogin);
         
         if (!dbuser.empty())
         {
-                std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbuser);
+                const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbuser);
 
                 if (!database)
                 {

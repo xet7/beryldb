@@ -36,7 +36,7 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
                return FAILED;
           }   
 
-          unsigned int exp_usig = convto_num<unsigned int>(seconds);
+          const unsigned int exp_usig = convto_num<unsigned int>(seconds);
           ExpireHelper::Future(user, key, exp_usig, value);
           return SUCCESS;
 }
@@ -51,7 +51,7 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 {
          const std::string& key = parameters[0];
          
-         signed int ttl = FutureManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl = FutureManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -169,7 +169,7 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
                return FAILED;
           }   
 
-          unsigned int exp_usig = convto_num<unsigned int>(seconds);
+          const unsigned int exp_usig = convto_num<unsigned int>(seconds);
 
           if ((time_t)exp_usig < Kernel->Now())
           {

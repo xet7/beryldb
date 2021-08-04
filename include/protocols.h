@@ -65,7 +65,6 @@ enum BRLD_PROTOCOL
 	BRLD_UPTIME			=		149,
 	BRLD_END_STATUS			=		150,
 	
-	BRLD_CPU_USE 			=		151,
 	BRLD_ALLOCATION			=		152,
 	BRLD_SIGNALS			=		153,
 	BRLD_PFAULTS			=		154,
@@ -88,7 +87,6 @@ enum BRLD_PROTOCOL
 	
 	BRLD_PERSIST			=		172,
 	BRLD_EXP_COUNT			=		173,
-        BRLD_SHARED_MEM                 =       	174, 
         BRLD_COUNT			=		175,
         BRLD_USER_ITEM			=		176,
         BRLD_USER_LIST_END		=		177,
@@ -190,7 +188,6 @@ enum BRLD_PROTOCOL
 	BRLD_END_LIST			=		283,
         BRLD_START_UNQ_LIST             =               284,
         BRLD_END_UNQ_LIST               =               285,
-        BRLD_CORES			=		286,
         BRLD_FIRSTOF			=		287,	
         BRLD_RESTART_OK			=		289,
         BRLD_COMMAND_ITEM		=		290,
@@ -216,10 +213,6 @@ enum BRLD_PROTOCOL
 	BRLD_LOGIN			=		308,
 	
 	BRLD_OK2			=		310,
-	BRLD_USERS_INFO			=		311,
-	BRLD_CHAN_INFO			=		312,
-	BRLD_COMMANDS			=		313,
-	BRLD_SSL			=		314,
 		
 	/* Error protocol codes. */
 	

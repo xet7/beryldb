@@ -28,7 +28,7 @@ COMMAND_RESULT CommandTime::Handle(User* user, const Params& parameters)
 		return SUCCESS;
 	}
 
-	user->SendRemoteProtocol(BRLD_LOCAL_TIME, Kernel->Config->GetServerName(), Daemon::HumanEpochTime(Kernel->Now()));
+	user->SendRemoteProtocol(BRLD_OK2, Kernel->Config->GetServerName(), Daemon::HumanEpochTime(Kernel->Now()));
 	return SUCCESS;
 }
 

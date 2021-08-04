@@ -62,7 +62,7 @@ void CommandStatus::PreloadData(Status::Context& status)
 				const std::string type = ls->listen_tag->as_string("type", "clients", 1);
 				const std::string attach = ls->listen_tag->as_string("ssl", "plaintext", 1);
 
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_SSL, ls->bind_sa.str() + " (" + type + ", " + attach + ")");
+				status.AppendLine(BRLD_ITEM_LIST, ls->bind_sa.str() + " (" + type + ", " + attach + ")");
 			}
 		}
 
@@ -70,9 +70,9 @@ void CommandStatus::PreloadData(Status::Context& status)
 
 		case 'c':
 		{
-			status.AppendLine(BRLD_ITEM_LIST, BRLD_USERS_INFO, "Users: "+convto_string(Kernel->Clients->GetInstances().size()));
-			status.AppendLine(BRLD_ITEM_LIST, BRLD_CHAN_INFO, "Channels: "+convto_string(Kernel->Channels->GetSubs().size()));
-			status.AppendLine(BRLD_ITEM_LIST, BRLD_COMMANDS, "Commands: "+convto_string(Kernel->Commander.GetCommands().size()));
+			status.AppendLine(BRLD_ITEM_LIST, "Users: "+convto_string(Kernel->Clients->GetInstances().size()));
+			status.AppendLine(BRLD_ITEM_LIST, "Channels: "+convto_string(Kernel->Channels->GetSubs().size()));
+			status.AppendLine(BRLD_ITEM_LIST, "Commands: "+convto_string(Kernel->Commander.GetCommands().size()));
 
 			rusage R;
 
@@ -80,25 +80,25 @@ void CommandStatus::PreloadData(Status::Context& status)
 			if (!getrusage(RUSAGE_SELF,&R))	
 			{
 #ifndef __HAIKU__
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_ALLOCATION, "Total allocation: "+convto_string(R.ru_maxrss)+"K");
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_SHARED_MEM, "Shared memory size: "+convto_string(R.ru_idrss));
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_SIGNALS, "Signals:          "+convto_string(R.ru_nsignals));
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_PFAULTS, "Page faults:      "+convto_string(R.ru_majflt));
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_SWAPS, "Swaps:            "+convto_string(R.ru_nswap));
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_CSW, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
+				status.AppendLine(BRLD_ITEM_LIST, "Total allocation: "+convto_string(R.ru_maxrss)+"K");
+				status.AppendLine(BRLD_ITEM_LIST, "Shared memory size: "+convto_string(R.ru_idrss));
+				status.AppendLine(BRLD_ITEM_LIST, "Signals:          "+convto_string(R.ru_nsignals));
+				status.AppendLine(BRLD_ITEM_LIST, "Page faults:      "+convto_string(R.ru_majflt));
+				status.AppendLine(BRLD_ITEM_LIST, "Swaps:            "+convto_string(R.ru_nswap));
+				status.AppendLine(BRLD_ITEM_LIST, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
 #endif
 				float sample_sincelast = (Kernel->Now() - Kernel->Stats->LastSampled.tv_sec) * 1000000
 					+ (Kernel->TimeStamp() - Kernel->Stats->LastSampled.tv_nsec) / 1000;
 				float sample_used = ((R.ru_utime.tv_sec - Kernel->Stats->LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats->LastCPU.tv_usec);
 				float per = (sample_used / sample_sincelast) * 100;
 
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_CPU_NOW, Daemon::Format("CPU Usage (current):    %03.5f%%", per));
+				status.AppendLine(BRLD_ITEM_LIST, Daemon::Format("CPU Usage (current):    %03.5f%%", per));
 
 				sample_sincelast = Kernel->Now() - Kernel->GetStartup();
 				sample_used = (float)R.ru_utime.tv_sec + R.ru_utime.tv_usec / 100000.0;
 				per = (sample_used / sample_sincelast) * 100;
 
-				status.AppendLine(BRLD_ITEM_LIST, BRLD_CPU_USE, Daemon::Format("CPU Usage (total):  %03.5f%%", per));
+				status.AppendLine(BRLD_ITEM_LIST, Daemon::Format("CPU Usage (total):  %03.5f%%", per));
 			}
 		}
 
@@ -106,22 +106,22 @@ void CommandStatus::PreloadData(Status::Context& status)
 
 		case 't':
 		{
-                        status.AppendLine(BRLD_ITEM_LIST, BRLD_CORES, Daemon::Format("Cores: %u", CORE_COUNT));
-                        status.AppendLine(BRLD_ITEM_LIST, BRLD_CORES, Daemon::Format("Threads: %u", Kernel->Store->Flusher->CountThreads()));
+                        status.AppendLine(BRLD_ITEM_LIST, Daemon::Format("Cores: %u", CORE_COUNT));
+                        status.AppendLine(BRLD_ITEM_LIST, Daemon::Format("Threads: %u", Kernel->Store->Flusher->CountThreads()));
 		}                        
                         
 		break;
 		
 		case 'u':
 		{
-			status.AppendLine(BRLD_ITEM_LIST, BRLD_UPTIME, Daemon::Uptime("", Kernel->GetUptime()));
+			status.AppendLine(BRLD_ITEM_LIST, Daemon::Uptime("", Kernel->GetUptime()));
 		}
 		
 		break;
 
 		case 's':
 		{
-                        status.AppendLine(BRLD_ITEM_LIST, BRLD_UPTIME, Kernel->GetUptime());
+                        status.AppendLine(BRLD_ITEM_LIST, Kernel->GetUptime());
 		}
 
 		default:
