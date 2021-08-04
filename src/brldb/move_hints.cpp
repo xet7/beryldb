@@ -33,12 +33,12 @@ void move_query::Keys()
      {
              Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
              Kernel->Store->Expires->Add(this->database, this->id, this->key, this->value, true);
-             
              this->SetOK();
-             return;
      }
-     
-     access_set(DBL_BATCH_FAILED);
+     else
+     {
+          access_set(DBL_BATCH_FAILED);
+     }
 }
 
 void move_query::Maps()

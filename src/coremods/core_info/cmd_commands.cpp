@@ -24,7 +24,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 {
 	const std::string& cmd = parameters[0];
 	
-	Command* Found = Kernel->Commander.GetBase(cmd);
+	Command* Found = Kernel->Commander->GetBase(cmd);
 	
 	if (!Found)
 	{
