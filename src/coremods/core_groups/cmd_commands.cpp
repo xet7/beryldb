@@ -101,7 +101,7 @@ COMMAND_RESULT CommandGShow::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
        
-       std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
        
        if (!a_group)
        {
@@ -379,7 +379,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       bool exists = UserHelper::Exists(dest);
+       const bool exists = UserHelper::Exists(dest);
 
        if (!exists)
        {
@@ -409,23 +409,23 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
        }
 
-        std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
 
-        if (!Found)
-        {
+       if (!Found)
+       {
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
-        }
+       }
         
-        const UserVector& logins = Kernel->Clients->FindLogin(dest);
+       const UserVector& logins = Kernel->Clients->FindLogin(dest);
 
-        for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
-        {
+       for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
+       {
              User* user_iter = *o;
              user_iter->RemoveGroup(Found);
-        }
+       }
         
-        CMapsHelper::Del(usergrups, gname);
-        user->SendProtocol(BRLD_OK, PROCESS_OK);
-        return FAILED;
+       CMapsHelper::Del(usergrups, gname);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+       return FAILED;
 }

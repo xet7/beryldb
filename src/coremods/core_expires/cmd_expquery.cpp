@@ -130,7 +130,6 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                
                std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
-               
          }
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);

@@ -207,7 +207,7 @@ COMMAND_RESULT CommandDB::Handle(User* user, const Params& parameters)
 {  
        if (user->GetDatabase())
        {
-             std::string dbname = user->GetDatabase()->GetName();                                  
+             const std::string& dbname = user->GetDatabase()->GetName();                                  
              user->SendProtocol(BRLD_OK, dbname);
              return SUCCESS;	
        }
@@ -224,7 +224,7 @@ CommandChange::CommandChange(Module* Creator) : Command(Creator, "CHANGE", 1, 1)
 COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 {  
        const std::string& dbname = parameters[0];
-       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+       const std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
 
        if (!database)
        {
