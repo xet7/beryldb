@@ -399,6 +399,7 @@ void DataThread::Process()
 
               if (!Kernel->Store->Flusher->Status())
               {
+                    this->SetStatus(false);
                     continue;
               }
 

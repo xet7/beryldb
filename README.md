@@ -22,6 +22,10 @@ The server is written in C++ and is powered by [RocksDB](https://github.com/face
 With Beryl, clients have access to lists, maps, keys, and channel subscription for its clients. 
 Currently, the server is available for GNU/Linux, FreeBSD and MacOS.
 
+A robust attention to performance and code cleanliness has been given when
+creating BerylDB. Our server aims at being crash-free while utilizing
+minimun resources.
+
 * Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 * We are on [Twitter](https://twitter.com/beryldb).
 
