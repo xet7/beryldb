@@ -154,14 +154,14 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
-                std::string flags = UserHelper::CheckFlags(item);
+                std::string userflags = UserHelper::CheckFlags(item);
                 
-                if (flags.empty())
+                if (userflags.empty())
                 {
                       continue;
                 }
                 
-                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), flags.c_str()), Daemon::Format("%s %s", item.c_str(), flags.c_str()));
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), userflags.c_str()), Daemon::Format("%s %s", item.c_str(), userflags.c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_END_LIST);
