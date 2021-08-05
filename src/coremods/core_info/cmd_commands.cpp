@@ -72,9 +72,9 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 	        
 		/* Requesting user must have required flags. */
 		
-		if (i->second->requires)
+		if (i->second->flags)
 		{
-			if (user->CanPerform(i->second->requires))
+			if (user->CanPerform(i->second->flags))
 			{
 	                        std::string fsyntax = i->second->syntax;
 	                        

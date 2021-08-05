@@ -16,7 +16,7 @@
 
 CommandMonitor::CommandMonitor(Module* Creator) : Command(Creator, "MONITOR", 0, 1)
 {
-         requires = 'm';
+         flags = 'm';
          syntax = "<level>";
 }
 
@@ -59,7 +59,7 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
 
 CommandMonitorReset::CommandMonitorReset(Module* Creator) : Command(Creator, "MRESET", 0, 0)
 {
-        requires = 'm';
+        flags = 'm';
 }
 
 COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
@@ -72,7 +72,7 @@ COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
 
 CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MONITORLIST", 0, 1)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<*argument>";
 }
 
@@ -133,7 +133,7 @@ COMMAND_RESULT CommandMonitorList::Handle(User* user, const Params& parameters)
 
 CommandStopMonitor::CommandStopMonitor(Module* Creator) : Command(Creator, "STOPMONITOR", 0, 0)
 {
-        requires = 'm';
+        flags = 'm';
 }
 
 COMMAND_RESULT CommandStopMonitor::Handle(User* user, const Params& parameters)

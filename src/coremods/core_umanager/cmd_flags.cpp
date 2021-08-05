@@ -18,7 +18,7 @@
 
 CommandListFlags::CommandListFlags(Module* parent) : Command(parent, "LISTFLAGS", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login>";
 }
 
@@ -64,7 +64,7 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login>";
 }
 
@@ -97,7 +97,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
 CommandDelFlags::CommandDelFlags(Module* parent) : Command(parent, "DELFLAG", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login> <flags>";
 }
 
@@ -184,7 +184,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
 CommandAddFlag::CommandAddFlag(Module* parent) : Command(parent, "ADDFLAG", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login> <flags>";
 }
 

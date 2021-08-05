@@ -16,7 +16,7 @@
 
 CommandSFlush::CommandSFlush(Module* Creator) : Command(Creator, "SFLUSH", 0, 1)
 {
-         requires = 'r';
+         flags = 'r';
          syntax = "<select>";
 }
 
@@ -49,7 +49,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
 
 CommandUsing::CommandUsing(Module* Creator) : Command(Creator, "USING", 1, 1)
 {
-         requires = 'm';
+         flags = 'm';
          syntax = "<instance>";
 }
 
@@ -240,7 +240,7 @@ COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 
 CommandDBLIST::CommandDBLIST(Module* Creator) : Command(Creator, "DBLIST", 0, 0)
 {
-      requires = 'r';
+      flags = 'r';
 }
 
 COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
@@ -267,7 +267,7 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
 
 CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE", 1, 1)
 {
-      requires = 'r';
+      flags = 'r';
       syntax = "<name>";
 }
 
@@ -310,7 +310,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 
 CommandDBDelete::CommandDBDelete(Module* Creator) : Command(Creator, "DBDELETE", 1, 1)
 {
-      requires = 'r';
+      flags = 'r';
       syntax = "<name>";
 }
 
@@ -352,7 +352,7 @@ COMMAND_RESULT CommandDBTest::Handle(User* user, const Params& parameters)
 
 CommandDBSetDefault::CommandDBSetDefault(Module* Creator) : Command(Creator, "SETDEFAULT", 1, 1)
 {
-      requires = 'r';
+      flags = 'r';
       syntax = "<db name>";
 }
 
@@ -377,7 +377,7 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
 CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 1)
 {
-       requires = 'r';
+       flags = 'r';
 }
 
 COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
@@ -396,7 +396,7 @@ COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
 
 CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)
 {
-       requires = 'r';
+       flags = 'r';
 }
 
 COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)

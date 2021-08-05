@@ -16,7 +16,7 @@
 
 CommandShutdown::CommandShutdown(Module* parent) : Command(parent, "SHUTDOWN", 0, 1)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<servername>";
 }
 
@@ -65,7 +65,7 @@ namespace
 
 CommandRestart::CommandRestart(Module* parent) : Command(parent, "RESTART", 0, 1)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<servername>";
 }
 
@@ -77,11 +77,11 @@ COMMAND_RESULT CommandRestart::Handle(User* user, const Params& parameters)
 
         for (int i = getdtablesize(); --i > 2;)
         {
-               int flags = fcntl(i, F_GETFD);
+               int specials = fcntl(i, F_GETFD);
                
-               if (flags != -1)
+               if (specials != -1)
                {
-                         fcntl(i, F_SETFD, flags | FD_CLOEXEC);
+                         fcntl(i, F_SETFD, specials | FD_CLOEXEC);
                }
         }
         

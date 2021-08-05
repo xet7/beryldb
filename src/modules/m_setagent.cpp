@@ -21,7 +21,7 @@ class CommandSetAgent : public Command
         CommandSetAgent(Module* Creator) : Command(Creator, "SETAGENT", 2)
         {
                 last_empty_ok = false;
-                requires = 'e';
+                flags = 'e';
                 syntax = "[<instance>] <channel>[,<channel>]+";
                 INTERPRET2(TR_INSTANCE, TR_TEXT);
         }

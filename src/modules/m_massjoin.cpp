@@ -19,7 +19,7 @@ class CommandMassJoin : public Command
   
         CommandMassJoin(Module* Creator) : Command(Creator, "MASSJOIN", 1, 1)
         {
-             requires = 'm';
+             flags = 'm';
              syntax = "<chan>";
         }
 

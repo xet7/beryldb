@@ -16,7 +16,7 @@
 
 CommandNotifier::CommandNotifier(Module* Creator) : Command(Creator, "NOTIFY", 0, 1)
 {
-       requires = 'm';
+       flags = 'm';
        syntax = "<level>";
 }
 
@@ -64,7 +64,7 @@ COMMAND_RESULT CommandNotifier::Handle(User* user, const Params& parameters)
 
 CommandNotifyReset::CommandNotifyReset(Module* Creator) : Command(Creator, "NRESET", 0, 0)
 {
-        requires = 'm';
+        flags = 'm';
 }
 
 COMMAND_RESULT CommandNotifyReset::Handle(User* user, const Params& parameters)
@@ -77,7 +77,7 @@ COMMAND_RESULT CommandNotifyReset::Handle(User* user, const Params& parameters)
 
 CommandStopNotify::CommandStopNotify(Module* Creator) : Command(Creator, "STOPNOTIFY", 0, 0)
 {
-        requires = 'm';
+        flags = 'm';
 }
 
 COMMAND_RESULT CommandStopNotify::Handle(User* user, const Params& parameters)

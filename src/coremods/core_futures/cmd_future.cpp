@@ -83,7 +83,7 @@ COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 
 CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETALL", 0, 0)
 {
-       requires = 'e';
+       flags = 'e';
 }
 
 COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)

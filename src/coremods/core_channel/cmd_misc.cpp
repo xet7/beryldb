@@ -39,7 +39,7 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
 CommandChans::CommandChans(Module* parent) : Command(parent, "GETCHANS", 1, 1)
 {
           syntax = "<instance>";
-          requires = 'e';
+          flags = 'e';
 }
 
 COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)

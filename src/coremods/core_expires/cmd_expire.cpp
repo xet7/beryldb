@@ -17,7 +17,7 @@
 CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)
 {
          last_empty_ok = true;
-         requires = 'e';
+         flags = 'e';
          syntax = "<%key> <argument>";
 }
 
@@ -78,7 +78,7 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
 CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIST", 0, 1)
 {
          last_empty_ok = true;
-         requires = 'e';
+         flags = 'e';
          syntax = "<*argument>";
 }
 
@@ -132,7 +132,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
 
 CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
 {
-         requires = 'e';
+         flags = 'e';
 }
 
 COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)

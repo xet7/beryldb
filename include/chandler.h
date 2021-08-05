@@ -183,7 +183,7 @@ class ExportAPI Command : public CommandModel
 	
 	/* User modes required to run this command. */
 	
-	unsigned char requires;
+	unsigned char flags;
 	
 	unsigned char group;
 	

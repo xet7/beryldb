@@ -54,7 +54,7 @@ class CommandUse : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Flushing datbase requires root flags. */
+/* Flushing datbase flags root flags. */
 
 class CommandFlushDB : public Command 
 {

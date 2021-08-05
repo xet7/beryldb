@@ -54,14 +54,14 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 
 		if (IS_LOCAL(user) && user->CanPerform('e'))
 		{
-			std::string flags("VCO");
+			std::string ModFlags("VCO");
 			size_t pos = 0;
 	
 			for (int mult = 1; mult <= VF_OPTCOMMON; mult *= 2, ++pos)
 			{
 				if (!(V.Flags & mult))
 				{
-					flags[pos] = '-';
+					ModFlags[pos] = '-';
 				}
                                 else
                                 {
@@ -128,14 +128,14 @@ COMMAND_RESULT CommandCoreModules::Handle(User* user, const Params& parameters)
 		
 		if (IS_LOCAL(user) && user->CanPerform('e'))
 		{
-			std::string flags("VCO");
+			std::string ModFlags("VCO");
 			size_t pos = 0;
 	
 			for (int mult = 1; mult <= VF_OPTCOMMON; mult *= 2, ++pos)
 			{
 				if (!(V.Flags & mult))
 				{
-					flags[pos] = '-';
+					ModFlags[pos] = '-';
 				}
 				else
 				{

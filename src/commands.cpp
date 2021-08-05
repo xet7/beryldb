@@ -40,7 +40,7 @@ RouteParams CommandModel::GetRouting(User* user, const Params& parameters)
 
 Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara)
 	: CommandModel(mod, cmd, minpara, maxpara)
-	, requires(0)
+	, flags(0)
 	, group(0)
 	, force_manual_route(false)
         , syntax(NO_SYNTAX)
