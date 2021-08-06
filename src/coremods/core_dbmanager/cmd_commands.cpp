@@ -265,26 +265,29 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
       return SUCCESS;
 }
 
-CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE", 1, 1)
+CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE", 1, 2)
 {
       flags = 'r';
-      syntax = "<name>";
+      syntax = "<name> <path>";
 }
 
 COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 {
-      std::string dbname = parameters[0];
+      std::string dbname    =    parameters[0];
+      std::string dbpath    =    parameters[1];
+      
       std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
+      std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
 
       /* 'dbdefault' is a reserved database name. */
       
-      if (dbname == "dbdefault" || dbname == "core")
+      if (dbname == "dbdefault" || dbname == "core" || dbname == "root")
       {
              user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
       }
       
-      if (Kernel->Store->DBM->Create(dbname, dbname))
+      if (Kernel->Store->DBM->Create(dbname, dbpath))
       {			
              Kernel->Store->DBM->Load(dbname);
              user->SendProtocol(BRLD_OK, PROCESS_OK);
