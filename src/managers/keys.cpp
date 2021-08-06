@@ -12,13 +12,9 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/keys.h"
 #include "helpers.h"
 #include "extras.h"
+#include "managers/keys.h"
 
 void KeyHelper::Modify(User* user, const std::string& entry, const STR_FUNCTION& fnc)
 {

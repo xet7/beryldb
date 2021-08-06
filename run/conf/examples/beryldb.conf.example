@@ -13,7 +13,7 @@
 #	   the entire network must have the same value.
 #
 
-<server name="server1.beryl.dev" network="bnet">
+<server name="server1.beryl.dev" network="cluster">
 
 # Listen ##################################################
 #

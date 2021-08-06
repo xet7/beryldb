@@ -2,7 +2,7 @@
 
 <a target="_blank" href="https://twitter.com/beryldb"><img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40beryldb"></a>
 <a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/Linux%20build/badge.svg"></a>
-<a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/MacOS%20Build/badge.svg"></a>
+<a target="_blank" href="https://github.com/beryldb/beryldb/actions"><img src="https://github.com/beryldb/beryldb/workflows/macOS%20Build/badge.svg"></a>
 <a target="_blank" href="https://github.com/beryldb/beryldb/pulse" alt="Activity"> <img src="https://img.shields.io/github/commit-activity/m/beryldb/beryldb" /></a>
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 <br>
@@ -15,33 +15,34 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
 ## What is Beryl?
 
-Beryl is a data structure server. Our database provide access to structures via a 
-wide range of commands, which are later queued, processed and dispatched. 
+Beryl is a data structure server. Our database provides access to structures via a 
+wide range of commands, which are later queued, processed, and dispatched. 
 The server is written in C++ and is powered by [RocksDB](https://github.com/facebook/rocksdb).
 
-With Beryl, clients have access to lists, maps, keys, and channel subscription for its clients. 
-Currently, the server is available for GNU/Linux, FreeBSD and MacOS.
+With Beryl, users have access to lists, maps, keys, and channel
+subscriptions for their clients. 
+Currently, the server is available for GNU/Linux, FreeBSD and macOS.
 
 * Check Beryl's [full list of commands](https://docs.beryl.dev/using/commands/).
 * We are on [Twitter](https://twitter.com/beryldb).
 
-A robust attention to performance and code cleanliness has been given when
-creating BerylDB. Our server aims at being crash-free while utilizing
-minimun resources.
+A robust attention to performance and code cleanliness is an ongoing
+priority when developing BerylDB. Our server aims at being crash-free while utilizing
+minimum resources.
 
 ## Why use it?
 
 Beryl simplifies your system by allowing you to write fewer lines of code to store, retrieve, and manage data in your apps. 
-For instance, if your application relies on sessions to keep users connected,
-you may use Beryl's key-value data storage, and then remove expiring keys with Beryl's automatic expire managing system.
+For instance, if your app relies on sessions to keep users connected,
+you may use Beryl's key-value data storage. Then remove expiring keys with Beryl's automatic expire managing system.
 
 ## Installation
 
-It is recommended to build Beryl from source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/using/installation/).
+We recommend building Beryl from the source. A guide on how to do this is available on [the Beryl docs site](https://docs.beryl.dev/using/installation/).
 Beryl's development branches are available in [our GitHub repository](https://github.com/beryldb/beryldb).
 
 NOTE: When running 'make', you should use the '-j4' argument, which allows you to compile 
-using 4 cores. Feel free to change this number according to your cpu.
+using 4 cores. Feel free to change this number according to your CPU.
 
 * Installing dependencies in **Debian** based systems:
 
@@ -56,7 +57,7 @@ dnf install @development-tools
 yum install git rocksdb-devel.x86_64
 ```
 
-* Installing dependencies in **MacOS**:
+* Installing dependencies in **macOS**:
 
 ```
 brew install rocksdb 
@@ -158,14 +159,14 @@ Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands
 
 ## Discussions
 
-In order to maintain a documentation that is easy to follow, we try to maintain 
-discussions at a very shallow level. Our code is actively changing and thus
+In order to maintain a documentation that is easy to follow. We try to maintain documentation that is easy to
+follow and try to make discussions understandable for everyone. Our code is actively changing and thus
 having a brief discussion board is preferred. Join our [Google groups](https://groups.google.com/g/beryldb) 
 If you would like to learn more about Beryl's development process.
 
 ## Source code organization
 
-Beryl's source code is contained in the `src/` directory. The Makefile, which is
+Beryl's source code is in the `src/` directory. The Makefile, which is
 created after configuring Beryl, is located in the root directory.
 
 Inside the root directory, you will find:
@@ -177,14 +178,13 @@ Inside the root directory, you will find:
 
 NOTE: Beryl has changed a bit. Some functions and file names may have
 changed. Hence, Beryl's documentation may be closer to the ``stable`` branch.
-Nonetheless, the core structure is the same, and it has been intensively
-tested.
+Nonetheless, the core structure is the same, tested extensively.
 
 ## Contributing
 
 We are always welcoming new members. If you wish to start contributing code to the 
 Beryl project in any form, such as in the form of pull requests via Github, 
-a code snippet or a patch, you will need to agree to release your work under the terms of the
+a code snippet, or a patch, you will need to agree to release your work under the terms of the
 BSD license.
 
 

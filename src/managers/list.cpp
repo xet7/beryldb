@@ -13,12 +13,8 @@
 
 #include "beryl.h"
 #include "extras.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/lists.h"
 #include "helpers.h"
+#include "managers/lists.h"
 
 void ListHelper::PushNX(User* user, const std::string& entry, const std::string& value)
 {

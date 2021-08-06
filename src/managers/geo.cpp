@@ -14,12 +14,8 @@
 #include <tuple>
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "managers/geo.h"
 #include "helpers.h"
+#include "managers/geo.h"
 
 void GeoHelper::AddPub(User* user, const std::string& chan, const std::string& key, const std::string& latitude, const std::string& longitude)
 {
@@ -79,7 +75,6 @@ void GeoHelper::Calc(User* user, const std::string& key, const std::string& key2
 {
        std::shared_ptr<geocalc_query> query = std::make_shared<geocalc_query>();
        Helpers::make_geo_query(user, query, key);
-       
        query->value = key2;
        Kernel->Store->Push(query);
 }
@@ -88,7 +83,6 @@ void GeoHelper::Remove(User* user, const std::string& key, const std::string& ke
 {
        std::shared_ptr<georem_query> query = std::make_shared<georem_query>();
        Helpers::make_geo_query(user, query, key);
-
        query->value = key2;
        Kernel->Store->Push(query);
 }
@@ -101,6 +95,5 @@ void GeoHelper::Distance(User* user, const std::string& key, const std::string& 
        query->value = key2;
        query->offset = offset;
        query->limit = limit;
-       
        Kernel->Store->Push(query);
 }

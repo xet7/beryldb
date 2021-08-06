@@ -420,7 +420,6 @@ void Dispatcher::ListDepend(User* user, BRLD_PROTOCOL brld, const std::string& m
         {
              user->SendProtocol(brld, msg2);
         }
-	
 }
 
 static bool MatchInternal(const unsigned char* str, const unsigned char* mask, unsigned const char* map)

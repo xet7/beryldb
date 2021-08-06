@@ -56,7 +56,6 @@ void MMapsHelper::Keys(User* user, const std::string& entry, signed int offset, 
        Kernel->Store->Push(query);
 }
 
-
 void MMapsHelper::Count(User* user, const std::string& entry)
 {
        std::shared_ptr<mget_query> query = std::make_shared<mget_query>();

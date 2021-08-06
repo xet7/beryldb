@@ -13,11 +13,8 @@
 
 #include "beryl.h"
 #include "extras.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
 #include "helpers.h"
 #include "managers/maps.h"
-
 
 void MapsHelper::Exists(User* user, const std::string& entry, const std::string& hesh)
 {
@@ -116,7 +113,6 @@ void MapsHelper::GetAll(User* user, const std::string& entry, signed int offset,
 {
        std::shared_ptr<hgetall_query> query = std::make_shared<hgetall_query>();
        Helpers::make_map(user, query, entry);
-       
        query->key = entry;
        query->offset = offset;
        query->limit = limit;
