@@ -164,7 +164,7 @@ install: target
 	@-$(INSTALL) -d -g @GID@ -o @UID@ -m $(INSTMODE_DIR) $(MODPATH)
 	@-$(INSTALL) -d -g @GID@ -o @UID@ -m $(INSTMODE_DIR) $(SCRPATH)
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_BIN) "$(BUILDPATH)/bin/beryldb" $(BINPATH)
-	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_BIN) "$(BUILDPATH)/modules/"*.dll $(MODPATH)
+	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_BIN) "$(BUILDPATH)/modules/"*.so $(MODPATH)
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_BIN) @CONFIGURE_DIRECTORY@/beryldb $(SCRPATH) 2>/dev/null
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_TXT) @CONFIGURE_DIRECTORY@/beryldb.1 $(MANPATH) 2>/dev/null
 	-$(INSTALL) -g @GID@ -o @UID@ -m $(INSTMODE_TXT) docs/conf/*.example $(EXAPATH)
@@ -195,8 +195,8 @@ clean:
 	-rm -f $(BINPATH)/beryldb
 	-rm -rf "$(BUILDPATH)" 2>/dev/null
 	-rm -rf "$(BUILDPATH)" ".configure"
-	-rm -f $(MODPATH)/m_*.dll
-	-rm -f $(MODPATH)/core_*.dll
+	-rm -f $(MODPATH)/m_*.so
+	-rm -f $(MODPATH)/core_*.so
 	-rm -rf build
 	-rm -f Makefile
 	-rm -f include/config.h
@@ -209,8 +209,8 @@ deinstall:
 	-rm -f $(BINPATH)/beryldb
 	-rm -rf $(EXAPATH)
 	-rm -f $(MANPATH)/beryldb.1
-	-rm -f $(MODPATH)/m_*.dll
-	-rm -f $(MODPATH)/core_*.dll
+	-rm -f $(MODPATH)/m_*.so
+	-rm -f $(MODPATH)/core_*.so
 
 configureclean:
 	-rm -f Makefile

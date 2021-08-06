@@ -101,7 +101,7 @@ END
 			if ($file =~ /^(?:core|m)_/ && -d "$directory/$file" && dep_dir "$directory/$file", "modules/$file") 
 			{
 				mkdir "${\BUILDPATH}/obj/$file";
-				push @modlist, "modules/$file.dll";
+				push @modlist, "modules/$file.so";
 			}
 			
 			if ($file =~ /^.*\.cpp$/) 
@@ -135,7 +135,7 @@ sub locate_outputs
 	
 	if ($path eq 'modules/' || $path eq 'coremods/') 
 	{
-		return "modules/$base.dll";
+		return "modules/$base.so";
 	} 
 	elsif ($path eq '' || $path =~ /^engines\/$/) 
 	{
@@ -223,7 +223,7 @@ sub dep_so($)
 	my($file) = @_;
 	my $out = locate_outputs $file;
 
-	my $name = basename $out, '.dll';
+	my $name = basename $out, '.so';
 	print MAKE ".PHONY: $name\n";
 	print MAKE "$name: $out\n";
 
@@ -252,8 +252,8 @@ sub dep_dir($$)
 		my $ofiles = join ' ', @ofiles;
 		my $name = basename $outdir;
 		print MAKE ".PHONY: $name\n";
-		print MAKE "$name: $outdir.dll\n";
-		print MAKE "$outdir.dll: $ofiles\n";
+		print MAKE "$name: $outdir.so\n";
+		print MAKE "$outdir.so: $ofiles\n";
 		print MAKE "\t@\$(SOURCEPATH)/make/links.pl link-dir \$\@ ${\SOURCEPATH}/src/$dir \$^ \$>\n";
 		return 1;
 	} 
