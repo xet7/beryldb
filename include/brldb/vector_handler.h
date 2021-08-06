@@ -174,6 +174,11 @@ class ExportAPI VectorHandler
                this->LastMsg = HANDLER_MSG_OK;
                std::sort(this->mhandler.begin(), this->mhandler.end());
         }
+        
+        std::string Front();
+        
+        std::string Back();
+        
 
         /*  
          * Sum of all elements in vector.

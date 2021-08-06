@@ -317,3 +317,29 @@ unsigned int VectorHandler::Repeats(const std::string& word)
       this->LastMsg = HANDLER_MSG_OK;
       return counter;
 }
+
+std::string VectorHandler::Front()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      const std::string& item = this->mhandler.front();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
+}
+
+std::string VectorHandler::Back()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      const std::string& item = this->mhandler.back();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
+}

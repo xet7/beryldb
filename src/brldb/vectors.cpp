@@ -924,3 +924,59 @@ void vsum_query::Process()
 {
        user->SendProtocol(BRLD_OK, this->response.c_str());
 }
+
+void vback_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
+
+       this->response = handler->Back();
+
+       if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
+       {
+             access_set(DBL_NOT_FOUND);
+             return;
+       }
+
+       this->SetOK();
+}
+
+void vback_query::Process()
+{
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
+}
+
+void vfront_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       if (!result.status.ok())
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+
+       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
+
+       this->response = handler->Front();
+
+       if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
+       {
+             access_set(DBL_NOT_FOUND);
+             return;
+       }
+
+       this->SetOK();
+}
+
+void vfront_query::Process()
+{
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
+}

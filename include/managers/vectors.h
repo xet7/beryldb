@@ -14,6 +14,9 @@
 #pragma once
 
 #include "brldb/database.h"
+#include "brldb/dbmanager.h"
+#include "brldb/dbnumeric.h"
+#include "brldb/query.h"
 
 class ExportAPI VectorHelper
 {
@@ -58,5 +61,11 @@ class ExportAPI VectorHelper
        static void Sum(User* user, const std::string& entry);
        
        static void Find(User* user, const std::string& entry, const std::string& value, signed int offset, signed int limit);
+       
+       static void Front(User* user, const std::string& entry);
+       
+       static void Back(User* user, const std::string& entry);
+       
+       
        
 };

@@ -308,11 +308,10 @@ std::string ListHandler::Back()
             return "";
       }
 
-      std::string item = this->mhandler.back();
+      const std::string& item = this->mhandler.back();
       this->LastMsg = HANDLER_MSG_OK;
       return item;
 }
-
 
 std::string ListHandler::FPOP()
 {
@@ -322,7 +321,7 @@ std::string ListHandler::FPOP()
             return "";
       }
 
-      std::string item = this->mhandler.front();
+      const std::string& item = this->mhandler.front();
       this->mhandler.pop_front();
       this->LastMsg = HANDLER_MSG_OK;
       return item;

@@ -170,3 +170,19 @@ void VectorHelper::Find(User* user, const std::string& entry, const std::string&
        query->value = stripe(value);
        Kernel->Store->Push(query);
 }
+
+void VectorHelper::Front(User* user, const std::string& entry)
+{
+       std::shared_ptr<vfront_query> query = std::make_shared<vfront_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+void VectorHelper::Back(User* user, const std::string& entry)
+{
+       std::shared_ptr<vback_query> query = std::make_shared<vback_query>();
+       Helpers::make_list(user, query, entry);
+       Kernel->Store->Push(query);
+}
+
+

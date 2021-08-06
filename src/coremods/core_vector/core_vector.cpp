@@ -38,6 +38,8 @@ class CoreModuleVector : public Module
         CommandVSum cmdvsum;
         CommandVPushNX cmdvpushnx;
         CommandVFind cmdvfind;
+        CommandVFront cmdvfront;
+        CommandVBack cmdvback;
         
     public:	
         
@@ -60,7 +62,9 @@ class CoreModuleVector : public Module
                              cmdvlow(this),
                              cmdvsum(this),
                              cmdvpushnx(this),
-                             cmdvfind(this)
+                             cmdvfind(this),
+                             cmdvfront(this),
+                             cmdvback(this)
                              
 
         {
