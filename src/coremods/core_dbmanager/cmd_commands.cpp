@@ -238,7 +238,7 @@ COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-CommandDBLIST::CommandDBLIST(Module* Creator) : Command(Creator, "DBLIST", 0, 0)
+CommandDBLIST::CommandDBLIST(Module* Creator) : Command(Creator, "DBLIST", 0, 1)
 {
       flags = 'r';
 }
@@ -258,6 +258,15 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
             
             const std::string& dbname = udb->GetName();
             const std::string& dbpath = udb->GetPath();
+            
+            if (parameters.size())
+            {
+                   if (!Daemon::Match(dbname, parameters[0]) && !Daemon::Match(dbpath, parameters[0])) 
+                   {
+                        continue;
+                   }
+            }
+            
             Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", dbname.c_str(), dbpath.c_str()), Daemon::Format("%s %s", dbname.c_str(), dbpath.c_str()));
       }     
       
