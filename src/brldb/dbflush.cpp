@@ -208,7 +208,7 @@ void DataFlush::GetPending()
       {
                User* user = u->second;
 
-               unsigned int pending = user->pending.size();
+               const unsigned int pending = user->pending.size();
 
                if ((user && !user->IsQuitting()) && (!pending || user->IsLocked()))
                {
@@ -237,26 +237,26 @@ void DataFlush::Process(User* user, std::shared_ptr<QueryBase> signal)
             return;
       }
 
-      DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
+      const DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
       
       /* Thread to use. */
       
       DataThread *ToUse = NULL;
       
-      for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
+      for (DataThreadVector::const_iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
       {
-           DataThread* thread = *iter;
+             DataThread* thread = *iter;
            
-           /* First, we attempt to find an unused thread. */
+             /* First, we attempt to find an unused thread. */
            
-           if (!thread->IsBusy())
-           {
-                 ToUse = thread;
+             if (!thread->IsBusy())
+             {
+                   ToUse = thread;
                  
-                 /* No need to continue looking for a thread. */
-                 
-                 break; 
-           }
+                   /* No need to continue looking for a thread. */
+                  
+                   break; 
+             }
       }
       
       /* Checks whether we found a not-busy thread. */
@@ -407,7 +407,10 @@ void DataThread::Process()
               {
                     case PROC_EXIT_THREAD:
                     {
+                          DataFlush::query_mute.lock();
                           this->Clear();
+                          DataFlush::query_mute.unlock();
+                          
                           return;
                     }
                     
@@ -457,7 +460,7 @@ void DataThread::Process()
                                  DataFlush::AttachResult(request);
                           }
                         
-                        break;
+                          break;
                     }
 
                     default:

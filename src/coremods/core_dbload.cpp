@@ -222,8 +222,6 @@ class ModuleCoreDB : public Module
                              ExpireHelper::ListFutures(database);
                        }
                  }
-                 
-                 
         }
 
         Version GetDescription() 
