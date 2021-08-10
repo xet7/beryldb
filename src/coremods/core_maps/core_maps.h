@@ -157,6 +157,18 @@ class CommandHKeys : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HLIST returns all keys for a given map.
+ * 
+ * @parameters:
+ *
+ *         · string  : Map to find.
+ * 
+ * @protocol:
+ *
+ *         · vector  : keys founds.
+ */ 
+ 
 class CommandHList : public Command 
 {
     public: 
@@ -166,6 +178,18 @@ class CommandHList : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HExists checks whether a given hash (key) exists.
+ * 
+ * @parameters:
+ *
+ *         · string  : Map to find.
+ * 
+ * @protocol:
+ *
+ *         · bool    : 1 or 0.
+ */ 
+ 
 class CommandHExists : public Command 
 {
     public: 
@@ -194,16 +218,6 @@ class CommandHStrlen : public Command
     public: 
 
         CommandHStrlen(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-
-};
-
-class CommandHClone : public Command
-{
-    public: 
-
-        CommandHClone(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 

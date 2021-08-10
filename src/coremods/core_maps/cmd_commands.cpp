@@ -72,7 +72,7 @@ COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::SimpleRetro(user, std::make_shared<hexists_query>(), kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hexists_query>(), kmap, key);
        return SUCCESS;
 }
 
