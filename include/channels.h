@@ -24,8 +24,9 @@
 
 class ExportAPI Channel : public Expandable
 {
-  friend class ChannelManager;
-  friend class User;
+   friend class ChannelManager;
+   friend class User;
+   friend class MessageTarget;
   
   public:
 	
@@ -34,6 +35,14 @@ class ExportAPI Channel : public Expandable
  	typedef std::map<User*, brld::aligned_storage<Subscription> > SubscriptionMap;
 
   private:
+
+        /* This channel's name. */
+
+        std::string name;
+
+        /* Time at which this channel was created. */
+
+        time_t created;
 	
 	/* 
 	 * DeleteUser is invoked from PartUser() and removes references
@@ -47,14 +56,6 @@ class ExportAPI Channel : public Expandable
 	void DeleteUser(User* user);
 
   public:
-	
-	/* This channel's name. */
-
-	std::string name;
-	
-	/* Time at which this channel was created. */
-
-	time_t created;
 	
 	/* Map that contains all subscribed clients to a given chan. */
 	
@@ -79,7 +80,7 @@ class ExportAPI Channel : public Expandable
 	 * 
 	 * @parameters:
 	 *
-	 *           · User*: user to add.
+	 *           · User	: user to add.
 	 */
 
 	Subscription* AddUser(User* user);
@@ -115,12 +116,12 @@ class ExportAPI Channel : public Expandable
          *
          * @parameters:
 	 *
-	 *         · User: User to unsubscribe.
+	 *         · User	   : User to unsubscribe.
 	 * 
          * @return:
  	 *
-         *         · True: OK
-         *         · False: Operation failed.
+         *         · bool (true)   : OK
+         *         · bool (false)  : Operation failed.
          */    	
 	
 	bool PartUser(User* user);
@@ -130,9 +131,9 @@ class ExportAPI Channel : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · fromconnect: If this is a join calling from the core_db.cpp (database).
-	 *         · user: User to join.
-	 *         · channame: Channel's name.
+	 *         · bool	: If this is a join calling from the core_db.cpp (database).
+	 *         · user	: User to join.
+	 *         · string	: Channel's name.
 	 * 
          * @return:
  	 *
@@ -141,6 +142,32 @@ class ExportAPI Channel : public Expandable
 
 	static Channel* JoinUser(bool fromconnect, LocalUser* user, std::string channame, bool override = false);
 
+        /* 
+         * Returns the name of this channel.
+	 * 
+         * @return:
+ 	 *
+         *         · string	: Channel name.
+         */    
+         
+	std::string GetName() const
+	{
+		return this->name;
+	}
+	
+        /* 
+         * Returns the time at which this channel was created.
+	 * 
+         * @return:
+ 	 *
+         *         · time_t	: this->created.
+         */    
+         	
+	time_t GetCreated()
+	{
+		return this->created;
+	}
+	
 	/* Creates a channel if not exists. */
 	
 	Subscription* ExecuteJoin(bool fromconnect, User* user, bool bursting = false, bool created_by_local = false);

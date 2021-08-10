@@ -533,3 +533,5 @@ COMMAND_RESULT CommandToCap::Handle(User* user, const Params& parameters)
        KeyHelper::Retro(user, query, key);
        return SUCCESS;
 }
+
+

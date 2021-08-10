@@ -24,11 +24,11 @@
  * 
  * @parameters:
  *
- *         · key: List key to check.
+ *         · string	: List key to check.
  * 
  * @protocol:
  *
- *         · int: Highest element found.
+ *         · int	: Highest element found.
  */ 
 
 class CommandLHigh : public Command 
@@ -45,11 +45,11 @@ class CommandLHigh : public Command
  * 
  * @parameters:
  *
- *         · key: List key to check.
+ *         · string	: List key to check.
  * 
  * @protocol:
  *
- *         · int: Lowest element found.
+ *         · int	: Lowest element found.
  */ 
 
 class CommandLLow : public Command 
@@ -67,11 +67,11 @@ class CommandLLow : public Command
  * 
  * @parameters:
  *
- *         · key: List key to average.
+ *         · string	: List key to average.
  * 
  * @protocol:
  *
- *         · double: Avg number.
+ *         · double	: Avg number.
  */ 
 
 class CommandLAvg : public Command 
@@ -89,7 +89,8 @@ class CommandLAvg : public Command
  * 
  * @parameters:
  *
- *         · value: Element to push.
+ *	   · strnig	: List name.
+ *         · string	: Element to push.
  * 
  * @protocol:
  *
@@ -111,7 +112,8 @@ class CommandLPushNX : public Command
  * 
  * @parameters:
  *
- *         · value: Element to push.
+ *	   · string	: List name to push.
+ *         · string	: Element to push.
  * 
  * @protocol:
  *
@@ -133,12 +135,12 @@ class CommandLPush : public Command
  * 
  * @parameters:
  *
- *         · key: Destination list.
+ *         · string	: Destination list.
  *         · { offset, limit }
  * 
  * @protocol:
  *
- *         · vector: Returning elements.
+ *         · vector : Returning elements.
  */ 
 
 class CommandLGet : public Command 
@@ -156,11 +158,11 @@ class CommandLGet : public Command
  * 
  * @parameters:
  *
- *         · key: List to check.
+ *         · string	: List to check.
  * 
  * @protocol:
  *
- *         · string: Element.
+ *         · string	: Element.
  */ 
 
 class CommandLPopFront : public Command 
@@ -178,11 +180,11 @@ class CommandLPopFront : public Command
  * 
  * @parameters:
  *
- *         · string: List to check.
+ *         · string	: List to check.
  * 
  * @protocol:
  *
- *         · string: Element.
+ *         · string	: Element.
  */ 
 
 class CommandLPopBack : public Command 
@@ -221,12 +223,12 @@ class CommandPopAll : public Command
  * 
  * @parameters:
  *
- *         · string: List key to find item on.
- *         · value: Value to verify.
+ *         · string	: List key to find item on.
+ *         · value	: Value to verify.
  * 
  * @protocol:
  *
- *         · enum: 0 or 1
+ *         · enum	: 0 or 1
  */ 
 
 class CommandLExist : public Command 
@@ -372,7 +374,7 @@ class CommandLSort : public Command
  * 
  * @parameters:
  *
- *         · pos    : Position to look for.
+ *         · int    : Position to look for.
  * 
  * @protocol:
  *

@@ -147,20 +147,54 @@ CommandPartAll::CommandPartAll(Module* Creator) : Command(Creator, "PARTALL", 0,
         
 COMMAND_RESULT CommandPartAll::Handle(User* user, const Params& parameters)
 {
-               if (!user->chans.size())
-               {
-                      user->SendProtocol(ERR_INPUT, NO_CHANS); 
-                      return FAILED;
-               }
+       if (!user->chans.size())
+       {
+             user->SendProtocol(ERR_INPUT, NO_CHANS); 
+             return FAILED;
+       }
                
-               user->SendProtocol(BRLD_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
 
-               for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
-               {
-                        Channel* chan = (*i)->chan;
-                        ++i;
-                        chan->PartUser(user);
-               }
+       for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
+       {
+             Channel* chan = (*i)->chan;
+             ++i;
+             chan->PartUser(user);
+       }
 
-               return SUCCESS;
+       return SUCCESS;
+}
+
+CommandHop::CommandHop(Module* Creator) : MultiCommand(Creator, "HOP", 1)
+{
+       syntax = "<channel>";
+}
+
+COMMAND_RESULT CommandHop::HandleLocal(LocalUser* user, const Params& parameters)
+{
+       if (CommandHandler::HasLoop(user, this, parameters, 0))
+       {
+                return SUCCESS;
+       }
+
+       Channel* channel = Kernel->Channels->Find(parameters[0]);
+
+       if (!channel)
+       {
+                 user->SendProtocol(Protocols::NoChannel(parameters[0]));
+                 return FAILED;
+       }
+
+       if (channel->IsSubscribed(user))
+       {
+                 channel->PartUser(user);
+                 Channel::JoinUser(false, user, parameters[0], true);
+                 return SUCCESS;
+       }
+       else
+       {
+                 user->SendProtocol(ERR_INPUT, NOT_SUBSCRIBED);
+       }
+
+       return FAILED;
 }

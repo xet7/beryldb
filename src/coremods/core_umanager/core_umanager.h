@@ -178,8 +178,8 @@ class CommandListFlags : public Command
  * 
  * @parameters:
  *
-*	   · string: user.
- *         · string: password.
+*	   · string	: user.
+ *         · string	: password.
  * 
  * @protocol:
  *
@@ -219,7 +219,7 @@ class CommandListAdmins : public Command
  *
  * @parameters:
  *
- *         ·  login    :   Login to verify if in cache.
+ *         · string    :   Login to verify if is present in cache.
  *
  * @protocol:
  *

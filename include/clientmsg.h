@@ -113,7 +113,7 @@ class ProtocolTrigger::Messages::Join : public ProtocolTrigger::Message
 	void SetParams(Subscription* Memb)
 	{
 		memb = Memb;
-		PushParamRef(memb->chan->name);
+		PushParamRef(memb->chan->GetName());
 	}
 
 	
@@ -128,7 +128,7 @@ struct ProtocolTrigger::Messages::Part : public ProtocolTrigger::Message
 	
 	Part(Subscription* memb) : ProtocolTrigger::Message(convto_string(BRLD_PART).c_str(), memb->user)
 	{
-		PushParamRef(memb->chan->name);
+		PushParamRef(memb->chan->GetName());
 	}
 };
 
@@ -160,21 +160,25 @@ class ProtocolTrigger::Messages::Publish : public ProtocolTrigger::Message
 		if (status)
 		{
 			std::string rawtarget(1, status);
-			rawtarget.append(targetchan->name);
+			rawtarget.append(targetchan->GetName());
 			PushParam(rawtarget);
 		}
 		else
 		{
-			PushParamRef(targetchan->name);
+			PushParamRef(targetchan->GetName());
 		}
 	}
 
 	void PushTargetUser(const User* targetuser)
 	{
 		if (targetuser->registered & REG_LOGIN)
+		{
 			PushParamRef(targetuser->instance);
+		}
 		else
+		{
 			PushParam("*");
+		}
 	}
 
  public:
