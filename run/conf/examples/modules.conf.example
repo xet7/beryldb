@@ -37,12 +37,6 @@
 
 #<module name="setagent">
 
-# PartAll ##############################################
-#
-# Unsubscribed an user from all channels.
-
-#<module name="partall">
-
 # Quit Idlers ##############################################
 #
 # Disconnects user with a provided amount of idle.

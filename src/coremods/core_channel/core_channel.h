@@ -99,10 +99,21 @@ class CommandMyChans : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns a list of channels for a given instance.
+ *
+ * @parameters:
+ * 
+ *        · string     : User to lookup channels.
+ *
+ * @protocol:
+ *
+ *         · list      : My channels.
+ */ 
 
 class CommandChans : public Command
 {
- public:
+  public:
 
         CommandChans(Module* parent);
 
@@ -125,3 +136,21 @@ class CommandPartAll : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Leaves and Joins a given channel with one command.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NO_CHAN, NOT_SUBSCRIBED or OK.
+ */ 
+
+class CommandHop : public MultiCommand
+{
+   public:
+
+        CommandHop(Module* parent);
+
+        COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters);
+};
+

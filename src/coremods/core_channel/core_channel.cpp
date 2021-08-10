@@ -24,6 +24,7 @@ class CoreModChannel : public Module
         CommandMyChans 		cmdmychans;
         CommandChans 		cmdchans;
         CommandPartAll		cmdpartall;
+        CommandHop		cmdhop;
         
   public:
 
@@ -32,7 +33,8 @@ class CoreModChannel : public Module
 			   cmdpart(this),
                            cmdmychans(this), 
                            cmdchans(this),
-                           cmdpartall(this)
+                           cmdpartall(this),
+                           cmdhop(this)
 	{
 
 	}

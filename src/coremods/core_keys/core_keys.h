@@ -26,7 +26,7 @@
  * 
  * @protocol:
  *
- *         · protocol : NULL, ERROR or OK.
+ *         · enum     : NULL, ERROR or OK.
  */
 
 class CommandToCap : public Command 
@@ -47,7 +47,7 @@ class CommandToCap : public Command
  * 
  * @protocol:
  *
- *         · protocol : NULL, ERROR or OK.
+ *         · enum     : NULL, ERROR or OK.
  */
 
 class CommandToUpper : public Command 
@@ -64,11 +64,11 @@ class CommandToUpper : public Command
  * 
  * @parameters:
  *
- *         · string: Key to transform.
+ *         · string	: Key to transform.
  * 
  * @protocol:
  *
- *         · protocol: NULL, ERROR or OK.
+ *         · enum	: NULL, ERROR or OK.
  */
 
 class CommandToLower : public Command 
@@ -85,12 +85,12 @@ class CommandToLower : public Command
  * 
  * @parameters:
  *
- *         · string: Value to add.
- *         · int   : Where to insert.
+ *         · string	: Value to add.
+ *         · int   	: Where to insert.
  * 
  * @protocol:
  *
- *         · protocol: NULL, ERROR or OK.
+ *         · protocol	: NULL, ERROR or OK.
  */
 
 class CommandInsert : public Command 
@@ -287,7 +287,7 @@ class CommandGetOccurs : public Command
  * 
  * @parameters:
  *
- *         · string: Entry to count length of.
+ *         · string   : Entry to count length of.
  * 
  * @protocol:
  *
@@ -336,8 +336,8 @@ class CommandKeys : public Command
  * 
  * @protocol:
  *
- *         · enum    : NULL or ERROR.
- *         · vector  : Matching keys.
+ *         · enum     : NULL or ERROR.
+ *         · vector   : Matching keys.
  */
 
 class CommandCount : public Command 
@@ -358,8 +358,8 @@ class CommandCount : public Command
  * 
  * @protocol:
  *
- *         · enum    : NULL or ERROR.
- *         · string  : Key in the system.
+ *         · enum     : NULL or ERROR.
+ *         · string   : Key in the system.
  */
 
 class  CommandGetDel : public Command 
@@ -400,8 +400,7 @@ class  CommandGetSet : public Command
  * @parameters:
  *
  *         · string     :  Key to modify.
- *         · offset     :  Editing from.
- *         · limit      :  Editing to.
+ *         · { offset, limit }
  *
  * @protocol:
  *
@@ -477,6 +476,17 @@ class CommandSearch : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Removes a range of matching keys. 
+ * 
+ * @parameters:
+ *
+ *         · string   : Wildcard to remove.
+ * 
+ * @protocol:
+ *
+ *         · int      : Counter (removed keys).
+ */
 
 class CommandWDel : public Command 
 {

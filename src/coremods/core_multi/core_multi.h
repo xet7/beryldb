@@ -16,7 +16,14 @@
 #include "beryl.h"
 #include "engine.h"
 
-
+/* 
+ * Creates a multi. Multi allows commands to be ran in a sequence.
+ * 
+ * @protocol:
+ *
+ *         · protocol        : OK or ERROR.
+ */ 
+ 
 class CommandMulti : public Command 
 {
 
@@ -27,6 +34,14 @@ class CommandMulti : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Flushes elements added to a multi.
+ *
+ * @protocol:
+ *
+ *         · protocol        : OK or ERROR.
+ */ 
+ 
 class CommandMRUN : public Command 
 {
 
@@ -36,6 +51,14 @@ class CommandMRUN : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Resets a multi.
+ * 
+ * @protocol:
+ *
+ *         · protocol        : OK or ERROR.
+ */ 
 
 class CommandMultiReset : public Command 
 {

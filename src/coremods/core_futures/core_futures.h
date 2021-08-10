@@ -140,6 +140,14 @@ class CommandCancel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Cancels all futures.
+ * 
+ * @protocol:
+ *
+ *         · enum    : OK.
+ */
+
 class CommandFResetAll : public Command 
 {
     public: 

@@ -158,6 +158,20 @@ class CommandMSeek : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Counts repeats for a given key.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ *         · string     : Value to count.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or ERROR.
+ *         · int        : Counter (repeats).
+ */ 
+
 class CommandMRepeats : public Command 
 {
     public: 
@@ -166,6 +180,19 @@ class CommandMRepeats : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * MVALS returns all values for a key multimap.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or ERROR.
+ *         · list       : All values found.
+ */ 
 
 class CommandMVals : public Command 
 {

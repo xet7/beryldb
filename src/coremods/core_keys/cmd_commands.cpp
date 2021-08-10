@@ -16,7 +16,7 @@
 
 CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<\%key> <offset> <limit>";
 }
 
@@ -36,7 +36,7 @@ COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 
 CommandSearch::CommandSearch(Module* Creator) : Command(Creator, "SEARCH", 1, 3)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<\%key> <offset> <limit>";
 }
 
