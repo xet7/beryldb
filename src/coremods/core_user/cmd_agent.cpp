@@ -16,9 +16,9 @@
 
 CommandAgent::CommandAgent(Module* parent) : MultiCommand(parent, "AGENT", 1, 1)
 {
-	last_empty_ok = false;
-	pre_reg_ok = true;
-	syntax = "<agent>";
+	last_empty_ok 	= false;
+	pre_reg_ok 	= true;
+	syntax 		= "<agent>";
 }
 
 COMMAND_RESULT CommandAgent::HandleLocal(LocalUser* user, const Params& parameters)

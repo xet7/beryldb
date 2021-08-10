@@ -18,20 +18,27 @@ class CoreModuleAdmin : public Module
 {
   private:
   
-	CommandLogout cmdlogout;
-        CommandFinger cmdfinger;	
-        CommandLogins cmdlogins;
-        CommandShutdown cmdshutdown;
-        CommandRestart cmdrestart;
-        CommandFindFlags cmdfindflags;
-        CommandPause cmdpause;
-        CommandResume cmdresume;
-        CommandIdle cmdidle;
+	CommandLogout 		cmdlogout;
+        CommandFinger 		cmdfinger;	
+        CommandLogins 		cmdlogins;
+        CommandShutdown 	cmdshutdown;
+        CommandRestart 		cmdrestart;
+        CommandFindFlags 	cmdfindflags;
+        CommandPause 		cmdpause;
+        CommandResume 		cmdresume;
+        CommandIdle 		cmdidle;
         
   public:
   
-	CoreModuleAdmin() : cmdlogout(this), cmdfinger(this), cmdlogins(this), cmdshutdown(this), cmdrestart(this),
-	                    cmdfindflags(this), cmdpause(this), cmdresume(this), cmdidle(this)
+	CoreModuleAdmin() : cmdlogout(this), 
+	                    cmdfinger(this), 
+                            cmdlogins(this), 
+                            cmdshutdown(this), 
+                            cmdrestart(this),
+	                    cmdfindflags(this), 
+	                    cmdpause(this), 
+	                    cmdresume(this), 
+	                    cmdidle(this)
 	{
 
 	}

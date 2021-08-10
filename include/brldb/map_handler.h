@@ -150,8 +150,6 @@ class ExportAPI MapHandler
              return this->mhandler.size();
         }
 
-        void WildRemove(const std::string& key);
-
         /* 
          * Get values from a map.
 	 * 

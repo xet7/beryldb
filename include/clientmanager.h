@@ -96,7 +96,7 @@ class ExportAPI ClientManager : public safecast<ClientManager>
 	 *         · quitreason: Disconnecting reason.
          */    
          
-	void Disconnect(User* user, const std::string& quitreason);
+	void Disconnect(User* user, const std::string& quitreason = "");
 
         /* 
          * Disconnects all users that have a common login.

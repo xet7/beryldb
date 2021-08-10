@@ -114,9 +114,9 @@ COMMAND_RESULT CommandHandler::CallHandler(const std::string& commandname, const
 		{
 			bool cready = false;
 
-			if (IS_LOCAL(user) && n->second->requires)
+			if (IS_LOCAL(user) && n->second->flags)
 			{
-				if (user->CanPerform(n->second->requires))
+				if (user->CanPerform(n->second->flags))
 				{
 					cready = true;
 				}
@@ -179,7 +179,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		
 			if (user->registered == REG_OK)
 			{
-				user->SendProtocol(ERR_CMD_NOFND, command, CMD_NOT_FOUND.c_str());
+				user->SendProtocol(ERR_INPUT, NOT_FOUND);
 			}
 
 			Kernel->Stats->Unknown++;
@@ -226,9 +226,9 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 	
 	bool is_manager = false;
 	
-	if (handler->requires)
+	if (handler->flags)
 	{
-		if (!user->CanPerform(handler->requires))
+		if (!user->CanPerform(handler->flags))
 		{
 			user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                         NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));

@@ -41,7 +41,7 @@ class AutoResume : public Timer
 
 CommandFinger::CommandFinger(Module* parent) : Command(parent, "FINGER", 0)
 {
-        requires = 'e';
+        flags = 'e';
 }
 
 COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
@@ -72,7 +72,7 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 
 CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 2)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<instance> <*seconds>";
 }
 
@@ -99,7 +99,7 @@ COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
 
 CommandResume::CommandResume(Module* parent) : Command(parent, "RESUME", 1, 1)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<instance>";
 }
 
@@ -120,7 +120,7 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 
 CommandIdle::CommandIdle(Module* parent) : Command(parent, "IDLE", 1, 1)
 {
-        requires = 'm';
+        flags = 'm';
         syntax = "<instance>";
 }
 
@@ -148,15 +148,14 @@ COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
 
 CommandLogins::CommandLogins(Module* parent) : Command(parent, "LOGINS", 1, 1)
 {
-        requires = 'e';
+        flags = 'e';
         syntax = "<login>";
 }
 
 COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 {
-        const std::string& loginid = parameters[0];
-        
-        UserVector logins = Kernel->Clients->FindLogin(loginid);
+        const std::string& loginid 	= parameters[0];
+        const UserVector& logins 	= Kernel->Clients->FindLogin(loginid);
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", "Login", "IP", "Agent", "Logged"));
@@ -178,10 +177,9 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-
 CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 0, 1)
 {
-        requires = 'e';
+        flags = 'e';
         syntax = "<flag>";
 }
 

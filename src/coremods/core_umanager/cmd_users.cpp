@@ -16,7 +16,7 @@
 
 CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login> <password>";
 }
 
@@ -63,7 +63,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 
 CommandDelUser::CommandDelUser(Module* parent) : Command(parent, "DELUSER", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login>";
 }
 
@@ -108,7 +108,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
 
 CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS", 0)
 {
-         requires = 'r';
+         flags = 'r';
 }
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
@@ -139,7 +139,7 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 
 CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMINS", 0)
 {
-        requires = 'r';
+        flags = 'r';
 }
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
@@ -154,14 +154,14 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
-                std::string flags = UserHelper::CheckFlags(item);
+                std::string userflags = UserHelper::CheckFlags(item);
                 
-                if (flags.empty())
+                if (userflags.empty())
                 {
                       continue;
                 }
                 
-                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), flags.c_str()), Daemon::Format("%s %s", item.c_str(), flags.c_str()));
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), userflags.c_str()), Daemon::Format("%s %s", item.c_str(), userflags.c_str()));
         }
 
         Dispatcher::JustAPI(user, BRLD_END_LIST);
@@ -245,7 +245,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
 CommandResetCache::CommandResetCache(Module* parent) : Command(parent, "RESETCACHE", 0)
 {
-         requires = 'm';
+         flags = 'm';
 }
 
 COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
@@ -258,7 +258,7 @@ COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 
 CommandInCache::CommandInCache(Module* parent) : Command(parent, "INCACHE", 1, 1)
 {
-         requires = 'm';
+         flags  = 'm';
          syntax = "<login>";
 }
 

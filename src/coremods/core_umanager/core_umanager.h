@@ -22,6 +22,19 @@
 #include "managers/maps.h"
 #include "managers/settings.h"
 
+/* 
+ * GetFlags returns flags for a given user.
+ * 
+ * @parameters:
+ *
+ *         · string   :  user to find flags for.
+ * 
+ * @protocol:
+ *
+ *         · enum     : NULL, or ERROR.
+ *         · string   : flags.
+ */
+
 class CommandGetFlags : public Command
 {
  public:
@@ -30,6 +43,20 @@ class CommandGetFlags : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Adds a new user to the user manager.
+ * 
+ * @parameters:
+ *
+ *         · string   :  Login to use, must have at least 3 characters.
+ *         · string   :  Password to use, valid strings must have between 3 and
+ *                       30 chars.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
 
 class CommandAddUser : public Command
 {
@@ -40,6 +67,18 @@ class CommandAddUser : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Removes an user from the server.
+ * 
+ * @parameters:
+ *
+ *         · string   :  Login to remove.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
+
 class CommandDelUser : public Command
 {
  public:
@@ -48,6 +87,19 @@ class CommandDelUser : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Adds a flag for a given user.
+ *
+ * @parameters:
+ *
+ *         ·  string	:   Login to add a flag to.
+ *         ·  char      :   New flag, either 'm', 'e' or 'r'. 
+ *
+ * @protocol:
+ *
+ *         · enum      :   NULL, INVALID or OK.
+ */
 
 class CommandAddFlag : public Command
 {
@@ -58,8 +110,19 @@ class CommandAddFlag : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Delete flags in the system. */
-
+/* 
+ * Deletes a flag for a given user.
+ *
+ * @parameters:
+ *
+ *         ·  string    :   Login to remove a flag from.
+ *         ·  char      :   New flag, either 'm', 'e' or 'r'. 
+ *
+ * @protocol:
+ *
+ *         · enum      :   NULL, INVALID or OK.
+ */
+ 
 class CommandDelFlags : public Command
 {
  public:
@@ -69,7 +132,15 @@ class CommandDelFlags : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* List all users in the system. */
+/* 
+ * Lists all users in the server.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · vector : user list.
+ */
 
 class CommandListUsers : public Command
 {
@@ -80,6 +151,41 @@ class CommandListUsers : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * List flags for a given user.
+ * 
+ * @parameters:
+ *
+ *         · string  : Destination user.
+ * 
+ * @protocol:
+ *
+ *         · vector  : List of flags.
+ */ 
+
+class CommandListFlags : public Command
+{
+ public:
+
+        CommandListFlags(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Changes password for current user. If 3 arguments are provided, this command
+ * will change the password of another user.
+ * 
+ * @parameters:
+ *
+*	   · string: user.
+ *         · string: password.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK, ERROR OR NOT_FOUND.
+ */ 
+
 class CommandPasswd : public Command
 {
  public:
@@ -88,6 +194,16 @@ class CommandPasswd : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Lists all admins in the server.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · vector : admin list.
+ */
 
 class CommandListAdmins : public Command
 {
@@ -98,8 +214,18 @@ class CommandListAdmins : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Checks whether a login is in cache. */
-
+/* 
+ * Checks whether a given user is in cache.
+ *
+ * @parameters:
+ *
+ *         ·  login    :   Login to verify if in cache.
+ *
+ * @protocol:
+ *
+ *         · enum      :   1 or 0.
+ */
+ 
 class CommandInCache : public Command
 {
  public:
@@ -109,7 +235,13 @@ class CommandInCache : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Resets cache login */
+/* 
+ * Resets all login in the local cache.
+ *
+ * @protocol:
+ *
+ *         · enum      :   OK.
+ */
 
 class CommandResetCache : public Command
 {
@@ -120,11 +252,3 @@ class CommandResetCache : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandListFlags : public Command
-{
- public:
-
-        CommandListFlags(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};

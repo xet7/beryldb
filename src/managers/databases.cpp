@@ -14,13 +14,7 @@
 #include "beryl.h"
 #include "engine.h"
 
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "managers/databases.h"
-#include "managers/lists.h"
-#include "managers/maps.h"
 
 bool DBHelper::FlushDB(std::shared_ptr<Database> database, bool notify)
 {
@@ -34,14 +28,6 @@ bool DBHelper::FlushDB(std::shared_ptr<Database> database, bool notify)
         }
         
         return result;
-}
-
-void DBHelper::Type(User* user, const std::string& key)
-{
-       std::shared_ptr<type_query> query = std::make_shared<type_query>();
-       Helpers::make_query(user, query, key);
-       query->type = QUERY_TYPE_TYPE;
-       Kernel->Store->Push(query);
 }
 
 MapData DBHelper::CType(const std::string& key)
@@ -91,3 +77,13 @@ void DBHelper::Total(User* user)
        Kernel->Store->Push(query);
 }
 
+void DBHelper::DatabaseReset(User* user, const std::string& dbname)
+{
+       std::shared_ptr<dbreset_query> query = std::make_shared<dbreset_query>();
+       
+       query->user 		= user;
+       query->database 		= Kernel->Store->DBM->Find(dbname);
+       query->key 		= dbname;
+       
+       Kernel->Store->Push(query);
+}

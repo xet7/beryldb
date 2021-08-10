@@ -63,7 +63,11 @@ typedef std::vector<std::string> Args;
 
 typedef std::list<std::string> ListMap;
 
+/* A map of strings */
+
 typedef std::map<std::string, std::string> MapMap;
+
+/* A multimap of strings */
 
 typedef std::multimap<std::string, std::string> MultiMap;
 

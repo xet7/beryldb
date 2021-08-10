@@ -73,7 +73,7 @@ void expire_list_query::Run()
                                   
                                   if (db_name.empty() || db_name != this->database->GetName())
                                   {
-                                       continue;
+                                       skip = true;
                                   }
                              }
                              
@@ -203,8 +203,6 @@ void get_substr_query::Run()
        {
            access_set(DBL_UNABLE_WRITE);
        }
-       
-       this->SetOK();
 }
 
 void get_substr_query::Process()
@@ -950,8 +948,15 @@ void append_query::Run()
 {
        RocksData result = this->Get(this->dest);
        this->response = to_string(result.value) + this->value;
-       this->Write(this->dest, to_bin(this->response));
-       this->SetOK();
+       
+       if (this->Write(this->dest, to_bin(this->response)))
+       {
+            this->SetOK();
+       }
+       else
+       {
+           access_set(DBL_UNABLE_WRITE);
+       }
 }
 
 void append_query::Process()
@@ -1069,6 +1074,7 @@ void getexp_query::Run()
 {
        RocksData result = this->Get(this->dest);
        this->response = to_string(result.value);
+       
        this->WriteExpire(this->key, this->select_query, this->id);
        this->SetOK();
 }
@@ -1136,6 +1142,7 @@ void insert_query::Run()
        }
        
        as_str.insert(this->id, this->value);
+       this->response = as_str;
        
        if (this->Write(this->dest, to_bin(as_str)))
        {
@@ -1149,5 +1156,5 @@ void insert_query::Run()
 
 void insert_query::Process()
 {
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
+       user->SendProtocol(BRLD_OK, Helpers::Format(this->response));
 }

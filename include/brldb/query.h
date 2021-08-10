@@ -1269,6 +1269,36 @@ class ExportAPI lget_query  : public QueryBase
         void Process();
 };
 
+class ExportAPI vfront_query  : public QueryBase
+{
+    public:
+
+        vfront_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
+class ExportAPI vback_query  : public QueryBase
+{
+    public:
+
+        vback_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_VECTOR;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI setnx_query  : public QueryBase
 {
     public:
@@ -1367,21 +1397,6 @@ class ExportAPI vpop_back_query  : public QueryBase
         vpop_back_query() 
         {
                 this->type = QUERY_TYPE_READ;
-                this->base_request = INT_VECTOR;
-        }
-
-        void Run();
-
-        void Process();
-};
-
-class ExportAPI verase_from_query  : public QueryBase
-{
-    public:
-
-        verase_from_query() 
-        {
-                this->type = QUERY_TYPE_DELETE;
                 this->base_request = INT_VECTOR;
         }
 

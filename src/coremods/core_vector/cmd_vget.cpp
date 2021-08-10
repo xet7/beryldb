@@ -34,15 +34,15 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
        {
            return FAILED;
        }
-       
-       VectorHelper::Exist(user, key, value);
+
+       KeyHelper::Simple(user, std::make_shared<vexist_query>(), key, value);
        return SUCCESS;  
 }
 
 CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 {
          group = 'v';
-         syntax = "<key> \"value\"";
+         syntax = "<key> <value>";
 }
 
 COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
@@ -60,7 +60,7 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
               return FAILED;
        }
        
-       VectorHelper::Index(user, key, value);
+       KeyHelper::SimpleRetro(user, std::make_shared<vpos_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -72,24 +72,21 @@ CommandVGet::CommandVGet(Module* Creator) : Command(Creator, "VGET", 1, 3)
 
 COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
+       const std::string& key             =      parameters[0];
 
        if (!CheckKey(user, key))
        {
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms        =      GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       VectorHelper::Get(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<vget_query>(), key, lms[1], lms[2]);
        return SUCCESS;  
 }
 
@@ -107,8 +104,8 @@ COMMAND_RESULT CommandVCount::Handle(User* user, const Params& parameters)
        {
             return FAILED;
        }
-
-       VectorHelper::Count(user, key);
+       
+       KeyHelper::Retro(user, std::make_shared<vcount_query>(), key);
        return SUCCESS;  
 }
 
@@ -133,7 +130,7 @@ COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
               return FAILED;
        }
 
-       VectorHelper::Resize(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<vresize_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -145,19 +142,16 @@ CommandVKeys::CommandVKeys(Module* Creator) : Command(Creator, "VKEYS", 1, 3)
 
 COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
+       const std::string& key             =    parameters[0];
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms =    GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
-       
-       signed int offset = lms[1];
-       signed int limit = lms[2];
 
-       VectorHelper::Keys(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<vkeys_query>(), key, lms[1], lms[2], true);
        return SUCCESS;  
 }
 
@@ -169,52 +163,21 @@ CommandVDel::CommandVDel(Module* Creator) : Command(Creator, "VDEL", 2, 2)
 
 COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
-
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-        
-        if (!CheckFormat(user, value))
-        {
-             return FAILED;
-        }
-
-        VectorHelper::Del(user, key, value);
-        return SUCCESS;  
-}
-
-CommandVEraseFrom::CommandVEraseFrom(Module* Creator) : Command(Creator, "VERASEFROM", 2, 2)
-{
-         group = 'v';
-         syntax = "<key> <value>";
-}
-
-COMMAND_RESULT CommandVEraseFrom::Handle(User* user, const Params& parameters)
-{  
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {
-            return FAILED;
+             return FAILED;
         }
-
+        
         if (!CheckFormat(user, value))
         {
              return FAILED;
         }
-        
-        if (!is_number(value, true))
-        {
-                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
-                return FAILED;
-        }
 
-        VectorHelper::EraseFrom(user, key, value);
-        return SUCCESS;
+        KeyHelper::Simple(user, std::make_shared<vdel_query>(), key, value);
+        return SUCCESS;  
 }
 
 CommandVReverse::CommandVReverse(Module* Creator) : Command(Creator, "VREVERSE", 1, 1)
@@ -232,7 +195,7 @@ COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
             return FAILED;
         }
      
-        VectorHelper::Reverse(user, key);
+        KeyHelper::Retro(user, std::make_shared<vreverse_query>(), key);
         return SUCCESS;  
 }
 
@@ -257,7 +220,7 @@ COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        VectorHelper::Repeats(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<vrepeats_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -276,7 +239,7 @@ COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        VectorHelper::Sort(user, key);
+        KeyHelper::Retro(user, std::make_shared<vsort_query>(), key);
         return SUCCESS;  
 }
 
@@ -301,7 +264,7 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        VectorHelper::Push(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<vpush_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -320,7 +283,7 @@ COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        VectorHelper::PopFront(user, key);
+        KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), key);
         return SUCCESS;  
 }
 
@@ -339,7 +302,7 @@ COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        VectorHelper::PopBack(user, key);
+        KeyHelper::Retro(user, std::make_shared<vpop_back_query>(), key);
         return SUCCESS;  
 }
 
@@ -358,7 +321,7 @@ COMMAND_RESULT CommandVAvg::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::Avg(user, key);
+       KeyHelper::Retro(user, std::make_shared<vavg_query>(), key);
        return SUCCESS;  
 }
 
@@ -377,7 +340,7 @@ COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::High(user, key);
+       KeyHelper::Retro(user, std::make_shared<vhigh_query>(), key);
        return SUCCESS;  
 }
 
@@ -396,7 +359,7 @@ COMMAND_RESULT CommandVLow::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::Low(user, key);
+       KeyHelper::Retro(user, std::make_shared<vlow_query>(), key);
        return SUCCESS;  
 }
 
@@ -415,7 +378,7 @@ COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::Sum(user, key);
+       KeyHelper::Retro(user, std::make_shared<vsum_query>(), key);
        return SUCCESS;  
 }
 
@@ -440,7 +403,7 @@ COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        VectorHelper::PushNX(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<vpushnx_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -460,16 +423,16 @@ COMMAND_RESULT CommandVFind::Handle(User* user, const Params& parameters)
             return FAILED;
        }
         
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       VectorHelper::Find(user, key, value, offset, limit);
+       std::shared_ptr<vdel_query> query = std::make_shared<vdel_query>();
+       query->value = stripe(value);
+       
+       KeyHelper::RetroLimits(user, query, key, lms[1], lms[2]);
        return SUCCESS;  
 }

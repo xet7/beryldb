@@ -16,7 +16,7 @@
 
 CommandDefaults::CommandDefaults(Module* Creator) : ServerTargetCommand(Creator, "DEFCONFIG")    
 {
-          requires = 'm';
+          flags = 'm';
           syntax = "[<servername>]";
 }
      

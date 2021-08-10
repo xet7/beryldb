@@ -15,12 +15,21 @@
 #include "engine.h"
 #include "maker.h"
 
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
+#include "managers/keys.h"
 
-#include "managers/mmaps.h"
-
+/* 
+ * MCOUNT counts items in a map.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or ERROR.
+ *         · int        : Item count.
+ */ 
+ 
 class CommandMCount : public Command 
 {
     public: 
@@ -30,14 +39,63 @@ class CommandMCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMSet : public Command 
+/* 
+ * MPUSH pushes a new element to a multimap.
+ * 
+ * @parameters:
+ *
+ *         · string	: Multimap name.
+ *         · string	: Value to add.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
+
+class CommandMPush : public Command 
 {
     public: 
 
-        CommandMSet(Module* parent);
+        CommandMPush(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * MPUSHNX pushes a new element to a multimap, only if adding element
+ * does not exists.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ *         · string     : Value to add.
+ * 
+ * @protocol:
+ *
+ *         · enum       : OK or ERROR.
+ */ 
+
+class CommandMPushNX : public Command 
+{
+    public: 
+
+        CommandMPushNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * MGET returns all keys for a given multimap.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or ERROR.
+ *         · map        : Results.
+ */ 
 
 class CommandMGet : public Command 
 {
@@ -48,6 +106,18 @@ class CommandMGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * MKEYS returns all keys for a given wildcard.
+ * 
+ * @parameters:
+ *
+ *         · string     : Wildcard to use.
+ * 
+ * @protocol:
+ *
+ *         · Vector     : Results.
+ */ 
+ 
 class CommandMKeys : public Command 
 {
     public: 
@@ -56,6 +126,19 @@ class CommandMKeys : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * MDEL deletes a given item from a map.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ *         · string     : Value to remove.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL, OK or ERROR.
+ */ 
 
 class CommandMDel : public Command 
 {
@@ -93,6 +176,19 @@ class CommandMVals : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * MGETALL returns all keys and values for a given multimap.
+ * 
+ * @parameters:
+ *
+ *         · string     : Multimap name.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or ERROR.
+ *         · map        : Results.
+ */ 
+ 
 class CommandMGetAll : public Command 
 {
     public: 
@@ -112,11 +208,3 @@ class CommandMIter : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMSetNX : public Command 
-{
-    public: 
-
-        CommandMSetNX(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};

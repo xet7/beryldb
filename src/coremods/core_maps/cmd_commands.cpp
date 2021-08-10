@@ -30,7 +30,7 @@ COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MapsHelper::Get(user, kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hget_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -49,8 +49,11 @@ COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-       MapsHelper::Count(user, kmap);
-       return SUCCESS;
+        std::shared_ptr<hlist_query> query = std::make_shared<hlist_query>();
+        query->flags = QUERY_FLAGS_COUNT;
+
+        KeyHelper::Retro(user, query, kmap);
+        return SUCCESS;
 }
 
 CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2, 2)
@@ -69,7 +72,7 @@ COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MapsHelper::Exists(user, kmap, key);
+       KeyHelper::SimpleRetro(user, std::make_shared<hexists_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -89,7 +92,7 @@ COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MapsHelper::Strlen(user, kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hstrlen_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -101,24 +104,21 @@ CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
 
 COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
+       const std::string& kmap 		   =    parameters[0];
 
        if (!CheckKey(user, kmap))
        {
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms  =    GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MapsHelper::Vals(user, kmap, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hvals_query>(), kmap, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -130,24 +130,21 @@ CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1,
 
 COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
+       const std::string& kmap      =    parameters[0];
 
        if (!CheckKey(user, kmap))
        {
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms  =    GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MapsHelper::GetAll(user, kmap, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hgetall_query>(), kmap, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -167,27 +164,7 @@ COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MapsHelper::Delete(user, kmap, key);
-       return SUCCESS;
-}
-
-CommandHWDel::CommandHWDel(Module* Creator) : Command(Creator, "HWDEL", 2, 2)
-{
-         group = 'm';
-         syntax = "<map> <key>";
-}
-
-COMMAND_RESULT CommandHWDel::Handle(User* user, const Params& parameters)
-{  
-       const std::string& kmap 		= 	parameters[0];
-       const std::string& key 		= 	parameters[1];
-       
-       if (!CheckKey(user, kmap))
-       {
-            return FAILED;
-       }
-       
-       MapsHelper::WDelete(user, kmap, key);
+       KeyHelper::SimpleRetro(user, std::make_shared<hdel_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -213,7 +190,7 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       MapsHelper::Set(user, kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<hset_query>(), kmap, key, value);
        return SUCCESS;
 }
 
@@ -239,7 +216,7 @@ COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MapsHelper::SetNX(user, kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<hsetnx_query>(), kmap, key, value);
        return SUCCESS;
 }
 

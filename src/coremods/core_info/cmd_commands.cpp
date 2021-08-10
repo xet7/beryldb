@@ -16,7 +16,7 @@
 
 CommandSyntax::CommandSyntax(Module* parent) : Command(parent, "SYNTAX", 1, 1)
 {
-	group = 'z';
+	group  = 'z';
 	syntax = "<command>";
 }
 
@@ -28,7 +28,7 @@ COMMAND_RESULT CommandSyntax::Handle(User* user, const Params& parameters)
 	
 	if (!Found)
 	{
-		user->SendProtocol(ERR_INPUT, CMD_NOT_FOUND);
+		user->SendProtocol(ERR_INPUT, PROCESS_NULL);
 		return FAILED;
 	}
 	
@@ -72,9 +72,9 @@ COMMAND_RESULT CommandCommands::Handle(User* user, const Params& parameters)
 	        
 		/* Requesting user must have required flags. */
 		
-		if (i->second->requires)
+		if (i->second->flags)
 		{
-			if (user->CanPerform(i->second->requires))
+			if (user->CanPerform(i->second->flags))
 			{
 	                        std::string fsyntax = i->second->syntax;
 	                        

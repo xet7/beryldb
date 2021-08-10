@@ -29,7 +29,8 @@ COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        ListHelper::PopBack(user, key);
+        KeyHelper::Retro(user, std::make_shared<lpop_back_query>(), key);
+        
         return SUCCESS;  
 }
 
@@ -48,7 +49,7 @@ COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
              return FAILED;
         }
      
-        ListHelper::PopFront(user, key);
+        KeyHelper::Retro(user, std::make_shared<lpop_front_query>(), key);
         return SUCCESS;  
 }
 
@@ -73,7 +74,7 @@ COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        ListHelper::PopAll(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<lpopall_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -92,7 +93,7 @@ COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        ListHelper::Reverse(user, key);
+        KeyHelper::Retro(user, std::make_shared<lreverse_query>(), key);
         return SUCCESS;  
 }
 
@@ -111,7 +112,7 @@ COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        ListHelper::Sort(user, key);
+        KeyHelper::Retro(user, std::make_shared<lsort_query>(), key);
         return SUCCESS;  
 }
 
@@ -136,6 +137,6 @@ COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        ListHelper::Del(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<ldel_query>(), key, value);
         return SUCCESS;  
 }

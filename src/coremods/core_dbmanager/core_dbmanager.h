@@ -17,15 +17,19 @@
 #include "maker.h"
 #include "engine.h"
 
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-#include "brldb/database.h"
-
 #include "managers/databases.h"
+#include "managers/keys.h"
 #include "managers/settings.h"
 #include "managers/globals.h"
 #include "managers/tests.h"
+
+/* 
+ * Returns current select in use.
+ * 
+ * @protocol:
+ *
+ *         · int        : current select.
+ */
 
 class CommandCurrent : public Command 
 {
@@ -36,6 +40,14 @@ class CommandCurrent : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns current working directory.
+ * 
+ * @protocol:
+ *
+ *         · string     : Full working directory.
+ */
+
 class CommandPWD : public Command 
 {
     public: 
@@ -44,6 +56,18 @@ class CommandPWD : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Changes current select.
+ * 
+ * @parameters:
+ *
+ *         · use	: New select.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK, ERROR, INVALID_RANGE.
+ */ 
 
 class CommandUse : public Command 
 {
@@ -54,7 +78,15 @@ class CommandUse : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Flushing datbase requires root flags. */
+/* 
+ * Flushes current database.
+ * 
+ * @requires 'r'.
+ * 
+ * @protocol:
+ *
+ *         · enum	:  OK.
+ */
 
 class CommandFlushDB : public Command 
 {
@@ -65,25 +97,15 @@ class CommandFlushDB : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-/* Returns database size. */
-
-class CommandDBSize : public Command 
-{
-    public: 
-
-        CommandDBSize(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandDBReset : public Command 
-{
-    public: 
-    
-        CommandDBReset(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
+/* 
+ * Flushes current select.
+ * 
+ * @requires 'r'.
+ * 
+ * @protocol:
+ *
+ *         · enum       :  OK.
+ */
 
 class CommandSFlush : public Command 
 {
@@ -94,6 +116,43 @@ class CommandSFlush : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns database size.
+ * If no parameter is provided, current database is checked.
+ * 
+ * @parameters:
+ *
+ *         · database name: Database to find size of.
+ * 
+ * @protocol:
+ *
+ *         · size: Database size.
+ */ 
+
+class CommandDBSize : public Command 
+{
+    public: 
+
+        CommandDBSize(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Returns using database for a given instance.
+ * 
+ * @requires 'm'.
+ *
+ * @parameters:
+ *
+ *         · string     : Instance to look for.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NOT FOUND.
+ *         · int        : select database found.
+ */
+
 class CommandUsing : public Command 
 {
     public: 
@@ -103,6 +162,13 @@ class CommandUsing : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returrns current database in use.
+ * 
+ * @protocol:
+ *
+ *         · string : current database.
+ */
 
 class CommandDB : public Command 
 {
@@ -113,6 +179,18 @@ class CommandDB : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Changes current database in use.
+ * 
+ * @parameters:
+ *      
+ *         · string   : New database to use.
+ *
+ * @protocol:
+ *
+ *         · protocol : NULL or OK.
+ */
+
 class CommandChange : public Command 
 {
     public: 
@@ -121,6 +199,16 @@ class CommandChange : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Lists all databases in system. This command returns dblist in the Name, Path format.
+ *
+ * @requires 'r'.
+ * 
+ * @protocol:
+ *
+ *         · map        :  Databases map.
+ */
 
 class CommandDBLIST : public Command 
 {
@@ -131,6 +219,21 @@ class CommandDBLIST : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Creates a new database.
+ * 
+ * @requires 'r'.
+ *
+ * @parameters:
+ *
+ *         · string     : Database name.
+ *         · string     : Database path.
+ * 
+ * @protocol:
+ *
+ *         · enum       : OK or FALSE.
+ */
+
 class CommandDBCreate : public Command 
 {
     public: 
@@ -139,6 +242,20 @@ class CommandDBCreate : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Deletes a database.
+ * 
+ * @requires 'r'.
+ *
+ * @parameters:
+ *
+ *         · string     : Database to delete.
+ * 
+ * @protocol:
+ *
+ *         · enum       : OK or FALSE.
+ */
 
 class CommandDBDelete : public Command 
 {
@@ -149,6 +266,10 @@ class CommandDBDelete : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Prints all content in database. This command should only be used
+ * when the server is running with --nofork.
+ */
 
 class CommandDBTest : public Command 
 {
@@ -159,6 +280,14 @@ class CommandDBTest : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns Default database.
+ * 
+ * @protocol:
+ *
+ *         · string     : Database name.
+ */
+
 class CommandDefault : public Command 
 {
     public: 
@@ -168,6 +297,16 @@ class CommandDefault : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Defines default database to use.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · enum        : OK.
+ */
+
 class CommandDBSetDefault : public Command 
 {
     public: 
@@ -176,6 +315,16 @@ class CommandDBSetDefault : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Removes all data in all databases and selects.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · enum        : OK.
+ */
 
 class CommandFlushAll : public Command 
 {

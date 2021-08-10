@@ -32,8 +32,8 @@ namespace
 	 public:
 
 		DispatchQuit(User* user, const std::string& msg)
-			: quitmsg(user, msg)
-			, quitevent(Kernel->GetBRLDEvents().quit, quitmsg)
+        			: quitmsg(user, msg)
+	        		, quitevent(Kernel->GetBRLDEvents().quit, quitmsg)
 		{
 			user->for_each_neighbor(*this, false);
 		}
@@ -48,7 +48,7 @@ namespace
 		
 		if (user->IsLocked())
 		{
-			user->next_ping_check += 10;
+			user->next_ping_check += PING_INTVL;
 			return;
 		}
 		
@@ -329,21 +329,28 @@ void ClientManager::Flush(time_t current)
 		switch (curr->registered)
 		{
 			case REG_OK:
-			
+			{
 				if ((current % 10) == 0)
 				{
 					VerifyPingTimeouts(curr);
 				}
-				
-				break;
+			}	
+			
+			break;
 
 			case REG_LOGINUSER:
+			{
 				VerifyModules(curr);
-				break;
+                        }
+                        
+			break;
 
 			default:
+			{
 				VerifyRegistrationTimeout(curr);
-				break;
+                        }
+                         
+			break;
 		}
 	}
 }
@@ -401,16 +408,15 @@ User *ClientManager::FindUUID(const std::string &uid)
 
 unsigned int ClientManager::CountLogin(const std::string& login)
 {
-     UserVector AllLogins = Kernel->Clients->FindLogin(login);
+        const UserVector& AllLogins = Kernel->Clients->FindLogin(login);
+        unsigned int counter = 0;
      
-     unsigned int counter = 0;
+        for (UserVector::const_iterator u = AllLogins.begin(); u != AllLogins.end(); ++u)
+        {
+            counter++;
+        } 
      
-     for (UserVector::iterator u = AllLogins.begin(); u != AllLogins.end(); ++u)
-     {
-          counter++;
-     } 
-     
-     return counter;
+        return counter;
 }
 
 void ClientManager::RemoveGroup(const std::shared_ptr<Group> group)
@@ -451,7 +457,7 @@ User* ClientManager::FirstLogin(const std::string& login, registration_state sta
 
         for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
         {
-                User* user = i->second;
+                User* const user = i->second;
 
                 if (i->first == login && user->registered == state)
                 {
@@ -525,98 +531,97 @@ UserVector ClientManager::FindPrivs(const std::string& flag)
 
 unsigned int ClientManager::DisconnectAll(const std::string& login, const std::string& msg)
 {
-       unsigned int counter = 0;
+         unsigned int counter = 0;
        
-       const UserVector& logins = Kernel->Clients->FindLogin(login);
+         const UserVector& logins = Kernel->Clients->FindLogin(login);
 
-       for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
-       {
-             User* user = *o;
-             
-             if (user->login != login)
-             {
+         for (UserVector::const_iterator i = logins.begin(); i != logins.end(); ++i)
+         {
+               User* const user = *i;
+              
+               if (user->login != login)
+               {
 		   continue;
-             }
+               }
        		
-             Kernel->Clients->Disconnect(user, msg);
-             counter++;
-       }
+               Kernel->Clients->Disconnect(user, msg);
+               counter++;
+         }
        
-       return counter;
+         return counter;
 }
 
 void ClientManager::ExitLogins(const std::string& login, const std::string& reason)
 {
-	const UserVector& foundl = this->FindLogin(login);	
+	 const UserVector& foundl = this->FindLogin(login);	
 	
-	for (UserVector::const_iterator i = foundl.begin(); i != foundl.end(); ++i)
-	{
+	 for (UserVector::const_iterator i = foundl.begin(); i != foundl.end(); ++i)
+	 {
 		User* user = *i;
 		this->Disconnect(user, reason);
-	}
+	 }
 }
 
 void ClientManager::Part(User* skip, const std::string& login, const std::string& channel)
 {
-     Channel* chan = Kernel->Channels->Find(channel);
+         Channel* const chan = Kernel->Channels->Find(channel);
 
-     if (!chan)
-     {
-         return;
-     }
+         if (!chan)
+         {
+              return;
+         }
 
-     const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
+         const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
-     {
-           User* user = *i;
+         for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
+         {
+                   User* const user = *i;
 
-           if (user == skip)
-           {
-                continue;
-           }
+                   if (user == skip)
+                   {
+                           continue;
+                   }
 
-           chan->PartUser(user);
-     }
+                   chan->PartUser(user);
+         }
 }
 
 UserVector ClientManager::FindLogin(const std::string& login, registration_state state)
 {
-        UserVector users;
-
-        const LoginHash& AllLogins = Kernel->Clients.GetLogins();
+         UserVector users;
+         const LoginHash& AllLogins = Kernel->Clients.GetLogins();
         
-        for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
-        {
+         for (LoginHash::const_iterator i = AllLogins.begin(); i != AllLogins.end(); ++i)
+         {
                 User* user = i->second;
 
                 if (i->first == login && user->registered == state)
                 {
                         users.push_back(user);
                 }
-        }
+         }
 
-        return users;
+         return users;
 }
 
 void ClientManager::Join(User* skip, const std::string& login, const std::string& channel)
 {
-     const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
+         const UserVector& FoundLogins = Kernel->Clients->FindLogin(login);
 
-     for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
-     {
-           User* user = *i;
+         for (UserVector::const_iterator i = FoundLogins.begin(); i != FoundLogins.end(); ++i)
+         {
+              User* const user = *i;
 
-           if (user == skip)
-           {
-                 continue;
-           }
+              if (user == skip)
+              {
+                   continue;
+              }
 
-           LocalUser* localuser = IS_LOCAL(user);
+              LocalUser* localuser = IS_LOCAL(user);
 
-           if (localuser)
-           {
-                  Channel::JoinUser(false, localuser, channel, true);
-           }
-     }
+              if (localuser)
+              {
+                    Channel::JoinUser(false, localuser, channel, true);
+              }
+         }
 }

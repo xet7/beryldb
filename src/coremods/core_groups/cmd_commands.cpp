@@ -16,7 +16,7 @@
 
 CommandGroupAdd::CommandGroupAdd(Module* Creator) : Command(Creator, "GROUPADD", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name>";
 }
 
@@ -44,7 +44,7 @@ COMMAND_RESULT CommandGroupAdd::Handle(User* user, const Params& parameters)
 
 CommandGroups::CommandGroups(Module* Creator) : Command(Creator, "GROUPS", 0, 0)
 {
-        requires = 'r';
+        flags = 'r';
 }
 
 COMMAND_RESULT CommandGroups::Handle(User* user, const Params& parameters) 
@@ -67,7 +67,7 @@ COMMAND_RESULT CommandGroups::Handle(User* user, const Params& parameters)
 
 CommandDelGroup::CommandDelGroup(Module* Creator) : Command(Creator, "DELGROUP", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name>";
 }
 
@@ -93,7 +93,7 @@ COMMAND_RESULT CommandDelGroup::Handle(User* user, const Params& parameters)
 
 CommandGShow::CommandGShow(Module* Creator) : Command(Creator, "GSHOW", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name>";
 }
 
@@ -101,7 +101,7 @@ COMMAND_RESULT CommandGShow::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
        
-       std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
        
        if (!a_group)
        {
@@ -182,7 +182,7 @@ COMMAND_RESULT CommandGShow::Handle(User* user, const Params& parameters)
 
 CommandGFlags::CommandGFlags(Module* Creator) : Command(Creator, "GFLAGS", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name>";
 }
 
@@ -232,7 +232,7 @@ COMMAND_RESULT CommandMyGroups::Handle(User* user, const Params& parameters)
 
 CommandAssign::CommandAssign(Module* Creator) : Command(Creator, "GSET", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name> <user>";
 }
 
@@ -295,7 +295,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
 
 CommandGList::CommandGList(Module* Creator) : Command(Creator, "GLIST", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login>";
 }
 
@@ -328,7 +328,7 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
 
 CommandGReset::CommandGReset(Module* Creator) : Command(Creator, "GRESET", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name>";
 }
 
@@ -362,7 +362,7 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
 
 CommandUnAssign::CommandUnAssign(Module* Creator) : Command(Creator, "GDEL", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name> <user>";
 }
 
@@ -379,7 +379,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       bool exists = UserHelper::Exists(dest);
+       const bool exists = UserHelper::Exists(dest);
 
        if (!exists)
        {
@@ -409,23 +409,23 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
        }
 
-        std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
 
-        if (!Found)
-        {
+       if (!Found)
+       {
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
-        }
+       }
         
-        const UserVector& logins = Kernel->Clients->FindLogin(dest);
+       const UserVector& logins = Kernel->Clients->FindLogin(dest);
 
-        for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
-        {
+       for (UserVector::const_iterator o = logins.begin(); o != logins.end(); ++o)
+       {
              User* user_iter = *o;
              user_iter->RemoveGroup(Found);
-        }
+       }
         
-        CMapsHelper::Del(usergrups, gname);
-        user->SendProtocol(BRLD_OK, PROCESS_OK);
-        return FAILED;
+       CMapsHelper::Del(usergrups, gname);
+       user->SendProtocol(BRLD_OK, PROCESS_OK);
+       return FAILED;
 }

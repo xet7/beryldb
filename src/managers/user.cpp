@@ -13,13 +13,13 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/dbmanager.h"
+#include "settings.h"
+
 #include "brldb/database.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
-#include "settings.h"
-#include "managers/maps.h"
 #include "managers/user.h"
+#include "managers/maps.h"
 #include "modules/encrypt.h"
 
 bool UserHelper::CheckPass(const std::string& user, const std::string& key)

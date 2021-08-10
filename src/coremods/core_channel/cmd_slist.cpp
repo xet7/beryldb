@@ -19,7 +19,7 @@
 
 CommandSlist::CommandSlist(Module* parent) : MultiCommand(parent, "SLIST", 0, 0), namesevprov(parent, "event/slist")
 {
-	requires = 'e';
+	flags = 'e';
 	
 	syntax = "[<channel>[,<channel>]+]";
 }

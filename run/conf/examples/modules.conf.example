@@ -25,11 +25,11 @@
 
 #<module name="forcepart">
 
-# Cycle  ##############################################
+# Hop  ##############################################
 #
 # Leaves and immediately subscribes to a channel.
 
-#<module name="cycle">
+#<module name="hop">
 
 # SetAgent  ##############################################
 #

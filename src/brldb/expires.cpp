@@ -124,6 +124,7 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
         
         Kernel->Store->Expires->ExpireList.insert(std::make_pair(New.schedule, New));
         
+        bprint(DONE, "Adding expire to %s (%s): %s", database->GetName().c_str(), key.c_str(), select.c_str());
         return New.schedule;
 }
 

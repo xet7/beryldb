@@ -21,7 +21,7 @@ class CommandLoadmodule : public Command
  
         CommandLoadmodule(Module* parent) : Command(parent, "LOADMODULE", 1, 1)
         {
-                requires = 'r';
+                flags = 'r';
                 syntax = "<modulename>";
         }
 
@@ -49,7 +49,7 @@ class CommandUnloadmodule : public Command
 
         CommandUnloadmodule(Module* parent) : Command(parent, "UNLOADMODULE", 1)
         {
-                requires = 'r';
+                flags = 'r';
                 syntax = "<modulename>";
         }
 

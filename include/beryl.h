@@ -184,16 +184,6 @@ class ExportAPI Beryl
 
         std::unique_ptr<LoginCache> Logins;
 
-	/* Handles class objects that are awaiting to be removed. */
-	
-	ReducerHandler Reducer;
-
-	/* Actions that will take place outside the current loop. */
-	
-	ActionHandler Atomics;
-
-	ExtensionManager Extensions;
-	
 	/* Handles core databases. */
 	
         std::unique_ptr<CoreManager> Core;
@@ -226,6 +216,16 @@ class ExportAPI Beryl
 
         std::unique_ptr<Daemon> Engine;
 	
+        /* Handles class objects that are awaiting to be removed. */
+
+        ReducerHandler Reducer;
+
+        /* Actions that will take place outside the current loop. */
+
+        ActionHandler Atomics;
+
+        ExtensionManager Extensions;
+
 	/* Parses and processes user-provided commands. */
 	
 	CommandHandler Commander;

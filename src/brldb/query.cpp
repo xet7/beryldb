@@ -43,7 +43,7 @@ bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ld
        batch.Put(newdest, lvalue);
        batch.Delete(ldest);
        
-       std::string lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       const std::string& lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
        batch.Put(lookup, convto_string(ttl));
 
@@ -100,7 +100,7 @@ void QueryBase::WriteExpire(const std::string& e_key, const std::string& select,
             db = this->database;
        }
        
-       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
+       const std::string& lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
        
        if (this->Write(lookup, convto_string(ttl)))
        {
@@ -128,7 +128,7 @@ void QueryBase::DelFuture()
 
 signed int QueryBase::IsExpiring()
 {
-      signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
+      const signed int ttl = ExpireManager::GetTIME(this->database, this->key, this->select_query);
       
       if (ttl > 0)
       {

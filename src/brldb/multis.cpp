@@ -16,6 +16,7 @@
 #include "beryl.h"
 #include "engine.h"
 #include "helpers.h"
+
 #include "brldb/expires.h"
 #include "brldb/functions.h"
 #include "brldb/multimap_handler.h"
@@ -630,7 +631,7 @@ void mvals_query::Process()
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-                 std::string item = *i;
+                 std::string item = "\"" + *i + "\"";
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
@@ -724,7 +725,7 @@ void mgetall_query::Process()
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {
                  std::string ikey = i->first;
-                 std::string item = i->second;
+                 std::string item = "\"" + i->second + "\"";
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
         }
 
@@ -816,7 +817,7 @@ void miter_query::Process()
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-                 std::string item = *i;
+                 std::string item = "\"" + *i + "\"";
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 

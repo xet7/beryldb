@@ -27,6 +27,11 @@ Settings::Settings()
 
 void Settings::SetDefaults()
 {
+       this->defaults.clear();
+       this->SetMap.clear();
+       
+       STHelper::Erase("conf");       
+       
        defaults.insert({ "allowchans", "true" });
        defaults.insert({ "syntaxhints", "true" });
        defaults.insert({ "autojoin", "false" });
@@ -42,25 +47,29 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-        Args confs = STHelper::HKeys("conf");
-        
-        for (Args::iterator i = confs.begin(); i != confs.end(); i++)
+        const Args& confs = STHelper::HKeys("conf");
+
+        for (Args::const_iterator i = confs.begin(); i != confs.end(); i++)
         {
-             std::string key = *i;
-             this->SetMap[key] = STHelper::Get("conf", key);
+              std::string key = *i;
+              this->SetMap[key] = STHelper::Get("conf", key);
         }
         
         bprint(DONE, "Settings loaded.");
 }
 
-void Settings::Set(const std::string& key, const std::string& value)
+void Settings::Set(std::string& key, std::string& value)
 {
-      this->SetMap[key] = value;
-      STHelper::Set("conf", key, value);
+        std::transform(key.begin(), key.end(), key.begin(), ::tolower);      
+        std::transform(value.begin(), value.end(), value.begin(), ::tolower);      
+      
+        this->SetMap[key] = value;
+        STHelper::Set("conf", key, value);
 }
 
-std::string Settings::Get(const std::string& key)
+std::string Settings::Get(std::string& key)
 {
+        std::transform(key.begin(), key.end(), key.begin(), ::tolower);      
         std::map<std::string, std::string>::iterator it = this->SetMap.find(key);
 
         if (it == this->SetMap.end())
@@ -71,7 +80,7 @@ std::string Settings::Get(const std::string& key)
         return it->second;
 }
 
-bool Settings::AsBool(const std::string& key)
+bool Settings::AsBool(std::string& key)
 {
         return Helpers::as_bool(this->Get(key), false);
 }
@@ -90,7 +99,7 @@ std::string Helpers::to_bool(bool boolean)
 
 bool Helpers::as_bool(const std::string &key, bool def)
 {
-        std::string result = key;
+        const std::string& result = key;
 
         if (key.empty())
         {

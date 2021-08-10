@@ -18,27 +18,27 @@ class CoreModUManager : public Module
 {
   private:
   
-        CommandAddUser cmdauser;
-        CommandAddFlag cmdaddflag;
-        CommandDelFlags cmddelflags;
-        CommandGetFlags cmdgetflags;
-        CommandListUsers CommandListusers;
-        CommandPasswd cmdpasswd;
-        CommandDelUser cmddeluser;
-        CommandListAdmins CommandListadmins;
-        CommandInCache cmdincache;
-        CommandResetCache cmdresetcache;
-        CommandListFlags cmdlistflags;
+        CommandAddUser 		cmdauser;
+        CommandDelUser          cmddeluser;
+        CommandAddFlag 		cmdaddflag;
+        CommandDelFlags 	cmddelflags;
+        CommandGetFlags 	cmdgetflags;
+        CommandListUsers 	CommandListusers;
+        CommandPasswd 		cmdpasswd;
+        CommandListAdmins 	CommandListadmins;
+        CommandInCache 		cmdincache;
+        CommandResetCache	cmdresetcache;
+        CommandListFlags 	cmdlistflags;
         
   public:
   
-        CoreModUManager() : cmdauser(this)
+        CoreModUManager() :   cmdauser(this)
+                            , cmddeluser(this)
                             , cmdaddflag(this)
                             , cmddelflags(this)
                             , cmdgetflags(this)
                             , CommandListusers(this)
                             , cmdpasswd(this)
-                            , cmddeluser(this)
                             , CommandListadmins(this)
                             , cmdincache(this)
                             , cmdresetcache(this)

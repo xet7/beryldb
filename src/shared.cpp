@@ -16,7 +16,7 @@
 #include "beryl.h"
 #include "engine.h"
  
-#define DYNAMIC_EXTENSION ".dll"
+#define DYNAMIC_EXTENSION ".so"
 
 DLLHandler::DLLHandler(const std::string& name) : lib(NULL), libname(name)
 {

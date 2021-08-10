@@ -214,6 +214,7 @@ void hset_query::Run()
             if (this->Write(this->dest, handler->as_string()))
             {
                    this->SetOK();
+                   return;
             }
         }
       
@@ -503,39 +504,6 @@ void hlist_query::Process()
         }
 }
 
-void hwdel_query::Run()
-{
-       RocksData result = this->Get(this->dest);
-
-       std::shared_ptr<MapHandler> handler = MapHandler::Create(result.value);
-       handler->WildRemove(this->hesh);
-
-       if (handler->Count() > 0)
-       {
-               if (this->Write(this->dest, handler->as_string()))
-               {
-                     this->SetOK();
-               }
-               else
-               {
-                     access_set(DBL_UNABLE_WRITE);
-               }
-               
-               return;
-       }
-       else
-       {
-               this->Delete(this->dest);
-       } 
-      
-       this->SetOK();
-}
-
-void hwdel_query::Process()
-{
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
-}
-
 void hvals_query::Run()
 {
        unsigned int total_counter = 0;
@@ -618,7 +586,7 @@ void hvals_query::Process()
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-                 std::string item = *i;
+                 std::string item = "\"" + *i + "\"";
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
@@ -712,7 +680,8 @@ void hgetall_query::Process()
         for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
         {
                  std::string ikey = i->first;
-                 std::string item = i->second;
+                 std::string item = "\"" + i->second + "\"";
+                 
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
         }
 

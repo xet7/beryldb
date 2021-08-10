@@ -14,8 +14,20 @@
 #include "beryl.h"
 #include "engine.h"
 #include "maker.h"
-
+#include "extras.h"
 #include "managers/keys.h"
+
+/* 
+ * Capitalizes a given string.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to capitalize.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
 
 class CommandToCap : public Command 
 {
@@ -26,6 +38,18 @@ class CommandToCap : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Transform an string to uppercase.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to transform.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
+
 class CommandToUpper : public Command 
 {
     public: 
@@ -34,6 +58,18 @@ class CommandToUpper : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Transform an string to lowercase.
+ * 
+ * @parameters:
+ *
+ *         · string: Key to transform.
+ * 
+ * @protocol:
+ *
+ *         · protocol: NULL, ERROR or OK.
+ */
 
 class CommandToLower : public Command 
 {
@@ -44,6 +80,19 @@ class CommandToLower : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Inserts a string into a entry in the database.
+ * 
+ * @parameters:
+ *
+ *         · string: Value to add.
+ *         · int   : Where to insert.
+ * 
+ * @protocol:
+ *
+ *         · protocol: NULL, ERROR or OK.
+ */
+
 class CommandInsert : public Command 
 {
     public: 
@@ -52,6 +101,20 @@ class CommandInsert : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Checks wether a string maches a given pattern.
+ * This commands allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to search.
+ *         · string   : Value to match.
+ * 
+ * @protocol:
+ *
+ *         · bool     : True or false.
+ */
 
 class CommandIsMatch : public Command 
 {
@@ -63,9 +126,22 @@ class CommandIsMatch : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns a given key as expressed in bool. Keep in mind that if a key is not 'true',
+ * 0, 1, no, yes, true or false, this command will always return 'false' as response. 
+ *
+ * @parameters:
+ *
+ *         · string   : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : ERROR or NULL.
+ *         · string   : true or false.
+ */
+
 class CommandAsBool : public Command 
 {
-
     public: 
 
         CommandAsBool(Module* parent);
@@ -73,9 +149,21 @@ class CommandAsBool : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Checks whether a string is a boolean or not.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : ERROR or NULL.
+ *         · bool     : true or false.
+ */
+
 class CommandIsBool : public Command 
 {
-
     public: 
 
         CommandIsBool(Module* parent);
@@ -83,15 +171,40 @@ class CommandIsBool : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Sets a new key.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to define.
+ *         · string   : Value this key will have.
+ * 
+ * @protocol:
+ *
+ *         · protocol : OK or ERROR.
+ */
+
 class CommandSet : public Command 
 {
-
     public: 
 
         CommandSet(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Sets a new key only if it does not has any timer set on it.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to define.
+ *         · string   : Value this key will have.
+ * 
+ * @protocol:
+ *
+ *         · protocol : OK or ERROR.
+ */
 
 class CommandSetTX : public Command 
 {
@@ -102,6 +215,18 @@ class CommandSetTX : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Sets a new key, only if not previosuly defined.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to define.
+ *         · string   : Value this key will have.
+ * 
+ * @protocol:
+ *
+ *         · protocol : OK or ERROR.
+ */
 
 class CommandSetNX : public Command 
 {
@@ -112,6 +237,18 @@ class CommandSetNX : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Gets a key.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to retrieve.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL or ERROR.
+ *         · string   : Obtained key.
+ */
 
 class CommandGet : public Command 
 {
@@ -122,6 +259,20 @@ class CommandGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Verifies whether an string has repeated strings.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to check.
+ *         · string   : Pattern to find.
+ * 
+ * @protocol:
+ *
+ *         · string   : String to match.
+ *         · protocol : NULL, or ERROR.
+ */
+ 
 class CommandGetOccurs : public Command 
 {
     public: 
@@ -131,7 +282,18 @@ class CommandGetOccurs : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
+/* 
+ * Counts the length of a string.
+ * 
+ * @parameters:
+ *
+ *         · string: Entry to count length of.
+ * 
+ * @protocol:
+ *
+ *         · int      : sized of string.
+ *         · protocol : Not found.
+ */
 
 class CommandStrlen : public Command 
 {
@@ -142,6 +304,19 @@ class CommandStrlen : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Finds a pattern in all keys in a given select and database.
+ * This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string  : Key to find.
+ * 
+ * @protocol:
+ *
+ *         · vector  : List of keys that matched pattern.
+ */
+
 class CommandKeys : public Command 
 {
     public: 
@@ -150,6 +325,20 @@ class CommandKeys : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Counts all matching keys in a system.
+ * This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to match.
+ * 
+ * @protocol:
+ *
+ *         · enum    : NULL or ERROR.
+ *         · vector  : Matching keys.
+ */
 
 class CommandCount : public Command 
 {
@@ -160,6 +349,18 @@ class CommandCount : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * GETDEL retrieves and then deletes a key.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to get and delete.
+ * 
+ * @protocol:
+ *
+ *         · enum    : NULL or ERROR.
+ *         · string  : Key in the system.
+ */
 
 class  CommandGetDel : public Command 
 {
@@ -170,6 +371,19 @@ class  CommandGetDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * GETSET retrieves and then sets a new value on a key.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to get and re-set.
+ *         · value    : New value to this key.
+ * 
+ * @protocol:
+ *
+ *         · enum    : NULL or ERROR.
+ *         · string  : Key in the system.
+ */
 
 class  CommandGetSet : public Command 
 {
@@ -180,6 +394,20 @@ class  CommandGetSet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Changes the sequence of a string in the server.
+ * 
+ * @parameters:
+ *
+ *         · string     :  Key to modify.
+ *         · offset     :  Editing from.
+ *         · limit      :  Editing to.
+ *
+ * @protocol:
+ *
+ *        · string	: Modified string.
+ */
+
 class CommandGetSubstr : public Command 
 {
     public: 
@@ -189,6 +417,13 @@ class CommandGetSubstr : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Random key command.
+ * 
+ * @protocol:
+ *
+ *         · string	:  Random key retrieved.
+ */
 
 class CommandRKey : public Command 
 {
@@ -199,6 +434,18 @@ class CommandRKey : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Appends a string to an entry.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to modify.
+ *         · string   : Value to append at the end of entry.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
 
 class CommandAppend : public Command 
 {
@@ -208,6 +455,18 @@ class CommandAppend : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Searches for a key. This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to search.
+ * 
+ * @protocol:
+ *
+ *         · vector   : List of matched items.
+ */
 
 class CommandSearch : public Command 
 {
@@ -228,6 +487,19 @@ class CommandWDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * GETEXP retrieves a key and then sets an expire on it.
+ *
+ * @parameters:
+ *
+ *         · int      : Seconds before expiring.
+ *         · string   : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : OK, NULL or ERROR.
+ */
+
 class CommandGetExp : public Command 
 {
     public: 
@@ -236,6 +508,19 @@ class CommandGetExp : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Checks whether a given key is alpha numeric.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL or ERROR.
+ *         · bool     : True or false.
+ */
 
 class CommandIsAlpha : public Command 
 {
@@ -246,6 +531,19 @@ class CommandIsAlpha : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Checks whether a given key is numeric.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL or ERROR.
+ *         · bool     : True or false.
+ */
+
 class CommandIsNum : public Command 
 {
     public: 
@@ -255,6 +553,18 @@ class CommandIsNum : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Obtains a key (GET) and then sets a PERSIST on it.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to get/persist.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
+ 
 class CommandGetPersist : public Command 
 {
     public: 

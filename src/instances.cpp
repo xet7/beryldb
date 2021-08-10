@@ -46,11 +46,11 @@ User::User(const std::string& uid, Server* srv, UserType type) :
 		}
 	}
 	
-	SetNullDB();
+	this->SetNullDB();
 	
 	/* By default, usersr are not quitting. */
 	
-        SetQuit(false);
+        this->SetQuit(false);
 	
 	/* Any user should be allowed to process queries by default. */
 		

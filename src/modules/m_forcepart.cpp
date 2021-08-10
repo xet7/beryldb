@@ -20,7 +20,7 @@ class CommandForcePart : public Command
        
         CommandForcePart(Module* Creator) : Command(Creator, "FORCEPART", 2, 2)
         {
-                requires = 'e';
+                flags = 'e';
                 syntax = "<instance> <channel>[,<channel>]";
                 INTERPRET3(TR_INSTANCE, TR_TEXT, TR_TEXT);
         }

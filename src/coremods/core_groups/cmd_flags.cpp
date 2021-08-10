@@ -16,7 +16,7 @@
 
 CommandFlagUpdate::CommandFlagUpdate(Module* Creator) : Command(Creator, "GUPDATE", 2, 2)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<name> <flag>";
 }
 

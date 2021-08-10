@@ -140,7 +140,11 @@ class ExportAPI User : public Expandable
 
  public:
 
+	/* Whether this user has an active Multi process. */
+	
 	bool Multi;
+	
+	/* Wether this user is currently flushing his multi queue. */
 	
 	bool MultiRunning;
 	
@@ -167,6 +171,8 @@ class ExportAPI User : public Expandable
 	
 	engine::sockets::sockaddrs client_sa;
 
+	/* User's unique instance. */
+	
 	std::string instance;
 	
 	/* Sets current_db to NULL. */
@@ -544,7 +550,20 @@ class ExportAPI User : public Expandable
 	
 	bool SetAgent(const std::string& newagent);
 
-	
+
+        /* 
+         * Sets a login to be used for a given user.
+         * 
+         * @parameters:
+	 *
+	 *         · userlogin  : Defines this->login.
+	 *         · time_t     : Logged time.
+ 	 * 
+         * @return:
+ 	 *
+         *         · True: Login accepted.
+         */    	
+         
 	bool SetLogin(const std::string& userlogin, time_t newts = 0);
 
 	
@@ -552,13 +571,13 @@ class ExportAPI User : public Expandable
 
 	virtual ~User();
 	
-	DiscardResult discard() ;
+	DiscardResult discard();
 
 	
-	bool Deserialize(Data& data) ;
+	bool Deserialize(Data& data);
 
 	
-	bool Serialize(Serializable::Data& data) ;
+	bool Serialize(Serializable::Data& data);
 };
 
 class ExportAPI InstanceStream : public StreamSocket
@@ -661,17 +680,17 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
 	/* Sets this user's IP address */
 
-	bool set_client_ip(const std::string& address) ;
+	bool set_client_ip(const std::string& address);
 
-	void set_client_ip(const engine::sockets::sockaddrs& sa) ;
+	void set_client_ip(const engine::sockets::sockaddrs& sa);
 	
-	void WriteRemoteNotice(const std::string& text) ;
+	void WriteRemoteNotice(const std::string& text);
 	
 	void Send(ProtocolTrigger::Event& protoev);
 	
 	void Send(ProtocolTrigger::EventProvider& protoevprov, ProtocolTrigger::Message& msg);
 	
-	bool Deserialize(Data& data) ;
+	bool Deserialize(Data& data);
 	
 	bool Serialize(Serializable::Data& data);
 	

@@ -137,7 +137,7 @@ COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
 
 CommandFirstOf::CommandFirstOf(Module* parent) : Command(parent, "FIRSTOF", 1, 1)
 {
-         requires = 'm';
+         flags = 'm';
          syntax = "<user>";
 }
 

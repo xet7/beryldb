@@ -40,7 +40,7 @@ RouteParams CommandModel::GetRouting(User* user, const Params& parameters)
 
 Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara)
 	: CommandModel(mod, cmd, minpara, maxpara)
-	, requires(0)
+	, flags(0)
 	, group(0)
 	, force_manual_route(false)
         , syntax(NO_SYNTAX)
@@ -82,7 +82,9 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
         	return;
         }
         
-        if (Kernel->Sets->AsBool("syntaxhints"))
+        std::string setting = "syntaxhints";
+        
+        if (Kernel->Sets->AsBool(setting))
         {
                 user->SendProtocol(ERR_MISS_PARAMS, name, "Missing parameters. Syntax:");
         }
@@ -91,7 +93,7 @@ void Command::MissingParameters(LocalUser* user, const Params& parameters)
                 user->SendProtocol(ERR_MISS_PARAMS, name, MIS_ARGS);
         }
 
-	if (Kernel->Sets->AsBool("syntaxhints") && user->registered == REG_OK && syntax.length())
+	if (Kernel->Sets->AsBool(setting) && user->registered == REG_OK && syntax.length())
 	{
 		user->SendProtocol(BRLD_SYNTAX, name, Daemon::Format("%s %s", name.c_str(), syntax.c_str()));
 	}

@@ -18,21 +18,22 @@ class CoreModuleMMaps : public Module
 {
     private:	
 
-         CommandMSet cmdmset;
-         CommandMGet cmdmget;
-         CommandMCount cmdmcount;
-         CommandMKeys cmditer;
-         CommandMDel cmdmdel;
-         CommandMSeek cmdmseek;
-         CommandMRepeats cmdmrepeats;
-         CommandMVals cmdmvals;
-         CommandMGetAll cmdgetalls;
-         CommandMIter cmdmfind;
-         CommandMSetNX cmdsetnx;
-         
+         CommandMPush		cmdmpush;
+         CommandMPushNX         cmdpushnx;
+         CommandMGet 		cmdmget;
+         CommandMCount 		cmdmcount;
+         CommandMKeys 		cmditer;
+         CommandMDel 		cmdmdel;
+         CommandMSeek 		cmdmseek;
+         CommandMRepeats 	cmdmrepeats;
+         CommandMVals 		cmdmvals;
+         CommandMGetAll 	cmdgetalls;
+         CommandMIter 		cmdmfind;
+    
     public:     
 
-        CoreModuleMMaps() : cmdmset(this),
+        CoreModuleMMaps() : cmdmpush(this),
+                            cmdpushnx(this),
                             cmdmget(this), 
                             cmdmcount(this), 
                             cmditer(this), 
@@ -41,8 +42,7 @@ class CoreModuleMMaps : public Module
                             cmdmrepeats(this), 
                             cmdmvals(this),
                             cmdgetalls(this), 
-                            cmdmfind(this),
-                            cmdsetnx(this)
+                            cmdmfind(this)
         {
         
         }

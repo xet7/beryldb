@@ -18,32 +18,32 @@ class CoreModKeys : public Module
 {
     private:
     
-        CommandSet cmdset;
-        CommandGet cmdget;
-        CommandStrlen cmdstrlen;
-        CommandKeys cmdkeys;
-        CommandCount cmdcount;
-        CommandGetDel cmdgetdel;
-        CommandGetSet cmdgetset;
-        CommandGetSubstr cmdsubstr;
-        CommandRKey cmdrkey;
-        CommandAppend cmdappend;
-        CommandSetNX cmdsetnx;
-        CommandSetTX cmdsettx;
-        CommandSearch cmdsearch;
-        CommandWDel cmdwdel;
-        CommandGetOccurs cmdgetoccurs;
-        CommandGetExp cmdgetexp;
-        CommandIsAlpha cmdisalpha;
-        CommandIsNum cmdisnum;
-        CommandGetPersist cmdgetpersist;
-        CommandIsBool cmdisbool;
-        CommandAsBool cmdasbool;
-        CommandIsMatch cmdismatch;
-        CommandInsert cmdinsert;
-        CommandToLower cmdtolower;
-        CommandToUpper cmdtoupper;
-        CommandToCap cmdtocap;
+        CommandSet 		cmdset;
+        CommandGet 		cmdget;
+        CommandStrlen 		cmdstrlen;
+        CommandKeys 		cmdkeys;
+        CommandCount 		cmdcount;
+        CommandGetDel 		cmdgetdel;
+        CommandGetSet 		cmdgetset;
+        CommandGetSubstr 	cmdsubstr;
+        CommandRKey 		cmdrkey;
+        CommandAppend 		cmdappend;
+        CommandSetNX 		cmdsetnx;
+        CommandSetTX 		cmdsettx;
+        CommandSearch 		cmdsearch;
+        CommandWDel 		cmdwdel;
+        CommandGetOccurs 	cmdgetoccurs;
+        CommandGetExp 		cmdgetexp;
+        CommandIsAlpha 		cmdisalpha;
+        CommandIsNum 		cmdisnum;
+        CommandGetPersist 	cmdgetpersist;
+        CommandIsBool 		cmdisbool;
+        CommandAsBool 		cmdasbool;
+        CommandIsMatch 		cmdismatch;
+        CommandInsert 		cmdinsert;
+        CommandToLower 		cmdtolower;
+        CommandToUpper 		cmdtoupper;
+        CommandToCap 		cmdtocap;
         
     public:	
         

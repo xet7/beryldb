@@ -14,12 +14,22 @@
 #include "beryl.h"
 #include "engine.h"
 #include "maker.h"
+#include "extras.h"
+#include "managers/keys.h"
 
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-
-#include "managers/lists.h"
+/* 
+ * LHigh returns highest number in a list. 
+ * Keep in mind that this function requires all list' elements
+ * to be numeric.
+ * 
+ * @parameters:
+ *
+ *         · key: List key to check.
+ * 
+ * @protocol:
+ *
+ *         · int: Highest element found.
+ */ 
 
 class CommandLHigh : public Command 
 {
@@ -29,6 +39,18 @@ class CommandLHigh : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LLow returns lowest number in a list.
+ * 
+ * @parameters:
+ *
+ *         · key: List key to check.
+ * 
+ * @protocol:
+ *
+ *         · int: Lowest element found.
+ */ 
 
 class CommandLLow : public Command 
 {
@@ -40,6 +62,18 @@ class CommandLLow : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LAvg calculates the average of a given list.
+ * 
+ * @parameters:
+ *
+ *         · key: List key to average.
+ * 
+ * @protocol:
+ *
+ *         · double: Avg number.
+ */ 
+
 class CommandLAvg : public Command 
 {
     public: 
@@ -49,6 +83,19 @@ class CommandLAvg : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LPushNX adds an element to the list, only if has NOT
+ * been previously defined.
+ * 
+ * @parameters:
+ *
+ *         · value: Element to push.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+
 class CommandLPushNX : public Command 
 {
     public: 
@@ -57,6 +104,19 @@ class CommandLPushNX : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LPush adds an element to the list, regardless if it has
+ * been previously defined.
+ * 
+ * @parameters:
+ *
+ *         · value: Element to push.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
 
 class CommandLPush : public Command 
 {
@@ -68,6 +128,19 @@ class CommandLPush : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LGet returns all elements in a list.
+ * 
+ * @parameters:
+ *
+ *         · key: Destination list.
+ *         · { offset, limit }
+ * 
+ * @protocol:
+ *
+ *         · vector: Returning elements.
+ */ 
+
 class CommandLGet : public Command 
 {
     public: 
@@ -76,6 +149,19 @@ class CommandLGet : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LPopFront returns and removes the front (first) element in a
+ * list.
+ * 
+ * @parameters:
+ *
+ *         · key: List to check.
+ * 
+ * @protocol:
+ *
+ *         · string: Element.
+ */ 
 
 class CommandLPopFront : public Command 
 {
@@ -86,6 +172,19 @@ class CommandLPopFront : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LPopBack returns and removes the last element in a
+ * list.
+ * 
+ * @parameters:
+ *
+ *         · string: List to check.
+ * 
+ * @protocol:
+ *
+ *         · string: Element.
+ */ 
+
 class CommandLPopBack : public Command 
 {
     public: 
@@ -95,6 +194,18 @@ class CommandLPopBack : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LPopAll removes all matching values in a list.
+ * 
+ * @parameters:
+ *
+ *         · string    : List name to lookup.
+ *         · string    : Value to delete.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK, ERROR or NULL.
+ */ 
 
 class CommandPopAll : public Command 
 {
@@ -105,6 +216,19 @@ class CommandPopAll : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Checks if a given element is part of a list.
+ * 
+ * @parameters:
+ *
+ *         · string: List key to find item on.
+ *         · value: Value to verify.
+ * 
+ * @protocol:
+ *
+ *         · enum: 0 or 1
+ */ 
+
 class CommandLExist : public Command 
 {
     public: 
@@ -114,6 +238,18 @@ class CommandLExist : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Counts elements in a list.
+ * 
+ * @parameters:
+ *
+ *         · string   : List to count items on.
+ * 
+ * @protocol:
+ *
+ *         · int      : Size of list.
+ */ 
+ 
 class CommandLCount : public Command 
 {
     public: 
@@ -122,6 +258,19 @@ class CommandLCount : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LResize resizes a list' length.
+ * 
+ * @parameters:
+ *
+ *         · string   : list to resize.
+ *         · int      : New list's size.
+ * 
+ * @protocol:
+ *
+ *         · enum     : ERROR, OK or NULL.
+ */ 
 
 class CommandLResize : public Command 
 {
@@ -132,6 +281,18 @@ class CommandLResize : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LKeys looks for all lists defined in the server.
+ * This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string   : Pattern to lookup.
+ * 
+ * @protocol:
+ *
+ *         · vector   : List founds.
+ */ 
 
 class CommandLKeys : public Command 
 {
@@ -142,6 +303,19 @@ class CommandLKeys : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LFind finds items in a given list.
+ * 
+ * @parameters:
+ *
+ *         · string   : Destination list.
+ *         · string   : Strnig to lookup.
+ * 
+ * @protocol:
+ *
+ *         · vector   : Returning results.
+ */ 
+
 class CommandLFind : public Command 
 {
     public: 
@@ -150,6 +324,18 @@ class CommandLFind : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LReverse reverses the order of a given list.
+ * 
+ * @parameters:
+ *
+ *         · string   : List name.
+ * 
+ * @protocol:
+ *
+ *         · enum     : NULL, OK or ERROR.
+ */ 
 
 class CommandLReverse : public Command 
 {
@@ -160,6 +346,18 @@ class CommandLReverse : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LSort sorts a list.
+ * 
+ * @parameters:
+ *
+ *         · string  : List name.
+ * 
+ * @protocol:
+ *
+ *         · enum    : NULL, OK or ERROR.
+ */ 
+
 class CommandLSort : public Command 
 {
     public: 
@@ -168,6 +366,18 @@ class CommandLSort : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LPos returns an element in a given position in a list.
+ * 
+ * @parameters:
+ *
+ *         · pos    : Position to look for.
+ * 
+ * @protocol:
+ *
+ *         · string : Element found in provided position.
+ */ 
 
 class CommandLPos : public Command 
 {
@@ -178,6 +388,19 @@ class CommandLPos : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LDel remove a given items from list.
+ * 
+ * @parameters:
+ *
+ *         · string    : List name to lookup.
+ *         · string    : Value to delete.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK, ERROR or NULL.
+ */ 
+
 class CommandLDel : public Command 
 {
     public: 
@@ -186,6 +409,18 @@ class CommandLDel : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LRepeats counts everytime a given item repeats.
+ * 
+ * @parameters:
+ *
+ *         · string: List to check.
+ * 
+ * @protocol:
+ *
+ *         · int: Repeated items.
+ */ 
 
 class CommandLRepeats : public Command 
 {
@@ -196,6 +431,19 @@ class CommandLRepeats : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LROP Returns last element and then removes it.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to process.
+ * 
+ * @protocol:
+ *
+ *         · enum     : ERROR or NULL.
+ *         · string   : Front element.
+ */ 
+
 class CommandLRop : public Command 
 {
     public: 
@@ -204,6 +452,19 @@ class CommandLRop : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LFPOP Returns front element and then removes it.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to process.
+ * 
+ * @protocol:
+ *
+ *         · enum     : ERROR or NULL.
+ *         · string   : Last element.
+ */ 
 
 class CommandFRop : public Command 
 {
@@ -214,15 +475,38 @@ class CommandFRop : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * LBack returns last element in a list.
+ * 
+ * @parameters:
+ *
+ *         · string   : Element to check.
+ * 
+ * @protocol:
+ *
+ *         · string   : Last element.
+ */ 
+
 class CommandLBack : public Command 
 {
-
     public: 
 
         CommandLBack(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * LFront returns first element in a list.
+ * 
+ * @parameters:
+ *
+ *         · string   : Element to check.
+ * 
+ * @protocol:
+ *
+ *         · string   : First element.
+ */ 
 
 class CommandLFront : public Command 
 {

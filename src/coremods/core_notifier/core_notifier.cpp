@@ -18,13 +18,15 @@ class CoreModuleNotifier : public Module
 {
     private:
     
-        CommandNotifier cmdnotify;
-        CommandStopNotify cmdstopnotify;
-        CommandNotifyReset cmdnotifyreset;
+        CommandNotifier 	cmdnotify;
+        CommandStopNotify 	cmdstopnotify;
+        CommandNotifyReset 	cmdnotifyreset;
 
     public:     
         
-        CoreModuleNotifier() : cmdnotify(this), cmdstopnotify(this), cmdnotifyreset(this)
+        CoreModuleNotifier() : cmdnotify(this), 
+                               cmdstopnotify(this), 
+                               cmdnotifyreset(this)
 
         {
         

@@ -103,7 +103,6 @@ class ExportAPI Session : public safecast<Session>
         {
               return this->login;
         }
-        
 };
 
 class ExportAPI SessionManager : public safecast<SessionManager>
@@ -132,6 +131,15 @@ class ExportAPI SessionManager : public safecast<SessionManager>
 
         void AttachExternal(const std::string& login, const std::string& flags);
         
+        /* 
+         * Links an user with a given flag.
+         * 
+         * @parameters:
+	 *
+	 *         · login: Associating login.
+	 *         · flags: Flags to set.
+         */    
+                 
         void Attach(User* user, const std::string& login, const std::string& flags);
                         
         /* 

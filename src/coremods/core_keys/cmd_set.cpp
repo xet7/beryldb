@@ -34,8 +34,8 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
        {
             return FAILED;
        }
-       
-       KeyHelper::Set(user, key, value);
+
+       KeyHelper::Simple(user, std::make_shared<set_query>(), key, value);
        return SUCCESS;
 }
 
@@ -60,7 +60,7 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::SetNX(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<setnx_query>(), key, value);
        return SUCCESS;
 }
 
@@ -85,7 +85,7 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::SetTX(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<settx_query>(), key, value);
        return SUCCESS;
 }
 
@@ -110,14 +110,14 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::GetSet(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<getset_query>(), key, value);
        return SUCCESS;
 }
 
 
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key> \"value\"";
 }
 
@@ -136,13 +136,13 @@ COMMAND_RESULT CommandAppend::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Append(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<append_query>(), key, value);
        return SUCCESS;
 }
 
 CommandCount::CommandCount(Module* Creator) : Command(Creator, "COUNT", 0, 1)
 {
-       group = 'k';
+       group  = 'k';
        syntax = "<\%key>";
 }
 
@@ -161,7 +161,7 @@ COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)
              key = parameters[0];
        }
        
-       KeyHelper::Count(user, key);
+       KeyHelper::Retro(user, std::make_shared<count_query>(), key, true);
        return SUCCESS;
 }
 
@@ -186,7 +186,7 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::GetOccurs(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<get_occurs_query>(), key, value);
        return SUCCESS;
 }
 
@@ -205,13 +205,13 @@ COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Get(user, key);
+       KeyHelper::Retro(user, std::make_shared<get_query>(), key);
        return SUCCESS;
 }
 
 CommandStrlen::CommandStrlen(Module* Creator) : Command(Creator, "STRLEN", 1, 1)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key>";
 }
 
@@ -224,13 +224,13 @@ COMMAND_RESULT CommandStrlen::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::Strlen(user, key);
+       KeyHelper::Retro(user, std::make_shared<strlen_query>(), key);
        return SUCCESS;
 }
 
 CommandGetDel::CommandGetDel(Module* Creator) : Command(Creator, "GETDEL", 1, 1)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key>";
 }
 
@@ -243,29 +243,29 @@ COMMAND_RESULT CommandGetDel::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::GetDel(user, key);
+       KeyHelper::Retro(user, std::make_shared<getdel_query>(), key);
        return SUCCESS;
 }
 
 CommandGetSubstr::CommandGetSubstr(Module* Creator) : Command(Creator, "SUBSTR", 3, 3)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key> <from> <to>";
 }
 
 COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 {
-       const std::string& key = parameters[0];
+       const std::string& key       =     parameters[0];
 
        if (!CheckKey(user, key))
        {
             return FAILED;
        }
 
-       int limit = convto_num<int>(parameters[2]); 
-       int offset = convto_num<int>(parameters[1]);
+       int limit 		    =     convto_num<int>(parameters[2]); 
+       int offset 		    =     convto_num<int>(parameters[1]);
 
-       KeyHelper::GetSubstr(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<get_substr_query>(), key, offset, limit);
        return SUCCESS;
 }
 
@@ -289,14 +289,14 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
        {
               return FAILED;
        }
-       
-       KeyHelper::GetExp(user, key, seconds);
+
+       KeyHelper::IDRetro(user, std::make_shared<getexp_query>(), key, seconds);
        return SUCCESS;
 }
 
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key>";
 }
 
@@ -309,7 +309,7 @@ COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::Alpha(user, key);
+       KeyHelper::Retro(user, std::make_shared<alpha_query>(), key);
        return SUCCESS;
 }
 
@@ -328,7 +328,7 @@ COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::IsNum(user, key);
+       KeyHelper::Retro(user, std::make_shared<isnum_query>(), key);
        return SUCCESS;
 }
 
@@ -347,7 +347,7 @@ COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       KeyHelper::GetPersist(user, key);
+       KeyHelper::Retro(user, std::make_shared<getpersist_query>(), key);
        return SUCCESS;
 }
 
@@ -366,7 +366,7 @@ COMMAND_RESULT CommandWDel::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::WDelete(user, key);
+       KeyHelper::Retro(user, std::make_shared<wdel_query>(), stripe(key), true);
        return SUCCESS;
 }
 
@@ -385,7 +385,7 @@ COMMAND_RESULT CommandIsBool::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::IsBool(user, key);
+       KeyHelper::Retro(user, std::make_shared<isbool_query>(), key);
        return SUCCESS;
 }
 
@@ -404,7 +404,7 @@ COMMAND_RESULT CommandAsBool::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::AsBool(user, key);
+       KeyHelper::Retro(user, std::make_shared<asbool_query>(), key);
        return SUCCESS;
 }
 
@@ -429,7 +429,7 @@ COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::IsMatch(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<ismatch_query>(), key, value);
        return SUCCESS;
 }
 
@@ -461,8 +461,11 @@ COMMAND_RESULT CommandInsert::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-       KeyHelper::Insert(user, key, value, convto_num<signed int>(where));
-       return SUCCESS;
+        std::shared_ptr<insert_query> query = std::make_shared<insert_query>();
+        query->id 			    = convto_num<unsigned int>(where);
+        
+        KeyHelper::Simple(user, query, key, value, true);
+        return SUCCESS;
 }
 
 CommandToLower::CommandToLower(Module* Creator) : Command(Creator, "TOLOWER", 1, 1)
@@ -480,7 +483,10 @@ COMMAND_RESULT CommandToLower::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Modify(user, key, STR_TO_LOW);
+       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
+       query->function = STR_TO_LOW;
+       KeyHelper::Retro(user, query, key);
+       
        return SUCCESS;
 }
 
@@ -499,7 +505,10 @@ COMMAND_RESULT CommandToUpper::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Modify(user, key, STR_TO_UPPER);
+       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
+       query->function 			   = STR_TO_UPPER;
+       
+       KeyHelper::Retro(user, query, key);
        return SUCCESS;
 }
 
@@ -518,6 +527,9 @@ COMMAND_RESULT CommandToCap::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       KeyHelper::Modify(user, key, STR_TO_CAP);
+       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
+       query->function 			   = STR_TO_CAP;
+  
+       KeyHelper::Retro(user, query, key);
        return SUCCESS;
 }

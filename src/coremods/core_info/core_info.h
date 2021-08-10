@@ -32,6 +32,22 @@ class ServerTargetCommand : public Command
 	RouteParams GetRouting(User* user, const Params& parameters) ;
 };
 
+/* 
+ * Returns all commands available in the system.
+ * This command allows wildcards.
+ *
+ * NOTE: If a given command requires certain flags, it will NOT
+ *       be returned to user, unless client satisfy the flag condition.
+ *
+ * @parameters:
+ *
+ *         · string  : This parameter is optional. If provided,
+ *                     a list of matching commands will be returned.
+ *
+ * @protocol:
+ *
+ *         · vector  : List of found commands.
+ */ 
 
 class CommandCommands : public Command
 {
@@ -42,6 +58,14 @@ class CommandCommands : public Command
 	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns all modules loaded in the server.
+ *
+ * @protocol:
+ *
+ *         · map  : Modules.
+ */ 
+
 class CommandModules : public ServerTargetCommand
 {
    public:
@@ -50,6 +74,14 @@ class CommandModules : public ServerTargetCommand
 	
 	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns all core modules loaded in the server.
+ *
+ * @protocol:
+ *
+ *         · map  : Core modules.
+ */ 
 
 class CommandCoreModules : public ServerTargetCommand
 {
@@ -60,6 +92,18 @@ class CommandCoreModules : public ServerTargetCommand
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns current time, as expressed in an human-readable format.
+ *
+ * @parameters:
+ *
+ *         · string  : Destination server, if provided.
+ *
+ * @protocol:
+ *
+ *         · string  : Current time.
+ */ 
+ 
 class CommandTime : public ServerTargetCommand
 {
  public:
@@ -69,6 +113,18 @@ class CommandTime : public ServerTargetCommand
 	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns current time, as expressed in an epoch format.
+ *
+ * @parameters:
+ *
+ *         · string  : Destination server, if provided.
+ *
+ * @protocol:
+ *
+ *         · string  : Current epoch.
+ */
+ 
 class CommandEpoch:  public ServerTargetCommand
 {
  public:
@@ -78,6 +134,14 @@ class CommandEpoch:  public ServerTargetCommand
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns server's version. Keep in mind that if requesting user has 'e' flags,
+ * a full version will be returned.
+ *
+ * @protocol:
+ *
+ *         · string  : Current version.
+ */
 
 class CommandVersion : public Command
 {
@@ -88,6 +152,14 @@ class CommandVersion : public Command
 	COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns information of your connection.
+ *
+ * @protocol:
+ *
+ *         · list : information.
+ */ 
+
 class CommandL : public Command
 {
  public:
@@ -96,6 +168,19 @@ class CommandL : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns the syntax of a given command.
+ *
+ * @parameters:
+ *  
+ *	   · string	: Command to obtain syntax from.
+ *
+ * @protocol:
+ *
+ *         · enum 	: NULL or OK.
+ *         · string	: Command.
+ */ 
 
 class CommandSyntax : public Command
 {
@@ -106,6 +191,14 @@ class CommandSyntax : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns current user in use.
+ *
+ * @protocol:
+ *
+ *         · string	: Login utilized.
+ */
+
 class CommandWhoami : public Command
 {
  public:
@@ -114,6 +207,14 @@ class CommandWhoami : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns current agent in use.
+ *
+ * @protocol:
+ *
+ *         · string     : Agent utilized.
+ */
 
 class CommandAgent : public Command
 {
@@ -124,6 +225,14 @@ class CommandAgent : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns the very first found user for a given login.
+ *
+ * @protocol:
+ *
+ *         · string      :       Instance.
+ */
+
 class CommandFirstOf : public Command
 {
  public:
@@ -132,6 +241,14 @@ class CommandFirstOf : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns an overview of defined keys in current select.
+ *
+ * @protocol:
+ *
+ *         · list	:	Defined keys.
+ */
 
 class CommandLS : public Command
 {
@@ -142,6 +259,14 @@ class CommandLS : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns a counter of all keys, regardless of type, defined in server.
+ *
+ * @protocol:
+ *
+ *         · int	:	counter.
+ */
+
 class CommandTotal : public Command
 {
  public:
@@ -151,6 +276,14 @@ class CommandTotal : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns an overview of defined keys in all select.
+ *
+ * @protocol:
+ *
+ *         · list       :       Defined keys.
+ */
+
 class CommandGS : public Command
 {
  public:
@@ -159,6 +292,14 @@ class CommandGS : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns time in which this server was started.
+ *
+ * @protocol:
+ *
+ *         · string  : Startup time.
+ */
 
 class CommandGetStartup : public Command
 {

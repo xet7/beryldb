@@ -14,14 +14,10 @@
 #include "beryl.h"
 #include "exit.h"
 #include "engine.h"
-#include "brldb/dbmanager.h"
-#include "brldb/query.h"
 #include "brldb/datathread.h"
-#include "managers/lists.h"
 #include "managers/user.h"
 #include "managers/databases.h"
 #include "managers/settings.h"
-#include "managers/maps.h"
 
 void Database::SetClosing(bool flag)
 {

@@ -16,7 +16,7 @@
 
 CommandLogout::CommandLogout(Module* parent) : Command(parent, "LOGOUT", 2, 2), protoev(parent, name)
 {
-	requires = 'e';
+	flags = 'e';
 	syntax = "<instance>[,<instance>]+ :<reason>";
 	INTERPRET2(TR_CUSTOM, TR_CUSTOM);
 }

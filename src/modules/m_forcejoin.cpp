@@ -22,7 +22,7 @@ class CommandForceJoin : public Command
 	CommandForceJoin(Module* Creator) : Command(Creator, "FORCEJOIN", 1)
 	{
 		last_empty_ok = false;
-		requires = 'e';
+		flags = 'e';
 		syntax = "[<instance>] <channel>[,<channel>]+";
 		INTERPRET2(TR_INSTANCE, TR_TEXT);
 	}

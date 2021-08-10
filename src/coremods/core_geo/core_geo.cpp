@@ -18,16 +18,16 @@ class CoreModuleGeo : public Module
 {
     private:
     
-        CommandGeoAdd cmdgeoadd;
-        CommandGeoGet cmdgeoget;
-        CommandGFind cmdgfind;
-        CommandGeoCalc cmdgcalc;
-        CommandGeoDistance cmdgeoclose;
-        CommandGeoRemove cmdgeoremove;
-        CommandGeoLaGet cmdgeolaget;
-        CommandGeoLoGet  cmdgeologet;
-        CommandGeoAddPub cmdgapub;
-        CommandGeoAddNX  cmdgeoaddnx;
+        CommandGeoAdd 		cmdgeoadd;
+        CommandGeoGet 		cmdgeoget;
+        CommandGFind 		cmdgfind;
+        CommandGeoCalc 		cmdgcalc;
+        CommandGeoDistance 	cmdgeoclose;
+        CommandGeoRemove 	cmdgeoremove;
+        CommandGeoLaGet 	cmdgeolaget;
+        CommandGeoLoGet  	cmdgeologet;
+        CommandGeoAddPub 	cmdgapub;
+        CommandGeoAddNX  	cmdgeoaddnx;
         
     public:     
         

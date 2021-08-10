@@ -19,7 +19,7 @@ class ExportAPI DBHelper
 {
     public:
 
-        static void Type(User* user, const std::string& key);
+        static void DatabaseReset(User* user, const std::string& dbname);
 
         static MapData CType(const std::string& key);
     

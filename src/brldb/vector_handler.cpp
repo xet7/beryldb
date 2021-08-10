@@ -220,24 +220,6 @@ double VectorHandler::GetLow()
       return value;
 }
 
-
-void VectorHandler::EraseFrom(unsigned int from)
-{
-      if (!this->mhandler.size())
-      {
-            return;
-      }
-        
-      this->mhandler.erase(this->mhandler.begin(), this->mhandler.begin()+from);
-      
-      if (!this->mhandler.size())
-      {
-            this->Erase();
-      }
-
-      this->LastMsg = HANDLER_MSG_OK;
-}
-
 std::string VectorHandler::as_string()
 {
         std::string final;
@@ -316,4 +298,30 @@ unsigned int VectorHandler::Repeats(const std::string& word)
 
       this->LastMsg = HANDLER_MSG_OK;
       return counter;
+}
+
+std::string VectorHandler::Front()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      const std::string& item = this->mhandler.front();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
+}
+
+std::string VectorHandler::Back()
+{
+      if (!this->mhandler.size())
+      {
+            this->LastMsg = HANDLER_MSG_NOT_FOUND;
+            return "";
+      }
+
+      const std::string& item = this->mhandler.back();
+      this->LastMsg = HANDLER_MSG_OK;
+      return item;
 }

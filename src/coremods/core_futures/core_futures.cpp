@@ -18,21 +18,27 @@ class CoreModuleFutures : public Module
 {
     private:
         
-        CommandFuture   cmdfuture;
-        CommandTTE	cmdtte;
-        CommandExec 	cmdexec;
-        CommandFReset   cmdfreset;
-        CommandCancel   cmdcancel;
-        CommandFResetAll cmdfresetall;
-        CommandFutureList cmdflist;
-        CommandFutureAT cmdfutureat;
-        CommandSelectCount cmdftselect;
+        CommandFuture   	cmdfuture;
+        CommandTTE		cmdtte;
+        CommandExec 		cmdexec;
+        CommandFReset   	cmdfreset;
+        CommandCancel   	cmdcancel;
+        CommandFResetAll 	cmdfresetall;
+        CommandFutureList 	cmdflist;
+        CommandFutureAT 	cmdfutureat;
+        CommandSelectCount 	cmdftselect;
         
     public:
     
-        CoreModuleFutures() : cmdfuture(this), cmdtte(this), cmdexec(this), cmdfreset(this),
-                              cmdcancel(this), cmdfresetall(this),
-                              cmdflist(this), cmdfutureat(this), cmdftselect(this)
+        CoreModuleFutures() : cmdfuture(this), 
+                              cmdtte(this), 
+                              cmdexec(this), 
+                              cmdfreset(this),
+                              cmdcancel(this), 
+                              cmdfresetall(this),
+                              cmdflist(this), 
+                              cmdfutureat(this), 
+                              cmdftselect(this)
         {
         
         }

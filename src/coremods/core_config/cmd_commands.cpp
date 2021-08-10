@@ -16,8 +16,8 @@
 
 CommandSetConfig::CommandSetConfig(Module* Creator) : ServerTargetCommand(Creator, "SETCONFIG")    
 {
-        requires = 'm';
-        syntax = "[<servername>] <value> <key>";
+        flags   = 'm';
+        syntax 	= "[<servername>] <key> <value>";
 }
      
 COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)

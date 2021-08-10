@@ -18,7 +18,7 @@
 
 CommandListFlags::CommandListFlags(Module* parent) : Command(parent, "LISTFLAGS", 1, 1)
 {
-        requires = 'r';
+        flags = 'r';
         syntax = "<login>";
 }
 
@@ -28,15 +28,15 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, USER_MIMMAX_LENGTH);
+                user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
                 return FAILED;
         }
 
-        std::string flags = UserHelper::CheckFlags(newlogin);
+        const std::string& userflags = UserHelper::CheckFlags(newlogin);
 
-        if (!flags.empty())
+        if (!userflags.empty())
         {
-                for (auto it = flags.cbegin() ; it != flags.cend(); ++it) 
+                for (auto it = userflags.cbegin() ; it != userflags.cend(); ++it) 
                 {
                       if (*it == 'e')
                       {
@@ -64,7 +64,7 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
 {
-        requires = 'r';
+        flags  = 'r';
         syntax = "<login>";
 }
 
@@ -78,18 +78,18 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
         
-        std::string flags = UserHelper::CheckFlags(newlogin);
+        std::string userflags = UserHelper::CheckFlags(newlogin);
 
         /* Checks if user has flags. */
         
-        if (!flags.empty())
+        if (!userflags.empty())
         {
-                user->SendProtocol(BRLD_OK, flags);
+                user->SendProtocol(BRLD_OK, userflags);
                 return SUCCESS;
         }
         else 
         {
-                user->SendProtocol(ERR_INPUT2, ERR_LOGIN_NO_FLAGS, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
         }
         
         return FAILED;       
@@ -97,14 +97,14 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
 CommandDelFlags::CommandDelFlags(Module* parent) : Command(parent, "DELFLAG", 2, 2)
 {
-        requires = 'r';
+        flags  = 'r';
         syntax = "<login> <flags>";
 }
 
 COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        const std::string& flag = parameters[1];
+        const std::string& newlogin 	= 	parameters[0];
+        const std::string& flag 	= 	parameters[1];
         
         if (flag.empty())
         {
@@ -130,7 +130,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                return FAILED;
         }
         
-        bool exists = UserHelper::HasFlags(newlogin);
+        const bool exists = UserHelper::HasFlags(newlogin);
         
         if (!exists)
         {
@@ -160,7 +160,6 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                 creating.push_back(*it);
         }
         
-        
         Kernel->Logins->Sessions->AttachExternal(newlogin, creating);
         
         if (creating.empty())
@@ -184,18 +183,18 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
 CommandAddFlag::CommandAddFlag(Module* parent) : Command(parent, "ADDFLAG", 2, 2)
 {
-        requires = 'r';
-        syntax = "<login> <flags>";
+        flags  = 'r';
+        syntax = "<login> <flag>";
 }
 
 COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        const std::string& flag = parameters[1];
+        const std::string& newlogin 	= 	parameters[0];
+        const std::string& flag 	= 	parameters[1];
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_INPUT2, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;
         }
         

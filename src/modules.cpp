@@ -258,6 +258,7 @@ found_src:
 					goto swap_now;
 				}
 			}
+			
 			return true;
 		}
 
@@ -293,7 +294,9 @@ swap_now:
 		for (unsigned int j = my_pos; j != swap_pos; j += incrmnt)
 		{
 			if ((j + incrmnt > EventHandlers[app].size() - 1) || ((incrmnt == -1) && (j == 0)))
+			{
 				continue;
+			}
 
 			std::swap(EventHandlers[app][j], EventHandlers[app][j+incrmnt]);
 		}
@@ -425,6 +428,7 @@ namespace
 	struct PromiseUnload : public PromiseAction
 	{
 		Module* const mod;
+		
 		PromiseUnload(Module* m) : mod(m) 
 		{
 
@@ -433,8 +437,8 @@ namespace
 		void Call() 
 		{
 			Kernel->Modules->SmartUnload(mod);
-			Kernel->Reducer.Apply();
-			Kernel->Reducer.Add(this);
+			Kernel->Reducer->Apply();
+			Kernel->Reducer->Add(this);
 		}
 	};
 }
@@ -446,7 +450,7 @@ bool ModuleHandler::Unload(Module* mod)
 		return false;
 	}
 
-	Kernel->Atomics.AddAction(new PromiseUnload(mod));
+	Kernel->Atomics->AddAction(new PromiseUnload(mod));
 	return true;
 }
 
@@ -548,7 +552,6 @@ void ModuleHandler::LoadAll()
 	}
 }
 
-
 std::string& ModuleHandler::LastError()
 {
 	return last_known_error;
@@ -642,11 +645,11 @@ std::string ModuleHandler::FullModName(const std::string& name)
 	
 	FullModule.append(name);
 	
-	/* Appends ".dll" to module name. */
+	/* Appends ".so" to module name. */
 	
-	if (name.length() < 4 || name.compare(name.size() - 4, 4, ".dll") != 0)
+	if (name.length() < 4 || name.compare(name.size() - 3, 3, ".so") != 0)
 	{
-		FullModule.append(".dll");
+		FullModule.append(".so");
 	}
 	
 	return FullModule;

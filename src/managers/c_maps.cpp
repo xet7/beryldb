@@ -13,11 +13,8 @@
 
 #include "beryl.h"
 #include "extras.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
 #include "helpers.h"
+
 #include "managers/maps.h"
 
 MapData CMapsHelper::Set(const std::string& entry, const std::string& hesh, const std::string& value)

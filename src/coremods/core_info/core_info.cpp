@@ -28,21 +28,21 @@ class CoreModInfo : public Module
 {
   private:
   
-	CommandCommands cmdcommands;
-	CommandModules cmdmodules;
-	CommandCoreModules cmdcoremodules;
-	CommandTime cmdtime;
-	CommandVersion cmdversion;
-	CommandL cmdl;
-	CommandSyntax cmdsyntax;
-	CommandWhoami cmdwhoami;
-	CommandAgent cmdagent;
-	CommandEpoch cmdepoch;
-	CommandFirstOf cmdfirstof;
-	CommandLS cmdls;
-	CommandGS cmdgs;
-	CommandTotal cmdtotal;
-	CommandGetStartup cmdgetstartup;
+	CommandCommands 	cmdcommands;
+	CommandModules 		cmdmodules;
+	CommandCoreModules 	cmdcoremodules;
+	CommandTime 		cmdtime;
+	CommandVersion 		cmdversion;
+	CommandL 		cmdl;
+	CommandSyntax 		cmdsyntax;
+	CommandWhoami 		cmdwhoami;
+	CommandAgent 		cmdagent;
+	CommandEpoch 		cmdepoch;
+	CommandFirstOf 		cmdfirstof;
+	CommandLS 		cmdls;
+	CommandGS 		cmdgs;
+	CommandTotal 		cmdtotal;
+	CommandGetStartup 	cmdgetstartup;
 	
   public:
  
@@ -61,7 +61,6 @@ class CoreModInfo : public Module
 			cmdgs(this), 
 			cmdtotal(this),
 			cmdgetstartup(this)
-			
 	{
 
 	}

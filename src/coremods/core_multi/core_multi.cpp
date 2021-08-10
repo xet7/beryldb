@@ -18,13 +18,15 @@ class CoreModuleMulti : public Module
 {
     private:
         
-        CommandMulti cmdmulti;
-        CommandMRUN cmdmrun;
-        CommandMultiReset cmdmultireset;
+        CommandMulti 		cmdmulti;
+        CommandMRUN 		cmdmrun;
+        CommandMultiReset 	cmdmultireset;
         
     public:     
         
-        CoreModuleMulti() : cmdmulti(this), cmdmrun(this), cmdmultireset(this)
+        CoreModuleMulti() : cmdmulti(this), 
+                            cmdmrun(this), 
+                            cmdmultireset(this)
         {
 
         }
