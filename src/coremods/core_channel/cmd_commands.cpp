@@ -45,8 +45,9 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 			
 			Channel::JoinUser(false, user, parameters[0], false);
                         std::string login = user->login;
-
-                        if (Kernel->Sets->AsBool("chansync"))
+                        
+                        std::string setting = "chansync";
+                        if (Kernel->Sets->AsBool(setting))
                         {
                                 Kernel->Clients->Join(user, login, parameters[0]);
                         }
@@ -76,10 +77,11 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 
 			Channel::JoinUser(false, user, parameters[0]);
 			std::string login = user->login;
+			std::string setting = "chansync";
 			
 		        /* User will not sync chans */
 
-		        if (Kernel->Sets->AsBool("chansync"))
+		        if (Kernel->Sets->AsBool(setting))
 		        {
 	                        Kernel->Clients->Join(user, login, parameters[0]);
 			}
@@ -121,7 +123,9 @@ COMMAND_RESULT CommandPart::Handle(User* user, const Params& parameters)
 	{
 		/* Parts are  being sync */
 		
-                if (Kernel->Sets->AsBool("chansync"))
+		std::string setting = "chansync";
+		
+                if (Kernel->Sets->AsBool(setting))
                 {
                 	std::string login = user->login;
 	                Kernel->Clients->Part(user, login, parameters[0]);
@@ -134,4 +138,29 @@ COMMAND_RESULT CommandPart::Handle(User* user, const Params& parameters)
 RouteParams CommandPart::GetRouting(User* user, const Params& parameters)
 {
 	return (IS_LOCAL(user) ? ROUTE_LOCALONLY : ROUTE_BROADCAST);
+}
+
+CommandPartAll::CommandPartAll(Module* Creator) : Command(Creator, "PARTALL", 0, 0)
+{
+
+}
+        
+COMMAND_RESULT CommandPartAll::Handle(User* user, const Params& parameters)
+{
+               if (!user->chans.size())
+               {
+                      user->SendProtocol(ERR_INPUT, NO_CHANS); 
+                      return FAILED;
+               }
+               
+               user->SendProtocol(BRLD_OK, PROCESS_OK);
+
+               for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); )
+               {
+                        Channel* chan = (*i)->chan;
+                        ++i;
+                        chan->PartUser(user);
+               }
+
+               return SUCCESS;
 }

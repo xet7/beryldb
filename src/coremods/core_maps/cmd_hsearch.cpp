@@ -24,24 +24,23 @@ COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
+       std::shared_ptr<hfind_query> query = std::make_shared<hfind_query>();
+       Helpers::make_map(user, query, "", "", true);
 
-       MapsHelper::Find(user, key, offset, limit);
-
+       KeyHelper::RetroLimits(user, query, key, lms[1], lms[2], true);
        return SUCCESS;
 }
 
 CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 {
-         group = 'm';
+         group  = 'm';
          syntax = "<map> <offset> <limit>";
 }
 
@@ -54,16 +53,13 @@ COMMAND_RESULT CommandHList::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MapsHelper::List(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hlist_query>(), key, lms[1], lms[2]);
        return SUCCESS;
 }

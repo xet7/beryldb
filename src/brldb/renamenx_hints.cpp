@@ -59,7 +59,14 @@ void renamenx_query::Run()
 {
     if (this->identified == INT_KEY)
     {
-          this->Keys();
+          signed int ttl = this->IsExpiring();
+
+          if (ttl > 0)
+          {
+               this->id = ttl;
+               this->Keys();
+               return;
+          }
     } 
     else if (this->identified == INT_MAP)
     {

@@ -157,6 +157,26 @@ test		   | "value"
 
 Take a look at all Beryl's commands [here](https://docs.beryl.dev/using/commands/).
 
+## Coremodules and Modules
+
+Beryl is mainly divided into two components: core modules and modules. These
+can be found in these directories:
+
+* `src/coremodules`: Contains Beryl's core modules. These are required to
+  		     run the server properly.
+
+* `src/modules`: Contains optional modules. Beryl can funcion without these.
+
+Core modules include those components that are required in order to run basic
+functionalities. For instance, [core_keys](https://github.com/beryldb/beryldb/tree/unstable/src/coremods/core_keys)
+handles the SET and GET commands.
+
+In the other hand, modules are optional components developed either by the Beryl team
+or by third party developers. A good example of this can be [Hop](https://github.com/beryldb/beryldb/blob/unstable/src/modules/m_hop.cpp).
+Hop allows users to unsubscribe and subscribe to a channel in just one command. 
+
+Feel free to code and submit your own modules.
+
 ## Discussions
 
 In order to maintain a documentation that is easy to follow. We try to maintain documentation that is easy to

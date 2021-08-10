@@ -17,8 +17,6 @@
 #include "brldb/query.h"
 #include "brldb/vector_handler.h"
 
-#include "managers/maps.h"
-
 void vfind_query::Run()
 {
        unsigned int total_counter = 0;
@@ -514,7 +512,7 @@ void vget_query::Process()
         
         for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
-                 std::string item = *i;
+                 std::string item = "\"" + *i + "\"";
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 
@@ -727,45 +725,6 @@ void vdel_query::Run()
                this->Delete(this->dest);
        } 
 
-       this->SetOK();
-}
-
-void verase_from_query::Process()
-{
-       user->SendProtocol(BRLD_OK, PROCESS_OK);
-}
-
-void verase_from_query::Run()
-{
-       RocksData result = this->Get(this->dest);
-
-       if (!result.status.ok())
-       {
-               access_set(DBL_NOT_FOUND);
-               return;
-       }
-
-       std::shared_ptr<VectorHandler> handler = VectorHandler::Create(result.value);
-       handler->EraseFrom(convto_num<unsigned int>(this->value));
-
-       if (handler->Count() > 0)
-       {
-               if (this->Write(this->dest, handler->as_string()))
-               {
-                    this->SetOK();
-               }
-               else
-               {
-                    access_set(DBL_UNABLE_WRITE);
-               }
-               
-               return;
-       }
-       else
-       {             
-               this->Delete(this->dest);
-       }
-       
        this->SetOK();
 }
 

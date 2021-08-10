@@ -16,9 +16,9 @@
 
 CommandLogin::CommandLogin(Module* parent) : MultiCommand(parent, "LOGIN", 1, 1)
 {
-	pre_reg_ok = true;
-	no_hint_until_reg = true;
-	syntax = "<login>";
+	pre_reg_ok 		= true;
+	no_hint_until_reg 	= true;
+	syntax 			= "<login>";
 }
 
 COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& parameters)
@@ -83,8 +83,8 @@ COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& paramete
 
 CommandAuth::CommandAuth(Module* parent) : MultiCommand(parent, "AUTH", 1, 1)
 {
-	pre_reg_ok = true;
-	syntax = "<password>";
+	pre_reg_ok 	= true;
+	syntax 		= "<password>";
 }
 
 COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameters)
@@ -109,8 +109,8 @@ COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameter
 
 CommandILogin::CommandILogin(Module* parent) : Command(parent, "ILOGIN", 3, 3)
 {
-	pre_reg_ok = true;
-	syntax = "<agent> <auth> <login>";
+	pre_reg_ok 	= true;
+	syntax 		= "<agent> <auth> <login>";
 }
 
 COMMAND_RESULT CommandILogin::Handle(User* user, const Params& parameters)
@@ -152,11 +152,8 @@ CommandExit::CommandExit(Module* parent) : Command(parent, "EXIT", 0)
 
 COMMAND_RESULT CommandExit::Handle(User* user, const Params& parameters)
 {
-        const std::string& exitmsg = "Exitting.";
-
         user->SendProtocol(BRLD_QUITTING);
-        Kernel->Clients->Disconnect(user, exitmsg);
-
+        Kernel->Clients->Disconnect(user);
         return SUCCESS;
 }
 

@@ -179,7 +179,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 		
 			if (user->registered == REG_OK)
 			{
-				user->SendProtocol(ERR_CMD_NOFND, command, CMD_NOT_FOUND.c_str());
+				user->SendProtocol(ERR_INPUT, NOT_FOUND);
 			}
 
 			Kernel->Stats->Unknown++;

@@ -128,7 +128,9 @@ class ModuleCoreDB : public Module
                  
                  /* Will only insert chans to the table if AutoJoin is enabled. */
                     
-                 if (!Kernel->Sets->AsBool("autojoin"))
+                 std::string setting = "autojoin";
+                 
+                 if (!Kernel->Sets->AsBool(setting))
                  {
                       return;
                  }
@@ -141,7 +143,9 @@ class ModuleCoreDB : public Module
 
         void OnUserPart(Subscription* memb, DiscardList& excepts)
         {		
-                 if (!Kernel->Sets->AsBool("autojoin"))
+                 std::string setting = "autojoin";
+
+                 if (!Kernel->Sets->AsBool(setting))
                  {
                       return;
                  }
@@ -178,7 +182,9 @@ class ModuleCoreDB : public Module
               
               /* User will not join chans */
               
-              if (!Kernel->Sets->AsBool("autojoin"))
+              std::string setting = "autojoin";
+
+              if (!Kernel->Sets->AsBool(setting))
               {
                     return;
               }

@@ -87,6 +87,6 @@ COMMAND_RESULT CommandRestart::Handle(User* user, const Params& parameters)
         
         /* Restarts in next cycle. */
         
-        Kernel->Atomics.AddAction(new PromiseRestart());
+        Kernel->Atomics->AddAction(new PromiseRestart());
         return FAILED;
 }

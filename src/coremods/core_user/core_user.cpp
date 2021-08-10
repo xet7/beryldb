@@ -95,20 +95,19 @@ void MessageWrapper::ConfigReading(const char* prefixname, const char* suffixnam
 
 class CoreModUser : public Module
 {
- private:
+  private:
  
-	CommandILogin cmdilogin;
-	CommandLogin cmdlogin;
-	CommandPing cmdping;
-	CommandPong cmdpong;
-	CommandExit cmdexit;
-	CommandAgent cmdagent;
-	CommandAuth cmdauth;
+	CommandILogin 		cmdilogin;
+	CommandLogin 		cmdlogin;
+	CommandPing 		cmdping;
+	CommandPong 		cmdpong;
+	CommandExit 		cmdexit;
+	CommandAgent 		cmdagent;
+	CommandAuth 		cmdauth;
 
-
- public:
+  public:
  
-	CoreModUser() : cmdilogin(this)
+	CoreModUser() :   cmdilogin(this)
 	                , cmdlogin(this)
 			, cmdping(this)
 			, cmdpong(this)

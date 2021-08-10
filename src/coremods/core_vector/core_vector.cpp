@@ -18,28 +18,27 @@ class CoreModuleVector : public Module
 {
     private:
     
-        CommandVPush cmdvpush;
-        CommandVExist cmdvexist;
-        CommandVCount cmdvcount;
-        CommandVPos cmdvpos;
-        CommandVGet cmdvget;
-        CommandVResize cmdvresize;
-        CommandVKeys cmdvkeys;
-        CommandVPopBack cmdvpopback;
-        CommandVPopFront cmdvpopfront;
-        CommandVDel cmdvdel;
-        CommandVEraseFrom cmdverasefrom;
-        CommandVReverse cmdvreverse;
-        CommandVRepeats cmdvrepeats;
-        CommandVSort cmdvsort;
-        CommandVAvg cmdavg;
-        CommandVHigh cmdvhigh;
-        CommandVLow cmdvlow;
-        CommandVSum cmdvsum;
-        CommandVPushNX cmdvpushnx;
-        CommandVFind cmdvfind;
-        CommandVFront cmdvfront;
-        CommandVBack cmdvback;
+        CommandVPush 		cmdvpush;
+        CommandVExist 		cmdvexist;
+        CommandVCount 		cmdvcount;
+        CommandVPos 		cmdvpos;
+        CommandVGet 		cmdvget;
+        CommandVResize 		cmdvresize;
+        CommandVKeys 		cmdvkeys;
+        CommandVPopBack 	cmdvpopback;
+        CommandVPopFront 	cmdvpopfront;
+        CommandVDel 		cmdvdel;
+        CommandVReverse 	cmdvreverse;
+        CommandVRepeats 	cmdvrepeats;
+        CommandVSort 		cmdvsort;
+        CommandVAvg 		cmdavg;
+        CommandVHigh 		cmdvhigh;
+        CommandVLow 		cmdvlow;
+        CommandVSum 		cmdvsum;
+        CommandVPushNX 		cmdvpushnx;
+        CommandVFind 		cmdvfind;
+        CommandVFront 		cmdvfront;
+        CommandVBack 		cmdvback;
         
     public:	
         
@@ -53,7 +52,6 @@ class CoreModuleVector : public Module
                              cmdvpopback(this),
                              cmdvpopfront(this),
                              cmdvdel(this),
-                             cmdverasefrom(this),
                              cmdvreverse(this),
                              cmdvrepeats(this),
                              cmdvsort(this),

@@ -12,15 +12,12 @@
  */
 
 #include "beryl.h"
-#include "brldb/dbmanager.h"
-#include "brldb/database.h"
+#include "cstruct.h"
 #include "brldb/query.h"
 #include "brldb/dbnumeric.h"
 #include "managers/databases.h"
-#include "managers/lists.h"
-#include "managers/settings.h"
 #include "managers/maps.h"
-#include "cstruct.h"
+#include "managers/settings.h"
 
 bool STHelper::Set(const std::string& type, const std::string& key, const std::string& value)
 {

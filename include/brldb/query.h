@@ -1405,21 +1405,6 @@ class ExportAPI vpop_back_query  : public QueryBase
         void Process();
 };
 
-class ExportAPI verase_from_query  : public QueryBase
-{
-    public:
-
-        verase_from_query() 
-        {
-                this->type = QUERY_TYPE_DELETE;
-                this->base_request = INT_VECTOR;
-        }
-
-        void Run();
-
-        void Process();
-};
-
 class ExportAPI vsort_query  : public QueryBase
 {
     public:

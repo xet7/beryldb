@@ -154,9 +154,8 @@ CommandLogins::CommandLogins(Module* parent) : Command(parent, "LOGINS", 1, 1)
 
 COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 {
-        const std::string& loginid = parameters[0];
-        
-        UserVector logins = Kernel->Clients->FindLogin(loginid);
+        const std::string& loginid 	= parameters[0];
+        const UserVector& logins 	= Kernel->Clients->FindLogin(loginid);
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", "Login", "IP", "Agent", "Logged"));
@@ -177,7 +176,6 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
         Dispatcher::JustAPI(user, BRLD_END_LIST);
 	return SUCCESS;
 }
-
 
 CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 0, 1)
 {

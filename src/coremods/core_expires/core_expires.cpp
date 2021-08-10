@@ -18,24 +18,33 @@ class CoreModuleExpires : public Module
 {
     private:
     
-        CommandExpire      cmdexpire;
-        CommandTTL         cmdttl;
-        CommandSetex       cmdsetex;
-        CommandPersist     cmdpersist;
-        CommandExpireLIST cmdexplist;
-        CommandReset       cmdreset;
-        CommandExpireAT    cmdexpireat;
-        CommandSelectReset cmdsreset;
-        CommandSelectCount cmdselectcount;
-        CommandDBEReset cmddbreset;
-        CommandTTLAT cmdttlat;
-        CommandExpireFIND cmdexpfind;
+        CommandExpire      	cmdexpire;
+        CommandTTL         	cmdttl;
+        CommandSetex       	cmdsetex;
+        CommandPersist     	cmdpersist;
+        CommandExpireLIST  	cmdexplist;
+        CommandReset       	cmdreset;
+        CommandExpireAT    	cmdexpireat;
+        CommandSelectReset 	cmdsreset;
+        CommandSelectCount 	cmdselectcount;
+        CommandDBEReset    	cmddbreset;
+        CommandTTLAT       	cmdttlat;
+        CommandExpireFIND  	cmdexpfind;
    
     public:     
         
-        CoreModuleExpires() : cmdexpire(this), cmdttl(this), cmdsetex(this), cmdpersist(this),
-                              cmdexplist(this), cmdreset(this), cmdexpireat(this), cmdsreset(this),
-                              cmdselectcount(this), cmddbreset(this), cmdttlat(this), cmdexpfind(this)
+        CoreModuleExpires() : cmdexpire(this), 
+                              cmdttl(this), 
+                              cmdsetex(this), 
+                              cmdpersist(this),
+                              cmdexplist(this), 
+                              cmdreset(this), 
+                              cmdexpireat(this), 
+                              cmdsreset(this),
+                              cmdselectcount(this), 
+                              cmddbreset(this), 
+                              cmdttlat(this), 
+                              cmdexpfind(this)
         {
         
         }

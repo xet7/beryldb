@@ -18,14 +18,16 @@ class CoreModuleMonitor : public Module
 {
     private:
     
-        CommandMonitor cmdmonitor;
-        CommandStopMonitor cmdstopmonitor;
-        CommandMonitorReset cmdmonitoreset;
-        CommandMonitorList cmdmonitorlist;
+        CommandMonitor 		cmdmonitor;
+        CommandStopMonitor 	cmdstopmonitor;
+        CommandMonitorReset 	cmdmonitoreset;
+        CommandMonitorList 	cmdmonitorlist;
 
     public:     
         
-        CoreModuleMonitor() : cmdmonitor(this), cmdstopmonitor(this), cmdmonitoreset(this),
+        CoreModuleMonitor() : cmdmonitor(this), 
+                              cmdstopmonitor(this), 
+                              cmdmonitoreset(this),
                               cmdmonitorlist(this)
 
         {

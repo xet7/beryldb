@@ -22,24 +22,21 @@ CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 
 COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
+       const std::string& kmap 		= 	parameters[0];
 
        if (!CheckKey(user, kmap))
        {
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MMapsHelper::Get(user, kmap, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<mget_query>(), kmap, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -58,17 +55,20 @@ COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MMapsHelper::Count(user, kmap);
+       std::shared_ptr<mget_query> query = std::make_shared<mget_query>();
+       query->flags = QUERY_FLAGS_COUNT;
+
+       KeyHelper::Retro(user, query, kmap);
        return SUCCESS;
 }
 
-CommandMSet::CommandMSet(Module* Creator) : Command(Creator, "MSET", 3, 3)
+CommandMPush::CommandMPush(Module* Creator) : Command(Creator, "MPUSH", 3, 3)
 {
          group = 'x';
          syntax = "<map> <key> \"value\"";
 }
 
-COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
+COMMAND_RESULT CommandMPush::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap  	= 	parameters[0];
        const std::string& key   	= 	parameters[1];
@@ -84,31 +84,53 @@ COMMAND_RESULT CommandMSet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       MMapsHelper::Set(user, kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<mset_query>(), kmap, key, value);
+       return SUCCESS;
+}
+
+CommandMPushNX::CommandMPushNX(Module* Creator) : Command(Creator, "MPUSHNX", 3, 3)
+{
+         group = 'v';
+         syntax = "<map> <key> \"value\"";
+}
+
+COMMAND_RESULT CommandMPushNX::Handle(User* user, const Params& parameters)
+{  
+       const std::string& kmap          =       parameters[0];
+       const std::string& key           =       parameters[1];
+       const std::string& value         =       parameters.back();
+
+       if (!CheckKey(user, key) || !CheckKey(user, kmap))
+       {
+            return FAILED;
+       }
+
+       if (!CheckFormat(user, value))
+       {
+            return FAILED;
+       }
+
+       KeyHelper::SimpleHesh(user, std::make_shared<setnx_query>(), kmap, key, value);
        return SUCCESS;
 }
 
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
-         group = 'x';
+         group  = 'x';
          syntax = "<map> <limit> <offset>";
 }
 
 COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::string& kmap 		  = 	parameters[0];
+       const std::vector<signed int>& lms = 	GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MMapsHelper::Keys(user, kmap, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<mkeys_query>(), kmap, lms[1], lms[2], true);
        return SUCCESS;
 }
 
@@ -128,7 +150,7 @@ COMMAND_RESULT CommandMDel::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MMapsHelper::Del(user, kmap, key);
+       KeyHelper::Simple(user, std::make_shared<mdel_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -148,22 +170,19 @@ COMMAND_RESULT CommandMSeek::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       if (!CheckFormat(user, hesh))
+       {
+            return FAILED;
+       }
+
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       if (!CheckFormat(user, hesh))
-       {
-            return FAILED;
-       }
-
-       MMapsHelper::Seek(user, mname, hesh, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<mseek_query>(), mname, lms[1], lms[2], true);
        return SUCCESS;
 }
 
@@ -183,7 +202,7 @@ COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       MMapsHelper::Repeats(user, kmap, key);
+       KeyHelper::Simple(user, std::make_shared<mrepeats_query>(), kmap, key);
        return SUCCESS;
 }
 
@@ -195,24 +214,21 @@ CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 
 COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
+       const std::string& kmap 		   =   parameters[0];
 
        if (!CheckKey(user, kmap))
        {
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms  =   GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MMapsHelper::Vals(user, kmap, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<mvals_query>(), kmap, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -231,49 +247,20 @@ COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MMapsHelper::GetAll(user, kmap, offset, limit);
-       return SUCCESS;
-}
-
-CommandMSetNX::CommandMSetNX(Module* Creator) : Command(Creator, "MSETNX", 3, 3)
-{
-         group = 'v';
-         syntax = "<map> <key> \"value\"";
-}
-
-COMMAND_RESULT CommandMSetNX::Handle(User* user, const Params& parameters)
-{  
-       const std::string& kmap          =       parameters[0];
-       const std::string& key           =       parameters[1];
-       const std::string& value         =       parameters.back();
-
-       if (!CheckKey(user, key) || !CheckKey(user, kmap))
-       {
-            return FAILED;
-       }
-
-       if (!CheckFormat(user, value))
-       {
-            return FAILED;
-       }
-
-       MMapsHelper::SetNX(user, kmap, key, value);
+       KeyHelper::RetroLimits(user, std::make_shared<mgetall_query>(), kmap, lms[1], lms[2]);
        return SUCCESS;
 }
 
 CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 {
-         group = 'x';
+         group  = 'x';
          syntax = "<map> <key> <limit> <offset>";
 }
 
@@ -287,16 +274,16 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       MMapsHelper::ITER(user, kmap, key, offset, limit);
+       std::shared_ptr<miter_query> query = std::make_shared<miter_query>();
+       query->value = key;
+       
+       KeyHelper::RetroLimits(user, query, kmap, lms[1], lms[2]);
        return SUCCESS;
 }

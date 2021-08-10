@@ -18,26 +18,23 @@ class CoreModChannel : public Module
 {
    private:
    
-	CommandJoin cmdjoin;
-	CommandSlist cmdslist;
-        CommandPart cmdpart;
-        CommandMyChans cmdmychans;
-        CommandChans cmdchans;
-
+	CommandJoin 		cmdjoin;
+	CommandSlist 		cmdslist;
+        CommandPart 		cmdpart;
+        CommandMyChans 		cmdmychans;
+        CommandChans 		cmdchans;
+        CommandPartAll		cmdpartall;
+        
   public:
 
 	CoreModChannel() : cmdjoin(this), 
 			   cmdslist(this), 
 			   cmdpart(this),
                            cmdmychans(this), 
-                           cmdchans(this)
+                           cmdchans(this),
+                           cmdpartall(this)
 	{
 
-	}
-
-	void OnInstaceReady(std::map<std::string, std::string>& tokens) 
-	{
-		
 	}
 
 	void OnPostJoin(Subscription* memb) 

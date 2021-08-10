@@ -19,7 +19,17 @@
 #include "channelmanager.h"
 #include "modules/message.h"
 
-/* Subscribes an user to a channel. */
+/* 
+ * Subscribes an user to a channel. 
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel(s) to join.
+ * 
+ * @protocol:
+ *
+ *         · enum       : PROCESS_ALREADY, OK or ERROR.
+ */ 
 
 class CommandJoin : public MultiCommand
 {
@@ -27,18 +37,29 @@ class CommandJoin : public MultiCommand
 	
 	CommandJoin(Module* parent);
 
-	COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters) ;
+	COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters);
 };
 
-/* Returns list containing all users in a given channel. */
+/* 
+ * Returns list containing all users in a given channel.
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel(s) to slist.
+ * 
+ * @protocol:
+ *
+ *         · enum	: NULL.
+ *         · vector     : Clients subscribed to a channel.
+ */ 
 
 class CommandSlist : public MultiCommand
 {
- private:
+  private:
  
 	Events::ModuleEventProvider namesevprov;
 
- public:
+  public:
 	
 	CommandSlist(Module* parent);
 
@@ -58,23 +79,49 @@ class CommandPart : public Command
         CommandPart(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
-        RouteParams GetRouting(User* user, const Params& parameters) ;
+        RouteParams GetRouting(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns a list of channels where you are subscribed.
+ * 
+ * @protocol:
+ *
+ *         · list      : My channels.
+ */ 
+ 
 class CommandMyChans : public Command
 {
- public:
+  public:
 
         CommandMyChans(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+
 class CommandChans : public Command
 {
  public:
 
         CommandChans(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Unsubscribes from all channels in one command.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NO_CHANS or OK.
+ */ 
+
+class CommandPartAll : public Command
+{
+   public:
+
+        CommandPartAll(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };

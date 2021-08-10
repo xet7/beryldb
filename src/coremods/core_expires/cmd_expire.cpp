@@ -137,7 +137,7 @@ CommandReset::CommandReset(Module* Creator) : Command(Creator, "RESET", 0)
 
 COMMAND_RESULT CommandReset::Handle(User* user, const Params& parameters)
 {       
-         unsigned int counter = Kernel->Store->Expires->CountAll();
+         const unsigned int counter = Kernel->Store->Expires->CountAll();
 
          /* Clears all expires pending. */
          

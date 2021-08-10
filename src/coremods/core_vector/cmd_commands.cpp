@@ -29,7 +29,7 @@ COMMAND_RESULT CommandVBack::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::Back(user, key);
+       KeyHelper::Retro(user, std::make_shared<vback_query>(), key);
        return SUCCESS;  
 }
 
@@ -48,6 +48,6 @@ COMMAND_RESULT CommandVFront::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       VectorHelper::Front(user, key);
+       KeyHelper::Retro(user, std::make_shared<vfront_query>(), key);
        return SUCCESS;  
 }

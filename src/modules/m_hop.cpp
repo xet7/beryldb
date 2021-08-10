@@ -14,11 +14,11 @@
 #include "beryl.h"
 #include "channelmanager.h"
 
-class CommandCycle : public MultiCommand
+class CommandHop : public MultiCommand
 {
   public:
   
-        CommandCycle(Module* Creator) : MultiCommand(Creator, "CYCLE", 1)
+        CommandHop(Module* Creator) : MultiCommand(Creator, "HOP", 1)
         {
                 syntax = "<channel>";
         }
@@ -53,24 +53,24 @@ class CommandCycle : public MultiCommand
         }
 };
 
-class ModuleCycle : public Module
+class ModuleHop : public Module
 {
   private:
   
-        CommandCycle cmd;
+        CommandHop  cmd;
 
   public:
  
-        ModuleCycle() : cmd(this)
+        ModuleHop() : cmd(this)
         {
         
         }
 
         Version GetDescription()
         {
-                return Version("Provides CYCLE command.", VF_BERYLDB|VF_OPTCOMMON);
+                return Version("Provides HOP command.", VF_BERYLDB|VF_OPTCOMMON);
         }
 };
 
-MODULE_LOAD(ModuleCycle)
+MODULE_LOAD(ModuleHop)
         

@@ -15,13 +15,21 @@
 #include "engine.h"
 #include "maker.h"
 
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-
 #include "managers/keys.h"
 #include "managers/globals.h"
-#include "managers/databases.h"
+
+/* 
+ * Transfers a given key to another database.
+ * 
+ * @parameters:
+ *
+ *         · string	: Key to transfer.
+ *         · string	: Database destination.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK, FALSE, or ERROR.
+ */ 
 
 class CommandTransfer : public Command 
 {
@@ -32,6 +40,18 @@ class CommandTransfer : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Deletes a key from the server.
+ * 
+ * @parameters:
+ *
+ *         · string   : key to remove.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ */ 
+ 
 class CommandDel : public Command 
 {
     public: 
@@ -40,6 +60,19 @@ class CommandDel : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Moves a key to another select.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to move.
+ *         · int      : Destination select.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ */ 
 
 class CommandMove : public Command 
 {
@@ -50,6 +83,19 @@ class CommandMove : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Renames a key. If key is a simple string and has an expire, it will be
+ * changed to the new name.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to rename.
+ *         · string   : New key name.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
 
 class CommandRename : public Command 
 {
@@ -60,44 +106,18 @@ class CommandRename : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandCopy : public Command 
-{
-    public: 
-
-         CommandCopy(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-
-/* Checks if a given key exists. */
-
-class CommandExists : public Command 
-{
-    public: 
-
-        CommandExists(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandClone : public Command 
-{
-    public: 
-
-        CommandClone(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
-class CommandType : public Command 
-{
-    public: 
-
-        CommandType(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
+/* 
+ * Renames a key, only if dest key has not been defined.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to rename.
+ *         · string   : New key name.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, ERROR or OK.
+ */
 
 class CommandRenameNX : public Command 
 {
@@ -108,7 +128,110 @@ class CommandRenameNX : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Copies a key.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to copy.
+ *         · string   : Destination copy name.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ */ 
 
+class CommandCopy : public Command 
+{
+    public: 
+
+         CommandCopy(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Checks whether a given key exists.
+ * 
+ * @parameters:
+ *
+ *         · string   : key to check.
+ * 
+ * @protocol:
+ *
+ *         · enum     : 1 or 0.
+ */ 
+
+class CommandExists : public Command 
+{
+    public: 
+
+        CommandExists(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Clones (copies a key into another select) a given key.
+ * 
+ * @parameters:
+ *
+ *         · string   : key to clone.
+ *         · int      : Select to clone key into.
+ * 
+ * @protocol:
+ *
+ *         · enum     : NULL, ERROR or ok.
+ */ 
+
+class CommandClone : public Command 
+{
+    public: 
+
+        CommandClone(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Checks the data type for a given key. Possible key types are:
+ * INT_LIST, INT_KEY, INT_GEO, INT_MAP, INT_MMAP, INT_VECTOR, 
+ * INT_EXPIRE, and INT_FUTURE.
+ * 
+ * @parameters:
+ *
+ *         · string   : Keys to check.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL or ERROR.
+ *         · string   : Key type.
+ */
+
+class CommandType : public Command 
+{
+    public: 
+
+        CommandType(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Looks for differences in two keys. Note that keys must be of the same
+ * type in order to run this command.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to diff.
+ *         · string   : Comparing key.
+ * 
+ * @protocol:
+ *
+ *         · enum     : NULL, or ERROR.
+ *         · type     : Custom return type, depending on comparing keys.
+ */
+ 
 class CommandDiff : public Command 
 {
     public: 
@@ -118,6 +241,19 @@ class CommandDiff : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Checks whether given keys, as separated by spaces, exist in 
+ * the server.
+ * 
+ * @parameters:
+ *
+ *         · string   : Keys to check.
+ * 
+ * @protocol:
+ *
+ *         · int      : counter.
+ */
+
 class CommandTouch : public Command 
 {
     public: 
@@ -126,6 +262,19 @@ class CommandTouch : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Checks whether given keys, as separated by spaces, do not exist in 
+ * the server.
+ * 
+ * @parameters:
+ *
+ *         · string   : Keys to check.
+ * 
+ * @protocol:
+ *
+ *         · int      : counter.
+ */
 
 
 class CommandNTouch : public Command 

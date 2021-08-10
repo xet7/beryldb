@@ -233,7 +233,6 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);
          return SUCCESS;
-
 }
 
 CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "FTSELECT", 0, 1)

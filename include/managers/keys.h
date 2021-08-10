@@ -19,64 +19,65 @@ class ExportAPI KeyHelper
 {
     public:
 
-        static void Modify(User* user, const std::string& entry, const STR_FUNCTION& fnc);
+        static void SimpleType(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, QUERY_TYPE type);
 
-        static void Insert(User* user, const std::string& entry, const std::string& value, signed int id);
+        static void HeshVal(User* user, std::shared_ptr<QueryBase> query, const std::string& key, const std::string& val1, const std::string& val2);
 
-        static void WDelete(User* user, const std::string& key);
+        static void AddPub(User* user, std::shared_ptr<QueryBase> query, const std::string& chan, const std::string& key, const std::string& val1, const std::string& val2);
 
-        static void Rename(User* user, const std::string& entry, const std::string& value);
+        static void HeshRetro(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, const std::string& value);
 
-        static void Copy(User* user, const std::string& entry, const std::string& value);
+        /* 
+         * Adds a query to a map.
+         * 
+         * @parameters:
+	 *
+         *         · query: Query type to create.
+         *         · kmap: Maps' key.
+         *         · key: The key of this map.
+         *         · value: Adding value.
+         */            
+         
+        static void SimpleHesh(User* user, std::shared_ptr<QueryBase> query, const std::string& kmap, const std::string& entry, const std::string& value);
 
-        static void GetSet(User* user, const std::string& entry, const std::string& value);
+	static void Quick(User* user, std::shared_ptr<QueryBase> query);
 
-        static void Count(User* user, const std::string& key);
+        static void RetroLimits(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, signed int offset, signed int limit, bool allow = false);
 
-        static void Strlen(User* user, const std::string& key);
-        
-        static void GetDel(User* user, const std::string& key);
-        
-        static void Exists(User* user, const std::string& key);
+        /* 
+         * Posts a simple job to the thread manager.
+         * 
+         * @parameters:
+	 *
+	 *         · query: Query type to create.
+	 *         · entry: Key to submit.
+	 *         · value: Adding value.
+         */    
+         
+        static void Simple(User* user, std::shared_ptr<QueryBase> query,  const std::string& entry, const std::string& value, bool do_stripe = true);
 
-        static void Search(User* user, const std::string& key, signed int offset, signed int limit);
+        static void IDRetro(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, const std::string& seconds);
 
-        static void Keys(User* user, const std::string& key, signed int offset, signed int limit);
+        static void Retro(User* user, std::shared_ptr<QueryBase> query,  const std::string& entry, bool allow = false);
 
-        static void Count(User* user, std::shared_ptr<Database> database, const std::string& where, const std::string& key, const std::string& customreply = "");
+        static void SimpleRetro(User* user, std::shared_ptr<QueryBase> query,  const std::string& entry, const std::string& value);
 
-        static void Get(User* user, const std::string& key);
-
+        /* 
+         * Posts an operation to the job manager.
+         * 
+         * @parameters:
+	 *
+	 *         · key: Key in which to run a given operation.
+	 *         · OP_TYPE: Type of job to run.
+	 *         · Operator: This is an optional argument. An operator may be, for instance
+	 *                     a second number to run an operation. The operation is required
+	 *                     when running jobs such as INCRBY, where a value is required.
+	 * 
+         * @return:
+ 	 *
+         *         · 
+         */    
         static void Operation(User* user, const std::string& key, OP_TYPE type, const std::string& oper = "");
-    
-        static void Delete(User* user, const std::string& key);
-
-        static void Set(User* user, const std::string& entry, const std::string& value);
-
-        static void SetNX(User* user, const std::string& entry, const std::string& value);
-
-        static void GetSubstr(User* user, const std::string& key, signed int offset, signed int limit);
-        
-        static void Append(User* user, const std::string& key, const std::string& value);
-
-        static void SetTX(User* user, const std::string& entry, const std::string& value);
-        
-        static void GetOccurs(User* user, const std::string& key, const std::string& value);
-
-        static void Random(User* user);
-
-        static void GetExp(User* user, const std::string& entry, const std::string& seconds);
-
-        static void Alpha(User* user, const std::string& entry);
-        
-        static void IsNum(User* user, const std::string& entry);
-        
-        static void GetPersist(User* user, const std::string& key);
-
-        static void IsBool(User* user, const std::string& entry);
-
-        static void AsBool(User* user, const std::string& entry);
-        
-        static void IsMatch(User* user, const std::string& entry, const std::string& value);
-        
 };
+
+

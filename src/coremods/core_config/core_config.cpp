@@ -29,13 +29,15 @@ class CoreModConfig : public Module
 {
  private:
 
-        CommandGetConfig cmdgetconfig;
-        CommandSetConfig cmdsetconfig;
-        CommandDefaults cmddefaults;
+        CommandGetConfig 	cmdgetconfig;
+        CommandSetConfig 	cmdsetconfig;
+        CommandDefaults 	cmddefaults;
 
  public:
 
-        CoreModConfig() :  cmdgetconfig(this), cmdsetconfig(this), cmddefaults(this)
+        CoreModConfig() :  cmdgetconfig(this), 
+                           cmdsetconfig(this), 
+                           cmddefaults(this)
         {
 
         }

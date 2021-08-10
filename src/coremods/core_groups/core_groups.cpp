@@ -18,23 +18,30 @@ class CoreModuleGroups : public Module
 {
     private:
     
-        CommandGroupAdd cmdgroupadd;
-        CommandGroups cmdgroups;
-        CommandDelGroup cmddelgroup;
-        CommandGFlags cmdgflags;
-        CommandMyGroups cmdmygroups;
-        CommandAssign cmdassign;
-        CommandGList cmdglist;
-        CommandGReset cmdgreset;
-        CommandUnAssign cmddel;
-        CommandGShow cmdgshow;
-        CommandFlagUpdate cmdflagupdate;
+        CommandGroupAdd 	cmdgroupadd;
+        CommandGroups 		cmdgroups;
+        CommandDelGroup 	cmddelgroup;
+        CommandGFlags 		cmdgflags;
+        CommandMyGroups 	cmdmygroups;
+        CommandAssign 		cmdassign;
+        CommandGList 		cmdglist;
+        CommandGReset 		cmdgreset;
+        CommandUnAssign 	cmddel;
+        CommandGShow 		cmdgshow;
+        CommandFlagUpdate 	cmdflagupdate;
         
     public:     
         
-        CoreModuleGroups() : cmdgroupadd(this), cmdgroups(this), cmddelgroup(this), cmdgflags(this),
-                             cmdmygroups(this), cmdassign(this), cmdglist(this),
-                             cmdgreset(this), cmddel(this), cmdgshow(this),
+        CoreModuleGroups() : cmdgroupadd(this), 
+                             cmdgroups(this), 
+                             cmddelgroup(this), 
+                             cmdgflags(this),
+                             cmdmygroups(this), 
+                             cmdassign(this), 
+                             cmdglist(this),
+                             cmdgreset(this), 
+                             cmddel(this), 
+                             cmdgshow(this),
                              cmdflagupdate(this)
         {
         

@@ -32,7 +32,7 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
 
-        std::string userflags = UserHelper::CheckFlags(newlogin);
+        const std::string& userflags = UserHelper::CheckFlags(newlogin);
 
         if (!userflags.empty())
         {
@@ -64,7 +64,7 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
 {
-        flags = 'r';
+        flags  = 'r';
         syntax = "<login>";
 }
 
@@ -97,14 +97,14 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
 CommandDelFlags::CommandDelFlags(Module* parent) : Command(parent, "DELFLAG", 2, 2)
 {
-        flags = 'r';
+        flags  = 'r';
         syntax = "<login> <flags>";
 }
 
 COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        const std::string& flag = parameters[1];
+        const std::string& newlogin 	= 	parameters[0];
+        const std::string& flag 	= 	parameters[1];
         
         if (flag.empty())
         {
@@ -130,7 +130,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                return FAILED;
         }
         
-        bool exists = UserHelper::HasFlags(newlogin);
+        const bool exists = UserHelper::HasFlags(newlogin);
         
         if (!exists)
         {
@@ -160,7 +160,6 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                 creating.push_back(*it);
         }
         
-        
         Kernel->Logins->Sessions->AttachExternal(newlogin, creating);
         
         if (creating.empty())
@@ -184,18 +183,18 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
 CommandAddFlag::CommandAddFlag(Module* parent) : Command(parent, "ADDFLAG", 2, 2)
 {
-        flags = 'r';
-        syntax = "<login> <flags>";
+        flags  = 'r';
+        syntax = "<login> <flag>";
 }
 
 COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        const std::string& flag = parameters[1];
+        const std::string& newlogin 	= 	parameters[0];
+        const std::string& flag 	= 	parameters[1];
         
         if (newlogin == "root")
         {
-                user->SendProtocol(ERR_INPUT2, ERR_PROTECTED_LOGIN, PROCESS_ERROR);
+                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;
         }
         

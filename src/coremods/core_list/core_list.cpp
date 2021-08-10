@@ -18,29 +18,29 @@ class CoreModuleList : public Module
 {
     private:
     
-        CommandLPush cmdlpush;
-        CommandLPopFront cmdlpopfront;
-        CommandLPopBack cmdlpopback;
-        CommandPopAll cmdlpopall;
-        CommandLGet cmdlget;
-        CommandLExist cmdlexist;
-        CommandLCount cmdlcount;
-        CommandLPos cmdlpos;
-        CommandLKeys cmdlkeys;
-        CommandLFind cmdlfind;
-        CommandLReverse cmdlreverse;
-        CommandLResize cmdlresize;
-        CommandLSort cmdlsort;
-        CommandLDel cmdldel;
-        CommandLRepeats cmdlrepeats;
-        CommandLRop cmdlrop;
-        CommandFRop cmdfrop;
-        CommandLBack cmdlback;
-        CommandLFront cmdlfront;
-        CommandLPushNX cmdlpushnx;
-        CommandLAvg cmdlavg;
-        CommandLHigh cmdlhigh;
-        CommandLLow cmdllow;
+        CommandLPush 		cmdlpush;
+        CommandLPopFront 	cmdlpopfront;
+        CommandLPopBack 	cmdlpopback;
+        CommandPopAll 		cmdlpopall;
+        CommandLGet 		cmdlget;
+        CommandLExist 		cmdlexist;
+        CommandLCount 		cmdlcount;
+        CommandLPos 		cmdlpos;
+        CommandLKeys 		cmdlkeys;
+        CommandLFind 		cmdlfind;
+        CommandLReverse 	cmdlreverse;
+        CommandLResize 		cmdlresize;
+        CommandLSort 		cmdlsort;
+        CommandLDel 		cmdldel;
+        CommandLRepeats 	cmdlrepeats;
+        CommandLRop 		cmdlrop;
+        CommandFRop 		cmdfrop;
+        CommandLBack 		cmdlback;
+        CommandLFront 		cmdlfront;
+        CommandLPushNX 		cmdlpushnx;
+        CommandLAvg 		cmdlavg;
+        CommandLHigh 		cmdlhigh;
+        CommandLLow 		cmdllow;
          
     public:	
         

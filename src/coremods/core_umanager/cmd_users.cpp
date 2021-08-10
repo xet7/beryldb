@@ -258,7 +258,7 @@ COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 
 CommandInCache::CommandInCache(Module* parent) : Command(parent, "INCACHE", 1, 1)
 {
-         flags = 'm';
+         flags  = 'm';
          syntax = "<login>";
 }
 

@@ -45,7 +45,7 @@ COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
               return FAILED;
        }
 
-       GeoHelper::AddPub(user, chan, gname, latitude, longitude);
+       KeyHelper::AddPub(user, std::make_shared<geoadd_pub_query>(), chan, gname, latitude, longitude);
        return SUCCESS;
 }
 
@@ -79,7 +79,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       GeoHelper::Add(user, gname, latitude, longitude);
+       KeyHelper::HeshVal(user, std::make_shared<geoadd_query>(), gname, latitude, longitude);
        return SUCCESS;
 }
 
@@ -113,7 +113,7 @@ COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
              return FAILED;
        }
 
-       GeoHelper::AddNX(user, gname, latitude, longitude);
+       KeyHelper::HeshVal(user, std::make_shared<geoaddnx_query>(), gname, latitude, longitude);
        return SUCCESS;
 }
 
@@ -132,7 +132,7 @@ COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       GeoHelper::Get(user, gname);
+       KeyHelper::Retro(user, std::make_shared<geoget_query>(), gname);
        return SUCCESS;
 }
 
@@ -153,10 +153,7 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
             return FAILED; 
        }
 
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-       
-       GeoHelper::Find(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<gkeys_query>(), key, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -176,7 +173,7 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
               return FAILED;
          }
          
-         GeoHelper::Calc(user, gname, gname2);
+         KeyHelper::Simple(user, std::make_shared<geoget_custom_query>(), gname2, gname);
          return SUCCESS;
 }
 
@@ -196,17 +193,17 @@ COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
        if (lms[0] == 0)
        {
             return FAILED; 
        }
-
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       GeoHelper::Distance(user, gname, distance, offset, limit);
+       
+       std::shared_ptr<geodistance_query> query = std::make_shared<geodistance_query>();
+       query->value = distance; 
+       
+       KeyHelper::RetroLimits(user, query, gname, lms[1], lms[2]);
        return SUCCESS;
 }
 
@@ -221,7 +218,7 @@ COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
          const std::string& gname 	= 	parameters[0];
          const std::string& dist 	= 	parameters[1];
          
-         GeoHelper::Remove(user, gname, dist);
+         KeyHelper::SimpleRetro(user, std::make_shared<georem_query>(), gname, dist);
          return SUCCESS;
 }
 
@@ -240,7 +237,7 @@ COMMAND_RESULT CommandGeoLoGet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       GeoHelper::GetCustom(user, gname, QUERY_TYPE_LONG);
+       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LONG);
        return SUCCESS;
 }
 
@@ -259,6 +256,6 @@ COMMAND_RESULT CommandGeoLaGet::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       GeoHelper::GetCustom(user, gname, QUERY_TYPE_LAT);
+       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LAT);
        return SUCCESS;
 }

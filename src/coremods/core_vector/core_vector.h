@@ -14,8 +14,42 @@
 #include "beryl.h"
 #include "maker.h"
 #include "engine.h"
+#include "extras.h"
 
-#include "managers/vectors.h"
+#include "managers/keys.h"
+
+/* 
+ * VLow returns lowest number in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string   : Vector's key to check.
+ * 
+ * @protocol:
+ *
+ *         · int      : Lowest element found.
+ */ 
+
+class CommandVLow : public Command 
+{
+    public: 
+
+        CommandVLow(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * VHigh returns highest number in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string   : Vector's key to check.
+ * 
+ * @protocol:
+ *
+ *         · int      : Highest element found.
+ */ 
 
 class CommandVHigh : public Command 
 {
@@ -26,6 +60,20 @@ class CommandVHigh : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VGet obtains all elements in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string   : Destination vector.
+ *         · { offset, limit }
+ * 
+ * @protocol:
+ *
+ *         · vector   : Returning elements.
+
+ */ 
+
 class CommandVGet : public Command 
 {
     public: 
@@ -34,6 +82,19 @@ class CommandVGet : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VPush pushes a new elemento a given vector.
+ * 
+ * @parameters:
+ *
+ *         · string     : Destination vector.
+ *         · string     : Vector to add new element into.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
 
 class CommandVPush : public Command 
 {
@@ -45,6 +106,19 @@ class CommandVPush : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VExist verifies whether an element exists.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ *         · string	: Element to check.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
+
 class CommandVExist : public Command 
 {
     public: 
@@ -54,6 +128,18 @@ class CommandVExist : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VCount counts all elements in a vector. 
+ * 
+ * @parameters:
+ *
+ *         · string	: Vector's key to check.
+ * 
+ * @protocol:
+ *
+ *         · int	: Elements found.
+ */ 
+ 
 class CommandVCount : public Command 
 {
     public: 
@@ -62,6 +148,18 @@ class CommandVCount : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VPos returns an element in a given position in a vector.
+ * 
+ * @parameters:
+ *
+ *         · int	: Position to look for.
+ * 
+ * @protocol:
+ *
+ *         · string	: Element found in provided position.
+ */ 
 
 class CommandVPos : public Command 
 {
@@ -72,6 +170,19 @@ class CommandVPos : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VResize resizes the size of a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Vector key.
+ *         · int	: New size of vector.
+ * 
+ * @protocol:
+ *
+ *         · enum	: NULL, OK or ERROR.
+ */ 
+ 
 class CommandVResize : public Command 
 {
     public: 
@@ -80,6 +191,19 @@ class CommandVResize : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VKeys looks for all geo-keys defined in the server.
+ * This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string   : Pattern to lookup.
+ * 
+ * @protocol:
+ *
+ *         · vector    : Geo Keys found.
+ */ 
 
 class CommandVKeys : public Command 
 {
@@ -90,6 +214,18 @@ class CommandVKeys : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VPopFront removes and obtains first element in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string    : Vector to look for.
+ * 
+ * @protocol:
+ *
+ *         · string    : Element.
+ */ 
+
 class CommandVPopFront : public Command 
 {
     public: 
@@ -98,6 +234,18 @@ class CommandVPopFront : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VPopBack removes and obtains last element in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string    : Vector to look for.
+ * 
+ * @protocol:
+ *
+ *         · string    : Element.
+ */ 
 
 class CommandVPopBack : public Command 
 {
@@ -108,6 +256,19 @@ class CommandVPopBack : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VDel remove a given items from vector.
+ * 
+ * @parameters:
+ *
+ *         · string    : vector name to lookup.
+ *         · string    : Value to delete.
+ * 
+ * @protocol:
+ *
+ *         · enum      : OK, ERROR or NULL.
+ */ 
+
 class CommandVDel : public Command 
 {
     public: 
@@ -117,14 +278,16 @@ class CommandVDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandVEraseFrom : public Command 
-{
-    public: 
-
-        CommandVEraseFrom(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
+/* VReverse reverses a given vector.
+ * 
+ * @parameters:
+ *
+ *         · string    : Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · enum      : NULL, OK or ERROR.
+ */ 
 
 class CommandVReverse : public Command 
 {
@@ -135,6 +298,19 @@ class CommandVReverse : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VRepeats finds repeats in a given vecot.r
+ *
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ *         · string	: Value to find.
+ * 
+ * @protocol:
+ *
+ *         · int	: Repeated items.
+ */ 
+
 class CommandVRepeats : public Command 
 {
     public: 
@@ -143,6 +319,18 @@ class CommandVRepeats : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VSorts sorts a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · enum	: NULL, OK or ERROR.
+ */ 
 
 class CommandVSort : public Command 
 {
@@ -153,6 +341,18 @@ class CommandVSort : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VAvg obtains the average value of a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector,
+ * 
+ * @protocol:
+ *
+ *         · double	: Average value.
+ */
+ 
 class CommandVAvg : public Command 
 {
     public: 
@@ -162,15 +362,18 @@ class CommandVAvg : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandVLow : public Command 
-{
-    public: 
-
-        CommandVLow(Module* parent);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
+/* 
+ * VSum sums all items in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · double	: Summed nums.
+ */
+ 
 class CommandVSum : public Command 
 {
     public: 
@@ -179,6 +382,18 @@ class CommandVSum : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VPushNX adds a new element to a vector, only if not previously defined.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */
 
 class CommandVPushNX : public Command 
 {
@@ -189,6 +404,19 @@ class CommandVPushNX : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VFind finds items in a given vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ *         · string	: String to lookup.
+ * 
+ * @protocol:
+ *
+ *         · vector	: Returning results.
+ */ 
+
 class CommandVFind : public Command 
 {
     public: 
@@ -197,6 +425,18 @@ class CommandVFind : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * VFront returns the front (first) element in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
 
 class CommandVFront : public Command 
 {
@@ -207,6 +447,18 @@ class CommandVFront : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * VBack returns last element in a vector.
+ * 
+ * @parameters:
+ *
+ *         · string	: Destination vector.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
+ 
 class CommandVBack : public Command 
 {
     public: 

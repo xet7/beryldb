@@ -27,6 +27,21 @@ class ServerTargetCommand : public Command
         RouteParams GetRouting(User* user, const Params& parameters) ;
 };
 
+/* 
+ * Retrieves a configuration setting.
+ * 
+ * @requires 'm'.
+ *
+ * @parameters:
+ *
+ *	   · string	 : setting.
+ *
+ * @protocol:
+ *
+ *         · enum        : NULL, INVALID_PARAM.
+ *         · string      : value.
+ */
+
 class CommandGetConfig : public ServerTargetCommand
 {
     public:
@@ -36,6 +51,20 @@ class CommandGetConfig : public ServerTargetCommand
      COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Retrieves a configuration setting.
+ * 
+ * @requires 'm'.
+ *
+ * @parameters:
+ *
+ *         · string      : setting key.
+ *         · string      : setting value.
+ *
+ * @protocol:
+ *
+ *         · enum        : OK, NULL, INVALID_PARAM.
+ */
 
 class CommandSetConfig : public ServerTargetCommand
 {
@@ -45,6 +74,14 @@ class CommandSetConfig : public ServerTargetCommand
      
      COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Resets all configuration settings to default.
+ * 
+ * @requires 'm'.
+ *
+ *         · enum        : OK.
+ */
 
 class CommandDefaults : public ServerTargetCommand
 {

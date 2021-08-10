@@ -17,9 +17,23 @@
 
 #include "brldb/dbmanager.h"
 
+/* 
+ * Monitor handles the 'monitor' command, which is used to
+ * activate monitoring handling.
+ * 
+ * Monitoring levels are: DEFAULT and DEBUG.
+ * 
+ * @parameters:
+ *
+ *         · string	: level.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK or ERROR.
+ */ 
+ 
 class CommandMonitor : public Command 
 {
-
     public: 
 
         CommandMonitor(Module* parent);
@@ -27,9 +41,18 @@ class CommandMonitor : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * StopMonitor is a command that allows a user to stop receiving
+ * monitoring data. 
+ *
+ * @protocol:
+ *
+ *         · OK		: Client will no longer monitor.
+ *         · ERROR	: Clients is not currently monitoring.
+ */
+ 
 class CommandStopMonitor : public Command 
 {
-
     public: 
 
         CommandStopMonitor(Module* parent);
@@ -37,9 +60,17 @@ class CommandStopMonitor : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Monitor reseting results in all subscribed clients to the monitoring
+ * map, to be automatically unsubscribed from monitor streams.
+ * 
+ * @protocol:
+ *
+ *         · enum	: OK.
+ */
+ 
 class CommandMonitorReset : public Command 
 {
-
     public: 
 
         CommandMonitorReset(Module* parent);
@@ -47,9 +78,22 @@ class CommandMonitorReset : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * MonitorList lists all active clients receiving monitoring alerts.
+ * 
+ * @requires 'm'.
+ *
+ * @parameters:
+ *
+ *         · DEFAULT or DEBUG	: Wether to list debug or default clients.
+ * 
+ * @protocol:
+ *
+ *         · enum		: OK or ERROR.
+ */
+
 class CommandMonitorList : public Command 
 {
-
     public: 
 
         CommandMonitorList(Module* parent);

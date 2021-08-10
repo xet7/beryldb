@@ -13,7 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "managers/lists.h"
 #include "managers/settings.h"
 
 DBManager::DBManager() 
@@ -100,7 +99,6 @@ unsigned int DBManager::OpenAll()
        unsigned int counter = 0;
        
        const Args& dblist = STHelper::HKeys("databases");
-
        const std::string& dbdefault = STHelper::Get("dbconf", "dbdefault");
 
        for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)

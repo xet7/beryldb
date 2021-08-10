@@ -15,7 +15,22 @@
 #include "engine.h"
 
 #include "managers/settings.h"
-#include "brldb/dbmanager.h"
+
+/* 
+ * NOTIFY commands enables notifying. Notifications are
+ * special alerts that the server sends to users with 'm' flag or
+ * superior.
+ *
+ * @requires 'm'.
+ * 
+ * @parameters:
+ *
+ *         · string  : Notify level: DEFAULT, VERBOSE or DEBUG.
+ * 
+ * @protocol:
+ *
+ *         · enum    : OK or ERROR.
+ */ 
 
 class CommandNotifier : public Command 
 {
@@ -26,15 +41,30 @@ class CommandNotifier : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Remove an user from receiving notifications.
+ *
+ * @protocol:
+ *
+ *         · enum    : OK or FALSE.
+ */ 
+
 class CommandStopNotify : public Command 
 {
-
     public: 
 
         CommandStopNotify(Module* parent);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Removes all users from receiving notifications.
+ * 
+ * @protocol:
+ *
+ *         · enum    : OK.
+ */ 
 
 class CommandNotifyReset : public Command 
 {

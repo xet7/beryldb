@@ -20,22 +20,37 @@
 
 class CommandLogin : public MultiCommand
 {
- public:
+   public:
 	
 	CommandLogin(Module* parent);
 	
-	COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters) ;
+	COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters);
 };
+
+/* 
+ * Authenticates a given user.
+ * 
+ * @parameters:
+ *
+ *             · string	 	: Password to use.
+ */ 
 
 class CommandAuth : public MultiCommand
 {
- public:
+   public:
 	
 	CommandAuth(Module* parent);
 
 	COMMAND_RESULT HandleLocal(LocalUser* user, const Params& parameters) ;
-
 };
+
+/* 
+ * Disconnects user from server.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
 
 class CommandExit : public Command
 {
@@ -50,9 +65,20 @@ class CommandExit : public Command
 	RouteParams GetRouting(User* user, const Params& parameters);
 };
 
+/* 
+ * Sets an agent for an user. Keep in mind that this command may be used
+ * only once.
+ *
+ * NOTE: A valid agent must be have at least 3 characters, and no more than 15.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+ 
 class CommandAgent : public MultiCommand
 {
-  public:
+    public:
 
 	CommandAgent(Module* parent);
 	
@@ -61,9 +87,17 @@ class CommandAgent : public MultiCommand
 	static COMMAND_RESULT CheckRegister(LocalUser* user);
 };
 
+/* 
+ * ILogin sends 3 commands in one single line: AGENT, AUTH and LOGIN.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+ 
 class CommandILogin : public Command
 {
- public:
+   public:
         
         CommandILogin(Module* parent);
 

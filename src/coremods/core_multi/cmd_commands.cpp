@@ -35,16 +35,16 @@ COMMAND_RESULT CommandMulti::Handle(User* user, const Params& parameters)
 CommandMultiReset::CommandMultiReset(Module* Creator) : Command(Creator, "MULTIRESET", 0, 0)
 {
       group = 'w';
-
 }
 
 COMMAND_RESULT CommandMultiReset::Handle(User* user, const Params& parameters)
 {  
       if (user->Multi)
       {
-            user->Multi = false;
-            user->MultiRunning = false;
+            user->Multi 	= false;
+            user->MultiRunning  = false;
             user->SendProtocol(BRLD_OK, PROCESS_OK);
+            
             return SUCCESS;
       }
 

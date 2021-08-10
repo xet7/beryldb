@@ -18,29 +18,29 @@ class CoreModHints : public Module
 {
     private:
     
-        CommandExists cmdexists;
-        CommandMove cmdmove;
-        CommandRename cmdrename;
-        CommandDel cmddel;
-        CommandCopy cmdcopy;
-        CommandClone cmdclone;
-        CommandType cmdtype;
-        CommandRenameNX cmdrenamenx;
-        CommandDiff cmddiff;
-        CommandTouch cmdtouch;
-        CommandNTouch cmdntouch;
-        CommandTransfer cmdtransfer;
+        CommandExists 		cmdexists;
+        CommandMove 		cmdmove;
+        CommandRename 		cmdrename;
+        CommandRenameNX         cmdrenamenx;
+        CommandDel 		cmddel;
+        CommandCopy 		cmdcopy;
+        CommandClone 		cmdclone;
+        CommandType 		cmdtype;
+        CommandDiff 		cmddiff;
+        CommandTouch 		cmdtouch;
+        CommandNTouch 		cmdntouch;
+        CommandTransfer 	cmdtransfer;
 
     public:
     
         CoreModHints() : cmdexists(this),
                          cmdmove(this),
                          cmdrename(this),   
+                         cmdrenamenx(this),
                          cmddel(this),
                          cmdcopy(this),
                          cmdclone(this),
                          cmdtype(this),
-                         cmdrenamenx(this),
                          cmddiff(this),
                          cmdtouch(this),
                          cmdntouch(this),

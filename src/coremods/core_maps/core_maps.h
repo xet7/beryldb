@@ -14,12 +14,7 @@
 #include "beryl.h"
 #include "engine.h"
 #include "maker.h"
-
-#include "brldb/dbmanager.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/query.h"
-
-#include "managers/maps.h"
+#include "managers/keys.h"
 
 class CommandHGetAll : public Command 
 {
@@ -30,6 +25,20 @@ class CommandHGetAll : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HSet defines a map in the server.
+ * 
+ * @parameters:
+ *
+ *         · string: Key to define this map with.
+ *         · string: Hash to use.
+ *         · string: Value to associate this hash with.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+
 class CommandHSet : public Command 
 {
     public: 
@@ -39,6 +48,40 @@ class CommandHSet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HSet defines a map in the server, only if NOT previously defined.
+ * 
+ * @parameters:
+ *
+ *         · string: Key to define this map with.
+ *         · string: Hash to use.
+ *         · string: Value to associate this hash with.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+class CommandHSetNX : public Command
+{
+    public: 
+
+        CommandHSetNX(Module* Creator);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * HGet retrieves a keys from a map-hash.
+ * 
+ * @parameters:
+ *
+ *         · string: Key map to look keys in.
+ *         · string: Maps' hesh.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
 class CommandHGet : public Command 
 {
     public: 
@@ -48,6 +91,19 @@ class CommandHGet : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HDel deletes a hash.
+ * 
+ * @parameters:
+ *
+ *         · string: Key associated with hash to remove.
+ *         · hash: Removing hash.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+ 
 class CommandHDel : public Command 
 {
     public: 
@@ -57,7 +113,18 @@ class CommandHDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-
+/* 
+ * Counts element in a map.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to count.
+ * 
+ * @protocol:
+ *
+ *         · protocol : NULL, or ERROR.
+ *         · int      : Count.
+ */
 
 class CommandHCount : public Command 
 {
@@ -67,6 +134,19 @@ class CommandHCount : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * HKeys looks for all maps defined in the server.
+ * This command allows wildcards.
+ * 
+ * @parameters:
+ *
+ *         · string  : Pattern to lookup.
+ * 
+ * @protocol:
+ *
+ *         · vector  : maps founds.
+ */ 
 
 class CommandHKeys : public Command 
 {
@@ -95,6 +175,20 @@ class CommandHExists : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * HStrlen returns a key's length.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to find.
+ *         · string   : Hash to obtain strlen.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ *         · int      : Length of given hash.
+ */ 
+
 class CommandHStrlen : public Command
 {
     public: 
@@ -105,30 +199,11 @@ class CommandHStrlen : public Command
 
 };
 
-class CommandHSetNX : public Command
-{
-    public: 
-
-        CommandHSetNX(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
 class CommandHClone : public Command
 {
     public: 
 
         CommandHClone(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-
-};
-
-class CommandHWDel : public Command
-{
-    public: 
-
-        CommandHWDel(Module* Creator);
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 

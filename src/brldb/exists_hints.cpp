@@ -12,9 +12,6 @@
  */
 
 #include "beryl.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
 #include "brldb/expires.h"
 #include "helpers.h"
 

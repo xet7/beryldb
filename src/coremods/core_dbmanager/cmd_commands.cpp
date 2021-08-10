@@ -43,7 +43,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
               return FAILED;
        }
        
-       DBHelper::SFlush(user, select);
+       KeyHelper::Simple(user, std::make_shared<sflush_query>(), select, "", false);
        return SUCCESS;
 }
 
@@ -57,7 +57,7 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
 {  
        const std::string& instance = parameters[0];
 
-       User* found = Kernel->Clients->FindInstance(instance);
+       User* const found = Kernel->Clients->FindInstance(instance);
 
        if (!found)
        {
@@ -101,7 +101,6 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
 
        user->select = use;
        user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
-
        return SUCCESS;
 }
 
@@ -223,8 +222,8 @@ CommandChange::CommandChange(Module* Creator) : Command(Creator, "CHANGE", 1, 1)
 
 COMMAND_RESULT CommandChange::Handle(User* user, const Params& parameters)
 {  
-       const std::string& dbname = parameters[0];
-       const std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+       const std::string& dbname 		    =   parameters[0];
+       const std::shared_ptr<UserDatabase> database =   Kernel->Store->DBM->Find(dbname);
 
        if (!database)
        {
@@ -248,7 +247,6 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
       const DataMap& dbases = Kernel->Store->DBM->GetDatabases();
 
       Dispatcher::JustAPI(user, BRLD_START_LIST);
-
       Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Name", "Path"));
       Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
@@ -276,17 +274,26 @@ COMMAND_RESULT CommandDBLIST::Handle(User* user, const Params& parameters)
 
 CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE", 1, 2)
 {
-      flags = 'r';
+      flags  = 'r';
       syntax = "<name> <path>";
 }
 
 COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 {
       std::string dbname    =    parameters[0];
-      std::string dbpath    =    parameters[1];
+      std::string dbpath;
       
-      std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
+      if (parameters.size() > 1)
+      {
+            dbpath    =    parameters[1];
+      }
+      else
+      {
+            dbpath    =    dbname;
+      }
+
       std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
+      std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
 
       /* 'dbdefault' is a reserved database name. */
       
@@ -316,7 +323,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              return SUCCESS;
       }
       
-      user->SendProtocol(ERR_INPUT, INVALID_TYPE);
+      user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
       return FAILED;
 }
 
@@ -346,7 +353,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
              return FAILED;
       }
       
-      GlobalHelper::DatabaseReset(user, database->GetName());
+      DBHelper::DatabaseReset(user, database->GetName());
       return SUCCESS;
 }
 
@@ -387,7 +394,7 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
       return SUCCESS;
 }
 
-CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 1)
+CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 0)
 {
        flags = 'r';
 }

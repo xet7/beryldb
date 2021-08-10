@@ -18,31 +18,31 @@ class CoreModDBManager : public Module
 {
     private:
     
-        CommandUse cmduse;
-        CommandCurrent cmdcurrent;
-        CommandFlushDB cmdflushdb;
-        CommandPWD cmdpwd;
-        CommandDBSize cmddbsize;
-        CommandSFlush cmdsflush;
-        CommandUsing cmdusing;
-        CommandDB cmddb;
-        CommandChange cmdchange;
-        CommandDBLIST dblist;
-        CommandDBCreate cmddbcreate;
-        CommandDBDelete cmddbdelete;
-        CommandDefault cmdefault;
-        CommandDBTest cmddbtest;
-        CommandDBSetDefault cmdsdfault;
-        CommandFlushAll cmdflushall;
+        CommandUse 		cmduse;
+        CommandCurrent 		cmdcurrent;
+        CommandFlushDB 		cmdflushdb;
+        CommandSFlush           cmdsflush;
+        CommandPWD 		cmdpwd;
+        CommandDBSize 		cmddbsize;
+        CommandUsing 		cmdusing;
+        CommandDB 		cmddb;
+        CommandChange 		cmdchange;
+        CommandDBLIST 		dblist;
+        CommandDBCreate 	cmddbcreate;
+        CommandDBDelete 	cmddbdelete;
+        CommandDefault 		cmdefault;
+        CommandDBTest 		cmddbtest;
+        CommandDBSetDefault 	cmdsdfault;
+        CommandFlushAll 	cmdflushall;
 
     public:     
         
         CoreModDBManager() : cmduse(this), 
                              cmdcurrent(this), 
                              cmdflushdb(this), 
+                             cmdsflush(this), 
                              cmdpwd(this),
                              cmddbsize(this), 
-                             cmdsflush(this), 
                              cmdusing(this),
                              cmddb(this), 
                              cmdchange(this),

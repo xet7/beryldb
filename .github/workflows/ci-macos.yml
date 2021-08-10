@@ -19,7 +19,7 @@ jobs:
             brew install $PACKAGE || brew upgrade $PACKAGE
           done
           brew link --force --overwrite rocksdb
-      - name: Run build
+      - name: Running macOS build workflow.
         run: ./make/build ${{ matrix.compiler }}
       - name: Check version
         run: ./run/beryldb version          

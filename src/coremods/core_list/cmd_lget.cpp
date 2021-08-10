@@ -35,7 +35,7 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
               return FAILED;
        }
        
-       ListHelper::Resize(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<lresize_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -47,24 +47,21 @@ CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 
 COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
+       const std::string& key 	=       parameters[0];
   
        if (!CheckKey(user, key))
        {
             return FAILED;
        }
       
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       ListHelper::Get(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<lget_query>(), key, lms[1], lms[2]);
        return SUCCESS;  
 }
 
@@ -76,19 +73,19 @@ CommandLKeys::CommandLKeys(Module* Creator) : Command(Creator, "LKEYS", 1, 3)
 
 COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
+       const std::string& key 	          =    parameters[0];
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms =    GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
+       signed int offset                  =    lms[1];
+       signed int limit                   =    lms[2];
 
-       ListHelper::Keys(user, key, offset, limit);
+       KeyHelper::RetroLimits(user, std::make_shared<lkeys_query>(), key, offset, limit, true);
        return SUCCESS;  
 }
 
@@ -108,30 +105,30 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
             return FAILED;
        }
         
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
        {
             return FAILED; 
        }
        
-       signed int offset = lms[1];
-       signed int limit = lms[2];
-
-       ListHelper::Find(user, key, value, offset, limit);
+       std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
+       query->value = stripe(value);
+       
+       KeyHelper::RetroLimits(user, std::make_shared<lfind_query>(), key, lms[1], lms[2]);
        return SUCCESS;  
 }
 
 CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 {
          group = 'l';
-         syntax = "<key> \"value\"";
+         syntax = "<key> <value>";
 }
 
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
-       const std::string& value 	= 	parameters.back();
+       const std::string& key 		 = 	parameters[0];
+       const std::string& value 	 = 	parameters.back();
 
        if (!CheckKey(user, key))
        {
@@ -143,7 +140,7 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
               return FAILED;
        }
        
-       ListHelper::Index(user, key, value);
+       KeyHelper::SimpleRetro(user, std::make_shared<lpos_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -168,7 +165,7 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::Repeats(user, key, value);
+       KeyHelper::SimpleRetro(user, std::make_shared<lrepeats_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -187,7 +184,7 @@ COMMAND_RESULT CommandLRop::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       ListHelper::Rop(user, key);
+       KeyHelper::Retro(user, std::make_shared<lrop_query>(), key);
        return SUCCESS;  
 }
 
@@ -206,7 +203,7 @@ COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       ListHelper::FRop(user, key);
+       KeyHelper::Retro(user, std::make_shared<lrop_query>(), key);
        return SUCCESS;  
 }
 
@@ -231,7 +228,7 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        ListHelper::Push(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<lpush_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -256,7 +253,7 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
            return FAILED;
        }
        
-       ListHelper::Exist(user, key, value);
+       KeyHelper::Simple(user, std::make_shared<lexist_query>(), key, value);
        return SUCCESS;  
 }
 
@@ -275,7 +272,7 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       ListHelper::Count(user, key);
+       KeyHelper::Retro(user, std::make_shared<lcount_query>(), key);
        return SUCCESS;  
 }
 
@@ -294,7 +291,7 @@ COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
             return FAILED;
        }
        
-       ListHelper::Rop(user, key);
+       KeyHelper::Retro(user, std::make_shared<lback_query>(), key);
        return SUCCESS;  
 }
 
@@ -313,7 +310,7 @@ COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::Front(user, key);
+       KeyHelper::Retro(user, std::make_shared<lfront_query>(), key);
        return SUCCESS;  
 }
 
@@ -325,8 +322,8 @@ CommandLPushNX::CommandLPushNX(Module* Creator) : Command(Creator, "LPUSHNX", 2,
 
 COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-        const std::string& value = parameters.back();
+        const std::string& key 		= 	parameters[0];
+        const std::string& value 	= 	parameters.back();
 
         if (!CheckKey(user, key))
         {
@@ -338,7 +335,7 @@ COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
             return FAILED;
         }
 
-        ListHelper::PushNX(user, key, value);
+        KeyHelper::Simple(user, std::make_shared<lpushnx_query>(), key, value);
         return SUCCESS;  
 }
 
@@ -357,7 +354,7 @@ COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::Avg(user, key);
+       KeyHelper::Retro(user, std::make_shared<lavg_query>(), key);
        return SUCCESS;  
 }
 
@@ -376,7 +373,7 @@ COMMAND_RESULT CommandLHigh::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::High(user, key);
+       KeyHelper::Retro(user, std::make_shared<lhigh_query>(), key);
        return SUCCESS;  
 }
 
@@ -395,7 +392,7 @@ COMMAND_RESULT CommandLLow::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-       ListHelper::Low(user, key);
+       KeyHelper::Retro(user, std::make_shared<llow_query>(), key);
        return SUCCESS;  
 }
 

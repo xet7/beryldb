@@ -125,7 +125,7 @@ void ListHandler::Add(const std::string& key)
       this->LastMsg = HANDLER_MSG_OK;
 }
 
-void ListHandler::Remove(const std::string& key)
+void ListHandler::PopAll(const std::string& key)
 {
       if (key.empty() || key == "")
       {
@@ -193,7 +193,7 @@ unsigned int ListHandler::Repeats(const std::string& word)
       return counter;
 }
 
-void ListHandler::PopAll(const std::string& key)
+void ListHandler::Remove(const std::string& key)
 {
       if (!this->mhandler.size())
       {
@@ -207,7 +207,8 @@ void ListHandler::PopAll(const std::string& key)
                   if (item == key)
                   {
                         this->mhandler.erase(i++);
-                        continue;
+                        this->LastMsg = HANDLER_MSG_OK;
+                        return;
                   }
                   
                   i++;

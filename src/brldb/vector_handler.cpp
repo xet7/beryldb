@@ -220,24 +220,6 @@ double VectorHandler::GetLow()
       return value;
 }
 
-
-void VectorHandler::EraseFrom(unsigned int from)
-{
-      if (!this->mhandler.size())
-      {
-            return;
-      }
-        
-      this->mhandler.erase(this->mhandler.begin(), this->mhandler.begin()+from);
-      
-      if (!this->mhandler.size())
-      {
-            this->Erase();
-      }
-
-      this->LastMsg = HANDLER_MSG_OK;
-}
-
 std::string VectorHandler::as_string()
 {
         std::string final;
