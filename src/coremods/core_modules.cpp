@@ -15,10 +15,25 @@
 #include "notifier.h"
 #include "engine.h"
 
+/* 
+ * Loadmodule Loads a module. Keep in mind that given modules must
+ * exist in coremodules or modules in order to be loaded.
+ * 
+ * @requires 'r'. 
+ *
+ * @parameters:
+ *
+ *         · string     : module to load.
+ * 
+ * @protocol:
+ *
+ *         · protocol   : OK, or ERR_UNLOAD_MOD.
+ */ 
+
 class CommandLoadmodule : public Command
 {
- public:
- 
+  public:
+  
         CommandLoadmodule(Module* parent) : Command(parent, "LOADMODULE", 1, 1)
         {
                 flags = 'r';
@@ -42,6 +57,21 @@ COMMAND_RESULT CommandLoadmodule::Handle(User* user, const Params& parameters)
               return FAILED;
         }
 }
+
+/* 
+ * ULoadmodule UnLoads a module. Keep in mind that given modules must
+ * be loaded in order to be unloaded.
+ * 
+ * @requires 'r'. 
+ *
+ * @parameters:
+ *
+ *         · string     : module to unload.
+ * 
+ * @protocol:
+ *
+ *         · protocol   : OK, ERR_UNLOAD_MOD, or ERROR.
+ */ 
 
 class CommandUnloadmodule : public Command
 {

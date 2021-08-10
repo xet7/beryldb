@@ -16,7 +16,7 @@
 
 CommandSFlush::CommandSFlush(Module* Creator) : Command(Creator, "SFLUSH", 0, 1)
 {
-         flags = 'r';
+         flags  = 'r';
          syntax = "<select>";
 }
 
@@ -49,7 +49,7 @@ COMMAND_RESULT CommandSFlush::Handle(User* user, const Params& parameters)
 
 CommandUsing::CommandUsing(Module* Creator) : Command(Creator, "USING", 1, 1)
 {
-         flags = 'm';
+         flags  = 'm';
          syntax = "<instance>";
 }
 
@@ -71,12 +71,12 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
 
 CommandUse::CommandUse(Module* Creator) : Command(Creator, "USE", 1)
 {
-         no_hint_until_reg = true;
+         no_hint_until_reg 	= true;
 
-         /* Users may provide use before registering. */
+         /* Users should be able to use this command before registering. */
 
-         pre_reg_ok = true;
-         syntax = "<id between 1 and 100>";
+         pre_reg_ok 		= true;
+         syntax 		= "<id between 1 and 100>";
 }
 
 COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
@@ -125,7 +125,7 @@ COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 
 CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0, 1)
 {
-       group = 'w';
+       group  = 'w';
        syntax = "<database>";
 }
 
@@ -148,7 +148,7 @@ COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)
             db = user->GetDatabase()->GetName();
        }
        
-       std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(db);
+       const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(db);
 
        if (!database)
        {
@@ -311,7 +311,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              
              if (user->GetDatabase() == NULL)
              {
-                  std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+                  const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
                   
                   if (database)
                   {

@@ -74,7 +74,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
-                user->SendProtocol(ERR_INPUT2, ERR_INVALID_PARAM, PROCESS_FALSE);
+                user->SendProtocol(ERR_INPUT, INVALID_PARAM);
                 return FAILED;
         }
         
@@ -89,7 +89,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
         }
         else 
         {
-                user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
+                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
         }
         
         return FAILED;       
@@ -147,7 +147,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                 }
         }
         
-        std::string adding = UserHelper::CheckFlags(newlogin);
+        const std::string& adding = UserHelper::CheckFlags(newlogin);
         std::string creating;
         
         for (auto it = adding.cbegin() ; it != adding.cend(); ++it) 
