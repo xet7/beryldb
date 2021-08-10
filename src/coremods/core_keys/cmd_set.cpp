@@ -16,7 +16,7 @@
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key> \"value\"";
 }
 
@@ -41,7 +41,7 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 
 CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<key> \"value\"";
 }
 
