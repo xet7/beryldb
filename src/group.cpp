@@ -186,9 +186,9 @@ bool GroupManager::Delete(const std::string& gname)
       STHelper::Delete("groups", name);
       this->GroupList.erase(name);
       
-      Args users = STHelper::HKeys("userlist");
+      const Args& users = STHelper::HKeys("userlist");
       
-      for (Args::iterator u = users.begin(); u != users.end(); u++)
+      for (Args::const_iterator u = users.begin(); u != users.end(); u++)
       {
             std::string login = *u;
             std::string usergrups = login + "/groups";

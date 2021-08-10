@@ -47,7 +47,7 @@ const std::string PROCESS_EMPTY 	= 	"EMPTY";
 
 /* Default group flags */
 
-const std::string DEFAULT_GFLAGS 	= 	"kzlgvefmxpchw";
+const std::string DEFAULT_GFLAGS 	= 	"klgvefmxphw";
 
 /* Entry is protected */
 

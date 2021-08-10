@@ -88,6 +88,20 @@ class ExportAPI DBManager : public safecast<DBManager>
          */             
          
         bool Create(const std::string& name, const std::string& path);
+
+        /* 
+         * Returns a database based on its path.
+         * 
+         * @parameters:
+         *
+         *         · string       :     Path to find.
+         * 
+         * @return:
+         *
+         *         · UserDatabase :    Database, if found. Returns NULL otherwise.
+         */
+
+        std::shared_ptr<UserDatabase> FindPath(const std::string& path);
         
         /* 
          * Get database.
@@ -227,6 +241,14 @@ class ExportAPI StoreManager
               this->Default = db;
         }
         
+        /* 
+         * Returns default database used.
+	 * 
+         * @return:
+ 	 *
+         *         · UserDatabase	: Default database.
+         */            
+         
         std::shared_ptr<UserDatabase> GetDefault()
         {
               return this->Default;

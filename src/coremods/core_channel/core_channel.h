@@ -68,7 +68,13 @@ class CommandSlist : public MultiCommand
 	void SendSlist(LocalUser* user, Channel* chan);
 };
 
-/* Unsubscribes an user from a channel. */
+/* 
+ * Unsubscribes from a chan.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NO_CHANS or OK.
+ */ 
 
 class CommandPart : public Command
 {
