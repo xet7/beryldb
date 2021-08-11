@@ -246,7 +246,6 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 	{
 		if (!user->InGroup(handler->group))
 		{
-			bprint(INFO, "Flag not found: %u", handler->group);
                         user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
                         NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
                         return;
@@ -261,11 +260,8 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 	{
 		for (std::vector<unsigned char>::iterator i = handler->groups.begin(); i != handler->groups.end(); ++i)
 		{
-			unsigned char item = *i;
-			
 			if (!user->InGroup(handler->group))			
 			{
-        	                bprint(INFO, "Flag not found: %u", item);
         	                user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
 	                        NOTIFY_MODS(OnCommandBlocked, (command, cmd_params, user));
                 	        return;

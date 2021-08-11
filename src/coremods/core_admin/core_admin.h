@@ -215,6 +215,8 @@ class CommandResume : public Command
  * Idle obtains the current idle for a given instance.
  * Keep in mind that PONG and invalid commands are not considered 
  * in the idle.
+ *
+ * @requires 'm'.
  * 
  * @parameters:
  *

@@ -30,13 +30,13 @@ class CommandHGetAll : public Command
  * 
  * @parameters:
  *
- *         · string: Key to define this map with.
- *         · string: Hash to use.
- *         · string: Value to associate this hash with.
+ *         · string	: Key to define this map with.
+ *         · string	: Hash to use.
+ *         · string	: Value to associate this hash with.
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum	: OK or ERROR.
  */ 
 
 class CommandHSet : public Command 
@@ -53,9 +53,9 @@ class CommandHSet : public Command
  * 
  * @parameters:
  *
- *         · string: Key to define this map with.
- *         · string: Hash to use.
- *         · string: Value to associate this hash with.
+ *         · string	: Key to define this map with.
+ *         · string	: Hash to use.
+ *         · string	: Value to associate this hash with.
  * 
  * @protocol:
  *
@@ -75,12 +75,12 @@ class CommandHSetNX : public Command
  * 
  * @parameters:
  *
- *         · string: Key map to look keys in.
- *         · string: Maps' hesh.
+ *         · string	: Key map to look keys in.
+ *         · string	: Maps' hesh.
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum	: OK or ERROR.
  */ 
 class CommandHGet : public Command 
 {
@@ -96,12 +96,12 @@ class CommandHGet : public Command
  * 
  * @parameters:
  *
- *         · string: Key associated with hash to remove.
- *         · hash: Removing hash.
+ *         · string	: Key associated with hash to remove.
+ *         · string	: Removing hash.
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum	: OK or ERROR.
  */ 
  
 class CommandHDel : public Command 
@@ -222,6 +222,19 @@ class CommandHStrlen : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 
 };
+
+/* 
+ * HVals returns all values of a given map.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to find.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ *         · list     : Values found.
+ */ 
 
 class CommandHVals : public Command
 {
