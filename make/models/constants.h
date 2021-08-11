@@ -17,6 +17,10 @@
 
 #define PUBL_DEF "PUBLISH"
 
+/* No diff. */
+
+const std::string NO_DIFF		=	"NO_DIFF";
+
 /* WriteBatch failed. */
 
 const std::string BATCH_FAIL 		= 	"SYNC_FAILED";

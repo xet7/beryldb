@@ -16,7 +16,6 @@
 
 CommandSyntax::CommandSyntax(Module* parent) : Command(parent, "SYNTAX", 1, 1)
 {
-	group  = 'z';
 	syntax = "<command>";
 }
 

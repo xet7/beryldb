@@ -75,7 +75,7 @@ namespace
      
      void LoadNotify(User* user)
      {
-             const std::string level = STHelper::Get("notify", user->login);
+             const std::string& level = STHelper::Get("notify", user->login);
              
              if (level.empty())
              {
