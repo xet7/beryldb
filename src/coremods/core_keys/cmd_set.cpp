@@ -30,7 +30,7 @@ COMMAND_RESULT CommandChar::Handle(User* user, const Params& parameters)
             return FAILED;
        }
 
-        if (!is_number(value, true))
+        if (!is_positive_number(value))
         {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;

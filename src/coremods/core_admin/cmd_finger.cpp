@@ -78,7 +78,7 @@ CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 2)
 
 COMMAND_RESULT CommandPause::Handle(User* user, const Params& parameters)
 {
-        User* target = Kernel->Clients->FindInstance(parameters[0]);
+        User* const target = Kernel->Clients->FindInstance(parameters[0]);
 
         if (!target)
         {
@@ -120,13 +120,13 @@ COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 
 CommandIdle::CommandIdle(Module* parent) : Command(parent, "IDLE", 1, 1)
 {
-        flags = 'm';
+        flags  = 'm';
         syntax = "<instance>";
 }
 
 COMMAND_RESULT CommandIdle::Handle(User* user, const Params& parameters)
 {
-        User* target = Kernel->Clients->FindInstance(parameters[0]);
+        User* const target = Kernel->Clients->FindInstance(parameters[0]);
 
         if (!target)
         {
