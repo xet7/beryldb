@@ -169,7 +169,14 @@ void future_exec_query::Run()
              std::string file2 = dbvalue.substr(found2+1);
              
              this->SetDest(this->key, this->select_query, INT_KEY);
-             this->Write(this->dest, to_bin(file2));
+             
+             if (!this->Write(this->dest, to_bin(file2)))
+             {
+                     this->DelFuture();
+                     access_set(DBL_UNABLE_WRITE);
+                     return;
+             }
+             
              this->DelFuture();
              this->SetOK();
              return;

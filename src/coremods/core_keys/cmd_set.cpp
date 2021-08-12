@@ -14,6 +14,32 @@
 #include "beryl.h"
 #include "core_keys.h"
 
+CommandChar::CommandChar(Module* Creator) : Command(Creator, "CHAR", 2, 2)
+{
+         group  = 'k';
+         syntax = "<key> <value>";
+}
+
+COMMAND_RESULT CommandChar::Handle(User* user, const Params& parameters)
+{  
+       const std::string& key           =        parameters[0];
+       const std::string& value         =        parameters[1];
+
+       if (!CheckKey(user, key))
+       {
+            return FAILED;
+       }
+
+        if (!is_number(value, true))
+        {
+                user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+                return FAILED;
+        }
+       
+       KeyHelper::Simple(user, std::make_shared<char_query>(), key, value, false);
+       return SUCCESS;
+}
+
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
          group  = 'k';

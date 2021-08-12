@@ -93,7 +93,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 
 CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 0, 1)
 {
-         group = 'e';
+         group  = 'e';
          syntax = "<select>";
 }
 

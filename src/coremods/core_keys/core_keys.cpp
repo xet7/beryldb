@@ -44,6 +44,7 @@ class CoreModKeys : public Module
         CommandToLower 		cmdtolower;
         CommandToUpper 		cmdtoupper;
         CommandToCap 		cmdtocap;
+        CommandChar		cmdchar;
         
     public:	
         
@@ -72,7 +73,8 @@ class CoreModKeys : public Module
                         cmdinsert(this),
                         cmdtolower(this),
                         cmdtoupper(this),
-                        cmdtocap(this)
+                        cmdtocap(this),
+                        cmdchar(this)
         {
         
         }

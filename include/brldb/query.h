@@ -652,6 +652,22 @@ class ExportAPI insert_query  : public QueryBase
 
         void Process();
 };
+
+class ExportAPI char_query  : public QueryBase
+{
+    public:
+
+        char_query() 
+        {
+                this->type = QUERY_TYPE_READ;
+                this->base_request = INT_KEY;
+        }
+
+        void Run();
+
+        void Process();
+};
+
 class ExportAPI getset_query  : public QueryBase
 {
     public:
