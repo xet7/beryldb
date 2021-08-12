@@ -112,15 +112,17 @@ class ExportAPI Configuration
 
  public:
 	
-	class ServerPaths
+	class ServerPaths : public safecast<ServerPaths>
 	{
-	 public:
+   	   public:
+		
+		/* Configuration path */
 		
 		std::string Config;
 
-		
 		std::string Data;
 
+		/* Log Path */
 		
 		std::string Log;
 		
@@ -128,6 +130,7 @@ class ExportAPI Configuration
 
 		std::string DB;
 
+		/* Module path */
 		
 		std::string Module;
 
@@ -183,18 +186,14 @@ class ExportAPI Configuration
 	
 	DBOptions DB;
 
-	
 	unsigned char c_ipv4_range;
 
 	
 	unsigned char c_ipv6_range;
 
-	
 	std::string ServerName;
 
-	
 	std::string Network;
-
 	
 	unsigned int MaxClients;
 
@@ -218,8 +217,12 @@ class ExportAPI Configuration
 
 	std::string sid;
 
+	/* Constructor */
+	
 	Configuration();
 
+	/* Destructor */
+	
 	~Configuration();
 
 	const std::string& GetSID() const 
@@ -259,12 +262,12 @@ class ExportAPI config_status
 {
 	public:
 		
-		bool const initial;
+	   bool const initial;
 		
-		User* const srcuser;
+	   User* const srcuser;
 
-		config_status(User* user = NULL, bool isinitial = false) : initial(isinitial), srcuser(user)
-		{
+	   config_status(User* user = NULL, bool isinitial = false) : initial(isinitial), srcuser(user)
+	   {
 		
-		}
+	   }
 };

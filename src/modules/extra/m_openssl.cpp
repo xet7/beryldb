@@ -367,7 +367,7 @@ namespace OpenSSL
 	 
 		Profile(const std::string& profilename, config_rule* tag)
 			: name(profilename)
-			, dh(Kernel->Config->Paths.SetWDConfig(tag->as_string("dhfile", "dhparams.pem", 1)))
+			, dh(Kernel->Config->Paths->SetWDConfig(tag->as_string("dhfile", "dhparams.pem", 1)))
 			, ctx(SSL_CTX_new(SSLv23_server_method()))
 			, clictx(SSL_CTX_new(SSLv23_client_method()))
 			, allowrenego(tag->as_bool("renegotiation")) 
@@ -409,7 +409,7 @@ namespace OpenSSL
 			SetContextOptions("server", tag, ctx);
 			SetContextOptions("client", tag, clictx);
 
-			std::string filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("certfile", "cert.pem", 1));
+			std::string filename = Kernel->Config->Paths->SetWDConfig(tag->as_string("certfile", "cert.pem", 1));
 			
 			if ((!ctx.SetCerts(filename)) || (!clictx.SetCerts(filename)))
 			{
@@ -417,7 +417,7 @@ namespace OpenSSL
 				throw Exception("Can't read certificate file: " + lasterr);
 			}
 
-			filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("keyfile", "key.pem", 1));
+			filename = Kernel->Config->Paths->SetWDConfig(tag->as_string("keyfile", "key.pem", 1));
 			
 			if ((!ctx.SetPrivateKey(filename)) || (!clictx.SetPrivateKey(filename)))
 			{
@@ -425,7 +425,7 @@ namespace OpenSSL
 				throw Exception("Can't read key file: " + lasterr);
 			}
 
-			filename = Kernel->Config->Paths.SetWDConfig(tag->as_string("cafile", "ca.pem", 1));
+			filename = Kernel->Config->Paths->SetWDConfig(tag->as_string("cafile", "ca.pem", 1));
 			
 			if ((!ctx.SetCA(filename)) || (!clictx.SetCA(filename)))
 			{

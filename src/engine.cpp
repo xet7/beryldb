@@ -167,7 +167,7 @@ bool Daemon::GroupValidator(const std::string& gname)
 void Daemon::DeletePID()
 {
      const std::string rawfile = Kernel->Config->PID;
-     std::string FileName = Kernel->Config->Paths.SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
+     std::string FileName = Kernel->Config->Paths->SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
      std::remove(FileName.c_str());
 }
 
@@ -179,8 +179,8 @@ void Daemon::SavePID(bool exitonfail)
                 return;
         }
 
-        const std::string rawfile = Kernel->Config->PID;
-        std::string FileName = Kernel->Config->Paths.SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
+        const std::string& rawfile = Kernel->Config->PID;
+        const std::string& FileName = Kernel->Config->Paths->SetWDRuntime(rawfile.empty() ? "beryldb.pid" : rawfile);
         std::ofstream outfile(FileName.c_str());
 
         if (outfile.is_open())

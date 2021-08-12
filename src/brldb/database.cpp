@@ -29,7 +29,7 @@ bool Database::IsClosing()
         return this->Closing;
 }
 
-Database::Database(const std::string& dbname, const std::string& dbpath) : created(Kernel->Now()), name(dbname), path(Kernel->Config->Paths.SetWDDB(dbpath))
+Database::Database(const std::string& dbname, const std::string& dbpath) : created(Kernel->Now()), name(dbname), path(Kernel->Config->Paths->SetWDDB(dbpath))
 {
         this->SetClosing(false);
 }
@@ -151,11 +151,11 @@ void CoreManager::UserDefaults()
 
 void CoreManager::CheckDefaults()
 {
-       std::string result = STHelper::Get("instance", "first_ran");
+       const std::string& result = STHelper::Get("instance", "first_ran");
        
        /* Creating instance, unless otherwise specified. */
        
-       time_t instance = Kernel->Now();
+       const time_t instance = Kernel->Now();
 
        /* No entry set. */
        
@@ -179,8 +179,7 @@ void CoreManager::CheckDefaults()
        }
        else
        {		
-               instance = convto_num<time_t>(result);
-               bprint(DONE, "Instance created: %s", Daemon::HumanEpochTime(instance).c_str());
+               bprint(DONE, "Instance created: %s", Daemon::HumanEpochTime(convto_num<time_t>(result)).c_str());
                Kernel->Store->First = false;
        }
        
@@ -204,10 +203,10 @@ void StoreManager::OpenAll()
 
        for (unsigned int i = 1; i <= Kernel->Config->DB.datathread; i++)
        {
-             DataThread* New = new DataThread();   
-             New->Create();
-             Kernel->Store->Flusher->threadslist.push_back(New);
-             counter++;
+              DataThread* New = new DataThread();   
+              New->Create();
+              Kernel->Store->Flusher->threadslist.push_back(New);
+              counter++;
        }
 
        if (!counter)
@@ -222,7 +221,7 @@ void StoreManager::OpenAll()
 
 void StoreManager::Push(std::shared_ptr<QueryBase> request)
 {
-      User* user = request->user;
+      User* const user = request->user;
 
       if (user == NULL || user->IsQuitting())
       {

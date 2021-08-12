@@ -87,7 +87,7 @@ void LogHandler::OpenLogs()
 		}
 		
 		FileHandler* fw;
-		std::string target = Kernel->Config->Paths.SetWDLog(tag->as_string("target"));
+		std::string target = Kernel->Config->Paths->SetWDLog(tag->as_string("target"));
 		std::map<std::string, FileHandler*>::iterator fwi = logmap.find(target);
 		
 		if (fwi == logmap.end())

@@ -128,7 +128,7 @@ unsigned int DBManager::OpenAll()
 
 std::shared_ptr<UserDatabase> DBManager::FindPath(const std::string& path)
 {
-        std::string dbpath = Kernel->Config->Paths.SetWDDB(path) + ".db";
+        std::string dbpath = Kernel->Config->Paths->SetWDDB(path) + ".db";
         std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
 
         for (DataMap::iterator i = DBMap.begin(); i != DBMap.end(); ++i)
