@@ -195,21 +195,18 @@ std::vector<std::string> MultiMapHandler::Find(const std::string& key)
 {
       std::vector<std::string> results;
 
-      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); )
+      for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
                   std::string item = i->first;
-                  std::string val = i->second;
+                  std::string val  = i->second;
 
                   if (Daemon::Match(val, key))
                   {
                          results.push_back(item);
                   }
-
-                  i++;
       }
 
       this->LastMsg = HANDLER_MSG_OK;
-      
       return results;
 }
 

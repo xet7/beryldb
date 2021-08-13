@@ -61,18 +61,19 @@ bool Database::Open()
 {	
         this->db = NULL;
         
-        options.env = Kernel->Store->GetEnv();
-        options.create_if_missing = Kernel->Config->DB.createim;
         options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
-        options.keep_log_file_num = 1;
-        options.write_thread_max_yield_usec = Kernel->Config->DB.yieldusec;
         options.OptimizeLevelStyleCompaction(2);
-        options.enable_thread_tracking = true;
-        options.enable_pipelined_write = Kernel->Config->DB.pipeline;
+
+        options.env 				= Kernel->Store->GetEnv();
+        options.create_if_missing 		= Kernel->Config->DB.createim;
+        options.keep_log_file_num 		= 1;
+        options.write_thread_max_yield_usec 	= Kernel->Config->DB.yieldusec;
+        options.enable_thread_tracking 		= true;
+        options.enable_pipelined_write 		= Kernel->Config->DB.pipeline;
+
+        this->status 				= rocksdb::DB::Open(options, this->path, &this->db);
 
         slog("DATABASE", LOG_VERBOSE, "Database opened: %s", this->path.c_str());
-        
-        this->status = rocksdb::DB::Open(options, this->path, &this->db);
 
         if (!this->status.ok()) 
         {
@@ -163,7 +164,7 @@ void CoreManager::CheckDefaults()
        {
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
-                 bprint(DONE, "Welcome to Beryl.");
+                 bprint(DONE, "Welcome to BerylDB.");
 
                  Kernel->Store->DBM->Create("default", "default");
                  Kernel->Store->DBM->SetDefault("default");

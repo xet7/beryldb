@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "engine.h"
 #include "interval.h"
+#include "maker.h"
 
 bool Daemon::PassCompare(Expandable* ex, const std::string& data, const std::string& input, const std::string& hashtype)
 {
@@ -298,10 +299,39 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 			return;
 		}
 
+		if (handler->check_key >= 0)
+		{
+			if (cmd_params.size() >= (unsigned int)handler->check_key)
+			{
+                        	if (!CheckKey(user, cmd_params[handler->check_key], true))
+                        	{
+                                	return;
+				}
+			}
+		}
+                
+                if (handler->check_value && cmd_params.size())
+                {
+                       if (!CheckFormat(user, cmd_params.back()))
+                       {
+                                return;
+                       } 
+                }
+
+                if (handler->check_hash >= 0)
+                {
+                        if (cmd_params.size() >= (unsigned int)handler->check_hash)
+                        {
+                                if (!CheckKey(user, cmd_params[handler->check_hash], true))
+                                {
+                                        return;
+                                }
+                        }
+                }
+
 		COMMAND_RESULT result = handler->Handle(user, cmd_params);
 		NOTIFY_MODS(OnPostCommand, (handler, cmd_params, user, result, false));
 	}
-	
 }
 
 void CommandHandler::Remove(Command* x)

@@ -16,38 +16,29 @@
 
 CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+        check_key	=	0;
+        group 		= 	'l';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-        
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<lpop_back_query>(), key);
-        
         return SUCCESS;  
 }
 
 CommandLPopFront::CommandLPopFront(Module* Creator) : Command(Creator, "LPOPFRONT", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'l';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-   
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
      
         KeyHelper::Retro(user, std::make_shared<lpop_front_query>(), key);
         return SUCCESS;  
@@ -55,8 +46,10 @@ COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 
 CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'l';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
@@ -64,34 +57,20 @@ COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
-
-        if (!CheckFormat(user, value))
-        {
-             return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<lpopall_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandLReverse::CommandLReverse(Module* Creator) : Command(Creator, "LREVERSE", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'l';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<lreverse_query>(), key);
         return SUCCESS;  
@@ -99,18 +78,14 @@ COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
 
 CommandLSort::CommandLSort(Module* Creator) : Command(Creator, "LSORT", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'l';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<lsort_query>(), key);
         return SUCCESS;  
@@ -118,8 +93,10 @@ COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 
 CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'l';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
@@ -127,16 +104,6 @@ COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
     
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
-    
-        if (!CheckFormat(user, value))
-        {
-             return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<ldel_query>(), key, value);
         return SUCCESS;  
 }

@@ -16,8 +16,9 @@
 
 CommandLResize::CommandLResize(Module* Creator) : Command(Creator, "LRESIZE", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> <size>";
+       check_key	=	0;
+       group 		= 	'l';
+       syntax 		= 	"<key> <size>";
 }
 
 COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
@@ -25,11 +26,6 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-       
        if (!CheckValidPos(user, value))
        {
               return FAILED;
@@ -41,19 +37,14 @@ COMMAND_RESULT CommandLResize::Handle(User* user, const Params& parameters)
 
 CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 	=       parameters[0];
-  
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-      
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
@@ -67,8 +58,8 @@ COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 
 CommandLKeys::CommandLKeys(Module* Creator) : Command(Creator, "LKEYS", 1, 3)
 {
-         group = 'l';
-         syntax = "<%key> <offset> <limit>";
+       group 		= 	'l';
+       syntax 		= 	"<%key> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
@@ -82,28 +73,21 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
             return FAILED; 
        }
        
-       signed int offset                  =    lms[1];
-       signed int limit                   =    lms[2];
-
-       KeyHelper::RetroLimits(user, std::make_shared<lkeys_query>(), key, offset, limit, true);
+       KeyHelper::RetroLimits(user, std::make_shared<lkeys_query>(), key, lms[1], lms[2], true);
        return SUCCESS;  
 }
 
 CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
 {
-         group = 'l';
-         syntax = "<key> \"%value\" <offset> <limit>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key> \"%value\" <offset> <limit>";
 }
 
 COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters.back();
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
         
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
@@ -121,19 +105,15 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
 
 CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> <value>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		 = 	parameters[0];
        const std::string& value 	 = 	parameters.back();
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        if (!CheckValidPos(user, value))
        {
@@ -146,8 +126,10 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 
 CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> \"value\"";
+       check_key        =       0;
+       check_value	=	true;
+       group 		= 	'l';
+       syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
@@ -155,62 +137,46 @@ COMMAND_RESULT CommandLRepeats::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters.back();
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
-       if (!CheckFormat(user, value))
-       {
-            return FAILED;
-       }
-
        KeyHelper::SimpleRetro(user, std::make_shared<lrepeats_query>(), key, value);
        return SUCCESS;  
 }
 
 CommandLRop::CommandLRop(Module* Creator) : Command(Creator, "LRPOP", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLRop::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-       
        KeyHelper::Retro(user, std::make_shared<lrop_query>(), key);
        return SUCCESS;  
 }
 
 CommandFRop::CommandFRop(Module* Creator) : Command(Creator, "LFPOP", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-       
        KeyHelper::Retro(user, std::make_shared<lrop_query>(), key);
        return SUCCESS;  
 }
 
 CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> \"value\"";
+       check_key        =       0;
+       check_value	=	true;
+       group 		= 	'l';
+       syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
@@ -218,24 +184,16 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-        
-        if (!CheckFormat(user, value))
-        {
-            return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<lpush_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
 {
-         group = 'l';
-         syntax = "<key> \"value\"";
+         check_key        =       0;
+         check_value	  =	  true;
+         group 		  =  	  'l';
+         syntax 	  = 	  "<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
@@ -243,34 +201,20 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters.back();
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
-       if (!CheckFormat(user, value))
-       {
-           return FAILED;
-       }
-       
        KeyHelper::Simple(user, std::make_shared<lexist_query>(), key, value);
        return SUCCESS;  
 }
 
 CommandLCount::CommandLCount(Module* Creator) : Command(Creator, "LCOUNT", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+      check_key =       0;
+      group 	= 	'l';
+      syntax 	= 	"<key>";
 }
 
 COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
        
        KeyHelper::Retro(user, std::make_shared<lcount_query>(), key);
        return SUCCESS;  
@@ -278,18 +222,14 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
 
 CommandLBack::CommandLBack(Module* Creator) : Command(Creator, "LBACK", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+      check_key = 	0;
+      group 	= 	'l';
+      syntax 	= 	"<key>";
 }
 
 COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
        
        KeyHelper::Retro(user, std::make_shared<lback_query>(), key);
        return SUCCESS;  
@@ -297,18 +237,14 @@ COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
 
 CommandLFront::CommandLFront(Module* Creator) : Command(Creator, "LFRONT", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key	=	0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<lfront_query>(), key);
        return SUCCESS;  
@@ -360,18 +296,14 @@ COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
 
 CommandLHigh::CommandLHigh(Module* Creator) : Command(Creator, "LHIGH", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'v';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLHigh::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<lhigh_query>(), key);
        return SUCCESS;  
@@ -379,18 +311,14 @@ COMMAND_RESULT CommandLHigh::Handle(User* user, const Params& parameters)
 
 CommandLLow::CommandLLow(Module* Creator) : Command(Creator, "LLOW", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+       check_key	=	0;
+       group 		= 	'v';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLLow::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<llow_query>(), key);
        return SUCCESS;  

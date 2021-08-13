@@ -16,8 +16,9 @@
 
 CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 4, 4)
 {
-         group = 'g';
-         syntax = "<name> <channel>[,<channel>] <longitude> <latitude>";
+        check_key       =       0;
+        group  		= 	'g';
+        syntax 		= 	"<name> <channel>[,<channel>] <longitude> <latitude>";
 }
 
 COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
@@ -51,8 +52,9 @@ COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
 
 CommandGeoAdd::CommandGeoAdd(Module* Creator) : Command(Creator, "GEOADD", 3, 3)
 {
-         group = 'g';
-         syntax = "<name> <latitude> <longitude>";
+         check_key       =       0;
+         group  	 = 	'g';
+         syntax 	 = 	"<name> <latitude> <longitude>";
 }
 
 COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
@@ -85,8 +87,9 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
 
 CommandGeoAddNX::CommandGeoAddNX(Module* Creator) : Command(Creator, "GEOADDNX", 3, 3)
 {
-         group = 'g';
-         syntax = "<name> <latitude> <longitude>";
+        check_key       =       0;
+        group 		= 	'g';
+        syntax 		= 	"<name> <latitude> <longitude>";
 }
 
 COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
@@ -119,18 +122,14 @@ COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
 
 CommandGeoGet::CommandGeoGet(Module* Creator) : Command(Creator, "GEOGET", 1, 1)
 {
-         group = 'g';
-         syntax = "<name>";
+       check_key	=	0;
+       group 		= 	'g';
+       syntax 		= 	"<name>";
 }
 
 COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
-
-       if (!CheckKey(user, gname))
-       {
-            return FAILED;
-       }
        
        KeyHelper::Retro(user, std::make_shared<geoget_query>(), gname);
        return SUCCESS;
@@ -138,8 +137,9 @@ COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 
 CommandGFind::CommandGFind(Module* Creator) : Command(Creator, "GKEYS", 1, 3)
 {
-         group = 'g';
-         syntax = "<\%name> <offset> <limit>";
+        check_key       =       0;
+        group 		= 	'g';
+        syntax 		= 	"<\%name> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
@@ -159,8 +159,10 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
 
 CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2)
 {
-         group = 'g';
-         syntax = "<name> <name2>";
+        check_key       =       0;
+        check_hash	=	1;
+        group 		= 	'g';
+        syntax 		= 	"<name> <name2>";
 }
 
 COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
@@ -168,30 +170,21 @@ COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
          const std::string& gname 	= 	parameters[0];
          const std::string& gname2 	= 	parameters[1];
          
-         if (!CheckKey(user, gname) || !CheckKey(user, gname2))
-         {
-              return FAILED;
-         }
-         
          KeyHelper::Simple(user, std::make_shared<geoget_custom_query>(), gname2, gname);
          return SUCCESS;
 }
 
 CommandGeoDistance::CommandGeoDistance(Module* Creator) : Command(Creator, "GDIST", 2, 4)
 {
-         group = 'g';
-         syntax = "<name> <max distance> <offset> <limit>";
+        check_key       =       0;
+        group 		= 	'g';
+        syntax 		= 	"<name> <max distance> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 {  
        const std::string& gname 	= 	parameters[0];
        const std::string& distance 	= 	parameters[1];
-
-       if (!CheckKey(user, gname))
-       {
-            return FAILED;
-       }
 
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 
@@ -224,18 +217,14 @@ COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
 
 CommandGeoLoGet::CommandGeoLoGet(Module* Creator) : Command(Creator, "GLOGET", 1, 1)
 {
-         group = 'g';
-         syntax = "<name>";
+         check_key	=	0;
+         group  	= 	'g';
+         syntax 	= 	"<name>";
 }
 
 COMMAND_RESULT CommandGeoLoGet::Handle(User* user, const Params& parameters)
 {
        const std::string& gname = parameters[0];
-
-       if (!CheckKey(user, gname))
-       {
-            return FAILED;
-       }
        
        KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LONG);
        return SUCCESS;
@@ -243,18 +232,14 @@ COMMAND_RESULT CommandGeoLoGet::Handle(User* user, const Params& parameters)
 
 CommandGeoLaGet::CommandGeoLaGet(Module* Creator) : Command(Creator, "GLAGET", 1, 1)
 {
-         group = 'g';
-         syntax = "<name>";
+         check_key	=	0;
+         group  	= 	'g';
+         syntax 	= 	"<name>";
 }
 
 COMMAND_RESULT CommandGeoLaGet::Handle(User* user, const Params& parameters)
 {       
        const std::string& gname = parameters[0];
-
-       if (!CheckKey(user, gname))
-       {
-            return FAILED;
-       }
        
        KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LAT);
        return SUCCESS;

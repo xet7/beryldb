@@ -28,7 +28,7 @@ COMMAND_RESULT CommandMyChans::Handle(User* user, const Params& parameters)
 
            for (User::SubsList::iterator i = user->chans.begin(); i != user->chans.end(); i++)
            {
-                    Channel* chan = (*i)->chan;
+                    Channel* const chan = (*i)->chan;
                     Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", chan->GetName().c_str()), Daemon::Format("%s", chan->GetName().c_str()));
            }
 
@@ -46,7 +46,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
 {
            const std::string& dest = parameters[0];
            
-           User* found =  Kernel->Clients->FindInstanceOnly(dest);
+           const User* found =  Kernel->Clients->FindInstanceOnly(dest);
            
            if (!found)
            {
@@ -61,7 +61,7 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
            
            for (User::SubsList::iterator i = found->chans.begin(); i != found->chans.end(); i++)
            {
-                    Channel* chan = (*i)->chan;
+                    Channel* const chan = (*i)->chan;
                     Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", chan->GetName().c_str()), Daemon::Format("%s", chan->GetName().c_str()));
            }
 

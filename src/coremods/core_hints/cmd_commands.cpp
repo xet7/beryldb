@@ -16,19 +16,16 @@
 
 CommandTransfer::CommandTransfer(Module* Creator) : Command(Creator, "TRANSFER", 2, 2)
 {
-         group 	= 'h';
-         syntax = "<key> <dest database>";
+        check_key       =       0;
+        check_hash	=	1;
+        group 		= 	'h';
+        syntax 		= 	"<key> <dest database>";
 }
 
 COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& newkey 	= 	parameters[1];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
        
        const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(newkey);
        
@@ -47,10 +44,13 @@ COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
        KeyHelper::SimpleRetro(user, std::make_shared<transfer_query>(), key, newkey);
        return SUCCESS;
 }
+
 CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
 {
-         group  = 'h';
-         syntax = "<key> <new key>";
+        check_key       =       0;
+        check_hash	=	1;
+        group  		= 	'h';
+        syntax 		= 	"<key> <new key>";
 }
 
 COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
@@ -58,19 +58,16 @@ COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& newkey 	= 	parameters[1];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
        KeyHelper::SimpleRetro(user, std::make_shared<rename_query>(), key, newkey);
        return SUCCESS;
 }
 
 CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX", 2, 2)
 {
-         group  = 'h';
-         syntax = "<key> <new key>";
+        check_key       =       0;
+        check_hash	=	1;
+        group  		= 	'h';
+        syntax 		= 	"<key> <new key>";
 }
 
 COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
@@ -78,33 +75,19 @@ COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
        const std::string& key           =       parameters[0];
        const std::string& newkey        =       parameters[1];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
-       if (!CheckKey(user, newkey))
-       {
-            return FAILED;
-       }
-
        KeyHelper::SimpleRetro(user, std::make_shared<renamenx_query>(), key, newkey);
        return SUCCESS;
 }
 
 CommandDel::CommandDel(Module* Creator) : Command(Creator, "DEL", 1)
 {
-         syntax = "<key>";
+        check_key       =       0;
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
        
        KeyHelper::Retro(user, std::make_shared<del_query>(), key);
        return SUCCESS;
@@ -112,8 +95,10 @@ COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 
 CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
 {
-         group  = 'h';
-         syntax = "<key> <dest key>";
+        check_key       =       0;
+        check_hash	=	1;
+        group  		= 	'h';
+        syntax 		= 	"<key> <dest key>";
 }
 
 COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
@@ -121,34 +106,20 @@ COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& destkey 	= 	parameters[1];
 
-       if (!CheckKey(user, key))
-       {
-             return FAILED;
-       }
-       
-       if (!CheckKey(user, destkey))
-       {
-             return FAILED;
-       }
-
        KeyHelper::SimpleRetro(user, std::make_shared<copy_query>(), key, destkey);
        return SUCCESS;
 }
 
 CommandExists::CommandExists(Module* Creator) : Command(Creator, "EXISTS", 1, 1)
 {
-         group  = 'h';
-         syntax = "<key>";
+        check_key       =       0;
+        group  		= 	'h';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<exists_query>(), key);
        return SUCCESS;
@@ -156,19 +127,15 @@ COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
 
 CommandMove::CommandMove(Module* Creator) : Command(Creator, "MOVE", 2, 2)
 {
-         group  = 'h';
-         syntax = "<key> <select>";
+        check_key       =       0;
+        group  		=	'h';
+        syntax 		= 	"<key> <select>";
 }
 
 COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& new_select 	= 	parameters[1];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        if (!CheckValidPos(user, new_select))
        {
@@ -186,7 +153,8 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
 
 CommandType::CommandType(Module* Creator) : Command(Creator, "TYPE", 1, 1)
 {
-         group = 'h';
+        check_key       =       0;
+        group 		= 	'h';
 }
 
 COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
@@ -199,8 +167,9 @@ COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
 
 CommandTouch::CommandTouch(Module* Creator) : Command(Creator, "TOUCH", 1, 1)
 {
-         group  = 'h';
-         syntax = "[keys]";
+        check_value     =       true;
+        group  		= 	'h';
+        syntax 		= 	"[keys]";
 }
 
 COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
@@ -213,8 +182,9 @@ COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
 
 CommandNTouch::CommandNTouch(Module* Creator) : Command(Creator, "NTOUCH", 1, 1)
 {
-         syntax = "[keys]";
-         group  = 'h';
+        check_value     =       true;
+        syntax 		= 	"[keys]";
+        group  		= 	'h';
 }
 
 COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
@@ -227,19 +197,15 @@ COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
 
 CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 {
-         group  = 'h';
-         syntax = "<key> <select>";
+        check_key       =       0;
+        group  		= 	'h';
+        syntax 		= 	"<key> <select>";
 }
 
 COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        if (!CheckValidPos(user, value))
        {
@@ -257,19 +223,15 @@ COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 
 CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
 {
-         group  = 'h';
-         syntax = "<key> <select> <offset> <limit>";
+        check_key       =       0;
+        group  		= 	'h';
+        syntax 		= 	"<key> <select> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
 

@@ -16,8 +16,9 @@
 
 CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)
 {
-         group = 'm';
-         syntax = "<map> <offset> <limit>";
+      check_key =       0;
+      group 	= 	'm';
+      syntax 	=	 "<map> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
@@ -40,18 +41,14 @@ COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
 
 CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 {
-         group  = 'm';
-         syntax = "<map> <offset> <limit>";
+      check_key =       0;
+      group  	= 	'm';
+      syntax	= 	"<map> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandHList::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        

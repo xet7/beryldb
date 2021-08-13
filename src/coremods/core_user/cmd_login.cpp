@@ -106,7 +106,6 @@ COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameter
 	return SUCCESS;
 }
 
-
 CommandILogin::CommandILogin(Module* parent) : Command(parent, "ILOGIN", 3, 3)
 {
 	pre_reg_ok 	= true;

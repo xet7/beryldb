@@ -16,8 +16,10 @@
 
 CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
@@ -25,37 +27,23 @@ COMMAND_RESULT CommandVExist::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters.back();
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
-       if (!CheckFormat(user, value))
-       {
-           return FAILED;
-       }
-
        KeyHelper::Simple(user, std::make_shared<vexist_query>(), key, value);
        return SUCCESS;  
 }
 
 CommandVPos::CommandVPos(Module* Creator) : Command(Creator, "VPOS", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
-       const std::string& value 	= 	parameters.back();
+       const std::string& value 	= 	parameters[1];
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-
-       if (!CheckValidPos(user, parameters[0]))
+       if (!CheckValidPos(user, value))
        {
               return FAILED;
        }
@@ -66,18 +54,14 @@ COMMAND_RESULT CommandVPos::Handle(User* user, const Params& parameters)
 
 CommandVGet::CommandVGet(Module* Creator) : Command(Creator, "VGET", 1, 3)
 {
-         group = 'v';
-         syntax = "<key> <offset> <limit>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key             =      parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        const std::vector<signed int>& lms        =      GetLimits(user, this->max_params, parameters);
        
@@ -92,18 +76,14 @@ COMMAND_RESULT CommandVGet::Handle(User* user, const Params& parameters)
 
 CommandVCount::CommandVCount(Module* Creator) : Command(Creator, "VCOUNT", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVCount::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
        
        KeyHelper::Retro(user, std::make_shared<vcount_query>(), key);
        return SUCCESS;  
@@ -111,19 +91,15 @@ COMMAND_RESULT CommandVCount::Handle(User* user, const Params& parameters)
 
 CommandVResize::CommandVResize(Module* Creator) : Command(Creator, "VRESIZE", 2, 2)
 {
-       group = 'v';
-       syntax = "<key> <size>";
+       check_key       =       0;
+       group 	       =       'v';
+       syntax 	       =       "<key> <size>";
 }
 
 COMMAND_RESULT CommandVResize::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
-       
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        if (!CheckValidPos(user, value))
        {
@@ -157,8 +133,10 @@ COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 
 CommandVDel::CommandVDel(Module* Creator) : Command(Creator, "VDEL", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
@@ -166,43 +144,31 @@ COMMAND_RESULT CommandVDel::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-        
-        if (!CheckFormat(user, value))
-        {
-             return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<vdel_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandVReverse::CommandVReverse(Module* Creator) : Command(Creator, "VREVERSE", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
    
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
-     
         KeyHelper::Retro(user, std::make_shared<vreverse_query>(), key);
         return SUCCESS;  
 }
 
 CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
@@ -210,34 +176,20 @@ COMMAND_RESULT CommandVRepeats::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-
-        if (!CheckFormat(user, value))
-        {
-             return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<vrepeats_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandVSort::CommandVSort(Module* Creator) : Command(Creator, "VSORT", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<vsort_query>(), key);
         return SUCCESS;  
@@ -245,8 +197,10 @@ COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
 
 CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
@@ -254,34 +208,20 @@ COMMAND_RESULT CommandVPush::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-        
-        if (!CheckFormat(user, value))
-        {
-            return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<vpush_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRONT", 1, 1)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), key);
         return SUCCESS;  
@@ -289,18 +229,15 @@ COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 
 CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK", 1, 1)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Retro(user, std::make_shared<vpop_back_query>(), key);
         return SUCCESS;  
@@ -308,18 +245,14 @@ COMMAND_RESULT CommandVPopBack::Handle(User* user, const Params& parameters)
 
 CommandVAvg::CommandVAvg(Module* Creator) : Command(Creator, "VAVG", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVAvg::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vavg_query>(), key);
        return SUCCESS;  
@@ -327,18 +260,14 @@ COMMAND_RESULT CommandVAvg::Handle(User* user, const Params& parameters)
 
 CommandVHigh::CommandVHigh(Module* Creator) : Command(Creator, "VHIGH", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vhigh_query>(), key);
        return SUCCESS;  
@@ -346,18 +275,14 @@ COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
 
 CommandVLow::CommandVLow(Module* Creator) : Command(Creator, "VLOW", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVLow::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vlow_query>(), key);
        return SUCCESS;  
@@ -365,18 +290,14 @@ COMMAND_RESULT CommandVLow::Handle(User* user, const Params& parameters)
 
 CommandVSum::CommandVSum(Module* Creator) : Command(Creator, "VSUM", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vsum_query>(), key);
        return SUCCESS;  
@@ -384,8 +305,10 @@ COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
 
 CommandVPushNX::CommandVPushNX(Module* Creator) : Command(Creator, "VPUSHNX", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+        check_key       =       0;
+        check_value	=	true;
+        group 		= 	'v';
+        syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
@@ -393,24 +316,16 @@ COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-
-        if (!CheckFormat(user, value))
-        {
-            return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<vpushnx_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandVFind::CommandVFind(Module* Creator) : Command(Creator, "VFIND", 2, 4)
 {
-         group = 'l';
-         syntax = "<key> \"%value\" <offset> <limit>";
+        check_key       =       0;
+        check_value     =       true;
+        group 		= 	'l';
+        syntax 		= 	"<key> \"%value\" <offset> <limit>";
 }
 
 COMMAND_RESULT CommandVFind::Handle(User* user, const Params& parameters)
@@ -418,11 +333,6 @@ COMMAND_RESULT CommandVFind::Handle(User* user, const Params& parameters)
        const std::string& key           =       parameters[0];
        const std::string& value         =       parameters.back();
 
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-        
        const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
        
        if (lms[0] == 0)
