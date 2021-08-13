@@ -36,8 +36,7 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
                return FAILED;
           }   
 
-          const unsigned int exp_usig = convto_num<unsigned int>(seconds);
-          ExpireHelper::Future(user, key, exp_usig, value);
+          ExpireHelper::Future(user, key, convto_num<unsigned int>(seconds), value);
           return SUCCESS;
 }
 

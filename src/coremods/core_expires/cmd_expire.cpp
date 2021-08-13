@@ -16,9 +16,9 @@
 
 CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)
 {
-         last_empty_ok = true;
-         flags = 'e';
-         syntax = "<%key> <argument>";
+         last_empty_ok  = true;
+         flags 		= 'e';
+         syntax 	= "<%key> <argument>";
 }
 
 COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
@@ -186,7 +186,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 
 CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 {
-         group = 'e';
+         group  = 'e';
          syntax = "<key> <seconds>";
 }
 
@@ -211,7 +211,7 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
 
 CommandDBEReset::CommandDBEReset(Module* Creator) : Command(Creator, "ERESET", 1, 1)
 {
-          group = 'e';
+          group  = 'e';
           syntax = "<database>";
 }
 
@@ -274,7 +274,7 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
 
 CommandExpireAT::CommandExpireAT(Module* Creator) : Command(Creator, "EXPIREAT", 2, 2)
 {
-          group = 'e';
+          group  = 'e';
           syntax = "<key> <epoch time>";
 }
 
