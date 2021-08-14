@@ -13,11 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/expires.h"
-#include "brldb/dbmanager.h"
 #include "helpers.h"
 #include "notifier.h"
 
@@ -222,7 +217,7 @@ void dbreset_query::Run()
 
 void dbreset_query::Process()
 {
-      std::shared_ptr<UserDatabase> userdb = Kernel->Store->DBM->Find(this->key);
+      const std::shared_ptr<UserDatabase>& userdb = Kernel->Store->DBM->Find(this->key);
  
       if (!userdb)
       {

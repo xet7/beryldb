@@ -13,6 +13,8 @@
 
 #pragma once
 
+static std::string chansync = "chansync";
+
 /* Default publish command. */
 
 #define PUBL_DEF "PUBLISH"

@@ -16,9 +16,9 @@
 
 CommandLogin::CommandLogin(Module* parent) : MultiCommand(parent, "LOGIN", 1, 1)
 {
-	pre_reg_ok 		= true;
-	no_hint_until_reg 	= true;
-	syntax 			= "<login>";
+	pre_reg_ok 		= 	true;
+	no_hint_until_reg 	= 	true;
+	syntax 			= 	"<login>";
 }
 
 COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& parameters)
@@ -108,8 +108,8 @@ COMMAND_RESULT CommandAuth::HandleLocal(LocalUser* user, const Params& parameter
 
 CommandILogin::CommandILogin(Module* parent) : Command(parent, "ILOGIN", 3, 3)
 {
-	pre_reg_ok 	= true;
-	syntax 		= "<agent> <auth> <login>";
+	pre_reg_ok 	= 	true;
+	syntax 		= 	"<agent> <auth> <login>";
 }
 
 COMMAND_RESULT CommandILogin::Handle(User* user, const Params& parameters)

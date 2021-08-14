@@ -24,7 +24,6 @@ CommandTTL::CommandTTL(Module* Creator) : Command(Creator, "TTL", 1)
 COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
          const std::string& key 	= parameters[0];
-         
          const signed int ttl 		= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
