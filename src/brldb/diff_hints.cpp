@@ -13,10 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/expires.h"
 #include "brldb/list_handler.h"
 #include "brldb/multimap_handler.h"
 #include "brldb/map_handler.h"
@@ -486,6 +482,14 @@ static void ProcessList(QueryBase* query)
         if (query->subresult == 1)
         {
                Dispatcher::JustAPI(query->user, BRLD_START_LIST);
+
+               if (query->VecData.empty())
+               {
+                       query->user->SendProtocol(BRLD_OK, NO_DIFF);
+                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+                       return;
+               }
+               
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -505,6 +509,13 @@ static void ProcessMaps(QueryBase* query)
         if (query->subresult == 1)
         {
                Dispatcher::JustAPI(query->user, BRLD_START_LIST);
+               
+               if (query->VecData.empty())
+               {
+                       query->user->SendProtocol(BRLD_OK, NO_DIFF);
+                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+                       return;
+               }
         }
 
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)

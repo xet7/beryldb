@@ -35,7 +35,7 @@ void Settings::SetDefaults()
        defaults.insert({ "allowchans", "true" });
        defaults.insert({ "syntaxhints", "true" });
        defaults.insert({ "autojoin", "false" });
-       defaults.insert({ "chansync", "false" });
+       defaults.insert({ chansync, "false" });
 
       for (std::map<std::string, std::string> ::iterator i = this->defaults.begin(); i != this->defaults.end(); i++)      
       {

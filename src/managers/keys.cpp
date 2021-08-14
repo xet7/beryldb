@@ -71,6 +71,15 @@ void KeyHelper::Retro(User* user, std::shared_ptr<QueryBase> query, const std::s
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::HeshLimits(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, const std::string& value, signed int offset, signed int limit, bool allow)
+{
+       Helpers::make_query(user, query, entry, allow);
+       query->value  = stripe(value);
+       query->offset = offset;
+       query->limit = limit;
+       Kernel->Store->Push(query);
+}
+
 void KeyHelper::RetroLimits(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, signed int offset, signed int limit, bool allow)
 {
        Helpers::make_query(user, query, entry, allow);

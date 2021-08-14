@@ -16,18 +16,14 @@
 
 CommandIncr::CommandIncr(Module* Creator) : Command(Creator, "INCR", 1)
 {
-         group = 'k';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Operation(user, key, OP_INCR);
         return SUCCESS;  
@@ -35,8 +31,9 @@ COMMAND_RESULT CommandIncr::Handle(User* user, const Params& parameters)
 
 CommandIncrBy::CommandIncrBy(Module* Creator) : Command(Creator, "INCRBY", 2, 2)
 {
-         group = 'k';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
@@ -44,11 +41,6 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters[1];
         
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
-
         if (!is_number(value, true))
         {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
@@ -61,19 +53,15 @@ COMMAND_RESULT CommandIncrBy::Handle(User* user, const Params& parameters)
 
 CommandAvg::CommandAvg(Module* Creator) : Command(Creator, "AVG", 2, 2)
 {
-         group = 'k';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		=	"<key> <value>";
 }
 
 COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
 {  
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters[1];
-        
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         if (!is_number(value, true))
         {
@@ -87,13 +75,14 @@ COMMAND_RESULT CommandAvg::Handle(User* user, const Params& parameters)
 
 CommandDecr::CommandDecr(Module* Creator) : Command(Creator, "DECR", 1)
 {
-         group = 'k';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
 {  
-        const std::string key = parameters[0];
+        const std::string& key = parameters[0];
 
         KeyHelper::Operation(user, key, OP_DECR);
         return SUCCESS;  
@@ -101,8 +90,9 @@ COMMAND_RESULT CommandDecr::Handle(User* user, const Params& parameters)
 
 CommandDecrBy::CommandDecrBy(Module* Creator) : Command(Creator, "DECRBY", 2, 2)
 {
-         group = 'k';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
@@ -122,19 +112,15 @@ COMMAND_RESULT CommandDecrBy::Handle(User* user, const Params& parameters)
 
 CommandDiv::CommandDiv(Module* Creator) : Command(Creator, "DIV", 2, 2)
 {
-         group = 'k';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
 {  
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters[1];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
         
         if (!is_number(value, true))
         {
@@ -148,8 +134,9 @@ COMMAND_RESULT CommandDiv::Handle(User* user, const Params& parameters)
 
 CommandMult::CommandMult(Module* Creator) : Command(Creator, "MULT", 2, 2)
 {
-         group = 'k';
-         syntax = "<key> <value>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
@@ -157,11 +144,6 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters[1];
 
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
-        
         if (!is_number(value, true))
         {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
@@ -174,18 +156,14 @@ COMMAND_RESULT CommandMult::Handle(User* user, const Params& parameters)
 
 CommandSqrt::CommandSqrt(Module* Creator) : Command(Creator, "SQRT", 1, 1)
 {
-         group = 'k';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'k';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandSqrt::Handle(User* user, const Params& parameters)
 {  
         const std::string& key = parameters[0];
-
-        if (!CheckKey(user, key))
-        {
-            return FAILED;
-        }
 
         KeyHelper::Operation(user, key, OP_SQRT, "NULL");
         return SUCCESS; 

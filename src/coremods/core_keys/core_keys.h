@@ -18,6 +18,28 @@
 #include "managers/keys.h"
 
 /* 
+ * Returns given char in a string.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to find.
+ *         · int      : Char position.
+ * 
+ * @protocol:
+ *
+ *         · enum     : NULL, ERROR or OK.
+ */
+
+class CommandChar : public Command 
+{
+    public: 
+
+        CommandChar(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
  * Capitalizes a given string.
  * 
  * @parameters:

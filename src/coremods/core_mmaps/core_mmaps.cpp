@@ -24,7 +24,6 @@ class CoreModuleMMaps : public Module
          CommandMCount 		cmdmcount;
          CommandMKeys 		cmditer;
          CommandMDel 		cmdmdel;
-         CommandMSeek 		cmdmseek;
          CommandMRepeats 	cmdmrepeats;
          CommandMVals 		cmdmvals;
          CommandMGetAll 	cmdgetalls;
@@ -38,7 +37,6 @@ class CoreModuleMMaps : public Module
                             cmdmcount(this), 
                             cmditer(this), 
                             cmdmdel(this), 
-                            cmdmseek(this),
                             cmdmrepeats(this), 
                             cmdmvals(this),
                             cmdgetalls(this), 

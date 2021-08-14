@@ -16,9 +16,9 @@
 
 CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)
 {
-         last_empty_ok = true;
-         flags = 'e';
-         syntax = "<%key> <argument>";
+         last_empty_ok  = true;
+         flags 		= 'e';
+         syntax 	= "<%key> <argument>";
 }
 
 COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
@@ -77,9 +77,9 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
 
 CommandExpireLIST::CommandExpireLIST(Module* Creator) : Command(Creator, "EXPLIST", 0, 1)
 {
-         last_empty_ok = true;
-         flags = 'e';
-         syntax = "<*argument>";
+         last_empty_ok 	= 	true;
+         flags 		= 	'e';
+         syntax 	= 	"<*argument>";
 }
 
 COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
@@ -186,8 +186,9 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 
 CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 {
-         group = 'e';
-         syntax = "<key> <seconds>";
+        check_key       =       0;
+        group  		= 	'e';
+        syntax 		= 	"<key> <seconds>";
 }
 
 COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters) 
@@ -195,11 +196,6 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
           const std::string& key 	= 	parameters[0];
           const std::string& seconds 	= 	parameters[1];
 
-          if (!CheckKey(user, key))
-          {
-               return FAILED;
-          }
-          
           if (!CheckValidPos(user, seconds))
           {
                 return FAILED;
@@ -211,7 +207,7 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
 
 CommandDBEReset::CommandDBEReset(Module* Creator) : Command(Creator, "ERESET", 1, 1)
 {
-          group = 'e';
+          group  = 'e';
           syntax = "<database>";
 }
 
@@ -219,7 +215,7 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 {       
           const std::string& dbname = parameters[0];
     
-          std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+          const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
 
           if (!database)
           {
@@ -239,8 +235,10 @@ COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters)
 
 CommandSetex::CommandSetex(Module* Creator) : Command(Creator, "SETEX", 3, 3)
 {
-          group = 'e';
-          syntax = "<seconds> <key> \"value\"";
+          check_key   = 1;
+          check_value = true;
+          group       = 'e';
+          syntax      = "<seconds> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters) 
@@ -248,18 +246,6 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
           const std::string& seconds 		= 	parameters[0];
           const std::string& key		= 	parameters[1];
           const std::string& value 		= 	parameters.back();
-
-          if (!CheckKey(user, key))
-          {
-              return FAILED;
-          }
-
-          /* Similar to a set, setex must have a proper inserting format. */
-          
-          if (!CheckFormat(user, value))
-          {
-               return FAILED;
-          } 
 
           if (!CheckValidPos(user, seconds))
           {
@@ -274,8 +260,9 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
 
 CommandExpireAT::CommandExpireAT(Module* Creator) : Command(Creator, "EXPIREAT", 2, 2)
 {
-          group = 'e';
-          syntax = "<key> <epoch time>";
+        check_key       =       0;
+        group  		= 	'e';
+        syntax 		= 	"<key> <epoch time>";
 }
 
 COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters) 
@@ -283,11 +270,6 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
           const std::string& key 	= 	parameters[0];
           const std::string& seconds 	= 	parameters[1];
 
-          if (!CheckKey(user, key))
-          {
-               return FAILED;
-          }
-          
           if (!CheckValidPos(user, seconds))
           {
               return FAILED;

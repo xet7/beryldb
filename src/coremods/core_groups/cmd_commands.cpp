@@ -301,9 +301,8 @@ CommandGList::CommandGList(Module* Creator) : Command(Creator, "GLIST", 1, 1)
 
 COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters) 
 {
-       const std::string& login = parameters[0];
-       
-        bool exists = UserHelper::Exists(login);
+        const std::string& login = parameters[0];
+        const bool exists = UserHelper::Exists(login);
 
         if (!exists)
         {
@@ -342,7 +341,7 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
              return FAILED;
         }
 
-        std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
+        const std::shared_ptr<Group>& Found = Kernel->Groups->Find(gname);
 
         if (!Found)
         {
@@ -362,16 +361,17 @@ COMMAND_RESULT CommandGReset::Handle(User* user, const Params& parameters)
 
 CommandUnAssign::CommandUnAssign(Module* Creator) : Command(Creator, "GDEL", 2, 2)
 {
-        flags = 'r';
-        syntax = "<name> <user>";
+        check_key	=	0;
+        flags 		= 	'r';
+        syntax 		= 	"<name> <user>";
 }
 
 COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters) 
 {
-       const std::string& gname = parameters[0];
-       const std::string& dest = parameters[1];
+       const std::string& gname  = parameters[0];
+       const std::string& dest   = parameters[1];
 
-       std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group>& a_group = Kernel->Groups->Find(gname);
 
        if (!a_group)
        {
@@ -409,7 +409,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
              return FAILED;
        }
 
-       const std::shared_ptr<Group> Found = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group>& Found = Kernel->Groups->Find(gname);
 
        if (!Found)
        {

@@ -85,8 +85,8 @@ inline bool CheckValid(User* user, const std::string& number)
 
 inline std::vector<signed int> GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
 {
-       signed int offset;
-       signed int limit;
+       signed int offset	=	0;
+       signed int limit		=	0;
 
        if (parameters.size() == (max - 1))
        {
@@ -96,7 +96,7 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
                  return { 0 };
              }
        
-             limit = convto_num<signed int>(parameters[(max - 2)]); 
+             limit  = convto_num<signed int>(parameters[(max - 2)]); 
              offset = 0;
        }
        else if (parameters.size() == max)
@@ -107,13 +107,13 @@ inline std::vector<signed int> GetLimits(User* user, unsigned int max, const Com
                    return { 0 };
              }
        
-             limit = convto_num<signed int>(parameters[(max - 1)]); 
+             limit  = convto_num<signed int>(parameters[(max - 1)]); 
              offset = convto_num<signed int>(parameters[(max - 2)]);
        }
        else
        {
-            limit = -1;
-            offset = 0;
+             limit  = -1;
+             offset = 0;
        }
        
        std::vector<signed int> created = { 1, offset, limit };

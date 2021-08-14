@@ -39,10 +39,10 @@ void DBManager::Load(const std::string& name, bool dbdefault)
 
         std::string path = STHelper::Get("databases", name);
 
-        std::shared_ptr<UserDatabase> New = NULL;
-        New = std::make_shared<UserDatabase>(name, path);
-
-        New->created = Kernel->Now();
+        std::shared_ptr<UserDatabase> New  = NULL;
+        New 				   = std::make_shared<UserDatabase>(name, path);
+        New->created 			   = Kernel->Now();
+        
         this->DBMap.insert(std::make_pair(name, std::shared_ptr<UserDatabase>(New)));
         New->Open();
         bprint(DONE, "Initializing database: %s", name.c_str());
@@ -57,7 +57,7 @@ bool DBManager::Delete(const std::string& name)
 {
       /* Name does not exists. */
       
-      std::shared_ptr<UserDatabase> userdb = this->Find(name);
+      const std::shared_ptr<UserDatabase>& userdb = this->Find(name);
       
       if (!userdb)
       {
@@ -76,7 +76,12 @@ bool DBManager::Create(const std::string& name, const std::string& path)
       
       if (this->Find(name))
       {
-           return false;
+            return false;
+      }
+      
+      if (this->FindPath(path))
+      {
+            return false;
       }
       
       if (!Kernel->Engine->IsDatabase(name))
@@ -119,6 +124,24 @@ unsigned int DBManager::OpenAll()
        }
 
        return counter;
+}
+
+std::shared_ptr<UserDatabase> DBManager::FindPath(const std::string& path)
+{
+        std::string dbpath = Kernel->Config->Paths->SetWDDB(path) + ".db";
+        std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
+
+        for (DataMap::iterator i = DBMap.begin(); i != DBMap.end(); ++i)
+        {
+                 std::shared_ptr<UserDatabase> db = i->second;
+                 
+                 if (i->second->GetPath() == dbpath)
+                 {
+                       return db;
+                 }
+        }
+        
+        return NULL;
 }
 
 std::shared_ptr<UserDatabase> DBManager::Find(const std::string& name)

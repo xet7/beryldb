@@ -29,7 +29,7 @@ bool Database::IsClosing()
         return this->Closing;
 }
 
-Database::Database(const std::string& dbname, const std::string& dbpath) : created(Kernel->Now()), name(dbname), path(Kernel->Config->Paths.SetWDDB(dbpath))
+Database::Database(const std::string& dbname, const std::string& dbpath) : created(Kernel->Now()), name(dbname), path(Kernel->Config->Paths->SetWDDB(dbpath))
 {
         this->SetClosing(false);
 }
@@ -61,18 +61,19 @@ bool Database::Open()
 {	
         this->db = NULL;
         
-        options.env = Kernel->Store->GetEnv();
-        options.create_if_missing = Kernel->Config->DB.createim;
         options.IncreaseParallelism(Kernel->Config->DB.increaseparal);
-        options.keep_log_file_num = 1;
-        options.write_thread_max_yield_usec = Kernel->Config->DB.yieldusec;
         options.OptimizeLevelStyleCompaction(2);
-        options.enable_thread_tracking = true;
-        options.enable_pipelined_write = Kernel->Config->DB.pipeline;
+
+        options.env 				= Kernel->Store->GetEnv();
+        options.create_if_missing 		= Kernel->Config->DB.createim;
+        options.keep_log_file_num 		= 1;
+        options.write_thread_max_yield_usec 	= Kernel->Config->DB.yieldusec;
+        options.enable_thread_tracking 		= true;
+        options.enable_pipelined_write 		= Kernel->Config->DB.pipeline;
+
+        this->status 				= rocksdb::DB::Open(options, this->path, &this->db);
 
         slog("DATABASE", LOG_VERBOSE, "Database opened: %s", this->path.c_str());
-        
-        this->status = rocksdb::DB::Open(options, this->path, &this->db);
 
         if (!this->status.ok()) 
         {
@@ -151,11 +152,11 @@ void CoreManager::UserDefaults()
 
 void CoreManager::CheckDefaults()
 {
-       std::string result = STHelper::Get("instance", "first_ran");
+       const std::string& result = STHelper::Get("instance", "first_ran");
        
        /* Creating instance, unless otherwise specified. */
        
-       time_t instance = Kernel->Now();
+       const time_t instance = Kernel->Now();
 
        /* No entry set. */
        
@@ -163,7 +164,7 @@ void CoreManager::CheckDefaults()
        {
                  STHelper::Set("instance", "first_ran", convto_string(instance));
                       
-                 bprint(DONE, "Welcome to Beryl.");
+                 bprint(DONE, "Welcome to BerylDB.");
 
                  Kernel->Store->DBM->Create("default", "default");
                  Kernel->Store->DBM->SetDefault("default");
@@ -179,8 +180,7 @@ void CoreManager::CheckDefaults()
        }
        else
        {		
-               instance = convto_num<time_t>(result);
-               bprint(DONE, "Instance created: %s", Daemon::HumanEpochTime(instance).c_str());
+               bprint(DONE, "Instance created: %s", Daemon::HumanEpochTime(convto_num<time_t>(result)).c_str());
                Kernel->Store->First = false;
        }
        
@@ -204,10 +204,10 @@ void StoreManager::OpenAll()
 
        for (unsigned int i = 1; i <= Kernel->Config->DB.datathread; i++)
        {
-             DataThread* New = new DataThread();   
-             New->Create();
-             Kernel->Store->Flusher->threadslist.push_back(New);
-             counter++;
+              DataThread* New = new DataThread();   
+              New->Create();
+              Kernel->Store->Flusher->threadslist.push_back(New);
+              counter++;
        }
 
        if (!counter)
@@ -222,7 +222,7 @@ void StoreManager::OpenAll()
 
 void StoreManager::Push(std::shared_ptr<QueryBase> request)
 {
-      User* user = request->user;
+      User* const user = request->user;
 
       if (user == NULL || user->IsQuitting())
       {

@@ -180,16 +180,16 @@ void ClientManager::AddUser(int socket, BindingPort* via, engine::sockets::socka
 
 void ClientManager::EraseLogin(User* user)
 {
-    LoginHash& users = this->GetLogins();
+        const LoginHash& users = this->GetLogins();
 
-    for (LoginHash::const_iterator i = users.begin(); i != users.end(); ++i)
-    {
-	    if (i->second == user)
-	    {
-		  logins.erase(i);
-		  break;
-	    }
-    }
+        for (LoginHash::const_iterator i = users.begin(); i != users.end(); ++i)
+        {
+	      if (i->second == user)
+	      {
+		    logins.erase(i);
+	   	    break;
+	      }
+        }
 }
 
 void ClientManager::ForceExits()
@@ -248,7 +248,7 @@ void ClientManager::Disconnect(User* user, const std::string& quitmessage)
 
 	if (!user->IsLocked())
 	{
-		Kernel->Reducer.Add(user);
+		Kernel->Reducer->Add(user);
 	}
 	else
 	{

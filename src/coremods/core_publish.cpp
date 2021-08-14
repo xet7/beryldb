@@ -234,7 +234,7 @@ class CommandMessage : public Command
 		
 		if (!user->InGroup('c') && !user->IsAdmin())
 		{
-                        user->SendProtocol(ERR_INPUT2, ERR_NO_FLAGS, ACCESS_DENIED);
+                        user->SendProtocol(ERR_INPUT, ACCESS_DENIED);
                         return FAILED;
 		}
 

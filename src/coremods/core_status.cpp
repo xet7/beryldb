@@ -14,7 +14,6 @@
 #include "beryl.h"
 #include "modules/status.h"
 #include "channelmanager.h"
-#include "brldb/dbmanager.h"
 #include "engine.h"
 #include "stats.h"
 
@@ -22,16 +21,16 @@ class CommandStatus : public Command
 {
  private:
 
-	Events::ModuleEventProvider statusevprov;
+	Events::ModuleEventProvider status_provider;
 	void PreloadData(Status::Context& status);
 
  public:
 	
-	CommandStatus(Module* Creator) : Command(Creator, "STATUS", 1, 2), statusevprov(Creator, "event/status")
+	CommandStatus(Module* Creator) : Command(Creator, "STATUS", 1, 2), status_provider(Creator, "event/status")
 	{
-		last_empty_ok = false;
-		syntax = "<symbol> [<servername>]";
-		group = 'w';
+		last_empty_ok   = false;
+		syntax 		= "<symbol> [<servername>]";
+		group 		= 'w';
 	}
 
 	COMMAND_RESULT Handle(User* user, const Params& parameters);

@@ -128,7 +128,6 @@ CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
 
 }
 
-
 COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
 {
          user->SendProtocol(BRLD_OK, user->login.c_str());

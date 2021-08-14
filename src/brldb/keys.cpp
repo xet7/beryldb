@@ -280,6 +280,31 @@ void alpha_query::Process()
        user->SendProtocol(BRLD_OK, this->response);
 }
 
+void char_query::Run()
+{
+       RocksData result = this->Get(this->dest);
+
+       const std::string& found = to_string(result.value);
+       const unsigned int flength = convto_num<unsigned int>(this->value);
+      
+       if (flength >= found.length())
+       {
+             access_set(DBL_INVALID_RANGE);
+             return;
+       }
+       else
+       {
+            this->response = found[flength];
+       }
+
+       this->SetOK();
+}
+
+void char_query::Process()
+{
+       user->SendProtocol(BRLD_OK, this->response);
+}
+
 void isnum_query::Run()
 {
        RocksData result = this->Get(this->dest);

@@ -16,15 +16,15 @@
 
 CommandTTL::CommandTTL(Module* Creator) : Command(Creator, "TTL", 1)
 {
-         group = 'e';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'e';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
-         const std::string& key = parameters[0];
-         
-         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
+         const std::string& key 	= parameters[0];
+         const signed int ttl 		= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -42,15 +42,15 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 
 CommandTTLAT::CommandTTLAT(Module* Creator) : Command(Creator, "TTLAT", 1)
 {
-         group = 'e';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'e';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 {       
          const std::string& key = parameters[0];
-         
-         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl 	= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -68,15 +68,15 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 
 CommandPersist::CommandPersist(Module* Creator) : Command(Creator, "PERSIST", 1, 1)
 {
-         group = 'e';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'e';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters) 
 {       
          const std::string& key = parameters[0];
-          
-         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl 	= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
          
          if (ttl != -1)
          {
@@ -93,7 +93,7 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
 
 CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 0, 1)
 {
-         group = 'e';
+         group  = 'e';
          syntax = "<select>";
 }
 

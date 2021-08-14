@@ -46,8 +46,7 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 			Channel::JoinUser(false, user, parameters[0], false);
                         std::string login = user->login;
                         
-                        std::string setting = "chansync";
-                        if (Kernel->Sets->AsBool(setting))
+                        if (Kernel->Sets->AsBool(chansync))
                         {
                                 Kernel->Clients->Join(user, login, parameters[0]);
                         }
@@ -77,11 +76,10 @@ COMMAND_RESULT CommandJoin::HandleLocal(LocalUser* user, const Params& parameter
 
 			Channel::JoinUser(false, user, parameters[0]);
 			std::string login = user->login;
-			std::string setting = "chansync";
 			
 		        /* User will not sync chans */
 
-		        if (Kernel->Sets->AsBool(setting))
+		        if (Kernel->Sets->AsBool(chansync))
 		        {
 	                        Kernel->Clients->Join(user, login, parameters[0]);
 			}
@@ -123,9 +121,7 @@ COMMAND_RESULT CommandPart::Handle(User* user, const Params& parameters)
 	{
 		/* Parts are  being sync */
 		
-		std::string setting = "chansync";
-		
-                if (Kernel->Sets->AsBool(setting))
+                if (Kernel->Sets->AsBool(chansync))
                 {
                 	std::string login = user->login;
 	                Kernel->Clients->Part(user, login, parameters[0]);

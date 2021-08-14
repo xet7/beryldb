@@ -16,8 +16,10 @@
 
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 {
-         group = 'f';
-         syntax = "<seconds> <key> \"value\"";
+         check_key	=	1;
+         check_value	=	true;         
+         group 		= 	'f';
+         syntax 	= 	"<seconds> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
@@ -31,20 +33,15 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
               return FAILED;
           }
   
-          if (!CheckFormat(user, value))
-          {
-               return FAILED;
-          }   
-
-          const unsigned int exp_usig = convto_num<unsigned int>(seconds);
-          ExpireHelper::Future(user, key, exp_usig, value);
+          ExpireHelper::Future(user, key, convto_num<unsigned int>(seconds), value);
           return SUCCESS;
 }
 
 CommandTTE::CommandTTE(Module* Creator) : Command(Creator, "TTE", 1)
 {
-         group = 'f';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'f';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
@@ -70,13 +67,15 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 
 CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 {
-         group = 'f';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'f';
+        syntax		= 	"<key>";
 }
 
 COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 {
          const std::string& key = parameters[0];
+         
          GlobalHelper::UserFutureExecute(user, key);
          return SUCCESS;
 }
@@ -135,8 +134,9 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
 
 CommandCancel::CommandCancel(Module* Creator) : Command(Creator, "CANCEL", 1, 1)
 {
-         group = 'f';
-         syntax = "<key>";
+        check_key       =       0;
+        group 		= 	'f';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
@@ -149,8 +149,10 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3, 3)
 {
-          group = 'f';
-          syntax = "<epoch time> <key> \"value\"";
+        check_key       =       1;
+        check_value	=	true;
+        group 		= 	'f';
+        syntax 		= 	"<epoch time> <key> \"value\"";
 }
 
 COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
@@ -163,11 +165,6 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
           {
               return FAILED;
           }
-
-          if (!CheckFormat(user, value))
-          {
-               return FAILED;
-          }   
 
           const unsigned int exp_usig = convto_num<unsigned int>(seconds);
 
@@ -183,8 +180,8 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
 
 CommandFutureList::CommandFutureList(Module* Creator) : Command(Creator, "FTLIST", 0, 1)
 {
-         last_empty_ok = true;
-         syntax = "<*argument>";
+         last_empty_ok 	= 	true;
+         syntax 	= 	"<*argument>";
 }
 
 COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)

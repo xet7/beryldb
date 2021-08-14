@@ -19,6 +19,8 @@ class ExportAPI KeyHelper
 {
     public:
 
+        static void HeshLimits(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, const std::string& value, signed int offset, signed int limit, bool allow = false);
+
         static void SimpleType(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, QUERY_TYPE type);
 
         static void HeshVal(User* user, std::shared_ptr<QueryBase> query, const std::string& key, const std::string& val1, const std::string& val2);

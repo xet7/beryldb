@@ -16,18 +16,14 @@
 
 CommandVBack::CommandVBack(Module* Creator) : Command(Creator, "VBACK", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVBack::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vback_query>(), key);
        return SUCCESS;  
@@ -35,18 +31,14 @@ COMMAND_RESULT CommandVBack::Handle(User* user, const Params& parameters)
 
 CommandVFront::CommandVFront(Module* Creator) : Command(Creator, "VFRONT", 1, 1)
 {
-         group = 'l';
-         syntax = "<key>";
+       check_key        =       0;
+       group 		= 	'l';
+       syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandVFront::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<vfront_query>(), key);
        return SUCCESS;  

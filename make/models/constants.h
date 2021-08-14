@@ -13,9 +13,15 @@
 
 #pragma once
 
+static std::string chansync = "chansync";
+
 /* Default publish command. */
 
 #define PUBL_DEF "PUBLISH"
+
+/* No diff. */
+
+const std::string NO_DIFF		=	"NO_DIFF";
 
 /* WriteBatch failed. */
 
@@ -47,7 +53,7 @@ const std::string PROCESS_EMPTY 	= 	"EMPTY";
 
 /* Default group flags */
 
-const std::string DEFAULT_GFLAGS 	= 	"kzlgvefmxpchw";
+const std::string DEFAULT_GFLAGS 	= 	"klgvefmxphw";
 
 /* Entry is protected */
 

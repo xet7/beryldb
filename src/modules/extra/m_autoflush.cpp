@@ -64,9 +64,9 @@ class ModuleAutoFlush : public Module
                         return;
                 }
 
-                DataMap dbs = Kernel->Store->DBM->GetDatabases();
+                const DataMap& dbs = Kernel->Store->DBM->GetDatabases();
                 
-                for (DataMap::iterator i = dbs.begin(); i != dbs.end(); ++i)
+                for (DataMap::const_iterator i = dbs.begin(); i != dbs.end(); ++i)
                 {
                         std::shared_ptr<UserDatabase> db = i->second;
                         

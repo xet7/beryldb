@@ -201,8 +201,8 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 return FAILED;        
         }
                 
-        const std::string& newlogin = parameters[0];
-        const std::string& pass = parameters[1];
+        const std::string& newlogin 	= parameters[0];
+        const std::string& pass 	= parameters[1];
 
         if (newlogin.length() < 3 || newlogin.length() > 15)
         {
@@ -222,7 +222,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        const std::string& exists = UserHelper::Find(newlogin, "created");
+        const std::string& exists 	= UserHelper::Find(newlogin, "created");
         
         if (exists.empty())
         {

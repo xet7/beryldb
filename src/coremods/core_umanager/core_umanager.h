@@ -98,7 +98,7 @@ class CommandDelUser : public Command
  *
  * @protocol:
  *
- *         · enum      :   NULL, INVALID or OK.
+ *         · enum       :   NULL, INVALID or OK.
  */
 
 class CommandAddFlag : public Command
@@ -139,7 +139,7 @@ class CommandDelFlags : public Command
  *
  * @protocol:
  *
- *         · vector : user list.
+ *         · vector    : user list.
  */
 
 class CommandListUsers : public Command
@@ -156,11 +156,11 @@ class CommandListUsers : public Command
  * 
  * @parameters:
  *
- *         · string  : Destination user.
+ *         · string    : Destination user.
  * 
  * @protocol:
  *
- *         · vector  : List of flags.
+ *         · vector    : List of flags.
  */ 
 
 class CommandListFlags : public Command
@@ -178,8 +178,8 @@ class CommandListFlags : public Command
  * 
  * @parameters:
  *
-*	   · string	: user.
- *         · string	: password.
+*	   · string   : user.
+ *         · string   : password.
  * 
  * @protocol:
  *
@@ -219,11 +219,11 @@ class CommandListAdmins : public Command
  *
  * @parameters:
  *
- *         · string    :   Login to verify if is present in cache.
+ *         · string   :   Login to verify if is present in cache.
  *
  * @protocol:
  *
- *         · enum      :   1 or 0.
+ *         · enum     :   1 or 0.
  */
  
 class CommandInCache : public Command

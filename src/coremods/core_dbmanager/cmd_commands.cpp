@@ -125,8 +125,8 @@ COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 
 CommandDBSize::CommandDBSize(Module* Creator) : Command(Creator, "DBSIZE", 0, 1)
 {
-       group  = 'w';
-       syntax = "<database>";
+       group   = 'w';
+       syntax  = "<database>";
 }
 
 COMMAND_RESULT CommandDBSize::Handle(User* user, const Params& parameters)

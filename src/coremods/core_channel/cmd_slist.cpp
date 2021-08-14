@@ -19,8 +19,7 @@
 
 CommandSlist::CommandSlist(Module* parent) : MultiCommand(parent, "SLIST", 0, 0), namesevprov(parent, "event/slist")
 {
-	flags = 'e';
-	
+	flags  = 'e';
 	syntax = "[<channel>[,<channel>]+]";
 }
 
@@ -37,9 +36,7 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 		return SUCCESS;
 	}
 
-        Channel* chan = NULL;
-
-	chan = Kernel->Channels->Find(parameters[0]);
+        Channel* chan = Kernel->Channels->Find(parameters[0]);
 
 	if (chan)
 	{

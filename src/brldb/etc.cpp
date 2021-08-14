@@ -13,11 +13,6 @@
 
 #include "beryl.h"
 #include "engine.h"
-#include "brldb/database.h"
-#include "brldb/query.h"
-#include "brldb/dbnumeric.h"
-#include "brldb/expires.h"
-#include "brldb/dbmanager.h"
 #include "helpers.h"
 #include "notifier.h"
 
@@ -169,7 +164,14 @@ void future_exec_query::Run()
              std::string file2 = dbvalue.substr(found2+1);
              
              this->SetDest(this->key, this->select_query, INT_KEY);
-             this->Write(this->dest, to_bin(file2));
+             
+             if (!this->Write(this->dest, to_bin(file2)))
+             {
+                     this->DelFuture();
+                     access_set(DBL_UNABLE_WRITE);
+                     return;
+             }
+             
              this->DelFuture();
              this->SetOK();
              return;
@@ -215,7 +217,7 @@ void dbreset_query::Run()
 
 void dbreset_query::Process()
 {
-      std::shared_ptr<UserDatabase> userdb = Kernel->Store->DBM->Find(this->key);
+      const std::shared_ptr<UserDatabase>& userdb = Kernel->Store->DBM->Find(this->key);
  
       if (!userdb)
       {

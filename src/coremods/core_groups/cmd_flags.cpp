@@ -16,16 +16,17 @@
 
 CommandFlagUpdate::CommandFlagUpdate(Module* Creator) : Command(Creator, "GUPDATE", 2, 2)
 {
-        flags = 'r';
-        syntax = "<name> <flag>";
+        check_key       =       0;
+        flags 		= 	'r';
+        syntax 		= 	"<name> <flag>";
 }
 
 COMMAND_RESULT CommandFlagUpdate::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       const std::string& flag = parameters[1];
+       const std::string& gname 	= 	parameters[0];
+       const std::string& flag 		= 	parameters[1];
        
-       std::shared_ptr<Group> a_group = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group>& a_group = Kernel->Groups->Find(gname);
        
        if (!a_group)
        {

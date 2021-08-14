@@ -181,6 +181,12 @@ class ExportAPI Command : public CommandModel
 	
 	~Command();
 	
+	signed int check_hash;
+	
+	signed int check_key;
+	
+	bool check_value;
+	
 	/* User modes required to run this command. */
 	
 	unsigned char flags;

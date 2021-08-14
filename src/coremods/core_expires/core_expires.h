@@ -236,6 +236,19 @@ class CommandSelectReset : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Returns all expires in a given select.
+ *
+ * @parameters:
+ *
+ *         · int   : Current select, if no select is provided,
+ *                   expires in current select will be returned. 
+ *
+ * @protocol:
+ *
+ *         · map   : Expires as keyed in a map.
+ */
+
 class CommandSelectCount : public Command 
 {
     public: 

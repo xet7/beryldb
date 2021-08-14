@@ -23,7 +23,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 	}
 
 	const std::string filename = FullModName(name);
-	const std::string ModuleFile = Kernel->Config->Paths.SetWDModule(filename);
+	const std::string ModuleFile = Kernel->Config->Paths->SetWDModule(filename);
 
 	if (!FileSystem::Exists(ModuleFile))
 	{
@@ -32,7 +32,6 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 		return false;
 	}
 
-	
 	if (Modules.find(filename) != Modules.end())
 	{
 		last_known_error = "Module " + filename + " already loaded.";
@@ -92,7 +91,7 @@ bool ModuleHandler::Load(const std::string& name, bool nextloop)
 		if (loading)
 		{
 			SmartUnload(loading);
-			Kernel->Reducer.Add(handler);
+			Kernel->Reducer->Add(handler);
 		}
 		else
 		{
@@ -120,7 +119,7 @@ void ModuleHandler::LoadCore(std::map<std::string, ServiceList>& ServiceMap)
 
 	std::vector<std::string> files;
 	
-	if (!FileSystem::AsFileList(Kernel->Config->Paths.Module, files, "core_*.so"))
+	if (!FileSystem::AsFileList(Kernel->Config->Paths->Module, files, "core_*.so"))
 	{
 		bprint(ERROR, "Failed to retrieve core modules list.");
 		Kernel->Exit(EXIT_CODE_MODULE);

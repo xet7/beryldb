@@ -141,7 +141,7 @@ void SocketPool::DeleteDescriptor(EventHandler* ehandler)
 
 int SocketPool::Events()
 {
-	int i = epoll_wait(SocketHandler, &events[0], events.size(), 6);
+	int i = epoll_wait(SocketHandler, &events[0], events.size(), 5);
 
         Kernel->Now();
 	
