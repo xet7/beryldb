@@ -19,6 +19,8 @@ class ExportAPI KeyHelper
 {
     public:
 
+        static void RetroFunc(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, STR_FUNCTION func, bool allow = false);
+
         static void HeshLimits(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, const std::string& value, signed int offset, signed int limit, bool allow = false);
 
         static void SimpleType(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, QUERY_TYPE type);

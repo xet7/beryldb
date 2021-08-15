@@ -167,9 +167,9 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 
 CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1, 1)
 {
-        check_key       = 0;
-        group 		= 'k';
-        syntax 		= "<key>";
+        check_key       = 	0;
+        group 		= 	'k';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandGet::Handle(User* user, const Params& parameters)
@@ -403,10 +403,7 @@ COMMAND_RESULT CommandToLower::Handle(User* user, const Params& parameters)
 {  
        const std::string& key           =       parameters[0];
 
-       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
-       query->function = STR_TO_LOW;
-       KeyHelper::Retro(user, query, key);
-       
+       KeyHelper::RetroFunc(user, std::make_shared<modify_query>(), key, STR_TO_LOW);
        return SUCCESS;
 }
 
@@ -421,28 +418,22 @@ COMMAND_RESULT CommandToUpper::Handle(User* user, const Params& parameters)
 {  
        const std::string& key           =       parameters[0];
 
-       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
-       query->function 			   = STR_TO_UPPER;
-       
-       KeyHelper::Retro(user, query, key);
+       KeyHelper::RetroFunc(user, std::make_shared<modify_query>(), key, STR_TO_UPPER);
        return SUCCESS;
 }
 
 CommandToCap::CommandToCap(Module* Creator) : Command(Creator, "TOCAP", 1, 1)
 {
-         check_key = 	0;
-         group     = 	'k';
-         syntax    = 	"<key>";
+         check_key 	= 	0;
+         group     	= 	'k';
+         syntax    	= 	"<key>";
 }
 
 COMMAND_RESULT CommandToCap::Handle(User* user, const Params& parameters)
 {  
        const std::string& key           =       parameters[0];
 
-       std::shared_ptr<modify_query> query = std::make_shared<modify_query>();
-       query->function 			   = STR_TO_CAP;
-  
-       KeyHelper::Retro(user, query, key);
+       KeyHelper::RetroFunc(user, std::make_shared<modify_query>(), key, STR_TO_CAP);
        return SUCCESS;
 }
 
