@@ -275,11 +275,6 @@ COMMAND_RESULT CommandIsNum::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
        
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
-       
        KeyHelper::Retro(user, std::make_shared<isnum_query>(), key);
        return SUCCESS;
 }

@@ -252,8 +252,10 @@ COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
 
 CommandLPushNX::CommandLPushNX(Module* Creator) : Command(Creator, "LPUSHNX", 2, 2)
 {
-         group = 'v';
-         syntax = "<key> \"value\"";
+       check_key	=	0;
+       check_value	=	true;
+       group 		= 	'v';
+       syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
@@ -261,34 +263,20 @@ COMMAND_RESULT CommandLPushNX::Handle(User* user, const Params& parameters)
         const std::string& key 		= 	parameters[0];
         const std::string& value 	= 	parameters.back();
 
-        if (!CheckKey(user, key))
-        {
-             return FAILED;
-        }
-
-        if (!CheckFormat(user, value))
-        {
-            return FAILED;
-        }
-
         KeyHelper::Simple(user, std::make_shared<lpushnx_query>(), key, value);
         return SUCCESS;  
 }
 
 CommandLAvg::CommandLAvg(Module* Creator) : Command(Creator, "LAVG", 1, 1)
 {
-         group = 'v';
-         syntax = "<key>";
+        check_key	=	0;
+        group 		= 	'v';
+        syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLAvg::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
-
-       if (!CheckKey(user, key))
-       {
-            return FAILED;
-       }
 
        KeyHelper::Retro(user, std::make_shared<lavg_query>(), key);
        return SUCCESS;  
