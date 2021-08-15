@@ -23,14 +23,14 @@ CommandKeys::CommandKeys(Module* Creator) : Command(Creator, "KEYS", 1, 3)
 COMMAND_RESULT CommandKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key             =     parameters[0];
-       const std::vector<signed int>& lms =     GetLimits(user, this->max_params, parameters);
+       Limiter conf =     GetLimits(user, this->max_params, parameters);
        
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
        
-       KeyHelper::RetroLimits(user, std::make_shared<keys_query>(), key, lms[1], lms[2], true);
+       KeyHelper::RetroLimits(user, std::make_shared<keys_query>(), key, conf.offset, conf.limit, true);
        return SUCCESS;
 }
 
@@ -43,14 +43,14 @@ CommandSearch::CommandSearch(Module* Creator) : Command(Creator, "SEARCH", 1, 3)
 COMMAND_RESULT CommandSearch::Handle(User* user, const Params& parameters)
 {  
        const std::string& key              =   parameters[0];
-       const std::vector<signed int>& lms  =   GetLimits(user, this->max_params, parameters);
+       Limiter conf  			   =   GetLimits(user, this->max_params, parameters);
        
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<search_query>(), key, lms[1], lms[2], true);
+       KeyHelper::RetroLimits(user, std::make_shared<search_query>(), key, conf.offset, conf.limit, true);
        return SUCCESS;
 }
 

@@ -233,9 +233,9 @@ COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
 
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
@@ -243,6 +243,6 @@ COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
        std::shared_ptr<diff_query> query = std::make_shared<diff_query>();
        query->value = value;
 
-       KeyHelper::RetroLimits(user, query, key, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, query, key, conf.offset, conf.limit);
        return SUCCESS;
 }

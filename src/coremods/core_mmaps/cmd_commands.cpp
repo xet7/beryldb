@@ -24,14 +24,14 @@ CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap 		= 	parameters[0];
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<mget_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mget_query>(), kmap, conf.offset, conf.limit);
        return SUCCESS;
 }
 
@@ -101,14 +101,14 @@ CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap 		  = 	parameters[0];
-       const std::vector<signed int>& lms = 	GetLimits(user, this->max_params, parameters);
+       Limiter conf = 	GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<mkeys_query>(), kmap, lms[1], lms[2], true);
+       KeyHelper::RetroLimits(user, std::make_shared<mkeys_query>(), kmap, conf.offset, conf.limit, true);
        return SUCCESS;
 }
 
@@ -156,14 +156,14 @@ CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap 		   =   parameters[0];
-       const std::vector<signed int>& lms  =   GetLimits(user, this->max_params, parameters);
+       Limiter conf  =   GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<mvals_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mvals_query>(), kmap, conf.offset, conf.limit);
        return SUCCESS;
 }
 
@@ -177,14 +177,14 @@ CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1,
 COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap = parameters[0];
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<mgetall_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mgetall_query>(), kmap, conf.offset, conf.limit);
        return SUCCESS;
 }
 
@@ -201,9 +201,9 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
        const std::string& kmap 		= 	parameters[0];
        const std::string& key 		= 	parameters[1];
 
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
@@ -211,6 +211,6 @@ COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
        std::shared_ptr<miter_query> query = std::make_shared<miter_query>();
        query->value = key;
        
-       KeyHelper::RetroLimits(user, query, kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, query, kmap, conf.offset, conf.limit);
        return SUCCESS;
 }

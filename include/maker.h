@@ -70,54 +70,75 @@ inline bool CheckValid(User* user, const std::string& number)
 }
 
 /* 
+ * Returns limiting data for a query.
+ * Keep in mind that this class should be only
+ * handled by function GetLimits.
+ */
+
+class ExportAPI Limiter
+{
+    public:	
+       
+       bool error;
+       
+       signed int limit;
+       signed int offset;
+       
+       Limiter() : error(false), limit(0), offset(0)
+       {
+       
+       }
+};
+
+/* 
  * Returns a vector containing limits.
  * 
  * @parameters:
  *
- *         · max: Max parameters.
- *         · Params: Parameters as given by the original command.,
+ *	   · User	: Requesting user.
+ *         · uint	: Max parameters.
+ *         · Params	: Parameters as given by the original command.,
  *
  * @return:
  *
- *         · Vector: Returns { 0 } if invalid.
+ *         · Limiter	: Returns { 0 } if invalid.
  */
 
-
-inline std::vector<signed int> GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
+inline Limiter GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
 {
-       signed int offset	=	0;
-       signed int limit		=	0;
+       Limiter limiter;
 
        if (parameters.size() == (max - 1))
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 2)]))
              {
-                 user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
-                 return { 0 };
+                  user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
+                  limiter.error = true;
+                  return limiter;
              }
        
-             limit  = convto_num<signed int>(parameters[(max - 2)]); 
-             offset = 0;
+             limiter.limit  = convto_num<signed int>(parameters[(max - 2)]); 
+             limiter.offset = 0;
        }
        else if (parameters.size() == max)
        {
              if (!is_zero_or_great_or_mone(parameters[(max - 1)]) || !is_zero_or_great(parameters[(max - 2)]))
              {
                    user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
-                   return { 0 };
+                   limiter.error = true;
+                   return limiter;
              }
        
-             limit  = convto_num<signed int>(parameters[(max - 1)]); 
-             offset = convto_num<signed int>(parameters[(max - 2)]);
+             limiter.limit  = convto_num<signed int>(parameters[(max - 1)]); 
+             limiter.offset = convto_num<signed int>(parameters[(max - 2)]);
        }
        else
        {
-             limit  = -1;
-             offset = 0;
+             limiter.limit  = -1;
+             limiter.offset = 0;
        }
        
-       std::vector<signed int> created = { 1, offset, limit };
-       return created;
+       return limiter;
 }
 
 /* 

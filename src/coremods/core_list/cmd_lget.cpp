@@ -45,14 +45,14 @@ CommandLGet::CommandLGet(Module* Creator) : Command(Creator, "LGET", 1, 3)
 COMMAND_RESULT CommandLGet::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 	=       parameters[0];
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
        
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
        
-       KeyHelper::RetroLimits(user, std::make_shared<lget_query>(), key, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<lget_query>(), key, conf.offset, conf.limit);
        return SUCCESS;  
 }
 
@@ -66,14 +66,14 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
 {  
        const std::string& key 	          =    parameters[0];
 
-       const std::vector<signed int>& lms =    GetLimits(user, this->max_params, parameters);
+       Limiter conf =    GetLimits(user, this->max_params, parameters);
        
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
        
-       KeyHelper::RetroLimits(user, std::make_shared<lkeys_query>(), key, lms[1], lms[2], true);
+       KeyHelper::RetroLimits(user, std::make_shared<lkeys_query>(), key, conf.offset, conf.limit, true);
        return SUCCESS;  
 }
 
@@ -89,9 +89,9 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
        const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters.back();
         
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
        
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
@@ -99,7 +99,7 @@ COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
        std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
        query->value = stripe(value);
        
-       KeyHelper::RetroLimits(user, std::make_shared<lfind_query>(), key, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<lfind_query>(), key, conf.offset, conf.limit);
        return SUCCESS;  
 }
 

@@ -146,14 +146,14 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
 {  
        const std::string& key = parameters[0];
 
-       std::vector<signed int> lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<gkeys_query>(), key, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<gkeys_query>(), key, conf.offset, conf.limit);
        return SUCCESS;
 }
 
@@ -186,9 +186,9 @@ COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
        const std::string& gname 	= 	parameters[0];
        const std::string& distance 	= 	parameters[1];
 
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
+       Limiter conf = GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
@@ -196,7 +196,7 @@ COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
        std::shared_ptr<geodistance_query> query = std::make_shared<geodistance_query>();
        query->value = distance; 
        
-       KeyHelper::RetroLimits(user, query, gname, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, query, gname, conf.offset, conf.limit);
        return SUCCESS;
 }
 

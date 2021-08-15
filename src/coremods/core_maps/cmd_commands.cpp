@@ -95,14 +95,14 @@ COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap 		   =    parameters[0];
 
-       const std::vector<signed int>& lms  =    GetLimits(user, this->max_params, parameters);
+       Limiter conf  =    GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<hvals_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<hvals_query>(), kmap, conf.offset, conf.limit);
        return SUCCESS;
 }
 
@@ -117,14 +117,14 @@ COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
 {  
        const std::string& kmap      =    parameters[0];
 
-       const std::vector<signed int>& lms  =    GetLimits(user, this->max_params, parameters);
+       Limiter conf  =    GetLimits(user, this->max_params, parameters);
 
-       if (lms[0] == 0)
+       if (conf.error)
        {
             return FAILED; 
        }
 
-       KeyHelper::RetroLimits(user, std::make_shared<hgetall_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<hgetall_query>(), kmap, conf.offset, conf.limit);
        return SUCCESS;
 }
 
