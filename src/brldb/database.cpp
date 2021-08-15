@@ -34,7 +34,7 @@ Database::Database(const std::string& dbname, const std::string& dbpath) : creat
         this->SetClosing(false);
 }
 
-CoreDatabase::CoreDatabase() : Database("core", "core.db")
+CoreDatabase::CoreDatabase() : Database(CORE_DB, CORE_DB + ".db")
 {
 
 }

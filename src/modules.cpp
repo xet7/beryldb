@@ -476,7 +476,7 @@ void ModuleHandler::LoadAll()
 		
 		/* These module names are not allowed. */
 
-		if (shortname == ROOT_USER || shortname == "coredb" || shortname == "beryldb")
+		if (shortname == ROOT_USER || shortname == CORE_DB || shortname == "coredb" || shortname == "beryldb")
 		{
 			bprint(ERROR, "Invalid module name: %s", shortname.c_str());
 			Kernel->Exit(EXIT_CODE_CONFIG);
