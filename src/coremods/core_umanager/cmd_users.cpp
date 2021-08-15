@@ -16,7 +16,7 @@
 
 CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2)
 {
-        flags = 'r';
+        flags  = 'r';
         syntax = "<login> <password>";
 }
 
@@ -63,7 +63,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 
 CommandDelUser::CommandDelUser(Module* parent) : Command(parent, "DELUSER", 1, 1)
 {
-        flags = 'r';
+        flags  = 'r';
         syntax = "<login>";
 }
 
@@ -77,7 +77,7 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
         
-        if (newlogin == "root")
+        if (newlogin == ROOT_USER)
         {
                 user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;

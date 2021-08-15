@@ -146,8 +146,8 @@ void CoreManager::UserDefaults()
      
        /* We add our default user. */
   
-       UserHelper::Add("root", "default");
-       UserHelper::SetFlags("root", "r");
+       UserHelper::Add(ROOT_USER, "default");
+       UserHelper::SetFlags(ROOT_USER, "r");
 }
 
 void CoreManager::CheckDefaults()

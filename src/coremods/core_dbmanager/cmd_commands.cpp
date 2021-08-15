@@ -297,7 +297,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 
       /* 'dbdefault' is a reserved database name. */
       
-      if (dbname == "dbdefault" || dbname == "core" || dbname == "root")
+      if (dbname == "dbdefault" || dbname == "core" || dbname == ROOT_USER)
       {
              user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
@@ -337,7 +337,7 @@ COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 {
       const std::string& dbname = parameters[0];
       
-      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
 
       if (!database)
       {
