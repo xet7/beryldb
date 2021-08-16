@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "limits.h"
 #include "engine.h"
 #include "exit.h"
 
@@ -40,9 +41,13 @@ RouteParams CommandModel::GetRouting(User* user, const Params& parameters)
 
 Command::Command(Module* mod, const std::string& cmd, unsigned int minpara, unsigned int maxpara)
 	: CommandModel(mod, cmd, minpara, maxpara)
+	, run_conf(false)
+	, check_value(false)
+	, offset(-1)
+	, limit(-1)
 	, check_hash(-1)
 	, check_key(-1)
-	, check_value(false)
+	, check_num(-1)
 	, flags(0)
 	, group(0)
 	, force_manual_route(false)

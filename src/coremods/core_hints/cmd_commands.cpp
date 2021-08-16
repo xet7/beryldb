@@ -223,6 +223,7 @@ COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 
 CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
 {
+        run_conf	=	true;
         check_key       =       0;
         group  		= 	'h';
         syntax 		= 	"<key> <select> <offset> <limit>";
@@ -230,19 +231,9 @@ CommandDiff::CommandDiff(Module* Creator) : Command(Creator, "DIFF", 2, 4)
 
 COMMAND_RESULT CommandDiff::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
-       const std::string& value 	= 	parameters[1];
-
-       Limiter conf = GetLimits(user, this->max_params, parameters);
-
-       if (conf.error)
-       {
-            return FAILED; 
-       }
-
        std::shared_ptr<diff_query> query = std::make_shared<diff_query>();
-       query->value = value;
+       query->value 			 = parameters[1];
 
-       KeyHelper::RetroLimits(user, query, key, conf.offset, conf.limit);
+       KeyHelper::RetroLimits(user, query, parameters[0], this->offset, this->limit);
        return SUCCESS;
 }

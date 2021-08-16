@@ -24,10 +24,7 @@ CommandHGet::CommandHGet(Module* Creator) : Command(Creator, "HGET", 2, 2)
 
 COMMAND_RESULT CommandHGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap     	= 	parameters[0];
-       const std::string& key      	= 	parameters[1];
-
-       KeyHelper::HeshRetro(user, std::make_shared<hget_query>(), kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hget_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -40,12 +37,10 @@ CommandHCount::CommandHCount(Module* Creator) : Command(Creator, "HCOUNT", 1, 1)
 
 COMMAND_RESULT CommandHCount::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-
        std::shared_ptr<hlist_query> query = std::make_shared<hlist_query>();
-       query->flags = QUERY_FLAGS_COUNT;
+       query->flags 			  = QUERY_FLAGS_COUNT;
 
-       KeyHelper::Retro(user, query, kmap);
+       KeyHelper::Retro(user, query, parameters[0]);
        return SUCCESS;
 }
 
@@ -59,10 +54,7 @@ CommandHExists::CommandHExists(Module* Creator) : Command(Creator, "HEXISTS", 2,
 
 COMMAND_RESULT CommandHExists::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		= 	parameters[0];
-       const std::string& key		= 	parameters[1];
-
-       KeyHelper::HeshRetro(user, std::make_shared<hexists_query>(), kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hexists_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -76,16 +68,13 @@ CommandHStrlen::CommandHStrlen(Module* Creator) : Command(Creator, "HSTRLEN", 2,
 
 COMMAND_RESULT CommandHStrlen::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		= 	parameters[0];
-       const std::string& key 		= 	parameters[1];
-
-
-       KeyHelper::HeshRetro(user, std::make_shared<hstrlen_query>(), kmap, key);
+       KeyHelper::HeshRetro(user, std::make_shared<hstrlen_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
 CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
 {
+       run_conf		=	true;
        check_key        =       0;
        group 		= 	'm';
        syntax 		= 	"<map> <offset> <limit>";
@@ -93,21 +82,13 @@ CommandHVals::CommandHVals(Module* Creator) : Command(Creator, "HVALS", 1, 3)
 
 COMMAND_RESULT CommandHVals::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		   =    parameters[0];
-
-       Limiter conf  =    GetLimits(user, this->max_params, parameters);
-
-       if (conf.error)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<hvals_query>(), kmap, conf.offset, conf.limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hvals_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
 CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1, 3)
 {
+       run_conf		=	true;
        check_key	=	0;
        group 		= 	'm';
        syntax 		= 	"<map> <offset> <limit>";
@@ -115,16 +96,7 @@ CommandHGetAll::CommandHGetAll(Module* Creator) : Command(Creator, "HGETALL", 1,
 
 COMMAND_RESULT CommandHGetAll::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap      =    parameters[0];
-
-       Limiter conf  =    GetLimits(user, this->max_params, parameters);
-
-       if (conf.error)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<hgetall_query>(), kmap, conf.offset, conf.limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hgetall_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
@@ -138,10 +110,7 @@ CommandHDel::CommandHDel(Module* Creator) : Command(Creator, "HDEL", 2, 2)
 
 COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		= 	parameters[0];
-       const std::string& key 		= 	parameters[1];
-
-       KeyHelper::SimpleRetro(user, std::make_shared<hdel_query>(), kmap, key);
+       KeyHelper::SimpleRetro(user, std::make_shared<hdel_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -155,12 +124,8 @@ CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 }
 
 COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
-{  
-       const std::string& kmap  	= 	parameters[0];
-       const std::string& key   	= 	parameters[1];
-       const std::string& value 	= 	parameters.back();
-
-       KeyHelper::SimpleHesh(user, std::make_shared<hset_query>(), kmap, key, value);
+{
+       KeyHelper::SimpleHesh(user, std::make_shared<hset_query>(),  parameters[0], parameters[1], parameters.back());
        return SUCCESS;
 }
 
@@ -175,11 +140,7 @@ CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 
 COMMAND_RESULT CommandHSetNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  	= 	parameters[0];
-       const std::string& key   	= 	parameters[1];
-       const std::string& value 	= 	parameters.back();
-
-       KeyHelper::SimpleHesh(user, std::make_shared<hsetnx_query>(), kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<hsetnx_query>(), parameters[0], parameters[1], parameters.back());
        return SUCCESS;
 }
 

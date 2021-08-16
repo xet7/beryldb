@@ -70,78 +70,6 @@ inline bool CheckValid(User* user, const std::string& number)
 }
 
 /* 
- * Returns limiting data for a query.
- * Keep in mind that this class should be only
- * handled by function GetLimits.
- */
-
-class ExportAPI Limiter
-{
-    public:	
-       
-       bool error;
-       
-       signed int limit;
-       signed int offset;
-       
-       Limiter() : error(false), limit(0), offset(0)
-       {
-       
-       }
-};
-
-/* 
- * Returns a vector containing limits.
- * 
- * @parameters:
- *
- *	   · User	: Requesting user.
- *         · uint	: Max parameters.
- *         · Params	: Parameters as given by the original command.,
- *
- * @return:
- *
- *         · Limiter	: Returns { 0 } if invalid.
- */
-
-inline Limiter GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
-{
-       Limiter limiter;
-
-       if (parameters.size() == (max - 1))
-       {
-             if (!is_zero_or_great_or_mone(parameters[(max - 2)]))
-             {
-                  user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
-                  limiter.error = true;
-                  return limiter;
-             }
-       
-             limiter.limit  = convto_num<signed int>(parameters[(max - 2)]); 
-             limiter.offset = 0;
-       }
-       else if (parameters.size() == max)
-       {
-             if (!is_zero_or_great_or_mone(parameters[(max - 1)]) || !is_zero_or_great(parameters[(max - 2)]))
-             {
-                   user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
-                   limiter.error = true;
-                   return limiter;
-             }
-       
-             limiter.limit  = convto_num<signed int>(parameters[(max - 1)]); 
-             limiter.offset = convto_num<signed int>(parameters[(max - 2)]);
-       }
-       else
-       {
-             limiter.limit  = -1;
-             limiter.offset = 0;
-       }
-       
-       return limiter;
-}
-
-/* 
  * Checks the format of a string (ie "string query").
  * 
  * @parameters:
@@ -225,4 +153,94 @@ inline bool CheckKey(User* user, const std::string& value, bool notify = true)
         }
         
         return false;
+}
+
+/* 
+ * Returns limiting data for a query.
+ * Keep in mind that this class should be only
+ * handled by function GetLimits.
+ */
+
+class ExportAPI Limiter : public safecast<Limiter>
+{
+   friend Limiter GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters);
+    
+   private:
+   
+      bool error;
+      signed int limit;
+      signed int offset;
+  
+  public:
+  
+      Limiter() : error(false), limit(0), offset(0)
+      {
+       
+      }
+      
+      bool GetError()
+      {
+             return this->error;
+      }
+       
+      signed int GetLimit()
+      {
+             return this->limit;
+      }
+      
+      signed int GetOffset()
+      {
+             return this->offset;      
+      }
+};
+
+/* 
+ * Returns a vector containing limits.
+ * 
+ * @parameters:
+ *
+ *         · User       : Requesting user.
+ *         · uint       : Max parameters.
+ *         · Params     : Parameters as given by the original command.,
+ *
+ * @return:
+ *
+ *         · Limiter    : Returns { 0 } if invalid.
+ */
+
+inline Limiter GetLimits(User* user, unsigned int max, const CommandModel::Params& parameters)
+{
+       Limiter limiter;
+
+       if (parameters.size() == (max - 1))
+       {
+             if (!is_zero_or_great_or_mone(parameters[(max - 2)]))
+             {
+                  user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
+                  limiter.error = true;
+                  return limiter;
+             }
+       
+             limiter.limit  = convto_num<signed int>(parameters[(max - 2)]); 
+             limiter.offset = 0;
+       }
+       else if (parameters.size() == max)
+       {
+             if (!is_zero_or_great_or_mone(parameters[(max - 1)]) || !is_zero_or_great(parameters[(max - 2)]))
+             {
+                   user->SendProtocol(ERR_INPUT, MUST_BE_GREAT_ZERO);
+                   limiter.error = true;
+                   return limiter;
+             }
+       
+             limiter.limit  = convto_num<signed int>(parameters[(max - 1)]); 
+             limiter.offset = convto_num<signed int>(parameters[(max - 2)]);
+       }
+       else
+       {
+             limiter.limit  = -1;
+             limiter.offset = 0;
+       }
+       
+       return limiter;
 }

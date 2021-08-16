@@ -16,47 +16,31 @@
 
 CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)
 {
-      check_key =       0;
-      group 	= 	'm';
-      syntax 	=	 "<map> <offset> <limit>";
+       run_conf		=	true;
+       check_key 	=       0;
+       group 		= 	'm';
+       syntax 		=	"<map> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       Limiter conf = GetLimits(user, this->max_params, parameters);
-       
-       if (conf.error)
-       {
-            return FAILED; 
-       }
-       
        std::shared_ptr<hfind_query> query = std::make_shared<hfind_query>();
        Helpers::make_map(user, query, "", "", true);
 
-       KeyHelper::RetroLimits(user, query, key, conf.offset, conf.limit, true);
+       KeyHelper::RetroLimits(user, query, parameters[0], this->offset, this->limit, true);
        return SUCCESS;
 }
 
 CommandHList::CommandHList(Module* Creator) : Command(Creator, "HLIST", 1, 3)
 {
-      check_key =       0;
-      group  	= 	'm';
-      syntax	= 	"<map> <offset> <limit>";
+      run_conf		=	true;
+      check_key 	=       0;
+      group  		= 	'm';
+      syntax		= 	"<map> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandHList::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       Limiter conf = GetLimits(user, this->max_params, parameters);
-       
-       if (conf.error)
-       {
-            return FAILED; 
-       }
-       
-       KeyHelper::RetroLimits(user, std::make_shared<hlist_query>(), key, conf.offset, conf.limit);
+       KeyHelper::RetroLimits(user, std::make_shared<hlist_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }

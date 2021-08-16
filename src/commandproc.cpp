@@ -299,34 +299,64 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 			return;
 		}
 
-		if (handler->check_key >= 0)
+		if (cmd_params.size())
 		{
-			if (cmd_params.size() >= (unsigned int)handler->check_key)
+			if (handler->check_key >= 0)
 			{
-                        	if (!CheckKey(user, cmd_params[handler->check_key], true))
-                        	{
-                                	return;
+				if (cmd_params.size() >= (unsigned int)handler->check_key)
+				{
+                        		if (!CheckKey(user, cmd_params[handler->check_key], true))
+                        		{
+                                		return;
+					}
 				}
 			}
-		}
-                
-                if (handler->check_value && cmd_params.size())
-                {
-                       if (!CheckFormat(user, cmd_params.back()))
-                       {
-                                return;
-                       } 
-                }
 
-                if (handler->check_hash >= 0)
-                {
-                        if (cmd_params.size() >= (unsigned int)handler->check_hash)
-                        {
-                                if (!CheckKey(user, cmd_params[handler->check_hash], true))
-                                {
-                                        return;
-                                }
+        	        if (handler->check_num)
+	                {
+				if (cmd_params.size() >= (unsigned int)handler->check_num)
+                	        {	
+                	        	if (!is_number(cmd_params[handler->check_num], true))
+					{
+						user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
+						return;
+					}
+                                } 
                         }
+                
+                        if (handler->check_value)
+                        {
+                        	if (!CheckFormat(user, cmd_params.back()))
+                        	{
+                         	      	 return;
+				} 
+	                }
+
+        	        if (handler->check_hash >= 0)
+        	        {
+                        	if (cmd_params.size() >= (unsigned int)handler->check_hash)
+                        	{
+                                	if (!CheckKey(user, cmd_params[handler->check_hash], true))
+                                	{
+                                       		 return;
+                                       	}
+				}
+		      }
+		      
+		      if (handler->run_conf)
+		      {
+  				Limiter Conf = GetLimits(user, handler->max_params, cmd_params);
+				
+				if (Conf->GetError())
+				{
+					return;
+				}
+				else
+				{
+					handler->offset = Conf->GetOffset();
+					handler->limit  = Conf->GetLimit();
+				}
+		      }
                 }
 
 		COMMAND_RESULT result = handler->Handle(user, cmd_params);
