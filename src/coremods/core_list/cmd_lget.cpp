@@ -87,7 +87,7 @@ CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 
 COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 {  
-       const std::string& value 	 = 	parameters.back();
+       const std::string& value 	 = 	parameters[1];
 
        if (!CheckValidPos(user, value))
        {

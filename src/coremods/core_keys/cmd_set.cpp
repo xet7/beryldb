@@ -133,11 +133,10 @@ COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)
 
 CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "OCCURS", 2, 2)
 {
-       check_key        = 0;
-       check_value      = true;  
-
-       group 		= 'k';
-       syntax 		= "<key> \"value\"";
+       check_key        = 	0;
+       check_value      = 	true;  
+       group 		= 	'k';
+       syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
@@ -194,10 +193,7 @@ CommandGetSubstr::CommandGetSubstr(Module* Creator) : Command(Creator, "SUBSTR",
 
 COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 {
-       int sublimit 		    =     convto_num<int>(parameters[2]); 
-       int suboffset 		    =     convto_num<int>(parameters[1]);
-
-       KeyHelper::RetroLimits(user, std::make_shared<get_substr_query>(), parameters[0], suboffset, sublimit);
+       KeyHelper::RetroLimits(user, std::make_shared<get_substr_query>(), parameters[0], convto_num<int>(parameters[1]), convto_num<int>(parameters[2]));
        return SUCCESS;
 }
 
@@ -329,21 +325,19 @@ CommandInsert::CommandInsert(Module* Creator) : Command(Creator, "INSERT", 3, 3)
 
 COMMAND_RESULT CommandInsert::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
        const std::string& where 	= 	parameters[1];
-       const std::string& value 	= 	parameters.back();
 
-        if (!is_number(where, false))
-        {
+       if (!is_number(where, false))
+       {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
-        }
+       }
 
-        std::shared_ptr<insert_query> query = std::make_shared<insert_query>();
-        query->id 			    = convto_num<unsigned int>(where);
+       std::shared_ptr<insert_query> query = std::make_shared<insert_query>();
+       query->id 			   = convto_num<unsigned int>(where);
         
-        KeyHelper::Simple(user, query, key, value, true);
-        return SUCCESS;
+       KeyHelper::Simple(user, query, parameters[0], parameters.back(), true);
+       return SUCCESS;
 }
 
 CommandToLower::CommandToLower(Module* Creator) : Command(Creator, "TOLOWER", 1, 1)
