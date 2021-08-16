@@ -29,6 +29,7 @@ class LocalUser;
 class Subscription;
 class Module;
 class ProtocolServer;
+class QueryBase;
 class RemoteUser;
 class Server;
 class Configuration;

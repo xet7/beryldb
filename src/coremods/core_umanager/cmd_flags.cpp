@@ -124,7 +124,7 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
                return FAILED;             
         }
 
-        if (newlogin == "root")
+        if (newlogin == ROOT_USER)
         {
                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                return FAILED;
@@ -192,7 +192,7 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
         const std::string& newlogin 	= 	parameters[0];
         const std::string& flag 	= 	parameters[1];
         
-        if (newlogin == "root")
+        if (newlogin == ROOT_USER)
         {
                 user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
                 return FAILED;

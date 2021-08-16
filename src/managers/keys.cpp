@@ -65,6 +65,15 @@ void KeyHelper::SimpleType(User* user, std::shared_ptr<QueryBase> query, const s
        Kernel->Store->Push(query);
 }
 
+void KeyHelper::RetroFunc(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, STR_FUNCTION func, bool allow)
+{
+       Helpers::make_query(user, query, entry, allow);
+       query->function = func;
+       
+       Kernel->Store->Push(query);
+}
+
+
 void KeyHelper::Retro(User* user, std::shared_ptr<QueryBase> query, const std::string& entry, bool allow)
 {
        Helpers::make_query(user, query, entry, allow);

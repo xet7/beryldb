@@ -181,15 +181,39 @@ class ExportAPI Command : public CommandModel
 	
 	~Command();
 	
+	/* Determines whether GetLimtis should be ran. */
+	
+	bool run_conf;
+
+        /* Whether to check a comilla value in a command */
+
+        bool check_value;
+	
+	/* Offset  (only available when running run_conf */
+	
+	signed int offset;
+	
+	/* Limit */
+	
+	signed int limit;
+	
+	/* Checks for a second key, as provided */
+	
 	signed int check_hash;
+	
+	/* Checks for a key in provided param */
 	
 	signed int check_key;
 	
-	bool check_value;
+	/* Check numeric parameter */
+	
+	signed int check_num;
 	
 	/* User modes required to run this command. */
 	
 	unsigned char flags;
+	
+	/* Group this command is gropued with */
 	
 	unsigned char group;
 	

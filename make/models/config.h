@@ -33,6 +33,14 @@ const std::vector<std::string> TypeRegs =
     INT_FUTURE 
 };
 
+/* Core database */
+
+const std::string CORE_DB		=	"core";
+
+/* Root user */
+
+const std::string ROOT_USER		=	"root";
+
 /* Default emerald client. */
 
 const std::string DEFAULT_EMERALD 	= 	"emerald";

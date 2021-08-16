@@ -23,9 +23,7 @@ CommandLPopBack::CommandLPopBack(Module* Creator) : Command(Creator, "LPOPBACK",
 
 COMMAND_RESULT CommandLPopBack::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-
-        KeyHelper::Retro(user, std::make_shared<lpop_back_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<lpop_back_query>(), parameters[0]);
         return SUCCESS;  
 }
 
@@ -38,9 +36,7 @@ CommandLPopFront::CommandLPopFront(Module* Creator) : Command(Creator, "LPOPFRON
 
 COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-     
-        KeyHelper::Retro(user, std::make_shared<lpop_front_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<lpop_front_query>(), parameters[0]);
         return SUCCESS;  
 }
 
@@ -54,10 +50,7 @@ CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2
 
 COMMAND_RESULT CommandPopAll::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key 		= 	parameters[0];
-        const std::string& value 	= 	parameters.back();
-
-        KeyHelper::Simple(user, std::make_shared<lpopall_query>(), key, value);
+        KeyHelper::Simple(user, std::make_shared<lpopall_query>(), parameters[0], parameters.back());
         return SUCCESS;  
 }
 
@@ -70,9 +63,7 @@ CommandLReverse::CommandLReverse(Module* Creator) : Command(Creator, "LREVERSE",
 
 COMMAND_RESULT CommandLReverse::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-
-        KeyHelper::Retro(user, std::make_shared<lreverse_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<lreverse_query>(), parameters[0]);
         return SUCCESS;  
 }
 
@@ -85,9 +76,7 @@ CommandLSort::CommandLSort(Module* Creator) : Command(Creator, "LSORT", 1, 1)
 
 COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-
-        KeyHelper::Retro(user, std::make_shared<lsort_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<lsort_query>(), parameters[0]);
         return SUCCESS;  
 }
 
@@ -101,9 +90,6 @@ CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
 
 COMMAND_RESULT CommandLDel::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key 		= 	parameters[0];
-        const std::string& value 	= 	parameters.back();
-    
-        KeyHelper::Simple(user, std::make_shared<ldel_query>(), key, value);
+        KeyHelper::Simple(user, std::make_shared<ldel_query>(), parameters[0], parameters.back());
         return SUCCESS;  
 }

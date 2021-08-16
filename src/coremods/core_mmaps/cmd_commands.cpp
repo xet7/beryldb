@@ -16,6 +16,7 @@
 
 CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 {
+        run_conf	=	true;
         check_key       =       0;
         group 		= 	'x';
         syntax 		= 	"<map> <limit> <offset>";
@@ -23,15 +24,7 @@ CommandMGet::CommandMGet(Module* Creator) : Command(Creator, "MGET", 1, 3)
 
 COMMAND_RESULT CommandMGet::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		= 	parameters[0];
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
-
-       if (lms[0] == 0)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<mget_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mget_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
@@ -44,12 +37,10 @@ CommandMCount::CommandMCount(Module* Creator) : Command(Creator, "MCOUNT", 1, 1)
 
 COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-
        std::shared_ptr<mget_query> query = std::make_shared<mget_query>();
-       query->flags = QUERY_FLAGS_COUNT;
+       query->flags 			 = QUERY_FLAGS_COUNT;
 
-       KeyHelper::Retro(user, query, kmap);
+       KeyHelper::Retro(user, query, parameters[0]);
        return SUCCESS;
 }
 
@@ -64,11 +55,7 @@ CommandMPush::CommandMPush(Module* Creator) : Command(Creator, "MPUSH", 3, 3)
 
 COMMAND_RESULT CommandMPush::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  	= 	parameters[0];
-       const std::string& key   	= 	parameters[1];
-       const std::string& value 	= 	parameters.back();
-
-       KeyHelper::SimpleHesh(user, std::make_shared<mset_query>(), kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<mset_query>(), parameters[0], parameters[1], parameters.back());
        return SUCCESS;
 }
 
@@ -83,16 +70,13 @@ CommandMPushNX::CommandMPushNX(Module* Creator) : Command(Creator, "MPUSHNX", 3,
 
 COMMAND_RESULT CommandMPushNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap          =       parameters[0];
-       const std::string& key           =       parameters[1];
-       const std::string& value         =       parameters.back();
-
-       KeyHelper::SimpleHesh(user, std::make_shared<setnx_query>(), kmap, key, value);
+       KeyHelper::SimpleHesh(user, std::make_shared<setnx_query>(), parameters[0], parameters[1], parameters.back());
        return SUCCESS;
 }
 
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
+        run_conf	=	true;
         check_key       =       0;
         group  		= 	'x';
         syntax 		= 	"<map> <limit> <offset>";
@@ -100,15 +84,7 @@ CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 
 COMMAND_RESULT CommandMKeys::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		  = 	parameters[0];
-       const std::vector<signed int>& lms = 	GetLimits(user, this->max_params, parameters);
-
-       if (lms[0] == 0)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<mkeys_query>(), kmap, lms[1], lms[2], true);
+       KeyHelper::RetroLimits(user, std::make_shared<mkeys_query>(), parameters[0], this->offset, this->limit, true);
        return SUCCESS;
 }
 
@@ -121,11 +97,8 @@ CommandMDel::CommandMDel(Module* Creator) : Command(Creator, "MDEL", 2, 2)
 }
 
 COMMAND_RESULT CommandMDel::Handle(User* user, const Params& parameters)
-{  
-       const std::string& kmap  	= 	parameters[0];
-       const std::string& key   	= 	parameters[1];
-
-       KeyHelper::Simple(user, std::make_shared<mdel_query>(), kmap, key);
+{
+       KeyHelper::Simple(user, std::make_shared<mdel_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -139,15 +112,13 @@ CommandMRepeats::CommandMRepeats(Module* Creator) : Command(Creator, "MREPEATS",
 
 COMMAND_RESULT CommandMRepeats::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap  	= 	parameters[0];
-       const std::string& key 		= 	parameters[1];
-
-       KeyHelper::Simple(user, std::make_shared<mrepeats_query>(), kmap, key);
+       KeyHelper::Simple(user, std::make_shared<mrepeats_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
 CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 {
+        run_conf	=	true;
         check_key       =       0;
         group 		= 	'x';
         syntax 		= 	"<map> <offset> <limit>";
@@ -155,20 +126,13 @@ CommandMVals::CommandMVals(Module* Creator) : Command(Creator, "MVALS", 1, 3)
 
 COMMAND_RESULT CommandMVals::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		   =   parameters[0];
-       const std::vector<signed int>& lms  =   GetLimits(user, this->max_params, parameters);
-
-       if (lms[0] == 0)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<mvals_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mvals_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
 CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1, 3)
 {
+        run_conf	=	true;
         check_key       =       0;
         group 		= 	'x';
         syntax 		= 	"<map> <offset> <limit>";
@@ -176,20 +140,13 @@ CommandMGetAll::CommandMGetAll(Module* Creator) : Command(Creator, "MGETALL", 1,
 
 COMMAND_RESULT CommandMGetAll::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap = parameters[0];
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
-
-       if (lms[0] == 0)
-       {
-            return FAILED; 
-       }
-
-       KeyHelper::RetroLimits(user, std::make_shared<mgetall_query>(), kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, std::make_shared<mgetall_query>(), parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
 CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 {
+       run_conf		=	true;
        check_key        =       0;
        check_hash       =       1;
        group  		= 	'x';
@@ -198,19 +155,9 @@ CommandMIter::CommandMIter(Module* Creator) : Command(Creator, "MITER", 2, 4)
 
 COMMAND_RESULT CommandMIter::Handle(User* user, const Params& parameters)
 {  
-       const std::string& kmap 		= 	parameters[0];
-       const std::string& key 		= 	parameters[1];
-
-       const std::vector<signed int>& lms = GetLimits(user, this->max_params, parameters);
-
-       if (lms[0] == 0)
-       {
-            return FAILED; 
-       }
-
        std::shared_ptr<miter_query> query = std::make_shared<miter_query>();
-       query->value = key;
+       query->value 			  = parameters[1];
        
-       KeyHelper::RetroLimits(user, query, kmap, lms[1], lms[2]);
+       KeyHelper::RetroLimits(user, query, parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
