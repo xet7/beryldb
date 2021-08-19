@@ -24,10 +24,7 @@ CommandTransfer::CommandTransfer(Module* Creator) : Command(Creator, "TRANSFER",
 
 COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
-       const std::string& newkey 	= 	parameters[1];
-       
-       const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(newkey);
+       const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[1]);
        
        if (!database)
        {
@@ -41,7 +38,7 @@ COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
             return FAILED;        
        }
 
-       KeyHelper::SimpleRetro(user, std::make_shared<transfer_query>(), key, newkey);
+       KeyHelper::SimpleRetro(user, std::make_shared<transfer_query>(), parameters[0], database->GetName());
        return SUCCESS;
 }
 
@@ -55,10 +52,7 @@ CommandRename::CommandRename(Module* Creator) : Command(Creator, "RENAME", 2, 2)
 
 COMMAND_RESULT CommandRename::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
-       const std::string& newkey 	= 	parameters[1];
-
-       KeyHelper::SimpleRetro(user, std::make_shared<rename_query>(), key, newkey);
+       KeyHelper::SimpleRetro(user, std::make_shared<rename_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -72,10 +66,7 @@ CommandRenameNX::CommandRenameNX(Module* Creator) : Command(Creator, "RENAMENX",
 
 COMMAND_RESULT CommandRenameNX::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key           =       parameters[0];
-       const std::string& newkey        =       parameters[1];
-
-       KeyHelper::SimpleRetro(user, std::make_shared<renamenx_query>(), key, newkey);
+       KeyHelper::SimpleRetro(user, std::make_shared<renamenx_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -87,9 +78,7 @@ CommandDel::CommandDel(Module* Creator) : Command(Creator, "DEL", 1)
 
 COMMAND_RESULT CommandDel::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       
-       KeyHelper::Retro(user, std::make_shared<del_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<del_query>(), parameters[0]);
        return SUCCESS;
 }
 
@@ -103,10 +92,7 @@ CommandCopy::CommandCopy(Module* Creator) : Command(Creator, "COPY", 2, 2)
 
 COMMAND_RESULT CommandCopy::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
-       const std::string& destkey 	= 	parameters[1];
-
-       KeyHelper::SimpleRetro(user, std::make_shared<copy_query>(), key, destkey);
+       KeyHelper::SimpleRetro(user, std::make_shared<copy_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 
@@ -119,9 +105,7 @@ CommandExists::CommandExists(Module* Creator) : Command(Creator, "EXISTS", 1, 1)
 
 COMMAND_RESULT CommandExists::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       KeyHelper::Retro(user, std::make_shared<exists_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<exists_query>(), parameters[0]);
        return SUCCESS;
 }
 
@@ -134,7 +118,6 @@ CommandMove::CommandMove(Module* Creator) : Command(Creator, "MOVE", 2, 2)
 
 COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
        const std::string& new_select 	= 	parameters[1];
 
        if (!CheckValidPos(user, new_select))
@@ -147,7 +130,7 @@ COMMAND_RESULT CommandMove::Handle(User* user, const Params& parameters)
                return FAILED;
        }
 
-       KeyHelper::Simple(user, std::make_shared<move_query>(), key, new_select, false);
+       KeyHelper::Simple(user, std::make_shared<move_query>(), parameters[0], new_select, false);
        return SUCCESS;
 }
 
@@ -159,9 +142,7 @@ CommandType::CommandType(Module* Creator) : Command(Creator, "TYPE", 1, 1)
 
 COMMAND_RESULT CommandType::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-       
-       KeyHelper::SimpleType(user, std::make_shared<type_query>(), key, QUERY_TYPE_TYPE);
+       KeyHelper::SimpleType(user, std::make_shared<type_query>(),  parameters[0], QUERY_TYPE_TYPE);
        return SUCCESS;
 }
 
@@ -174,10 +155,8 @@ CommandTouch::CommandTouch(Module* Creator) : Command(Creator, "TOUCH", 1, 1)
 
 COMMAND_RESULT CommandTouch::Handle(User* user, const Params& parameters)
 {  
-       const std::string& keys = parameters.back();
-
-       KeyHelper::Simple(user, std::make_shared<touch_query>(), "", keys, false);
-       return SUCCESS;
+        KeyHelper::Simple(user, std::make_shared<touch_query>(), "", parameters.back(), false);
+        return SUCCESS;
 }
 
 CommandNTouch::CommandNTouch(Module* Creator) : Command(Creator, "NTOUCH", 1, 1)
@@ -189,10 +168,8 @@ CommandNTouch::CommandNTouch(Module* Creator) : Command(Creator, "NTOUCH", 1, 1)
 
 COMMAND_RESULT CommandNTouch::Handle(User* user, const Params& parameters)
 {  
-       const std::string& keys = parameters.back();
-
-       KeyHelper::Simple(user, std::make_shared<ntouch_query>(), "", keys, false);
-       return SUCCESS;
+        KeyHelper::Simple(user, std::make_shared<ntouch_query>(), "", parameters.back(), false);
+        return SUCCESS;
 }
 
 CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
@@ -204,7 +181,6 @@ CommandClone::CommandClone(Module* Creator) : Command(Creator, "CLONE", 2, 2)
 
 COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key 		= 	parameters[0];
        const std::string& value 	= 	parameters[1];
 
        if (!CheckValidPos(user, value))
@@ -217,7 +193,7 @@ COMMAND_RESULT CommandClone::Handle(User* user, const Params& parameters)
                return FAILED;
        }
 
-       KeyHelper::SimpleRetro(user, std::make_shared<clone_query>(), key, value);
+       KeyHelper::SimpleRetro(user, std::make_shared<clone_query>(), parameters[0], value);
        return SUCCESS;
 }
 

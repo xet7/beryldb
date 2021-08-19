@@ -25,7 +25,6 @@ CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
 {       
           const std::string& seconds 	= 	parameters[0];
-          const std::string& key 	= 	parameters[1];
           const std::string& value 	= 	parameters.back();
           
           if (!CheckValidPos(user, seconds))
@@ -33,7 +32,7 @@ COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters)
               return FAILED;
           }
   
-          ExpireHelper::Future(user, key, convto_num<unsigned int>(seconds), value);
+          ExpireHelper::Future(user, parameters[1], convto_num<unsigned int>(seconds), value);
           return SUCCESS;
 }
 
@@ -46,9 +45,7 @@ CommandTTE::CommandTTE(Module* Creator) : Command(Creator, "TTE", 1)
 
 COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 {
-         const std::string& key = parameters[0];
-         
-         const signed int ttl = FutureManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl = FutureManager::GetTIME(user->GetDatabase(), parameters[0], user->select);
          
          if (ttl != -1)
          {
@@ -74,9 +71,7 @@ CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 
 COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 {
-         const std::string& key = parameters[0];
-         
-         GlobalHelper::UserFutureExecute(user, key);
+         GlobalHelper::UserFutureExecute(user, parameters[0]);
          return SUCCESS;
 }
 
@@ -141,9 +136,7 @@ CommandCancel::CommandCancel(Module* Creator) : Command(Creator, "CANCEL", 1, 1)
 
 COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
 {
-        const std::string& key = parameters[0];
-        
-        GlobalHelper::FutureCancel(user, key);
+        GlobalHelper::FutureCancel(user, parameters[0]);
         return SUCCESS;
 }
 
@@ -158,8 +151,6 @@ CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3
 COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
 {    
           const std::string& seconds 	= 	parameters[0];
-          const std::string& key 	= 	parameters[1];
-          const std::string& value 	= 	parameters.back();
           
           if (!CheckValid(user, seconds))
           {
@@ -174,7 +165,7 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
                  return FAILED;
           }
           
-          ExpireHelper::FutureAT(user, key, exp_usig, value);
+          ExpireHelper::FutureAT(user, parameters[1], exp_usig, parameters.back());
           return SUCCESS;
 }
 

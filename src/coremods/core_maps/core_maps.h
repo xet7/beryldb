@@ -16,6 +16,19 @@
 #include "maker.h"
 #include "managers/keys.h"
 
+/* 
+ * Returns all hashes in a given map.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to find.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ *         · list     : Values found.
+ */ 
+
 class CommandHGetAll : public Command 
 {
     public: 

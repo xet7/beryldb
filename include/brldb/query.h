@@ -49,7 +49,8 @@ enum QUERY_TYPE
        QUERY_TYPE_DIFF           = 	22,
        QUERY_TYPE_LAT		 =	23,
        QUERY_TYPE_LONG		 = 	24,
-       QUERY_TYPE_TRANSFER	 =      25
+       QUERY_TYPE_TRANSFER	 =      25,
+       QUERY_TYPE_SORT		=	26
 };
 
 enum QUERY_FLAGS
@@ -259,6 +260,7 @@ class ExportAPI QueryBase
         }
 };
 
+
 class ExportAPI routed_query : public QueryBase
 {
    public:
@@ -279,8 +281,34 @@ class ExportAPI routed_query : public QueryBase
         
         virtual void Vectors() = 0;
 
-
 };
+
+class ExportAPI sort_query : public routed_query
+{
+   public:
+
+        sort_query() : routed_query(QUERY_TYPE_SORT)
+        {
+
+        }
+
+        void Keys();
+
+        void Maps();
+
+        void Geos();
+
+        void Multis();
+
+        void Lists();
+
+        void Vectors();
+
+        void Run();
+
+        void Process();
+};
+
 
 class ExportAPI rename_query : public routed_query
 {

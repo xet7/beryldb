@@ -71,12 +71,12 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
 
 CommandUse::CommandUse(Module* Creator) : Command(Creator, "USE", 1)
 {
-         no_hint_until_reg 	= true;
+       no_hint_until_reg 	= 	true;
 
-         /* Users should be able to use this command before registering. */
+       /* Users should be able to use this command before registering. */
 
-         pre_reg_ok 		= true;
-         syntax 		= "<id between 1 and 100>";
+       pre_reg_ok 		= 	true;
+       syntax 			= 	"<id between 1 and 100>";
 }
 
 COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
@@ -169,9 +169,9 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
        if (!BASE_PATH.empty())
        {
-            const std::string& path = BASE_PATH.c_str();
-            user->SendProtocol(BRLD_OK, path);
-            return SUCCESS;
+             const std::string& path = BASE_PATH.c_str();
+             user->SendProtocol(BRLD_OK, path);
+             return SUCCESS;
        }
 
        user->SendProtocol(ERR_INPUT, PROCESS_NULL);
@@ -297,7 +297,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 
       /* 'dbdefault' is a reserved database name. */
       
-      if (dbname == "dbdefault" || dbname == "core" || dbname == ROOT_USER)
+      if (dbname == "dbdefault" || dbname == CORE_DB || dbname == ROOT_USER)
       {
              user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
@@ -335,9 +335,7 @@ CommandDBDelete::CommandDBDelete(Module* Creator) : Command(Creator, "DBDELETE",
 
 COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 {
-      const std::string& dbname = parameters[0];
-      
-      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
+      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[0]);
 
       if (!database)
       {
@@ -377,9 +375,7 @@ CommandDBSetDefault::CommandDBSetDefault(Module* Creator) : Command(Creator, "SE
 
 COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 {
-      const std::string& dbname = parameters[0];
-
-      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[0]);
 
       if (!database)
       {
@@ -389,7 +385,7 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
       sfalert(user, NOTIFY_DEFAULT, "Setting default database to: %s", database->GetName().c_str());
 
-      DBManager::SetDefault(dbname);
+      DBManager::SetDefault(database->GetName().c_str());
       user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }

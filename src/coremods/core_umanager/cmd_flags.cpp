@@ -78,7 +78,7 @@ COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
                 return FAILED;
         }
         
-        std::string userflags = UserHelper::CheckFlags(newlogin);
+        const std::string& userflags = UserHelper::CheckFlags(newlogin);
 
         /* Checks if user has flags. */
         

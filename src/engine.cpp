@@ -627,9 +627,7 @@ std::string Daemon::Uptime(const std::string& msg, unsigned int up)
 
 void Dispatcher::TellThat(std::string& who, const std::string& msg, int rpl)
 {
-        User* user = NULL;
-
-        user = Kernel->Clients->FindInstance(who);
+        User* user = Kernel->Clients->FindInstance(who);
 
         if (!user)
         {

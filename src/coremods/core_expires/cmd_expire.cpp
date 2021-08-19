@@ -16,14 +16,13 @@
 
 CommandExpireFIND::CommandExpireFIND(Module* Creator) : Command(Creator, "EXPFIND", 1, 2)
 {
-         last_empty_ok  = true;
-         flags 		= 'e';
-         syntax 	= "<%key> <argument>";
+         last_empty_ok  	= 	true;
+         flags 			= 	'e';
+         syntax 		= 	"<%key> <argument>";
 }
 
 COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
 {
-         const std::string& key 	= 	parameters[0];
          const std::string& arg 	= 	parameters[1];
 
          if (parameters.size() == 2 && arg != "h" && arg != "r")
@@ -52,7 +51,7 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
                     continue;
                }
                
-               if (!Daemon::Match(entry.key, key))
+               if (!Daemon::Match(entry.key, parameters[0]))
                {
                       continue;
                }
@@ -193,7 +192,6 @@ CommandExpire::CommandExpire(Module* Creator) : Command(Creator, "EXPIRE", 2, 2)
 
 COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters) 
 {       
-          const std::string& key 	= 	parameters[0];
           const std::string& seconds 	= 	parameters[1];
 
           if (!CheckValidPos(user, seconds))
@@ -201,7 +199,7 @@ COMMAND_RESULT CommandExpire::Handle(User* user, const Params& parameters)
                 return FAILED;
           }
                   
-          ExpireHelper::Expire(user, key, convto_num<unsigned int>(seconds));
+          ExpireHelper::Expire(user, parameters[0], convto_num<unsigned int>(seconds));
           return SUCCESS;
 }
 
@@ -213,9 +211,7 @@ CommandDBEReset::CommandDBEReset(Module* Creator) : Command(Creator, "ERESET", 1
 
 COMMAND_RESULT CommandDBEReset::Handle(User* user, const Params& parameters) 
 {       
-          const std::string& dbname = parameters[0];
-    
-          const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
+          const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[0]);
 
           if (!database)
           {
@@ -244,8 +240,6 @@ CommandSetex::CommandSetex(Module* Creator) : Command(Creator, "SETEX", 3, 3)
 COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters) 
 {       
           const std::string& seconds 		= 	parameters[0];
-          const std::string& key		= 	parameters[1];
-          const std::string& value 		= 	parameters.back();
 
           if (!CheckValidPos(user, seconds))
           {
@@ -254,7 +248,7 @@ COMMAND_RESULT CommandSetex::Handle(User* user, const Params& parameters)
 
           /* We convert expiring time to int. */
           
-          ExpireHelper::Setex(user, convto_num<unsigned int>(seconds), key, value);
+          ExpireHelper::Setex(user, convto_num<unsigned int>(seconds), parameters[1], parameters.back());
           return SUCCESS;
 }
 
@@ -267,7 +261,6 @@ CommandExpireAT::CommandExpireAT(Module* Creator) : Command(Creator, "EXPIREAT",
 
 COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters) 
 {    
-          const std::string& key 	= 	parameters[0];
           const std::string& seconds 	= 	parameters[1];
 
           if (!CheckValidPos(user, seconds))
@@ -283,6 +276,6 @@ COMMAND_RESULT CommandExpireAT::Handle(User* user, const Params& parameters)
                  return FAILED;
           }
           
-          ExpireHelper::ExpireAT(user, key, exp_usig);
+          ExpireHelper::ExpireAT(user, parameters[0], exp_usig);
           return SUCCESS;
 }

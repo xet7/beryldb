@@ -16,15 +16,14 @@
 
 CommandTTL::CommandTTL(Module* Creator) : Command(Creator, "TTL", 1)
 {
-        check_key       =       0;
-        group 		= 	'e';
-        syntax 		= 	"<key>";
+         check_key       =      0;
+         group 		 = 	'e';
+         syntax 	 = 	"<key>";
 }
 
 COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
 {       
-         const std::string& key 	= parameters[0];
-         const signed int ttl 		= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), parameters[0], user->select);
          
          if (ttl != -1)
          {
@@ -49,8 +48,7 @@ CommandTTLAT::CommandTTLAT(Module* Creator) : Command(Creator, "TTLAT", 1)
 
 COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 {       
-         const std::string& key = parameters[0];
-         const signed int ttl 	= ExpireManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), parameters[0], user->select);
          
          if (ttl != -1)
          {
@@ -121,15 +119,15 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
 
          for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
-               ExpireEntry entry = it->second;
+                ExpireEntry entry = it->second;
 
-               if (entry.select != select || entry.database != user->GetDatabase())
-               {  
+                if (entry.select != select || entry.database != user->GetDatabase())
+                {  
                          continue;
-               }
+                }
                
-               std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
-               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+                std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
+                Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);

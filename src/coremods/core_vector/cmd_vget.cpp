@@ -185,9 +185,7 @@ CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRON
 
 COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-
-        KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), parameters[0]);
         return SUCCESS;  
 }
 
@@ -227,9 +225,7 @@ CommandVHigh::CommandVHigh(Module* Creator) : Command(Creator, "VHIGH", 1, 1)
 
 COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       KeyHelper::Retro(user, std::make_shared<vhigh_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<vhigh_query>(), parameters[0]);
        return SUCCESS;  
 }
 
