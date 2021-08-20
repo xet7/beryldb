@@ -23,10 +23,7 @@ CommandFlagUpdate::CommandFlagUpdate(Module* Creator) : Command(Creator, "GUPDAT
 
 COMMAND_RESULT CommandFlagUpdate::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname 	= 	parameters[0];
-       const std::string& flag 		= 	parameters[1];
-       
-       const std::shared_ptr<Group>& a_group = Kernel->Groups->Find(gname);
+       const std::shared_ptr<Group>& a_group = Kernel->Groups->Find(parameters[0]);
        
        if (!a_group)
        {
@@ -34,7 +31,7 @@ COMMAND_RESULT CommandFlagUpdate::Handle(User* user, const Params& parameters)
              return FAILED;
        }
          
-       a_group->UpdateFlags(flag);
+       a_group->UpdateFlags(parameters[1]);
        user->SendProtocol(BRLD_OK, PROCESS_OK);
        return SUCCESS;
 }

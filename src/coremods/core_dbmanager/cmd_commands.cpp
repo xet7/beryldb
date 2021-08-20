@@ -416,17 +416,15 @@ CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0,
 
 COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
 {  
-       const std::string& dbname = parameters[0];
-       
        std::shared_ptr<UserDatabase> database;
        
        if (parameters.size())
        {
-             database = Kernel->Store->DBM->Find(dbname);
+              database = Kernel->Store->DBM->Find(parameters[0]);
        }
        else
        {
-            database = user->GetDatabase();
+             database = user->GetDatabase();
        }
        
        if (!database)

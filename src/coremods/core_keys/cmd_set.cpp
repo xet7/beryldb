@@ -37,8 +37,8 @@ COMMAND_RESULT CommandChar::Handle(User* user, const Params& parameters)
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
+       check_value    =       true;         
        check_key 	= 	0;
-       check_value 	= 	true; 
        group  		= 	'k';
        syntax 		= 	"<key> \"value\"";
 }
@@ -81,7 +81,6 @@ CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
        check_key        = 0;
        check_value      = true;  
-
        group 		= 'k';
        syntax 		= "<key> \"value\"";
 }

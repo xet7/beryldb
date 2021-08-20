@@ -100,8 +100,8 @@ COMMAND_RESULT CommandLPos::Handle(User* user, const Params& parameters)
 
 CommandLRepeats::CommandLRepeats(Module* Creator) : Command(Creator, "LREPEATS", 2, 2)
 {
+       check_value     =       true;
        check_key        =       0;
-       check_value	=	true;
        group 		= 	'l';
        syntax 		= 	"<key> \"value\"";
 }
@@ -154,8 +154,8 @@ COMMAND_RESULT CommandLPush::Handle(User* user, const Params& parameters)
 
 CommandLExist::CommandLExist(Module* Creator) : Command(Creator, "LEXISTS", 2, 2)
 {
+         check_value      =       true;
          check_key        =       0;
-         check_value	  =	  true;
          group 		  =  	  'l';
          syntax 	  = 	  "<key> \"value\"";
 }
@@ -168,9 +168,9 @@ COMMAND_RESULT CommandLExist::Handle(User* user, const Params& parameters)
 
 CommandLCount::CommandLCount(Module* Creator) : Command(Creator, "LCOUNT", 1, 1)
 {
-      check_key =       0;
-      group 	= 	'l';
-      syntax 	= 	"<key>";
+      check_key 	=       0;
+      group 		= 	'l';
+      syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
@@ -181,9 +181,9 @@ COMMAND_RESULT CommandLCount::Handle(User* user, const Params& parameters)
 
 CommandLBack::CommandLBack(Module* Creator) : Command(Creator, "LBACK", 1, 1)
 {
-      check_key = 	0;
-      group 	= 	'l';
-      syntax 	= 	"<key>";
+      check_key 	= 	0;
+      group 		= 	'l';
+      syntax 		= 	"<key>";
 }
 
 COMMAND_RESULT CommandLBack::Handle(User* user, const Params& parameters)
@@ -207,8 +207,8 @@ COMMAND_RESULT CommandLFront::Handle(User* user, const Params& parameters)
 
 CommandLPushNX::CommandLPushNX(Module* Creator) : Command(Creator, "LPUSHNX", 2, 2)
 {
+       check_value     =       true;
        check_key	=	0;
-       check_value	=	true;
        group 		= 	'v';
        syntax 		= 	"<key> \"value\"";
 }

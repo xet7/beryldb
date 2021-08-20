@@ -16,8 +16,8 @@
 
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 {
+         check_value    =       true;         
          check_key	=	1;
-         check_value	=	true;         
          group 		= 	'f';
          syntax 	= 	"<seconds> <key> \"value\"";
 }
@@ -25,14 +25,13 @@ CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
 {       
           const std::string& seconds 	= 	parameters[0];
-          const std::string& value 	= 	parameters.back();
           
           if (!CheckValidPos(user, seconds))
           {
               return FAILED;
           }
   
-          ExpireHelper::Future(user, parameters[1], convto_num<unsigned int>(seconds), value);
+          ExpireHelper::Future(user, parameters[1], convto_num<unsigned int>(seconds), parameters.back());
           return SUCCESS;
 }
 
@@ -89,7 +88,7 @@ COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 
 CommandFReset::CommandFReset(Module* Creator) : Command(Creator, "FRESET", 0, 1)
 {
-        group = 'f';        
+        group  = 'f';        
         syntax = "<*select>";
 }
 
@@ -142,8 +141,8 @@ COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters)
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3, 3)
 {
+        check_value     =       true;         
         check_key       =       1;
-        check_value	=	true;
         group 		= 	'f';
         syntax 		= 	"<epoch time> <key> \"value\"";
 }

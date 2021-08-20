@@ -42,8 +42,8 @@ COMMAND_RESULT CommandLPopFront::Handle(User* user, const Params& parameters)
 
 CommandPopAll::CommandPopAll(Module* Creator) : Command(Creator, "LPOPALL", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'l';
         syntax 		= 	"<key> \"value\"";
 }
@@ -82,8 +82,8 @@ COMMAND_RESULT CommandLSort::Handle(User* user, const Params& parameters)
 
 CommandLDel::CommandLDel(Module* Creator) : Command(Creator, "LDEL", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'l';
         syntax 		= 	"<key> \"value\"";
 }
