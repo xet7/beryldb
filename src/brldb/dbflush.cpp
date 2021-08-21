@@ -50,6 +50,17 @@ void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
       signal->user->notifications.push_back(signal);
 }
 
+void DataFlush::AttachGlobal(std::shared_ptr<QueryBase> signal)
+{
+      if (!signal)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(DataFlush::mute);
+      signal->Process();
+}
+
 void DataFlush::GetResults()
 {
       const UserMap& users = Kernel->Clients->GetInstances();
@@ -451,6 +462,11 @@ void DataThread::Process()
                           if (request->flags == QUERY_FLAGS_QUIET)
                           {
                                 break;
+                          }
+                          
+                          if (request->flags == QUERY_FLAGS_GLOBAL)
+                          {
+                                 DataFlush::AttachGlobal(request);
                           }
 
                           if (request->access != DBL_INTERRUPT)

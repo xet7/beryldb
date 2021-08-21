@@ -122,6 +122,12 @@ void future_list_query::Run()
 
 void future_list_query::Process()
 {
+        if (this->id == 1000)
+        {
+              bprint(DONE, "Commands OK");
+              Kernel->Ready = true;
+        }
+        
         /* We may now begin processing queries. */
 
         return;

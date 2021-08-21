@@ -58,7 +58,8 @@ enum QUERY_FLAGS
        QUERY_FLAGS_NONE 	 = 	0,
        QUERY_FLAGS_QUIET 	 = 	1,
        QUERY_FLAGS_CORE 	 = 	2,
-       QUERY_FLAGS_COUNT 	 = 	9
+       QUERY_FLAGS_COUNT 	 = 	9,
+       QUERY_FLAGS_GLOBAL        =      10
 };
 
 enum OP_TYPE

@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	return 1;
 }
 
-Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG)
+Beryl::Beryl(int argc, char** argv) : ConfigFile(DEFAULT_CONFIG), Ready(false)
 {
 	/* Main link. */
 	

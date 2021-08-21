@@ -392,7 +392,7 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
 CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 0)
 {
-       flags = 'r';
+      flags = 'r';
 }
 
 COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)

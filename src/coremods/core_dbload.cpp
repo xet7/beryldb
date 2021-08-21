@@ -128,9 +128,7 @@ class ModuleCoreDB : public Module
                  
                  /* Will only insert chans to the table if AutoJoin is enabled. */
                     
-                 std::string setting = "autojoin";
-                 
-                 if (!Kernel->Sets->AsBool(setting))
+                 if (!Kernel->Sets->AsBool(autojoin))
                  {
                       return;
                  }
@@ -143,9 +141,7 @@ class ModuleCoreDB : public Module
 
         void OnUserPart(Subscription* memb, DiscardList& excepts)
         {		
-                 std::string setting = "autojoin";
-
-                 if (!Kernel->Sets->AsBool(setting))
+                 if (!Kernel->Sets->AsBool(autojoin))
                  {
                       return;
                  }
@@ -211,16 +207,25 @@ class ModuleCoreDB : public Module
                  
                  const Args& dblist = STHelper::HKeys("databases");
                  
+                 unsigned int counter = 0;
+                 
                  for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
                  {
                        std::string name = *i;
                        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(name);
                       
+                       counter++;
+                       
                        if (database)
                        {
                              ExpireHelper::List(database);
-                             ExpireHelper::ListFutures(database);
+                             
+                             if (dblist.size() == counter)
+                             {
+                                  ExpireHelper::ListFutures(database, true);
+                             }
                        }
+                       
                  }
         }
 

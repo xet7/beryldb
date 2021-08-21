@@ -33,7 +33,7 @@ class ExportAPI ExpireHelper
 
        static void Future(User* user, const std::string& entry, unsigned int ttl, const std::string& value);
 
-       static void ListFutures(std::shared_ptr<Database> db);
+       static void ListFutures(std::shared_ptr<Database> db, bool last = false);
        
        static void FutureAT(User* user, const std::string& entry, unsigned int ttl, const std::string& value);
        

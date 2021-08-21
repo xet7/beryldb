@@ -548,6 +548,11 @@ void CommandQueue::Reset()
 
 void CommandQueue::Flush()
 {
+       if (!Kernel->Ready)
+       {
+        	return;
+       }
+       
        const ClientManager::LocalList& users = Kernel->Clients->GetLocals();
        
        if (!users.size())

@@ -131,9 +131,9 @@ COMMAND_RESULT CommandHSet::Handle(User* user, const Params& parameters)
 
 CommandHSetNX::CommandHSetNX(Module* Creator) : Command(Creator, "HSETNX", 3, 3)
 {
+       check_value      =       true;
        check_key        =       0;
        check_hash       =       1;
-       check_value      =       true;
        group 		= 	'm';
        syntax 		= 	"<map> <key> \"value\"";
 }
