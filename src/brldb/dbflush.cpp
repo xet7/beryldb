@@ -59,6 +59,7 @@ void DataFlush::AttachGlobal(std::shared_ptr<QueryBase> signal)
 
       std::lock_guard<std::mutex> lg(DataFlush::mute);
       signal->Process();
+      signal->user->SetLock(false);
 }
 
 void DataFlush::GetResults()
@@ -512,10 +513,10 @@ void DataFlush::CloseThreads()
       
       for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
       {
-             DataThread* thread = *iter;
-             thread->Exit();
-             thread = NULL;
-             counter++;
+              DataThread* thread = *iter;
+              thread->Exit();
+              thread = NULL;
+              counter++;
       }     
       
       Kernel->Store->Flusher->EraseAll();

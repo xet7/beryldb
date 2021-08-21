@@ -106,6 +106,42 @@ COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
+CommandSetStatus::CommandSetStatus(Module* parent) : Command(parent, "SETSTATUS", 2, 2)
+{
+        flags  = 'r';
+        syntax = "<login> <bool>";
+}
+
+COMMAND_RESULT CommandSetStatus::Handle(User* user, const Params& parameters)
+{
+        const std::string& newlogin = parameters[0];
+        const std::string& option   = parameters[1];
+        
+        const bool status = Helpers::as_bool(option, false);
+         
+        if (newlogin.length() < 3 || newlogin.length() > 15)
+        {
+                user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
+                return FAILED;
+        }
+
+        if (newlogin == ROOT_USER)
+        {
+                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
+                return FAILED;
+        }
+
+        if (!Kernel->Engine->ValidLogin(newlogin))
+        {
+                user->SendProtocol(ERR_INPUT, INVALID_UNAME);
+                return FAILED;
+        }
+        
+        CMapsHelper::Set(newlogin, "status", convto_string(status));
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
+        return SUCCESS;
+}
+
 CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS", 0)
 {
          flags = 'r';
@@ -123,17 +159,49 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
+
                 std::string created = UserHelper::Find(item, "created");
 
                 if (created.empty())
                 {
                       continue;
                 }
-
+                
                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", item.c_str(), Daemon::HumanEpochTime(convto_num<time_t>(created)).c_str()), Daemon::Format("%s %s", item.c_str(), created.c_str()));
         }        
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
+        return SUCCESS;
+}
+
+CommandListStatus::CommandListStatus(Module* parent) : Command(parent, "LISTSTATUS", 0)
+{
+        flags = 'r';
+}
+
+COMMAND_RESULT CommandListStatus::Handle(User* user, const Params& parameters)
+{
+        const Args& users = STHelper::HKeys("userlist");
+
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Status"));
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
+        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
+        {
+                const std::string item = *i;
+                std::string status = CMapsHelper::Get(item, "status").response;
+
+                if (status.empty())
+                {
+                       continue;
+                }
+                
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()), Daemon::Format("%s %s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()));
+        }
+
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
 
@@ -167,7 +235,6 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
-
 
 CommandPasswd::CommandPasswd(Module* parent) : Command(parent, "PASSWD", 1, 2)
 {

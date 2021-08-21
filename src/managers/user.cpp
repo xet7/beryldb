@@ -37,7 +37,15 @@ bool UserHelper::CheckPass(const std::string& user, const std::string& key)
                 return true;
         }
 
-        const std::string passwd = CMapsHelper::Get(user, "pass").response;
+        const std::string& status = CMapsHelper::Get(user, "status").response;
+        bool bool_status = Helpers::as_bool(status, false);
+        
+        if (!bool_status)
+        {
+             return false;
+        }
+        
+        const std::string& passwd = CMapsHelper::Get(user, "pass").response;
         
         HashProvider* provider = Kernel->Modules->DataModule<HashProvider>("hash/bcrypt");
 
@@ -78,10 +86,11 @@ bool UserHelper::Add(const std::string& user, const std::string& pass)
                return false;
         }
 
-        std::string hashed_pass = provider->Generate(pass);
+        const std::string& hashed_pass = provider->Generate(pass);
             
         CMapsHelper::Set(user, "userlogin", user);
         CMapsHelper::Set(user, "pass", hashed_pass);
+        CMapsHelper::Set(user, "status", "1");
         CMapsHelper::Set(user, "created", convto_string(Kernel->Now()));
 
         CMapsHelper::Set("userlist", user, "login");
@@ -130,7 +139,7 @@ bool UserHelper::SetFlags(const std::string& user, const std::string& flags)
 
 bool UserHelper::HasFlags(const std::string& user)
 {
-        const std::string flags = CMapsHelper::Get(user, "flags").response;
+        const std::string& flags = CMapsHelper::Get(user, "flags").response;
         
         if (flags.empty() || flags == "")
         {
@@ -157,6 +166,7 @@ bool UserHelper::Remove(const std::string& user)
         
         CMapsHelper::Del(user, "pass");
         CMapsHelper::Del(user, "created");
+        CMapsHelper::Del(user, "status");
         CMapsHelper::Del(user, "flags");
         CMapsHelper::Del(user, "userlogin");      
         CMapsHelper::Del("userlist", user);
@@ -173,14 +183,14 @@ bool UserHelper::Remove(const std::string& user)
 
 bool UserHelper::Exists(const std::string& user)
 {
-    std::string created = UserHelper::Find(user, "created");
+      const std::string& created = UserHelper::Find(user, "created");
     
-    if (created.empty() || created == "")
-    {
+      if (created.empty() || created == "")
+      {
              return false;
-    }
+      }
     
-    return true;
+      return true;
 }
 
 

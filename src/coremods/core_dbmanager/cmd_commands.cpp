@@ -424,7 +424,7 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        }
        else
        {
-             database = user->GetDatabase();
+              database = user->GetDatabase();
        }
        
        if (!database)
