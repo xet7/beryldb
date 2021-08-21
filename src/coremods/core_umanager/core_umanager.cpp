@@ -31,6 +31,7 @@ class CoreModUManager : public Module
         CommandListFlags 	cmdlistflags;
         CommandSetStatus	cmdsetstatus;
         CommandListStatus	cmdliststatus;
+        CommandGetStatus	cmdgetstatus;
         
   public:
   
@@ -47,6 +48,7 @@ class CoreModUManager : public Module
                             , cmdlistflags(this)
                             , cmdsetstatus(this)
                             , cmdliststatus(this)
+                            , cmdgetstatus(this)
         {
 
         }

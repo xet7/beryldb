@@ -37,7 +37,7 @@ COMMAND_RESULT CommandChar::Handle(User* user, const Params& parameters)
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
 {
-       check_value    =       true;         
+       check_value      =       true;         
        check_key 	= 	0;
        group  		= 	'k';
        syntax 		= 	"<key> \"value\"";
@@ -132,8 +132,8 @@ COMMAND_RESULT CommandCount::Handle(User* user, const Params& parameters)
 
 CommandGetOccurs::CommandGetOccurs(Module* Creator) : Command(Creator, "OCCURS", 2, 2)
 {
+       check_value      =       true;  
        check_key        = 	0;
-       check_value      = 	true;  
        group 		= 	'k';
        syntax 		= 	"<key> \"value\"";
 }
@@ -146,7 +146,7 @@ COMMAND_RESULT CommandGetOccurs::Handle(User* user, const Params& parameters)
 
 CommandGet::CommandGet(Module* Creator) : Command(Creator, "GET", 1, 1)
 {
-       check_key       = 	0;
+       check_key        = 	0;
        group 		= 	'k';
        syntax 		= 	"<key>";
 }

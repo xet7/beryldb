@@ -174,13 +174,41 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
-CommandListStatus::CommandListStatus(Module* parent) : Command(parent, "LISTSTATUS", 0)
+CommandGetStatus::CommandGetStatus(Module* parent) : Command(parent, "GETSTATUS", 1, 1)
 {
+         syntax = "<login>";
+         flags = 'r';
+}
+
+COMMAND_RESULT CommandGetStatus::Handle(User* user, const Params& parameters)
+{
+        const std::string& status = UserHelper::Find(parameters[0], "status");
+
+        if (status.empty())
+        {
+             user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
+             return FAILED;
+        }
+
+        user->SendProtocol(BRLD_OK, status);
+        return SUCCESS;
+}
+
+CommandListStatus::CommandListStatus(Module* parent) : Command(parent, "LISTSTATUS", 0, 1)
+{
+        syntax = "<*status>";
         flags = 'r';
 }
 
 COMMAND_RESULT CommandListStatus::Handle(User* user, const Params& parameters)
 {
+        bool ReqStatus;
+
+        if (parameters.size())
+        {
+              ReqStatus = Helpers::as_bool(parameters[0], false);
+        }
+        
         const Args& users = STHelper::HKeys("userlist");
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
@@ -196,6 +224,14 @@ COMMAND_RESULT CommandListStatus::Handle(User* user, const Params& parameters)
                 if (status.empty())
                 {
                        continue;
+                }
+                
+                if (parameters.size())
+                {
+                      if (Helpers::as_bool(status, false) != ReqStatus)
+                      {
+                           continue;
+                      }
                 }
                 
                 Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()), Daemon::Format("%s %s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()));

@@ -291,3 +291,25 @@ class CommandListStatus : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Returns status for a given user.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · boolean:
+ *		     - true   : User is not blocked.
+ *                   - false  : User is blocked.
+ */
+
+class CommandGetStatus : public Command
+{
+  public:
+
+        CommandGetStatus(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
