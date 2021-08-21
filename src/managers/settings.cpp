@@ -30,9 +30,9 @@ std::string STHelper::Get(const std::string& type, const std::string& key)
         return CMapsHelper::Get(type, key).response;
 }
 
-Args STHelper::HKeys(const std::string& key)
+Args STHelper::HList(const std::string& key)
 {
-       return CMapsHelper::HKeys(key).list;
+       return CMapsHelper::HList(key).list;
 }
 
 void STHelper::Delete(const std::string& type, const std::string& key)

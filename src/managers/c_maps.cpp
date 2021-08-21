@@ -49,7 +49,7 @@ MapData CMapsHelper::Del(const std::string& key, const std::string& hesh)
        return MapData(query->access);
 }
 
-MapData CMapsHelper::HKeys(const std::string& entry)
+MapData CMapsHelper::HList(const std::string& entry)
 {
        std::shared_ptr<hlist_query> query = std::make_shared<hlist_query>();
        Helpers::make_cmap(query, entry);

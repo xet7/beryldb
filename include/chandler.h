@@ -181,6 +181,12 @@ class ExportAPI Command : public CommandModel
 	
 	~Command();
 	
+	/* Checks whether a given login exists. */
+	
+	bool check_exists;
+	
+	bool check_root;
+	
 	/* Determines whether GetLimtis should be ran. */
 	
 	bool run_conf;
@@ -196,6 +202,10 @@ class ExportAPI Command : public CommandModel
 	/* Limit */
 	
 	signed int limit;
+	
+	/* Checks for a valid login */
+	
+	signed check_login;
 	
 	/* Checks for a second key, as provided */
 	

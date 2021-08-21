@@ -26,7 +26,7 @@ class ExportAPI CMapsHelper
 
        static MapData Del(const std::string& key, const std::string& hesh);
 
-       static MapData HKeys(const std::string& entry);
+       static MapData HList(const std::string& entry);
        
        static MapData Erase(const std::string& entry);
 };

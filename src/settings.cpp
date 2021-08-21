@@ -47,7 +47,7 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-        const Args& confs = STHelper::HKeys("conf");
+        const Args& confs = STHelper::HList("conf");
 
         for (Args::const_iterator i = confs.begin(); i != confs.end(); i++)
         {

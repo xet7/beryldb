@@ -183,20 +183,17 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
 CommandAddFlag::CommandAddFlag(Module* parent) : Command(parent, "ADDFLAG", 2, 2)
 {
-        flags  = 'r';
-        syntax = "<login> <flag>";
+        check_exists	=	true;
+        check_root	=	true;
+        check_login	=	0;
+        flags  		= 	'r';
+        syntax 		= 	"<login> <flag>";
 }
 
 COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
 {
         const std::string& newlogin 	= 	parameters[0];
         const std::string& flag 	= 	parameters[1];
-        
-        if (newlogin == ROOT_USER)
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
-                return FAILED;
-        }
         
         if (flag.length() > 1)
         {
@@ -213,12 +210,6 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
                 }
         }
 
-        if (!UserHelper::Exists(newlogin))
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-                return FAILED;             
-        }
-  
         std::string exists = UserHelper::CheckFlags(newlogin);
         std::string adding;
         

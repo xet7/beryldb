@@ -258,7 +258,7 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         }
         
         const std::string& usergrups = dest + "/groups";
-        const Args& grouplist = STHelper::HKeys(usergrups);
+        const Args& grouplist = STHelper::HList(usergrups);
         
         for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
         {
@@ -311,7 +311,7 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
         }
        
        const std::string& usergrups = login + "/groups";
-       const Args& grouplist = STHelper::HKeys(usergrups);
+       const Args& grouplist = STHelper::HList(usergrups);
 
        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
@@ -388,7 +388,7 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        }
        
        const std::string& usergrups = dest + "/groups";
-       const Args& grouplist = STHelper::HKeys(usergrups);
+       const Args& grouplist = STHelper::HList(usergrups);
 
        bool found = false;
        

@@ -124,7 +124,7 @@ void future_list_query::Process()
 {
         if (this->id == 1000)
         {
-              bprint(DONE, "Commands OK");
+              bprint(DONE, "All expires and futures loaded.");
               Kernel->Ready = true;
         }
         
