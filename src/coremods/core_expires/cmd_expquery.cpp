@@ -39,6 +39,29 @@ COMMAND_RESULT CommandTTL::Handle(User* user, const Params& parameters)
          return SUCCESS;
 }
 
+CommandExpires::CommandExpires(Module* Creator) : Command(Creator, "EXPIRES", 1)
+{
+         check_key       =      0;
+         group           =      'e';
+         syntax          =      "<key>";
+}
+
+COMMAND_RESULT CommandExpires::Handle(User* user, const Params& parameters)
+{
+         const signed int ttl = ExpireManager::GetTIME(user->GetDatabase(), parameters[0], user->select);
+
+         if (ttl != -1)
+         {
+                  user->SendProtocol(BRLD_OK, "1");
+         }
+         else
+         {
+                  user->SendProtocol(ERR_INPUT, "0");
+         }
+
+         return SUCCESS;
+}
+
 CommandTTLAT::CommandTTLAT(Module* Creator) : Command(Creator, "TTLAT", 1)
 {
         check_key       =       0;

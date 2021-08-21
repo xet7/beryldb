@@ -467,6 +467,7 @@ void DataThread::Process()
                           if (request->flags == QUERY_FLAGS_GLOBAL)
                           {
                                  DataFlush::AttachGlobal(request);
+                                 break;
                           }
 
                           if (request->access != DBL_INTERRUPT)

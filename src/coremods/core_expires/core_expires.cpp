@@ -30,6 +30,7 @@ class CoreModuleExpires : public Module
         CommandDBEReset    	cmddbreset;
         CommandTTLAT       	cmdttlat;
         CommandExpireFIND  	cmdexpfind;
+        CommandExpires		cmdexpires;
    
     public:     
         
@@ -44,7 +45,8 @@ class CoreModuleExpires : public Module
                               cmdselectcount(this), 
                               cmddbreset(this), 
                               cmdttlat(this), 
-                              cmdexpfind(this)
+                              cmdexpfind(this),
+                              cmdexpires(this)
         {
         
         }
