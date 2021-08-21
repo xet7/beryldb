@@ -169,8 +169,7 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
        if (!BASE_PATH.empty())
        {
-             const std::string& path = BASE_PATH.c_str();
-             user->SendProtocol(BRLD_OK, path);
+             user->SendProtocol(BRLD_OK, BASE_PATH.c_str());
              return SUCCESS;
        }
 

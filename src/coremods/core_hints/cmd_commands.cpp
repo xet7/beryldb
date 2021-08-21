@@ -17,7 +17,6 @@
 CommandTransfer::CommandTransfer(Module* Creator) : Command(Creator, "TRANSFER", 2, 2)
 {
         check_key       =       0;
-        check_hash	=	1;
         group 		= 	'h';
         syntax 		= 	"<key> <dest database>";
 }
@@ -38,7 +37,7 @@ COMMAND_RESULT CommandTransfer::Handle(User* user, const Params& parameters)
             return FAILED;        
        }
 
-       KeyHelper::SimpleRetro(user, std::make_shared<transfer_query>(), parameters[0], database->GetName());
+       GlobalHelper::Transfer(user, parameters[0], database);
        return SUCCESS;
 }
 

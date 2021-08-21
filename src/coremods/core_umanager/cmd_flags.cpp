@@ -64,21 +64,15 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
 {
-        flags  = 'r';
-        syntax = "<login>";
+        check_exists	=	true;
+        check_login	=	0;
+        flags  		= 	'r';
+        syntax 		= 	"<login>";
 }
 
 COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-
-        if (newlogin.length() < 3 || newlogin.length() > 15)
-        {
-                user->SendProtocol(ERR_INPUT, INVALID_PARAM);
-                return FAILED;
-        }
-        
-        const std::string& userflags = UserHelper::CheckFlags(newlogin);
+        const std::string& userflags = UserHelper::CheckFlags(parameters[0]);
 
         /* Checks if user has flags. */
         
