@@ -94,7 +94,7 @@ void ExpireHelper::ExpireAT(User* user, const std::string& entry, unsigned int t
        Kernel->Store->Push(query);
 }
 
-void ExpireHelper::Persist(User* user, const std::string& entry, const std::string& select, std::shared_ptr<Database> db)
+void ExpireHelper::Persist(User* user, const std::string& entry, unsigned int select, std::shared_ptr<Database> db)
 {
        std::shared_ptr<expire_del_query> query = std::make_shared<expire_del_query>();
        

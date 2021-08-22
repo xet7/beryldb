@@ -130,7 +130,7 @@ class ExportAPI QueryBase
         
         DualMMap mlist;
         
-        std::string select_query;
+        unsigned int select_query;
 
         unsigned int id;
 
@@ -218,23 +218,23 @@ class ExportAPI QueryBase
 	 *         · Expire information, including expiring time.
          */    
                  
-        void WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
+        void WriteExpire(const std::string& e_key, unsigned int select, unsigned int ttl, std::shared_ptr<Database> db = NULL);
 
         bool Swap(const std::string& newdest, const std::string& dest, const std::string& lvalue, std::shared_ptr<Database> db = NULL);
 
-        bool SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& key, unsigned int ttl, const std::string& oldkey);
+        bool SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, unsigned int select, const std::string& key, unsigned int ttl, const std::string& oldkey);
 
-        void ExpireBatch(const std::string& wdest, const std::string& value, const std::string& e_key, const std::string& select, unsigned int ttl);
+        void ExpireBatch(const std::string& wdest, const std::string& value, const std::string& e_key, unsigned int select, unsigned int ttl);
         
-        void WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& value);
+        void WriteFuture(const std::string& e_key, unsigned int select, unsigned int ttl, const std::string& value);
 
         bool Prepare();
         
-        bool GetRegistry(const std::string& select, const std::string& regkey, bool do_load = false);
+        bool GetRegistry(unsigned int select, const std::string& regkey, bool do_load = false);
         
-        void SetDest(const std::string& regkey, const std::string& regselect, const std::string& regtype);
+        void SetDest(const std::string& regkey, unsigned int regselect, const std::string& regtype);
         
-        int CheckDest(const std::string& select, const std::string& regkey,  const std::string& ltype, std::shared_ptr<Database> db = NULL);
+        int CheckDest(unsigned int select, const std::string& regkey,  const std::string& ltype, std::shared_ptr<Database> db = NULL);
 
         RocksData Get(const std::string& where);
         

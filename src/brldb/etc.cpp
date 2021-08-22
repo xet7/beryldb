@@ -105,7 +105,7 @@ void future_list_query::Run()
                 
                 if (Kernel->Config->KeepFutures)
                 {
-                     Kernel->Store->Futures->Add(this->database, convto_num<signed int>(path2), key_as_string, file2, select_as_string, true);
+                     Kernel->Store->Futures->Add(this->database, convto_num<signed int>(path2), key_as_string, file2, convto_num<unsigned int>(select_as_string), true);
                      total_counter++;
                 }
                 else
@@ -158,7 +158,7 @@ void expire_query::Process()
 
 void future_exec_query::Run()
 {
-      std::string lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_FUTURE + ":" + this->database->GetName();
+      std::string lookup = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + INT_FUTURE + ":" + this->database->GetName();
       std::string dbvalue;
       rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);       
       
@@ -193,7 +193,7 @@ void future_exec_query::Process()
 
 void future_del_query::Run()
 {
-      std::string lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_FUTURE + ":" + this->database->GetName();
+      std::string lookup = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + INT_FUTURE + ":" + this->database->GetName();
       std::string dbvalue;
       rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);       
       

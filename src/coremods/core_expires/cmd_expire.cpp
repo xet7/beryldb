@@ -39,7 +39,7 @@ COMMAND_RESULT CommandExpireFIND::Handle(User* user, const Params& parameters)
 
          for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
-               ExpireEntry entry = it->second;
+               ExpireEntry const entry = it->second;
 
                if (entry.database != user->GetDatabase())
                {
@@ -122,7 +122,7 @@ COMMAND_RESULT CommandExpireLIST::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);
@@ -176,7 +176,7 @@ COMMAND_RESULT CommandSelectReset::Handle(User* user, const Params& parameters)
 
         /* Clears all expires pending. */
 
-        const unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), use);
+        const unsigned int counter = ExpireManager::SelectReset(user->GetDatabase()->GetName(), convto_num<unsigned int>(use));
         user->SendProtocol(BRLD_OK, PROCESS_OK);
         
         sfalert(user, NOTIFY_DEFAULT, "Expires from select %s have been removed: %u", use.c_str(), counter);

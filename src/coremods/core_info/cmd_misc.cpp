@@ -63,7 +63,7 @@ COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
         user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         
         user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->select.c_str()));
+        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->GetSelect().c_str()));
         user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Agent", user->agent.c_str()));
 
         /* Returns admin flags to requesting user, if any. */

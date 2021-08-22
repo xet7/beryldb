@@ -20,7 +20,7 @@
 
 void del_query::Keys()
 {
-       const std::string& lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       const std::string& lookup = to_bin(this->key) + ":" + convto_string(convto_string(this->select_query)) + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
        rocksdb::WriteBatch batch;
 

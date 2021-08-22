@@ -29,7 +29,7 @@ void rename_query::Lists()
 void rename_query::Keys()
 {
      RocksData result = this->Get(this->dest);
-     const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+     const std::string& newdest = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->identified;
 
      if (!this->SwapWithExpire(newdest, this->dest, result.value, this->select_query, this->value, this->id, this->key))
      {
@@ -91,7 +91,7 @@ void rename_query::Run()
     }   
     
     RocksData result = this->Get(this->dest);
-    const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    const std::string& newdest = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->identified;
 
     if (!this->Swap(newdest, this->dest, result.value))
     {

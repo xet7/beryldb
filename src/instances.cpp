@@ -30,7 +30,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
                                         	, uuid(uid)
                                         	, server(srv)
                                         	, session(NULL)
-                                        	, select("1")
+                                        	, select(1)
                                         	, registered(REG_NONE)
                                         	, usertype(type)
                                         

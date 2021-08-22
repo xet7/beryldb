@@ -78,7 +78,7 @@ void copy_query::Run()
     }   
 
     RocksData result = this->Get(this->dest);
-    const std::string& newdest = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    const std::string& newdest = to_bin(this->value) + ":" + convto_string(convto_string(this->select_query)) + ":" + this->identified;
     this->Write(newdest, result.value);
 }
 

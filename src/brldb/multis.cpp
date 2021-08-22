@@ -221,7 +221,7 @@ void mkeys_query::Run()
 
                              case 1:
                              {
-                                  if (this->select_query != token)
+                                  if (convto_string(this->select_query) != token)
                                   {
                                        skip = true;
                                   }

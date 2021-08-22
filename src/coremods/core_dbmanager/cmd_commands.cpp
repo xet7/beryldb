@@ -65,7 +65,7 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
               return FAILED;
        }
 
-       user->SendProtocol(BRLD_OK, found->select.c_str());
+       user->SendProtocol(BRLD_OK, convto_string(found->GetSelect()).c_str());
        return SUCCESS;
 }
 
@@ -92,14 +92,16 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        {
                return FAILED;
        }
+       
+       unsigned int as_int = convto_num<unsigned int>(use);
 
-       if (user->select == use)
+       if (user->select == as_int)
        {
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
        }
 
-       user->select = use;
+       user->select = as_int;
        user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
        return SUCCESS;
 }
@@ -111,7 +113,7 @@ CommandCurrent::CommandCurrent(Module* Creator) : Command(Creator, "CURRENT", 0)
 
 COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 {  
-       const std::string& use = user->select;
+       const std::string& use = user->GetSelect();
        
        if (use.empty())
        {
@@ -428,15 +430,15 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (!database)
        {
-             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-             return FAILED;
+              user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+              return FAILED;
        }
        
        if (DBHelper::FlushDB(database, true))
        {
-             sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
-             user->SendProtocol(BRLD_OK, PROCESS_OK);
-             return SUCCESS;
+              sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+              user->SendProtocol(BRLD_OK, PROCESS_OK);
+              return SUCCESS;
        }
 
        sfalert(user, NOTIFY_DEFAULT, "Unable to flush database: %s", user->GetDatabase()->GetName().c_str());      

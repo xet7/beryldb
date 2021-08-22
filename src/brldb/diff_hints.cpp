@@ -23,7 +23,7 @@
 
 void diff_query::Keys()
 {
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(convto_string(this->select_query)) + ":" + this->identified;
     
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);     
@@ -53,7 +53,7 @@ void diff_query::Maps()
 
     std::shared_ptr<MapHandler> handler1 = MapHandler::Create(query_result.value);
 
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(convto_string(this->select_query)) + ":" + this->identified;
 
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);
@@ -146,7 +146,7 @@ void diff_query::Multis()
 
     std::shared_ptr<MultiMapHandler> handler1 = MultiMapHandler::Create(query_result.value);
     
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(convto_string(this->select_query)) + ":" + this->identified;
     
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);     
@@ -236,7 +236,7 @@ void diff_query::Multis()
 
 void diff_query::Geos()
 {
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->identified;
     
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);     
@@ -266,7 +266,7 @@ void diff_query::Vectors()
 
     std::shared_ptr<VectorHandler> handler1 = VectorHandler::Create(query_result.value);
     
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->identified;
     
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);     
@@ -360,7 +360,7 @@ void diff_query::Lists()
     
     std::shared_ptr<ListHandler> handler1 = ListHandler::Create(query_result.value);
     
-    std::string lookup  = to_bin(this->value) + ":" + this->select_query + ":" + this->identified;
+    std::string lookup  = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->identified;
     
     std::string dbvalue;
     rocksdb::Status fstatus = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);     

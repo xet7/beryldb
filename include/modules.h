@@ -420,7 +420,7 @@ class ExportAPI Module : public Discarder, public usecountbase
 	 *         · Expire information.
          */    
          
-	virtual void OnExpireAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select, unsigned int seconds);
+	virtual void OnExpireAdd(User* user, const std::string& dbname, const std::string& key, unsigned int select, unsigned int seconds);
 
         /* 
          * Called every time an future is added.
@@ -430,7 +430,7 @@ class ExportAPI Module : public Discarder, public usecountbase
 	 *         · Information about future.
          */    	
          
-        virtual void OnFutureAdd(User* user, const std::string& dbname, const std::string& key, const std::string& select);
+        virtual void OnFutureAdd(User* user, const std::string& dbname, const std::string& key, unsigned int select);
 
         /* 
          * Called as a new user registers its user agent.

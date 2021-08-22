@@ -32,7 +32,7 @@ void move_query::Keys()
      if (stats.ok())
      {
              Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-             Kernel->Store->Expires->Add(this->database, this->id, this->key, this->value, true);
+             Kernel->Store->Expires->Add(this->database, this->id, this->key, convto_num<unsigned int>(this->value), true);
              this->SetOK();
      }
      else

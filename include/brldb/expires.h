@@ -35,7 +35,7 @@ class ExpireEntry
         
         /* select used */
          
-        std::string select;
+        unsigned int select;
         
         /* Key used */
         
@@ -92,7 +92,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · int: Time at which this timer will run.
          */            
          
-        signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& select, bool epoch = false);
+        signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, unsigned int select, bool epoch = false);
 
         /* 
          * Returns triggering time of a timer.
@@ -103,7 +103,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · int: time_t to expiring time.
          */          
            
-        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* 
          * Deletes an entry from expires.
@@ -113,7 +113,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · True: Entry has been deleted. False: Not found.
          */            
          
-        static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static bool Delete(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* 
          * Finds an expire.
@@ -123,7 +123,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · ExpireEntry: An static object to ExpireEntry.
          */    
                  
-        ExpireEntry Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        ExpireEntry Find(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
         
         /* 
          * Gets all expires.
@@ -144,15 +144,26 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · Same as ExpireManager::GetTIME();
          */    
          
-        signed int GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        signed int GetTTL(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
         
         /* Clears everything inside ExpireList. */
         
         static void Reset();
         
-        /* Select reset */
-        
-        static unsigned int SelectReset(const std::string& dbname, const std::string& select);
+        /* 
+         * Destroys all elements in a given select.
+         * 
+         * @parameters:
+	 *
+	 *         · string	: Database name to destroy.
+	 *	   · uint	: Select to destroy.
+	 * 
+         * @return:
+ 	 *
+         *         · uint	: Expired removed (counter).
+         */            
+         
+        static unsigned int SelectReset(const std::string& dbname, unsigned int select);
 
         void DatabaseDestroy(const std::string& dbname);
 
@@ -183,7 +194,7 @@ class ExportAPI ExpireManager : public safecast<ExpireManager>
          *         · unsigned int: Counter of all items found.
          */
                      
-        unsigned int Count(const std::string& database, const std::string& select);
+        unsigned int Count(const std::string& database, unsigned int select);
 
         /* 
          * This function should be called before a database is closing.
