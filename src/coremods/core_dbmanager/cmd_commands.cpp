@@ -428,8 +428,8 @@ COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
        
        if (!database)
        {
-            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-            return FAILED;
+             user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+             return FAILED;
        }
        
        if (DBHelper::FlushDB(database, true))

@@ -69,7 +69,6 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-
 CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 2)
 {
         flags = 'm';

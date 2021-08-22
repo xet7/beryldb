@@ -216,9 +216,9 @@ void DataFlush::GetPending()
             return;
       }
       
-      for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
+      for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
       {
-               User* user = u->second;
+               User* const user = i->second;
 
                const unsigned int pending = user->pending.size();
 

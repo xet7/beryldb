@@ -140,8 +140,8 @@ COMMAND_RESULT CommandFRop::Handle(User* user, const Params& parameters)
 
 CommandLPush::CommandLPush(Module* Creator) : Command(Creator, "LPUSH", 2, 2)
 {
+       check_value      =       true;
        check_key        =       0;
-       check_value	=	true;
        group 		= 	'l';
        syntax 		= 	"<key> \"value\"";
 }

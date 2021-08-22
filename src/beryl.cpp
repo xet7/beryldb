@@ -416,6 +416,8 @@ void Beryl::Signalizer(int signal)
 
 void Beryl::PrepareExit(int status, const std::string& quitmsg)
 {
+	Ready = false;
+	
 	/* Timers reset */
 	
 	this->Tickers->Reset();
@@ -504,8 +506,6 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
 	
 	while (!clients.empty())
 	{
-		/* NOTE: SERVER_EXITING is defined in constants.h */
-		
 		this->Clients->Disconnect(clients.front(), quitmsg);
 		csize++;
 	}

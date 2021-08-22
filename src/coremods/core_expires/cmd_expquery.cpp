@@ -142,7 +142,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
 
          for (ExpireMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
-                ExpireEntry entry = it->second;
+                ExpireEntry const entry = it->second;
 
                 if (entry.select != select || entry.database != user->GetDatabase())
                 {  
