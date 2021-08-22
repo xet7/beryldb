@@ -79,10 +79,10 @@ COMMAND_RESULT CommandSetTX::Handle(User* user, const Params& parameters)
 
 CommandGetSet::CommandGetSet(Module* Creator) : Command(Creator, "GETSET", 2, 2)
 {
-       check_key        = 0;
-       check_value      = true;  
-       group 		= 'k';
-       syntax 		= "<key> \"value\"";
+       check_value      = 	true;  
+       check_key        = 	0;
+       group 		= 	'k';
+       syntax 		= 	"<key> \"value\"";
 }
 
 COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
@@ -93,8 +93,8 @@ COMMAND_RESULT CommandGetSet::Handle(User* user, const Params& parameters)
 
 CommandAppend::CommandAppend(Module* Creator) : Command(Creator, "APPEND", 2, 2)
 {
+       check_value      = 	true;  
        check_key 	=    	0;
-       check_value 	= 	true;
        group  	 	= 	'k';
        syntax 	 	= 	"<key> \"value\"";
 }

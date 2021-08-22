@@ -85,6 +85,7 @@ COMMAND_RESULT CommandSetStatus::Handle(User* user, const Params& parameters)
         if (Helpers::as_bool(parameters[1], false) == false)
         {
                 ClientManager::DisconnectAll(parameters[0], PROCESS_OK);
+                Kernel->Logins->Remove(parameters[0]);
         }
         
         CMapsHelper::Set(parameters[0], "status", convto_string(Helpers::as_bool(parameters[1], false)));

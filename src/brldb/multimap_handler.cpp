@@ -260,3 +260,4 @@ std::vector<std::string> MultiMapHandler::GetVals(const std::string& key)
       this->LastMsg = HANDLER_MSG_OK;
       return results;
 }
+
