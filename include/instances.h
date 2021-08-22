@@ -80,7 +80,6 @@ struct ExportAPI ConfigConnect : public refcountbase
 	{ 
 		return host; 
 	}
-
 };
 
 /*
@@ -243,7 +242,7 @@ class ExportAPI User : public Expandable
 
         /* Current select: 1 by default */
         
-        std::string select;
+        unsigned int select;
 
         unsigned int registered:3;
 
@@ -428,6 +427,19 @@ class ExportAPI User : public Expandable
 	{
 		return this->logged;
 	}
+
+        /* 
+         * Returns current select, as string.
+	 * 
+         * @return:
+ 	 *
+         *         · string	:  select in use.
+         */    	
+         
+	std::string GetSelect()
+	{
+		return convto_string(this->select);
+	}
 		
 	virtual void SendRemoteProtocol(const Numeric::Numeric& numeric);
 
@@ -566,16 +578,13 @@ class ExportAPI User : public Expandable
          
 	bool SetLogin(const std::string& userlogin, time_t newts = 0);
 
-	
 	void CheckEmptyChannels();
 
 	virtual ~User();
 	
 	DiscardResult discard();
-
 	
 	bool Deserialize(Data& data);
-
 	
 	bool Serialize(Serializable::Data& data);
 };

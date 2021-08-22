@@ -252,3 +252,64 @@ class CommandResetCache : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
+/* 
+ * Disables an user from being used.
+ *
+ * @parameters:
+ *
+ *         ·  string    :   Login to disable.
+ *
+ * @protocol:
+ *
+ *         · enum      :   NULL, INVALID or OK.
+ */
+ 
+class CommandSetStatus : public Command
+{
+ public:
+
+        CommandSetStatus(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Lists all users that are disabled or enabled.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · vector    : user list.
+ */
+
+class CommandListStatus : public Command
+{
+  public:
+
+        CommandListStatus(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Returns status for a given user.
+ * 
+ * @requires 'r'.
+ *
+ * @protocol:
+ *
+ *         · boolean:
+ *		     - true   : User is not blocked.
+ *                   - false  : User is blocked.
+ */
+
+class CommandGetStatus : public Command
+{
+  public:
+
+        CommandGetStatus(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+

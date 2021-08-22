@@ -11,23 +11,10 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#pragma once
+#include "beryl.h"
+#include "brldb/sort.h"
 
-enum sort_order
+void Sort::List()
 {
-    sort_order_asc  =  1,
-    sort_order_desc =  2
-};
-
-
-class ExportAPI Sort
-{
-    public:
-        
-        sort_order order;
-        
-        Sort();
-        
-        void List();
-        
-};
+//    for (ListMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+}

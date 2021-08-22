@@ -173,7 +173,7 @@ COMMAND_RESULT CommandHop::HandleLocal(LocalUser* user, const Params& parameters
                 return SUCCESS;
        }
 
-       Channel* channel = Kernel->Channels->Find(parameters[0]);
+       Channel* const channel = Kernel->Channels->Find(parameters[0]);
 
        if (!channel)
        {

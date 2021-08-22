@@ -47,7 +47,7 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-        const Args& confs = STHelper::HKeys("conf");
+        const Args& confs = STHelper::HList("conf");
 
         for (Args::const_iterator i = confs.begin(); i != confs.end(); i++)
         {
@@ -181,7 +181,7 @@ void Helpers::make_map(User* user, std::shared_ptr<QueryBase> base, const std::s
 void Helpers::make_cmap(std::shared_ptr<QueryBase> base, const std::string& key, const std::string& hesh)
 {
        base->database = Kernel->Core->GetDatabase();
-       base->select_query = "1";
+       base->select_query = 1;
        base->flags = QUERY_FLAGS_CORE;
      
        if (!key.empty() && !hesh.empty())
@@ -199,7 +199,7 @@ void Helpers::make_cmap(std::shared_ptr<QueryBase> base, const std::string& key,
 void Helpers::make_cquery(std::shared_ptr<QueryBase> base, const std::string& key)
 {
       base->database = Kernel->Core->GetDatabase();
-      base->select_query = "1";
+      base->select_query = 1;
       base->flags = QUERY_FLAGS_CORE;
       
       if (!key.empty())

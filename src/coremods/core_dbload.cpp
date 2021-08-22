@@ -33,7 +33,7 @@ namespace
              
              const std::string& usergrups = user->login + "/groups";
 
-             const Args& groups = STHelper::HKeys(usergrups);
+             const Args& groups = STHelper::HList(usergrups);
              
              for (Args::const_iterator i = groups.begin(); i != groups.end(); i++)
              {
@@ -54,7 +54,7 @@ namespace
      void Autojoin(User* user)
      {
               const std::string& userchans = user->login + "/chans";
-              const Args& chans = STHelper::HKeys(userchans);
+              const Args& chans = STHelper::HList(userchans);
               
               LocalUser* localuser = IS_LOCAL(user);
 
@@ -128,9 +128,7 @@ class ModuleCoreDB : public Module
                  
                  /* Will only insert chans to the table if AutoJoin is enabled. */
                     
-                 std::string setting = "autojoin";
-                 
-                 if (!Kernel->Sets->AsBool(setting))
+                 if (!Kernel->Sets->AsBool(autojoin))
                  {
                       return;
                  }
@@ -143,9 +141,7 @@ class ModuleCoreDB : public Module
 
         void OnUserPart(Subscription* memb, DiscardList& excepts)
         {		
-                 std::string setting = "autojoin";
-
-                 if (!Kernel->Sets->AsBool(setting))
+                 if (!Kernel->Sets->AsBool(autojoin))
                  {
                       return;
                  }
@@ -200,7 +196,7 @@ class ModuleCoreDB : public Module
         {
                  Kernel->Sets->Load();
                  
-                 const Args& grlist = STHelper::HKeys("groups");
+                 const Args& grlist = STHelper::HList("groups");
 
                  for (Args::const_iterator i = grlist.begin(); i != grlist.end(); i++)
                  {
@@ -209,18 +205,27 @@ class ModuleCoreDB : public Module
                         Kernel->Groups->Add(name, flags);
                  }
                  
-                 const Args& dblist = STHelper::HKeys("databases");
+                 const Args& dblist = STHelper::HList("databases");
+                 
+                 unsigned int counter = 0;
                  
                  for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
                  {
                        std::string name = *i;
                        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(name);
                       
+                       counter++;
+                       
                        if (database)
                        {
                              ExpireHelper::List(database);
-                             ExpireHelper::ListFutures(database);
+                             
+                             if (dblist.size() == counter)
+                             {
+                                  ExpireHelper::ListFutures(database, true);
+                             }
                        }
+                       
                  }
         }
 

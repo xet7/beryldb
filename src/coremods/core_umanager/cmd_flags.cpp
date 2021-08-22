@@ -64,21 +64,15 @@ COMMAND_RESULT CommandListFlags::Handle(User* user, const Params& parameters)
 
 CommandGetFlags::CommandGetFlags(Module* parent) : Command(parent, "GETFLAGS", 1, 1)
 {
-        flags  = 'r';
-        syntax = "<login>";
+        check_exists	=	true;
+        check_login	=	0;
+        flags  		= 	'r';
+        syntax 		= 	"<login>";
 }
 
 COMMAND_RESULT CommandGetFlags::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-
-        if (newlogin.length() < 3 || newlogin.length() > 15)
-        {
-                user->SendProtocol(ERR_INPUT, INVALID_PARAM);
-                return FAILED;
-        }
-        
-        std::string userflags = UserHelper::CheckFlags(newlogin);
+        const std::string& userflags = UserHelper::CheckFlags(parameters[0]);
 
         /* Checks if user has flags. */
         
@@ -183,20 +177,17 @@ COMMAND_RESULT CommandDelFlags::Handle(User* user, const Params& parameters)
 
 CommandAddFlag::CommandAddFlag(Module* parent) : Command(parent, "ADDFLAG", 2, 2)
 {
-        flags  = 'r';
-        syntax = "<login> <flag>";
+        check_exists	=	true;
+        check_root	=	true;
+        check_login	=	0;
+        flags  		= 	'r';
+        syntax 		= 	"<login> <flag>";
 }
 
 COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
 {
         const std::string& newlogin 	= 	parameters[0];
         const std::string& flag 	= 	parameters[1];
-        
-        if (newlogin == ROOT_USER)
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
-                return FAILED;
-        }
         
         if (flag.length() > 1)
         {
@@ -213,12 +204,6 @@ COMMAND_RESULT CommandAddFlag::Handle(User* user, const Params& parameters)
                 }
         }
 
-        if (!UserHelper::Exists(newlogin))
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-                return FAILED;             
-        }
-  
         std::string exists = UserHelper::CheckFlags(newlogin);
         std::string adding;
         

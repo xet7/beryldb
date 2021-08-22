@@ -15,6 +15,10 @@
 
 static std::string chansync = "chansync";
 
+/* Auto join */
+
+static std::string autojoin = "autojoin";
+
 /* Default publish command. */
 
 #define PUBL_DEF "PUBLISH"

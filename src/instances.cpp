@@ -30,7 +30,7 @@ User::User(const std::string& uid, Server* srv, UserType type) :
                                         	, uuid(uid)
                                         	, server(srv)
                                         	, session(NULL)
-                                        	, select("1")
+                                        	, select(1)
                                         	, registered(REG_NONE)
                                         	, usertype(type)
                                         
@@ -853,7 +853,6 @@ void LocalUser::set_class(const std::string &classname)
 
 			if (c->type == CC_NAMED)
 			{
-
 				continue;
 			}
 
@@ -869,11 +868,9 @@ void LocalUser::set_class(const std::string &classname)
 			{
 				continue;
 			}
-
 			
 			if (!c->ports.empty() && !c->ports.count(this->server_sa.port()))
 			{
-
 				continue;
 			}
 
@@ -892,9 +889,9 @@ void User::CheckEmptyChannels()
 {
 	for (User::SubsList::iterator i = this->chans.begin(); i != this->chans.end(); )
 	{
-		Channel* c = (*i)->chan;
+		Channel* iter = (*i)->chan;
 		++i;
-		c->DeleteUser(this);
+		iter->DeleteUser(this);
 	}
 }
 

@@ -16,8 +16,8 @@
 
 CommandVExist::CommandVExist(Module* Creator) : Command(Creator, "VEXISTS", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -110,8 +110,8 @@ COMMAND_RESULT CommandVKeys::Handle(User* user, const Params& parameters)
 
 CommandVDel::CommandVDel(Module* Creator) : Command(Creator, "VDEL", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -137,8 +137,8 @@ COMMAND_RESULT CommandVReverse::Handle(User* user, const Params& parameters)
 
 CommandVRepeats::CommandVRepeats(Module* Creator) : Command(Creator, "VREPEATS", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -164,8 +164,8 @@ COMMAND_RESULT CommandVSort::Handle(User* user, const Params& parameters)
 
 CommandVPush::CommandVPush(Module* Creator) : Command(Creator, "VPUSH", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -185,16 +185,14 @@ CommandVPopFront::CommandVPopFront(Module* Creator) : Command(Creator, "VPOPFRON
 
 COMMAND_RESULT CommandVPopFront::Handle(User* user, const Params& parameters)
 {  
-        const std::string& key = parameters[0];
-
-        KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), key);
+        KeyHelper::Retro(user, std::make_shared<vpop_front_query>(), parameters[0]);
         return SUCCESS;  
 }
 
 CommandVPopBack::CommandVPopBack(Module* Creator) : Command(Creator, "VPOPBACK", 1, 1)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -227,9 +225,7 @@ CommandVHigh::CommandVHigh(Module* Creator) : Command(Creator, "VHIGH", 1, 1)
 
 COMMAND_RESULT CommandVHigh::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       KeyHelper::Retro(user, std::make_shared<vhigh_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<vhigh_query>(), parameters[0]);
        return SUCCESS;  
 }
 
@@ -261,8 +257,8 @@ COMMAND_RESULT CommandVSum::Handle(User* user, const Params& parameters)
 
 CommandVPushNX::CommandVPushNX(Module* Creator) : Command(Creator, "VPUSHNX", 2, 2)
 {
+        check_value     =       true;
         check_key       =       0;
-        check_value	=	true;
         group 		= 	'v';
         syntax 		= 	"<key> \"value\"";
 }
@@ -276,8 +272,8 @@ COMMAND_RESULT CommandVPushNX::Handle(User* user, const Params& parameters)
 CommandVFind::CommandVFind(Module* Creator) : Command(Creator, "VFIND", 2, 4)
 {
         run_conf	=	true;
-        check_key       =       0;
         check_value     =       true;
+        check_key       =       0;
         group 		= 	'l';
         syntax 		= 	"<key> \"%value\" <offset> <limit>";
 }

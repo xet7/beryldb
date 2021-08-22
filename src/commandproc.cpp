@@ -12,6 +12,7 @@
  */
 
 #include "beryl.h"
+#include "managers/user.h"
 #include "engine.h"
 #include "interval.h"
 #include "maker.h"
@@ -330,7 +331,45 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
                         	{
                          	      	 return;
 				} 
-	                }
+			}
+			
+			if (handler->check_login >= 0)
+			{
+                                if (cmd_params.size() >= (unsigned int)handler->check_login)
+                                {
+                                	if (handler->check_exists)
+                                	{
+						const std::string& exists = UserHelper::Find(cmd_params[handler->check_login], "created");
+					
+					        if (exists.empty())
+					        {
+					                user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
+					                return;
+						}
+                                	}
+                                	
+                                	if (cmd_params[handler->check_login].length() < 3 || cmd_params[handler->check_login].length() > 15)
+                                	{
+                                		user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
+                                		return;
+   					}
+                                
+					if (!Kernel->Engine->ValidLogin(cmd_params[handler->check_login]))
+					{
+						user->SendProtocol(ERR_INPUT, INVALID_UNAME);
+						return;
+					}
+				
+					if (handler->check_root)
+					{
+						if (cmd_params[handler->check_login] == ROOT_USER)
+						{
+							user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
+							return;
+						}
+					}
+				}
+			}
 
         	        if (handler->check_hash >= 0)
         	        {
@@ -548,6 +587,11 @@ void CommandQueue::Reset()
 
 void CommandQueue::Flush()
 {
+       if (!Kernel->Ready)
+       {
+        	return;
+       }
+       
        const ClientManager::LocalList& users = Kernel->Clients->GetLocals();
        
        if (!users.size())

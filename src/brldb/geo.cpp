@@ -197,7 +197,7 @@ void gkeys_query::Run()
                              
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -308,7 +308,7 @@ void gkeys_query::Process()
 
 void geocalc_query::Run()
 {
-        std::string first = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
+        std::string first = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
 
         std::string dbvalue;
         this->database->GetAddress()->Get(rocksdb::ReadOptions(), first, &dbvalue);
@@ -319,7 +319,7 @@ void geocalc_query::Run()
                return;
         }
         
-        std::string second = to_bin(this->value) + ":" + this->select_query + ":" + this->base_request;
+        std::string second = to_bin(this->value) + ":" + convto_string(this->select_query) + ":" + this->base_request;
         
         std::string dbvalue2;
         this->database->GetAddress()->Get(rocksdb::ReadOptions(), second, &dbvalue2);
@@ -349,7 +349,7 @@ void geocalc_query::Process()
 
 void geodistance_query::Run()
 {
-    std::string first = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
+    std::string first = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
     
     Args result;
     
@@ -411,7 +411,7 @@ void geodistance_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -535,7 +535,7 @@ void geodistance_query::Process()
 
 void georem_query::Run()
 {
-    std::string first = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
+    std::string first = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
     
     Args result;
     
@@ -595,7 +595,7 @@ void georem_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }

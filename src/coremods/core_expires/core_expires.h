@@ -20,6 +20,27 @@
 #include "managers/expires.h"
 
 /* 
+ * Expires checks whether a key is expiring, as expressed in a bool.
+ * 
+ * @parameters:
+ *
+ *         · string     : Key to check.
+ * 
+ * @protocol:
+ *
+ *         · bool	: 0 or 1.
+ */
+
+class CommandExpires : public Command 
+{
+    public: 
+
+        CommandExpires(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
  * Expire command sets an expire on a given key.
  * 
  * In order to use this command, provided key MUST be defined.

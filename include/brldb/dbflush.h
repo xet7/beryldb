@@ -213,6 +213,8 @@ class ExportAPI DataFlush : public safecast<DataFlush>
         
          static void ResetAll();
 
+         static void AttachGlobal(std::shared_ptr<QueryBase> result);
+         
         /* 
          * Adds a new notification to the notification vector.
          * 

@@ -16,8 +16,8 @@
 
 CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 {
+         check_value    =       true;         
          check_key	=	1;
-         check_value	=	true;         
          group 		= 	'f';
          syntax 	= 	"<seconds> <key> \"value\"";
 }
@@ -25,15 +25,13 @@ CommandFuture::CommandFuture(Module* Creator) : Command(Creator, "FUTURE", 3, 3)
 COMMAND_RESULT CommandFuture::Handle(User* user, const Params& parameters) 
 {       
           const std::string& seconds 	= 	parameters[0];
-          const std::string& key 	= 	parameters[1];
-          const std::string& value 	= 	parameters.back();
           
           if (!CheckValidPos(user, seconds))
           {
               return FAILED;
           }
   
-          ExpireHelper::Future(user, key, convto_num<unsigned int>(seconds), value);
+          ExpireHelper::Future(user, parameters[1], convto_num<unsigned int>(seconds), parameters.back());
           return SUCCESS;
 }
 
@@ -46,9 +44,7 @@ CommandTTE::CommandTTE(Module* Creator) : Command(Creator, "TTE", 1)
 
 COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 {
-         const std::string& key = parameters[0];
-         
-         const signed int ttl = FutureManager::GetTIME(user->GetDatabase(), key, user->select);
+         const signed int ttl = FutureManager::GetTIME(user->GetDatabase(), parameters[0], user->select);
          
          if (ttl != -1)
          {
@@ -74,9 +70,7 @@ CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 
 COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 {
-         const std::string& key = parameters[0];
-         
-         GlobalHelper::UserFutureExecute(user, key);
+         GlobalHelper::UserFutureExecute(user, parameters[0]);
          return SUCCESS;
 }
 
@@ -94,7 +88,7 @@ COMMAND_RESULT CommandFResetAll::Handle(User* user, const Params& parameters)
 
 CommandFReset::CommandFReset(Module* Creator) : Command(Creator, "FRESET", 0, 1)
 {
-        group = 'f';        
+        group  = 'f';        
         syntax = "<*select>";
 }
 
@@ -127,7 +121,7 @@ COMMAND_RESULT CommandFReset::Handle(User* user, const Params& parameters)
               return FAILED;
         }
 
-        Kernel->Store->Futures->SelectReset(user->GetDatabase()->GetName(), use);
+        Kernel->Store->Futures->SelectReset(user->GetDatabase()->GetName(), convto_num<unsigned int>(use));
         user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
@@ -141,16 +135,14 @@ CommandCancel::CommandCancel(Module* Creator) : Command(Creator, "CANCEL", 1, 1)
 
 COMMAND_RESULT CommandCancel::Handle(User* user, const Params& parameters) 
 {
-        const std::string& key = parameters[0];
-        
-        GlobalHelper::FutureCancel(user, key);
+        GlobalHelper::FutureCancel(user, parameters[0]);
         return SUCCESS;
 }
 
 CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3, 3)
 {
+        check_value     =       true;         
         check_key       =       1;
-        check_value	=	true;
         group 		= 	'f';
         syntax 		= 	"<epoch time> <key> \"value\"";
 }
@@ -158,8 +150,6 @@ CommandFutureAT::CommandFutureAT(Module* Creator) : Command(Creator, "FUTSET", 3
 COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters) 
 {    
           const std::string& seconds 	= 	parameters[0];
-          const std::string& key 	= 	parameters[1];
-          const std::string& value 	= 	parameters.back();
           
           if (!CheckValid(user, seconds))
           {
@@ -174,7 +164,7 @@ COMMAND_RESULT CommandFutureAT::Handle(User* user, const Params& parameters)
                  return FAILED;
           }
           
-          ExpireHelper::FutureAT(user, key, exp_usig, value);
+          ExpireHelper::FutureAT(user, parameters[1], exp_usig, parameters.back());
           return SUCCESS;
 }
 
@@ -225,7 +215,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
                       schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
                }
                
-               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);
@@ -239,7 +229,7 @@ CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "FTSE
 
 COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters) 
 {
-         std::string select;
+         unsigned int select;
          
          /* No argument provided, we simply count expire items. */
          
@@ -249,7 +239,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
          }
          else
          {
-                  select  = parameters[0];
+                  select  = convto_num<unsigned int>(parameters[0]);
          }
          
          const FutureMap& expiring = Kernel->Store->Futures->GetFutures();
@@ -261,7 +251,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
 
          for (FutureMap::const_iterator it = expiring.begin(); it != expiring.end(); ++it)
          {
-               FutureEntry entry = it->second;
+               FutureEntry const entry = it->second;
 
                if (entry.select != select || entry.database != user->GetDatabase())
                {  
@@ -269,7 +259,7 @@ COMMAND_RESULT CommandSelectCount::Handle(User* user, const Params& parameters)
                }
                
                std::string schedule = Daemon::HumanEpochTime(entry.schedule).c_str();
-               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), entry.select.c_str(), entry.database->GetName().c_str()));
+               Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-25s | %-25s | %-9s | %-10s", entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()), Daemon::Format("%s %s %s %s",  entry.key.c_str(), schedule.c_str(), convto_string(entry.select).c_str(), entry.database->GetName().c_str()));
          }
          
          Dispatcher::JustAPI(user, BRLD_END_LIST);

@@ -16,26 +16,16 @@
 
 CommandAddUser::CommandAddUser(Module* parent) : Command(parent, "ADDUSER", 2, 2)
 {
-        flags  = 'r';
-        syntax = "<login> <password>";
+        check_root      =       true;
+        check_login     =       0;
+        flags  		= 	'r';
+        syntax 		= 	"<login> <password>";
 }
 
 COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin 	= 	parameters[0];
+        const std::string& login	=	parameters[0];
         const std::string& pass 	= 	parameters[1];
-        
-        if (newlogin.length() < 3 || newlogin.length() > 15)
-        {
-                user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
-                return FAILED;
-        }
-
-        if (!Kernel->Engine->ValidLogin(newlogin))
-        {
-                user->SendProtocol(ERR_INPUT, INVALID_FORMAT);
-                return FAILED;
-        }
         
         if (pass.length() < 3 || pass.length() > 30)
         {
@@ -43,7 +33,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
                 return FAILED; 
         }
         
-        const std::string& exists = UserHelper::Find(newlogin, "created");
+        const std::string& exists = UserHelper::Find(login, "created");
         
         if (!exists.empty())
         {
@@ -53,7 +43,7 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
         
         /* We can now insert the user. */
         
-        if (UserHelper::Add(newlogin, pass))
+        if (UserHelper::Add(login, pass))
         {
                 user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
@@ -63,46 +53,42 @@ COMMAND_RESULT CommandAddUser::Handle(User* user, const Params& parameters)
 
 CommandDelUser::CommandDelUser(Module* parent) : Command(parent, "DELUSER", 1, 1)
 {
-        flags  = 'r';
-        syntax = "<login>";
+        check_root      =       true;
+        check_exists    =       true;
+        check_login     =       0;
+        flags  		= 	'r';
+        syntax 		= 	"<login>";
 }
 
 COMMAND_RESULT CommandDelUser::Handle(User* user, const Params& parameters)
 {
-        const std::string& newlogin = parameters[0];
-        
-        if (newlogin.length() < 3 || newlogin.length() > 15)
-        {
-                user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);
-                return FAILED;
-        }
-        
-        if (newlogin == ROOT_USER)
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
-                return FAILED;
-        }
-        
-        if (!Kernel->Engine->ValidLogin(newlogin))
-        {
-                user->SendProtocol(ERR_INPUT, INVALID_UNAME);
-                return FAILED;
-        }
-
-        const std::string& exists = UserHelper::Find(newlogin, "created");
-        
-        if (exists.empty())
-        {
-                user->SendProtocol(ERR_INPUT, PROCESS_FALSE);
-                return FAILED;
-        }
-        
-        if (UserHelper::Remove(newlogin))
+        if (UserHelper::Remove(parameters[0]))
         {
                 user->SendProtocol(BRLD_OK, PROCESS_OK);
-                ClientManager::DisconnectAll(newlogin, PROCESS_OK);
+                ClientManager::DisconnectAll(parameters[0], PROCESS_OK);
         }
 
+        return SUCCESS;
+}
+
+CommandSetStatus::CommandSetStatus(Module* parent) : Command(parent, "SETSTATUS", 2, 2)
+{
+        check_root	=	true;
+        check_exists	=	true;
+        check_login	=	0;
+        flags  		= 	'r';
+        syntax 		= 	"<login> <bool>";
+}
+
+COMMAND_RESULT CommandSetStatus::Handle(User* user, const Params& parameters)
+{
+        if (Helpers::as_bool(parameters[1], false) == false)
+        {
+                ClientManager::DisconnectAll(parameters[0], PROCESS_OK);
+        }
+        
+        CMapsHelper::Set(parameters[0], "status", convto_string(Helpers::as_bool(parameters[1], false)));
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
         return SUCCESS;
 }
 
@@ -113,7 +99,7 @@ CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS"
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
-        const Args& users = STHelper::HKeys("userlist");
+        const Args& users = STHelper::HList("userlist");
         
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
@@ -123,17 +109,85 @@ COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
         for (Args::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
+
                 std::string created = UserHelper::Find(item, "created");
 
                 if (created.empty())
                 {
                       continue;
                 }
-
+                
                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", item.c_str(), Daemon::HumanEpochTime(convto_num<time_t>(created)).c_str()), Daemon::Format("%s %s", item.c_str(), created.c_str()));
         }        
         
         Dispatcher::JustAPI(user, BRLD_USER_LIST_END);
+        return SUCCESS;
+}
+
+CommandGetStatus::CommandGetStatus(Module* parent) : Command(parent, "GETSTATUS", 1, 1)
+{
+         syntax = "<login>";
+         flags = 'r';
+}
+
+COMMAND_RESULT CommandGetStatus::Handle(User* user, const Params& parameters)
+{
+        const std::string& status = UserHelper::Find(parameters[0], "status");
+
+        if (status.empty())
+        {
+             user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
+             return FAILED;
+        }
+
+        user->SendProtocol(BRLD_OK, status);
+        return SUCCESS;
+}
+
+CommandListStatus::CommandListStatus(Module* parent) : Command(parent, "LISTSTATUS", 0, 1)
+{
+        syntax = "<*status>";
+        flags = 'r';
+}
+
+COMMAND_RESULT CommandListStatus::Handle(User* user, const Params& parameters)
+{
+        bool ReqStatus = false;
+
+        if (parameters.size())
+        {
+              ReqStatus = Helpers::as_bool(parameters[0], false);
+        }
+        
+        const Args& users = STHelper::HList("userlist");
+
+        Dispatcher::JustAPI(user, BRLD_START_LIST);
+
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Status"));
+        Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
+        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
+        {
+                const std::string item = *i;
+                std::string status = CMapsHelper::Get(item, "status").response;
+
+                if (status.empty())
+                {
+                       continue;
+                }
+                
+                if (parameters.size())
+                {
+                      if (Helpers::as_bool(status, false) != ReqStatus)
+                      {
+                           continue;
+                      }
+                }
+                
+                Dispatcher::ListDepend(user, BRLD_USER_ITEM, Daemon::Format("%-30s | %-10s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()), Daemon::Format("%s %s", item.c_str(), convto_string(Helpers::as_bool(status)).c_str()));
+        }
+
+        Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
 
@@ -144,7 +198,7 @@ CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMI
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
-        const Args& users = STHelper::HKeys("userlist");
+        const Args& users = STHelper::HList("userlist");
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
@@ -167,7 +221,6 @@ COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
         Dispatcher::JustAPI(user, BRLD_END_LIST);
         return SUCCESS;
 }
-
 
 CommandPasswd::CommandPasswd(Module* parent) : Command(parent, "PASSWD", 1, 2)
 {
@@ -245,7 +298,7 @@ COMMAND_RESULT CommandPasswd::Handle(User* user, const Params& parameters)
 
 CommandResetCache::CommandResetCache(Module* parent) : Command(parent, "RESETCACHE", 0)
 {
-         flags = 'm';
+        flags 		= 	'm';
 }
 
 COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
@@ -258,14 +311,14 @@ COMMAND_RESULT CommandResetCache::Handle(User* user, const Params& parameters)
 
 CommandInCache::CommandInCache(Module* parent) : Command(parent, "INCACHE", 1, 1)
 {
-         flags  = 'm';
-         syntax = "<login>";
+        check_exists    =       true;
+        check_login     =       0;
+        flags  		= 	'm';
+        syntax 		= 	"<login>";
 }
 
 COMMAND_RESULT CommandInCache::Handle(User* user, const Params& parameters)
 {
-        const std::string& login = parameters[0];
-
-        user->SendProtocol(BRLD_OK, convto_string(Kernel->Logins->InCache(login)));
+        user->SendProtocol(BRLD_OK, convto_string(Kernel->Logins->InCache(parameters[0])));
         return SUCCESS;
 }

@@ -65,18 +65,18 @@ COMMAND_RESULT CommandUsing::Handle(User* user, const Params& parameters)
               return FAILED;
        }
 
-       user->SendProtocol(BRLD_OK, found->select.c_str());
+       user->SendProtocol(BRLD_OK, convto_string(found->GetSelect()).c_str());
        return SUCCESS;
 }
 
 CommandUse::CommandUse(Module* Creator) : Command(Creator, "USE", 1)
 {
-         no_hint_until_reg 	= true;
+       no_hint_until_reg 	= 	true;
 
-         /* Users should be able to use this command before registering. */
+       /* Users should be able to use this command before registering. */
 
-         pre_reg_ok 		= true;
-         syntax 		= "<id between 1 and 100>";
+       pre_reg_ok 		= 	true;
+       syntax 			= 	"<id between 1 and 100>";
 }
 
 COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
@@ -92,14 +92,16 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        {
                return FAILED;
        }
+       
+       unsigned int as_int = convto_num<unsigned int>(use);
 
-       if (user->select == use)
+       if (user->select == as_int)
        {
              user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);
              return FAILED;
        }
 
-       user->select = use;
+       user->select = as_int;
        user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
        return SUCCESS;
 }
@@ -111,7 +113,7 @@ CommandCurrent::CommandCurrent(Module* Creator) : Command(Creator, "CURRENT", 0)
 
 COMMAND_RESULT CommandCurrent::Handle(User* user, const Params& parameters)
 {  
-       const std::string& use = user->select;
+       const std::string& use = user->GetSelect();
        
        if (use.empty())
        {
@@ -169,9 +171,8 @@ COMMAND_RESULT CommandPWD::Handle(User* user, const Params& parameters)
 {  
        if (!BASE_PATH.empty())
        {
-            const std::string& path = BASE_PATH.c_str();
-            user->SendProtocol(BRLD_OK, path);
-            return SUCCESS;
+             user->SendProtocol(BRLD_OK, BASE_PATH.c_str());
+             return SUCCESS;
        }
 
        user->SendProtocol(ERR_INPUT, PROCESS_NULL);
@@ -297,7 +298,7 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 
       /* 'dbdefault' is a reserved database name. */
       
-      if (dbname == "dbdefault" || dbname == "core" || dbname == ROOT_USER)
+      if (dbname == "dbdefault" || dbname == CORE_DB || dbname == ROOT_USER)
       {
              user->SendProtocol(ERR_INPUT, PROCESS_ERROR);
              return FAILED;
@@ -335,9 +336,7 @@ CommandDBDelete::CommandDBDelete(Module* Creator) : Command(Creator, "DBDELETE",
 
 COMMAND_RESULT CommandDBDelete::Handle(User* user, const Params& parameters)
 {
-      const std::string& dbname = parameters[0];
-      
-      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(dbname);
+      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[0]);
 
       if (!database)
       {
@@ -377,9 +376,7 @@ CommandDBSetDefault::CommandDBSetDefault(Module* Creator) : Command(Creator, "SE
 
 COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 {
-      const std::string& dbname = parameters[0];
-
-      std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(dbname);
+      const std::shared_ptr<UserDatabase>& database = Kernel->Store->DBM->Find(parameters[0]);
 
       if (!database)
       {
@@ -389,14 +386,14 @@ COMMAND_RESULT CommandDBSetDefault::Handle(User* user, const Params& parameters)
 
       sfalert(user, NOTIFY_DEFAULT, "Setting default database to: %s", database->GetName().c_str());
 
-      DBManager::SetDefault(dbname);
+      DBManager::SetDefault(database->GetName().c_str());
       user->SendProtocol(BRLD_OK, PROCESS_OK);
       return SUCCESS;
 }
 
 CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL", 0, 0)
 {
-       flags = 'r';
+      flags = 'r';
 }
 
 COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
@@ -420,30 +417,28 @@ CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0,
 
 COMMAND_RESULT CommandFlushDB::Handle(User* user, const Params& parameters)
 {  
-       const std::string& dbname = parameters[0];
-       
        std::shared_ptr<UserDatabase> database;
        
        if (parameters.size())
        {
-             database = Kernel->Store->DBM->Find(dbname);
+              database = Kernel->Store->DBM->Find(parameters[0]);
        }
        else
        {
-            database = user->GetDatabase();
+              database = user->GetDatabase();
        }
        
        if (!database)
        {
-            user->SendProtocol(ERR_INPUT, PROCESS_NULL);
-            return FAILED;
+              user->SendProtocol(ERR_INPUT, PROCESS_NULL);
+              return FAILED;
        }
        
        if (DBHelper::FlushDB(database, true))
        {
-             sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
-             user->SendProtocol(BRLD_OK, PROCESS_OK);
-             return SUCCESS;
+              sfalert(user, NOTIFY_DEFAULT, "Flushed database: %s", user->GetDatabase()->GetName().c_str());      
+              user->SendProtocol(BRLD_OK, PROCESS_OK);
+              return SUCCESS;
        }
 
        sfalert(user, NOTIFY_DEFAULT, "Unable to flush database: %s", user->GetDatabase()->GetName().c_str());      

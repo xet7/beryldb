@@ -69,7 +69,6 @@ COMMAND_RESULT CommandFinger::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-
 CommandPause::CommandPause(Module* parent) : Command(parent, "PAUSE", 1, 2)
 {
         flags = 'm';
@@ -177,20 +176,15 @@ COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 0, 1)
+CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS", 1, 1)
 {
-        flags = 'e';
+        flags  = 'e';
         syntax = "<flag>";
 }
 
 COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
 {
-        std::string flag;
-        
-        if (parameters.size())
-        {
-                flag = parameters[0];
-        }
+        const std::string& flag = parameters[0];
         
         const UserVector& logins = ClientManager::FindPrivs(flag);
 

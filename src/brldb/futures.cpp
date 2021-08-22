@@ -24,7 +24,7 @@ FutureManager::FutureManager()
 
 }
 
-signed int FutureManager::Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& value, const std::string& select, bool epoch)
+signed int FutureManager::Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& value, unsigned int select, bool epoch)
 {
         if (schedule < 0)
         {
@@ -61,7 +61,7 @@ signed int FutureManager::Add(std::shared_ptr<Database> database, signed int sch
         return New.schedule;
 }
 
-bool FutureManager::Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+bool FutureManager::Delete(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         FutureMap& all = Kernel->Store->Futures->GetFutures();
 
@@ -126,7 +126,7 @@ void FutureManager::Flush(time_t TIME)
         }
 }
 
-FutureEntry FutureManager::Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+FutureEntry FutureManager::Find(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         FutureMap& current = Kernel->Store->Futures->GetFutures();
 
@@ -143,7 +143,7 @@ FutureEntry FutureManager::Find(std::shared_ptr<Database> database, const std::s
         throw KernelException("ne");
 }
 
-std::tuple<int, std::string> FutureManager::GetVal(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+std::tuple<int, std::string> FutureManager::GetVal(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         FutureEntry entry;
  
@@ -159,7 +159,7 @@ std::tuple<int, std::string> FutureManager::GetVal(std::shared_ptr<Database> dat
         return std::make_tuple(1, entry.value);
 }
 
-bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         FutureEntry entry;
         
@@ -176,7 +176,7 @@ bool FutureManager::Exec(std::shared_ptr<Database> database, const std::string& 
         return true;
 }
 
-signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         FutureMap& futures = Kernel->Store->Futures->GetFutures();
         
@@ -195,7 +195,7 @@ signed int FutureManager::GetTIME(std::shared_ptr<Database> database, const std:
         return -1;
 }
 
-signed int FutureManager::GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int FutureManager::GetTTE(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
       std::lock_guard<std::mutex> lg(FutureManager::mute);
       return FutureManager::GetTIME(database, key, select);
@@ -260,7 +260,7 @@ unsigned int FutureManager::DatabaseReset(const std::string& dbname)
       return counter;
 }
 
-unsigned int FutureManager::SelectReset(const std::string& dbname, const std::string& select)
+unsigned int FutureManager::SelectReset(const std::string& dbname, unsigned int select)
 {
       /* Keeps track of deleted expires */
 
@@ -322,7 +322,7 @@ void FutureManager::PreDBClose(const std::string& dbname)
       }
 }
 
-unsigned int FutureManager::Count(std::shared_ptr<Database> database, const std::string& select)
+unsigned int FutureManager::Count(std::shared_ptr<Database> database, unsigned int select)
 {
         FutureMap& expires = Kernel->Store->Futures->GetFutures();
 

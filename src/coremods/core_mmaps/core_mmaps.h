@@ -149,15 +149,6 @@ class CommandMDel : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
 
-class CommandMSeek : public Command 
-{
-    public: 
-
-        CommandMSeek(Module* Creator);
-
-        COMMAND_RESULT Handle(User* user, const Params& parameters);
-};
-
 /* 
  * Counts repeats for a given key.
  * 
@@ -224,6 +215,19 @@ class CommandMGetAll : public Command
 
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 };
+
+/* 
+ * Iterates over a hash.
+ * 
+ * @parameters:
+ *
+ *         · string   : Key to find.
+ * 
+ * @protocol:
+ *
+ *         · enum     : OK or ERROR.
+ *         · list     : Values found.
+ */ 
 
 
 class CommandMIter : public Command 

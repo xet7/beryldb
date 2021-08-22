@@ -46,9 +46,9 @@ COMMAND_RESULT CommandMCount::Handle(User* user, const Params& parameters)
 
 CommandMPush::CommandMPush(Module* Creator) : Command(Creator, "MPUSH", 3, 3)
 {
+       check_value      =       true;
        check_key        =       0;
        check_hash       =       1;
-       check_value      =       true;
        group 		= 	'x';
        syntax 		= 	"<map> <key> \"value\"";
 }

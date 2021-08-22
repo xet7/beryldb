@@ -23,8 +23,6 @@ CommandGeoAddPub::CommandGeoAddPub(Module* Creator) : Command(Creator, "GAPUB", 
 
 COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname 	= 	parameters[0];
-       const std::string& chan 		= 	parameters[1];
        const std::string& latitude 	= 	parameters[2];
        const std::string& longitude 	= 	parameters[3];
        
@@ -46,7 +44,7 @@ COMMAND_RESULT CommandGeoAddPub::Handle(User* user, const Params& parameters)
               return FAILED;
        }
 
-       KeyHelper::AddPub(user, std::make_shared<geoadd_pub_query>(), chan, gname, latitude, longitude);
+       KeyHelper::AddPub(user, std::make_shared<geoadd_pub_query>(), parameters[1], parameters[0], latitude, longitude);
        return SUCCESS;
 }
 
@@ -59,7 +57,6 @@ CommandGeoAdd::CommandGeoAdd(Module* Creator) : Command(Creator, "GEOADD", 3, 3)
 
 COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname 	= 	parameters[0];
        const std::string& latitude 	= 	parameters[1];
        const std::string& longitude 	= 	parameters[2];
        
@@ -81,7 +78,7 @@ COMMAND_RESULT CommandGeoAdd::Handle(User* user, const Params& parameters)
              return FAILED;
        }
        
-       KeyHelper::HeshVal(user, std::make_shared<geoadd_query>(), gname, latitude, longitude);
+       KeyHelper::HeshVal(user, std::make_shared<geoadd_query>(), parameters[0], latitude, longitude);
        return SUCCESS;
 }
 
@@ -94,7 +91,6 @@ CommandGeoAddNX::CommandGeoAddNX(Module* Creator) : Command(Creator, "GEOADDNX",
 
 COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname         =       parameters[0];
        const std::string& latitude      =       parameters[1];
        const std::string& longitude     =       parameters[2];
 
@@ -116,7 +112,7 @@ COMMAND_RESULT CommandGeoAddNX::Handle(User* user, const Params& parameters)
              return FAILED;
        }
 
-       KeyHelper::HeshVal(user, std::make_shared<geoaddnx_query>(), gname, latitude, longitude);
+       KeyHelper::HeshVal(user, std::make_shared<geoaddnx_query>(), parameters[0], latitude, longitude);
        return SUCCESS;
 }
 
@@ -129,9 +125,7 @@ CommandGeoGet::CommandGeoGet(Module* Creator) : Command(Creator, "GEOGET", 1, 1)
 
 COMMAND_RESULT CommandGeoGet::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       
-       KeyHelper::Retro(user, std::make_shared<geoget_query>(), gname);
+       KeyHelper::Retro(user, std::make_shared<geoget_query>(), parameters[0]);
        return SUCCESS;
 }
 
@@ -159,10 +153,7 @@ CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2
 
 COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
 {  
-         const std::string& gname 	= 	parameters[0];
-         const std::string& gname2 	= 	parameters[1];
-         
-         KeyHelper::Simple(user, std::make_shared<geoget_custom_query>(), gname2, gname);
+         KeyHelper::Simple(user, std::make_shared<geoget_custom_query>(), parameters[1], parameters[0]);
          return SUCCESS;
 }
 
@@ -176,13 +167,10 @@ CommandGeoDistance::CommandGeoDistance(Module* Creator) : Command(Creator, "GDIS
 
 COMMAND_RESULT CommandGeoDistance::Handle(User* user, const Params& parameters)
 {  
-       const std::string& gname 	= 	parameters[0];
-       const std::string& distance 	= 	parameters[1];
-
        std::shared_ptr<geodistance_query> query = std::make_shared<geodistance_query>();
-       query->value 				= distance; 
+       query->value 				= parameters[1]; 
        
-       KeyHelper::RetroLimits(user, query, gname, this->offset, this->limit);
+       KeyHelper::RetroLimits(user, query, parameters[0], this->offset, this->limit);
        return SUCCESS;
 }
 
@@ -194,10 +182,7 @@ CommandGeoRemove::CommandGeoRemove(Module* Creator) : Command(Creator, "GREM", 2
 
 COMMAND_RESULT CommandGeoRemove::Handle(User* user, const Params& parameters)
 {  
-         const std::string& gname 	= 	parameters[0];
-         const std::string& dist 	= 	parameters[1];
-         
-         KeyHelper::SimpleRetro(user, std::make_shared<georem_query>(), gname, dist);
+         KeyHelper::SimpleRetro(user, std::make_shared<georem_query>(), parameters[0], parameters[1]);
          return SUCCESS;
 }
 
@@ -210,9 +195,7 @@ CommandGeoLoGet::CommandGeoLoGet(Module* Creator) : Command(Creator, "GLOGET", 1
 
 COMMAND_RESULT CommandGeoLoGet::Handle(User* user, const Params& parameters)
 {
-       const std::string& gname = parameters[0];
-       
-       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LONG);
+       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), parameters[0], QUERY_TYPE_LONG);
        return SUCCESS;
 }
 
@@ -225,8 +208,6 @@ CommandGeoLaGet::CommandGeoLaGet(Module* Creator) : Command(Creator, "GLAGET", 1
 
 COMMAND_RESULT CommandGeoLaGet::Handle(User* user, const Params& parameters)
 {       
-       const std::string& gname = parameters[0];
-       
-       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), gname, QUERY_TYPE_LAT);
+       KeyHelper::SimpleType(user, std::make_shared<geoget_custom_query>(), parameters[0], QUERY_TYPE_LAT);
        return SUCCESS;
 }

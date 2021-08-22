@@ -25,7 +25,7 @@ class ExportAPI STHelper
 
         static void Erase(const std::string& type);
 
-        static Args HKeys(const std::string& key);
+        static Args HList(const std::string& key);
     
 };
 

@@ -289,7 +289,11 @@ class ExportAPI LiveSocket : public StreamSocket
 	
 	SocketTimer* Timeout;
 
-	
+	/* 
+	 * The state for given socket. A socket state may be
+	 * either listening, connected, error or connecting.
+	 */
+	 
 	LiveSocketState state;
 
 	LiveSocket();

@@ -23,9 +23,7 @@ CommandVBack::CommandVBack(Module* Creator) : Command(Creator, "VBACK", 1, 1)
 
 COMMAND_RESULT CommandVBack::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       KeyHelper::Retro(user, std::make_shared<vback_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<vback_query>(), parameters[0]);
        return SUCCESS;  
 }
 
@@ -38,8 +36,6 @@ CommandVFront::CommandVFront(Module* Creator) : Command(Creator, "VFRONT", 1, 1)
 
 COMMAND_RESULT CommandVFront::Handle(User* user, const Params& parameters)
 {  
-       const std::string& key = parameters[0];
-
-       KeyHelper::Retro(user, std::make_shared<vfront_query>(), key);
+       KeyHelper::Retro(user, std::make_shared<vfront_query>(), parameters[0]);
        return SUCCESS;  
 }

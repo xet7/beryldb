@@ -40,17 +40,17 @@ class ExportAPI GlobalHelper
 
       static void Delete(User* user, const std::string& entry);
       
-      static void ExpireDelete(std::shared_ptr<Database> database, const std::string& where, const std::string& key);
+      static void ExpireDelete(std::shared_ptr<Database> database, unsigned int where, const std::string& key);
 
       static void Exists(User* user, const std::string& entry);
       
-      static void FutureExecute(std::shared_ptr<Database> database, const std::string& where, const std::string& key);
+      static void FutureExecute(std::shared_ptr<Database> database, unsigned int where, const std::string& key);
 
       static void UserFutureExecute(User* user, const std::string& key);
 
       static void FutureCancel(User* user, const std::string& key);
 
-      static void FutureGlobalCancel(std::shared_ptr<Database> database, const std::string& where, const std::string& key);
+      static void FutureGlobalCancel(std::shared_ptr<Database> database, unsigned int where, const std::string& key);
 
       static void RenameNX(User* user, const std::string& entry, const std::string& dest);
 

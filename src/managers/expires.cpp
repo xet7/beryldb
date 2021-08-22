@@ -20,12 +20,19 @@
 #include "helpers.h"
 #include "extras.h"
 
-void ExpireHelper::ListFutures(std::shared_ptr<Database> db)
+void ExpireHelper::ListFutures(std::shared_ptr<Database> db, bool last)
 {
        std::shared_ptr<future_list_query> query = std::make_shared<future_list_query>();
        
-       query->database = db;
-       query->user = Kernel->Clients->Global;
+       query->database 	=  db;
+       query->user 	=  Kernel->Clients->Global;
+       query->flags	=  QUERY_FLAGS_GLOBAL;
+       
+       if (last)
+       {
+               query->id = 1000;
+       }
+       
        Kernel->Store->Push(query);
 }
 
@@ -87,7 +94,7 @@ void ExpireHelper::ExpireAT(User* user, const std::string& entry, unsigned int t
        Kernel->Store->Push(query);
 }
 
-void ExpireHelper::Persist(User* user, const std::string& entry, const std::string& select, std::shared_ptr<Database> db)
+void ExpireHelper::Persist(User* user, const std::string& entry, unsigned int select, std::shared_ptr<Database> db)
 {
        std::shared_ptr<expire_del_query> query = std::make_shared<expire_del_query>();
        

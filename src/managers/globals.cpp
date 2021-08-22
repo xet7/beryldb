@@ -104,7 +104,7 @@ void GlobalHelper::Exists(User* user, const std::string& entry)
        Kernel->Store->Push(query);
 }
 
-void GlobalHelper::ExpireDelete(std::shared_ptr<Database> database, const std::string& where, const std::string& key)
+void GlobalHelper::ExpireDelete(std::shared_ptr<Database> database, unsigned int  where, const std::string& key)
 {
        std::shared_ptr<del_query> query = std::make_shared<del_query>();
 
@@ -117,7 +117,7 @@ void GlobalHelper::ExpireDelete(std::shared_ptr<Database> database, const std::s
        Kernel->Store->Push(query);
 }
 
-void GlobalHelper::FutureExecute(std::shared_ptr<Database> database, const std::string& where, const std::string& key)
+void GlobalHelper::FutureExecute(std::shared_ptr<Database> database, unsigned int where, const std::string& key)
 {
        std::shared_ptr<future_exec_query> query = std::make_shared<future_exec_query>();
 
@@ -143,7 +143,7 @@ void GlobalHelper::FutureCancel(User* user, const std::string& key)
        Kernel->Store->Push(query);
 }
 
-void GlobalHelper::FutureGlobalCancel(std::shared_ptr<Database> database, const std::string& where, const std::string& key)
+void GlobalHelper::FutureGlobalCancel(std::shared_ptr<Database> database, unsigned int where, const std::string& key)
 {
        std::shared_ptr<future_del_query> query = std::make_shared<future_del_query>();
 

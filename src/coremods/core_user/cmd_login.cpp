@@ -18,24 +18,13 @@ CommandLogin::CommandLogin(Module* parent) : MultiCommand(parent, "LOGIN", 1, 1)
 {
 	pre_reg_ok 		= 	true;
 	no_hint_until_reg 	= 	true;
+	check_login		=	0;
 	syntax 			= 	"<login>";
 }
 
 COMMAND_RESULT CommandLogin::HandleLocal(LocalUser* user, const Params& parameters)
 {
 	const std::string& newlogin = parameters[0];
-
-	if (newlogin.empty())
-	{
-		user->SendProtocol(ERR_INPUT, ERRON_LOGIN);
-		return FAILED;
-	}
-
-	if (!Kernel->Engine->ValidLogin(newlogin))
-	{
-		user->SendProtocol(ERR_INPUT, ERRON_LOGIN);
-		return FAILED;
-	}
 
 	ModuleResult MOD_RESULT;
 	UNTIL_RESULT(OnUserPreLogin, MOD_RESULT, (user, newlogin));

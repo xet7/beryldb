@@ -36,14 +36,14 @@ bool QueryBase::Swap(const std::string& newdest, const std::string& ldest, const
        return false;
 }
 
-bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, const std::string& select, const std::string& lkey, unsigned int ttl, const std::string& oldkey)
+bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ldest, const std::string& lvalue, unsigned int select, const std::string& lkey, unsigned int ttl, const std::string& oldkey)
 {
        rocksdb::WriteBatch batch;
 
        batch.Put(newdest, lvalue);
        batch.Delete(ldest);
        
-       const std::string& lookup = to_bin(lkey) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       const std::string& lookup = to_bin(lkey) + ":" + convto_string(select) + ":" + INT_EXPIRE + ":" + this->database->GetName();
 
        batch.Put(lookup, convto_string(ttl));
 
@@ -60,10 +60,10 @@ bool QueryBase::SwapWithExpire(const std::string& newdest, const std::string& ld
 }
 
 
-void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, const std::string& select, unsigned int ttl)
+void QueryBase::ExpireBatch(const std::string& wdest, const std::string& lvalue, const std::string& e_key, unsigned int select, unsigned int ttl)
 {
        rocksdb::WriteBatch batch;
-       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + this->database->GetName();
+       std::string lookup = to_bin(e_key) + ":" + convto_string(select) + ":" + INT_EXPIRE + ":" + this->database->GetName();
        
        batch.Put(lookup, convto_string(ttl));
        batch.Put(wdest, to_bin(lvalue));
@@ -93,14 +93,14 @@ void QueryBase::Delete(const std::string& wdest)
        this->database->GetAddress()->Delete(rocksdb::WriteOptions(), wdest);
 }
 
-void QueryBase::WriteExpire(const std::string& e_key, const std::string& select, unsigned int ttl, std::shared_ptr<Database> db)
+void QueryBase::WriteExpire(const std::string& e_key, unsigned int select, unsigned int ttl, std::shared_ptr<Database> db)
 {
        if (db == NULL)
        {
             db = this->database;
        }
        
-       const std::string& lookup = to_bin(e_key) + ":" + select + ":" + INT_EXPIRE + ":" + db->GetName();
+       const std::string& lookup = to_bin(e_key) + ":" + convto_string(select) + ":" + INT_EXPIRE + ":" + db->GetName();
        
        if (this->Write(lookup, convto_string(ttl)))
        {
@@ -108,9 +108,9 @@ void QueryBase::WriteExpire(const std::string& e_key, const std::string& select,
        }
 }
 
-void QueryBase::WriteFuture(const std::string& e_key, const std::string& select, unsigned int ttl, const std::string& fvalue)
+void QueryBase::WriteFuture(const std::string& e_key, unsigned int select, unsigned int ttl, const std::string& fvalue)
 {
-       std::string lookup = to_bin(e_key) + ":" + select + ":" + INT_FUTURE + ":" + this->database->GetName();
+       std::string lookup = to_bin(e_key) + ":" + convto_string(select) + ":" + INT_FUTURE + ":" + this->database->GetName();
        std::string lvalue = convto_string(ttl) + ":" + fvalue;
        
        if (this->Write(lookup, lvalue))
@@ -122,7 +122,7 @@ void QueryBase::WriteFuture(const std::string& e_key, const std::string& select,
 void QueryBase::DelFuture()
 {
         Kernel->Store->Futures->Delete(this->database, this->key, this->select_query);
-        std::string lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_FUTURE + ":" + this->database->GetName();
+        std::string lookup = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + INT_FUTURE + ":" + this->database->GetName();
         this->Delete(lookup);
 }
 
@@ -143,7 +143,7 @@ void QueryBase::DelExpire()
         /* Deletes key in case it is expiring. */
         
         Kernel->Store->Expires->Delete(this->database, this->key, this->select_query);
-        std::string lookup = to_bin(this->key) + ":" + this->select_query + ":" + INT_EXPIRE + ":" + this->database->GetName();
+        std::string lookup = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + INT_EXPIRE + ":" + this->database->GetName();
         this->Delete(lookup);
 }
 
@@ -162,7 +162,7 @@ RocksData QueryBase::Get(const std::string& where)
        return result;
 }
 
-int QueryBase::CheckDest(const std::string& select, const std::string& regkey, const std::string& ltype, std::shared_ptr<Database> db)
+int QueryBase::CheckDest(unsigned int select, const std::string& regkey, const std::string& ltype, std::shared_ptr<Database> db)
 {
        if (db == NULL)
        {
@@ -177,7 +177,7 @@ int QueryBase::CheckDest(const std::string& select, const std::string& regkey, c
        for (std::vector<std::string>::const_iterator iter = TypeRegs.begin(); iter != TypeRegs.end(); ++iter)
        {
               std::string found_type = *iter;
-              std::string saved = to_bin(regkey) + ":" + select + ":" + found_type;
+              std::string saved = to_bin(regkey) + ":" + convto_string(select) + ":" + found_type;
        
               std::string dbvalue;
               rocksdb::Status fstatus2 = db->GetAddress()->Get(rocksdb::ReadOptions(), saved, &dbvalue);
@@ -204,12 +204,12 @@ int QueryBase::CheckDest(const std::string& select, const std::string& regkey, c
        return 0;
 }
 
-bool QueryBase::GetRegistry(const std::string& select, const std::string& regkey, bool do_load)
+bool QueryBase::GetRegistry(unsigned int select, const std::string& regkey, bool do_load)
 {
        for (std::vector<std::string>::const_iterator iter = TypeRegs.begin(); iter != TypeRegs.end(); ++iter)
        {
              std::string found_type = *iter;
-             std::string lookup = to_bin(regkey) + ":" + select + ":" + found_type;
+             std::string lookup = to_bin(regkey) + ":" + convto_string(select) + ":" + found_type;
              
              std::string dbvalue;
              rocksdb::Status fstatus2 = this->database->GetAddress()->Get(rocksdb::ReadOptions(), lookup, &dbvalue);
@@ -234,9 +234,9 @@ bool QueryBase::GetRegistry(const std::string& select, const std::string& regkey
        return false;
 }
 
-void QueryBase::SetDest(const std::string& regkey, const std::string& regselect, const std::string& regtype)
+void QueryBase::SetDest(const std::string& regkey, unsigned int regselect, const std::string& regtype)
 {
-       this->dest = to_bin(regkey) + ":" + regselect + ":" + regtype;
+       this->dest = to_bin(regkey) + ":" + convto_string(regselect) + ":" + regtype;
 }
 
 bool QueryBase::Check()
@@ -306,7 +306,7 @@ bool QueryBase::Prepare()
                  {
                       if (this->identified == PROCESS_NULL)
                       {
-                            this->dest = to_bin(this->key) + ":" + this->select_query + ":" + this->base_request;
+                            this->dest = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
                             this->Run();
                             return true;
                       }  
@@ -515,7 +515,7 @@ bool QueryBase::Prepare()
            case QUERY_TYPE_CLONE:
            {
                    GetRegistry(this->select_query, this->key, true);
-                   int result = this->CheckDest(this->value, this->key, this->identified); 
+                   int result = this->CheckDest(convto_num<unsigned int>(this->value), this->key, this->identified); 
                    
                    if (this->identified == PROCESS_NULL)
                    {
@@ -549,7 +549,7 @@ bool QueryBase::Prepare()
                                 return false;
                    }
                    
-                   int result = this->CheckDest(this->value, this->key, this->identified); 
+                   int result = this->CheckDest(convto_num<unsigned int>(this->value), this->key, this->identified); 
 
                    if (result == 0 || result == 1)
                    {

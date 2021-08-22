@@ -25,9 +25,9 @@ ExpireManager::ExpireManager()
 
 }
 
-bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
-        ExpireMap& all = Kernel->Store->Expires->GetExpires();
+        const ExpireMap& all = Kernel->Store->Expires->GetExpires();
 
         /* Nothing to delete, at all. */
         
@@ -38,7 +38,7 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
 
         std::lock_guard<std::mutex> lg(ExpireManager::mute);
 
-        for (ExpireMap::iterator it = all.begin(); it != all.end(); )
+        for (ExpireMap::const_iterator it = all.begin(); it != all.end(); )
         {
                 if (it->second.key != key)
                 {
@@ -67,13 +67,13 @@ bool ExpireManager::Delete(std::shared_ptr<Database> database, const std::string
         return false;
 }
 
-signed int ExpireManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int ExpireManager::GetTIME(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
-        ExpireMap& expires = Kernel->Store->Expires->GetExpires();
+        const ExpireMap& expires = Kernel->Store->Expires->GetExpires();
 
         std::lock_guard<std::mutex> lg(ExpireManager::mute);
 
-        for (ExpireMap::iterator it = expires.begin(); it != expires.end(); it++)
+        for (ExpireMap::const_iterator it = expires.begin(); it != expires.end(); it++)
         {
                         if (it->second.key == key && it->second.select == select && it->second.database == database)
                         {
@@ -86,7 +86,7 @@ signed int ExpireManager::GetTIME(std::shared_ptr<Database> database, const std:
         return -1;
 }
 
-signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& select, bool epoch)
+signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, unsigned int select, bool epoch)
 {
         if (schedule < 0)
         {
@@ -116,19 +116,19 @@ signed int ExpireManager::Add(std::shared_ptr<Database> database, signed int sch
             New.schedule = Now + schedule;
         }
         
-        New.database = database;
-        New.key = key;
-        New.added = Now;
-        New.secs = schedule;
-        New.select = select;
+        New.database 	= database;
+        New.key 	= key;
+        New.added 	= Now;
+        New.secs 	= schedule;
+        New.select 	= select;
         
         Kernel->Store->Expires->ExpireList.insert(std::make_pair(New.schedule, New));
         
-        bprint(DONE, "Adding expire to %s (%s): %s", database->GetName().c_str(), key.c_str(), select.c_str());
+        //bprint(DONE, "Adding expire to %s (%s): %s", database->GetName().c_str(), key.c_str(), select.c_str());
         return New.schedule;
 }
 
-ExpireEntry ExpireManager::Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+ExpireEntry ExpireManager::Find(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
         ExpireMap& current = Kernel->Store->Expires->GetExpires();
 
@@ -179,7 +179,7 @@ void ExpireManager::Flush(time_t TIME)
         }  
 }
 
-signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::string& key, const std::string& select)
+signed int ExpireManager::GetTTL(std::shared_ptr<Database> database, const std::string& key, unsigned int select)
 {
       std::lock_guard<std::mutex> lg(ExpireManager::mute);
       return ExpireManager::GetTIME(database, key, select);
@@ -280,7 +280,7 @@ void ExpireManager::DatabaseDestroy(const std::string& dbname)
       }  
 }
 
-unsigned int ExpireManager::SelectReset(const std::string& dbname, const std::string& select)
+unsigned int ExpireManager::SelectReset(const std::string& dbname, unsigned int select)
 {
       /* Keeps track of deleted expires */
       
@@ -333,7 +333,7 @@ void ExpireManager::Reset()
       }  
 }
 
-unsigned int ExpireManager::Count(const std::string& dbname, const std::string& select)
+unsigned int ExpireManager::Count(const std::string& dbname, unsigned int select)
 {
         ExpireMap& expires = Kernel->Store->Expires->GetExpires();
         

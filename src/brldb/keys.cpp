@@ -107,7 +107,7 @@ void expire_list_query::Run()
                 
                 if (Kernel->Config->KeepExpires)
                 {
-                     Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, select_as_string, true);
+                     Kernel->Store->Expires->Add(this->database, convto_num<signed int>(rawvalue), key_as_string, convto_num<unsigned int>(select_as_string), true);
                      total_counter++;
                 }
                 else
@@ -433,7 +433,7 @@ void count_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -558,7 +558,7 @@ void wdel_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -701,7 +701,7 @@ void search_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -860,7 +860,7 @@ void keys_query::Run()
                              
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }
@@ -1025,7 +1025,7 @@ void random_query::Run()
 
                              case 1:
                              {
-                                   if (this->select_query != token)
+                                   if (convto_string(this->select_query) != token)
                                    {
                                         skip = true;
                                    }

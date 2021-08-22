@@ -23,7 +23,7 @@ void clone_query::Keys()
     RocksData result = this->Get(this->dest);
     const std::string& newdest = to_bin(this->key) + ":" + this->value + ":" + this->identified;
 
-    this->ExpireBatch(newdest, this->value, this->key, this->value, this->id);
+    this->ExpireBatch(newdest, this->value, this->key, convto_num<unsigned int>(this->value), this->id);
     this->SetOK();
 }
 

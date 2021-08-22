@@ -19,7 +19,7 @@ class CommandSubs : public Command
 {
     public:
       
-      CommandSubs(Module* parent) : Command(parent, "SUBS", 0, 0)
+      CommandSubs(Module* parent) : Command(parent, "LISTCHANS", 0, 0)
       {
             last_empty_ok = false;
       }
@@ -50,10 +50,10 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
       
       unsigned int counter = 0;
 
-      Dispatcher::JustAPI(user, BRLD_SUBS_LIST_BEGIN);
+      Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-      Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s | %-10s", "Name", "Clients"));
-      Dispatcher::JustEmerald(user, BRLD_SUBS_LIST_BEGIN, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+      Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Name", "Clients"));
+      Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
        
       for (ChanMap::const_iterator i = chans.begin(); i != chans.end(); ++i)
       {
@@ -69,7 +69,7 @@ COMMAND_RESULT CommandSubs::Handle(User* user, const Params& parameters)
                      Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", chan->GetName().c_str(), convto_string(users).c_str()), Daemon::Format("%s %s", chan->GetName().c_str(), convto_string(users).c_str()));
       }
 
-      Dispatcher::JustAPI(user, BRLD_SUBS_LIST_END);
+      Dispatcher::JustAPI(user, BRLD_END_LIST);
             
       return SUCCESS;
 };

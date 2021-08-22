@@ -29,6 +29,9 @@ class CoreModUManager : public Module
         CommandInCache 		cmdincache;
         CommandResetCache	cmdresetcache;
         CommandListFlags 	cmdlistflags;
+        CommandSetStatus	cmdsetstatus;
+        CommandListStatus	cmdliststatus;
+        CommandGetStatus	cmdgetstatus;
         
   public:
   
@@ -43,6 +46,9 @@ class CoreModUManager : public Module
                             , cmdincache(this)
                             , cmdresetcache(this)
                             , cmdlistflags(this)
+                            , cmdsetstatus(this)
+                            , cmdliststatus(this)
+                            , cmdgetstatus(this)
         {
 
         }

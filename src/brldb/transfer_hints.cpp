@@ -83,7 +83,7 @@ void transfer_query::Run()
     }   
     
     RocksData result = this->Get(this->dest);
-    const std::string& newdest = to_bin(this->key) + ":" + this->select_query + ":" + this->identified;
+    const std::string& newdest = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->identified;
     this->transf_db->GetAddress()->Put(rocksdb::WriteOptions(), newdest, result.value);
     this->Delete(this->dest);
 }

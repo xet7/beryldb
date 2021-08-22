@@ -50,6 +50,18 @@ void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
       signal->user->notifications.push_back(signal);
 }
 
+void DataFlush::AttachGlobal(std::shared_ptr<QueryBase> signal)
+{
+      if (!signal)
+      {
+           return;
+      }
+
+      std::lock_guard<std::mutex> lg(DataFlush::mute);
+      signal->Process();
+      signal->user->SetLock(false);
+}
+
 void DataFlush::GetResults()
 {
       const UserMap& users = Kernel->Clients->GetInstances();
@@ -204,9 +216,9 @@ void DataFlush::GetPending()
             return;
       }
       
-      for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
+      for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
       {
-               User* user = u->second;
+               User* const user = i->second;
 
                const unsigned int pending = user->pending.size();
 
@@ -452,6 +464,12 @@ void DataThread::Process()
                           {
                                 break;
                           }
+                          
+                          if (request->flags == QUERY_FLAGS_GLOBAL)
+                          {
+                                 DataFlush::AttachGlobal(request);
+                                 break;
+                          }
 
                           if (request->access != DBL_INTERRUPT)
                           {
@@ -495,10 +513,10 @@ void DataFlush::CloseThreads()
       
       for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
       {
-             DataThread* thread = *iter;
-             thread->Exit();
-             thread = NULL;
-             counter++;
+              DataThread* thread = *iter;
+              thread->Exit();
+              thread = NULL;
+              counter++;
       }     
       
       Kernel->Store->Flusher->EraseAll();

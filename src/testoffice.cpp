@@ -58,7 +58,7 @@ void TestOffice::Run()
         STHelper::Set("tests", "hello3", "world3");
         STHelper::Set("tests", "hello6", "world6");
 
-        Args items = STHelper::HKeys("tests");
+        Args items = STHelper::HList("tests");
        
         for (Args::iterator i = items.begin(); i != items.end(); ++i)
         {
@@ -107,7 +107,7 @@ void TestOffice::Run()
         STHelper::Set(userchans, "#test1", convto_string(Kernel->Now()));
         STHelper::Set(userchans, "#test2", convto_string(Kernel->Now()));
         
-        Args chans = STHelper::HKeys(userchans);
+        Args chans = STHelper::HList(userchans);
 
         for (Args::iterator i = chans.begin(); i != chans.end(); i++)
         {

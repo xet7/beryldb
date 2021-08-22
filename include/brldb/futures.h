@@ -25,7 +25,8 @@ class FutureEntry
         bool epoch;
 
         unsigned int secs;
-        std::string select;
+        unsigned int select;
+        
         std::string key;
         std::string value;
         
@@ -65,7 +66,7 @@ class ExportAPI FutureManager : public safecast<FutureManager>
 
         /* Returns triggering time for a future. */
 
-        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static signed int GetTIME(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* 
          * Deletes a given future.
@@ -77,7 +78,7 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          *         · False: Not found or unable to remove.
          */    
          
-        static bool Delete(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static bool Delete(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         static void Reset();
 
@@ -95,15 +96,15 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          *         · FutureEntry: An static object to a FutureEntry class. 
          */    
          
-        static FutureEntry Find(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static FutureEntry Find(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* Exercises an entry. */
 
-        static bool Exec(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static bool Exec(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* Adds a new future. */
 
-        signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& value, const std::string& select, bool epoch);
+        signed int Add(std::shared_ptr<Database> database, signed int schedule, const std::string& key, const std::string& value, unsigned int select, bool epoch);
 
         /* 
          * Pending time on a future to be executed.
@@ -113,7 +114,7 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          *         · int: Seconds remaining for this entry to be executed.
          */    
          
-        signed int GetTTE(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        signed int GetTTE(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
 
         /* 
          * Returns a value from FutureMap.
@@ -129,7 +130,7 @@ class ExportAPI FutureManager : public safecast<FutureManager>
          *         · tuple: int (0 if not found, 1 if found), string found.
          */    
          
-        static std::tuple<int, std::string> GetVal(std::shared_ptr<Database> database, const std::string& key, const std::string& select);
+        static std::tuple<int, std::string> GetVal(std::shared_ptr<Database> database, const std::string& key, unsigned int select);
             
         /* 
          * Obtain all futures in the FutureList.
@@ -153,9 +154,9 @@ class ExportAPI FutureManager : public safecast<FutureManager>
             return this->FutureList.size();
         }
 
-        unsigned int Count(std::shared_ptr<Database> database, const std::string& select);
+        unsigned int Count(std::shared_ptr<Database> database, unsigned int select);
 
-        unsigned int SelectReset(const std::string& dbname, const std::string& select);      
+        unsigned int SelectReset(const std::string& dbname, unsigned int select);      
 
         /* 
          * Removes all entries from a given database.

@@ -16,14 +16,13 @@
 
 CommandShutdown::CommandShutdown(Module* parent) : Command(parent, "SHUTDOWN", 0, 1)
 {
-        flags = 'm';
+        flags  = 'm';
         syntax = "<servername>";
 }
 
 COMMAND_RESULT CommandShutdown::Handle(User* user, const Params& parameters)
 {
         user->SendProtocol(BRLD_OK, PROCESS_OK);
-        
         slog("STARTUP", LOG_DEFAULT, "Shutting down request by " + user->login);
         Kernel->Exit(EXIT_CODE_SHUTDOWN, false, false, "Shutting down.");
         
@@ -36,13 +35,14 @@ namespace
         {
                 PromiseRestart() 
                 {
+                
                 }
 
                 void Call() 
                 {
-                      execvp(Kernel->Config->usercmd.argv[0], Kernel->Config->usercmd.argv);
-                      Kernel->Reducer.Apply();
-                      Kernel->Reducer.Add(this);
+                       execvp(Kernel->Config->usercmd.argv[0], Kernel->Config->usercmd.argv);
+                       Kernel->Reducer->Apply();
+                       Kernel->Reducer->Add(this);
                 }
         };
 }
