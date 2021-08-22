@@ -57,43 +57,43 @@ CommandL::CommandL(Module* parent) : Command(parent, "I", 0)
 
 COMMAND_RESULT CommandL::Handle(User* user, const Params& parameters)
 {
-        Dispatcher::JustAPI(user, BRLD_START_LIST);
+       Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Connected", Daemon::HumanEpochTime(user->GetConnected()).c_str()));
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Connected", Daemon::HumanEpochTime(user->GetConnected()).c_str()));
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Created", Daemon::HumanEpochTime(Kernel->Store->GetCreated()).c_str()).c_str());
         
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->GetSelect().c_str()));
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Agent", user->agent.c_str()));
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Version", Kernel->GetVersion(user->CanPerform('e')).c_str()).c_str());
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Select", user->GetSelect().c_str()));
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Agent", user->agent.c_str()));
 
-        /* Returns admin flags to requesting user, if any. */
+       /* Returns admin flags to requesting user, if any. */
 
-        const std::string& exists = UserHelper::CheckFlags(user->login);
+       const std::string& exists = UserHelper::CheckFlags(user->login);
 
-        if (!exists.empty())
-        {
+       if (!exists.empty())
+       {
                 user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Flags", exists.c_str()).c_str());
-        }
+       }
      
-        if (user->GetDatabase())
-        {
+       if (user->GetDatabase())
+       {
              user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Database", user->GetDatabase()->GetName().c_str()));
-        }
+       }
         
-        const std::string& all_groups = user->GetAllGroups();
+       const std::string& all_groups = user->GetAllGroups();
         
-        if (!all_groups.empty())
-        {
+       if (!all_groups.empty())
+       {
                 user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Groups", all_groups.c_str()).c_str());
-        }
+       }
         
-        /* Requesting user login. */
+       /* Requesting user login. */
 
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
-        user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Login", user->login.c_str())); 
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Instance", user->instance.c_str()));	
+       user->SendProtocol(BRLD_ITEM_LIST, Daemon::Format("%-9s | %s", "Login", user->login.c_str())); 
 
-        Dispatcher::JustAPI(user, BRLD_END_LIST);
-	return SUCCESS;
+       Dispatcher::JustAPI(user, BRLD_END_LIST);
+       return SUCCESS;
 }
 
 CommandVersion::CommandVersion(Module* parent) : Command(parent, "VERSION", 0, 0)
@@ -103,13 +103,13 @@ CommandVersion::CommandVersion(Module* parent) : Command(parent, "VERSION", 0, 0
 
 COMMAND_RESULT CommandVersion::Handle(User* user, const Params& parameters)
 {
-      /* 
-       * All connected users can run VERSION command. However, only users 
-       * with 'e' or higher flags can obtain a full version of this server. 
-       */
+       /* 
+        * All connected users can run VERSION command. However, only users 
+        * with 'e' or higher flags can obtain a full version of this server. 
+        */
 	
-      user->SendProtocol(BRLD_OK, Kernel->GetVersion(user->CanPerform('e')));
-      return SUCCESS;
+       user->SendProtocol(BRLD_OK, Kernel->GetVersion(user->CanPerform('e')));
+       return SUCCESS;
 }
 
 CommandAgent::CommandAgent(Module* parent) : Command(parent, "MYAGENT", 0, 0)
@@ -119,8 +119,8 @@ CommandAgent::CommandAgent(Module* parent) : Command(parent, "MYAGENT", 0, 0)
 
 COMMAND_RESULT CommandAgent::Handle(User* user, const Params& parameters)
 {
-         user->SendProtocol(BRLD_OK, user->agent.c_str());
-         return SUCCESS;
+        user->SendProtocol(BRLD_OK, user->agent.c_str());
+        return SUCCESS;
 }
 
 CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
@@ -130,63 +130,63 @@ CommandWhoami::CommandWhoami(Module* parent) : Command(parent, "WHOAMI", 0, 0)
 
 COMMAND_RESULT CommandWhoami::Handle(User* user, const Params& parameters)
 {
-         user->SendProtocol(BRLD_OK, user->login.c_str());
-         return SUCCESS;
+        user->SendProtocol(BRLD_OK, user->login.c_str());
+        return SUCCESS;
 }
 
 CommandFirstOf::CommandFirstOf(Module* parent) : Command(parent, "FIRSTOF", 1, 1)
 {
-         flags = 'm';
-         syntax = "<user>";
+        flags = 'm';
+        syntax = "<user>";
 }
 
 COMMAND_RESULT CommandFirstOf::Handle(User* user, const Params& parameters)
 {
-         const User* found = Kernel->Clients->FirstLogin(parameters[0]);
+        const User* found = Kernel->Clients->FirstLogin(parameters[0]);
          
-         if (found)
-         {
+        if (found)
+        {
                 user->SendProtocol(BRLD_OK, found->instance.c_str());
-         }
-         else
-         {
+        }
+        else
+        {
                user->SendProtocol(ERR_INPUT, parameters[0].c_str());
                return FAILED;
-         }
+        }
          
-         return SUCCESS;
+        return SUCCESS;
 }
 
 CommandGS::CommandGS(Module* parent) : Command(parent, "GLS", 0)
 {
-         group = 'w';
+        group = 'w';
 }
 
 COMMAND_RESULT CommandGS::Handle(User* user, const Params& parameters)
 {
-      DBHelper::GList(user);
-      return SUCCESS;
+        DBHelper::GList(user);
+        return SUCCESS;
 }
 
 CommandLS::CommandLS(Module* parent) : Command(parent, "LS", 0)
 {
-         group = 'w';
+        group = 'w';
 }
 
 COMMAND_RESULT CommandLS::Handle(User* user, const Params& parameters)
 {
-      DBHelper::List(user);
-      return SUCCESS;
+        DBHelper::List(user);
+        return SUCCESS;
 }
 
 CommandTotal::CommandTotal(Module* parent) : Command(parent, "TOTAL", 0)
 {
-         group = 'w';
+        group = 'w';
 }
 
 COMMAND_RESULT CommandTotal::Handle(User* user, const Params& parameters)
 {
-         DBHelper::Total(user);
-         return SUCCESS;
+        DBHelper::Total(user);
+        return SUCCESS;
 }
 

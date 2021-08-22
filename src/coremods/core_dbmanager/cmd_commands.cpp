@@ -398,16 +398,20 @@ CommandFlushAll::CommandFlushAll(Module* Creator) : Command(Creator, "FLUSHALL",
 
 COMMAND_RESULT CommandFlushAll::Handle(User* user, const Params& parameters)
 {  
-     const DataMap& dbs = Kernel->Store->DBM->GetDatabases();
+      const DataMap& dbs = Kernel->Store->DBM->GetDatabases();
 
-     for (DataMap::const_iterator i = dbs.begin(); i != dbs.end(); ++i)
-     {
+      Kernel->Ready = false;
+     
+      for (DataMap::const_iterator i = dbs.begin(); i != dbs.end(); ++i)
+      {
                std::shared_ptr<UserDatabase> db = i->second;
                db->FlushDB();
-     }
+      }
+     
+      Kernel->Ready = true;
                 
-     user->SendProtocol(BRLD_OK, PROCESS_OK);                
-     return SUCCESS;
+      user->SendProtocol(BRLD_OK, PROCESS_OK);                
+      return SUCCESS;
 }
 
 CommandFlushDB::CommandFlushDB(Module* Creator) : Command(Creator, "FLUSHDB", 0, 1)

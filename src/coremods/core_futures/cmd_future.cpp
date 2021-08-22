@@ -202,7 +202,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
 
          for (FutureMap::const_iterator it = futures.begin(); it != futures.end(); ++it)
          {
-               FutureEntry entry = it->second;
+               FutureEntry const entry = it->second;
                
                std::string schedule;
                
