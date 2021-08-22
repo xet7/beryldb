@@ -47,6 +47,6 @@ CommandRKey::CommandRKey(Module* Creator) : Command(Creator, "RKEY", 0, 0)
 
 COMMAND_RESULT CommandRKey::Handle(User* user, const Params& parameters)
 {
-       KeyHelper::Quick(user,  std::make_shared<random_query>());
+       KeyHelper::Quick(user, std::make_shared<random_query>());
        return SUCCESS;
 }

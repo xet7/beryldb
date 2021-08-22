@@ -102,6 +102,7 @@ class CoreModUser : public Module
 	CommandPing 		cmdping;
 	CommandPong 		cmdpong;
 	CommandExit 		cmdexit;
+	CommandQuit		cmdquit;
 	CommandAgent 		cmdagent;
 	CommandAuth 		cmdauth;
 
@@ -112,6 +113,7 @@ class CoreModUser : public Module
 			, cmdping(this)
 			, cmdpong(this)
 			, cmdexit(this)
+			, cmdquit(this)
 			, cmdagent(this)
 			, cmdauth(this)
 

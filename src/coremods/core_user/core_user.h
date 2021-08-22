@@ -104,3 +104,20 @@ class CommandILogin : public Command
         COMMAND_RESULT Handle(User* user, const Params& parameters);
 
 };
+
+/* 
+ * Alias command for quit.
+ * 
+ * @protocol:
+ *
+ *         · enum: OK or ERROR.
+ */ 
+
+class CommandQuit : public Command
+{
+ public:
+
+        CommandQuit(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
