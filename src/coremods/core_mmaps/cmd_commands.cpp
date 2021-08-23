@@ -61,9 +61,9 @@ COMMAND_RESULT CommandMPush::Handle(User* user, const Params& parameters)
 
 CommandMPushNX::CommandMPushNX(Module* Creator) : Command(Creator, "MPUSHNX", 3, 3)
 {
+       check_value      =       true;
        check_key        =       0;
        check_hash       =       1;
-       check_value	=	true;
        group 		= 	'v';
        syntax 		= 	"<map> <key> \"value\"";
 }

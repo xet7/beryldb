@@ -13,6 +13,12 @@
 
 #pragma once
 
+/* Syntax hints */
+
+static std::string syntaxhints = "syntaxhints";
+
+/* Chan sync setting */
+
 static std::string chansync = "chansync";
 
 /* Auto join */

@@ -65,8 +65,8 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 
 CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 {
+       check_value      =       true;
        check_key        =    	0;
-       check_value      = 	true;
        groups 		= 	{ 'e', 'k' };
        syntax 		= 	"<key> \"value\"";
 }
@@ -316,8 +316,8 @@ COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
 
 CommandInsert::CommandInsert(Module* Creator) : Command(Creator, "INSERT", 3, 3)
 {
+         check_value      =       true;
          check_key 	= 	0;
-         check_value	=	true;
          group 	 	= 	'k';
          syntax    	= 	"<key> <where> \"value\"";
 }
