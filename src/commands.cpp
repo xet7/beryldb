@@ -12,7 +12,6 @@
  */
 
 #include "beryl.h"
-#include "limits.h"
 #include "engine.h"
 #include "exit.h"
 
@@ -74,7 +73,13 @@ void Command::RegisterService()
 		Kernel->Exit(EXIT_CODE_COMMAND, true, true);
 	}
 	
-	if (!Kernel->Commander.AddCommand(this))
+	if (!this->alias.empty() && this->alias == this->name)
+	{
+                bprint(ERROR, "A command may not have an alias and same name.");
+                Kernel->Exit(EXIT_CODE_COMMAND, true, true);
+	}
+	
+	if (!Kernel->Commander->AddCommand(this))
 	{
 		throw ModuleException("Command already exists: " + name);
 	}

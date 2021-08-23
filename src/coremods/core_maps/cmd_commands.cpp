@@ -116,9 +116,9 @@ COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
 
 CommandHSet::CommandHSet(Module* Creator) : Command(Creator, "HSET", 3, 3)
 {
+       check_value      =       true;
        check_key        =       0;
        check_hash       =       1;
-       check_value	=	true;
        group 		= 	'm';
        syntax 		= 	"<map> <key> \"value\"";
 }

@@ -36,7 +36,7 @@ COMMAND_RESULT CommandSlist::HandleLocal(LocalUser* user, const Params& paramete
 		return SUCCESS;
 	}
 
-        Channel* chan = Kernel->Channels->Find(parameters[0]);
+        Channel* const chan = Kernel->Channels->Find(parameters[0]);
 
 	if (chan)
 	{

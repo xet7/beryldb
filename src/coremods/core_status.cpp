@@ -28,9 +28,9 @@ class CommandStatus : public Command
 	
 	CommandStatus(Module* Creator) : Command(Creator, "STATUS", 1, 2), status_provider(Creator, "event/status")
 	{
-		last_empty_ok   = false;
-		syntax 		= "<symbol> [<servername>]";
-		group 		= 'w';
+		last_empty_ok   = 	false;
+		syntax 		= 	"<symbol> [<servername>]";
+		group 		= 	'w';
 	}
 
 	COMMAND_RESULT Handle(User* user, const Params& parameters);
@@ -86,8 +86,7 @@ void CommandStatus::PreloadData(Status::Context& status)
 				status.AppendLine(BRLD_ITEM_LIST, "Swaps:            "+convto_string(R.ru_nswap));
 				status.AppendLine(BRLD_ITEM_LIST, "Context Switches: Voluntary; "+convto_string(R.ru_nvcsw)+" Involuntary; "+convto_string(R.ru_nivcsw));
 #endif
-				float sample_sincelast = (Kernel->Now() - Kernel->Stats->LastSampled.tv_sec) * 1000000
-					+ (Kernel->TimeStamp() - Kernel->Stats->LastSampled.tv_nsec) / 1000;
+				float sample_sincelast = (Kernel->Now() - Kernel->Stats->LastSampled.tv_sec) * 1000000 + (Kernel->TimeStamp() - Kernel->Stats->LastSampled.tv_nsec) / 1000;
 				float sample_used = ((R.ru_utime.tv_sec - Kernel->Stats->LastCPU.tv_sec) * 1000000 + R.ru_utime.tv_usec - Kernel->Stats->LastCPU.tv_usec);
 				float per = (sample_used / sample_sincelast) * 100;
 

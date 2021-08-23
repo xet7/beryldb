@@ -63,15 +63,15 @@ COMMAND_RESULT CommandTTE::Handle(User* user, const Params& parameters)
 
 CommandExec::CommandExec(Module* Creator) : Command(Creator, "EXEC", 1, 1)
 {
-        check_key       =       0;
-        group 		= 	'f';
-        syntax		= 	"<key>";
+       check_key       =       0;
+       group 	       =       'f';
+       syntax	       =       "<key>";
 }
 
 COMMAND_RESULT CommandExec::Handle(User* user, const Params& parameters)
 {
-         GlobalHelper::UserFutureExecute(user, parameters[0]);
-         return SUCCESS;
+       GlobalHelper::UserFutureExecute(user, parameters[0]);
+       return SUCCESS;
 }
 
 CommandFResetAll::CommandFResetAll(Module* Creator) : Command(Creator, "FRESETALL", 0, 0)
@@ -202,7 +202,7 @@ COMMAND_RESULT CommandFutureList::Handle(User* user, const Params& parameters)
 
          for (FutureMap::const_iterator it = futures.begin(); it != futures.end(); ++it)
          {
-               FutureEntry entry = it->second;
+               FutureEntry const entry = it->second;
                
                std::string schedule;
                

@@ -67,7 +67,7 @@ class CoreModInfo : public Module
 
 	void Prioritize() 
 	{
-		Kernel->Modules.SetPriority(this, I_OnInstanceConnect, PRIORITY_FIRST);
+		Kernel->Modules->SetPriority(this, I_OnInstanceConnect, PRIORITY_FIRST);
 	}
 
 	Version GetDescription() 

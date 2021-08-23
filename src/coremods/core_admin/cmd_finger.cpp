@@ -104,7 +104,7 @@ CommandResume::CommandResume(Module* parent) : Command(parent, "RESUME", 1, 1)
 
 COMMAND_RESULT CommandResume::Handle(User* user, const Params& parameters)
 {
-        User* target = Kernel->Clients->FindInstance(parameters[0]);
+        User* const target = Kernel->Clients->FindInstance(parameters[0]);
 
         if (!target)
         {
@@ -153,8 +153,7 @@ CommandLogins::CommandLogins(Module* parent) : Command(parent, "LOGINS", 1, 1)
 
 COMMAND_RESULT CommandLogins::Handle(User* user, const Params& parameters)
 {
-        const std::string& loginid 	= parameters[0];
-        const UserVector& logins 	= Kernel->Clients->FindLogin(loginid);
+        const UserVector& logins 	= Kernel->Clients->FindLogin(parameters[0]);
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s | %-10s", "Login", "IP", "Agent", "Logged"));
@@ -184,9 +183,7 @@ CommandFindFlags::CommandFindFlags(Module* parent) : Command(parent, "FINDFLAGS"
 
 COMMAND_RESULT CommandFindFlags::Handle(User* user, const Params& parameters)
 {
-        const std::string& flag = parameters[0];
-        
-        const UserVector& logins = ClientManager::FindPrivs(flag);
+        const UserVector& logins = ClientManager::FindPrivs(parameters[0]);
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-16s | %-20s", "Instance", "Login", "Flags"));

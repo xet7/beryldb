@@ -300,6 +300,13 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 			return;
 		}
 
+                if (!handler->alias.empty())
+                {
+                        const std::string& CMD = handler->alias;
+                        Kernel->Commander->Queue->Add(user, CMD, cmd_params);
+                        return;
+                }
+
 		if (cmd_params.size())
 		{
 			if (handler->check_key >= 0)

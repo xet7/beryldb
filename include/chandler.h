@@ -135,8 +135,15 @@ class ExportAPI CommandModel : public ServiceProvider
 		
 		}
 		
-		const ProtocolTrigger::TagMap& GetTags() const { return tags; }
-		ProtocolTrigger::TagMap& GetTags() { return tags; }
+		const ProtocolTrigger::TagMap& GetTags() const 
+		{ 
+			return tags; 
+		}
+		
+		ProtocolTrigger::TagMap& GetTags() 
+		{ 
+			return tags; 
+		}
 	};
 
 	/* Minimun number of parameters that this command needs. */
@@ -154,14 +161,11 @@ class ExportAPI CommandModel : public ServiceProvider
 	 
 	bool last_empty_ok;
 
-	
 	std::vector<InterpretationType> interpret;
 
-	
 	CommandModel(Module* me, const std::string& cmd, unsigned int minpara = 0, unsigned int maxpara = 0);
 
 	virtual RouteParams GetRouting(User* user, const CommandModel::Params& parameters);
-
 	
 	virtual void EncodeParameter(std::string& parameter, unsigned int index);
 
@@ -170,20 +174,23 @@ class ExportAPI CommandModel : public ServiceProvider
 
 class ExportAPI Command : public CommandModel
 {
- 
- protected:
+  protected:
 	
 	Command(Module* me, const std::string& cmd, unsigned int minpara = 0, unsigned int maxpara = 0);
 
- public:
+  public:
 	
 	/* Destructor. */
 	
 	~Command();
 	
+	std::string alias;
+	
 	/* Checks whether a given login exists. */
 	
 	bool check_exists;
+	
+	/* Check whether login root is allowed to be used */
 	
 	bool check_root;
 	
