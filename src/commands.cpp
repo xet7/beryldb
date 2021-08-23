@@ -12,7 +12,6 @@
  */
 
 #include "beryl.h"
-#include "limits.h"
 #include "engine.h"
 #include "exit.h"
 

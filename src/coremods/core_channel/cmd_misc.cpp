@@ -44,25 +44,24 @@ CommandChans::CommandChans(Module* parent) : Command(parent, "GETCHANS", 1, 1)
 
 COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
 {
-           const User* found =  Kernel->Clients->FindInstanceOnly(parameters[0]);
+          const User* found = Kernel->Clients->FindInstanceOnly(parameters[0]);
            
-           if (!found)
-           {
+          if (!found)
+          {
                   user->SendProtocol(ERR_INPUT, PROCESS_NULL);
                   return FAILED;
-           }
+          }
            
-           Dispatcher::JustAPI(user, BRLD_START_LIST);
-
-           Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Channel"));
-           Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+          Dispatcher::JustAPI(user, BRLD_START_LIST);
+          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Channel"));
+          Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
            
-           for (User::SubsList::iterator i = found->chans.begin(); i != found->chans.end(); i++)
-           {
-                    Channel* const chan = (*i)->chan;
-                    Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", chan->GetName().c_str()), Daemon::Format("%s", chan->GetName().c_str()));
-           }
+          for (User::SubsList::iterator i = found->chans.begin(); i != found->chans.end(); i++)
+          {
+                  Channel* const chan = (*i)->chan;
+                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", chan->GetName().c_str()), Daemon::Format("%s", chan->GetName().c_str()));
+          }
 
-           Dispatcher::JustAPI(user, BRLD_END_LIST);
-           return SUCCESS;
+          Dispatcher::JustAPI(user, BRLD_END_LIST);
+          return SUCCESS;
 }

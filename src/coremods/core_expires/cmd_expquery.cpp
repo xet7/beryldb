@@ -109,7 +109,6 @@ COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters)
          }
          
          return SUCCESS;
-
 }
 
 CommandSelectCount::CommandSelectCount(Module* Creator) : Command(Creator, "EXPSELECT", 0, 1)
