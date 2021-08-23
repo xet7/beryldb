@@ -89,9 +89,9 @@ COMMAND_RESULT CommandTTLAT::Handle(User* user, const Params& parameters)
 
 CommandPersist::CommandPersist(Module* Creator) : Command(Creator, "PERSIST", 1, 1)
 {
-        check_key       =       0;
-        group 		= 	'e';
-        syntax 		= 	"<key>";
+         check_key       =       0;
+         group 		 = 	'e';
+         syntax 	 = 	"<key>";
 }
 
 COMMAND_RESULT CommandPersist::Handle(User* user, const Params& parameters) 
