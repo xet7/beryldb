@@ -69,7 +69,6 @@ COMMAND_RESULT CommandMonitorReset::Handle(User* user, const Params& parameters)
        return SUCCESS;
 }
 
-
 CommandMonitorList::CommandMonitorList(Module* Creator) : Command(Creator, "MONITORLIST", 0, 1)
 {
         flags = 'm';

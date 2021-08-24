@@ -17,17 +17,13 @@
 CommandHKeys::CommandHKeys(Module* Creator) : Command(Creator, "HKEYS", 1, 3)
 {
        run_conf		=	true;
-       check_key 	=       0;
        group 		= 	'm';
        syntax 		=	"<map> <offset> <limit>";
 }
 
 COMMAND_RESULT CommandHKeys::Handle(User* user, const Params& parameters)
 {  
-       std::shared_ptr<hfind_query> query = std::make_shared<hfind_query>();
-       Helpers::make_map(user, query, "", "", true);
-
-       KeyHelper::RetroLimits(user, query, parameters[0], this->offset, this->limit, true);
+       KeyHelper::RetroLimits(user, std::make_shared<hfind_query>(), parameters[0], this->offset, this->limit, true);
        return SUCCESS;
 }
 

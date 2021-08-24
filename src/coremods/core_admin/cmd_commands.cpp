@@ -74,3 +74,4 @@ COMMAND_RESULT CommandRestart::Handle(User* user, const Params& parameters)
         Kernel->Atomics->AddAction(new PromiseRestart());
         return FAILED;
 }
+

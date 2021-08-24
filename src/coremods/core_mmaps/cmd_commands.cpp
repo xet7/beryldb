@@ -77,7 +77,6 @@ COMMAND_RESULT CommandMPushNX::Handle(User* user, const Params& parameters)
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
         run_conf	=	true;
-        check_key       =       0;
         group  		= 	'x';
         syntax 		= 	"<map> <limit> <offset>";
 }

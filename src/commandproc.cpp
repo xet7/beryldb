@@ -156,8 +156,7 @@ void CommandHandler::Execute(LocalUser* user, std::string& command, CommandModel
 			return;
 		}
 	}
-	
-	
+
 	Command* handler = GetBase(command);
 
 	if (!handler)
