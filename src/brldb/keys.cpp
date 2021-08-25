@@ -161,7 +161,7 @@ void expire_del_query::Process()
 {
         if (this->flags != QUERY_FLAGS_QUIET)
         {
-                user->SendProtocol(BRLD_PERSIST, this->key, PROCESS_OK);
+                user->SendProtocol(BRLD_OK, PROCESS_OK);
         }
 }
 

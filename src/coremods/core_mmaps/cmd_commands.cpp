@@ -61,9 +61,9 @@ COMMAND_RESULT CommandMPush::Handle(User* user, const Params& parameters)
 
 CommandMPushNX::CommandMPushNX(Module* Creator) : Command(Creator, "MPUSHNX", 3, 3)
 {
+       check_value      =       true;
        check_key        =       0;
        check_hash       =       1;
-       check_value	=	true;
        group 		= 	'v';
        syntax 		= 	"<map> <key> \"value\"";
 }
@@ -77,7 +77,6 @@ COMMAND_RESULT CommandMPushNX::Handle(User* user, const Params& parameters)
 CommandMKeys::CommandMKeys(Module* Creator) : Command(Creator, "MKEYS", 1, 3)
 {
         run_conf	=	true;
-        check_key       =       0;
         group  		= 	'x';
         syntax 		= 	"<map> <limit> <offset>";
 }

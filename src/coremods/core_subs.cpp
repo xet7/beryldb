@@ -15,6 +15,41 @@
 #include "engine.h"
 #include "channelmanager.h"
 
+class CommandCount : public Command
+{
+    public:
+
+      CommandCount(Module* parent) : Command(parent, "USERS", 1)
+      {
+            syntax = "<channel>";
+      }
+
+      COMMAND_RESULT Handle(User* user, const Params& parameters)
+      {
+            const std::string& channel = parameters[0];
+            
+            if (!Kernel->Engine->ValidChannel(channel))            
+            {
+                     user->SendProtocol(ERR_INPUT, INVALID);                  
+                     return FAILED;
+            }
+            
+            Channel* const chan = Kernel->Channels->Find(channel);
+            
+            if (!chan)
+            {
+                  user->SendProtocol(ERR_INPUT, NOT_FOUND);                  
+                  return FAILED;
+            }
+
+            const size_t users = chan->GetClientCounter();            
+            
+            user->SendProtocol(BRLD_OK, convto_string(users));
+            return SUCCESS;
+      }
+      
+};
+
 class CommandSubs : public Command
 {
     public:
@@ -79,10 +114,12 @@ class ModuleCoreSubs : public Module
  private:
 
         CommandSubs cmd;
+        CommandCount count;
 
  public:
 
-        ModuleCoreSubs() : cmd(this)
+        ModuleCoreSubs() : cmd(this),
+                           count(this)
         {
         
         }

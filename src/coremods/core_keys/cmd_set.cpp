@@ -51,8 +51,8 @@ COMMAND_RESULT CommandSet::Handle(User* user, const Params& parameters)
 
 CommandSetNX::CommandSetNX(Module* Creator) : Command(Creator, "SETNX", 2, 2)
 {
+       check_value      =       true;
        check_key	= 	0;
-       check_value	= 	true;  
        group  		= 	'k';
        syntax 		= 	"<key> \"value\"";
 }
@@ -65,8 +65,8 @@ COMMAND_RESULT CommandSetNX::Handle(User* user, const Params& parameters)
 
 CommandSetTX::CommandSetTX(Module* Creator) : Command(Creator, "SETTX", 2, 2)
 {
+       check_value      =       true;
        check_key        =    	0;
-       check_value      = 	true;
        groups 		= 	{ 'e', 'k' };
        syntax 		= 	"<key> \"value\"";
 }
@@ -198,9 +198,9 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
-       check_key       =       1;
-       groups 	       =       { 'e', 'k' };
-       syntax 	       =       "<seconds> <key>";
+       check_key        =       1;
+       groups 	        =       { 'e', 'k' };
+       syntax 	        =       "<seconds> <key>";
 }
 
 COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
@@ -218,9 +218,9 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
-         check_key            =         0;
-         group  	      = 	'k';
-         syntax 	      = 	"<key>";
+         check_key      =         0;
+         group  	= 	'k';
+         syntax 	= 	"<key>";
 }
 
 COMMAND_RESULT CommandIsAlpha::Handle(User* user, const Params& parameters)
@@ -257,7 +257,7 @@ COMMAND_RESULT CommandGetPersist::Handle(User* user, const Params& parameters)
 
 CommandWDel::CommandWDel(Module* Creator) : Command(Creator, "WDEL", 1, 1)
 {
-         group = 'k';
+         group  = 'k';
          syntax = "<%key>";
 }
 
@@ -302,8 +302,8 @@ COMMAND_RESULT CommandAsBool::Handle(User* user, const Params& parameters)
 
 CommandIsMatch::CommandIsMatch(Module* Creator) : Command(Creator, "ISMATCH", 2, 2)
 {
+         check_value    =       true;
          check_key	=	0;
-         check_value	=	true;
          group 		= 	'k';
          syntax 	= 	"<key> \"value\"";
 }
@@ -316,8 +316,8 @@ COMMAND_RESULT CommandIsMatch::Handle(User* user, const Params& parameters)
 
 CommandInsert::CommandInsert(Module* Creator) : Command(Creator, "INSERT", 3, 3)
 {
+         check_value    =       true;
          check_key 	= 	0;
-         check_value	=	true;
          group 	 	= 	'k';
          syntax    	= 	"<key> <where> \"value\"";
 }

@@ -2134,7 +2134,7 @@ class ExportAPI hlist_query  : public QueryBase
 
         hlist_query() 
         {
-                this->type = QUERY_TYPE_ITER;
+                this->type = QUERY_TYPE_READ;
                 this->base_request = INT_MAP;
         }
 

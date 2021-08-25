@@ -15,7 +15,7 @@
 #include "core_info.h"
 #include "engine.h"
 
-CommandModules::CommandModules(Module* parent) : ServerTargetCommand(parent, "MODULES")
+CommandModules::CommandModules(Module* parent) : TargetedCommand(parent, "MODULES")
 {
 	syntax = "[<server>]";
 }
@@ -89,7 +89,7 @@ COMMAND_RESULT CommandModules::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-CommandCoreModules::CommandCoreModules(Module* parent) : ServerTargetCommand(parent, "COREMODULES")
+CommandCoreModules::CommandCoreModules(Module* parent) : TargetedCommand(parent, "COREMODULES")
 {
 	syntax = "[<server>]";
 }

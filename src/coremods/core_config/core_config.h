@@ -15,11 +15,11 @@
 
 #include "beryl.h"
 
-class ServerTargetCommand : public Command
+class TargetedCommand : public Command
 {
  public:
 
-        ServerTargetCommand(Module* mod, const std::string& Name) : Command(mod, Name)
+        TargetedCommand(Module* mod, const std::string& Name) : Command(mod, Name)
         {
         
         }
@@ -42,7 +42,7 @@ class ServerTargetCommand : public Command
  *         · string      : value.
  */
 
-class CommandGetConfig : public ServerTargetCommand
+class CommandGetConfig : public TargetedCommand
 {
     public:
     
@@ -66,7 +66,7 @@ class CommandGetConfig : public ServerTargetCommand
  *         · enum        : OK, NULL, INVALID_PARAM.
  */
 
-class CommandSetConfig : public ServerTargetCommand
+class CommandSetConfig : public TargetedCommand
 {
     public:
     
@@ -83,7 +83,7 @@ class CommandSetConfig : public ServerTargetCommand
  *         · enum        : OK.
  */
 
-class CommandDefaults : public ServerTargetCommand
+class CommandDefaults : public TargetedCommand
 {
     public:
     

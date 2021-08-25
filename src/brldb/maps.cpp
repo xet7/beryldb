@@ -365,8 +365,20 @@ void hdel_query::Run()
        RocksData result = this->Get(this->dest);
 
        std::shared_ptr<MapHandler> handler = MapHandler::Create(result.value);
-       handler->Remove(this->hesh);
-       
+
+       if (handler->Get(this->hesh).empty())
+       {
+               if (handler->GetLast() == HANDLER_MSG_NOT_FOUND)
+               {
+                          access_set(DBL_NOT_FOUND);
+                          return;
+                }
+       }
+       else
+       {
+               handler->Remove(this->hesh);
+       }
+
        if (handler->Count() > 0)
        {
                if (this->Write(this->dest, handler->as_string()))

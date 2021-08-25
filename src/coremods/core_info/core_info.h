@@ -20,11 +20,11 @@
 #include "managers/user.h"
 #include "managers/databases.h"
 
-class ServerTargetCommand : public Command
+class TargetedCommand : public Command
 {
  public:
 
-	ServerTargetCommand(Module* mod, const std::string& Name) : Command(mod, Name)
+	TargetedCommand(Module* mod, const std::string& Name) : Command(mod, Name)
 	{
 	
 	}
@@ -66,7 +66,7 @@ class CommandCommands : public Command
  *         · map  : Modules.
  */ 
 
-class CommandModules : public ServerTargetCommand
+class CommandModules : public TargetedCommand
 {
    public:
 
@@ -83,7 +83,7 @@ class CommandModules : public ServerTargetCommand
  *         · map  : Core modules.
  */ 
 
-class CommandCoreModules : public ServerTargetCommand
+class CommandCoreModules : public TargetedCommand
 {
    public:
 
@@ -104,7 +104,7 @@ class CommandCoreModules : public ServerTargetCommand
  *         · string  : Current time.
  */ 
  
-class CommandTime : public ServerTargetCommand
+class CommandTime : public TargetedCommand
 {
  public:
 	
@@ -125,7 +125,7 @@ class CommandTime : public ServerTargetCommand
  *         · string  : Current epoch.
  */
  
-class CommandEpoch:  public ServerTargetCommand
+class CommandEpoch:  public TargetedCommand
 {
  public:
 
