@@ -102,7 +102,16 @@ COMMAND_RESULT CommandUse::Handle(User* user, const Params& parameters)
        }
 
        user->select = as_int;
-       user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
+
+       if (user->agent == DEFAULT_EMERALD)
+       {
+           user->SendProtocol(BRLD_NEW_USE, use, PROCESS_OK);
+       }
+       else
+       {
+            user->SendProtocol(BRLD_OK, use);       
+       }
+       
        return SUCCESS;
 }
 

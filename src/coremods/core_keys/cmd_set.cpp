@@ -199,7 +199,7 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
        check_key        =       1;
-       groups 	        =       { 'e', 'k' };
+       group 	        =       'e';
        syntax 	        =       "<seconds> <key>";
 }
 
@@ -218,7 +218,7 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
-         check_key      =         0;
+         check_key      =       0;
          group  	= 	'k';
          syntax 	= 	"<key>";
 }

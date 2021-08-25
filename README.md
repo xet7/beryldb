@@ -181,7 +181,7 @@ Feel free to code and submit your own modules.
 
 In order to maintain a documentation that is easy to follow. We try to maintain documentation that is easy to
 follow and try to make discussions understandable for everyone. Our code is actively changing and thus
-having a brief discussion board is preferred. Join our [Google groups](https://groups.google.com/g/beryldb) 
+having a brief discussion board is preferred. Join our [Google group](https://groups.google.com/g/beryldb) 
 If you would like to learn more about Beryl's development process.
 
 ## Source code organization
