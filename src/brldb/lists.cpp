@@ -750,6 +750,13 @@ void ldel_query::Run()
        }
 
        std::shared_ptr<ListHandler> handler = ListHandler::Create(query_result.value);
+       
+       if (!handler->Exist(this->value))
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
        handler->Remove(this->value);
 
        if (handler->Count() > 0)
