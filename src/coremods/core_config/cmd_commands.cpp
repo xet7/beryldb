@@ -14,7 +14,7 @@
 #include "beryl.h"
 #include "core_config.h"
 
-CommandSetConfig::CommandSetConfig(Module* Creator) : ServerTargetCommand(Creator, "SETCONFIG")    
+CommandSetConfig::CommandSetConfig(Module* Creator) : TargetedCommand(Creator, "SETCONFIG")    
 {
         flags   = 'm';
         syntax 	= "[<servername>] <key> <value>";
@@ -61,7 +61,7 @@ COMMAND_RESULT CommandSetConfig::Handle(User* user, const Params& parameters)
         return SUCCESS;
 }
 
-CommandGetConfig::CommandGetConfig(Module* Creator) : ServerTargetCommand(Creator, "GETCONFIG")    
+CommandGetConfig::CommandGetConfig(Module* Creator) : TargetedCommand(Creator, "GETCONFIG")    
 {
           syntax = "[<servername>] <setting>";
 }

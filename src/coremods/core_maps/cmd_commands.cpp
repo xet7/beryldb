@@ -110,7 +110,7 @@ CommandHDel::CommandHDel(Module* Creator) : Command(Creator, "HDEL", 2, 2)
 
 COMMAND_RESULT CommandHDel::Handle(User* user, const Params& parameters)
 {  
-       KeyHelper::SimpleRetro(user, std::make_shared<hdel_query>(), parameters[0], parameters[1]);
+       KeyHelper::HeshRetro(user, std::make_shared<hdel_query>(), parameters[0], parameters[1]);
        return SUCCESS;
 }
 

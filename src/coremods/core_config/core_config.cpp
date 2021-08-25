@@ -14,7 +14,7 @@
 #include "beryl.h"
 #include "core_config.h"
 
-RouteParams ServerTargetCommand::GetRouting(User* user, const Params& parameters)
+RouteParams TargetedCommand::GetRouting(User* user, const Params& parameters)
 {
         if ((!parameters.empty()) && (parameters[0].find('.') != std::string::npos))
         {

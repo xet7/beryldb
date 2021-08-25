@@ -14,7 +14,7 @@
 #include "beryl.h"
 #include "core_config.h"
 
-CommandDefaults::CommandDefaults(Module* Creator) : ServerTargetCommand(Creator, "DEFCONFIG")    
+CommandDefaults::CommandDefaults(Module* Creator) : TargetedCommand(Creator, "DEFCONFIG")    
 {
           flags = 'm';
           syntax = "[<servername>]";

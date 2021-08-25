@@ -14,7 +14,7 @@
 #include "beryl.h"
 #include "core_info.h"
 
-CommandTime::CommandTime(Module* parent) : ServerTargetCommand(parent, "TIME")
+CommandTime::CommandTime(Module* parent) : TargetedCommand(parent, "TIME")
 {
 	syntax = "[<server>]";
 }
@@ -32,7 +32,7 @@ COMMAND_RESULT CommandTime::Handle(User* user, const Params& parameters)
 	return SUCCESS;
 }
 
-CommandEpoch::CommandEpoch(Module* parent) : ServerTargetCommand(parent, "EPOCH")
+CommandEpoch::CommandEpoch(Module* parent) : TargetedCommand(parent, "EPOCH")
 {
         syntax = "[<server>]";
 }
