@@ -707,6 +707,13 @@ void vdel_query::Run()
        RocksData query_result = this->Get(this->dest);
 
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
+       
+       if (!handler->Exist(this->value))
+       {
+               access_set(DBL_NOT_FOUND);
+               return;
+       }
+       
        handler->Remove(this->value);
 
        if (handler->Count() > 0)
