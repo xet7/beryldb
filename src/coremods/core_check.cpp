@@ -37,7 +37,6 @@ class CommandCheck : public Command
 
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Login", target->login.c_str()), Daemon::Format("%s %s", "login", target->login.c_str()));
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "IP", target->GetReadableIP().c_str()), Daemon::Format("%s %s", "ip", target->GetReadableIP().c_str()));
-
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Select", target->GetSelect().c_str()), Daemon::Format("%s %s", "select", target->GetSelect().c_str()));
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Database", target->GetDatabase()->GetName().c_str()), Daemon::Format("%s %s", "database", target->GetDatabase()->GetName().c_str()));
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Connected", convto_string(target->GetConString()).c_str()), Daemon::Format("%s %s", "connected", convto_string(target->GetConString()).c_str()));
@@ -49,11 +48,11 @@ class CommandCheck : public Command
 
 class CoreModCheck : public Module
 {
- private:
+  private:
 
         CommandCheck cmd;
 
- public:
+  public:
 
         CoreModCheck() : cmd(this)
         {

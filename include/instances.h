@@ -256,8 +256,8 @@ class ExportAPI User : public Expandable
          *
          * @return:
  	 *
-         *         · True: User has 'r' flags.
-         *         · False: User is not an admin.
+         *         · True   : User has 'r' flags.
+         *         · False  : User is not an admin.
          */    	
 	
 	bool IsAdmin();
@@ -681,7 +681,6 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
 	
 	void check_con_conf(bool clone_count = true);
-
 	
 	engine::sockets::sockaddrs server_sa;
 
