@@ -19,7 +19,7 @@ There are several ways that you can support this project 👍
  - 🎓 Check our pending issues.
  - 🌵 Contribute to our APIs (JS, PHP, Python).
  - 🙋 Become a Q&A: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
- - 💬 Get Involved and join our [Discord server](https://discord.gg/sqsXVYuGrX).
+ - 💬 Get Involved and join our [Discord server](https://discord.gg/H6HVxeDq).
 
 ### Funding is always appreciated ❤️ 
 
@@ -231,7 +231,7 @@ BSD license.
 
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
-* [Support/Discord](https://discord.gg/sqsXVYuGrX)
+* [Support/Discord](https://discord.gg/H6HVxeDq)
 * [Twitter](https://twitter.com/beryldb)
 
 
