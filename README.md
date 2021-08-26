@@ -11,6 +11,21 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
+## Support this project 
+
+There are several ways that you can support this project 👍
+
+### If you are a developer:
+ 
+ - 🎓 Check our pending issues.
+ - 🌵 Contribute to our APIs (JS, PHP, Python).
+ - 🙋 Become a Q&A: Test our software and report back.
+
+### Funding is always appreciated ❤️ 
+
+ - 💲 Donate using the funding link above.
+ - 💱 Litecoin donations. Feel free to donate to ``LVJg7sC9AFmGNASd7geXkDMUFuBpXYek7L``
+
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
 ## What is Beryl?
