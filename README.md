@@ -19,7 +19,7 @@ There are several ways that you can support this project 👍
  
  - 🎓 Check our pending issues.
  - 🌵 Contribute to our APIs (JS, PHP, Python).
- - 🙋 Become a Q&A: Test our software and report back.
+ - 🙋 Become a Q&A: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb))
 
 ### Funding is always appreciated ❤️ 
 
