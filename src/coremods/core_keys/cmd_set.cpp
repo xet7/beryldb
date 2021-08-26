@@ -16,7 +16,7 @@
 
 CommandChar::CommandChar(Module* Creator) : Command(Creator, "CHAR", 2, 2)
 {
-       check_key       =    	0;
+       check_key        =    	0;
        group  		= 	'k';
        syntax 		= 	"<key> <value>";
 }

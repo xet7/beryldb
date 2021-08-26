@@ -7,7 +7,6 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 <br>
 
-
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
@@ -19,7 +18,8 @@ There are several ways that you can support this project 👍
  
  - 🎓 Check our pending issues.
  - 🌵 Contribute to our APIs (JS, PHP, Python).
- - 🙋 Become a Q&A: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb))
+ - 🙋 Become a Q&A: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
+ - 💬 Get Involved and join our [Discord server](https://discord.gg/sqsXVYuGrX).
 
 ### Funding is always appreciated ❤️ 
 
@@ -119,6 +119,10 @@ Great! You may now run your very first BerylDB command using
 
 Keep in mind that BerylDB uses port **6378** by default, so be sure to
 maintain that port unused before running the server.
+
+## APIs
+
+* Check our [PHP API](https://github.com/beryldb/php-beryl).
 
 ## First queries
 

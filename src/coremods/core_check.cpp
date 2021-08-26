@@ -19,8 +19,8 @@ class CommandCheck : public Command
 
         CommandCheck(Module* parent) : Command(parent, "CHECK", 1, 1)
         {
-                flags   = 'r';
-                syntax  = "<instance>";
+                flags   =   'e';
+                syntax  =   "<instance>";
         }
 
         COMMAND_RESULT Handle(User* user, const Params& parameters)
@@ -34,6 +34,11 @@ class CommandCheck : public Command
                  }
                  
                  Dispatcher::JustAPI(user, BRLD_START_LIST);
+                 
+                 if (!target->session->GetFlags().empty())
+                 {
+                     Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Flags", target->session->GetFlags().c_str()), Daemon::Format("%s %s", "flags", target->session->GetFlags().c_str()));
+                 }
 
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Login", target->login.c_str()), Daemon::Format("%s %s", "login", target->login.c_str()));
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "IP", target->GetReadableIP().c_str()), Daemon::Format("%s %s", "ip", target->GetReadableIP().c_str()));
