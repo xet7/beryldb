@@ -113,12 +113,12 @@ class ModuleCoreSubs : public Module
 {
  private:
 
-        CommandSubs cmd;
-        CommandCount count;
+        CommandSubs 		subs;
+        CommandCount 		count;
 
  public:
 
-        ModuleCoreSubs() : cmd(this),
+        ModuleCoreSubs() : subs(this),
                            count(this)
         {
         

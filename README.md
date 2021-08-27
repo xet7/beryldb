@@ -122,6 +122,10 @@ maintain that port unused before running the server.
 
 ## APIs
 
+APIs are used to interact with a BerylDB data-structure server. You can
+typically execute the same exact command as if you were connecting from
+the CLI.
+
 * Check our [PHP API](https://github.com/beryldb/php-beryl).
 
 ## First queries

@@ -65,3 +65,4 @@ COMMAND_RESULT CommandChans::Handle(User* user, const Params& parameters)
           Dispatcher::JustAPI(user, BRLD_END_LIST);
           return SUCCESS;
 }
+

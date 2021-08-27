@@ -275,7 +275,7 @@ void DataFlush::Process(User* user, std::shared_ptr<QueryBase> signal)
       
       if (!ToUse)
       {
-            /* We find a random thread to attach this signal to. */
+            /* We find a random thread to attach this signal into. */
       
             ToUse = *random_item(Threads.begin(), Threads.end());
       }
@@ -312,9 +312,9 @@ void DataFlush::ResetAll()
       
       DataFlush::mute.lock();
       
-      for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
+      for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
       {           
-              User* user = u->second;
+              User* const user = i->second;
             
               if (user == NULL || user->IsQuitting())
               {

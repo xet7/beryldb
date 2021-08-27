@@ -29,6 +29,10 @@ static std::string autojoin = "autojoin";
 
 #define PUBL_DEF "PUBLISH"
 
+/* Chan is muted */ 
+
+const std::string CHAN_MUTED            =       "CHAN_MUTED";
+
 /* No diff. */
 
 const std::string NO_DIFF		=	"NO_DIFF";
