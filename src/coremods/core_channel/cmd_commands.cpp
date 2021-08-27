@@ -197,6 +197,7 @@ COMMAND_RESULT CommandHop::HandleLocal(LocalUser* user, const Params& parameters
 
 CommandMute::CommandMute(Module* parent) : Command(parent, "MUTE", 1, 1)
 {
+        flags  = 'e';
         syntax = "<channel>";
 }
 
@@ -223,6 +224,7 @@ COMMAND_RESULT CommandMute::Handle(User* user, const Params& parameters)
 
 CommandUnmute::CommandUnmute(Module* parent) : Command(parent, "UNMUTE", 1, 1)
 {
+        flags  = 'e';
         syntax = "<channel>";
 }
 
