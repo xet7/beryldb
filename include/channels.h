@@ -57,6 +57,8 @@ class ExportAPI Channel : public Expandable
 
   public:
 	
+	bool muted;
+	
 	/* Map that contains all subscribed clients to a given chan. */
 	
 	SubscriptionMap subscribedlist;

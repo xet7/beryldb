@@ -145,15 +145,13 @@ COMMAND_RESULT CommandGFind::Handle(User* user, const Params& parameters)
 
 CommandGeoCalc::CommandGeoCalc(Module* Creator) : Command(Creator, "GCALC", 2, 2)
 {
-        check_key       =       0;
-        check_hash	=	1;
         group 		= 	'g';
         syntax 		= 	"<name> <name2>";
 }
 
 COMMAND_RESULT CommandGeoCalc::Handle(User* user, const Params& parameters)
 {  
-         KeyHelper::Simple(user, std::make_shared<geoget_custom_query>(), parameters[1], parameters[0]);
+         KeyHelper::Simple(user, std::make_shared<geocalc_query>(), parameters[1], parameters[0], false);
          return SUCCESS;
 }
 

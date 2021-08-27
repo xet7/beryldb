@@ -7,9 +7,24 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 <br>
 
-
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
+
+## Support this project 
+
+There are several ways that you can support this project 👍
+
+### If you are a developer:
+ 
+ - 🎓 Check our pending issues.
+ - 🌵 Contribute to our APIs (JS, PHP, Python).
+ - 🙋 Become a QA: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
+ - 💬 Get Involved and join our [Discord server](https://discord.gg/H6HVxeDq).
+
+### Funding is always appreciated ❤️ 
+
+ - 💲 Donate using the funding link above.
+ - 💱 Litecoin donations. Feel free to donate to ``LVJg7sC9AFmGNASd7geXkDMUFuBpXYek7L``
 
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 
@@ -105,6 +120,14 @@ Great! You may now run your very first BerylDB command using
 Keep in mind that BerylDB uses port **6378** by default, so be sure to
 maintain that port unused before running the server.
 
+## APIs
+
+APIs are used to interact with a BerylDB data-structure server. You can
+typically execute the same exact command as if you were connecting from
+the CLI.
+
+* Check our [PHP API](https://github.com/beryldb/php-beryl).
+
 ## First queries
 
 You may want to learn more about Beryl and run your first queries using
@@ -181,7 +204,7 @@ Feel free to code and submit your own modules.
 
 In order to maintain a documentation that is easy to follow. We try to maintain documentation that is easy to
 follow and try to make discussions understandable for everyone. Our code is actively changing and thus
-having a brief discussion board is preferred. Join our [Google groups](https://groups.google.com/g/beryldb) 
+having a brief discussion board is preferred. Join our [Google group](https://groups.google.com/g/beryldb) 
 If you would like to learn more about Beryl's development process.
 
 ## Source code organization
@@ -212,7 +235,7 @@ BSD license.
 
 * [Documentation](https://docs.beryl.dev)
 * [GitHub](https://github.com/beryldb/beryldb)
-* [Support/Discord](https://discord.gg/sqsXVYuGrX)
+* [Support/Discord](https://discord.gg/H6HVxeDq)
 * [Twitter](https://twitter.com/beryldb)
 
 

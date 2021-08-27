@@ -19,7 +19,7 @@
 #include "managers/keys.h"
 
 /* 
- * Increments a key.
+ * Increments a key by 1.
  * 
  * @parameters:
  *
@@ -64,7 +64,7 @@ class CommandIncrBy : public Command
 };
 
 /* 
- * Decrements a key.
+ * Decrements a key by 1.
  * 
  * @parameters:
  *

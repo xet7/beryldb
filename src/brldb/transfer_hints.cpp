@@ -20,7 +20,7 @@
 
 void transfer_query::Keys()
 {
-     unsigned int ttl = this->IsExpiring();
+     signed int ttl = this->IsExpiring();
 
      if (ttl > 0)
      {

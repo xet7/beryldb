@@ -194,3 +194,57 @@ COMMAND_RESULT CommandHop::HandleLocal(LocalUser* user, const Params& parameters
 
        return FAILED;
 }
+
+CommandMute::CommandMute(Module* parent) : Command(parent, "MUTE", 1, 1)
+{
+        flags  = 'e';
+        syntax = "<channel>";
+}
+
+COMMAND_RESULT CommandMute::Handle(User* user, const Params& parameters)
+{
+        Channel* const chan = Kernel->Channels->Find(parameters[0]);
+
+        if (!chan)
+        {
+                user->SendProtocol(Protocols::NoChannel(parameters[0]));
+                return FAILED;
+        }
+        
+        if (chan->muted)
+        {
+                user->SendProtocol(ERR_INPUT, PROCESS_ALREADY);        
+                return FAILED;
+        }
+        
+        chan->muted = true;
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
+        return SUCCESS;
+}
+
+CommandUnmute::CommandUnmute(Module* parent) : Command(parent, "UNMUTE", 1, 1)
+{
+        flags  = 'e';
+        syntax = "<channel>";
+}
+
+COMMAND_RESULT CommandUnmute::Handle(User* user, const Params& parameters)
+{
+        Channel* const chan = Kernel->Channels->Find(parameters[0]);
+
+        if (!chan)
+        {
+                user->SendProtocol(Protocols::NoChannel(parameters[0]));
+                return FAILED;
+        }
+
+        if (!chan->muted)
+        {
+               user->SendProtocol(ERR_INPUT, PROCESS_FALSE);        
+               return FAILED;
+        }
+        
+        chan->muted = false;
+        user->SendProtocol(BRLD_OK, PROCESS_OK);
+        return SUCCESS;
+}

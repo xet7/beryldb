@@ -70,7 +70,7 @@ CommandMPushNX::CommandMPushNX(Module* Creator) : Command(Creator, "MPUSHNX", 3,
 
 COMMAND_RESULT CommandMPushNX::Handle(User* user, const Params& parameters)
 {  
-       KeyHelper::SimpleHesh(user, std::make_shared<setnx_query>(), parameters[0], parameters[1], parameters.back());
+       KeyHelper::SimpleHesh(user, std::make_shared<msetnx_query>(), parameters[0], parameters[1], parameters.back());
        return SUCCESS;
 }
 

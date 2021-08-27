@@ -11,14 +11,15 @@
  * More information about our licensing can be found at https://docs.beryl.dev
  */
 
-#pragma once
+#include "beryl.h"
+#include "brldb/iterators.h"
 
-class ExportAPI LoopIterator
+LoopIterator::LoopIterator()
 {
-    public:
-        
-        signed int match;
-        
-        LoopIterator();
-};
 
+}
+
+void LoopIterator::Run::()
+{
+
+}

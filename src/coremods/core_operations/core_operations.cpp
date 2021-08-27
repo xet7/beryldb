@@ -18,14 +18,14 @@ class CoreModOperations : public Module
 {
     private:
     
-        CommandIncr cmdincr;
-        CommandIncrBy cmdincrby;
-        CommandDecr cmddecr;
-        CommandDecrBy cmddecrby;
-        CommandAvg cmdavg;
-        CommandDiv cmddiv;
-        CommandMult cmdmult;
-        CommandSqrt cmdsqrt;
+        CommandIncr 		cmdincr;
+        CommandIncrBy 		cmdincrby;
+        CommandDecr 		cmddecr;
+        CommandDecrBy 		cmddecrby;
+        CommandAvg 		cmdavg;
+        CommandDiv 		cmddiv;
+        CommandMult 		cmdmult;
+        CommandSqrt 		cmdsqrt;
         
     public:     
         

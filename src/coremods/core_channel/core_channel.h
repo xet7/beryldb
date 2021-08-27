@@ -20,6 +20,48 @@
 #include "modules/message.h"
 
 /* 
+ * Mutes a channel.
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel to mute.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL, OK or ERROR.
+ */ 
+
+class CommandMute : public Command
+{
+ public:
+
+        CommandMute(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Unmutes a channel.
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel to unmute.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL, OK or ERROR.
+ */ 
+
+class CommandUnmute : public Command
+{
+ public:
+
+        CommandUnmute(Module* parent);
+
+        COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
  * Subscribes an user to a channel. 
  * 
  * @parameters:

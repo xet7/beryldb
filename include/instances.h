@@ -21,6 +21,7 @@
 #include "brldsocket.h"
 #include "subscription.h"
 #include "login.h"
+#include "engine.h"
 #include "commandproc.h"
 #include "brldb/query.h"
 
@@ -255,8 +256,8 @@ class ExportAPI User : public Expandable
          *
          * @return:
  	 *
-         *         · True: User has 'r' flags.
-         *         · False: User is not an admin.
+         *         · True   : User has 'r' flags.
+         *         · False  : User is not an admin.
          */    	
 	
 	bool IsAdmin();
@@ -295,11 +296,11 @@ class ExportAPI User : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · flag: Flag to check.
+	 *         · flag    : Flag to check.
 	 * 
          * @return:
  	 *
-         *         · True: User is in group.
+         *         · True    : User is in group.
          */    	
          
 	bool InGroup(unsigned char flag);
@@ -310,12 +311,12 @@ class ExportAPI User : public Expandable
          *
          * @parameters:
 	 *
-	 *         · flag: Flag to check.
+	 *         · flag     : Flag to check.
 	 * 
          * @return:
  	 *
-         *         · True: Command can be executed.
-         *         · False: No required flags.
+         *         · True     : Command can be executed.
+         *         · False    : No required flags.
          */    	
          
 	bool CanPerform(unsigned char flag);
@@ -325,7 +326,7 @@ class ExportAPI User : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · database: New database to use.
+	 *         · UserDatabase    : New database to use.
          */    
          
         void SetDatabase(const std::shared_ptr<UserDatabase>& database);
@@ -335,11 +336,19 @@ class ExportAPI User : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · UserDatabase: current_db.
+	 *         · UserDatabase   : current_db.
          */            
          
         std::shared_ptr<UserDatabase> GetDatabase();
-	
+
+        /*  
+         * Returns this user's IP address in a readabale format.
+         * 
+         * @return:
+ 	 *
+         *         · string	: IP Address.
+         */    	
+         
 	const std::string& GetReadableIP();
 
 	const std::string& GetRealHost() const;
@@ -407,13 +416,26 @@ class ExportAPI User : public Expandable
          * 
          * @return:
  	 *
-         *         · time_t: this->connected.
+         *         · time_t  : this->connected.
          */    	
          
 	time_t GetConnected()
 	{
 		return this->connected;
 	}
+
+        /* 
+         * Returns current connected time in an string format.
+         * 
+         * @return:
+         *
+         *         · strnig  : this->connected.
+         */
+
+        std::string GetConString()
+        {
+                return Daemon::HumanEpochTime(this->connected);
+        }
 
         /* 
          * Time at which this user logged in.
@@ -659,7 +681,6 @@ class ExportAPI LocalUser : public User, public brld::node_list_node<LocalUser>
 
 	
 	void check_con_conf(bool clone_count = true);
-
 	
 	engine::sockets::sockaddrs server_sa;
 

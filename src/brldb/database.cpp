@@ -152,6 +152,8 @@ void CoreManager::UserDefaults()
 
 void CoreManager::CheckDefaults()
 {
+       bprint(DONE, "Booting up BerylDB.");
+       
        const std::string& result = STHelper::Get("instance", "first_ran");
        
        /* Creating instance, unless otherwise specified. */

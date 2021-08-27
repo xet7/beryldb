@@ -71,7 +71,7 @@ void ChannelManager::CheckRemoval(Channel* chan)
         falert(NOTIFY_DEFAULT, "Removed channel: %s", chan->name.c_str());
 }
 
-Channel::Channel(const std::string &cname, time_t current) : name(cname), created(current)
+Channel::Channel(const std::string &cname, time_t current) : name(cname), created(current), muted(false)
 {
 	if (!Kernel->Channels->ChannelList.insert(std::make_pair(cname, this)).second)
 	{

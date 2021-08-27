@@ -16,23 +16,23 @@
 
 CommandChar::CommandChar(Module* Creator) : Command(Creator, "CHAR", 2, 2)
 {
-        check_key       =    	0;
-        group  		= 	'k';
-        syntax 		= 	"<key> <value>";
+       check_key        =    	0;
+       group  		= 	'k';
+       syntax 		= 	"<key> <value>";
 }
 
 COMMAND_RESULT CommandChar::Handle(User* user, const Params& parameters)
 {  
-        const std::string& value         =        parameters[1];
+       const std::string& value         =        parameters[1];
 
-        if (!is_positive_number(value))
-        {
+       if (!is_positive_number(value))
+       {
                 user->SendProtocol(ERR_INPUT, MUST_BE_NUMERIC);
                 return FAILED;
-        }
+       }
        
-        KeyHelper::Simple(user, std::make_shared<char_query>(), parameters[0], value, false);
-        return SUCCESS;
+       KeyHelper::Simple(user, std::make_shared<char_query>(), parameters[0], value, false);
+       return SUCCESS;
 }
 
 CommandSet::CommandSet(Module* Creator) : Command(Creator, "SET", 2, 2)
@@ -199,7 +199,7 @@ COMMAND_RESULT CommandGetSubstr::Handle(User* user, const Params& parameters)
 CommandGetExp::CommandGetExp(Module* Creator) : Command(Creator, "GETEXP", 2, 2)
 {
        check_key        =       1;
-       groups 	        =       { 'e', 'k' };
+       group 	        =       'e';
        syntax 	        =       "<seconds> <key>";
 }
 
@@ -218,7 +218,7 @@ COMMAND_RESULT CommandGetExp::Handle(User* user, const Params& parameters)
 
 CommandIsAlpha::CommandIsAlpha(Module* Creator) : Command(Creator, "ISALPHA", 1, 1)
 {
-         check_key      =         0;
+         check_key      =       0;
          group  	= 	'k';
          syntax 	= 	"<key>";
 }

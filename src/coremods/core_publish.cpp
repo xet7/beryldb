@@ -329,6 +329,12 @@ class ModuleCoreMessage : public Module
 
 		Channel* chan = target.Get<Channel>();
 		
+		if (chan->muted)
+		{
+                        user->SendProtocol(ERR_INPUT2, ERR_MUTED, CHAN_MUTED);
+                        return MOD_RES_STOP;
+		}
+		
 		if (!user->InGroup('p') && !user->IsAdmin() && !chan->IsSubscribed(user))
 		{
 			user->SendProtocol(ERR_INPUT2, ERR_CANNOTSENDTOCHAN, NO_EXTERNAL);
