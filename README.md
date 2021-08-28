@@ -13,18 +13,11 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 ## Support this project 
 
 There are several ways that you can support this project 👍
-
-### If you are a developer:
  
- - 🎓 Check our pending issues.
+ - 🎓 Check our pending issues, or create your own.
  - 🌵 Contribute to our APIs (JS, PHP, Python).
  - 🙋 Become a QA: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
  - 💬 Get Involved and join our [Discord server](https://discord.gg/H6HVxeDq).
-
-### Funding is always appreciated ❤️ 
-
- - 💲 Donate using the funding link above.
- - 💱 Litecoin donations. Feel free to donate to ``LVJg7sC9AFmGNASd7geXkDMUFuBpXYek7L``
 
 ![Logo](https://docs.beryl.dev/img/smaller.png??)
 

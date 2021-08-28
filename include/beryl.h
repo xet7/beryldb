@@ -105,8 +105,8 @@ class ExportAPI Beryl
 	 *
          * @parameters:
 	 *
-	 *         · Status: Exit code.
-	 *         · Exit msg to display to clients.
+	 *         · int	: Exit code.
+	 *         · string	: Exit msg to display to clients.
          */    	        
          
 	void PrepareExit(int status, const std::string& quitmsg);
@@ -262,7 +262,7 @@ class ExportAPI Beryl
 	 * 
          * @return:
  	 *
-         *         · 1: Beryl is exiting.
+         *         · int      : Beryl is exiting.
          */    
 
 	Beryl(int argc, char** argv);
@@ -279,11 +279,11 @@ class ExportAPI Beryl
          * 
          * @parameters:
 	 *
-	 *         · status: Exiting code.
-	 *         · nline: whether to print a newline before exiting.
-	 *         · skip: whether to skip PrepareExit().
-	 *         · exitmsg: Exit message. If exitmsg is defined, users
-	 *                    will be sent this msg before disconnect.
+	 *         · int      : Exiting code.
+	 *         · bool     : Whether to print a newline before exiting.
+	 *         · bool     : Whether to skip PrepareExit().
+	 *         · string   : Exit message. If exitmsg is defined, users
+	 *                      will be sent this msg before disconnecting.
          */    	
          
 	void Exit(int status, bool nline = false, bool skip = false, const std::string& exitmsg = "");
@@ -321,11 +321,11 @@ class ExportAPI Beryl
          * 
          * @parameters:
          *
-	 *        · Full: Whether to return full or basic version.
+	 *        · bool    : Whether to return full or basic version.
 	 * 
          * @return:
          *
-         *        · string: Version.
+         *        · string  : Version.
          */    
 	 
 	std::string GetVersion(bool Full = false);
@@ -353,7 +353,7 @@ class ExportAPI Beryl
 	 * 
          * @return:
  	 *
-         *         · unsigned int: Uptime in seconds.
+         *         · unsigned int  : Uptime in seconds.
          */    
          	
 	unsigned int GetUptime()
