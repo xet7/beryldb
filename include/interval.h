@@ -49,7 +49,7 @@ class ExportAPI IntervalManager
          * 
          * @parameters:
 	 *
-	 *         · flag: True if sleeping is requested, false if not.
+	 *         · bool    : True if sleeping is requested, false if not.
          */            
          
         void SleepMode(bool flag);
@@ -59,8 +59,8 @@ class ExportAPI IntervalManager
          * 
          * @return:
  	 *
-         *         · true: Resting is true.
-         *         · false: Not resting.
+         *         · True    : Resting is true.
+         *         · False   : Not resting.
          */    
          
         bool RestingStatus();

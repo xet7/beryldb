@@ -1632,21 +1632,6 @@ class ExportAPI vfind_query  : public QueryBase
 };
 
 
-class ExportAPI lfind_query  : public QueryBase
-{
-    public:
-
-        lfind_query() 
-        {
-                this->type = QUERY_TYPE_ITER;
-                this->base_request = INT_LIST;
-        }
-
-        void Run();
-
-        void Process();
-};
-
 class ExportAPI lpopall_query  : public QueryBase
 {
     public:

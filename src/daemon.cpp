@@ -168,9 +168,11 @@ bool Daemon::ValidHost(const std::string& host)
 		return false;
 	}
 
-	unsigned int dash_count = 0;
-	unsigned int dots_count = 0;
-	bool dots_counted = false;
+	unsigned int dash_count  = 0;
+	unsigned int dots_count  = 0;
+	
+	bool dots_counted        = false;
+	
 	const std::string::const_iterator hostend = host.end() - 1;
 	
 	for (std::string::const_iterator iter = host.begin(); iter != host.end(); ++iter)
@@ -305,12 +307,12 @@ std::string Daemon::duration_as_string(time_t duration)
 		return "0s";
 	}
 
-	time_t years = duration / 31449600;
-	time_t weeks = (duration / 604800) % 52;
-	time_t days = (duration / 86400) % 7;
-	time_t hours = (duration / 3600) % 24;
-	time_t minutes = (duration / 60) % 60;
-	time_t seconds = duration % 60;
+	time_t years    =   duration / 31449600;
+	time_t weeks    =   (duration / 604800) % 52;
+	time_t days     =   (duration / 86400) % 7;
+	time_t hours    =   (duration / 3600) % 24;
+	time_t minutes  =   (duration / 60) % 60;
+	time_t seconds  =   duration % 60;
 
 	std::string formatted;
 
@@ -660,7 +662,7 @@ int FileSystem::RemoveDir(const char *path)
 		while (!answer && (p = readdir(dopen))) 
 		{
 				int r2 = -1;
-				char *buf;
+				char *buffer;
 				size_t len;
 
 				if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, ".."))
@@ -668,28 +670,28 @@ int FileSystem::RemoveDir(const char *path)
 					continue;
 				}
 
-				len = path_len + strlen(p->d_name) + 2; 
-				buf = (char*)malloc(len);
+				len    = path_len + strlen(p->d_name) + 2; 
+				buffer = (char*)malloc(len);
 
-				if (buf) 
+				if (buffer) 
 				{
 					struct stat statbuf;
 
-					snprintf(buf, len, "%s/%s", path, p->d_name);
+					snprintf(buffer, len, "%s/%s", path, p->d_name);
 					
-					if (!stat(buf, &statbuf)) 
+					if (!stat(buffer, &statbuf)) 
 					{
 							if (S_ISDIR(statbuf.st_mode))
 							{
-								r2 = RemoveDir(buf);
+								r2 = RemoveDir(buffer);
 							}
 							else
 							{
-								r2 = unlink(buf);
+								r2 = unlink(buffer);
 							}
 					}
 					
-					free(buf);
+					free(buffer);
 				}
 				
 				answer = r2;
@@ -704,4 +706,26 @@ int FileSystem::RemoveDir(const char *path)
 	}
 
 	return answer;
+}
+
+void Dispatcher::VectorFlush(const std::string& title, QueryBase* query)
+{
+        if (query->subresult == 1)
+        {
+                Dispatcher::JustAPI(query->user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s", title.c_str()));
+                Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+        }
+        
+        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        {            
+                 std::string item = *i;
+                 Dispatcher::ListDepend(query->user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
+        }
+
+        if (!query->partial)
+        {
+                Dispatcher::JustAPI(query->user, BRLD_END_LIST);                 
+        }
+	
 }

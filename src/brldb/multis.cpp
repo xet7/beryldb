@@ -308,23 +308,7 @@ void mkeys_query::Run()
 
 void mkeys_query::Process()
 {
-        if (this->subresult == 1)
-        {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
-        }
-        
-        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {            
-                 std::string item = *i;
-                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
-        }
-
-        if (!this->partial)
-        {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
-        }
+       Dispatcher::VectorFlush("Multi", this);
 }
 
 void mget_query::Run()
@@ -425,23 +409,7 @@ void mget_query::Process()
                return;
         }
 
-        if (this->subresult == 1)
-        {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
-        }
-
-        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {
-                 std::string item = *i;
-                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
-        }
-
-        if (!this->partial)
-        {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);
-        }
+        Dispatcher::VectorFlush("Multi", this);
 }
 
 void mrepeats_query::Run()
@@ -532,23 +500,7 @@ void mvals_query::Run()
 
 void mvals_query::Process()
 {
-        if (this->subresult == 1)
-        {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
-        }
-        
-        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {            
-                 std::string item = "\"" + *i + "\"";
-                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
-        }
-
-        if (!this->partial)
-        {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
-        }
+        Dispatcher::VectorFlush("Multi", this);
 }
 
 void mgetall_query::Run()
@@ -718,23 +670,6 @@ void miter_query::Run()
 
 void miter_query::Process()
 {
-        if (this->subresult == 1)
-        {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", "Key"));
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
-        }
-        
-        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
-        {            
-                 std::string item = "\"" + *i + "\"";
-                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
-        }
-
-        if (!this->partial)
-        {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);                 
-        }
-        
+       Dispatcher::VectorFlush("Key", this);
 }
      
