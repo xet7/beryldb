@@ -497,7 +497,7 @@ void hlist_query::Process()
                return;
         }
         
-        Dispatcher::VectorFlush("Map", this);
+        Dispatcher::VectorFlush(false, "Map", this);
 }
 
 void hvals_query::Run()
@@ -573,7 +573,7 @@ void hvals_query::Run()
 
 void hvals_query::Process()
 {
-       Dispatcher::VectorFlush("Map", this);
+       Dispatcher::VectorFlush(true, "Map", this);
 }
 
 void hgetall_query::Run()

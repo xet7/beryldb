@@ -308,7 +308,7 @@ void mkeys_query::Run()
 
 void mkeys_query::Process()
 {
-       Dispatcher::VectorFlush("Multi", this);
+       Dispatcher::VectorFlush(false, "Multi", this);
 }
 
 void mget_query::Run()
@@ -409,7 +409,7 @@ void mget_query::Process()
                return;
         }
 
-        Dispatcher::VectorFlush("Multi", this);
+        Dispatcher::VectorFlush(true, "Multi", this);
 }
 
 void mrepeats_query::Run()
@@ -500,7 +500,7 @@ void mvals_query::Run()
 
 void mvals_query::Process()
 {
-        Dispatcher::VectorFlush("Multi", this);
+        Dispatcher::VectorFlush(true, "Multi", this);
 }
 
 void mgetall_query::Run()
@@ -670,6 +670,6 @@ void miter_query::Run()
 
 void miter_query::Process()
 {
-       Dispatcher::VectorFlush("Key", this);
+       Dispatcher::VectorFlush(true, "Key", this);
 }
      

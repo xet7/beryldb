@@ -156,7 +156,7 @@ void lkeys_query::Run()
 
 void lkeys_query::Process()
 {
-       Dispatcher::VectorFlush("List", this);
+       Dispatcher::VectorFlush(false, "List", this);
 }
 
 void lpush_query::Run()
@@ -571,7 +571,7 @@ void lget_query::Process()
                return;
         }
 
-       Dispatcher::VectorFlush("List", this);
+       Dispatcher::VectorFlush(true, "List", this);
 }
 
 void lexist_query::Process()
