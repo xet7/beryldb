@@ -61,23 +61,6 @@ COMMAND_RESULT CommandLKeys::Handle(User* user, const Params& parameters)
        return SUCCESS;  
 }
 
-CommandLFind::CommandLFind(Module* Creator) : Command(Creator, "LFIND", 2, 4)
-{
-       run_conf		=	true;
-       check_key        =       0;
-       group 		= 	'l';
-       syntax 		= 	"<key> \"%value\" <offset> <limit>";
-}
-
-COMMAND_RESULT CommandLFind::Handle(User* user, const Params& parameters)
-{  
-       std::shared_ptr<lfind_query> query = std::make_shared<lfind_query>();
-       query->value 			  = stripe(parameters.back());
-       
-       KeyHelper::RetroLimits(user, std::make_shared<lfind_query>(), parameters[0], this->offset, this->limit);
-       return SUCCESS;  
-}
-
 CommandLPos::CommandLPos(Module* Creator) : Command(Creator, "LPOS", 2, 2)
 {
        check_key        =       0;

@@ -27,7 +27,6 @@ class CoreModuleList : public Module
         CommandLCount 		cmdlcount;
         CommandLPos 		cmdlpos;
         CommandLKeys 		cmdlkeys;
-        CommandLFind 		cmdlfind;
         CommandLReverse 	cmdlreverse;
         CommandLResize 		cmdlresize;
         CommandLSort 		cmdlsort;
@@ -53,7 +52,6 @@ class CoreModuleList : public Module
                            cmdlcount(this),
                            cmdlpos(this),
                            cmdlkeys(this),
-                           cmdlfind(this),
                            cmdlreverse(this),
                            cmdlresize(this),
                            cmdlsort(this),

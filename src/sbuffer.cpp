@@ -14,6 +14,8 @@
 #include "beryl.h"
 #include "queues.h"
 
+static const int use_iov_max = iov_max < 128 ? iov_max : 128;
+
 SocketTimer::SocketTimer(int fd, std::shared_ptr<LiveSocket> thesock, unsigned int add_secs) : Timer(add_secs), sock(std::move(thesock)), sfd(fd)
 {
 
@@ -34,14 +36,14 @@ static IOQueue* GetNextQueue(IOQueue* attach)
 LiveSocket::LiveSocket()
 {
 	Timeout = NULL;
-	state = S_ERROR;
+	state   = S_ERROR;
 }
 
 LiveSocket::LiveSocket(int newfd)
 {
-	Timeout = NULL;
-	this->fd = newfd;
-	this->state = S_FULL_CONNECTED;
+	Timeout 	= 	NULL;
+	this->fd 	= 	newfd;
+	this->state 	= 	S_FULL_CONNECTED;
 
 	if (HasFileDesc())
 	{
@@ -247,8 +249,6 @@ int StreamSocket::ProcessRevQueue(std::string& rq)
 	return n;
 }
 
-static const int use_iov_max = iov_max < 128 ? iov_max : 128;
-
 void StreamSocket::QueueWrite()
 {
 	if (GetQueueSize() == 0)
@@ -309,92 +309,92 @@ void StreamSocket::QueueWrite()
 
 void StreamSocket::Dispatchsend_queue(send_queue& sq)
 {
+	if (GetEventMask() & Q_WRITE_BLOCK)
+	{
+		return;
+	}
 	
-		if (GetEventMask() & Q_WRITE_BLOCK)
-		{
-			return;
-		}
-		
-		int eventChange = Q_EDGE_WRITE;
+	int event_change = Q_EDGE_WRITE;
 
-		while (error.empty() && !sq.empty() && eventChange == Q_EDGE_WRITE)
+	while (error.empty() && !sq.empty() && event_change == Q_EDGE_WRITE)
+	{
+		int bufcount = sq.size();
+		
+		if (bufcount > use_iov_max)
 		{
-			int bufcount = sq.size();
+			bufcount = use_iov_max;
+		}
+
+		int rv_max = 0;
+		int rv;
+		{
+			SocketPool::IOVector iovecs[use_iov_max];
+			size_t j = 0;
 			
-			if (bufcount > use_iov_max)
+			for (send_queue::const_iterator i = sq.begin(), end = i+bufcount; i != end; ++i, j++)
 			{
-				bufcount = use_iov_max;
+				const send_queue::Element& elem = *i;
+				iovecs[j].iov_base = const_cast<char*>(elem.data());
+				iovecs[j].iov_len = elem.length();
+				rv_max += iovecs[j].iov_len;
 			}
+	
+			rv = SocketPool::WriteV(this, iovecs, bufcount);
+		}
 
-			int rv_max = 0;
-			int rv;
+		if (rv == (int)sq.bytes())
+		{
+			sq.clear();
+		}
+		else if (rv > 0)
+		{
+			if (rv < rv_max)
 			{
-				SocketPool::IOVector iovecs[use_iov_max];
-				size_t j = 0;
-				
-				for (send_queue::const_iterator i = sq.begin(), end = i+bufcount; i != end; ++i, j++)
+				event_change = Q_FAST_WRITE | Q_WRITE_BLOCK;
+			}
+	
+			while (rv > 0 && !sq.empty())
+			{
+				const send_queue::Element& front = sq.front();
+	
+				if (front.length() <= (size_t)rv)
 				{
-					const send_queue::Element& elem = *i;
-					iovecs[j].iov_base = const_cast<char*>(elem.data());
-					iovecs[j].iov_len = elem.length();
-					rv_max += iovecs[j].iov_len;
+					rv -= front.length();
+					sq.pop_front();
 				}
-		
-				rv = SocketPool::WriteV(this, iovecs, bufcount);
-			}
-
-			if (rv == (int)sq.bytes())
-			{
-				sq.clear();
-			}
-			else if (rv > 0)
-			{
-				if (rv < rv_max)
+				else
 				{
-					eventChange = Q_FAST_WRITE | Q_WRITE_BLOCK;
+					sq.erase_front(rv);
+					rv = 0;
 				}
-		
-				while (rv > 0 && !sq.empty())
-				{
-					const send_queue::Element& front = sq.front();
-		
-					if (front.length() <= (size_t)rv)
-					{
-						rv -= front.length();
-						sq.pop_front();
-					}
-					else
-					{
-						sq.erase_front(rv);
-						rv = 0;
-					}
-				}
-			}
-			else if (rv == 0)
-			{
-				error = "Connection closed";
-			}
-			else if (SocketPool::IgnoreError())
-			{
-				eventChange = Q_FAST_WRITE | Q_WRITE_BLOCK;
-			}
-			else if (errno == EINTR)
-			{
-				errno = 0;
-			}
-			else
-			{
-				error = SocketPool::LastError();
 			}
 		}
-		if (!error.empty())
+		else if (rv == 0)
 		{
-			SocketPool::EventSwitch(this, Q_NO_READ | Q_NO_WRITE);
+			error = "Connection closed";
+		}
+		else if (SocketPool::IgnoreError())
+		{
+			event_change = Q_FAST_WRITE | Q_WRITE_BLOCK;
+		}
+		else if (errno == EINTR)
+		{
+			errno = 0;
 		}
 		else
 		{
-			SocketPool::EventSwitch(this, eventChange);
+			error = SocketPool::LastError();
 		}
+	}
+	
+	if (!error.empty())
+	{
+		SocketPool::EventSwitch(this, Q_NO_READ | Q_NO_WRITE);
+	}
+	else
+	{
+		SocketPool::EventSwitch(this, event_change);
+	}
 }
 
 bool StreamSocket::OnSetEndPoint(const engine::sockets::sockaddrs& local, const engine::sockets::sockaddrs& remote)
@@ -435,8 +435,15 @@ bool SocketTimer::Run(time_t)
 	return false;
 }
 
-void LiveSocket::OnConnected() { }
-void LiveSocket::OnTimeout() { return; }
+void LiveSocket::OnConnected() 
+{ 
+
+}
+
+void LiveSocket::OnTimeout() 
+{ 
+	return; 
+}
 
 void LiveSocket::OnPendingWrites()
 {
@@ -444,9 +451,13 @@ void LiveSocket::OnPendingWrites()
 	{
 		state = S_FULL_CONNECTED;
 		this->OnConnected();
+
 		if (!GetIOQueue())
+		{
 			SocketPool::EventSwitch(this, Q_FAST_READ | Q_EDGE_WRITE);
+		}
 	}
+
 	this->StreamSocket::OnPendingWrites();
 }
 
@@ -464,9 +475,13 @@ void StreamSocket::OnManageError(int errornum)
 	}
 
 	if (errornum == 0)
+	{
 		SetError("Connection closed");
+	}
 	else
+	{
 		SetError(SocketPool::GetError(errornum));
+	}
 
 	LiveSocketError errcode = L_ERR_OTHER;
 	switch (errornum)
@@ -551,7 +566,6 @@ IOQueue* StreamSocket::GetLastHook() const
 
 	return last;
 }
-
 
 void StreamSocket::AddIOQueue(IOQueue* newattach)
 {

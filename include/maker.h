@@ -21,12 +21,12 @@
  * 
  * @parameters:
  *
- *         · string: String to check.
+ *         · string   : String to check.
  *
  * @return:
  *
- *         · True: Valid number.
- *         · False: Invalid number.
+ *         · True     : Valid number.
+ *         · False    : Invalid number.
  */
 
 inline bool CheckValidPos(User* user, const std::string& number)

@@ -146,7 +146,6 @@ void LogHandler::AttachTypes(const std::string &types, LogStream* l, bool autocl
 		
 		if (token.at(0) == '-')
 		{
-			
 			excludes.push_back(token.substr(1));
 		}
 		else
