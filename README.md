@@ -10,9 +10,20 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
-## Support this project 
+## Get involved
 
+<<<<<<< HEAD
 There are several ways that you can support this project 👍
+=======
+Join our community. We invite people from different backgrounds, even if just
+getting started in the world of coding. 
+
+If you are just getting started as programmer, there are several ways that you can
+collaborate. There is no need to be a senior C++/JS/Python. At BerylDB, we
+are problem solvers and welcome people having this vision 👍
+
+### Some ways to get involved include 
+>>>>>>> unstable
  
  - 🎓 Check our pending issues, or create your own.
  - 🌵 Contribute to our APIs (JS, PHP, Python).
