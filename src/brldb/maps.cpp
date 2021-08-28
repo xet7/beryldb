@@ -650,25 +650,7 @@ void hgetall_query::Run()
 
 void hgetall_query::Process()
 {
-        if (this->subresult == 1)
-        {
-                Dispatcher::JustAPI(user, BRLD_START_LIST);
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "Map", "Value"));
-                Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
-        }
-
-        for (DualMMap::iterator i = this->mmap.begin(); i != this->mmap.end(); ++i)
-        {
-                 std::string ikey = i->first;
-                 std::string item = "\"" + i->second + "\"";
-                 
-                 Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
-        }
-
-        if (!this->partial)
-        {
-                Dispatcher::JustAPI(user, BRLD_END_LIST);
-        }
+     Dispatcher::MMapFlush(true, "Map", "Value", this);
 }
 
 

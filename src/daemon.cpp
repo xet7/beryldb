@@ -739,3 +739,35 @@ void Dispatcher::VectorFlush(bool comillas, const std::string& title, QueryBase*
         }
 	
 }
+
+void Dispatcher::MMapFlush(bool comillas, const std::string& title, const std::string& subtitle, QueryBase* query)
+{
+        if (query->subresult == 1)
+        {
+                Dispatcher::JustAPI(query->user, BRLD_START_LIST);
+                Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", title.c_str(), subtitle.c_str()));
+                Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+        }
+
+        for (DualMMap::iterator i = query->mmap.begin(); i != query->mmap.end(); ++i)
+        {
+                 std::string ikey = i->first;
+                 std::string item;
+                 
+                 if (comillas)
+                 {
+		      item  = "\"" + i->second + "\"";
+		 }
+		 else
+		 {
+		     item = i->second;
+		 }
+		 
+                 Dispatcher::ListDepend(query->user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", ikey.c_str(), item.c_str()), Daemon::Format("%s %s", ikey.c_str(), item.c_str()));
+        }
+
+        if (!query->partial)
+        {
+                Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+        }
+}
