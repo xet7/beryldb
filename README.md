@@ -12,8 +12,7 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
 ## Get involved
 
-Join our community. We invite people from different backgrounds, even if just
-getting started in the world of coding. 
+Join our community 👋 We invite people from different backgrounds 🌈👨❤️ :raising_hand::older_man:  
 
 If you are just getting started as programmer, there are several ways that you can
 collaborate. There is no need to be a senior C++/JS/Python. At BerylDB, we
