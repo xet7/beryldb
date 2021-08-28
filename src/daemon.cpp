@@ -708,7 +708,7 @@ int FileSystem::RemoveDir(const char *path)
 	return answer;
 }
 
-void Dispatcher::VectorFlush(const std::string& title, QueryBase* query)
+void Dispatcher::VectorFlush(bool comillas, const std::string& title, QueryBase* query)
 {
         if (query->subresult == 1)
         {
@@ -719,7 +719,17 @@ void Dispatcher::VectorFlush(const std::string& title, QueryBase* query)
         
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
-                 std::string item = *i;
+        	 std::string item;
+        	 
+                 if (comillas)
+                 {
+                 	item = "\"" + *i + "\"";
+		 }
+		 else
+		 {
+		 	item = *i;
+		 }
+		 
                  Dispatcher::ListDepend(query->user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
         }
 

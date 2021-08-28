@@ -283,7 +283,7 @@ void vkeys_query::Run()
 
 void vkeys_query::Process()
 {
-       Dispatcher::VectorFlush("Vector", this);
+       Dispatcher::VectorFlush(false, "Vector", this);
 }
 
 void vresize_query::Run()
@@ -487,7 +487,7 @@ void vget_query::Process()
                return;
         }
 
-        Dispatcher::VectorFlush("Vector", this);
+        Dispatcher::VectorFlush(true, "Vector", this);
 }
 
 void vcount_query::Run()

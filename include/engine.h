@@ -399,7 +399,7 @@ class ExportAPI Daemon
 	 * 
          * @return:
  	 *
-         *         · True: All the same.
+         *         · boolean  : All chars are the same or not.
          */            
          
         static bool SameChars(const std::string& str);
@@ -417,8 +417,8 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          * 
          * @parameters:
 	 *
-	 *         · who: User to find.
-	 *         · msg: Msg to send.
+	 *         · string   : User to find.
+	 *         · string   : Msg to send.
          */         
          
         static void TellThat(std::string& who, const std::string& msg, int rpl);      
@@ -429,8 +429,8 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          *
          * @parameters:
 	 *
-	 *         · user: User to send data to.
-	 *         · brld: Protocol.
+	 *         · user   : User to send data to.
+	 *         · brld   : Protocol.
          */    
         
         static void JustAPI(User* user, BRLD_PROTOCOL brld);
@@ -440,17 +440,36 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          * 
          * @parameters:
 	 *
-	 *         · User: User to dispatch data to.
-	 *         · brld: Protocol to send.
-	 *         · one_api: First string.
-	 *         · second_api: Second string.
+	 *         · User    : User to dispatch data to.
+	 *         · brld    : Protocol to send.
+	 *         · strnig  : First string.
+	 *         · string  : Second string.
+	 *         · bool    : Whether to add comillas or not.
          */    
          
         static void CondList(User* user, BRLD_PROTOCOL brld, const std::string& one_api, const std::string& second_api, bool comillas = false);
         
+        /* 
+         * Just flush provided data if destination client is emerald.
+         * 
+         * @parameters:
+	 *
+	 *         · string   : Message to send.
+         */            
+         
         static void JustEmerald(User* user, BRLD_PROTOCOL brld, const std::string& msg);
-        
-        static void VectorFlush(const std::string& title, QueryBase* query);
+
+        /* 
+         * Flushes data in a vector format.
+         * 
+         * @parameters:
+	 *
+	 *         · bool      : Whether to add comillas to our results.
+	 *         · string    : Title that a given returning title has.
+	 *         · QueryBase : Original query. 
+         */            
+         
+        static void VectorFlush(bool comillas, const std::string& title, QueryBase* query);
         
         static std::string Repeat(const std::string& str, unsigned int times);
 
