@@ -36,11 +36,11 @@ enum class_flags
 
 enum registration_state 
 {
-	REG_NONE = 0,		/* The user has not sent any identification */
-	REG_USER = 1,		/* User has sent password */
-	REG_LOGIN = 2,		/* User has sent login */
-	REG_LOGINUSER = 3, 	/* User has sent password and login */
-	REG_OK = 7	  	
+	REG_NONE        = 0,		/* The user has not sent any identification */
+	REG_USER        = 1,		/* User has sent password */
+	REG_LOGIN       = 2,		/* User has sent login */
+	REG_LOGINUSER   = 3, 	        /* User has sent password and login */
+	REG_OK          = 7	  	
 };
 
 enum UserType 
@@ -132,6 +132,8 @@ class ExportAPI User : public Expandable
 	
         std::atomic<unsigned int> quitting;
 
+        /* This instance's current db */
+        
         std::shared_ptr<UserDatabase> current_db;
         
         /* Groups' this user belongs to. */
@@ -237,8 +239,12 @@ class ExportAPI User : public Expandable
 	
 	std::string agent;
 
+        /* Pending queries */
+        
         std::deque<std::shared_ptr<QueryBase>> pending;
 
+        /* Pending results */
+        
         std::deque<std::shared_ptr<QueryBase>> notifications;
 
         /* Current select: 1 by default */
@@ -396,7 +402,7 @@ class ExportAPI User : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · grp: Group to add.
+	 *         · Group     : Group to add.
          */    	
          
 	bool PushGroup(std::shared_ptr<Group> grp);
@@ -406,7 +412,7 @@ class ExportAPI User : public Expandable
          * 
          * @return:
  	 *
-         *         · string: All flags.
+         *         · string    : All flags.
          */    		
          
 	std::string GetAllGroups();
@@ -416,7 +422,7 @@ class ExportAPI User : public Expandable
          * 
          * @return:
  	 *
-         *         · time_t  : this->connected.
+         *         · time_t    : this->connected.
          */    	
          
 	time_t GetConnected()
@@ -425,11 +431,11 @@ class ExportAPI User : public Expandable
 	}
 
         /* 
-         * Returns current connected time in an string format.
+         * Returns connected time, as expressed as string.
          * 
          * @return:
          *
-         *         · strnig  : this->connected.
+         *         · string : this->connected.
          */
 
         std::string GetConString()
@@ -442,7 +448,7 @@ class ExportAPI User : public Expandable
 	 * 
          * @return:
  	 *
-         *         · time_t: Logging time.
+         *         · time_t   : Logging-in time.
          */    
          
 	time_t GetLogged()
@@ -590,7 +596,7 @@ class ExportAPI User : public Expandable
          * 
          * @parameters:
 	 *
-	 *         · userlogin  : Defines this->login.
+	 *         · string     : Defines a new login into this->login.
 	 *         · time_t     : Logged time.
  	 * 
          * @return:
