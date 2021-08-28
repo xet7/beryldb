@@ -470,6 +470,19 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          */            
          
         static void VectorFlush(bool comillas, const std::string& title, QueryBase* query);
+
+        /* 
+         * Flushes data in a multimap  format.
+         * 
+         * @parameters:
+         *
+         *         · bool      : Whether to add comillas to our results.
+         *         · string    : Title that a given returning title has.
+         *         · string    : Subtitle to utilize.
+         *         · QueryBase : Original query. 
+         */  
+         
+        static void MMapFlush(bool comillas, const std::string& title, const std::string& subtitle, QueryBase* query);
         
         static std::string Repeat(const std::string& str, unsigned int times);
 
