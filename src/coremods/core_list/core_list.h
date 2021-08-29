@@ -89,7 +89,7 @@ class CommandLAvg : public Command
  * 
  * @parameters:
  *
- *	   · strnig	: List name.
+ *	   · string	: List name.
  *         · string	: Element to push.
  * 
  * @protocol:
@@ -311,7 +311,7 @@ class CommandLKeys : public Command
  * @parameters:
  *
  *         · string   : Destination list.
- *         · string   : Strnig to lookup.
+ *         · string   : string to lookup.
  * 
  * @protocol:
  *

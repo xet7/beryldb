@@ -15,22 +15,30 @@
 
 enum NOTIFY_LEVEL
 {
-      NOTIFY_DEBUG     =  10,  
-      NOTIFY_VERBOSE   =  20,
-      NOTIFY_DEFAULT   =  30
+      NOTIFY_DEBUG     =  10,		/* Notification of detailed events */  
+      NOTIFY_VERBOSE   =  20,		/* Verbose notifications */
+      NOTIFY_DEFAULT   =  30		/* The most basic level of notifications */
 };
 
 struct Event
 {
-    public:
+   friend class Notifier;
+   
+   private:
 
        /* User to skip while showing this event. */
            
        User* skip;
     
+       /* Command that took place. */
+       
        std::string command;
 
+       /* Who to nofiy this event. */
+       
        NOTIFY_LEVEL level;
+       
+   public:
 
        Event(User* usr, const std::string& cmd, NOTIFY_LEVEL lvl) : skip(usr), command(cmd), level(lvl)
        {
@@ -61,12 +69,14 @@ class ExportAPI Notifier
          * 
          * @parameters:
          *
-         *         · User: user to add.
-         *         · level: notification level.
+         *         · NOTIFY_LEVEL   : Notification level.
+         *         · User	    : User that will be notified.
          * 
          * @return:
          *
-         *         · bool: User added successfuly.
+         *         - bool
+         *	       · true       : User added successfuly.
+         *             · false	    : An error has occured.
          */
 
          bool Add(NOTIFY_LEVEL lvl, User* user);
@@ -76,12 +86,13 @@ class ExportAPI Notifier
          * 
          * @parameters:
 	 *
-	 *         · user: User to check:
+	 *         · user	: User to check:
 	 * 
          * @return:
  	 *
-         *         · True: User is in NotifyList.
-         *         · False: User is not.
+ 	 *         -bool 
+         *             · true	: User is in NotifyList.
+         *             · false	: User is not.
          */    
          
          bool Has(User* user);
@@ -91,7 +102,7 @@ class ExportAPI Notifier
          * 
          * @parameters:
 	 *
-	 *         · user: Uset to remove.
+	 *         · user    : User to remove.
          */    
          
          void Remove(User* user);
@@ -101,9 +112,9 @@ class ExportAPI Notifier
          * 
          * @parameters:
 	 *
-	 *         · skip: User to skip.
-	 *         · level: Level of events this event is from.
-	 *         · buff: Message.
+	 *         · User	   : User to skip.
+	 *         · NOTIFY_LEVEL  : Level of events this event is from.
+	 *         · string	   : Message to send.
          */    
          
          void SkipPush(User* skip, NOTIFY_LEVEL level, const std::string& buff);
@@ -115,8 +126,8 @@ class ExportAPI Notifier
          * 
          * @parameters:
          *
-         *         · level: Log Level.
-         *         · uff: Message.
+         *         · NOTIFY_LEVEL    : Log Level.
+         *         · string	     : Message to send.
          */    
          
          void Push(NOTIFY_LEVEL level, const std::string& buff);
@@ -143,7 +154,7 @@ class ExportAPI Notifier
          * 
          * @return:
  	 *
-         *         · unsigned int: Events size.
+         *         · uint	: Events size.
          */          
             
          unsigned int Count()
