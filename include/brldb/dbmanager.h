@@ -36,29 +36,48 @@ class ExportAPI DBManager : public safecast<DBManager>
 	 * 
          * @return:
  	 *
-         *         · uint: Counter of opened databases.
+         *         · uint	: Counter of opened databases.
          */             
          
         unsigned int OpenAll();
       
+        /* Close all databases */
+        
         void CloseAll();
       
-        void Load(const std::string& name, bool defaultdb = false);
+        /* 
+         * Loads a new database in the system.
+         * 
+         * @parameters:
+	 *
+	 *         · string	: Database name.
+	 */
+               
+        void Load(const std::string& name, bool dbdefault = false);
 
         /* 
          * Finds a database within DBMap.
          * 
          * @parameters:
 	 *
-	 *         · name: Database to lookup.
-	 * 
+	 *         · string	  : Database to lookup.
+	 *         · bool	  : Whether this db is deafult. 
+	 *
          * @return:
  	 *
-         *         · Database ptr to UserDatabase. Returns NULL if not found.
+         *         · UserDatabase : Database ptr to UserDatabase. Returns NULL if not found.
          */    
          
         std::shared_ptr<UserDatabase> Find(const std::string& name);
 
+        /* 
+         * Sets a default database.
+         * 
+         * @parameters:
+         *
+         *         · string       : Database to set default.
+         */
+         
         static void SetDefault(const std::string& name);
 
         /* 
@@ -66,11 +85,11 @@ class ExportAPI DBManager : public safecast<DBManager>
          * 
          * @parameters:
 	 *
-	 *         · string: Database to remove.
+	 *         · string	: Database to remove.
 	 * 
          * @return:
  	 *
-         *         · True: Database found and removed.
+         *         · True	: Database found and removed.
          */    
          
         bool Delete(const std::string& name);
@@ -272,7 +291,7 @@ class ExportAPI StoreManager
          * 
          * @return:
  	 *
-         *         · rocksdb::Env*: env var.
+         *         · rocksdb::Env*  : env var.
          */            
          
         rocksdb::Env* GetEnv()

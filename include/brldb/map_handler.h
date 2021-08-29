@@ -44,8 +44,8 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to add.
-	 *         · value: Value to add.
+	 *         · string	: Key to add.
+	 *         · strnig	: Value to add.
          */            
          
         void Add(const std::string& key, const std::string& value);
@@ -55,7 +55,7 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to remove.
+	 *         · string	: Key to remove.
          */    
                  
         void Remove(const std::string& key);
@@ -69,11 +69,11 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to calculate.
+	 *         · string	: Key to calculate.
 	 * 
          * @return:
  	 *
-         *         · uint: Length.
+         *         · uint	: Length.
          */    
 
         unsigned int Strlen(const std::string& key);
@@ -83,11 +83,11 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to find.
+	 *         · string	: Key to find.
 	 * 
          * @return:
  	 *
-         *         · std::string: value.
+         *         · string	: value.
          */            
          
         std::string Get(const std::string& key);
@@ -97,12 +97,11 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · word: Word to check.
+	 *         · string	: Item to check.
 	 * 
          * @return:
  	 *
-         *         · True: Word is in map.
-         *         · False: Word not in map.
+         *         · bool/true  : Item is in map.
          */            
          
         bool Exists(const std::string& word);
@@ -112,12 +111,14 @@ class ExportAPI MapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to delete.
+	 *         · string	: Key to delete.
 	 * 
          * @return:
  	 *
-         *         · True: Key has been deleted.
-         *         · False: Unable to delete key.
+ 	 *       -bool
+ 	 *      
+         *         · true       : Key has been deleted.
+         *         · false      : Unable to delete key.
          */            
          
         bool Delete(const std::string& key);
@@ -127,7 +128,7 @@ class ExportAPI MapHandler
 	 * 
          * @return:
  	 *
-         *         · DualMap: A key-value map.
+         *         · DualMap	  : A key-value map.
          */    
          
         DualMap GetAll();
@@ -141,7 +142,7 @@ class ExportAPI MapHandler
          * 
          * @return:
  	 *
-         *         · unsigned int: Counter.
+         *         · unsigned int  : Counter.
          */    
          
         unsigned int Count()
@@ -155,11 +156,19 @@ class ExportAPI MapHandler
 	 * 
          * @return:
  	 *
-         *         · std::vector: Vector of strings.
+         *         · vector	: Vector of strings.
          */    
          
         std::vector<std::string> GetValues();
-        
+
+        /* 
+         * Returns all items in mhandler.
+	 * 
+         * @return:
+ 	 *
+         *         · MapMap	: All items pending.
+         */            
+         
         MapMap& GetList()
         {
               return this->mhandler;

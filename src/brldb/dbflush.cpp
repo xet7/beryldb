@@ -15,6 +15,83 @@
 #include "engine.h"
 #include "algo.h"
 
+namespace 
+{
+      void CheckFlush(User* user, std::shared_ptr<QueryBase> signal)
+      {
+              switch (signal->access)
+              {
+                    case DBL_NOT_FOUND:
+                             
+                           DataFlush::NotFound(user, signal);
+
+                    break;
+                    
+                    case DBL_INVALID_RANGE:
+                                
+                              DataFlush::InvalidRange(user, signal);
+                    break;
+                    
+                    case DBL_BATCH_FAILED:
+                             
+                                DataFlush::BatchFailed(user, signal);
+                    break;
+                    
+                    case DBL_INVALID_FORMAT:
+
+                                DataFlush::InvalidFormat(user, signal);
+                    break;
+
+                    case DBL_MISS_ARGS:
+
+                                DataFlush::MissArgs(user, signal);
+                    break;
+
+                    case DBL_INVALID_TYPE:
+
+                                DataFlush::InvalidType(user, signal);
+                    break;
+
+                    case DBL_ENTRY_EXISTS:
+
+                                DataFlush::EntryExists(user, signal);
+                    break;
+
+                    case DBL_STATUS_BROKEN:
+
+                                DataFlush::StatusFailed(user, signal);
+                    break;
+
+                    case DBL_UNABLE_WRITE:
+
+                                DataFlush::UnableWrite(user, signal);
+                    break;
+                    
+                    case DBL_ENTRY_EXPIRES:
+
+                                DataFlush::EntryExpires(user, signal);
+
+                    break;
+
+                    case DBL_NOT_EXPIRING:
+
+                                DataFlush::EntryNOExpires(user, signal);
+
+                    break;
+
+                    case DBL_NOT_NUM:
+
+                                DataFlush::NotNumeric(user, signal);
+
+                    break;
+
+                    default:
+
+                                DataFlush::Flush(user, signal);
+              }
+      }
+}
+
 std::mutex DataFlush::query_mute;
 
 std::mutex DataFlush::mute;
@@ -39,7 +116,7 @@ DataFlush::DataFlush() : running(false)
 
 }
 
-void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
+void DataFlush::AttachResult(const std::shared_ptr<QueryBase> signal)
 {
       if (!signal)
       {
@@ -50,7 +127,7 @@ void DataFlush::AttachResult(std::shared_ptr<QueryBase> signal)
       signal->user->notifications.push_back(signal);
 }
 
-void DataFlush::AttachGlobal(std::shared_ptr<QueryBase> signal)
+void DataFlush::AttachGlobal(const std::shared_ptr<QueryBase> signal)
 {
       if (!signal)
       {
@@ -73,9 +150,9 @@ void DataFlush::GetResults()
 
       DataFlush::mute.lock();
       
-      for (UserMap::const_iterator u = users.begin(); u != users.end(); ++u)
+      for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
       {
-                  User* user = u->second;
+                  User* const user = i->second;
 
                   if (user == NULL || user->IsQuitting() || !user->notifications.size())
                   {
@@ -98,84 +175,8 @@ void DataFlush::GetResults()
                              NOTIFY_MODS(OnQueryFailed, (signal->access, localuser, signal));
                         }
                         
-                        switch (signal->access)
-                        {
-                             case DBL_NOT_FOUND:
-                             
-                                 DataFlush::NotFound(user, signal);
-
-                             break;
-                             
-                             case DBL_INVALID_RANGE:
-                                
-                                DataFlush::InvalidRange(user, signal);
-                             
-                             break;
-                             
-                             case DBL_BATCH_FAILED:
-                             
-                                DataFlush::BatchFailed(user, signal);
-                                
-                             break;
-                             
-                             case DBL_INVALID_FORMAT:
-                             
-                                  DataFlush::InvalidFormat(user, signal);
-                                  
-                             break;
-                             
-                             case DBL_MISS_ARGS:
-                             
-                                    DataFlush::MissArgs(user, signal);
-                             
-                             break;
-                             
-                             case DBL_INVALID_TYPE:
-                              
-                                     DataFlush::InvalidType(user, signal);
-                              
-                             break;                             
-                             
-                             case DBL_ENTRY_EXISTS:
-        
-                                     DataFlush::EntryExists(user, signal);
-                             
-                             break;
-                             
-                             case DBL_STATUS_BROKEN:
-                             
-                                     DataFlush::StatusFailed(user, signal);
-                            break;
-                            
-                            case DBL_UNABLE_WRITE:
-                            
-                                    DataFlush::UnableWrite(user, signal);
-                                    
-                            break;
-                            
-                            case DBL_ENTRY_EXPIRES:
-
-                                    DataFlush::EntryExpires(user, signal);
-
-                            break;                            
-
-                            case DBL_NOT_EXPIRING:
-
-                                    DataFlush::EntryNOExpires(user, signal);
-
-                            break;
-                            
-                            case DBL_NOT_NUM:
-                                   
-                                   DataFlush::NotNumeric(user, signal);
-                                   
-                            break;
-                            
-                            default:
-                             
-                               DataFlush::Flush(user, signal);
-                        }
-
+                        CheckFlush(user, signal);
+                        
                         if (!signal->partial)
                         {
                             user->SetLock(false);
@@ -354,7 +355,7 @@ void DataThread::Exit()
       m_thread = NULL;
 }
 
-void DataThread::Post(std::shared_ptr<QueryBase> query)
+void DataThread::Post(const std::shared_ptr<QueryBase> query)
 {	
       if (!m_thread)
       {

@@ -23,19 +23,19 @@
 
 enum THR_CMD
 {
-        PROC_EXIT_THREAD = 1,
-        PROC_SIGNAL = 2,
+        PROC_EXIT_THREAD = 1,	/* Request to exit thread */
+        PROC_SIGNAL 	 = 2,   /* Request to process a QueryBase signal */
 };
 
 struct ThreadMsg
 {
-      ThreadMsg(THR_CMD i, std::shared_ptr<QueryBase> m) : msg(m)
-      { 
-            id = i; 
-      }
+        THR_CMD id;
+        std::shared_ptr<QueryBase> msg;
 
-      THR_CMD id;
-      std::shared_ptr<QueryBase> msg;
+        ThreadMsg(THR_CMD identifier, std::shared_ptr<QueryBase> message) : msg(message)
+        { 
+             id = identifier; 
+        }
 };
 
 class DataThread
@@ -70,11 +70,13 @@ class DataThread
 
         /* 
          * Checks if thread is busy.
-         
+         *
          * @return:
  	 *
-         *         · True: Thread busy.
-         *         · False: Thread available.
+ 	 *       - bool
+ 	 *
+         *         · true	: Thread busy.
+         *         · false	: Thread available.
          */    
          
         bool IsBusy();
@@ -88,7 +90,7 @@ class DataThread
          * 
          * @return:
  	 *
-         *         · thread::id: Thread id.
+         *         · thread::id  : Thread id.
          */    
 
         std::thread::id Create();
@@ -106,10 +108,10 @@ class DataThread
          * 
          * @parameters:
 	 *
-	 *         · query: Thread to process.
+	 *         · QueryBase   : Thread to process.
          */            
         
-        void Post(std::shared_ptr<QueryBase> query);
+        void Post(const std::shared_ptr<QueryBase> query);
 
         /* Removes all items in this->queue */
         

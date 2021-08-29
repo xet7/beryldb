@@ -44,8 +44,8 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to add.
-	 *         · value: Value to add.
+	 *         · string	: Key to add.
+	 *         · string	: Value to add.
          */            
          
         void Add(const std::string& key, const std::string& value);
@@ -55,7 +55,7 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to be removed.
+	 *         · string	: Key to be removed.
          */            
          
         void Remove(const std::string& key);
@@ -69,11 +69,11 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to get.
+	 *         · string	: Key to get.
 	 * 
          * @return:
  	 *
-         *         · string: value.
+         *         · string	: Value obtained.
          */    
          
         std::string Get(const std::string& key);
@@ -83,11 +83,11 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to count.
+	 *         · string	: Key to count.
 	 * 
          * @return:
  	 *
-         *         · uint: Counter.
+         *         · uint	: Counter.
          */            
          
         unsigned int Repeats(const std::string& key);
@@ -97,12 +97,14 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
          *
-         *         · word: Word to check.
+         *         · string	: Item to check.
          * 
          * @return:
          *
-         *         · True: Word is in map.
-         *         · False: Word not in map.
+         *        - bool
+         *       
+         *          · true	: Item is in map.
+         *          · false     : Item not in map.
          */
 
         bool Exists(const std::string& word);
@@ -112,12 +114,14 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
          *
-         *         · key: Key to delete.
+         *         · string    : Key to delete.
          * 
          * @return:
          *
-         *         · True: Key has been deleted.
-         *         · False: Unable to delete key.
+         *        - bool
+         *
+         *          · true     : Key has been deleted.
+         *          · false    : Unable to delete key.
          */    
                  
         bool Delete(const std::string& key);
@@ -127,11 +131,11 @@ class ExportAPI MultiMapHandler
          * 
          * @parameters:
          *
-         *         · key: Key to find.
+         *         · string    :  Key to find.
          * 
          * @return:
          *
-         *         · vector: Found keys.
+         *         · vector    :  Found keys.
          */    
          
         std::vector<std::string> Find(const std::string& key);
@@ -143,7 +147,7 @@ class ExportAPI MultiMapHandler
          * 
          * @return:
  	 *
-         *         · vector: List of vectors.
+         *         · vector    : List of vectors.
          */            
          
         std::vector<std::string> GetValues();
@@ -153,7 +157,7 @@ class ExportAPI MultiMapHandler
          * 
          * @return:
  	 *
-         *         · multimap: All values.
+         *         · multimap  : All values.
          */    
          
         DualMMap GetAll();
@@ -165,7 +169,7 @@ class ExportAPI MultiMapHandler
          * 
          * @return:
  	 *
-         *         · uint: Counter.
+         *         · uint      : Counter.
          */    
          
         unsigned int Count()
