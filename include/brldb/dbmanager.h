@@ -80,11 +80,11 @@ class ExportAPI DBManager : public safecast<DBManager>
          * 
          * @parameters:
 	 *
-	 *         · name: Name of database.
+	 *         · string	: Name of database.
 	 * 
          * @return:
  	 *
-         *         · True: Database opened.
+         *         · True	: Database created.
          */             
          
         bool Create(const std::string& name, const std::string& path);
@@ -114,6 +114,19 @@ class ExportAPI DBManager : public safecast<DBManager>
         DataMap& GetDatabases()
         {
                return this->DBMap;
+        }
+        
+        /* 
+         * Counts databases opened.
+	 * 
+         * @return:
+ 	 *
+         *         · uint	:	Databases running.
+         */            
+         
+        unsigned int CountDatabases()
+        {
+              return this->DBMap.size();
         }
 };
 

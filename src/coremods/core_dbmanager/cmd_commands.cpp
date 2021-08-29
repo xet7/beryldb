@@ -313,6 +313,12 @@ COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
              return FAILED;
       }
       
+      if (Kernel->Store->DBM->CountDatabases() > MAX_DATABASES)
+      {
+             user->SendProtocol(ERR_INPUT, USER_MIMMAX_LENGTH);         
+             return FAILED;
+      }
+      
       if (Kernel->Store->DBM->Create(dbname, dbpath))
       {			
              Kernel->Store->DBM->Load(dbname);

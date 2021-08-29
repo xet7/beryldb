@@ -16,7 +16,6 @@
 #include "engine.h"
 #include "brldb/datathread.h"
 #include "managers/user.h"
-#include "managers/databases.h"
 #include "managers/settings.h"
 
 void Database::SetClosing(bool flag)

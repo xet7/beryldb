@@ -15,6 +15,10 @@
 
 #include <string>
 
+/* Max databases constant. */
+
+const unsigned int MAX_DATABASES	=	5;
+
 /* Items to display in each loop. */
 
 const unsigned int ITER_LIMIT 		= 	50;

@@ -18,6 +18,15 @@
 #include "managers/settings.h"
 #include "brldb/dbmanager.h"
 
+/* 
+ * Logins an user into the system.
+ * 
+ * @parameters:
+ *
+ *             · string         : Login to submit.
+ */ 
+
+
 class CommandLogin : public MultiCommand
 {
    public:
@@ -73,7 +82,7 @@ class CommandExit : public Command
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum   : OK or ERROR.
  */ 
  
 class CommandAgent : public MultiCommand
@@ -92,7 +101,7 @@ class CommandAgent : public MultiCommand
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum   : OK or ERROR.
  */ 
  
 class CommandILogin : public Command
@@ -110,7 +119,7 @@ class CommandILogin : public Command
  * 
  * @protocol:
  *
- *         · enum: OK or ERROR.
+ *         · enum   : OK or ERROR.
  */ 
 
 class CommandQuit : public Command

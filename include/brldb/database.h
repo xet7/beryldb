@@ -68,7 +68,7 @@ class ExportAPI Database
          * 
          * @parameters:
 	 *
-	 *         · flag: Database is closing.
+	 *         · bool     : Database is closing.
 	 */
 	 
         void SetClosing(bool flag);
@@ -125,8 +125,9 @@ class ExportAPI Database
 	 * 
          * @return:
  	 *
-         *         · True: Busy.
-         *         · False: Not busy.
+ 	 *        - bool
+         *             · true    : Busy.
+         *             · false   : Not busy.
          */        
              
         bool IsLocked();
@@ -134,7 +135,6 @@ class ExportAPI Database
 
 class ExportAPI UserDatabase : public Database
 {
-
   public:
       
        UserDatabase(const std::string& dbname, const std::string& dbpath);
@@ -143,7 +143,6 @@ class ExportAPI UserDatabase : public Database
 
 class CoreDatabase : public Database
 {
-
   public:
 
      CoreDatabase();
