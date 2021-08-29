@@ -31,14 +31,27 @@ typedef std::multimap<User*, MONITOR_LEVEL> MonitorMap;
 
 struct CMDBuffer
 {
-    public:
+     friend class MonitorHandler;
+     
+     private:
     
+       /* Original author of this command */
+       
        std::string instance;
+       
+       /* Original command */
+       
        std::string command;
 
+       /* Monitoring level. */
+       
        MONITOR_LEVEL level;
 
+       /* Command that is being monitored */
+       
        CommandModel::Params params;
+     
+     public:
        
        /* Constructor, define data */
        
@@ -67,16 +80,17 @@ class ExportAPI MonitorHandler
         MonitorHandler();
         
         /* 
-         * Checks whether an user is monitoring.
+         * Checks whether an user is receiving monitoring events.
          * 
          * @parameters:
 	 *
-	 *         · User: User to check.
+	 *         · User	: User to verify.
 	 * 
          * @return:
- 	 *
-         *         · True: User is monitoring.
-         *         · False: User is not monitoring.
+ 	 *        
+ 	 *	  - bool
+         *             · true: User is monitoring.
+         *             · false: User is not monitoring.
          */    
         
         bool Has(User* user);
@@ -86,13 +100,14 @@ class ExportAPI MonitorHandler
          * 
          * @parameters:
 	 *
-	 *         · user: User to add.
-	 *         · level: May be Default or Debug.
+	 *         · User	   : User that will receive monitoring events.
+	 *         · MONITOR_LEVEL : May be Default or Debug.
 	 * 
          * @return:
  	 *
-         *         · True: User added. 
-         *         · False: Unable to add user.
+ 	 *         - bool
+         *              · true     : User added. 
+         *              · false    : Unable to add user.
          */    
                  
         bool Add(User* user, MONITOR_LEVEL level);
@@ -102,7 +117,7 @@ class ExportAPI MonitorHandler
          * 
          * @parameters:
 	 *
-	 *         · User: User to remove.
+	 *         · User	: User to remove.
          */            
          
         void Remove(User* user);
@@ -145,7 +160,7 @@ class ExportAPI MonitorHandler
          * 
          * @return:
  	 *
-         *         · uint: Monitor list size.
+         *         · uint	: Monitor list size.
          */            
         
         unsigned int Count()

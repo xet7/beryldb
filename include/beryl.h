@@ -353,7 +353,7 @@ class ExportAPI Beryl
 	 * 
          * @return:
  	 *
-         *         · unsigned int  : Uptime in seconds.
+         *         · uint  : Uptime in seconds.
          */    
          	
 	unsigned int GetUptime()

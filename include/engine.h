@@ -22,7 +22,7 @@
 #include "filehandler.h"
 #include "exit.h"
 
-class ExportAPI Daemon 
+class ExportAPI Daemon : public safecast<Daemon>
 {
     friend class Beryl;
 
@@ -34,7 +34,13 @@ class ExportAPI Daemon
          */    
          
         void SnapshotStats();
-
+        
+        /* 
+         * Run as another user.
+         * This function reads configuration file looking for the 'runasuser' tag.
+         * It will attempt to run as given user if available.
+         */
+             
         void RunAs();
         
         /* 
@@ -42,12 +48,13 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · path: Path to check.
+	 *         · string	: Path to check.
 	 * 
          * @return:
  	 *
-         *         · True: File OK.
-         *         · False: Unable to locate files.
+ 	 *        - bool
+         *         · True       : File located.
+         *         · False      : Unable to locate files.
          */            
 
         static bool ConfigFileExists(std::string& path);
@@ -83,11 +90,11 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · msg: Text to turn bold.
+	 *         · string    : Text to turn bold.
 	 * 
          * @return:
  	 *
-         *         · string: Msg in bold.
+         *         · string    : Message in bold.
          */    
         
         static std::string Welcome(const std::string& msg);
@@ -143,11 +150,13 @@ class ExportAPI Daemon
          * 
          * @parameters:
          *
-         *         · Key to check.
+         *         · string	:  Key to check.
          * 
          * @return:
          *
-         *         · true: Valid Key, false: invalid.
+         *         - bool
+         *            · True : Valid Key.
+         *            · False : invalid.
          */
 
         static bool KeyValidator(const std::string& key);
@@ -159,7 +168,7 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · login to check.
+	 *         · string   : login to check.
 	 * 
          * @return:
  	 *
@@ -176,15 +185,15 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · agent to check.
+	 *         · string	:  Agent to check.
 	 * 
          * @return:
  	 *
-         *         · True: Valid agent.
-         *         · False: Invalid agent.
+ 	 *        - bool 
+         *         · True       : Valid agent.
+         *         · False      : Invalid agent.
          */    
         
-
         static bool AgentValidator(const std::string& agent);
 
         STR1::function<bool(const std::string&)> IsAgent;
@@ -194,12 +203,13 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · Database name to check.
+	 *         · string	:	Database name to check.
 	 * 
          * @return:
  	 *
-         *         · True: Valid database.
-         *         · False: Invalid name.
+         *         - bool	
+         *            · true    : Valid database.
+         *            · false	: Invalid name.
          */    
         
         static bool DBValidator(const std::string& name);
@@ -211,11 +221,11 @@ class ExportAPI Daemon
          *  
          * @parameters:
 	 *
-	 *         · gname: Name to validate.
+	 *         · string   : Name to validate.
 	 *  
          * @return:
  	 *
-         *         · True: Valid name.
+         *         · bool     : Whether provided name is valid.
          */    
          
         static bool GroupValidator(const std::string& gname);
@@ -228,12 +238,13 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · host: Host to check.
+	 *         · host         : Host to check.
 	 * 
          * @return:
  	 *
-         *         · True: Valid host.
+         *         · bool/True    : Valid host.
          */            
+         
         static bool ValidHost(const std::string& host);
         
         static bool Valid_SID(const std::string& sid);
@@ -245,11 +256,11 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · max: Max number.
+	 *         · ulong   : Max number.
 	 * 
          * @return:
  	 *
-         *         · ulong: Random number.
+         *         · ulong   : Random number.
          */            
          
         unsigned long generate_random_int(unsigned long max);
@@ -257,7 +268,7 @@ class ExportAPI Daemon
         /* 
          * Checks if BerylDB had been started as root.
          *
-         * @exit:
+         * @process:
          *
          *       · This function will exit if started using root, unless
          *         --asoot argument was provided.
@@ -274,7 +285,7 @@ class ExportAPI Daemon
 	 * 
          * @return:
  	 *
-         *         · string: String formatted.
+         *         · string   : String formatted.
          */    
          
         std::string GetRealPath(const char* path);
@@ -284,11 +295,11 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · printf like string to format.
+	 *         · char*    :  printf like string to format.
 	 * 
          * @return:
  	 *
-         *         · string: Formatted string.
+         *         · string   : Formatted string.
          */    
        
         static std::string Format(const char* TempString, ...) BERYL_PRINTF(1, 2);
@@ -300,9 +311,9 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · time_t: Time to convert.
-	 *         · format: Optional format to use.
-	 *         · utc: Whether using utc or not.
+	 *         · time_t   : Time to convert.
+	 *         · char     : Optional format to use.
+	 *         · bool     : Whether using utc or not.
 	 * 
          * @return:
  	 *
@@ -318,13 +329,14 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · str: String to check.
-	 *         · mask: Mask to check against.
+	 *         · string	: String to check.
+	 *         · string	: Mask to check against.
 	 * 
          * @return:
  	 *
-         *         · True: Matches.
-         *         · False: String did not match.
+ 	 *        - bool
+         *         · True       : Provided wilcard Matches.
+         *         · False      : No matching.
          */    
         
         static bool Match(const std::string& str, const std::string& mask, unsigned const char* map = NULL);
@@ -354,8 +366,8 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · type: String type (INFO, ERROR, DONE)
-	 *         · buff: Buffer to print.
+	 *         · int        : String type (INFO, ERROR, DONE).
+	 *         · string     : Buffer to print.
          */    
          
          void printb(const int type, const std::string& buff);
@@ -367,8 +379,8 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · number: Counter to print.
-	 *         · buff: Buffer to print.
+	 *         · int	: Counter to print.
+	 *         · string	: Buffer to print.
          */            
         
          void iprintb(int number, const std::string& buff);
@@ -380,12 +392,12 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · msg: Msg to incorporate.
-	 *         · up: uptime in seconds.
+	 *         · string	: Message to incorporate.
+	 *         · uint	: Uptime in seconds.
 	 * 
          * @return:
  	 *
-         *         · Formatted string.
+         *         · string	: Formatted string.
          */    
         
         static std::string Uptime(const std::string& msg, unsigned int up);
@@ -395,11 +407,11 @@ class ExportAPI Daemon
          * 
          * @parameters:
 	 *
-	 *         · string: String to check.
+	 *         · string  : String to check.
 	 * 
          * @return:
  	 *
-         *         · boolean  : All chars are the same or not.
+         *         · bool    : All chars are the same or not.
          */            
          
         static bool SameChars(const std::string& str);
@@ -442,7 +454,7 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
 	 *
 	 *         · User    : User to dispatch data to.
 	 *         · brld    : Protocol to send.
-	 *         · strnig  : First string.
+	 *         · string  : First string.
 	 *         · string  : Second string.
 	 *         · bool    : Whether to add comillas or not.
          */    
@@ -484,6 +496,20 @@ class ExportAPI Dispatcher : public safecast<Dispatcher>
          
         static void MMapFlush(bool comillas, const std::string& title, const std::string& subtitle, QueryBase* query);
         
+        /* 
+         * This function is used when creating a string that cotains repeated 
+         * data.
+         * 
+         * @parameters:
+	 *
+	 *         · string	: String to generate.
+	 *  	   · times	: Times to repeat given strnig.
+	 * 
+         * @return:
+ 	 *
+         *         · string	: String repeating.
+         */            
+         
         static std::string Repeat(const std::string& str, unsigned int times);
 
         static void ListDepend(User* user, BRLD_PROTOCOL brld, const std::string& msg, const std::string& msg2);

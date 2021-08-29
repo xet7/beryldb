@@ -20,6 +20,51 @@
 #include "modules/message.h"
 
 /* 
+ * Lists all users in given channel.
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel to list users on.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or INVALID.
+ *         · list       : User list.
+ */ 
+
+
+class CommandListChans : public Command
+{
+    public:
+
+      CommandListChans(Module* parent);
+
+      COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
+ * Counts users in a channel.
+ * 
+ * @parameters:
+ *
+ *         · string     : Channel to count users on.
+ * 
+ * @protocol:
+ *
+ *         · enum       : NULL or INVALID.
+ *         · int	: User counter.
+ */ 
+ 
+class CommandUsers : public Command
+{
+  public:
+  
+    CommandUsers(Module* parent);
+
+    COMMAND_RESULT Handle(User* user, const Params& parameters);
+};
+
+/* 
  * Mutes a channel.
  * 
  * @parameters:

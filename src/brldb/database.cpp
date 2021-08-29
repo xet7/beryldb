@@ -152,7 +152,7 @@ void CoreManager::UserDefaults()
 
 void CoreManager::CheckDefaults()
 {
-       bprint(DONE, "Booting up BerylDB.");
+       bprint(DONE, "Starting BerylDB.");
        
        const std::string& result = STHelper::Get("instance", "first_ran");
        

@@ -27,6 +27,8 @@ class CoreModChannel : public Module
         CommandHop		cmdhop;
         CommandMute		cmdmute;
         CommandUnmute		cmdunmute;
+        CommandListChans	cmdlistchans;
+        CommandUsers		cmdusers;
         
   public:
 
@@ -38,7 +40,9 @@ class CoreModChannel : public Module
                            cmdpartall(this),
                            cmdhop(this),
                            cmdmute(this),
-                           cmdunmute(this)
+                           cmdunmute(this),
+                           cmdlistchans(this),
+                           cmdusers(this)
 	{
 
 	}
