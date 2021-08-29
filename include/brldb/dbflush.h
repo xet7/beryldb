@@ -26,7 +26,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 { 
       friend class StoreManager;
 
-      private:
+   private:
 
         /* Mute used to add notifications. */
 
@@ -39,10 +39,16 @@ class ExportAPI DataFlush : public safecast<DataFlush>
         /* Vector containing all threads. */
 
         DataThreadVector threadslist;
+  
+   public:
 
+        /* Mutexes for queries */
+        
+        static std::mutex query_mute;
+   
         /* Flush processor */
         
-        static void Flush(User* user, std::shared_ptr<QueryBase> signal);
+        static void Flush(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * NotFound is called when a database was not found when processing
@@ -50,14 +56,14 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          * 
          * @parameters:
 	 *
-	 *         · User: User to process.
+	 *         · User	: User to process.
 	 * 
          * @print:
  	 *
-         *         · Original requesting signal was not found.
+         *         · QueryBase	: Original requesting signal was not found.
          */    
          
-         static void NotFound(User* user, std::shared_ptr<QueryBase> signal);
+         static void NotFound(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Format is not valid.
@@ -67,7 +73,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · INVALID_FORMAT
          */
              
-         static void InvalidFormat(User* user, std::shared_ptr<QueryBase> signal);
+         static void InvalidFormat(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Missing arguments.
@@ -77,7 +83,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · MIS_ARGS
          */
 
-         static void MissArgs(User* user, std::shared_ptr<QueryBase> signal);
+         static void MissArgs(User* user, const std::shared_ptr<QueryBase> signal);
          
         /* 
          * Unable to modify destination key.
@@ -87,7 +93,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · INVALID_FORMAT (DATA_TYPE).
          */
 
-         static void InvalidType(User* user,  std::shared_ptr<QueryBase> signal);
+         static void InvalidType(User* user,  const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Request has failed, due to a database failure.
@@ -97,7 +103,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · DB_NULL.
          */
 
-         static void StatusFailed(User* user, std::shared_ptr<QueryBase> signal);
+         static void StatusFailed(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * WriteBatch has failed.
@@ -108,7 +114,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *         · DBL_BATCH_FAILED.
          */    
          
-         static void BatchFailed(User* user, std::shared_ptr<QueryBase> signal);
+         static void BatchFailed(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Entry already is defined.
@@ -118,7 +124,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · ENTRY_DEFINED
          */
 
-         static void EntryExists(User* user, std::shared_ptr<QueryBase> signal);
+         static void EntryExists(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Unable to write data.
@@ -128,7 +134,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · PROCESS_FALSE
          */
 
-         static void UnableWrite(User* user, std::shared_ptr<QueryBase> signal);
+         static void UnableWrite(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Entry tried to be modify is not numeric.
@@ -138,7 +144,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · PROCESS_NOT_NUM
          */
 
-         static void NotNumeric(User* user, std::shared_ptr<QueryBase> signal);
+         static void NotNumeric(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Range is invalid.
@@ -148,7 +154,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · INVALID_RANGE
          */
 
-         static void InvalidRange(User* user, std::shared_ptr<QueryBase> signal);
+         static void InvalidRange(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Entry is expiring.
@@ -158,7 +164,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · ENTRY_EXPIRES
          */
 
-         static void EntryExpires(User* user, std::shared_ptr<QueryBase> signal);
+         static void EntryExpires(User* user, const std::shared_ptr<QueryBase> signal);
 
         /* 
          * Entry is not expiring.
@@ -168,7 +174,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *         · ENTRY_NOT_EXPIRING
          */    
          
-         static void EntryNOExpires(User* user, std::shared_ptr<QueryBase> signal);
+         static void EntryNOExpires(User* user, const std::shared_ptr<QueryBase> signal);
         
          /* Results from the processing threads. */
         
@@ -177,10 +183,6 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          /* Gets pending queries by iterating all users. */
  
          static void GetPending();
-
-    public:
-    
-         static std::mutex query_mute;
 
          /* Flush constructor, should should be set to OK after this. */
         
@@ -192,10 +194,10 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *
          * @parameters:
 	 *
-	 *         · signal: Signal to process.
+	 *         · QueryBase	: Signal to process.
          */             
          
-         static void Process(User* user, std::shared_ptr<QueryBase> signal);
+         static void Process(User* user, const std::shared_ptr<QueryBase> signal);
         
          /* Pauses this->running */
         
@@ -212,18 +214,28 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          /* Clears notifications and pending queries. */
         
          static void ResetAll();
-
-         static void AttachGlobal(std::shared_ptr<QueryBase> result);
+         
+        /* 
+         * Adds a new notification to be processed immediately.
+         * This function calls signal->Process(), thus bypassing
+         * the notifications buffer in a given user.
+         * 
+         * @parameters:
+         *
+         *         · QueryBase  : Resulting query.
+         */
+         
+         static void AttachGlobal(const std::shared_ptr<QueryBase> result);
          
         /* 
          * Adds a new notification to the notification vector.
          * 
          * @parameters:
 	 *
-	 *         · result: Resulting query.
+	 *         · QueryBase	: Resulting query.
          */    
          
-         static void AttachResult(std::shared_ptr<QueryBase> result);
+         static void AttachResult(const std::shared_ptr<QueryBase> result);
 
          /* Called in the mainloop, used to dispatch notifications and pending queries. */
         
@@ -245,7 +257,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
 	 * 
          * @return:
  	 *
-         *         · uint: Counter.
+         *         · uint	: Counter.
          */            
          
          unsigned int CountThreads()

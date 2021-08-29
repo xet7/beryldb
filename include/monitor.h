@@ -89,8 +89,9 @@ class ExportAPI MonitorHandler
          * @return:
  	 *        
  	 *	  - bool
-         *             · true: User is monitoring.
-         *             · false: User is not monitoring.
+ 	 *
+         *             · true   : User is monitoring.
+         *             · false  : User is not monitoring.
          */    
         
         bool Has(User* user);
@@ -106,6 +107,7 @@ class ExportAPI MonitorHandler
          * @return:
  	 *
  	 *         - bool
+         *             
          *              · true     : User added. 
          *              · false    : Unable to add user.
          */    
@@ -146,11 +148,11 @@ class ExportAPI MonitorHandler
          * 
          * @parameters:
 	 *
-	 *         · arg: Requesting all debugs or defaults.
+	 *         · string	: Requesting all debugs or defaults.
 	 * 
          * @return:
  	 *
-         *         · MonitorMap map (user-level).
+         *         · MonitorMap :  Indicated relationship (user-level).
          */    
          
         MonitorMap GetList(const std::string& arg = "");

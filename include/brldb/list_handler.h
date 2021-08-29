@@ -38,7 +38,7 @@ class ExportAPI ListHandler
          * 
          * @return:
  	 *
-         *         · double: Avg value.
+         *         · double	: Avg value.
          */    
          
         double GetSMA();
@@ -48,7 +48,7 @@ class ExportAPI ListHandler
          * 
          * @return:
  	 *
-         *         · True: All elements are numeric.
+         *         · True	: All elements are numeric.
          */    
 
         bool IsNumeric();
@@ -66,11 +66,11 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · key: Key to verify.
+	 *         · string	: Key to verify.
 	 * 
          * @return:
  	 *
-         *         · True: Key is present.
+         *         · True	: Key is present.
          */    
          
         bool Exist(const std::string& key);
@@ -80,11 +80,11 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · word: Word to lookup.
+	 *         · string	: Item to lookup.
 	 * 
          * @return:
  	 *
-         *         · uint: Times a given key is repeated.
+         *         · uint	: Times a given item is repeated.
          */    
          
         unsigned int Repeats(const std::string& word);
@@ -94,11 +94,11 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · pos: Pos to find.
+	 *         · uint	: Position to find.
 	 * 
          * @return:
  	 *
-         *         · string: Item found in given position.
+         *         · string	: Item found in given position.
          */
                      
         std::string Index(unsigned int pos);
@@ -112,7 +112,7 @@ class ExportAPI ListHandler
 	 * 
          * @return:
  	 *
-         *         · string: Front element as string.
+         *         · string	: Front element as string.
          */    
          
         std::string Front();
@@ -122,7 +122,7 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · string key: Key to remove.
+	 *         · string	: Key to remove.
          */             
          
         void PopAll(const std::string& key);
@@ -136,7 +136,7 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · string: Key to add.
+	 *         · string	: Key to add.
          */         
          
         void Add(const std::string& key);
@@ -146,7 +146,7 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · string: Key to remove.
+	 *         · string	: Key to remove.
          */         
          
         void Remove(const std::string& key);
@@ -156,7 +156,7 @@ class ExportAPI ListHandler
          * 
          * @return:
  	 *
-         *         · uint: List size.
+         *         · uint	: List size.
          */    
               
         unsigned int Count()
@@ -178,7 +178,7 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · size: Shrink to size.
+	 *         · uint	: Shrink to size.
 	 * 
          */    
          
@@ -201,11 +201,11 @@ class ExportAPI ListHandler
          * 
          * @parameters:
 	 *
-	 *         · string (wildcard): key to lookup.
+	 *         · string	: Wildcard to lookup.
 	 * 
          * @return:
  	 *
-         *         · vector: String vector containing all matched keys.
+         *         · vector	: String vector containing all matched keys.
          */              
          
         std::vector<std::string> Find(const std::string& key);
@@ -215,7 +215,7 @@ class ExportAPI ListHandler
 	 * 
          * @return:
  	 *
-         *         · string: last item.
+         *         · string	: Last item in provided item.
          */    
          
         std::string RPOP();
@@ -225,7 +225,7 @@ class ExportAPI ListHandler
 	 * 
          * @return:
  	 *
-         *         · string: Last element.
+         *         · string	: Last element in list.
          */    
          
         std::string Back();
@@ -235,7 +235,7 @@ class ExportAPI ListHandler
          * 
          * @return:
  	 *
-         *         · string: Front element.
+         *         · string	: Front element.
          */    
          
         std::string FPOP();
@@ -247,8 +247,9 @@ class ExportAPI ListHandler
 	 * 
          * @return:
  	 *
-         *         · double: Lowest element.
+         *         · double	: Lowest element.
          */             
+         
         double GetLow();
         
         /* 
@@ -267,7 +268,7 @@ class ExportAPI ListHandler
          * 
          * @return:
  	 *
-         *         · ListMap list.
+         *         · ListMap	: Entire list.
          */         
          
         ListMap& GetList()
@@ -280,7 +281,7 @@ class ExportAPI ListHandler
          *
          * @return:
  	 *
-         *         · HANDLER_MSG: Last msg.
+         *         · HANDLER_MSG	: Last msg.
          */    
          
         HANDLER_MSG GetLast()

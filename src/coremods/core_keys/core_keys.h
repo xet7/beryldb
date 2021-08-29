@@ -86,11 +86,11 @@ class CommandToUpper : public Command
  * 
  * @parameters:
  *
- *         · string	: Key to transform.
+ *         · string   : Key to transform.
  * 
  * @protocol:
  *
- *         · enum	: NULL, ERROR or OK.
+ *         · enum     : NULL, ERROR or OK.
  */
 
 class CommandToLower : public Command 
@@ -107,12 +107,12 @@ class CommandToLower : public Command
  * 
  * @parameters:
  *
- *         · string	: Value to add.
- *         · int   	: Where to insert.
+ *         · string   : Value to add.
+ *         · int      : Where to insert.
  * 
  * @protocol:
  *
- *         · protocol	: NULL, ERROR or OK.
+ *         · protocol : NULL, ERROR or OK.
  */
 
 class CommandInsert : public Command 
@@ -586,7 +586,7 @@ class CommandIsNum : public Command
 };
 
 /* 
- * Obtains a key (GET) and then sets a PERSIST on it.
+ * Obtains a key (GET) and then removes an expires (if any).
  * 
  * @parameters:
  *

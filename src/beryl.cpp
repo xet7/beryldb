@@ -592,6 +592,7 @@ void Beryl::PrepareExit(int status, const std::string& quitmsg)
         this->Sets	  =	NULL;
         this->Interval	  = 	NULL;
         this->Engine	  =	NULL;
+        this->Stats	  = 	NULL;
         
         /* The END. */
 

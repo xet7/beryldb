@@ -15,13 +15,13 @@ can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 Join our community 👋 We invite people from different backgrounds 🌈👨❤️ :raising_hand::older_man:  
 
 If you are just getting started as programmer, there are several ways that you can
-collaborate. There is no need to be a senior C++/JS/Python. At BerylDB, we
+collaborate. There is no need to be a senior programmer. At BerylDB, we
 are problem solvers and welcome people having this vision 👍
 
 ### Some ways to get involved include 
  
  - 🎓 Check our pending issues, or create your own.
- - 🌵 Contribute to our APIs (JS, PHP, Python).
+ - 🌵 Contribute to our APIs (JS, [PHP](https://github.com/beryldb/php-beryl), Python).
  - 🙋 Become a QA: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
  - 💬 Get Involved and join our [Discord server](https://discord.gg/H6HVxeDq).
 

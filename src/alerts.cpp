@@ -117,12 +117,14 @@ void MonitorHandler::Flush()
 
         const MonitorMap& all = this->MonitorList;
         
-        CMDBuffer flushing = this->buffer.front();
+        /* Process next item in buffer */
+        
+        CMDBuffer flushing    = this->buffer.front();
                
-        for (MonitorMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
+        for (MonitorMap::const_iterator i = all.begin(); i != all.end(); i++)
         {
-                      User* user = uit->first;
-                      MONITOR_LEVEL level = uit->second;
+                      User* const user    = i->first;
+                      MONITOR_LEVEL level = i->second;
                       
                       if (!user || user->IsQuitting())
                       {
@@ -253,9 +255,9 @@ void Notifier::Flush()
        
        const NotifyMap& all = this->NotifyList;
 
-       for (NotifyMap::const_iterator uit = all.begin(); uit != all.end(); uit++)
+       for (NotifyMap::const_iterator i = all.begin(); i != all.end(); i++)
        {
-                      User* user = uit->first;
+                      User* const user = i->first;
                       
                       if (!user || user->IsQuitting())
                       {
@@ -272,7 +274,7 @@ void Notifier::Flush()
                             }
                       }
                       
-                      NOTIFY_LEVEL level = uit->second;
+                      NOTIFY_LEVEL level = i->second;
                       
                       if (level <= ready.level)
                       {

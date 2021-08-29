@@ -37,7 +37,7 @@ void DBManager::Load(const std::string& name, bool dbdefault)
              return;
         }
 
-        std::string path = STHelper::Get("databases", name);
+        const std::string& path = STHelper::Get("databases", name);
 
         std::shared_ptr<UserDatabase> New  = NULL;
         New 				   = std::make_shared<UserDatabase>(name, path);
@@ -45,6 +45,7 @@ void DBManager::Load(const std::string& name, bool dbdefault)
         
         this->DBMap.insert(std::make_pair(name, std::shared_ptr<UserDatabase>(New)));
         New->Open();
+        
         bprint(DONE, "Initializing database: %s", name.c_str());
         
         if (dbdefault)
@@ -89,7 +90,7 @@ bool DBManager::Create(const std::string& name, const std::string& path)
            return false;
       }
             
-      std::string realpath = path + ".db";
+      const std::string& realpath = path + ".db";
       STHelper::Set("databases", name, realpath);
       return true;
 }
