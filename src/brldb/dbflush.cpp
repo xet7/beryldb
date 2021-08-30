@@ -326,14 +326,14 @@ void DataFlush::ResetAll()
       Kernel->Store->Flusher->Resume();
 }
 
-DataThread::DataThread() : m_thread(nullptr), busy(false)
+DataThread::DataThread() : handler(nullptr), busy(false)
 {
 
 }
 
 void DataThread::Exit()
 {
-      if (!m_thread)
+      if (!handler)
       {
            return;
       }
@@ -345,13 +345,13 @@ void DataThread::Exit()
                 m_cv.notify_one();
       }
 
-      m_thread->join();
-      m_thread = NULL;
+      handler->join();
+      handler = NULL;
 }
 
 void DataThread::Post(const std::shared_ptr<QueryBase> query)
 {	
-      if (!m_thread)
+      if (!handler)
       {
             return;
       }
@@ -371,18 +371,18 @@ void DataThread::Post(const std::shared_ptr<QueryBase> query)
 
 std::thread::id DataThread::Create()
 {
-         if (!m_thread)
+         if (!handler)
          {
-              m_thread = std::unique_ptr<std::thread>(new std::thread(&DataThread::Process, this)); 
+              handler = std::unique_ptr<std::thread>(new std::thread(&DataThread::Process, this)); 
          }
 
-         return m_thread->get_id();
+         return handler->get_id();
 }
 
 void DataThread::Process()
 {
-         while (true)
-         {
+      while (true)
+      {
               std::shared_ptr<ThreadMsg> signal;
               {
                       std::unique_lock<std::mutex> lk(m_mutex);
@@ -483,7 +483,7 @@ void DataThread::Process()
                            break;
                     }
               }
-         }
+      }
 }
 
 DataThread::~DataThread()

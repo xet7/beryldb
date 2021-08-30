@@ -28,8 +28,7 @@ COMMAND_RESULT CommandMonitor::Handle(User* user, const Params& parameters)
        
        if (parameters.size())
        {
-             std::string level = parameters[0];
-             std::transform(level.begin(), level.end(), level.begin(), ::toupper);
+             const std::string& level = to_upper(parameters[0]);
        
              MONITOR_LEVEL monitor = MONITOR_DEFAULT;
              

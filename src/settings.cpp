@@ -14,6 +14,7 @@
 #include "beryl.h"
 #include "settings.h"
 #include "helpers.h"
+#include "extras.h"
 #include "managers/user.h"
 #include "managers/settings.h"
 #include "managers/maps.h"
@@ -58,19 +59,15 @@ void Settings::Load()
         bprint(DONE, "Settings loaded.");
 }
 
-void Settings::Set(std::string& key, std::string& value)
+void Settings::Set(const std::string& key, const std::string& value)
 {
-        std::transform(key.begin(), key.end(), key.begin(), ::tolower);      
-        std::transform(value.begin(), value.end(), value.begin(), ::tolower);      
-      
-        this->SetMap[key] = value;
-        STHelper::Set("conf", key, value);
+        this->SetMap[to_lower(key)] = to_lower(value);
+        STHelper::Set("conf", to_lower(key), to_lower(value));
 }
 
-std::string Settings::Get(std::string& key)
+std::string Settings::Get(const std::string& key)
 {
-        std::transform(key.begin(), key.end(), key.begin(), ::tolower);      
-        std::map<std::string, std::string>::iterator it = this->SetMap.find(key);
+        std::map<std::string, std::string>::iterator it = this->SetMap.find(to_lower(key));
 
         if (it == this->SetMap.end())
         {

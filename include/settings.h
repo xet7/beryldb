@@ -41,7 +41,7 @@ class ExportAPI Settings
 	 *         · string   : Value to assign to this config.
          */    
                  
-        void Set(std::string& key, std::string& value);
+        void Set(const std::string& key, const std::string& value);
         
         /* 
          * Returns a particular setting found in SetMap.
@@ -55,7 +55,7 @@ class ExportAPI Settings
          *         · string   : value, as keyed in this->SetMap.
          */    
         
-        std::string Get(std::string& key);
+        std::string Get(const std::string& key);
 
         /* 
          * Returns configuration setting as boolean.

@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include "beryl.h"
+#include "extras.h"
 #include "exit.h"
 #include "engine.h"
 
@@ -60,7 +61,7 @@ class ModuleForward : public Module
                         config_rule* tag = i->second;
                         
                         std::string from = tag->as_string("from");
-                        std::string to = tag->as_string("to");
+                        std::string to   = tag->as_string("to");
                         
                         if (!Kernel->Engine->ValidChannel(from))
                         {
@@ -74,8 +75,7 @@ class ModuleForward : public Module
                               Kernel->Exit(EXIT_CODE_CONFIG, true, true);
                         }
                         
-                        std::transform(from.begin(), from.end(), from.begin(), ::toupper);
-                        this->forwards.insert(std::make_pair(from, to));
+                        this->forwards.insert(std::make_pair(to_upper(from), to));
                 }
         }
         

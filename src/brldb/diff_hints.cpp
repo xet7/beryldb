@@ -477,83 +477,25 @@ void diff_query::Run()
 
 }
 
-static void ProcessList(QueryBase* query)
-{
-        if (query->subresult == 1)
-        {
-               Dispatcher::JustAPI(query->user, BRLD_START_LIST);
-
-               if (query->VecData.empty())
-               {
-                       query->user->SendProtocol(BRLD_OK, NO_DIFF);
-                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
-                       return;
-               }
-               
-        }
-
-        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
-        {
-               std::string item = *i;
-               query->user->SendProtocol(BRLD_ITEM, Helpers::Format(item).c_str());
-        }
-
-        if (!query->partial)
-        {
-               Dispatcher::JustAPI(query->user, BRLD_END_LIST);
-        }
-}
-
-static void ProcessMaps(QueryBase* query)
-{
-        if (query->subresult == 1)
-        {
-               Dispatcher::JustAPI(query->user, BRLD_START_LIST);
-               
-               if (query->VecData.empty())
-               {
-                       query->user->SendProtocol(BRLD_OK, NO_DIFF);
-                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
-                       return;
-               }
-        }
-
-        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
-        {
-               std::string item = *i;
-               query->user->SendProtocol(BRLD_ITEM, item.c_str());
-        }
-
-        if (!query->partial)
-        {
-               Dispatcher::JustAPI(query->user, BRLD_END_LIST);
-        }
-}
-
-static void ProcessKey(QueryBase* query)
-{
-        Dispatcher::JustAPI(query->user, BRLD_START_LIST);
-        query->user->SendProtocol(BRLD_ITEM, query->response.c_str());
-        Dispatcher::JustAPI(query->user, BRLD_END_LIST);
-}
-
 void diff_query::Process()
 {
     if (this->identified == INT_LIST)
     {
-          ProcessList(this);
+          Dispatcher::VectorFlush(false, "List", this);
     }
     else if (this->identified == INT_VECTOR)
     {
-          ProcessList(this);
+          Dispatcher::VectorFlush(false, "Vector", this);
     }
     else if (this->identified == INT_MMAP || this->identified == INT_MAP)
     {
-         ProcessMaps(this);
+         Dispatcher::MMapFlush(false, "Map", "Key", this);
     }
     else if (this->identified == INT_KEY || this->identified == INT_GEO)
     {
-         ProcessKey(this);
+         Dispatcher::JustAPI(this->user, BRLD_START_LIST);
+         this->user->SendProtocol(BRLD_ITEM, this->response.c_str());
+         Dispatcher::JustAPI(this->user, BRLD_END_LIST);
     }
     
 }

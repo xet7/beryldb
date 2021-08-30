@@ -290,20 +290,17 @@ CommandDBCreate::CommandDBCreate(Module* Creator) : Command(Creator, "DBCREATE",
 
 COMMAND_RESULT CommandDBCreate::Handle(User* user, const Params& parameters)
 {
-      std::string dbname    =    parameters[0];
+      const std::string& dbname    =    to_lower(parameters[0]);
       std::string dbpath;
       
       if (parameters.size() > 1)
       {
-            dbpath    =    parameters[1];
+            dbpath    =    to_lower(parameters[1]);
       }
       else
       {
-            dbpath    =    dbname;
+            dbpath    =    to_lower(dbname);
       }
-
-      std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
-      std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
 
       /* 'dbdefault' is a reserved database name. */
       

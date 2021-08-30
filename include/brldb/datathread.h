@@ -46,7 +46,7 @@ class DataThread
         
         std::mutex m_mutex;
         
-        std::unique_ptr<std::thread> m_thread;
+        std::unique_ptr<std::thread> handler;
         
         /* Queue item to attach. */
         
