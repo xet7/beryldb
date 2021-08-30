@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "managers/user.h"
+#include "extras.h"
 #include "engine.h"
 #include "interval.h"
 #include "maker.h"
@@ -428,8 +429,8 @@ void CommandHandler::ProcessBuffer(LocalUser* user, const std::string& buffer)
 		return;
 	}
 
-	std::string& command = parseoutput.cmd;
-	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
+        std::string& command = parseoutput.cmd;
+        std::transform(command.begin(), command.end(), command.begin(), ::toupper);
 
 	CommandModel::Params parameters(parseoutput.params, parseoutput.tags);
   

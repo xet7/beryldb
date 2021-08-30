@@ -261,7 +261,6 @@ class ExportAPI QueryBase
         }
 };
 
-
 class ExportAPI routed_query : public QueryBase
 {
    public:

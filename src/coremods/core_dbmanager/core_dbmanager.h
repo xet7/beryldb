@@ -15,6 +15,7 @@
 #include "converter.h"
 #include "notifier.h"
 #include "maker.h"
+#include "extras.h"
 #include "engine.h"
 
 #include "managers/databases.h"

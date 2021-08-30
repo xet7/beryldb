@@ -301,8 +301,8 @@ class CommandListStatus : public Command
  *
  *         - bool
  *
- *		- true   : User is not blocked.
- *              - false  : User is blocked.
+ *		· true   : User is not blocked.
+ *              · false  : User is blocked.
  */
 
 class CommandGetStatus : public Command

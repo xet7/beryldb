@@ -715,6 +715,12 @@ void Dispatcher::VectorFlush(bool comillas, const std::string& title, QueryBase*
                 Dispatcher::JustAPI(query->user, BRLD_START_LIST);
                 Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s", title.c_str()));
                 Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
+                
+                if (query->VecData.empty())
+                {
+                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+                       return;
+                }
         }
         
         for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
@@ -747,6 +753,13 @@ void Dispatcher::MMapFlush(bool comillas, const std::string& title, const std::s
                 Dispatcher::JustAPI(query->user, BRLD_START_LIST);
                 Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", title.c_str(), subtitle.c_str()));
                 Dispatcher::JustEmerald(query->user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
+
+               if (query->mmap.empty())
+               {
+                       Dispatcher::JustAPI(query->user, BRLD_END_LIST);
+                       return;
+               }
+                
         }
 
         for (DualMMap::iterator i = query->mmap.begin(); i != query->mmap.end(); ++i)

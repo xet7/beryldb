@@ -13,6 +13,7 @@
 
 #include "beryl.h"
 #include "engine.h"
+#include "extras.h"
 #include "managers/settings.h"
 
 DBManager::DBManager() 
@@ -129,8 +130,7 @@ unsigned int DBManager::OpenAll()
 
 std::shared_ptr<UserDatabase> DBManager::FindPath(const std::string& path)
 {
-        std::string dbpath = Kernel->Config->Paths->SetWDDB(path) + ".db";
-        std::transform(dbpath.begin(), dbpath.end(), dbpath.begin(), ::tolower);
+        std::string dbpath = to_lower(Kernel->Config->Paths->SetWDDB(path) + ".db");
 
         for (DataMap::iterator i = DBMap.begin(); i != DBMap.end(); ++i)
         {
@@ -147,10 +147,7 @@ std::shared_ptr<UserDatabase> DBManager::FindPath(const std::string& path)
 
 std::shared_ptr<UserDatabase> DBManager::Find(const std::string& name)
 {
-        std::string dbname = name;
-        std::transform(dbname.begin(), dbname.end(), dbname.begin(), ::tolower);
-
-        DataMap::iterator it = this->DBMap.find(dbname);
+        DataMap::iterator it = this->DBMap.find(to_lower(name));
 
         if (it == this->DBMap.end())
         {

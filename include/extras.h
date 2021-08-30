@@ -14,16 +14,56 @@
 #pragma once
 
 /* 
+ * Converts an const string to upper case.
+ * 
+ * @parameters:
+ *
+ *         · string    : String to convert.
+ * 
+ * @return:
+ *
+ *         · string    : Converted string.
+ */ 
+ 
+inline std::string to_upper(const std::string& t_value)
+{	
+      std::string value = t_value;
+      std::transform(value.begin(), value.end(), value.begin(), ::toupper);
+      return value;
+}
+
+/* 
+ * Converts an const string to lower case.
+ * 
+ * @parameters:
+ *
+ *         · string    : String to convert.
+ * 
+ * @return:
+ *
+ *         · string    : Converted string.
+ */ 
+ 
+inline std::string to_lower(const std::string& t_value)
+{
+      std::string value = t_value;
+      std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+      return value;
+}
+
+/* 
  * Checks whether a given number is a valid longitude.
  * 
  * @parameters:
  *
- *         · int number: Number to check.
+ *         · int    : Number to check.
  * 
  * @return:
  *
- *         · True: Valid.
- *           False: Invalid.
+ *       - bool
+ *   
+ *         · true   : Valid.
+ *         · false  : Invalid.
  */ 
 
 inline bool ValidLong(int number)
@@ -41,12 +81,14 @@ inline bool ValidLong(int number)
  * 
  * @parameters:
  *
- *         · int number: Number to check.
+ *         · int    : Number to check.
  * 
  * @return:
  *
- *         · True: Valid.
- *           False: Invalid.
+ *      - bool
+ *
+ *         · true   : Valid.
+ *         · false  : Invalid.
  */ 
 
 inline bool ValidLat(int number)
@@ -64,11 +106,11 @@ inline bool ValidLat(int number)
  * 
  * @parameters:
  *
- *         · string str: Data to check.
+ *         · string	: Data to check.
  * 
  * @return:
  *
- *         · string: Full string without quote marks.
+ *         · string	: Full string without quote marks.
  */
 
 inline std::string stripe(const std::string& str)
@@ -114,10 +156,10 @@ inline std::string stripe(const std::string& str)
  *
  * @parameters:
  *
- *         · string: string.
- *         · string: substring.
- *         · start: start from.
- *         · end: Found.
+ *         · string	: string.
+ *         · string	: substring.
+ *         · start	: start from.
+ *         · end	: Found.
  * 
  * @return:
  *
@@ -143,12 +185,12 @@ inline int find(const std::string & str, const std::string & sub, int start = 0,
  *
  * @parameters:
  *
- *         · string: string.
- *         · string: substring.
+ *         · string	: string to analyze.
+ *         · string	: substring to look for.
  * 
  * @return:
  *
- *         · int: counter.
+ *         · int	: Total counter.
  */ 
 
 inline int count_occur(const std::string & str, const std::string & substr, int start = 0, int end = MAX_32BIT_INT)
@@ -178,11 +220,11 @@ inline int count_occur(const std::string & str, const std::string & substr, int 
  * 
  * @parameters:
  *
- *         · string: text
+ *         · string	: text
  * 
  * @return:
  *
- *         · boolean: True if it is alpha, false if not.
+ *         · bool	: True if it is alpha, false if not.
  */ 
 
 inline bool isalpha(const std::string & str)
