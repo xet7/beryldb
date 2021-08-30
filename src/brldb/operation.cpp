@@ -30,10 +30,9 @@ void dbsize_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-            if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+            if (!Dispatcher::CheckIterator(this))
             {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                    return;
             }
     
             /* We directly count byte size from binary keys/values. */
@@ -194,10 +193,9 @@ void sflush_query::Run()
 
      for (it->SeekToFirst(); it->Valid(); it->Next()) 
      {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string rawmap = it->key().ToString();
@@ -323,10 +321,9 @@ void list_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string rawmap = it->key().ToString();
@@ -403,10 +400,9 @@ void total_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string rawmap = it->key().ToString();
@@ -479,10 +475,9 @@ void glist_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string rawmap = it->key().ToString();

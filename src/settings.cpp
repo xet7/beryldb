@@ -48,9 +48,9 @@ void Settings::SetDefaults()
 
 void Settings::Load()
 {
-        const Args& confs = STHelper::HList("conf");
+        const StringVector& confs = STHelper::HList("conf");
 
-        for (Args::const_iterator i = confs.begin(); i != confs.end(); i++)
+        for (StringVector::const_iterator i = confs.begin(); i != confs.end(); i++)
         {
               std::string key = *i;
               this->SetMap[key] = STHelper::Get("conf", key);

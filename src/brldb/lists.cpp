@@ -18,7 +18,7 @@
 
 void lkeys_query::Run()
 {
-       Args result;
+       StringVector result;
        unsigned int total_counter = 0;
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
@@ -27,10 +27,9 @@ void lkeys_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string rawmap = it->key().ToString();
@@ -490,7 +489,7 @@ void lget_query::Run()
        
        ListMap result = handler->GetList();
 
-       Args result_return;
+       StringVector result_return;
        
        for (ListMap::iterator i = result.begin(); i != result.end(); ++i)
        {

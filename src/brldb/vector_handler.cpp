@@ -127,7 +127,7 @@ std::string VectorHandler::Index(unsigned int pos)
       
       unsigned int counter = 0;
       
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)      
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)      
       {
                   std::string item = *i;
                   
@@ -146,7 +146,7 @@ std::string VectorHandler::Index(unsigned int pos)
 
 bool VectorHandler::IsNumeric()
 {
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
                if (!is_number(*i, true))
                {
@@ -161,7 +161,7 @@ double VectorHandler::GetSMA()
 {
       double value = 0;
       
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
              double item = convto_num<double>(*i);
              value += item;
@@ -175,7 +175,7 @@ double VectorHandler::GetHigh()
 {
       double value = 0;
       
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
              double item = convto_num<double>(*i);
              
@@ -193,7 +193,7 @@ double VectorHandler::Sum()
 {
       double sum = 0;
       
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
              double item = convto_num<double>(*i);
              sum += item;
@@ -206,7 +206,7 @@ double VectorHandler::GetLow()
 {
       double value = convto_num<double>(mhandler.front());
       
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
              double item = convto_num<double>(*i);
              
@@ -228,7 +228,7 @@ std::string VectorHandler::as_string()
         
         unsigned int counter = 0;
         
-        for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
+        for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
         {
                   std::string key = *i;
                   
@@ -245,7 +245,7 @@ std::string VectorHandler::as_string()
 
 void VectorHandler::Dump()
 {
-        for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
+        for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
         {
                   std::string key = *i;
                   std::cout << "key =>   " << key << std::endl;
@@ -256,7 +256,7 @@ std::vector<std::string> VectorHandler::Find(const std::string& key)
 {
         std::vector<std::string> items;
         
-        for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
+        for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); ++i)      
         {
                 std::string item = *i;
                 
@@ -286,7 +286,7 @@ unsigned int VectorHandler::Repeats(const std::string& word)
 
       unsigned int counter = 0;
 
-      for (Args::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
+      for (StringVector::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {
                   std::string item = *i;
 

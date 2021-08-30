@@ -105,10 +105,10 @@ unsigned int DBManager::OpenAll()
 {
        unsigned int counter = 0;
        
-       const Args& dblist = STHelper::HList("databases");
+       const StringVector& dblist = STHelper::HList("databases");
        const std::string& dbdefault = STHelper::Get("dbconf", "dbdefault");
 
-       for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
+       for (StringVector::const_iterator i = dblist.begin(); i != dblist.end(); i++)
        {
              std::string name = *i;
 

@@ -60,7 +60,7 @@ void DataFlush::StatusFailed(User* user, std::shared_ptr<QueryBase> signal)
         user->SendProtocol(ERR_INPUT, DB_NULL);
 }
 
-void DataFlush::MissArgs(User* user, std::shared_ptr<QueryBase> signal)
+void DataFlush::MissStringVector(User* user, std::shared_ptr<QueryBase> signal)
 {
         user->SendProtocol(ERR_INPUT, MIS_ARGS);
 }

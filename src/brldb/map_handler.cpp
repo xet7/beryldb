@@ -209,7 +209,7 @@ DualMap MapHandler::GetAll()
 
 std::vector<std::string> MapHandler::GetValues()
 {
-      Args result;
+      StringVector result;
 
       for (MapMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {

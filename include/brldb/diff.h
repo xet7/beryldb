@@ -46,12 +46,12 @@ class ExportAPI DiffHandler
 	 * 
          * @return:
  	 *
-         *         · Args: A result containing differences.
+         *         · StringVector: A result containing differences.
          */    
          
-         static Args CompareVector(const Args& list, const Args& list2);
+         static StringVector CompareVector(const StringVector& list, const StringVector& list2);
          
-         static Args CompareMultiMap(const MultiMap list, const MultiMap list2);
+         static StringVector CompareMultiMap(const MultiMap list, const MultiMap list2);
 
         /* 
          * Compares a map.
@@ -63,8 +63,8 @@ class ExportAPI DiffHandler
 	 * 
          * @return:
  	 *
-         *         · Args: Compared list.
+         *         · StringVector: Compared list.
          */    
          
-         static Args CompareMap(const MapMap list, const MapMap list2);
+         static StringVector CompareMap(const MapMap list, const MapMap list2);
 };

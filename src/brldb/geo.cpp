@@ -149,7 +149,7 @@ void geoget_custom_query::Process()
 
 void gkeys_query::Run()
 {
-       Args result;
+       StringVector result;
        unsigned int total_counter = 0;
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
@@ -160,10 +160,9 @@ void gkeys_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 rawmap = it->key().ToString();
@@ -335,7 +334,7 @@ void geodistance_query::Run()
 {
     std::string first = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
     
-    Args result;
+    StringVector result;
     
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
@@ -358,10 +357,9 @@ void geodistance_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 rawmap = it->key().ToString();
@@ -505,7 +503,7 @@ void geodistance_query::Process()
                 Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s", Dispatcher::Repeat("―", 30).c_str()));
         }
         
-        for (Args::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
+        for (StringVector::iterator i = this->VecData.begin(); i != this->VecData.end(); ++i)
         {            
                  std::string item = *i;
                  Dispatcher::ListDepend(user, BRLD_ITEM_LIST, Daemon::Format("%-30s", item.c_str()), Daemon::Format("%s", item.c_str()));
@@ -521,7 +519,7 @@ void georem_query::Run()
 {
     std::string first = to_bin(this->key) + ":" + convto_string(this->select_query) + ":" + this->base_request;
     
-    Args result;
+    StringVector result;
     
     unsigned int total_counter = 0;
 
@@ -542,10 +540,9 @@ void georem_query::Run()
 
     for (it->SeekToFirst(); it->Valid(); it->Next()) 
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string rawmap = it->key().ToString();

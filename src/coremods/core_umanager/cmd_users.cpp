@@ -100,14 +100,14 @@ CommandListUsers::CommandListUsers(Module* parent) : Command(parent, "LISTUSERS"
 
 COMMAND_RESULT CommandListUsers::Handle(User* user, const Params& parameters)
 {
-        const Args& users = STHelper::HList("userlist");
+        const StringVector& users = STHelper::HList("userlist");
         
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", "User", "Created"));
         Dispatcher::JustEmerald(user, BRLD_START_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
+        for (StringVector::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
 
@@ -160,14 +160,14 @@ COMMAND_RESULT CommandListStatus::Handle(User* user, const Params& parameters)
               ReqStatus = Helpers::as_bool(parameters[0], false);
         }
         
-        const Args& users = STHelper::HList("userlist");
+        const StringVector& users = STHelper::HList("userlist");
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Status"));
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
+        for (StringVector::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
                 std::string status = CMapsHelper::Get(item, "status").response;
@@ -199,14 +199,14 @@ CommandListAdmins::CommandListAdmins(Module* parent) : Command(parent, "LISTADMI
 
 COMMAND_RESULT CommandListAdmins::Handle(User* user, const Params& parameters)
 {
-        const Args& users = STHelper::HList("userlist");
+        const StringVector& users = STHelper::HList("userlist");
 
         Dispatcher::JustAPI(user, BRLD_START_LIST);
 
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", "Admin", "Flag"));
         Dispatcher::JustEmerald(user, BRLD_ITEM_LIST, Daemon::Format("%-30s | %-10s", Dispatcher::Repeat("―", 30).c_str(), Dispatcher::Repeat("―", 10).c_str()));
 
-        for (Args::const_iterator i = users.begin(); i != users.end(); i++)
+        for (StringVector::const_iterator i = users.begin(); i != users.end(); i++)
         {
                 const std::string item = *i;
                 std::string userflags = UserHelper::CheckFlags(item);

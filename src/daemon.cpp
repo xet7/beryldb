@@ -723,7 +723,7 @@ void Dispatcher::VectorFlush(bool comillas, const std::string& title, QueryBase*
                 }
         }
         
-        for (Args::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
+        for (StringVector::iterator i = query->VecData.begin(); i != query->VecData.end(); ++i)
         {            
         	 std::string item;
         	 

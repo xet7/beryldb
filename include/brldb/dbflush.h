@@ -83,7 +83,7 @@ class ExportAPI DataFlush : public safecast<DataFlush>
          *        · MIS_ARGS
          */
 
-         static void MissArgs(User* user, const std::shared_ptr<QueryBase> signal);
+         static void MissStringVector(User* user, const std::shared_ptr<QueryBase> signal);
          
         /* 
          * Unable to modify destination key.

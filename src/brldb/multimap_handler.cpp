@@ -212,7 +212,7 @@ std::vector<std::string> MultiMapHandler::Find(const std::string& key)
 
 std::vector<std::string> MultiMapHandler::GetValues()
 {
-      Args result;
+      StringVector result;
 
       for (MultiMap::const_iterator i = this->mhandler.begin(); i != this->mhandler.end(); i++)
       {

@@ -66,20 +66,19 @@ void diff_query::Maps()
 
     std::shared_ptr<MapHandler> handler2 = MapHandler::Create(dbvalue);
 
-    Args flist = DiffHandler::CompareMap(handler2->GetList(), handler1->GetList());
+    StringVector flist = DiffHandler::CompareMap(handler2->GetList(), handler1->GetList());
 
-    Args result;
+    StringVector result;
 
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
     unsigned int tracker = 0;
 
-    for (Args::const_iterator i = flist.begin(); i != flist.end(); i++)
+    for (StringVector::const_iterator i = flist.begin(); i != flist.end(); i++)
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string key_as_string = *i;
@@ -159,20 +158,19 @@ void diff_query::Multis()
     
     std::shared_ptr<MultiMapHandler> handler2 = MultiMapHandler::Create(dbvalue);
     
-    Args flist = DiffHandler::CompareMultiMap(handler2->GetList(), handler1->GetList());
+    StringVector flist = DiffHandler::CompareMultiMap(handler2->GetList(), handler1->GetList());
     
-    Args result;
+    StringVector result;
 
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
     unsigned int tracker = 0;
 
-    for (Args::const_iterator i = flist.begin(); i != flist.end(); i++)
+    for (StringVector::const_iterator i = flist.begin(); i != flist.end(); i++)
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string key_as_string = *i;
@@ -279,20 +277,19 @@ void diff_query::Vectors()
     
     std::shared_ptr<VectorHandler> handler2 = VectorHandler::Create(dbvalue);
     
-    Args flist = DiffHandler::CompareVector(handler2->GetList(), handler1->GetList());
+    StringVector flist = DiffHandler::CompareVector(handler2->GetList(), handler1->GetList());
     
-    Args result;
+    StringVector result;
 
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
     unsigned int tracker = 0;
 
-    for (Args::const_iterator i = flist.begin(); i != flist.end(); i++)
+    for (StringVector::const_iterator i = flist.begin(); i != flist.end(); i++)
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string key_as_string = *i;
@@ -375,7 +372,7 @@ void diff_query::Lists()
     
     ListMap flist = DiffHandler::CompareList(handler2->GetList(), handler1->GetList());
     
-    Args result;
+    StringVector result;
 
     unsigned int total_counter = 0;
     unsigned int aux_counter = 0;
@@ -383,10 +380,9 @@ void diff_query::Lists()
 
     for (ListMap::const_iterator i = flist.begin(); i != flist.end(); i++)
     {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 std::string key_as_string = *i;

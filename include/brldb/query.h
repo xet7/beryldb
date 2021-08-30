@@ -144,7 +144,7 @@ class ExportAPI QueryBase
         
         bool all;
 
-        Args VecData;
+        StringVector VecData;
         
         std::multimap<std::string, std::string>  mmap;
         
