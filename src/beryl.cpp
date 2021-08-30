@@ -186,7 +186,7 @@ void Beryl::Initialize()
 	
 	if (this->Config->Ready)
 	{
-		bprint(DONE, "Configuration file: %s", Daemon::Welcome(this->ConfigFile).c_str());
+		bprint(DONE, "Configuration file: %s", this->ConfigFile.c_str());
 	}
 	
 	/* Opens all logs as provided in the configuration file. */

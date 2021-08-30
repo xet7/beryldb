@@ -24,7 +24,6 @@ namespace
                     case DBL_NOT_FOUND:
                              
                            DataFlush::NotFound(user, signal);
-
                     break;
                     
                     case DBL_INVALID_RANGE:
@@ -70,23 +69,19 @@ namespace
                     case DBL_ENTRY_EXPIRES:
 
                                 DataFlush::EntryExpires(user, signal);
-
                     break;
 
                     case DBL_NOT_EXPIRING:
 
                                 DataFlush::EntryNOExpires(user, signal);
-
                     break;
 
                     case DBL_NOT_NUM:
 
                                 DataFlush::NotNumeric(user, signal);
-
                     break;
 
                     default:
-
                                 DataFlush::Flush(user, signal);
               }
       }
@@ -118,73 +113,73 @@ DataFlush::DataFlush() : running(false)
 
 void DataFlush::AttachResult(const std::shared_ptr<QueryBase> signal)
 {
-      if (!signal)
-      {
-           return;
-      }
-      
-      std::lock_guard<std::mutex> lg(DataFlush::mute);
-      signal->user->notifications.push_back(signal);
+            if (!signal)
+            {
+            return;
+            }
+            
+            std::lock_guard<std::mutex> lg(DataFlush::mute);
+            signal->user->notifications.push_back(signal);
 }
 
 void DataFlush::AttachGlobal(const std::shared_ptr<QueryBase> signal)
 {
-      if (!signal)
-      {
-           return;
-      }
+            if (!signal)
+            {
+            return;
+            }
 
-      std::lock_guard<std::mutex> lg(DataFlush::mute);
-      signal->Process();
-      signal->user->SetLock(false);
+            std::lock_guard<std::mutex> lg(DataFlush::mute);
+            signal->Process();
+            signal->user->SetLock(false);
 }
 
 void DataFlush::GetResults()
 {
-      const UserMap& users = Kernel->Clients->GetInstances();
-      
-      if (!users.size())
-      {
-            return;
-      }
+            const UserMap& users = Kernel->Clients->GetInstances();
+            
+            if (!users.size())
+            {
+                  return;
+            }
 
-      DataFlush::mute.lock();
-      
-      for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
-      {
-                  User* const user = i->second;
+            DataFlush::mute.lock();
+            
+            for (UserMap::const_iterator i = users.begin(); i != users.end(); ++i)
+            {
+                        User* const user = i->second;
 
-                  if (user == NULL || user->IsQuitting() || !user->notifications.size())
-                  {
-                        continue;
+                        if (user == NULL || user->IsQuitting() || !user->notifications.size())
+                        {
+                              continue;
+                        }
+                        
+                        /* Nothing to iterate if user has no pending notifications. */
+
+                        if (user->notifications.size())
+                        {
+                              std::shared_ptr<QueryBase> signal = user->notifications.front();
+                              
+                              /* Removes signal from queue. */
+                              
+                              user->notifications.pop_front();
+                              
+                              if (!signal->GetStatus())
+                              {
+                                    LocalUser* localuser = IS_LOCAL(user);
+                                    NOTIFY_MODS(OnQueryFailed, (signal->access, localuser, signal));
+                              }
+                              
+                              CheckFlush(user, signal);
+                              
+                              if (!signal->partial)
+                              {
+                              user->SetLock(false);
+                              }
                   }
-                  
-                  /* Nothing to iterate if user has no pending notifications. */
-
-                  if (user->notifications.size())
-                  {
-                        std::shared_ptr<QueryBase> signal = user->notifications.front();
-                        
-                        /* Removes signal from queue. */
-                        
-                        user->notifications.pop_front();
-                        
-                        if (!signal->GetStatus())
-                        {
-                             LocalUser* localuser = IS_LOCAL(user);
-                             NOTIFY_MODS(OnQueryFailed, (signal->access, localuser, signal));
-                        }
-                        
-                        CheckFlush(user, signal);
-                        
-                        if (!signal->partial)
-                        {
-                            user->SetLock(false);
-                        }
-                }
-      }
-          
-      DataFlush::mute.unlock();
+            }
+            
+            DataFlush::mute.unlock();
 }
 
 void DataFlush::Process()
@@ -256,23 +251,22 @@ void DataFlush::Process(User* user, std::shared_ptr<QueryBase> signal)
       
       DataThread *ToUse = NULL;
       
-      for (DataThreadVector::const_iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
+      for (DataThreadVector::const_iterator i = Threads.begin(); i != Threads.end(); ++i)
       {
-             DataThread* thread = *iter;
+             DataThread* thread = *i;
            
              /* First, we attempt to find an unused thread. */
            
              if (!thread->IsBusy())
              {
-                   ToUse = thread;
-                 
                    /* No need to continue looking for a thread. */
-                  
+
+                   ToUse = thread;
                    break; 
              }
       }
       
-      /* Checks whether we found a not-busy thread. */
+      /* Checks whether we have assigned a thread. */
       
       if (!ToUse)
       {
@@ -377,18 +371,18 @@ void DataThread::Post(const std::shared_ptr<QueryBase> query)
 
 std::thread::id DataThread::Create()
 {
-      if (!m_thread)
-      {
-           m_thread = std::unique_ptr<std::thread>(new std::thread(&DataThread::Process, this)); 
-      }
+         if (!m_thread)
+         {
+              m_thread = std::unique_ptr<std::thread>(new std::thread(&DataThread::Process, this)); 
+         }
 
-      return m_thread->get_id();
+         return m_thread->get_id();
 }
 
 void DataThread::Process()
 {
-        while (true)
-        {
+         while (true)
+         {
               std::shared_ptr<ThreadMsg> signal;
               {
                       std::unique_lock<std::mutex> lk(m_mutex);
@@ -456,14 +450,16 @@ void DataThread::Process()
                           
                           if (request->access != DBL_INVALID_FORMAT)
                           {
-                                request->Prepare();
+                                 request->Prepare();
                           }
 
                           DataFlush::query_mute.unlock();
+            
+                          this->SetStatus(false);
 
                           if (request->flags == QUERY_FLAGS_QUIET)
                           {
-                                break;
+                                 break;
                           }
                           
                           if (request->flags == QUERY_FLAGS_GLOBAL)
@@ -487,11 +483,7 @@ void DataThread::Process()
                            break;
                     }
               }
-              
-              /* Thread is no longer busy. */
-
-              this->SetStatus(false);
-        }
+         }
 }
 
 DataThread::~DataThread()
@@ -501,27 +493,27 @@ DataThread::~DataThread()
 
 void DataThread::Clear()
 {
-       std::queue<std::shared_ptr<ThreadMsg>> empty;
-       std::swap(this->queue, empty);
-       this->SetStatus(false);
+         std::queue<std::shared_ptr<ThreadMsg>> empty;
+         std::swap(this->queue, empty);
+         this->SetStatus(false);
 }
 
 void DataFlush::CloseThreads()
 {
-      DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
+         DataThreadVector& Threads = Kernel->Store->Flusher->GetThreads();
 
-      unsigned int counter = 0;
+         unsigned int counter = 0;
       
-      for (DataThreadVector::iterator iter = Threads.begin(); iter != Threads.end(); ++iter)
-      {
-              DataThread* thread = *iter;
+         for (DataThreadVector::iterator i = Threads.begin(); i != Threads.end(); ++i)
+         {
+              DataThread* thread = *i;
               thread->Exit();
               thread = NULL;
               counter++;
-      }     
+         }     
       
-      Kernel->Store->Flusher->EraseAll();
-      iprint(counter, "Thread%s closed.", counter > 1 ? "s" : "");
-      slog("DATABASE", LOG_VERBOSE, "Thread%s closed.", counter > 1 ? "s" : "");
+         Kernel->Store->Flusher->EraseAll();
+         iprint(counter, "Thread%s closed.", counter > 1 ? "s" : "");
+         slog("DATABASE", LOG_VERBOSE, "Thread%s closed.", counter > 1 ? "s" : "");
 }
 
