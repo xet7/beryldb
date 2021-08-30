@@ -299,9 +299,10 @@ class CommandListStatus : public Command
  *
  * @protocol:
  *
- *         · boolean:
- *		     - true   : User is not blocked.
- *                   - false  : User is blocked.
+ *         - bool
+ *
+ *		- true   : User is not blocked.
+ *              - false  : User is blocked.
  */
 
 class CommandGetStatus : public Command
