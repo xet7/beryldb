@@ -10,8 +10,8 @@
 This README is a brief introduction to Beryl. For extended information, you
 can visit our documentation site at [docs.beryl.dev](https://docs.beryl.dev/).
 
-If you like this project and supports its development, a star would be
-appreciated ⭐
+If you enjoyed learning about project and support its development, give it a
+star. It is appreciated ⭐
 
 ## Get involved
 
