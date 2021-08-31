@@ -20,7 +20,7 @@ class ExportAPI VectorHandler
 {
   private:
     
-        Args mhandler;
+        StringVector mhandler;
 
         HANDLER_MSG LastMsg;
      
@@ -195,7 +195,7 @@ class ExportAPI VectorHandler
          *         · ListMap list.
          */         
          
-        Args& GetList()
+        StringVector& GetList()
         {
                 return this->mhandler;
         }

@@ -58,9 +58,9 @@ void TestOffice::Run()
         STHelper::Set("tests", "hello3", "world3");
         STHelper::Set("tests", "hello6", "world6");
 
-        Args items = STHelper::HList("tests");
+        StringVector items = STHelper::HList("tests");
        
-        for (Args::iterator i = items.begin(); i != items.end(); ++i)
+        for (StringVector::iterator i = items.begin(); i != items.end(); ++i)
         {
              std::string item_list = *i;
              std::cout << "item: " <<  item_list << std::endl;
@@ -107,9 +107,9 @@ void TestOffice::Run()
         STHelper::Set(userchans, "#test1", convto_string(Kernel->Now()));
         STHelper::Set(userchans, "#test2", convto_string(Kernel->Now()));
         
-        Args chans = STHelper::HList(userchans);
+        StringVector chans = STHelper::HList(userchans);
 
-        for (Args::iterator i = chans.begin(); i != chans.end(); i++)
+        for (StringVector::iterator i = chans.begin(); i != chans.end(); i++)
         {
                        std::string channel = *i;
 

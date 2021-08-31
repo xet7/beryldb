@@ -32,11 +32,11 @@ ListMap DiffHandler::CompareList(const ListMap list, const ListMap list2)
       return diff;
 }
 
-Args DiffHandler::CompareVector(const Args& list, const Args& list2)
+StringVector DiffHandler::CompareVector(const StringVector& list, const StringVector& list2)
 {
-      Args diff;
+      StringVector diff;
       
-      for (Args::const_iterator i = list.begin(); i != list.end(); i++)
+      for (StringVector::const_iterator i = list.begin(); i != list.end(); i++)
       {
               std::string item = *i;
               bool found = std::find(list2.begin(), list2.end(), item) != list2.end();
@@ -50,9 +50,9 @@ Args DiffHandler::CompareVector(const Args& list, const Args& list2)
       return diff;
 }
 
-Args DiffHandler::CompareMultiMap(const MultiMap list, const MultiMap list2)
+StringVector DiffHandler::CompareMultiMap(const MultiMap list, const MultiMap list2)
 {
-      Args result;
+      StringVector result;
       
       for (MultiMap::const_iterator i = list.begin(); i != list.end(); i++)
       {
@@ -80,9 +80,9 @@ Args DiffHandler::CompareMultiMap(const MultiMap list, const MultiMap list2)
 }
 
 
-Args DiffHandler::CompareMap(const MapMap list, const MapMap list2)
+StringVector DiffHandler::CompareMap(const MapMap list, const MapMap list2)
 {
-      Args result;
+      StringVector result;
       
       for (MapMap::const_iterator i = list.begin(); i != list.end(); i++)
       {

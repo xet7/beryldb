@@ -26,10 +26,9 @@ void expire_list_query::Run()
        
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string key_as_string;
@@ -329,8 +328,7 @@ void isnum_query::Process()
 void isbool_query::Run()
 {
        RocksData result = this->Get(this->dest);
-
-       std::string as_str = to_string(result.value);
+       const std::string& as_str = to_string(result.value);
        
        if (as_str == "0" || as_str == "1" || as_str == "true" || as_str == "false" || as_str == "on" || as_str == "off")
        {
@@ -395,12 +393,11 @@ void count_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
-
+                
                 std::string rawmap = it->key().ToString();
 
                 engine::colon_node_stream stream(rawmap);
@@ -520,10 +517,9 @@ void wdel_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 rawmap = it->key().ToString();
@@ -662,10 +658,9 @@ void search_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string rawmap = it->key().ToString();
@@ -794,7 +789,7 @@ void search_query::Process()
 
 void keys_query::Run()
 {
-       Args result;
+       StringVector result;
        unsigned int total_counter = 0;
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
@@ -805,11 +800,9 @@ void keys_query::Run()
        
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
-
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
                 
                 rawmap = it->key().ToString();
@@ -966,6 +959,11 @@ void random_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
+                if (!Dispatcher::CheckIterator(this))
+                {
+                       return;
+                }
+
                 std::string rawmap = it->key().ToString();
                 engine::colon_node_stream stream(rawmap);
                 std::string token;

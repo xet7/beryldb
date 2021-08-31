@@ -30,7 +30,7 @@ std::string STHelper::Get(const std::string& type, const std::string& key)
         return CMapsHelper::Get(type, key).response;
 }
 
-Args STHelper::HList(const std::string& key)
+StringVector STHelper::HList(const std::string& key)
 {
        return CMapsHelper::HList(key).list;
 }

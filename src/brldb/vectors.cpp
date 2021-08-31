@@ -33,9 +33,9 @@ void vfind_query::Run()
        }
        
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(dbvalue);
-       Args query_result = handler->Find(this->value);
+       StringVector query_result = handler->Find(this->value);
        
-       Args result;
+       StringVector result;
        
        for (std::vector<std::string>::iterator i = query_result.begin(); i != query_result.end(); ++i)
        {
@@ -130,7 +130,7 @@ void vsort_query::Run()
 
 void vkeys_query::Run()
 {
-       Args result;
+       StringVector result;
        unsigned int total_counter = 0;
        unsigned int aux_counter = 0;
        unsigned int tracker = 0;
@@ -139,10 +139,9 @@ void vkeys_query::Run()
 
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 std::string rawmap = it->key().ToString();
@@ -390,10 +389,10 @@ void vget_query::Run()
        
        std::shared_ptr<VectorHandler> handler = VectorHandler::Create(query_result.value);
        
-       Args result = handler->GetList();
+       StringVector result = handler->GetList();
 
-       Args result_return;
-       for (Args::iterator i = result.begin(); i != result.end(); ++i)
+       StringVector result_return;
+       for (StringVector::iterator i = result.begin(); i != result.end(); ++i)
        {
                 std::string hesh_as_string = *i;
                 

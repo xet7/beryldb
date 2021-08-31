@@ -43,7 +43,7 @@ namespace
 
                     case DBL_MISS_ARGS:
 
-                                DataFlush::MissArgs(user, signal);
+                                DataFlush::MissStringVector(user, signal);
                     break;
 
                     case DBL_INVALID_TYPE:
@@ -115,7 +115,7 @@ void DataFlush::AttachResult(const std::shared_ptr<QueryBase> signal)
 {
             if (!signal)
             {
-            return;
+                 return;
             }
             
             std::lock_guard<std::mutex> lg(DataFlush::mute);
@@ -126,7 +126,7 @@ void DataFlush::AttachGlobal(const std::shared_ptr<QueryBase> signal)
 {
             if (!signal)
             {
-            return;
+                 return;
             }
 
             std::lock_guard<std::mutex> lg(DataFlush::mute);
@@ -335,14 +335,14 @@ void DataThread::Exit()
 {
       if (!handler)
       {
-           return;
-      }
+             return;
+      }  
 
       std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_EXIT_THREAD, 0));
       {
-                std::lock_guard<std::mutex> lock(m_mutex);
-                queue.push(Input);
-                m_cv.notify_one();
+             std::lock_guard<std::mutex> lock(m_mutex);
+             queue.push(Input);
+             m_cv.notify_one();
       }
 
       handler->join();
@@ -358,9 +358,9 @@ void DataThread::Post(const std::shared_ptr<QueryBase> query)
 
       if (!query || !query->database || query->database->IsClosing())
       {
-              query->user->SendProtocol(ERR_INPUT, DB_NULL);
-              query->user->SetLock(false);
-              return;
+            query->user->SendProtocol(ERR_INPUT, DB_NULL);
+            query->user->SetLock(false);
+            return;
       }
            
       std::shared_ptr<ThreadMsg> Input(new ThreadMsg(PROC_SIGNAL, query));
@@ -371,12 +371,12 @@ void DataThread::Post(const std::shared_ptr<QueryBase> query)
 
 std::thread::id DataThread::Create()
 {
-         if (!handler)
-         {
+      if (!handler)
+      {
               handler = std::unique_ptr<std::thread>(new std::thread(&DataThread::Process, this)); 
-         }
+      }
 
-         return handler->get_id();
+      return handler->get_id();
 }
 
 void DataThread::Process()

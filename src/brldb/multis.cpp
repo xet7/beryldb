@@ -170,7 +170,7 @@ void mset_query::Process()
 
 void mkeys_query::Run()
 {
-       Args result;
+       StringVector result;
 
        rocksdb::Iterator* it = this->database->GetAddress()->NewIterator(rocksdb::ReadOptions());
        std::string rawmap;
@@ -181,10 +181,9 @@ void mkeys_query::Run()
        
        for (it->SeekToFirst(); it->Valid(); it->Next()) 
        {
-                if ((this->user && this->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || this->database->IsClosing())
+                if (!Dispatcher::CheckIterator(this))
                 {
-                      this->access_set(DBL_INTERRUPT);
-                      return;
+                       return;
                 }
 
                 rawmap = it->key().ToString();
@@ -329,7 +328,7 @@ void mget_query::Run()
        
        DualMMap result = handler->GetList();
 
-       Args result_return;
+       StringVector result_return;
        
        for (DualMap::iterator i = result.begin(); i != result.end(); ++i)
        {
@@ -437,11 +436,11 @@ void mvals_query::Run()
        
        std::shared_ptr<MultiMapHandler> handler = MultiMapHandler::Create(query_result.value);
        
-       Args result = handler->GetValues();
+       StringVector result = handler->GetValues();
 
-       Args result_return;
+       StringVector result_return;
        
-       for (Args::iterator i = result.begin(); i != result.end(); ++i)
+       for (StringVector::iterator i = result.begin(); i != result.end(); ++i)
        {
                 std::string hesh_as_string = (*i);
                 
@@ -590,11 +589,11 @@ void miter_query::Run()
 
        std::shared_ptr<MultiMapHandler> handler = MultiMapHandler::Create(query_result.value);
 
-       Args result = handler->GetVals(this->value);
+       StringVector result = handler->GetVals(this->value);
 
-       Args result_return;
+       StringVector result_return;
 
-       for (Args::iterator i = result.begin(); i != result.end(); ++i)
+       for (StringVector::iterator i = result.begin(); i != result.end(); ++i)
        {
                 std::string hesh_as_string = (*i);
 

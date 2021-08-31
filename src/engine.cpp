@@ -637,3 +637,13 @@ void Dispatcher::TellThat(std::string& who, const std::string& msg, int rpl)
         user->SendProtocol(rpl, msg);
 }
 
+bool Dispatcher::CheckIterator(QueryBase* query)
+{
+       if ((query->user && query->user->IsQuitting()) || !Kernel->Store->Flusher->Status() || query->database->IsClosing())
+       {
+                query->access_set(DBL_INTERRUPT);
+                return false;
+       }
+       
+       return true;
+}

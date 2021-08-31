@@ -57,7 +57,7 @@ typedef std::multimap<std::string, std::string> DualMMap;
 
 /* A vector of string. */
 
-typedef std::vector<std::string> Args;
+typedef std::vector<std::string> StringVector;
 
 /* List handler */
 

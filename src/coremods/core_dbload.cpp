@@ -33,9 +33,9 @@ namespace
              
              const std::string& usergrups = user->login + "/groups";
 
-             const Args& groups = STHelper::HList(usergrups);
+             const StringVector& groups = STHelper::HList(usergrups);
              
-             for (Args::const_iterator i = groups.begin(); i != groups.end(); i++)
+             for (StringVector::const_iterator i = groups.begin(); i != groups.end(); i++)
              {
                        std::string channel = *i;
                        
@@ -54,11 +54,11 @@ namespace
      void Autojoin(User* user)
      {
               const std::string& userchans = user->login + "/chans";
-              const Args& chans = STHelper::HList(userchans);
+              const StringVector& chans = STHelper::HList(userchans);
               
               LocalUser* localuser = IS_LOCAL(user);
 
-              for (Args::const_iterator i = chans.begin(); i != chans.end(); i++)
+              for (StringVector::const_iterator i = chans.begin(); i != chans.end(); i++)
               {
                        std::string channel = *i;
 
@@ -196,20 +196,20 @@ class ModuleCoreDB : public Module
         {
                  Kernel->Sets->Load();
                  
-                 const Args& grlist = STHelper::HList("groups");
+                 const StringVector& grlist = STHelper::HList("groups");
 
-                 for (Args::const_iterator i = grlist.begin(); i != grlist.end(); i++)
+                 for (StringVector::const_iterator i = grlist.begin(); i != grlist.end(); i++)
                  {
                         std::string name = *i;
                         std::string flags = STHelper::Get("groups", name);
                         Kernel->Groups->Add(name, flags);
                  }
                  
-                 const Args& dblist = STHelper::HList("databases");
+                 const StringVector& dblist = STHelper::HList("databases");
                  
                  unsigned int counter = 0;
                  
-                 for (Args::const_iterator i = dblist.begin(); i != dblist.end(); i++)
+                 for (StringVector::const_iterator i = dblist.begin(); i != dblist.end(); i++)
                  {
                        std::string name = *i;
                        std::shared_ptr<UserDatabase> database = Kernel->Store->DBM->Find(name);

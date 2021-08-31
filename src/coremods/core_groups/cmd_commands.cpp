@@ -258,9 +258,9 @@ COMMAND_RESULT CommandAssign::Handle(User* user, const Params& parameters)
         }
         
         const std::string& usergrups = dest + "/groups";
-        const Args& grouplist = STHelper::HList(usergrups);
+        const StringVector& grouplist = STHelper::HList(usergrups);
         
-        for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
+        for (StringVector::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
         {
                std::string item = *i;
                
@@ -311,11 +311,11 @@ COMMAND_RESULT CommandGList::Handle(User* user, const Params& parameters)
         }
        
        const std::string& usergrups = login + "/groups";
-       const Args& grouplist = STHelper::HList(usergrups);
+       const StringVector& grouplist = STHelper::HList(usergrups);
 
        Dispatcher::JustAPI(user, BRLD_START_LIST);
 
-       for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
+       for (StringVector::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                 std::string gname = *i;
                 user->SendProtocol(BRLD_ITEM_LIST, gname.c_str());
@@ -388,11 +388,11 @@ COMMAND_RESULT CommandUnAssign::Handle(User* user, const Params& parameters)
        }
        
        const std::string& usergrups = dest + "/groups";
-       const Args& grouplist = STHelper::HList(usergrups);
+       const StringVector& grouplist = STHelper::HList(usergrups);
 
        bool found = false;
        
-       for (Args::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
+       for (StringVector::const_iterator i = grouplist.begin(); i != grouplist.end(); i++)
        {
                std::string item = *i;
 
