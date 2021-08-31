@@ -60,33 +60,33 @@ using 4 cores. Feel free to change this number according to your CPU.
 
 * Installing dependencies in **Debian** based systems:
 
-```php
+```console
 sudo apt-get install librocksdb-dev build-essential
 ```
 
 * Installing dependencies in **Redhat** based systems:
 
-```php
+```console
 dnf install @development-tools
 yum install git rocksdb-devel.x86_64
 ```
 
 * Installing dependencies in **macOS**:
 
-```php
+```console
 brew install rocksdb 
 ```
 
 Clone Beryl's latest stable version:
 
-```php
+```console
 git clone --branch 1.0 https://github.com/beryldb/beryldb.git --depth=5
 cd beryldb/
 ```
 
 You may now configure BerylDB following these quick steps: 
 
-```php
+```console
 ./configure
 make -j4 install
 ```
@@ -94,7 +94,7 @@ make -j4 install
 Beryl is compiled in verbose level by default. If you prefer to build with minimal
 information, you can use:
 
-```php
+```console
 make -j4 install VERBOSE=0
 ```
 
@@ -102,14 +102,14 @@ make -j4 install VERBOSE=0
 
 To run Beryl using the default configuration, type:
 
-```php
+```console
 ./run/beryldb start
 ```
 
 **NOTE**: Beryl runs in the background by default. If you wish to avoid
 forking, you can run the server using nofork:
 
-```php
+```console
 ./run/beryldb start --nofork
 ```
 
@@ -138,7 +138,7 @@ Beryl-cli:
 * use **exists** to verify whether a given key exists.
 * **strlen** is used to obtain a key's length.
 
-```php
+```console
 beryl> set hello "world"
 OK
 beryl> get hello
@@ -155,7 +155,7 @@ beryl> exists hello
 
 You can also run the **ls** command to obtain a counter in all structures:
 
-```php
+```console
 beryl> ls
 KEY       |  1 
 MAP       |  0 
@@ -169,7 +169,7 @@ FUTURES   |  0
 
 To search all keys:
 
-```php
+```console
 beryl> search *
 Key                | Value     
 ―――――――――――――――――― | ―――――――
