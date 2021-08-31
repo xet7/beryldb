@@ -942,8 +942,8 @@ ConfigConnect::ConfigConnect(config_rule* tag, char t, const std::string& mask, 
 void ConfigConnect::Update(const ConfigConnect* src)
 {
 	config = src->config;
-	type = src->type;
-	name = src->name;
-	host = src->host;
-	ports = src->ports;
+	type   = src->type;
+	name   = src->name;
+	host   = src->host;
+	ports  = src->ports;
 }
