@@ -21,7 +21,7 @@ are problem solvers and welcome people having this vision 👍
 ### Some ways to get involved include 
  
  - 🎓 Check our pending issues, or create your own.
- - 🌵 Contribute to our APIs (JS, [console](https://github.com/beryldb/console-beryl), Python).
+ - 🌵 Contribute to our APIs (JS, [PHP](https://github.com/beryldb/php-beryl), Python).
  - 🙋 Become a QA: Test our software and report back ([Check our Google group](https://groups.google.com/g/beryldb)).
  - 💬 Get Involved and join our [Discord server](https://discord.gg/H6HVxeDq).
 
@@ -125,7 +125,7 @@ APIs are used to interact with a BerylDB data-structure server. You can
 typically execute the same exact command as if you were connecting from
 the CLI.
 
-* Check our [console API](https://github.com/beryldb/console-beryl).
+* Check our [PHP API](https://github.com/beryldb/php-beryl).
 
 ## First queries
 
